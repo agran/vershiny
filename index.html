@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <title>Вершины — панорама гор</title>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #1a1a2e; }
+    #app { position: fixed; inset: 0; }
+    #app canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+    #status {
+      position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      color: #cfd8dc; font: 14px/1.5 system-ui, sans-serif; text-align: center;
+      pointer-events: none; white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="status">Загрузка…</div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
