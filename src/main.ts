@@ -84,22 +84,28 @@ async function main(): Promise<void> {
   setStatus('Загрузка региона…');
 
   const base = import.meta.env.BASE_URL;
-  const peaksRes = await fetch(`${base}peaks/${REGION}.json`);
-  if (!peaksRes.ok) {
-    setStatus(
-      `Нет данных региона «${REGION}».\n` +
-        'Сгенерируйте их: tools/dem-to-tiles и tools/peaks-to-json (см. docs/DATA-PIPELINE.md)',
-    );
-    return;
-  }
-  const peaksFile = (await peaksRes.json()) as PeaksFile;
 
-  worker.postMessage({ type: 'init', baseUrl: `${base}tiles/${REGION}` });
+  // Пики региона — опционально; без них панорама всё равно строится
+  let peaks: PeaksFile['peaks'] = [];
+  const peaksRes = await fetch(`${base}peaks/${REGION}.json`);
+  if (peaksRes.ok) {
+    peaks = ((await peaksRes.json()) as PeaksFile).peaks;
+  }
+
+  // Локальный DEM-патч — если сгенерирован; иначе глобальный Terrarium
+  // (docs/new-geo-data.md, слой 1)
+  let patchBaseUrl: string | undefined;
+  const patchProbe = await fetch(`${base}tiles/${REGION}/index.json`, {
+    method: 'HEAD',
+  });
+  if (patchProbe.ok) patchBaseUrl = `${base}tiles/${REGION}`;
+
+  worker.postMessage({ type: 'init', patchBaseUrl });
 
   // Позиция: GPS, fallback — Приют 11 (контрольная точка MVP-ACCEPTANCE)
   const origin = await getPosition();
   setStatus('Расчёт панорамы…');
-  worker.postMessage({ type: 'compute', origin, peaks: peaksFile.peaks });
+  worker.postMessage({ type: 'compute', origin, peaks });
 }
 
 function getPosition(): Promise<LatLon> {

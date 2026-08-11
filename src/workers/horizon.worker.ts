@@ -1,17 +1,18 @@
 /**
  * Web Worker: ray-marching горизонта и видимость пиков (ARCHITECTURE.md).
+ * Источник высот — DemSource (new-geo-data.md): локальный патч → Terrarium.
+ *
  * Протокол сообщений:
- *   → { type: 'init', baseUrl }
+ *   → { type: 'init', patchBaseUrl? }
  *   → { type: 'compute', origin, peaks }
  *   ← { type: 'result', horizon, stepRad, peaks, observerH, computeMs }
  *   ← { type: 'error', message }
  */
 
-import { DemSampler } from '../core/dem';
+import { DemSource } from '../core/dem-source';
 import {
   computeHorizon,
   filterVisiblePeaks,
-  nextRayStep,
   type VisiblePeak,
 } from '../core/horizon';
 import { destination, type LatLon } from '../core/geo';
@@ -19,7 +20,8 @@ import type { Peak } from '../core/peaks';
 
 export interface InitMessage {
   type: 'init';
-  baseUrl: string;
+  /** URL локального патча (tiles/{region}); без него — только Terrarium */
+  patchBaseUrl?: string;
 }
 
 export interface ComputeMessage {
@@ -49,7 +51,7 @@ export interface ErrorMessage {
 export type WorkerInMessage = InitMessage | ComputeMessage;
 export type WorkerOutMessage = ResultMessage | ErrorMessage;
 
-let dem: DemSampler | null = null;
+let dem: DemSource | null = null;
 
 /** Максимальная дальность луча — синхронизирована с computeHorizon */
 const MAX_DIST_M = 200_000;
@@ -60,8 +62,7 @@ async function compute(origin: LatLon, peaks: Peak[]): Promise<ResultMessage> {
 
   const observerH = await dem.observerHeight(origin);
 
-  // Предзагрузка тайлов веером лучей (шаг 5° — достаточно для покрытия:
-  // ширина тайла 90 м × 256 ≈ 23 км, веер сходится плотно)
+  // Предзагрузка тайлов веером лучей (шаг 5° — достаточно для покрытия)
   const prefetchTasks: Promise<void>[] = [];
   for (let az = 0; az < 2 * Math.PI; az += (5 * Math.PI) / 180) {
     prefetchTasks.push(
@@ -70,8 +71,7 @@ async function compute(origin: LatLon, peaks: Peak[]): Promise<ResultMessage> {
   }
   await Promise.all(prefetchTasks);
 
-  const sample = (pos: LatLon, distM: number): number =>
-    dem!.sample(pos, dem!.lodForDistance(distM));
+  const sample = (pos: LatLon, distM: number): number => dem!.sample(pos, distM);
 
   const { angles, stepRad } = computeHorizon(origin, observerH, sample);
   const visible = filterVisiblePeaks(origin, observerH, peaks, sample);
@@ -90,8 +90,8 @@ self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
   try {
     const msg = ev.data;
     if (msg.type === 'init') {
-      dem = new DemSampler({ baseUrl: msg.baseUrl });
-      await dem.loadIndex();
+      dem = new DemSource({ patchBaseUrl: msg.patchBaseUrl });
+      await dem.init();
       return;
     }
     if (msg.type === 'compute') {
@@ -107,6 +107,3 @@ self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
     self.postMessage(out);
   }
 };
-
-// nextRayStep реэкспортирован для тестов worker-протокола
-void nextRayStep;

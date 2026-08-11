@@ -10,6 +10,8 @@
 ## Epic: MVP
 4. [data] tools/dem-to-tiles: GeoTIFF → int16-тайлы 256×256 + LOD + index.json
 5. [data] tools/peaks-to-json: Overpass → peaks/{region}.json (прекомпиляция)
+5a. [core] DemSource: абстракция источника высот (патч → Terrarium → кеш) — точка
+    расширения из new-geo-data.md; выбор зума Terrarium по дальности луча
 6. [core] Ray-marching горизонта в Web Worker (кривизна+рефракция, LOD-выборка)
 7. [core] Бенчмарк производительности на телефоне, цель <500 мс
 8. [core] Видимость пиков: точные лучи + проекция (азимут, возвышение)
@@ -29,6 +31,9 @@
 20. [ui] «Покорённые вершины»: бейджи, личная карта
 21. [ui] Петля OSM: правка названий пиков из приложения
 22. [data] Регионы: Алтай, Урал; GLO-90-пайплайн для Хибин
+22a. [data] global-peaks.json из Wikidata SPARQL (instance of mountain + ele + coords,
+     ~50–100 тыс. записей); name:ru из OSM-регионов приоритетнее Wikidata
+22b. [pwa] Кеширование Terrarium-тайлов просмотренных областей (Cache API/IndexedDB)
 
 ## Epic: v2.0 (research)
 23. [research] CV-калибровка: 1D-корреляция профиля горизонта
