@@ -31,9 +31,13 @@ resize();
 
 const view: ViewState = {
   centerAzRad: 0,
+  tiltRad: 0,
   fovRad: toRad(60),
   fovVRad: toRad(25),
 };
+
+/** Предел наклона камеры, рад */
+const MAX_TILT = toRad(45);
 
 let panorama: PanoramaState | null = null;
 
@@ -43,18 +47,27 @@ function draw(): void {
 }
 
 // --- Поворот пальцем / мышью (fallback-режим, работает без сенсоров) ---
+// Влево-вправо — азимут, вверх-вниз — наклон; диагональ = оба сразу
 let dragging = false;
 let lastX = 0;
+let lastY = 0;
 canvas.addEventListener('pointerdown', (ev) => {
   dragging = true;
   lastX = ev.clientX;
+  lastY = ev.clientY;
   canvas.setPointerCapture(ev.pointerId);
 });
 canvas.addEventListener('pointermove', (ev) => {
   if (!dragging) return;
   const dx = ev.clientX - lastX;
+  const dy = ev.clientY - lastY;
   lastX = ev.clientX;
+  lastY = ev.clientY;
   view.centerAzRad -= (dx / canvas.clientWidth) * view.fovRad;
+  view.tiltRad = Math.max(
+    -MAX_TILT,
+    Math.min(MAX_TILT, view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad),
+  );
   draw();
 });
 canvas.addEventListener('pointerup', () => (dragging = false));

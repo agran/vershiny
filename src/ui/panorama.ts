@@ -21,6 +21,8 @@ export interface PanoramaState {
 export interface ViewState {
   /** Центральный азимут взгляда, рад */
   centerAzRad: number;
+  /** Наклон камеры: + вверх, − вниз, рад */
+  tiltRad: number;
   /** Горизонтальный FOV, рад */
   fovRad: number;
   /** Вертикальный FOV, рад */
@@ -53,9 +55,9 @@ export function renderPanorama(
   ctx.fillRect(0, horizonY, width, height - horizonY);
 
   const azToX = (az: number): number =>
-    ((wrapAngle(az - view.centerAzRad) / view.fovRad) * width) / 1 + width / 2;
+    (wrapAngle(az - view.centerAzRad) / view.fovRad) * width + width / 2;
   const elevToY = (elev: number): number =>
-    horizonY - (elev / view.fovVRad) * height;
+    horizonY - ((elev - view.tiltRad) / view.fovVRad) * height;
 
   // Силуэт горизонта
   ctx.beginPath();
