@@ -85,20 +85,19 @@ async function main(): Promise<void> {
 
   const base = import.meta.env.BASE_URL;
 
-  // Пики региона — опционально; без них панорама всё равно строится
+  // Пики региона — опционально; без них панорама всё равно строится.
+  // Vite на 404 отдаёт index.html (SPA-fallback) — проверяем Content-Type.
   let peaks: PeaksFile['peaks'] = [];
   const peaksRes = await fetch(`${base}peaks/${REGION}.json`);
-  if (peaksRes.ok) {
+  if (isJson(peaksRes)) {
     peaks = ((await peaksRes.json()) as PeaksFile).peaks;
   }
 
   // Локальный DEM-патч — если сгенерирован; иначе глобальный Terrarium
   // (docs/new-geo-data.md, слой 1)
   let patchBaseUrl: string | undefined;
-  const patchProbe = await fetch(`${base}tiles/${REGION}/index.json`, {
-    method: 'HEAD',
-  });
-  if (patchProbe.ok) patchBaseUrl = `${base}tiles/${REGION}`;
+  const patchProbe = await fetch(`${base}tiles/${REGION}/index.json`);
+  if (isJson(patchProbe)) patchBaseUrl = `${base}tiles/${REGION}`;
 
   worker.postMessage({ type: 'init', patchBaseUrl });
 
@@ -108,9 +107,25 @@ async function main(): Promise<void> {
   worker.postMessage({ type: 'compute', origin, peaks });
 }
 
+/** Ответ — JSON, а не SPA-fallback index.html? */
+function isJson(res: Response): boolean {
+  return (
+    res.ok && (res.headers.get('content-type') ?? '').includes('application/json')
+  );
+}
+
 function getPosition(): Promise<LatLon> {
   return new Promise((resolve) => {
-    const fallback: LatLon = { lat: 43.2912, lon: 42.4697 }; // Приют 11
+    // Отладка/шаринг: ?lat=43.318&lon=42.458 (Приют 11)
+    const q = new URLSearchParams(location.search);
+    const qLat = Number(q.get('lat'));
+    const qLon = Number(q.get('lon'));
+    if (q.get('lat') && q.get('lon') && !Number.isNaN(qLat) && !Number.isNaN(qLon)) {
+      resolve({ lat: qLat, lon: qLon });
+      return;
+    }
+    // Приют 11 (4130 м) — сверено с Terrarium: отметка ~4134 м
+    const fallback: LatLon = { lat: 43.318, lon: 42.458 };
     if (!('geolocation' in navigator)) {
       resolve(fallback);
       return;

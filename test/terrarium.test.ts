@@ -28,10 +28,10 @@ describe('terrarium', () => {
   });
 
   it('выбор зума по дальности', () => {
-    expect(zoomForDistance(5_000)).toBe(15);
-    expect(zoomForDistance(50_000)).toBe(13);
-    expect(zoomForDistance(150_000)).toBe(11);
-    expect(zoomForDistance(500_000)).toBe(9);
+    expect(zoomForDistance(1_000)).toBe(12);
+    expect(zoomForDistance(5_000)).toBe(11);
+    expect(zoomForDistance(30_000)).toBe(10);
+    expect(zoomForDistance(150_000)).toBe(9);
   });
 
   it('пиксельная позиция в пределах тайла', () => {

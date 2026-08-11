@@ -25,13 +25,16 @@ export interface ZoomRule {
 }
 
 /**
- * Выбор зума по дальности луча (аналог LOD из DATA-PIPELINE):
- * ближний рельеф — z15, дальние хребты — грубые зумы (мало запросов).
+ * Выбор зума по дальности луча (аналог LOD из DATA-PIPELINE).
+ * Принцип: пиксель тайла ≲ шага луча (90 м вблизи → 700 м вдали).
+ * Метры/пиксель на экваторе: z12 ≈ 38, z11 ≈ 76, z10 ≈ 153, z9 ≈ 306.
+ * Родное разрешение данных ~90 м — зумы выше z12 впустую качают пиксели:
+ * проверено, что правило «<30 км → z15» даёт 1341 тайл (~130 МБ) на панораму.
  */
 export const ZOOM_RULES: ZoomRule[] = [
-  { upToDistM: 30_000, zoom: 15 },
-  { upToDistM: 100_000, zoom: 13 },
-  { upToDistM: 200_000, zoom: 11 },
+  { upToDistM: 2_000, zoom: 12 },
+  { upToDistM: 10_000, zoom: 11 },
+  { upToDistM: 40_000, zoom: 10 },
   { upToDistM: Infinity, zoom: 9 },
 ];
 
@@ -39,7 +42,7 @@ export function zoomForDistance(distM: number): number {
   for (const rule of ZOOM_RULES) {
     if (distM < rule.upToDistM) return rule.zoom;
   }
-  return 9;
+  return ZOOM_RULES[ZOOM_RULES.length - 1].zoom;
 }
 
 /** lon/lat → индексы тайла slippy map */
