@@ -60,7 +60,10 @@ download (Earthdata/AWS Open Data / JAXA)
 
 ## Вершины (POI)
 
-- Источник: **Overpass API, один раз, офлайн**: `node["natural"="peak"](bbox);`
+- Источник 1: **Overpass API** (онлайн, требует доступ): `node["natural"="peak"](bbox);`
+- Источник 2: **planet.osm.pbf + tools/planet-peaks** (офлайн, полный контроль):
+  `planet_peaks.py planet.osm.pbf --bbox 42.0,41.8,45.0,44.9 -o peaks.jsonl`
+  затем `peaks_to_json.py --from-file peaks.jsonl`
 - Поля: `name:ru` → fallback `name` → `name:en`, `ele`, `lat/lon`, `wikidata`
 - **`prominence` в OSM почти не заполнен** — НЕ использовать. Приоритет подписи:
   `score = ele / distance`, при наложении на экране показываем топ-N, остальные в кластер «+3»

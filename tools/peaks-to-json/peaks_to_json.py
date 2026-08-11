@@ -45,7 +45,14 @@ def fetch_peaks(bbox: tuple[float, float, float, float], retries: int = 3) -> li
     data = f"data={urllib.parse.quote(query)}".encode()
     for attempt in range(retries):
         try:
-            req = urllib.request.Request(OVERPASS_URL, data=data)
+            req = urllib.request.Request(
+                OVERPASS_URL,
+                data=data,
+                headers={
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "User-Agent": "vershiny-peaks-to-json/0.1 (github.com/agran/vershiny)",
+                },
+            )
             with urllib.request.urlopen(req, timeout=180) as resp:
                 payload = json.loads(resp.read())
             return payload.get("elements", [])
@@ -91,23 +98,58 @@ def convert(elements: list[dict]) -> tuple[list[dict], dict]:
     return peaks, stats
 
 
+def convert_jsonl(path: Path) -> tuple[list[dict], dict]:
+    """Чтение JSONL от planet_peaks.py вместо Overpass."""
+    peaks: list[dict] = []
+    stats = {"total": 0, "no_name": 0, "no_ele": 0}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        p = json.loads(line)
+        stats["total"] += 1
+        if not p.get("name"):
+            stats["no_name"] += 1
+            continue
+        if p.get("ele") is None:
+            stats["no_ele"] += 1
+        peaks.append(
+            {
+                "lat": p["lat"],
+                "lon": p["lon"],
+                "name": p["name"],
+                **({"ele": p["ele"]} if p.get("ele") is not None else {}),
+                **({"wikidata": p["wikidata"]} if p.get("wikidata") else {}),
+            }
+        )
+    return peaks, stats
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Overpass → peaks/{region}.json")
+    parser = argparse.ArgumentParser(description="Overpass/JSONL → peaks/{region}.json")
     parser.add_argument("--region", required=True, help="Имя региона (elbrus, altai, …)")
     parser.add_argument(
         "--bbox",
-        required=True,
         help="minLon,minLat,maxLon,maxLat — с запасом 200 км за видимый край!",
+    )
+    parser.add_argument(
+        "--from-file",
+        type=Path,
+        help="JSONL от planet_peaks.py вместо запроса к Overpass",
     )
     parser.add_argument("-o", "--out", type=Path, required=True)
     args = parser.parse_args()
 
-    bbox = tuple(float(x) for x in args.bbox.split(","))
-    if len(bbox) != 4:
-        sys.exit("bbox: minLon,minLat,maxLon,maxLat")
-
-    elements = fetch_peaks(bbox)  # type: ignore[arg-type]
-    peaks, stats = convert(elements)
+    if args.from_file:
+        peaks, stats = convert_jsonl(args.from_file)
+    else:
+        if not args.bbox:
+            sys.exit("Нужен --bbox (или --from-file)")
+        bbox = tuple(float(x) for x in args.bbox.split(","))
+        if len(bbox) != 4:
+            sys.exit("bbox: minLon,minLat,maxLon,maxLat")
+        elements = fetch_peaks(bbox)  # type: ignore[arg-type]
+        peaks, stats = convert(elements)
 
     out = {
         "region": args.region,
@@ -120,7 +162,7 @@ def main() -> None:
     pct_no_ele = 100 * stats["no_ele"] / max(stats["total"], 1)
     print(
         f"OK: {len(peaks)} вершин → {args.out}\n"
-        f"  всего в OSM: {stats['total']}, без имени (пропущены): {stats['no_name']}, "
+        f"  всего записей: {stats['total']}, без имени (пропущены): {stats['no_name']}, "
         f"без ele: {stats['no_ele']} ({pct_no_ele:.0f}%)"
     )
 
