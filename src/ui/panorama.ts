@@ -89,12 +89,10 @@ export function renderPanorama(
     ctx.fillStyle = LAYER_COLORS[Math.min(layerIdx, LAYER_COLORS.length - 1)];
     ctx.fill();
 
-    // Контур только для ближнего слоя
-    if (layerIdx === 0) {
-      ctx.strokeStyle = 'rgba(241,250,238,0.6)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    }
+    // Светлый контур для ВСЕХ слоёв (различимость гор друг за другом)
+    ctx.strokeStyle = `rgba(241,250,238,${0.3 + (layers.length - 1 - layerIdx) * 0.15})`;
+    ctx.lineWidth = layerIdx === 0 ? 1.5 : 1;
+    ctx.stroke();
   }
 
   // Шкала азимутов: каждые 15°, подписи сторон света

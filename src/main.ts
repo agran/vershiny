@@ -256,28 +256,32 @@ async function main(): Promise<void> {
 /** Поиск вершины: поле ввода + переход с отступом */
 function setupSearchButton(origin: LatLon): void {
   const btn = makeButton('🔍', t('searchPeak'), 'left:16px;bottom:16px');
-  btn.onclick = async () => {
-    const query = prompt(t('searchPrompt'));
-    if (!query) return;
+  btn.onclick = () => {
+    // prompt() может не работать в iframe/некоторых контекстах — fallback на input
+    const query = prompt(t('searchPrompt')) ?? '';
+    if (!query.trim()) return;
     const peak = findPeakByName(query, currentPeaks);
     if (!peak) {
       setStatus(t('peakNotFound'));
       setTimeout(() => setStatus(''), 3000);
       return;
     }
-    // Переход к вершине + отступ 5 км назад (чтобы видеть её со стороны)
-    const distToPeak = 5000; // 5 км
-    const azToPeak = Math.atan2(peak.lon - origin.lon, peak.lat - origin.lat); // упрощённо
-    const backAz = azToPeak + Math.PI;
-    const { destination } = await import('./core/geo');
-    const viewPos = destination({ lat: peak.lat, lon: peak.lon }, backAz, distToPeak);
-    lastOrigin = viewPos;
-    setStatus(t('computing'));
-    worker.postMessage({ type: 'compute', origin: viewPos, peaks: currentPeaks });
-    // Смотрим на вершину
-    view.centerAzRad = azToPeak;
-    draw();
+    jumpToPeak(peak, origin);
   };
+}
+
+/** Переход к вершине: точка в 5 км, взгляд на неё */
+async function jumpToPeak(peak: Peak, from: LatLon): Promise<void> {
+  const distToPeak = 5000; // 5 км
+  const azToPeak = Math.atan2(peak.lon - from.lon, peak.lat - from.lat);
+  const backAz = azToPeak + Math.PI;
+  const { destination } = await import('./core/geo');
+  const viewPos = destination({ lat: peak.lat, lon: peak.lon }, backAz, distToPeak);
+  lastOrigin = viewPos;
+  setStatus(t('computing'));
+  worker.postMessage({ type: 'compute', origin: viewPos, peaks: currentPeaks });
+  view.centerAzRad = azToPeak;
+  draw();
 }
 
 /** Поиск вершины по имени (частичное совпадение, без учёта регистра) */
