@@ -12,7 +12,8 @@
     ],
     "core_ru": "Комсомол (4895м), Корона, Чимбулак, Медео, Большой Алма-Атинский пик",
     "core_en": "Komsomol (4895m), Korona, Chimbulak, Medeo, Big Almaty Peak",
-    "priority": 1
+    "priority": 1,
+    "group": "Средняя Азия"
   },
   "altai": {
     "title_ru": "Алтай",
@@ -25,7 +26,8 @@
     ],
     "core_ru": "Белуха, Катунский хребет, Чулышман, Укок",
     "core_en": "Belukha, Katun Ridge, Chulyshman, Ukok",
-    "priority": 1
+    "priority": 1,
+    "group": "Сибирь и Алтай"
   },
   "annapurna": {
     "title_ru": "Регион Аннапурна",
@@ -38,7 +40,8 @@
     ],
     "core_ru": "Аннапурна I (8091м), Мачапучаре, Пун-Хилл, трек ABC и Circuit",
     "core_en": "Annapurna I (8091m), Machapuchare, Poon Hill, ABC Trek",
-    "priority": 1
+    "priority": 1,
+    "group": "Гималаи"
   },
   "cordillera-blanca": {
     "title_ru": "Кордильера-Бланка",
@@ -51,7 +54,8 @@
     ],
     "core_ru": "Уаскаран (6768м), Альпамайо, трек Санта-Крус, Уарас",
     "core_en": "Huascarán (6768m), Alpamayo, Santa Cruz trek, Huaraz",
-    "priority": 1
+    "priority": 1,
+    "group": "Анды"
   },
   "cordillera-real": {
     "title_ru": "Кордильера-Реаль (Боливия)",
@@ -64,7 +68,8 @@
     ],
     "core_ru": "Иллимани (6438м), Уайна-Потоси (6088м), Чекарани",
     "core_en": "Illimani (6438m), Huayna Potosí (6088m), Chekarama",
-    "priority": 1
+    "priority": 1,
+    "group": "Анды"
   },
   "dolomites": {
     "title_ru": "Доломиты",
@@ -77,7 +82,8 @@
     ],
     "core_ru": "Мармолада (3343м), Тре-Чиме-ди-Лаваредо, Сассолунго, Чима-Гранде",
     "core_en": "Marmolada (3343m), Tre Cime, Sassolungo",
-    "priority": 1
+    "priority": 1,
+    "group": "Альпы"
   },
   "drakensberg": {
     "title_ru": "Дракенсберг и Лесото",
@@ -90,7 +96,8 @@
     ],
     "core_ru": "Тхабана-Нтленьяна (3482м), Amphitheatre, Giants Castle",
     "core_en": "Thabana Ntlenyana (3482m), Amphitheatre, Giants Castle",
-    "priority": 1
+    "priority": 1,
+    "group": "Южная Африка"
   },
   "ecuador-volcanoes": {
     "title_ru": "Эквадор — Аллея вулканов",
@@ -103,7 +110,8 @@
     ],
     "core_ru": "Чимборазо (6263м), Котопахи (5897м), Каямбе, Илиниса",
     "core_en": "Chimborazo (6263m), Cotopaxi (5897m), Cayambe, Iliniza",
-    "priority": 1
+    "priority": 1,
+    "group": "Анды"
   },
   "elbrus": {
     "title_ru": "Приэльбрусье",
@@ -116,7 +124,8 @@
     ],
     "core_ru": "Эльбрус, Чегет, Домбай, Архыз, Баксанское ущелье",
     "core_en": "Elbrus, Cheget, Dombay, Arkhyz, Baksan Valley",
-    "priority": 1
+    "priority": 1,
+    "group": "Кавказ"
   },
   "everest-region": {
     "title_ru": "Кхумбу — регион Эверест",
@@ -129,7 +138,8 @@
     ],
     "core_ru": "Эверест (8849м), Лхоцзе, Ама-Даблам, Намче-Базар, EBC trek",
     "core_en": "Everest (8849m), Lhotse, Ama Dablam, Namche Bazaar",
-    "priority": 1
+    "priority": 1,
+    "group": "Гималаи"
   },
   "fann": {
     "title_ru": "Фанские горы",
@@ -142,7 +152,8 @@
     ],
     "core_ru": "Чимтарга (5487м), Зиёрат, озёра Алаудин, Куликалон, Мутные",
     "core_en": "Chimtarga (5487m), Ziyorat, Alaudin Lakes, Kulikalon, Mutnye",
-    "priority": 1
+    "priority": 1,
+    "group": "Средняя Азия"
   },
   "fiordland": {
     "title_ru": "Фьордленд и Милфорд",
@@ -155,7 +166,8 @@
     ],
     "core_ru": "Митр-Пик (1683м), трек Milford, Kepler Track",
     "core_en": "Mitre Peak, Mackinnon Pass, Milford Track",
-    "priority": 1
+    "priority": 1,
+    "group": "Новая Зеландия"
   },
   "garhwal": {
     "title_ru": "Гархвал — Уттаракханд",
@@ -168,7 +180,8 @@
     ],
     "core_ru": "Нанда-Деви (7816м), Кедарнатх (3583м), Ганготри, Пинари-ледник",
     "core_en": "Nanda Devi (7816m), Bandarpunch, Gangotri, Kedarnath",
-    "priority": 1
+    "priority": 1,
+    "group": "Гималаи"
   },
   "hawaii": {
     "title_ru": "Гавайи",
@@ -181,7 +194,8 @@
     ],
     "core_ru": "Мауна-Кеа (4207м), Мауна-Лоа (4169м), Халеакала (3055м)",
     "core_en": "Mauna Kea (4207m), Mauna Loa (4169m), Haleakalā (3055m)",
-    "priority": 1
+    "priority": 1,
+    "group": "Гавайи"
   },
   "jotunheimen": {
     "title_ru": "Йотунхеймен",
@@ -194,7 +208,8 @@
     ],
     "core_ru": "Галлхёпигген (2469м), Глиттертинн, маршрут Бесеген",
     "core_en": "Galdhøpiggen (2469m), Glittertind, Besseggen",
-    "priority": 1
+    "priority": 1,
+    "group": "Скандинавия"
   },
   "khibiny": {
     "title_ru": "Хибины и Кольский",
@@ -207,7 +222,8 @@
     ],
     "core_ru": "Хибины, Ловозерские тундры, Кольский полуостров",
     "core_en": "Khibiny, Lovozero Tundras, Kola Peninsula",
-    "priority": 1
+    "priority": 1,
+    "group": "Кольский полуостров"
   },
   "ladakh": {
     "title_ru": "Ладакх и Занскар",
@@ -220,7 +236,8 @@
     ],
     "core_ru": "Сточр-Кангри (6153м), Занскарский хребет, Лех, Занскар-каньон",
     "core_en": "Stok Kangri (6153m), Stanzin, Zanskar",
-    "priority": 1
+    "priority": 1,
+    "group": "Гималаи"
   },
   "tasmania": {
     "title_ru": "Тасмания",
@@ -233,7 +250,8 @@
     ],
     "core_ru": "Крейдл-Маунтин (1545м), Оса, маршрут Overland Track",
     "core_en": "Cradle Mountain (1545m), Ossa, Overland Track",
-    "priority": 1
+    "priority": 1,
+    "group": "Тасмания"
   },
   "tatry": {
     "title_ru": "Татры",
@@ -246,7 +264,8 @@
     ],
     "core_ru": "Герлаховски-Штит (2655м), Рысы, Закопане",
     "core_en": "Gerlachovský štít (2655m), Rysy, Lomnický",
-    "priority": 1
+    "priority": 1,
+    "group": "Карпаты"
   },
   "ak-suu": {
     "title_ru": "Ак-Суу и Терскей Ала-Тоо",
@@ -259,7 +278,8 @@
     ],
     "core_ru": "Каракол (5281м), Джигит, ущелья Каракол и Арашан",
     "core_en": "Karakol (5281m), Dzhigit, Karakol and Arashan gorges",
-    "priority": 2
+    "priority": 2,
+    "group": "Средняя Азия"
   },
   "bhutan": {
     "title_ru": "Бутан",
@@ -272,7 +292,8 @@
     ],
     "core_ru": "Джомолхари (7326м), Гангкхар Пуэнсум (7570м), Тигровое гнездо",
     "core_en": "Gangkhar Puensum (7570m, unclimbed), Jomolhari, Tiger's Nest",
-    "priority": 2
+    "priority": 2,
+    "group": "Гималаи"
   },
   "caucasus-east": {
     "title_ru": "Восточный Кавказ",
@@ -285,7 +306,8 @@
     ],
     "core_ru": "Казбек, Базардюзи, Дагестан, Чечня",
     "core_en": "Kazbek, Bazardüzü, Dagestan, Chechnya",
-    "priority": 2
+    "priority": 2,
+    "group": "Кавказ"
   },
   "caucasus-west": {
     "title_ru": "Западный Кавказ",
@@ -298,7 +320,8 @@
     ],
     "core_ru": "Фишт, Оштен, Красная Поляна, Абхазия",
     "core_en": "Fisht, Oshten, Krasnaya Polyana, Abkhazia",
-    "priority": 2
+    "priority": 2,
+    "group": "Кавказ"
   },
   "central-america-volcanoes": {
     "title_ru": "Вулканы Гватемалы и Коста-Рики",
@@ -311,7 +334,8 @@
     ],
     "core_ru": "Тахумулко (4220м), Акатенанго, Санта-Мария, Чиррипо (3821м)",
     "core_en": "Tajumulco (4220m), Acatenango, Santa María, Chirripó (3821m)",
-    "priority": 2
+    "priority": 2,
+    "group": "Мексика и Центральная Америка"
   },
   "kamchatka-north": {
     "title_ru": "Северная Камчатка",
@@ -324,7 +348,8 @@
     ],
     "core_ru": "Ключевская группа, Толбачик, Кроноцкий",
     "core_en": "Klyuchevskaya group, Tolbachik, Kronotsky",
-    "priority": 2
+    "priority": 2,
+    "group": "Камчатка и Корякия"
   },
   "kamchatka-south": {
     "title_ru": "Южная Камчатка",
@@ -337,7 +362,8 @@
     ],
     "core_ru": "Авачинская группа, Вилючинский, Мутновский, Горелый",
     "core_en": "Avachinsky group, Vilyuchinsky, Mutnovsky, Gorely",
-    "priority": 2
+    "priority": 2,
+    "group": "Камчатка и Корякия"
   },
   "langtang": {
     "title_ru": "Лангтанг",
@@ -350,7 +376,8 @@
     ],
     "core_ru": "Лангтанг Лирунг (7227м), Госайкунд, Херумбу",
     "core_en": "Langtang Lirung (7227m), Gosainkunda, Helambu",
-    "priority": 2
+    "priority": 2,
+    "group": "Гималаи"
   },
   "lofoten": {
     "title_ru": "Лофотенские острова",
@@ -363,7 +390,8 @@
     ],
     "core_ru": "Хигравстинден (1146м), Свольвергейтен, хайкинг Дьюпфьорд",
     "core_en": "Higravstinden, Svolværgeita",
-    "priority": 2
+    "priority": 2,
+    "group": "Скандинавия"
   },
   "mongolia-altai": {
     "title_ru": "Монгольский Алтай",
@@ -376,7 +404,8 @@
     ],
     "core_ru": "Хуйтэн / Найрамдал (4374м), Цамбагарав, Мунх-Хайрхан",
     "core_en": "Khüiten / Nairamdal (4374m), Tsambagarav, Munkh-Khairkhan",
-    "priority": 2
+    "priority": 2,
+    "group": "Китай и Монголия"
   },
   "rila-pirin": {
     "title_ru": "Рила и Пирин (Болгария)",
@@ -389,7 +418,8 @@
     ],
     "core_ru": "Мусала (2925м), Вихрен (2914м), Седемте езера",
     "core_en": "Musala (2925m), Vihren (2914m)",
-    "priority": 2
+    "priority": 2,
+    "group": "Балканы"
   },
   "sayan-east": {
     "title_ru": "Восточный Саян и Прибайкалье",
@@ -402,7 +432,8 @@
     ],
     "core_ru": "Мунку-Сардык, Тункинская долина, Хамар-Дабан",
     "core_en": "Munku-Sardyk, Tunka Valley, Khamar-Daban",
-    "priority": 2
+    "priority": 2,
+    "group": "Сибирь и Алтай"
   },
   "sayan-west": {
     "title_ru": "Западный Саян",
@@ -415,7 +446,8 @@
     ],
     "core_ru": "Ергаки, Шушенский бор, Тоджа",
     "core_en": "Ergaki, Shushensky Bor, Todzha",
-    "priority": 2
+    "priority": 2,
+    "group": "Сибирь и Алтай"
   },
   "scottish-highlands": {
     "title_ru": "Шотландское нагорье",
@@ -428,7 +460,8 @@
     ],
     "core_ru": "Бен-Невис (1345м), Торридон, Куиллин, Кернгормс",
     "core_en": "Ben Nevis (1345m), Torridon, Cuillin",
-    "priority": 2
+    "priority": 2,
+    "group": "Британия"
   },
   "tiva-mongun": {
     "title_ru": "Тыва — Монгун-Тайга",
@@ -441,7 +474,8 @@
     ],
     "core_ru": "Монгун-Тайга (3976м), Шивит-Тайга",
     "core_en": "Mongun-Taiga (3976m), Ukok Plateau",
-    "priority": 2
+    "priority": 2,
+    "group": "Сибирь и Алтай"
   },
   "ural-north": {
     "title_ru": "Северный и Полярный Урал",
@@ -454,7 +488,8 @@
     ],
     "core_ru": "Конжаковский Камень, Народа, Манарага, Приполярный Урал",
     "core_en": "Konzhakovsky Kamen, Naroda, Manaraga, Subpolar Urals",
-    "priority": 2
+    "priority": 2,
+    "group": "Урал"
   },
   "ural-south": {
     "title_ru": "Южный Урал",
@@ -467,7 +502,8 @@
     ],
     "core_ru": "Таганай, Иремель, Зюраткуль, Нургуш",
     "core_en": "Taganay, Iremel, Zyuratkul, Nurgush",
-    "priority": 2
+    "priority": 2,
+    "group": "Урал"
   },
   "yunnan-meili": {
     "title_ru": "Юньнань — Меили и Хаба",
@@ -480,7 +516,8 @@
     ],
     "core_ru": "Каваго / Меили (6740м), Хаба (5396м), ущелье Тигровый Прыжок",
     "core_en": "Kawagebo / Meili (6740m), Haba (5396m), Tiger Leaping Gorge",
-    "priority": 2
+    "priority": 2,
+    "group": "Китай"
   },
   "alps-east": {
     "title_ru": "Восточные Альпы",
@@ -493,7 +530,8 @@
     ],
     "core_ru": "Гросглокнер, Дахштайн, Доломиты",
     "core_en": "Grossglockner, Dachstein, Dolomites",
-    "priority": 3
+    "priority": 3,
+    "group": "Альпы"
   },
   "alps-west": {
     "title_ru": "Западные Альпы",
@@ -506,7 +544,8 @@
     ],
     "core_ru": "Монблан, Маттерхорн, Экрен",
     "core_en": "Mont Blanc, Matterhorn, Écrins",
-    "priority": 3
+    "priority": 3,
+    "group": "Альпы"
   },
   "anti-atlas": {
     "title_ru": "Анти-Атлас и Сироуа (Марокко)",
@@ -519,7 +558,8 @@
     ],
     "core_ru": "Сироуа (3305м), Акхсас, Джебель-Сагхро",
     "core_en": "Siroua (3305m), Akhsas, Jbel Saghro",
-    "priority": 3
+    "priority": 3,
+    "group": "Атлас"
   },
   "baikal-east": {
     "title_ru": "Забайкалье",
@@ -532,7 +572,8 @@
     ],
     "core_ru": "Баргузинский хребет, Икатский, Кодар, Удокан",
     "core_en": "Barguzin Range, Ikat, Kodar, Udokan",
-    "priority": 3
+    "priority": 3,
+    "group": "Забайкалье и Байкал"
   },
   "blue-mountains": {
     "title_ru": "Голубые горы (Австралия)",
@@ -545,7 +586,8 @@
     ],
     "core_ru": "Три Сестры, каньон Джейми, Говетс-Лип",
     "core_en": "Three Sisters, Govetts Leap, Jamie Valley canyons",
-    "priority": 3
+    "priority": 3,
+    "group": "Австралия"
   },
   "colombia-snsmarta": {
     "title_ru": "Сьерра-Невада-де-Санта-Марта",
@@ -558,7 +600,8 @@
     ],
     "core_ru": "Кристобаль-Колон (5775м), Симон-Боливар, Паромос, Город Богов",
     "core_en": "Cristóbal Colón (5775m), Simón Bolívar, Paromos, Lost City",
-    "priority": 3
+    "priority": 3,
+    "group": "Колумбия"
   },
   "himalaya-central": {
     "title_ru": "Центральная Гималаи",
@@ -571,7 +614,8 @@
     ],
     "core_ru": "Эверест, Аннапурна, Манаслу, Дхаулагири",
     "core_en": "Everest, Annapurna, Manaslu, Dhaulagiri",
-    "priority": 3
+    "priority": 3,
+    "group": "Гималаи"
   },
   "kashmir": {
     "title_ru": "Кашмир и Пир-Панджал",
@@ -584,7 +628,8 @@
     ],
     "core_ru": "Колахой (5425м), Занскар, долина Лиддер, Гульмарг",
     "core_en": "Kolahoi (5425m), Zanskar, Lidder Valley, Gulmarg",
-    "priority": 3
+    "priority": 3,
+    "group": "Гималаи"
   },
   "kuznetsk-alatau": {
     "title_ru": "Кузнецкий Алатау и Шория",
@@ -597,7 +642,8 @@
     ],
     "core_ru": "Тигер-Тыш, Шерегеш, Мустаг",
     "core_en": "Tiger-Tysh, Sheregesh, Mustag",
-    "priority": 3
+    "priority": 3,
+    "group": "Прочее"
   },
   "pamir": {
     "title_ru": "Памир",
@@ -610,7 +656,8 @@
     ],
     "core_ru": "Пик Исмоила Сомони, Пик Ленина, Федченко",
     "core_en": "Ismoil Somoni Peak, Lenin Peak, Fedchenko",
-    "priority": 3
+    "priority": 3,
+    "group": "Средняя Азия"
   },
   "patagonia-argentina": {
     "title_ru": "Барилоче и Науэль-Уапи",
@@ -623,7 +670,8 @@
     ],
     "core_ru": "Трондор (3478м), Тронадор, Черепаховая тропа, Нахуэль-Уапи",
     "core_en": "Tronador (3478m), Turtle Trail, Nahuel Huapi",
-    "priority": 3
+    "priority": 3,
+    "group": "Патагония"
   },
   "putorana": {
     "title_ru": "Плато Путорана",
@@ -636,7 +684,8 @@
     ],
     "core_ru": "Камень, Аян, Китайская (севернее 60°N — GLO-90/Terrarium)",
     "core_en": "Kamen, Ayan, Kitayskaya (>60°N — GLO-90/Terrarium)",
-    "priority": 3
+    "priority": 3,
+    "group": "Север Сибири"
   },
   "qinghai-gansu": {
     "title_ru": "Цинхай и Ганьсу",
@@ -649,7 +698,8 @@
     ],
     "core_ru": "Амне-Мачин (6282м), Циляньшань, Ганнань",
     "core_en": "Amne Machin (6282m), Qilian Mountains, Gannan",
-    "priority": 3
+    "priority": 3,
+    "group": "Китай"
   },
   "sakhalin": {
     "title_ru": "Сахалин",
@@ -662,7 +712,8 @@
     ],
     "core_ru": "Лопатина, Жданко",
     "core_en": "Lopatin, Zhdanko",
-    "priority": 3
+    "priority": 3,
+    "group": "Курилы и Сахалин"
   },
   "sikhote-alin": {
     "title_ru": "Сихотэ-Алинь",
@@ -675,7 +726,8 @@
     ],
     "core_ru": "Терней, Дальнегорск, гора Ливадийская",
     "core_en": "Terney, Dalnegorsk, Livadiyskaya",
-    "priority": 3
+    "priority": 3,
+    "group": "Сихотэ-Алинь"
   },
   "stolby-yenisei": {
     "title_ru": "Красноярские Столбы и Манское Белогорье",
@@ -688,7 +740,8 @@
     ],
     "core_ru": "Красноярские Столбы, Манские Белки, Борус",
     "core_en": "Krasnoyarsk Stolby, Byurert",
-    "priority": 3
+    "priority": 3,
+    "group": "Сибирь и Алтай"
   },
   "tashkent-mountains": {
     "title_ru": "Западный Тянь-Шань — Чимган",
@@ -701,7 +754,8 @@
     ],
     "core_ru": "Чимган (3309м), Бабайтаг, Угам, Чарвакское водохранилище",
     "core_en": "Chimgan (3309m), Babaytag, Ugam, Charvak Reservoir",
-    "priority": 3
+    "priority": 3,
+    "group": "Средняя Азия"
   },
   "tien-shan": {
     "title_ru": "Тянь-Шань",
@@ -714,7 +768,8 @@
     ],
     "core_ru": "Хан-Тенгри, Пик Победы, Ала-Арча, Иссык-Куль",
     "core_en": "Khan Tengri, Pobeda Peak, Ala-Archa, Issyk-Kul",
-    "priority": 3
+    "priority": 3,
+    "group": "Средняя Азия"
   },
   "turkey-kackar": {
     "title_ru": "Качкар и Понтийские горы",
@@ -727,7 +782,8 @@
     ],
     "core_ru": "Качкар (3937м), Верчиник, Чамлыхемшин",
     "core_en": "Kaçkar (3937m), Vercinik, Çamlıhemşin",
-    "priority": 3
+    "priority": 3,
+    "group": "Ближний Восток"
   },
   "white-mountains-ne": {
     "title_ru": "Белые горы и Адирондак",
@@ -740,7 +796,8 @@
     ],
     "core_ru": "Вашингтон (1917м), Марси, Катадин, Уайтфейс",
     "core_en": "Washington (1917m), Marcy, Katahdin, Whiteface",
-    "priority": 3
+    "priority": 3,
+    "group": "Аппалачи"
   },
   "xinjiang-altai": {
     "title_ru": "Синьцзян — Канасу и Алтай",
@@ -753,7 +810,8 @@
     ],
     "core_ru": "Канасу (нацпарк), Хуйтэн с кит. стороны, Кекетуохай",
     "core_en": "Kanas (national park), Khüiten from Chinese side, Keketuohai",
-    "priority": 3
+    "priority": 3,
+    "group": "Китай и Монголия"
   },
   "alaska": {
     "title_ru": "Аляска",
@@ -766,7 +824,8 @@
     ],
     "core_ru": "Денали, Форэкер, Логан (граница с Канадой)",
     "core_en": "Denali, Foraker, Logan (border with Canada)",
-    "priority": 4
+    "priority": 4,
+    "group": "Аляска и Юкон"
   },
   "andes-central": {
     "title_ru": "Центральные Анды",
@@ -779,7 +838,8 @@
     ],
     "core_ru": "Уаскаран, Сорбон, Аконкагуа (частично)",
     "core_en": "Huascarán, Salkantay, Aconcagua (partly)",
-    "priority": 4
+    "priority": 4,
+    "group": "Анды"
   },
   "andes-north": {
     "title_ru": "Северные Анды",
@@ -792,7 +852,8 @@
     ],
     "core_ru": "Чимборазо, Котопахи, Уаскаран (частично)",
     "core_en": "Chimborazo, Cotopaxi, Huascarán (partly)",
-    "priority": 4
+    "priority": 4,
+    "group": "Анды"
   },
   "andes-south": {
     "title_ru": "Южные Анды",
@@ -805,7 +866,8 @@
     ],
     "core_ru": "Аконкагуа, Охос-дель-Саладо, Льюльяйльяко",
     "core_en": "Aconcagua, Ojos del Salado, Llullaillaco",
-    "priority": 4
+    "priority": 4,
+    "group": "Анды"
   },
   "antarctica": {
     "title_ru": "Антарктида",
@@ -818,7 +880,8 @@
     ],
     "core_ru": "Винсон, Эребус",
     "core_en": "Vinson, Erebus",
-    "priority": 4
+    "priority": 4,
+    "group": "Антарктида"
   },
   "apennines": {
     "title_ru": "Апеннины и острова Средиземноморья",
@@ -831,7 +894,8 @@
     ],
     "core_ru": "Гран-Сассо, Этна, Корсика",
     "core_en": "Gran Sasso, Etna, Corsica",
-    "priority": 4
+    "priority": 4,
+    "group": "Апеннины"
   },
   "appalachians": {
     "title_ru": "Аппалачи",
@@ -844,7 +908,8 @@
     ],
     "core_ru": "Митчелл, Вашингтон, Катадин",
     "core_en": "Mitchell, Washington, Katahdin",
-    "priority": 4
+    "priority": 4,
+    "group": "Аппалачи"
   },
   "atlas": {
     "title_ru": "Атлас",
@@ -857,7 +922,8 @@
     ],
     "core_ru": "Тубкаль, Мгун",
     "core_en": "Toubkal, M'Goun",
-    "priority": 4
+    "priority": 4,
+    "group": "Атлас"
   },
   "australia": {
     "title_ru": "Австралия и Тасмания",
@@ -870,7 +936,8 @@
     ],
     "core_ru": "Косцюшко, Уллуру (вид), Крейдл",
     "core_en": "Kosciuszko, Uluru (view), Cradle",
-    "priority": 4
+    "priority": 4,
+    "group": "Австралия"
   },
   "balkans": {
     "title_ru": "Балканы",
@@ -883,7 +950,8 @@
     ],
     "core_ru": "Мусала, Олимп, Триглав",
     "core_en": "Musala, Olympus, Triglav",
-    "priority": 4
+    "priority": 4,
+    "group": "Балканы"
   },
   "brazil": {
     "title_ru": "Бразилия и Гвиана",
@@ -896,7 +964,8 @@
     ],
     "core_ru": "Пик-да-Неблина, Рорайма",
     "core_en": "Pico da Neblina, Roraima",
-    "priority": 4
+    "priority": 4,
+    "group": "Бразилия"
   },
   "british-isles": {
     "title_ru": "Британия и Ирландия",
@@ -909,7 +978,8 @@
     ],
     "core_ru": "Бен-Невис, Сноудон, Каррантуол",
     "core_en": "Ben Nevis, Snowdon, Carrauntoohil",
-    "priority": 4
+    "priority": 4,
+    "group": "Британия"
   },
   "canaries": {
     "title_ru": "Канарские острова",
@@ -922,7 +992,8 @@
     ],
     "core_ru": "Тейде, Табуриенте",
     "core_en": "Teide, Taburiente",
-    "priority": 4
+    "priority": 4,
+    "group": "Канары"
   },
   "carpathians": {
     "title_ru": "Карпаты",
@@ -935,7 +1006,8 @@
     ],
     "core_ru": "Говерла, Герлаховски-Штит, Молдовяну",
     "core_en": "Hoverla, Gerlachovský štít, Moldoveanu",
-    "priority": 4
+    "priority": 4,
+    "group": "Карпаты"
   },
   "chukotka": {
     "title_ru": "Чукотское нагорье",
@@ -948,7 +1020,8 @@
     ],
     "core_ru": "Исходная (1843м), хр. Пекульней, Чукотское плоскогорье",
     "core_en": "Iskhodnaya (1843m), Pekulney Range, Anadyr Plateau",
-    "priority": 4
+    "priority": 4,
+    "group": "Чукотка и Арктика"
   },
   "commanders": {
     "title_ru": "Командорские острова",
@@ -961,7 +1034,8 @@
     ],
     "core_ru": "О. Беринга (742м), о. Медный, заповедник",
     "core_en": "Steller, Medny",
-    "priority": 4
+    "priority": 4,
+    "group": "Командоры"
   },
   "east-africa": {
     "title_ru": "Восточная Африка",
@@ -974,7 +1048,8 @@
     ],
     "core_ru": "Килиманджаро, Кения, Рувензори",
     "core_en": "Kilimanjaro, Kenya, Rwenzori",
-    "priority": 4
+    "priority": 4,
+    "group": "Восточная Африка"
   },
   "ethiopia": {
     "title_ru": "Эфиопия и Африканский Рог",
@@ -987,7 +1062,8 @@
     ],
     "core_ru": "Рас-Дашен, Симиен",
     "core_en": "Ras Dashen, Simien",
-    "priority": 4
+    "priority": 4,
+    "group": "Эфиопия"
   },
   "faroe": {
     "title_ru": "Фарерские острова",
@@ -1000,7 +1076,8 @@
     ],
     "core_ru": "Слэттаратиндур (882м), Гасадалур, Мулафоссур",
     "core_en": "Slættaratindur (882m)",
-    "priority": 4
+    "priority": 4,
+    "group": "Фареры"
   },
   "franz-josef-land": {
     "title_ru": "Земля Франца-Иосифа",
@@ -1013,7 +1090,8 @@
     ],
     "core_ru": "Архипелаг ледников, арктические круизы",
     "core_en": "Archipelago islands, glaciers",
-    "priority": 4
+    "priority": 4,
+    "group": "Земля Франца-Иосифа"
   },
   "greenland": {
     "title_ru": "Гренландия",
@@ -1026,7 +1104,8 @@
     ],
     "core_ru": "Гуннбьёрн",
     "core_en": "Gunnbjørn",
-    "priority": 4
+    "priority": 4,
+    "group": "Гренландия"
   },
   "himalaya-east": {
     "title_ru": "Восточная Гималаи",
@@ -1039,7 +1118,8 @@
     ],
     "core_ru": "Канченджанга, Бутан, Намча-Барва",
     "core_en": "Kangchenjunga, Bhutan, Namcha Barwa",
-    "priority": 4
+    "priority": 4,
+    "group": "Гималаи"
   },
   "himalaya-west": {
     "title_ru": "Западная Гималаи и Каракорум",
@@ -1052,7 +1132,8 @@
     ],
     "core_ru": "Нанга-Парбат, К2, Броуд-Пик",
     "core_en": "Nanga Parbat, K2, Broad Peak",
-    "priority": 4
+    "priority": 4,
+    "group": "Гималаи"
   },
   "hindu-kush": {
     "title_ru": "Гиндукуш и Памир (запад)",
@@ -1065,7 +1146,8 @@
     ],
     "core_ru": "Тирич-Мир, Ношак",
     "core_en": "Tirich Mir, Noshaq",
-    "priority": 4
+    "priority": 4,
+    "group": "Гиндукуш"
   },
   "iberia": {
     "title_ru": "Пиренейский полуостров",
@@ -1078,7 +1160,8 @@
     ],
     "core_ru": "Мулен, Тейде (Канары отдельно), Сьерра-Невада",
     "core_en": "Mulhacén, Sierra Nevada",
-    "priority": 4
+    "priority": 4,
+    "group": "Пиренеи и Иберия"
   },
   "iceland": {
     "title_ru": "Исландия",
@@ -1091,7 +1174,8 @@
     ],
     "core_ru": "Хваннадальсхнукур, Эйяфьятлайокудль",
     "core_en": "Hvannadalshnúkur, Eyjafjallajökull",
-    "priority": 4
+    "priority": 4,
+    "group": "Исландия"
   },
   "indonesia": {
     "title_ru": "Индонезия",
@@ -1104,7 +1188,8 @@
     ],
     "core_ru": "Керамас, Ринджани, Семеру, Карстенс",
     "core_en": "Kerinci, Rinjani, Semeru, Carstensz",
-    "priority": 4
+    "priority": 4,
+    "group": "Индонезия"
   },
   "iran-zagros": {
     "title_ru": "Загрос (Иран)",
@@ -1117,7 +1202,8 @@
     ],
     "core_ru": "Зард-Кух (4221м), Алам-Кух, Дена",
     "core_en": "Zard-Kuh (4221m), Alam-Kuh, Dena",
-    "priority": 4
+    "priority": 4,
+    "group": "Ближний Восток"
   },
   "jan-mayen": {
     "title_ru": "Ян-Майен",
@@ -1130,7 +1216,8 @@
     ],
     "core_ru": "Беренберг (2277м) — активный вулкан",
     "core_en": "Beerenberg (2277m) — active volcano",
-    "priority": 4
+    "priority": 4,
+    "group": "Ян-Майен"
   },
   "japan": {
     "title_ru": "Япония",
@@ -1143,7 +1230,8 @@
     ],
     "core_ru": "Фудзи, Кита, Онтаке",
     "core_en": "Fuji, Kita, Ontake",
-    "priority": 4
+    "priority": 4,
+    "group": "Япония"
   },
   "khangai": {
     "title_ru": "Хангай (Монголия)",
@@ -1156,7 +1244,8 @@
     ],
     "core_ru": "Отгонтэнгэр (4031м), Тариатский вулканический район",
     "core_en": "Otgontenger (4031m), Tariat volcanic area",
-    "priority": 4
+    "priority": 4,
+    "group": "Китай и Монголия"
   },
   "kolyma-magadan": {
     "title_ru": "Магаданские горы и Колыма",
@@ -1169,7 +1258,8 @@
     ],
     "core_ru": "Хр. Колымский, Снежная долина, Оротукан",
     "core_en": "Snow Valley, Kolyma Range, Khasyn",
-    "priority": 4
+    "priority": 4,
+    "group": "Якутия и Северо-Восток"
   },
   "korea": {
     "title_ru": "Корея",
@@ -1182,7 +1272,8 @@
     ],
     "core_ru": "Пэктусан, Халлаcан, Чирисан",
     "core_en": "Paektu, Hallasan, Jirisan",
-    "priority": 4
+    "priority": 4,
+    "group": "Корея"
   },
   "koryakia": {
     "title_ru": "Корякское нагорье",
@@ -1195,7 +1286,8 @@
     ],
     "core_ru": "Ледяная (2562м), Алней, Апахончич",
     "core_en": "Ledyanaya (2562m), Alney, Rekinniki Plateau",
-    "priority": 4
+    "priority": 4,
+    "group": "Камчатка и Корякия"
   },
   "kurily": {
     "title_ru": "Курильские острова",
@@ -1208,7 +1300,8 @@
     ],
     "core_ru": "Тятя (Кунашир, 1819м), Алаид (Атласова, 2339м), Саричев (Матуа)",
     "core_en": "Tyatya (Kunashir), Alaid (Atlasov), Sarychev (Matua)",
-    "priority": 4
+    "priority": 4,
+    "group": "Курилы и Сахалин"
   },
   "madagascar": {
     "title_ru": "Мадагаскар",
@@ -1221,7 +1314,8 @@
     ],
     "core_ru": "Марумукутру",
     "core_en": "Maromokotro",
-    "priority": 4
+    "priority": 4,
+    "group": "Мадагаскар"
   },
   "mexico": {
     "title_ru": "Мексика и Центральная Америка",
@@ -1234,7 +1328,8 @@
     ],
     "core_ru": "Орисаба, Попокатепетль, Истаксиватль",
     "core_en": "Orizaba, Popocatépetl, Iztaccíhuatl",
-    "priority": 4
+    "priority": 4,
+    "group": "Мексика и Центральная Америка"
   },
   "middle-east": {
     "title_ru": "Ближний Восток",
@@ -1247,7 +1342,8 @@
     ],
     "core_ru": "Демавенд, Арарат, Арагац, Таурус, Загрос",
     "core_en": "Damavand, Ararat, Aragats, Taurus, Zagros",
-    "priority": 4
+    "priority": 4,
+    "group": "Ближний Восток"
   },
   "new-guinea": {
     "title_ru": "Новая Гвинея",
@@ -1260,7 +1356,8 @@
     ],
     "core_ru": "Пунчак-Джая, Вильгельм",
     "core_en": "Puncak Jaya, Wilhelm",
-    "priority": 4
+    "priority": 4,
+    "group": "Новая Гвинея"
   },
   "new-zealand": {
     "title_ru": "Новая Зеландия",
@@ -1273,7 +1370,8 @@
     ],
     "core_ru": "Кука, Тасман, Руапеху",
     "core_en": "Cook, Tasman, Ruapehu",
-    "priority": 4
+    "priority": 4,
+    "group": "Новая Зеландия"
   },
   "novaya-zemlya": {
     "title_ru": "Новая Земля",
@@ -1286,7 +1384,8 @@
     ],
     "core_ru": "Ледяная (1547м), Северный ледниковый покров",
     "core_en": "Ledyanaya (1547m)",
-    "priority": 4
+    "priority": 4,
+    "group": "Чукотка и Арктика"
   },
   "patagonia": {
     "title_ru": "Патагония",
@@ -1299,7 +1398,8 @@
     ],
     "core_ru": "Фицрой, Серро-Торре, Торрес-дель-Пайне",
     "core_en": "Fitz Roy, Cerro Torre, Torres del Paine",
-    "priority": 4
+    "priority": 4,
+    "group": "Патагония"
   },
   "pyrenees": {
     "title_ru": "Пиренеи",
@@ -1312,7 +1412,8 @@
     ],
     "core_ru": "Ането, Винмаль",
     "core_en": "Aneto, Vignemale",
-    "priority": 4
+    "priority": 4,
+    "group": "Пиренеи и Иберия"
   },
   "rockies-north": {
     "title_ru": "Северные Скалистые горы",
@@ -1325,7 +1426,8 @@
     ],
     "core_ru": "Робсон, Колумбия, Ассинибойн",
     "core_en": "Robson, Columbia, Assiniboine",
-    "priority": 4
+    "priority": 4,
+    "group": "Скалистые горы"
   },
   "rockies-south": {
     "title_ru": "Южные Скалистые горы",
@@ -1338,7 +1440,8 @@
     ],
     "core_ru": "Элберт, Пайкс-Пик, Гранд-Титон",
     "core_en": "Elbert, Pikes Peak, Grand Teton",
-    "priority": 4
+    "priority": 4,
+    "group": "Скалистые горы"
   },
   "scandinavia": {
     "title_ru": "Скандинавия",
@@ -1351,7 +1454,8 @@
     ],
     "core_ru": "Галлхёпигген, Кебнекайсе, Лофотены",
     "core_en": "Galdhøpiggen, Kebnekaise, Lofoten",
-    "priority": 4
+    "priority": 4,
+    "group": "Скандинавия"
   },
   "sichuan": {
     "title_ru": "Сычуань и Юньнань",
@@ -1364,7 +1468,8 @@
     ],
     "core_ru": "Гунга, Юйлунсюэшань, Эмейшань",
     "core_en": "Gongga, Yulongxueshan, Emeishan",
-    "priority": 4
+    "priority": 4,
+    "group": "Китай"
   },
   "sierra-cascades": {
     "title_ru": "Сьерра-Невада и Каскады",
@@ -1377,7 +1482,8 @@
     ],
     "core_ru": "Уитни, Рейнир, Шаста",
     "core_en": "Whitney, Rainier, Shasta",
-    "priority": 4
+    "priority": 4,
+    "group": "Тихоокеанское побережье"
   },
   "southern-africa": {
     "title_ru": "Южная Африка",
@@ -1390,7 +1496,8 @@
     ],
     "core_ru": "Табл-Маунтин, Драконовы горы (Мфади)",
     "core_en": "Table Mountain, Drakensberg (Mafadi)",
-    "priority": 4
+    "priority": 4,
+    "group": "Южная Африка"
   },
   "suntar-khayata": {
     "title_ru": "Сунтар-Хаята",
@@ -1403,7 +1510,8 @@
     ],
     "core_ru": "Мус-Хая (2959м), ледники Сунтар-Хаята",
     "core_en": "Mus-Khaya (2959m), Suntar glaciers",
-    "priority": 4
+    "priority": 4,
+    "group": "Якутия и Северо-Восток"
   },
   "svalbard": {
     "title_ru": "Шпицберген",
@@ -1416,7 +1524,8 @@
     ],
     "core_ru": "Ньютонтоппен",
     "core_en": "Newtontoppen",
-    "priority": 4
+    "priority": 4,
+    "group": "Шпицберген"
   },
   "taiwan": {
     "title_ru": "Тайвань",
@@ -1429,7 +1538,8 @@
     ],
     "core_ru": "Юйшань, Сюэшань",
     "core_en": "Yushan, Xueshan",
-    "priority": 4
+    "priority": 4,
+    "group": "Тайвань"
   },
   "tibet": {
     "title_ru": "Тибет и Центральная Азия",
@@ -1442,7 +1552,8 @@
     ],
     "core_ru": "Кайлас, Намуно, Амне-Мачин",
     "core_en": "Kailash, Namcha Barwa, Amne Machin",
-    "priority": 4
+    "priority": 4,
+    "group": "Тибет"
   },
   "ural-mid": {
     "title_ru": "Средний Урал",
@@ -1455,7 +1566,8 @@
     ],
     "core_ru": "Конжаковский (север), Ослянка",
     "core_en": "Konzhakovsky (north), Oslyanka",
-    "priority": 4
+    "priority": 4,
+    "group": "Урал"
   },
   "wrangel": {
     "title_ru": "Остров Врангеля",
@@ -1468,7 +1580,8 @@
     ],
     "core_ru": "Советская (1096м), арктическая тундра",
     "core_en": "Sovetskaya (1096m)",
-    "priority": 4
+    "priority": 4,
+    "group": "Чукотка и Арктика"
   },
   "yakutia-chersky": {
     "title_ru": "Хребет Черского",
@@ -1481,7 +1594,8 @@
     ],
     "core_ru": "Победа (3003м), Буордах, Улахан-Чистай",
     "core_en": "Pobeda (3003m), Buordakh, Ulakhan-Chistai",
-    "priority": 4
+    "priority": 4,
+    "group": "Якутия и Северо-Восток"
   },
   "yukon": {
     "title_ru": "Юкон и Северо-Западная Канада",
@@ -1494,6 +1608,7 @@
     ],
     "core_ru": "Логан, Сент-Элиас",
     "core_en": "Logan, St. Elias",
-    "priority": 4
+    "priority": 4,
+    "group": "Аляска и Юкон"
   }
 }

@@ -14,6 +14,7 @@ export interface RegionInfo {
   title_en?: string;
   bbox: [number, number, number, number];
   priority?: number;
+  group?: string;
 }
 
 export interface DownloadProgress {
