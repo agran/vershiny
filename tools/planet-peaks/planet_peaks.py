@@ -162,7 +162,7 @@ def parse_ele(raw: str | None) -> float | None:
 
 
 def emit_peak(
-    out,
+    outs: list,
     lat: float,
     lon: float,
     tags: dict[str, str],
@@ -170,11 +170,13 @@ def emit_peak(
     stats: dict,
 ) -> None:
     stats["peaks"] += 1
+    in_bbox = True
     if bbox:
         min_lon, min_lat, max_lon, max_lat = bbox
-        if not (min_lon <= lon <= max_lon and min_lat <= lat <= max_lat):
-            stats["outside"] += 1
-            return
+        in_bbox = min_lon <= lon <= max_lon and min_lat <= lat <= max_lat
+    if not in_bbox:
+        stats["outside"] += 1
+
     name = pick_name(tags)
     if not name:
         stats["no_name"] += 1
@@ -187,8 +189,14 @@ def emit_peak(
         stats["no_ele"] += 1
     if tags.get("wikidata"):
         peak["wikidata"] = tags["wikidata"]
-    out.write(json.dumps(peak, ensure_ascii=False) + "\n")
+    line = json.dumps(peak, ensure_ascii=False) + "\n"
+
+    # outs[0] — полный файл (весь мир); outs[1] (если есть) — только bbox
+    outs[0].write(line)
     stats["written"] += 1
+    if in_bbox and len(outs) > 1:
+        outs[1].write(line)
+        stats["written_bbox"] = stats.get("written_bbox", 0) + 1
 
 
 def parse_dense_nodes(
@@ -197,7 +205,7 @@ def parse_dense_nodes(
     granularity: int,
     lat_offset: int,
     lon_offset: int,
-    out,
+    outs,
     bbox,
     stats: dict,
 ) -> None:
@@ -263,7 +271,7 @@ def parse_dense_nodes(
         kv_pos += 1  # разделитель 0
 
         if tags.get("natural") == "peak":
-            emit_peak(out, lat, lon, tags, bbox, stats)
+            emit_peak(outs, lat, lon, tags, bbox, stats)
 
 
 def parse_node(
@@ -300,7 +308,7 @@ def parse_node(
     }
     if tags.get("natural") == "peak":
         emit_peak(
-            out,
+            outs,
             (lat_offset + granularity * lat) / 1e9,
             (lon_offset + granularity * lon) / 1e9,
             tags,
@@ -365,7 +373,12 @@ def main() -> None:
     parser.add_argument("-o", "--out", type=Path, required=True, help="JSONL на выход")
     parser.add_argument(
         "--bbox",
-        help="minLon,minLat,maxLon,maxLat — фильтр по области (необязательно)",
+        help="minLon,minLat,maxLon,maxLat — дополнительно писать пики области в --bbox-out",
+    )
+    parser.add_argument(
+        "--bbox-out",
+        type=Path,
+        help="JSONL только для bbox (требует --bbox); без него bbox игнорируется",
     )
     args = parser.parse_args()
 
@@ -374,6 +387,8 @@ def main() -> None:
         bbox = tuple(float(x) for x in args.bbox.split(","))
         if len(bbox) != 4:
             sys.exit("bbox: minLon,minLat,maxLon,maxLat")
+        if not args.bbox_out:
+            sys.exit("--bbox без --bbox-out бесполезен: укажите --bbox-out")
 
     stats = {"peaks": 0, "outside": 0, "no_name": 0, "no_ele": 0, "written": 0}
     t0 = time.time()
@@ -381,7 +396,13 @@ def main() -> None:
     file_size = args.input.stat().st_size
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
+    bbox_out = None
+    if args.bbox_out:
+        args.bbox_out.parent.mkdir(parents=True, exist_ok=True)
+        bbox_out = args.bbox_out.open("w", encoding="utf-8")
+
     with args.input.open("rb") as f, args.out.open("w", encoding="utf-8") as out:
+        outs = [out] + ([bbox_out] if bbox_out else [])
         while True:
             header = read_blob_header(f)
             if header is None:
@@ -389,7 +410,7 @@ def main() -> None:
             blob_type, datasize = header
             if blob_type == "OSMData":
                 raw = read_blob(f, datasize)
-                parse_primitive_block(raw, out, bbox, stats)
+                parse_primitive_block(raw, outs, bbox, stats)
                 blocks += 1
                 if blocks % 50 == 0:
                     elapsed = time.time() - t0
@@ -399,19 +420,32 @@ def main() -> None:
                     eta_min = (file_size - pos) / max(pos / elapsed, 1) / 60
                     print(
                         f"  {pct:5.1f}% | {blocks} блоков | "
-                        f"{stats['peaks']} пиков, записано {stats['written']} | "
-                        f"{speed:.1f} МБ/с | прошло {elapsed / 60:.1f} мин, "
+                        f"{stats['peaks']} пиков, записано {stats['written']}"
+                        + (
+                            f" (в bbox: {stats.get('written_bbox', 0)})"
+                            if bbox_out
+                            else ""
+                        )
+                        + f" | {speed:.1f} МБ/с | прошло {elapsed / 60:.1f} мин, "
                         f"осталось ~{eta_min:.1f} мин",
                         flush=True,
                     )
             else:  # OSMHeader — пропускаем
                 f.seek(datasize, 1)
 
+    if bbox_out:
+        bbox_out.close()
+
     elapsed = time.time() - t0
     print(
         f"OK: {stats['written']} вершин → {args.out} за {elapsed / 60:.1f} мин\n"
         f"  найдено natural=peak: {stats['peaks']}, вне bbox: {stats['outside']}, "
         f"без имени: {stats['no_name']}, без ele: {stats['no_ele']}"
+        + (
+            f"\n  в bbox записано: {stats.get('written_bbox', 0)} → {args.bbox_out}"
+            if args.bbox_out
+            else ""
+        )
     )
 
 
