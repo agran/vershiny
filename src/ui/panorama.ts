@@ -199,16 +199,13 @@ function drawLabels(
       const best = sorted[0];
       const extra = sorted.length - 1;
       drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''), best.visibility);
-      // Маркер к точке пика (visible/onSlope) или к силуэту (hidden)
-      const markerY = best.visibility === 'hidden'
-        ? horizonAtAzimuth(state, best.azimuthRad, elevToY)
-        : elevToY(best.elevationRad);
+      // Маркер к силуэту на азимуте пика (не к расчётной точке — DEM vs OSM расходятся)
+      const markerY = horizonAtAzimuth(state, best.azimuthRad, elevToY);
       drawMarker(ctx, azToX(best.azimuthRad), box.y + box.h, markerY, best.visibility);
     } else if (box.peak) {
       drawLabel(ctx, box, labelText(box.peak), box.peak.visibility);
-      const markerY = box.peak.visibility === 'hidden'
-        ? horizonAtAzimuth(state, box.peak.azimuthRad, elevToY)
-        : elevToY(box.peak.elevationRad);
+      // Маркер к силуэту на азимуте пика
+      const markerY = horizonAtAzimuth(state, box.peak.azimuthRad, elevToY);
       drawMarker(ctx, azToX(box.peak.azimuthRad), box.y + box.h, markerY, box.peak.visibility);
     }
   }
