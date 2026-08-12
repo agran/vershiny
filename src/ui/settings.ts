@@ -135,7 +135,7 @@ export function openSettings(
           'border:none;border-radius:6px;padding:4px 10px;font-size:12px;' +
           'cursor:pointer;flex-shrink:0';
         if (isDownloaded) {
-          btn.textContent = '✓';
+          btn.textContent = t('downloaded');
           btn.style.background = '#2d6a4f';
           btn.style.color = '#d8f3dc';
           btn.disabled = true;
@@ -153,8 +153,9 @@ export function openSettings(
                   btn.textContent = `${p.done}/${p.total}`;
                 }
               });
-              btn.textContent = '✓';
+              btn.textContent = t('downloaded');
               btn.style.background = '#2d6a4f';
+              btn.style.color = '#d8f3dc';
             } catch {
               btn.textContent = '✗';
               btn.style.background = '#e63946';
