@@ -7,7 +7,6 @@
 
 import { toDeg, wrapAngle } from '../core/geo';
 import type { VisiblePeak } from '../core/horizon';
-import { peakScore } from '../core/peaks';
 import { getLocale, peakName, t } from '../core/i18n';
 
 export interface PanoramaState {
@@ -47,11 +46,14 @@ const RIDGE_LIGHT = 'rgba(255,255,255,0.95)';
 /** Толщина/сдвиг контура в CSS-пикселях (масштабируются по devicePixelRatio) */
 const RIDGE_WIDTH_CSS = 1.4;
 const RIDGE_OFFSET_CSS = 1.1;
-const LABEL_COLOR = '#f1faee';
-const LABEL_DIM = '#a8dadc';
-const LABEL_HIDDEN = 'rgba(168,218,220,0.5)';
+/** Подписи и выноски — тот же принцип: светлое с тёмной обводкой, без плашек */
+const INK_DARK = 'rgba(0,0,0,0.85)';
+const INK_LIGHT = 'rgba(255,255,255,0.98)';
+const INK_LIGHT_DIM = 'rgba(255,255,255,0.55)';
+/** Наклон подписей вершин: все под одним углом, вправо-вверх от вершины */
+const LABEL_ANGLE_DEG = 60;
 
-/** Рендер одного кадра панорамы */
+/** Рендер одного кадра панорамы: небо + оверлей */
 export function renderPanorama(
   ctx: CanvasRenderingContext2D,
   state: PanoramaState,
@@ -68,6 +70,22 @@ export function renderPanorama(
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, width, height);
 
+  drawOverlay(ctx, state, view);
+}
+
+/**
+ * Оверлей поверх любого фона: контуры гребней, шкала азимутов, подписи вершин.
+ * Используется и панорамой, и AR-режимом поверх кадра камеры, поэтому ничего
+ * не заливает — только контрастные линии и текст.
+ */
+export function drawOverlay(
+  ctx: CanvasRenderingContext2D,
+  state: PanoramaState,
+  view: ViewState,
+): void {
+  const { width, height } = ctx.canvas;
+  const horizonY = height * 0.62;
+
   const azToX = (az: number): number =>
     (wrapAngle(az - view.centerAzRad) / view.fovRad) * width + width / 2;
   const elevToY = (elev: number): number =>
@@ -76,8 +94,8 @@ export function renderPanorama(
   const { horizon, stepRad } = state;
   const layers = state.layers ?? [horizon];
 
-  // Отладка: доступ к данным из консоли
-  (window as unknown as Record<string, unknown>).__pano = state;
+  // Масштаб под плотность пикселей (canvas в devicePixelRatio раз крупнее CSS)
+  const uiScale = ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1;
 
   // Профили силуэта: видимые гребни по возрастанию дистанции.
   // Гребень = локальный максимум угла вдоль луча (то, что реально видно как линия).
@@ -90,10 +108,8 @@ export function renderPanorama(
 
   if (profiles.length) {
     const rayCount = profiles[0].length;
-    // Масштаб линий под плотность пикселей (canvas.width может быть в 2–3× больше CSS)
-    const dpr = ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1;
-    const ridgeWidth = RIDGE_WIDTH_CSS * dpr;
-    const ridgeOffset = RIDGE_OFFSET_CSS * dpr;
+    const ridgeWidth = RIDGE_WIDTH_CSS * uiScale;
+    const ridgeOffset = RIDGE_OFFSET_CSS * uiScale;
     // Окклюзия: гребень виден только там, где он выше всех более близких
     const runningMax = new Float32Array(rayCount).fill(-Infinity);
     const EPS = 5e-4; // ~0.03° — не рисуем «дрожание» на одном уровне
@@ -113,26 +129,36 @@ export function renderPanorama(
   }
 
   // Шкала азимутов: каждые 15°, подписи сторон света
-  ctx.font = '12px system-ui, sans-serif';
+  ctx.font = `${12 * uiScale}px system-ui, sans-serif`;
   ctx.textAlign = 'center';
+  ctx.lineJoin = 'round';
   const stepDeg = 15;
   for (let deg = 0; deg < 360; deg += stepDeg) {
     const az = (deg * Math.PI) / 180;
     const x = azToX(az);
     if (x < 0 || x > width) continue;
-    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    const tickLen = (deg % 45 === 0 ? 14 : 7) * uiScale;
     ctx.beginPath();
     ctx.moveTo(x, horizonY);
-    ctx.lineTo(x, horizonY + (deg % 45 === 0 ? 14 : 7));
+    ctx.lineTo(x, horizonY + tickLen);
+    ctx.strokeStyle = INK_DARK;
+    ctx.lineWidth = 3 * uiScale;
+    ctx.stroke();
+    ctx.strokeStyle = INK_LIGHT_DIM;
+    ctx.lineWidth = 1.2 * uiScale;
     ctx.stroke();
     if (deg % 45 === 0) {
-      ctx.fillStyle = LABEL_DIM;
-      ctx.fillText(cardinal(deg), x, horizonY + 28);
+      const ty = horizonY + 28 * uiScale;
+      ctx.lineWidth = 3 * uiScale;
+      ctx.strokeStyle = INK_DARK;
+      ctx.strokeText(cardinal(deg), x, ty);
+      ctx.fillStyle = INK_LIGHT;
+      ctx.fillText(cardinal(deg), x, ty);
     }
   }
 
   // Подписи пиков с кластеризацией
-  drawLabels(ctx, state.peaks, azToX, elevToY, view, state);
+  drawLabels(ctx, state.peaks, azToX, elevToY, view, state, uiScale);
 }
 
 /**
@@ -211,13 +237,20 @@ function strokeRidge(
   ctx.stroke();
 }
 
-interface LabelBox {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  peak?: VisiblePeak;
-  cluster?: VisiblePeak[];
+/** Размещённая подпись в повёрнутой системе координат (все подписи параллельны) */
+interface PlacedLabel {
+  peak: VisiblePeak;
+  /** Точка вершины на силуэте */
+  mx: number;
+  my: number;
+  /** Якорь первой буквы (чуть выше вершины по направлению текста) */
+  ax: number;
+  ay: number;
+  /** Проекции на ось текста (u) и поперечную (v) — для проверки пересечений */
+  u0: number;
+  u1: number;
+  v: number;
+  extra: number;
 }
 
 function drawLabels(
@@ -227,83 +260,63 @@ function drawLabels(
   elevToY: (elev: number) => number,
   view: ViewState,
   state: PanoramaState,
+  uiScale: number,
 ): void {
   void view;
   const { width, height } = ctx.canvas;
-  ctx.font = '13px system-ui, sans-serif';
-  ctx.textAlign = 'left';
+  ctx.font = `${13 * uiScale}px system-ui, sans-serif`;
 
-  // Полки: 3 ряда подписей над горизонтом
-  const horizonY = height * 0.62;
-  const ROW_H = 24;
-  const GAP = 12;
-  const shelves = [horizonY - GAP, horizonY - GAP - ROW_H, horizonY - GAP - ROW_H * 2];
+  // Все подписи под одним углом: так они не пересекают друг друга,
+  // их помещается больше, а выноска не режет соседние надписи.
+  const theta = (LABEL_ANGLE_DEG * Math.PI) / 180;
+  const ux = Math.cos(theta);   // ось вдоль текста (вправо-вверх)
+  const uy = -Math.sin(theta);
+  const vx = Math.sin(theta);   // ось поперёк текста
+  const vy = Math.cos(theta);
 
-  // Сортировка по score (уже отсортированы в filterVisiblePeaks)
-  const placed: LabelBox[] = [];
-  const clusters = new Map<LabelBox, VisiblePeak[]>();
+  const LINE_H = 15 * uiScale;  // зазор между параллельными «дорожками»
+  const LEAD = 7 * uiScale;     // отступ от вершины до первой буквы
+  const PAD_U = 8 * uiScale;    // зазор между подписями вдоль строки
+
+  // Список отсортирован по приоритету (высота + бонус за близость), поэтому
+  // при нехватке места остаётся более высокая (и более близкая) вершина.
+  const placed: PlacedLabel[] = [];
 
   for (const peak of peaks) {
-    const x = azToX(peak.azimuthRad);
-    if (x < 0 || x > width) continue;
+    const marker = findPeakMarkerPosition(peak, state, azToX, elevToY);
+    if (!marker) continue;
+    const { x: mx, y: my } = marker;
+    if (mx < 0 || mx > width || my < 0 || my > height) continue;
+
+    // Якорь первой буквы — над вершиной по направлению текста
+    const ax = mx + ux * LEAD;
+    const ay = my + uy * LEAD;
+    if (ay < LINE_H) continue; // подпись ушла бы за верх кадра
 
     const text = labelText(peak);
-    const w = ctx.measureText(text).width + 10;
+    const w = ctx.measureText(text).width;
+    const u0 = ax * ux + ay * uy;
+    const v = ax * vx + ay * vy;
+    const u1 = u0 + w;
 
-    // Пробуем полки сверху вниз: ищем свободное место по x на этой полке
-    let placedBox: LabelBox | null = null;
-    for (let s = 0; s < shelves.length; s++) {
-      const shelfY = shelves[s];
-      // Проверяем перекрытие только с подписями на ТОЙ ЖЕ полке
-      const conflict = placed.some(
-        (b) => Math.abs(b.y - (shelfY - 16)) < 2 && // та же полка
-               x - w / 2 < b.x + b.w + 4 && // левый край левее правого края существующего + зазор
-               x + w / 2 > b.x - 4,          // правый край правее левого края
-      );
-      if (!conflict) {
-        placedBox = { x: x - w / 2, y: shelfY - 16, w, h: 20, peak };
-        placed.push(placedBox);
-        break;
-      }
+    // Пересечение параллельных прямоугольников — это пересечение интервалов
+    // по обеим осям повёрнутой системы координат
+    const conflict = placed.find(
+      (p) => Math.abs(p.v - v) < LINE_H && u0 < p.u1 + PAD_U && u1 > p.u0 - PAD_U,
+    );
+    if (conflict) {
+      conflict.extra++; // соседа не подписываем — считаем его в «+N»
+      continue;
     }
 
-    if (!placedBox) {
-      // Все полки заняты — в кластер ближайшего по x
-      if (placed.length === 0) continue;
-      const nearest = placed.reduce((best, b) => {
-        const distBest = Math.abs(b.x + b.w / 2 - x);
-        const distB = Math.abs(b.x + b.w / 2 - x);
-        return distB < distBest ? b : best;
-      });
-      if (!clusters.has(nearest)) clusters.set(nearest, []);
-      clusters.get(nearest)!.push(peak);
-      if (!nearest.cluster) nearest.cluster = [];
-      nearest.cluster.push(peak);
-    }
+    placed.push({ peak, mx, my, ax, ay, u0, u1, v, extra: 0 });
   }
 
-  // Рендер: сначала кластеры, потом одиночные
-  for (const box of placed) {
-    const cluster = clusters.get(box);
-    if (cluster) {
-      const sorted = [...cluster].sort(
-        (a, b) => peakScore(b, b.distanceM) - peakScore(a, a.distanceM),
-      );
-      const best = sorted[0];
-      const extra = sorted.length - 1;
-      drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''), best.visibility);
-      // Маркер: точная позиция вершины на силуэте
-      const marker = findPeakMarkerPosition(best, state, azToX, elevToY);
-      if (marker) {
-        drawMarker(ctx, marker.x, box.y + box.h, marker.y, best.visibility);
-      }
-    } else if (box.peak) {
-      drawLabel(ctx, box, labelText(box.peak), box.peak.visibility);
-      const marker = findPeakMarkerPosition(box.peak, state, azToX, elevToY);
-      if (marker) {
-        drawMarker(ctx, marker.x, box.y + box.h, marker.y, box.peak.visibility);
-      }
-    }
+  // Рендер: подпись приоритетной вершины, вытесненные соседи — как «+N»
+  for (const p of placed) {
+    const text = labelText(p.peak) + (p.extra > 0 ? `  +${p.extra}` : '');
+    drawPeakAnchor(ctx, p.mx, p.my, p.ax, p.ay, p.peak.visibility, uiScale);
+    drawRotatedLabel(ctx, p.ax, p.ay, theta, text, p.peak.visibility, uiScale);
   }
 }
 
@@ -315,46 +328,67 @@ function labelText(peak: VisiblePeak): string {
   return `${peakName(peak)}${ele ? ' · ' + ele : ''} · ${km} ${kmUnit}`;
 }
 
-function drawLabel(
+/**
+ * Подпись под фиксированным углом: без плашки, светлый текст с тёмной обводкой.
+ * Начало строки — в якоре (первая буква над вершиной), текст уходит вправо-вверх.
+ */
+function drawRotatedLabel(
   ctx: CanvasRenderingContext2D,
-  box: LabelBox,
+  ax: number,
+  ay: number,
+  theta: number,
   text: string,
-  visibility: 'visible' | 'onSlope' | 'hidden' = 'visible',
+  visibility: 'visible' | 'onSlope' | 'hidden',
+  uiScale: number,
 ): void {
-  ctx.fillStyle = 'rgba(13,27,42,0.72)';
-  ctx.beginPath();
-  ctx.roundRect(box.x, box.y, box.w, box.h, 4);
-  ctx.fill();
-  ctx.fillStyle = visibility === 'hidden' ? LABEL_HIDDEN : LABEL_COLOR;
-  ctx.fillText(text, box.x + 5, box.y + 13.5);
+  ctx.save();
+  ctx.translate(ax, ay);
+  ctx.rotate(-theta);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round';
+  ctx.miterLimit = 2;
+  ctx.lineWidth = 3.5 * uiScale;
+  ctx.strokeStyle = INK_DARK;
+  ctx.strokeText(text, 0, 0);
+  ctx.fillStyle = visibility === 'hidden' ? INK_LIGHT_DIM : INK_LIGHT;
+  ctx.fillText(text, 0, 0);
+  ctx.restore();
 }
 
-function drawMarker(
+/** Точка на вершине и короткая связка до первой буквы подписи */
+function drawPeakAnchor(
   ctx: CanvasRenderingContext2D,
-  x: number,
-  fromY: number,
-  toY: number,
-  visibility: 'visible' | 'onSlope' | 'hidden' = 'visible',
+  mx: number,
+  my: number,
+  ax: number,
+  ay: number,
+  visibility: 'visible' | 'onSlope' | 'hidden',
+  uiScale: number,
 ): void {
-  if (visibility === 'hidden') {
-    ctx.setLineDash([3, 3]);
-    ctx.strokeStyle = 'rgba(168,218,220,0.4)';
-  } else {
-    ctx.setLineDash([]);
-    ctx.strokeStyle = 'rgba(241,250,238,0.8)';
-  }
-  ctx.lineWidth = 1;
+  const hidden = visibility === 'hidden';
+  ctx.lineCap = 'round';
+  ctx.setLineDash(hidden ? [3 * uiScale, 3 * uiScale] : []);
   ctx.beginPath();
-  ctx.moveTo(x, fromY);
-  ctx.lineTo(x, toY);
+  ctx.moveTo(mx, my);
+  ctx.lineTo(ax, ay);
+  ctx.strokeStyle = INK_DARK;
+  ctx.lineWidth = 3 * uiScale;
+  ctx.stroke();
+  ctx.strokeStyle = hidden ? INK_LIGHT_DIM : INK_LIGHT;
+  ctx.lineWidth = 1.2 * uiScale;
   ctx.stroke();
   ctx.setLineDash([]);
 
   // Точка-якорь на вершине (только для видимых)
   if (visibility === 'visible') {
-    ctx.fillStyle = 'rgba(241,250,238,0.9)';
     ctx.beginPath();
-    ctx.arc(x, toY, 3, 0, Math.PI * 2);
+    ctx.arc(mx, my, 3.4 * uiScale, 0, Math.PI * 2);
+    ctx.fillStyle = INK_DARK;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(mx, my, 2 * uiScale, 0, Math.PI * 2);
+    ctx.fillStyle = INK_LIGHT;
     ctx.fill();
   }
 }

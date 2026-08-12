@@ -4,9 +4,7 @@
  */
 
 import type { PanoramaState, ViewState } from './panorama';
-import { wrapAngle, toDeg } from '../core/geo';
-import { peakScore } from '../core/peaks';
-import { getLocale, peakName } from '../core/i18n';
+import { drawOverlay } from './panorama';
 
 export interface ArOptions {
   /** Прозрачность оверлея 0–1 */
@@ -76,80 +74,10 @@ function drawArFrame(
     ctx.fillRect(0, 0, width, height);
   }
 
-  // Оверлей
+  // Оверлей: те же контуры и подписи, что в панораме (без заливок —
+  // важно видеть кадр камеры под линиями)
   ctx.save();
   ctx.globalAlpha = opacity;
-
-  const horizonY = height * 0.62;
-  const azToX = (az: number): number =>
-    (wrapAngle(az - view.centerAzRad) / view.fovRad) * width + width / 2;
-  const elevToY = (elev: number): number =>
-    horizonY - ((elev - view.tiltRad) / view.fovVRad) * height;
-
-  // Силуэт горизонта
-  ctx.beginPath();
-  ctx.moveTo(0, height);
-  const { horizon, stepRad } = state;
-  for (let i = 0; i < horizon.length; i++) {
-    const az = i * stepRad;
-    const x = azToX(az);
-    if (x < -50 || x > width + 50) continue;
-    const y = horizon[i] === -Infinity ? horizonY : elevToY(horizon[i]);
-    ctx.lineTo(x, Math.max(-50, Math.min(height, y)));
-  }
-  ctx.lineTo(width, height);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(13,27,42,0.5)';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(241,250,238,0.9)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  // Подписи пиков (только видимые, без кластеров — в AR важна скорость)
-  ctx.font = '13px system-ui, sans-serif';
-  ctx.textAlign = 'center';
-  for (const peak of state.peaks) {
-    const x = azToX(peak.azimuthRad);
-    if (x < 0 || x > width) continue;
-    const y = elevToY(peak.elevationRad) - 16;
-
-    // Метка
-    ctx.strokeStyle = 'rgba(241,250,238,0.8)';
-    ctx.beginPath();
-    ctx.moveTo(x, y + 16);
-    ctx.lineTo(x, y + 6);
-    ctx.stroke();
-
-    // Подпись
-    const km = (peak.distanceM / 1000).toFixed(peak.distanceM < 10_000 ? 1 : 0);
-    const unit = getLocale() === 'ru' ? 'км' : 'km';
-    const ele = peak.ele !== undefined ? `${Math.round(peak.ele)}${getLocale() === 'ru' ? 'м' : 'm'}` : '';
-    const text = `${peakName(peak)}${ele ? ' ' + ele : ''} · ${km}${unit}`;
-    const tw = ctx.measureText(text).width;
-    ctx.fillStyle = 'rgba(13,27,42,0.7)';
-    ctx.fillRect(x - tw / 2 - 4, y - 12, tw + 8, 16);
-    ctx.fillStyle = '#f1faee';
-    ctx.fillText(text, x, y);
-  }
-
-  // Шкала азимутов (только стороны света)
-  ctx.font = '11px system-ui, sans-serif';
-  ctx.fillStyle = 'rgba(168,218,220,0.9)';
-  for (let deg = 0; deg < 360; deg += 45) {
-    const az = (deg * Math.PI) / 180;
-    const x = azToX(az);
-    if (x < 0 || x > width) continue;
-    ctx.fillText(`${cardinalShort(deg)}`, x, height - 12);
-  }
-
+  drawOverlay(ctx, state, view);
   ctx.restore();
 }
-
-function cardinalShort(deg: number): string {
-  const names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  return names[deg / 45];
-}
-
-/** Для будущей кластеризации в AR (пока не используется) */
-void peakScore;
-void toDeg;

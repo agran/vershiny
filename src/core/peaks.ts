@@ -27,12 +27,19 @@ export interface PeaksFile {
 }
 
 /**
- * Приоритет подписи: score = ele / distance (ALGORITHMS.md §4).
- * Чем выше и ближе — тем важнее.
+ * Приоритет подписи (ALGORITHMS.md §4).
+ *
+ * Главный критерий — абсолютная высота: из двух соседних вершин подписываем
+ * более высокую. Близость даёт бонус (до +40% на нулевой дистанции, затухает
+ * к ~40 км), поэтому при близкой высоте выигрывает ближняя вершина.
+ *
+ * Прежняя формула ele/distance была слишком чувствительна к дистанции:
+ * холм 3000 м в 5 км «побеждал» Эльбрус в 20 км.
  */
 export function peakScore(peak: Peak, distanceM: number): number {
   const ele = peak.ele ?? 0;
-  return ele / Math.max(distanceM, 1);
+  const proximity = Math.exp(-Math.max(distanceM, 0) / 40_000);
+  return ele * (1 + 0.4 * proximity);
 }
 
 /** Фильтр пиков в радиусе видимости (200 км по ROADMAP) */

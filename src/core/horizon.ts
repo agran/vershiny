@@ -13,7 +13,7 @@ import {
   type LatLon,
 } from './geo';
 import type { Peak } from './peaks';
-import { PEAK_VISIBILITY_RADIUS_M } from './peaks';
+import { PEAK_VISIBILITY_RADIUS_M, peakScore } from './peaks';
 
 /** Синхронная выборка высоты: (pos, дистанция от наблюдателя) → метры | NaN */
 export type SampleFn = (pos: LatLon, distM: number) => number;
@@ -387,13 +387,13 @@ export function filterVisiblePeaks(
     const visible = checkPeakVisibility(origin, observerH, peak, sample, distToHorizon);
     if (visible) result.push(visible);
   }
-  // Сортировка: видимые → на склоне → скрытые; внутри — по score
+  // Сортировка: видимые → на склоне → скрытые; внутри — по приоритету подписи
   const order = { visible: 0, onSlope: 1, hidden: 2 };
   result.sort((a, b) => {
     const oa = order[a.visibility];
     const ob = order[b.visibility];
     if (oa !== ob) return oa - ob;
-    return (b.ele ?? 0) / b.distanceM - (a.ele ?? 0) / a.distanceM;
+    return peakScore(b, b.distanceM) - peakScore(a, a.distanceM);
   });
   return result;
 }
