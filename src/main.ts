@@ -57,11 +57,15 @@ function draw(): void {
   renderPanorama(ctx, panorama, view);
 }
 
-// --- Поворот пальцем / мышью (fallback-режим, работает без сенсоров) ---
-// Влево-вправо — азимут, вверх-вниз — наклон; диагональ = оба сразу
+// --- Управление: поворот + перемещение ---
+// Мышь/тач: поворот (drag), перемещение (shift+drag или двойной тап)
+// Клавиатура: WASD/стрелки
+
 let dragging = false;
 let lastX = 0;
 let lastY = 0;
+let lastTap = 0; // для двойного тапа (перемещение вперёд)
+
 canvas.addEventListener('pointerdown', (ev) => {
   dragging = true;
   lastX = ev.clientX;
@@ -71,21 +75,57 @@ canvas.addEventListener('pointerdown', (ev) => {
   } catch {
     // Playwright/синтетические события не имеют pointerId — пропускаем
   }
+
+  // Двойной тап = перемещение вперёд
+  const now = Date.now();
+  if (now - lastTap < 300) {
+    moveForward();
+    lastTap = 0;
+  } else {
+    lastTap = now;
+  }
 });
+
 canvas.addEventListener('pointermove', (ev) => {
   if (!dragging) return;
   const dx = ev.clientX - lastX;
   const dy = ev.clientY - lastY;
   lastX = ev.clientX;
   lastY = ev.clientY;
-  view.centerAzRad -= (dx / canvas.clientWidth) * view.fovRad;
-  view.tiltRad = Math.max(
-    -MAX_TILT,
-    Math.min(MAX_TILT, view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad),
-  );
-  draw();
+
+  // Shift+drag или правый клик = перемещение; обычный drag = поворот
+  if (ev.shiftKey || ev.buttons === 2) {
+    // Перемещение: dx/dy → шаг в сторону взгляда
+    const dist = Math.hypot(dx, dy) * 2; // масштаб: 1px = 2м
+    if (dist > 5) {
+      const az = view.centerAzRad + Math.atan2(dy, dx); // направление движения
+      const newPos = destination(lastOrigin, az, dist);
+      lastOrigin = newPos;
+      worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
+      setStatus(t('computing'));
+    }
+  } else {
+    // Поворот камеры
+    view.centerAzRad -= (dx / canvas.clientWidth) * view.fovRad;
+    view.tiltRad = Math.max(
+      -MAX_TILT,
+      Math.min(MAX_TILT, view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad),
+    );
+    draw();
+  }
 });
+
 canvas.addEventListener('pointerup', () => (dragging = false));
+canvas.addEventListener('contextmenu', (ev) => ev.preventDefault()); // правый клик = перемещение
+
+/** Перемещение вперёд по азимуту взгляда (двойной тап) */
+function moveForward(): void {
+  if (!panorama) return;
+  const newPos = destination(lastOrigin, view.centerAzRad, MOVE_STEP_M);
+  lastOrigin = newPos;
+  worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
+  setStatus(t('computing'));
+}
 
 // --- Навигация: WASD/стрелки + PageUp/PageDown ---
 const MOVE_STEP_M = 500; // шаг перемещения по земле
