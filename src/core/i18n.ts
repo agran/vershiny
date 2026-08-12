@@ -64,6 +64,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   regions: { ru: 'Регионы', en: 'Regions' },
   download: { ru: 'Скачать', en: 'Download' },
   downloaded: { ru: 'Скачан', en: 'Downloaded' },
+  close: { ru: 'Закрыть', en: 'Close' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },

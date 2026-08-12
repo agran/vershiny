@@ -31,7 +31,7 @@ export function openSettings(
   panel.style.cssText =
     'background:#1a1a2e;border-radius:16px;padding:24px;max-width:420px;' +
     'width:90%;max-height:80vh;overflow-y:auto;color:#f1faee;' +
-    'font:14px/1.6 system-ui,sans-serif';
+    'font:14px/1.6 system-ui,sans-serif;position:relative';
   overlay.appendChild(panel);
 
   // Заголовок
@@ -123,11 +123,19 @@ export function openSettings(
           `border-radius:8px;background:${isCurrent ? '#2b4a6f' : '#1f2833'};` +
           'border:1px solid #415a77';
 
-        // Название
+        // Название + размер
+        const nameWrap = document.createElement('div');
+        nameWrap.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:2px';
         const name = document.createElement('span');
         name.textContent = regionLabel(regionInfo);
-        name.style.cssText = 'flex:1;font-size:13px';
-        rowEl.appendChild(name);
+        name.style.cssText = 'font-size:13px';
+        nameWrap.appendChild(name);
+        const size = estimateRegionSizeMB(regionInfo.bbox);
+        const sizeEl = document.createElement('span');
+        sizeEl.textContent = `~${size} МБ`;
+        sizeEl.style.cssText = 'font-size:11px;color:#a8dadc';
+        nameWrap.appendChild(sizeEl);
+        rowEl.appendChild(nameWrap);
 
         // Статус / кнопка скачивания
         const btn = document.createElement('button');
@@ -195,6 +203,17 @@ export function openSettings(
     callbacks.onRegionChange(regionSelect.value);
   };
 
+  // Кнопка закрытия (✕) — явная, в углу
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕';
+  closeBtn.title = t('close');
+  closeBtn.style.cssText =
+    'position:absolute;top:12px;right:12px;width:32px;height:32px;' +
+    'border:none;border-radius:50%;background:#415a77;color:#f1faee;' +
+    'font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center';
+  closeBtn.onclick = close;
+  panel.appendChild(closeBtn);
+
   // Закрытие по клику на оверлей
   overlay.onclick = (ev) => {
     if (ev.target === overlay) close();
@@ -232,4 +251,19 @@ function btnStyle(): string {
     'background:#415a77;color:#f1faee;border:none;border-radius:8px;' +
     'padding:8px 16px;font-size:14px;cursor:pointer;margin-top:8px'
   );
+}
+
+/** Оценка размера региона для скачивания (пики + DEM-патч).
+ *  По DATA-PIPELINE: регион ~400×400 км ≈ 5–15 МБ int16 + brotli.
+ *  Считаем по площади bbox с поправкой на широту (меридианы сходятся). */
+function estimateRegionSizeMB(bbox: [number, number, number, number]): number {
+  const [minLon, minLat, maxLon, maxLat] = bbox;
+  const latMid = (minLat + maxLat) / 2;
+  const lonSpanKm = (maxLon - minLon) * 111.32 * Math.cos((latMid * Math.PI) / 180);
+  const latSpanKm = (maxLat - minLat) * 111.32;
+  const areaKm2 = lonSpanKm * latSpanKm;
+  // База: 400×400 км = 160 000 км² ≈ 10 МБ → 0.0625 МБ на 1000 км²
+  const demMB = Math.max(3, Math.round((areaKm2 / 1000) * 0.0625));
+  const peaksMB = 0.3; // peaks/{region}.json ≈ 200–500 КБ
+  return Math.round((demMB + peaksMB) * 10) / 10;
 }
