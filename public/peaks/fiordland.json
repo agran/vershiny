@@ -1,0 +1,4050 @@
+{
+ "region": "fiordland",
+ "generated": "2026-08-12T10:54:55+00:00",
+ "peaks": [
+  {
+   "lat": -44.623235,
+   "lon": 168.402404,
+   "name": "Mount Earnslaw / Pikirakatahi",
+   "name_en": "Mount Earnslaw",
+   "ele": 2830,
+   "wikidata": "Q6920530"
+  },
+  {
+   "lat": -44.622342,
+   "lon": 168.410599,
+   "name": "East Peak",
+   "ele": 2830,
+   "wikidata": "Q31480651"
+  },
+  {
+   "lat": -44.6256,
+   "lon": 168.395264,
+   "name": "West Peak",
+   "ele": 2820,
+   "wikidata": "Q31652973"
+  },
+  {
+   "lat": -44.594564,
+   "lon": 168.012459,
+   "name": "Mount Tūtoko",
+   "name_en": "Mount Tūtoko",
+   "ele": 2723,
+   "wikidata": "Q8527426"
+  },
+  {
+   "lat": -44.592329,
+   "lon": 168.404491,
+   "name": "Sir William Peak",
+   "ele": 2610,
+   "wikidata": "Q31653003"
+  },
+  {
+   "lat": -44.55647,
+   "lon": 168.429811,
+   "name": "Mount Head",
+   "ele": 2585,
+   "wikidata": "Q31653111"
+  },
+  {
+   "lat": -44.612467,
+   "lon": 168.41007,
+   "name": "O'Leary Peak",
+   "ele": 2570,
+   "wikidata": "Q31652631"
+  },
+  {
+   "lat": -44.614149,
+   "lon": 168.045935,
+   "name": "Mount Madeline",
+   "ele": 2536,
+   "wikidata": "Q31645870"
+  },
+  {
+   "lat": -44.556715,
+   "lon": 168.443544,
+   "name": "Moira Peak",
+   "ele": 2495,
+   "wikidata": "Q31653095"
+  },
+  {
+   "lat": -44.615337,
+   "lon": 168.386295,
+   "name": "Pluto Peak",
+   "ele": 2480,
+   "wikidata": "Q31652989"
+  },
+  {
+   "lat": -44.792934,
+   "lon": 168.048591,
+   "name": "Mount Christina",
+   "ele": 2474,
+   "wikidata": "Q31649439"
+  },
+  {
+   "lat": -44.658569,
+   "lon": 168.379937,
+   "name": "Turret Head",
+   "ele": 2350,
+   "wikidata": "Q31653269"
+  },
+  {
+   "lat": -44.826552,
+   "lon": 168.279168,
+   "name": "Mount Bonpland",
+   "ele": 2343,
+   "wikidata": "Q30509351"
+  },
+  {
+   "lat": -44.78692,
+   "lon": 168.044426,
+   "name": "North Peak",
+   "ele": 2324,
+   "wikidata": "Q31645650"
+  },
+  {
+   "lat": -44.562097,
+   "lon": 168.407968,
+   "name": "Head Peak",
+   "ele": 2313,
+   "wikidata": "Q31653033"
+  },
+  {
+   "lat": -44.658391,
+   "lon": 168.054239,
+   "name": "Te Wera Peak",
+   "name_en": "Te Wera Peak",
+   "ele": 2309,
+   "wikidata": "Q31645796"
+  },
+  {
+   "lat": -44.879267,
+   "lon": 168.492263,
+   "name": "Mount Larkins",
+   "ele": 2300,
+   "wikidata": "Q31653719"
+  },
+  {
+   "lat": -44.839107,
+   "lon": 168.012417,
+   "name": "Pyramid Peak",
+   "ele": 2295,
+   "wikidata": "Q31649338"
+  },
+  {
+   "lat": -44.664299,
+   "lon": 168.220869,
+   "name": "Somnus",
+   "ele": 2293,
+   "wikidata": "Q30509418"
+  },
+  {
+   "lat": -44.551426,
+   "lon": 168.480138,
+   "name": "Mount Clarke",
+   "ele": 2285,
+   "wikidata": "Q31653049"
+  },
+  {
+   "lat": -44.551853,
+   "lon": 168.455125,
+   "name": "Osonzac Twins",
+   "ele": 2282,
+   "wikidata": "Q31653065"
+  },
+  {
+   "lat": -44.844084,
+   "lon": 168.008988,
+   "name": "Flat Top Peak",
+   "ele": 2282,
+   "wikidata": "Q31649323"
+  },
+  {
+   "lat": -44.554574,
+   "lon": 168.449591,
+   "name": "Ellie Peak",
+   "ele": 2271,
+   "wikidata": "Q31653080"
+  },
+  {
+   "lat": -44.765811,
+   "lon": 168.04062,
+   "name": "East Peak",
+   "ele": 2263,
+   "wikidata": "Q31645444"
+  },
+  {
+   "lat": -44.584413,
+   "lon": 168.38857,
+   "name": "Cerberus",
+   "ele": 2257,
+   "wikidata": "Q31653017"
+  },
+  {
+   "lat": -44.766189,
+   "lon": 168.03786,
+   "name": "Second Peak",
+   "ele": 2252,
+   "wikidata": "Q31645468"
+  },
+  {
+   "lat": -44.76611,
+   "lon": 168.034752,
+   "name": "Middle Peak",
+   "ele": 2250,
+   "wikidata": "Q31645628"
+  },
+  {
+   "lat": -44.669202,
+   "lon": 168.023398,
+   "name": "Mount Pātuki",
+   "name_en": "Mount Pātuki",
+   "ele": 2246,
+   "wikidata": "Q31645785"
+  },
+  {
+   "lat": -44.632167,
+   "lon": 168.421872,
+   "name": "Black Peak",
+   "ele": 2240,
+   "wikidata": "Q31653302"
+  },
+  {
+   "lat": -44.592304,
+   "lon": 167.953482,
+   "name": "Mount Grave",
+   "ele": 2225,
+   "wikidata": "Q31645085"
+  },
+  {
+   "lat": -44.673474,
+   "lon": 168.003736,
+   "name": "Mount Underwood",
+   "ele": 2222,
+   "wikidata": "Q31645737"
+  },
+  {
+   "lat": -44.578379,
+   "lon": 168.234984,
+   "name": "Poseidon Peak",
+   "ele": 2208,
+   "wikidata": "Q31653175"
+  },
+  {
+   "lat": -44.672315,
+   "lon": 168.045885,
+   "name": "Karetai Peak",
+   "name_en": "Karetai Peak",
+   "ele": 2206,
+   "wikidata": "Q31645773"
+  },
+  {
+   "lat": -44.564503,
+   "lon": 168.236972,
+   "name": "Niobe Peak",
+   "ele": 2204,
+   "wikidata": "Q31653127"
+  },
+  {
+   "lat": -44.767905,
+   "lon": 168.030042,
+   "name": "West Peak",
+   "ele": 2203,
+   "wikidata": "Q31645639"
+  },
+  {
+   "lat": -44.626946,
+   "lon": 168.03211,
+   "name": "Mount Syme",
+   "ele": 2188,
+   "wikidata": "Q31645858"
+  },
+  {
+   "lat": -44.681315,
+   "lon": 168.049619,
+   "name": "Mount Revelation",
+   "ele": 2176,
+   "wikidata": "Q31645749"
+  },
+  {
+   "lat": -44.843641,
+   "lon": 168.032974,
+   "name": "Ngatimamoe Peak",
+   "name_en": "Ngatimamoe Peak",
+   "ele": 2164,
+   "wikidata": "Q31649352"
+  },
+  {
+   "lat": -44.571272,
+   "lon": 167.97898,
+   "name": "Paranui Peak",
+   "name_en": "Paranui Peak",
+   "ele": 2163,
+   "wikidata": "Q31480788"
+  },
+  {
+   "lat": -44.747281,
+   "lon": 168.05258,
+   "name": "Sabre Peak",
+   "ele": 2162,
+   "wikidata": "Q31645412"
+  },
+  {
+   "lat": -44.632747,
+   "lon": 168.025028,
+   "name": "Mount Tarewai",
+   "name_en": "Mount Tarewai",
+   "ele": 2158,
+   "wikidata": "Q31645833"
+  },
+  {
+   "lat": -44.680204,
+   "lon": 168.062064,
+   "name": "Taiaroa Peak",
+   "name_en": "Taiaroa Peak",
+   "ele": 2154,
+   "wikidata": "Q31645760"
+  },
+  {
+   "lat": -44.826141,
+   "lon": 167.995723,
+   "name": "Mount Charlton",
+   "ele": 2152,
+   "wikidata": "Q31649367"
+  },
+  {
+   "lat": -44.725026,
+   "lon": 168.07584,
+   "name": "Mount Gifford",
+   "ele": 2149,
+   "wikidata": "Q31646095"
+  },
+  {
+   "lat": -44.684652,
+   "lon": 168.235957,
+   "name": "Momus",
+   "ele": 2148,
+   "wikidata": "Q31652807"
+  },
+  {
+   "lat": -44.72469,
+   "lon": 168.079445,
+   "name": "East Peak",
+   "ele": 2143,
+   "wikidata": "Q31711249"
+  },
+  {
+   "lat": -44.634856,
+   "lon": 168.022067,
+   "name": "Mount Makere",
+   "name_en": "Mount Makere",
+   "ele": 2137,
+   "wikidata": "Q31645820"
+  },
+  {
+   "lat": -44.630092,
+   "lon": 168.027565,
+   "name": "Mount Milne",
+   "ele": 2135,
+   "wikidata": "Q31645845"
+  },
+  {
+   "lat": -44.585308,
+   "lon": 168.241981,
+   "name": "Sarpedon",
+   "ele": 2135,
+   "wikidata": "Q31653191"
+  },
+  {
+   "lat": -44.563782,
+   "lon": 167.995282,
+   "name": "Parariki Peak",
+   "name_en": "Parariki Peak",
+   "ele": 2134,
+   "wikidata": "Q31645937"
+  },
+  {
+   "lat": -44.887626,
+   "lon": 168.465246,
+   "name": "Stone Peak",
+   "ele": 2130,
+   "wikidata": "Q31653830"
+  },
+  {
+   "lat": -44.912447,
+   "lon": 168.475155,
+   "name": "Major Peak",
+   "ele": 2126,
+   "wikidata": "Q31653966"
+  },
+  {
+   "lat": -44.848965,
+   "lon": 167.784198,
+   "name": "Pariroa / Castle Mount",
+   "ele": 2122,
+   "wikidata": "Q31649032"
+  },
+  {
+   "lat": -44.726947,
+   "lon": 168.067472,
+   "name": "High Peak",
+   "ele": 2119,
+   "wikidata": "Q31645369"
+  },
+  {
+   "lat": -44.847824,
+   "lon": 168.302537,
+   "name": "Bold Peak",
+   "ele": 2118,
+   "wikidata": "Q30509362"
+  },
+  {
+   "lat": -44.750815,
+   "lon": 167.99752,
+   "name": "Mount Talbot",
+   "name_en": "Mount Talbot",
+   "ele": 2105,
+   "wikidata": "Q31645289"
+  },
+  {
+   "lat": -44.748438,
+   "lon": 168.045542,
+   "name": "Marian Peak",
+   "ele": 2102,
+   "wikidata": "Q31645423"
+  },
+  {
+   "lat": -45.032736,
+   "lon": 168.11697,
+   "name": "Moffat Peak",
+   "ele": 2102,
+   "wikidata": "Q31649295"
+  },
+  {
+   "lat": -44.81841,
+   "lon": 168.013061,
+   "name": "Mount Suter",
+   "ele": 2094,
+   "wikidata": "Q31649381"
+  },
+  {
+   "lat": -44.683822,
+   "lon": 168.077565,
+   "name": "Tūhawaiki Mountain",
+   "name_en": "Tūhawaiki Mountain",
+   "ele": 2092,
+   "wikidata": "Q31646082"
+  },
+  {
+   "lat": -44.797426,
+   "lon": 168.485323,
+   "name": "Temple Peak",
+   "ele": 2089,
+   "wikidata": "Q31652694"
+  },
+  {
+   "lat": -44.746061,
+   "lon": 168.058674,
+   "name": "Adelaide Peak",
+   "ele": 2086,
+   "wikidata": "Q31645402"
+  },
+  {
+   "lat": -44.64371,
+   "lon": 168.022539,
+   "name": "Waitiri",
+   "ele": 2084
+  },
+  {
+   "lat": -44.728745,
+   "lon": 168.061979,
+   "name": "Third Peak",
+   "ele": 2081,
+   "wikidata": "Q31645379"
+  },
+  {
+   "lat": -44.741037,
+   "lon": 168.265434,
+   "name": "Upper Peak",
+   "ele": 2072,
+   "wikidata": "Q31652725"
+  },
+  {
+   "lat": -44.978621,
+   "lon": 168.318136,
+   "name": "Tooth Peak",
+   "ele": 2061,
+   "wikidata": "Q31653950"
+  },
+  {
+   "lat": -44.796331,
+   "lon": 168.040736,
+   "name": "South Peak",
+   "ele": 2060,
+   "wikidata": "Q31649454"
+  },
+  {
+   "lat": -44.754984,
+   "lon": 168.08411,
+   "name": "Mount Gunn",
+   "ele": 2044,
+   "wikidata": "Q31646109"
+  },
+  {
+   "lat": -44.749657,
+   "lon": 168.036101,
+   "name": "Barrier Peak",
+   "ele": 2039,
+   "wikidata": "Q31645434"
+  },
+  {
+   "lat": -44.808419,
+   "lon": 167.983442,
+   "name": "Mount Park",
+   "ele": 2020,
+   "wikidata": "Q31649395"
+  },
+  {
+   "lat": -44.882442,
+   "lon": 168.011522,
+   "name": "Triangle Peak",
+   "ele": 2017,
+   "wikidata": "Q31649223"
+  },
+  {
+   "lat": -44.567938,
+   "lon": 167.885633,
+   "name": "Puhipuhi-takiwai / Mount Pembroke",
+   "ele": 2015,
+   "wikidata": "Q8557330"
+  },
+  {
+   "lat": -44.619598,
+   "lon": 168.247717,
+   "name": "Minos Peak",
+   "ele": 2002,
+   "wikidata": "Q31653238"
+  },
+  {
+   "lat": -44.611694,
+   "lon": 168.266167,
+   "name": "Mount Chaos",
+   "ele": 1995,
+   "wikidata": "Q31653222"
+  },
+  {
+   "lat": -45.32787,
+   "lon": 168.32359,
+   "name": "Jane Peak",
+   "ele": 1992,
+   "wikidata": "Q31691481"
+  },
+  {
+   "lat": -44.732863,
+   "lon": 168.059532,
+   "name": "Low Peak",
+   "ele": 1991,
+   "wikidata": "Q31645390"
+  },
+  {
+   "lat": -45.08755,
+   "lon": 168.1763,
+   "name": "Mount Mavora",
+   "ele": 1990,
+   "wikidata": "Q31654228"
+  },
+  {
+   "lat": -44.77976,
+   "lon": 167.784985,
+   "name": "Mount Elliot",
+   "name_en": "Mount Elliot",
+   "ele": 1990,
+   "wikidata": "Q31648973"
+  },
+  {
+   "lat": -44.821271,
+   "lon": 168.481486,
+   "name": "Black Peak",
+   "ele": 1989,
+   "wikidata": "Q31653736"
+  },
+  {
+   "lat": -44.799254,
+   "lon": 168.064983,
+   "name": "East Peak",
+   "ele": 1983,
+   "wikidata": "Q31649468"
+  },
+  {
+   "lat": -44.84549,
+   "lon": 167.713932,
+   "name": "Barrier Peak",
+   "ele": 1982,
+   "wikidata": "Q31649017"
+  },
+  {
+   "lat": -44.700305,
+   "lon": 168.191598,
+   "name": "Mount Erebus",
+   "ele": 1978,
+   "wikidata": "Q31646070"
+  },
+  {
+   "lat": -44.857346,
+   "lon": 168.001979,
+   "name": "Aragorn Peak",
+   "ele": 1978,
+   "wikidata": "Q115034202"
+  },
+  {
+   "lat": -44.654197,
+   "lon": 168.018835,
+   "name": "Whaitiri",
+   "ele": 1976,
+   "wikidata": "Q31645808"
+  },
+  {
+   "lat": -44.858831,
+   "lon": 168.173091,
+   "name": "Jean Batten Peak",
+   "ele": 1971,
+   "wikidata": "Q31649281"
+  },
+  {
+   "lat": -45.32375,
+   "lon": 168.45988,
+   "name": "Eyre Peak",
+   "ele": 1969,
+   "wikidata": "Q31654482"
+  },
+  {
+   "lat": -44.772694,
+   "lon": 167.977177,
+   "name": "Mount Moir",
+   "ele": 1965,
+   "wikidata": "Q31645662"
+  },
+  {
+   "lat": -44.774552,
+   "lon": 167.985073,
+   "name": "Mount Belle",
+   "ele": 1965,
+   "wikidata": "Q31645675"
+  },
+  {
+   "lat": -44.605015,
+   "lon": 168.234144,
+   "name": "Amphion Peak",
+   "ele": 1965,
+   "wikidata": "Q31653207"
+  },
+  {
+   "lat": -44.867239,
+   "lon": 168.466171,
+   "name": "Mount Alaska",
+   "ele": 1965,
+   "wikidata": "Q31653703"
+  },
+  {
+   "lat": -44.772237,
+   "lon": 167.916151,
+   "name": "Lloyd Peak",
+   "ele": 1962,
+   "wikidata": "Q31645220"
+  },
+  {
+   "lat": -44.642995,
+   "lon": 168.196625,
+   "name": "Nereus Peak",
+   "ele": 1962,
+   "wikidata": "Q31646059"
+  },
+  {
+   "lat": -44.865879,
+   "lon": 167.921646,
+   "name": "Mount Ānau",
+   "name_en": "Mount Ānau",
+   "ele": 1956,
+   "wikidata": "Q31649209"
+  },
+  {
+   "lat": -44.545053,
+   "lon": 168.235298,
+   "name": "Tantalus Peak",
+   "ele": 1951,
+   "wikidata": "Q31653143"
+  },
+  {
+   "lat": -44.693672,
+   "lon": 168.031294,
+   "name": "Apirana Peak",
+   "name_en": "Apirana Peak",
+   "ele": 1946,
+   "wikidata": "Q31645723"
+  },
+  {
+   "lat": -44.640582,
+   "lon": 168.274661,
+   "name": "Mount Nox",
+   "ele": 1940,
+   "wikidata": "Q31653253"
+  },
+  {
+   "lat": -44.801175,
+   "lon": 167.890667,
+   "name": "Mount Mitchelson",
+   "ele": 1936,
+   "wikidata": "Q31649543"
+  },
+  {
+   "lat": -44.785674,
+   "lon": 167.945338,
+   "name": "Mount Gendarme",
+   "ele": 1935,
+   "wikidata": "Q31645711"
+  },
+  {
+   "lat": -44.748473,
+   "lon": 167.975721,
+   "name": "Mount McPherson",
+   "ele": 1931,
+   "wikidata": "Q31645278"
+  },
+  {
+   "lat": -44.559166,
+   "lon": 168.00468,
+   "name": "Halfway Peak",
+   "ele": 1928,
+   "wikidata": "Q31645962"
+  },
+  {
+   "lat": -44.847258,
+   "lon": 167.851793,
+   "name": "Mount Sentinel",
+   "ele": 1920,
+   "wikidata": "Q111327573"
+  },
+  {
+   "lat": -44.79222,
+   "lon": 167.998548,
+   "name": "Students Peak",
+   "ele": 1913,
+   "wikidata": "Q31649424"
+  },
+  {
+   "lat": -44.713674,
+   "lon": 168.189539,
+   "name": "Mount Xenicus",
+   "ele": 1912,
+   "wikidata": "Q31646132"
+  },
+  {
+   "lat": -45.13046,
+   "lon": 168.32119,
+   "name": "Mount Turnbull",
+   "ele": 1910,
+   "wikidata": "Q31654386"
+  },
+  {
+   "lat": -44.784125,
+   "lon": 167.964877,
+   "name": "Cirque Peak",
+   "ele": 1902,
+   "wikidata": "Q31645699"
+  },
+  {
+   "lat": -44.77566,
+   "lon": 168.09312,
+   "name": "Mount Lyttle",
+   "ele": 1899,
+   "wikidata": "Q31646120"
+  },
+  {
+   "lat": -45.275,
+   "lon": 167.53669,
+   "name": "Mount Lyall",
+   "ele": 1892,
+   "wikidata": "Q31646371"
+  },
+  {
+   "lat": -44.72787,
+   "lon": 167.884883,
+   "name": "Mount Ada",
+   "ele": 1881,
+   "wikidata": "Q31645198"
+  },
+  {
+   "lat": -44.73963,
+   "lon": 168.023655,
+   "name": "Barrier Knob",
+   "ele": 1879,
+   "wikidata": "Q31645361"
+  },
+  {
+   "lat": -44.699325,
+   "lon": 167.939058,
+   "name": "Te Pari / Sheerdown Peak",
+   "name_en": "Sheerdown Peak",
+   "ele": 1878,
+   "wikidata": "Q31645232"
+  },
+  {
+   "lat": -45.027192,
+   "lon": 168.486203,
+   "name": "Mount Crichton",
+   "ele": 1870,
+   "wikidata": "Q30509219"
+  },
+  {
+   "lat": -44.856294,
+   "lon": 167.794968,
+   "name": "Mount Fisher",
+   "ele": 1869,
+   "wikidata": "Q31649047"
+  },
+  {
+   "lat": -44.7896,
+   "lon": 167.927309,
+   "name": "Basin Peak",
+   "ele": 1865,
+   "wikidata": "Q31649409"
+  },
+  {
+   "lat": -44.736216,
+   "lon": 167.915808,
+   "name": "Access Peak",
+   "ele": 1865,
+   "wikidata": "Q31645209"
+  },
+  {
+   "lat": -44.71508,
+   "lon": 168.015016,
+   "name": "The Twins",
+   "ele": 1861,
+   "wikidata": "Q31645339"
+  },
+  {
+   "lat": -45.17784,
+   "lon": 167.35954,
+   "name": "Mount Irene",
+   "ele": 1859,
+   "wikidata": "Q31646337"
+  },
+  {
+   "lat": -45.017591,
+   "lon": 167.971571,
+   "name": "Mount Eglinton",
+   "ele": 1854,
+   "wikidata": "Q30509142"
+  },
+  {
+   "lat": -44.511968,
+   "lon": 168.273965,
+   "name": "Corinna Peak",
+   "ele": 1852,
+   "wikidata": "Q31652015"
+  },
+  {
+   "lat": -44.849269,
+   "lon": 168.054731,
+   "name": "Consolation Peak",
+   "ele": 1851,
+   "wikidata": "Q31649309"
+  },
+  {
+   "lat": -44.743736,
+   "lon": 168.180799,
+   "name": "Ocean Peak",
+   "ele": 1848,
+   "wikidata": "Q31646157"
+  },
+  {
+   "lat": -44.799652,
+   "lon": 167.78801,
+   "name": "Mount Balloon",
+   "ele": 1847,
+   "wikidata": "Q31649143"
+  },
+  {
+   "lat": -45.20187,
+   "lon": 168.39947,
+   "name": "Ridge Peak",
+   "ele": 1838,
+   "wikidata": "Q31670850"
+  },
+  {
+   "lat": -44.694998,
+   "lon": 167.761994,
+   "name": "Mount Danger",
+   "ele": 1825,
+   "wikidata": "Q31644928"
+  },
+  {
+   "lat": -44.612227,
+   "lon": 167.928329,
+   "name": "Mills Peak",
+   "ele": 1825,
+   "wikidata": "Q31645111"
+  },
+  {
+   "lat": -45.09304,
+   "lon": 168.04138,
+   "name": "Countess Peak",
+   "ele": 1823,
+   "wikidata": "Q31647706"
+  },
+  {
+   "lat": -44.608444,
+   "lon": 167.927028,
+   "name": "Pomaroa / Benton Peak",
+   "ele": 1823,
+   "wikidata": "Q31645098"
+  },
+  {
+   "lat": -44.715482,
+   "lon": 167.89818,
+   "name": "Odyssey Peak",
+   "ele": 1821,
+   "wikidata": "Q31645186"
+  },
+  {
+   "lat": -44.720303,
+   "lon": 167.731065,
+   "name": "Lady of the Snows",
+   "ele": 1818,
+   "wikidata": "Q31644964"
+  },
+  {
+   "lat": -44.745433,
+   "lon": 168.205019,
+   "name": "Emily Peak",
+   "ele": 1815,
+   "wikidata": "Q31652741"
+  },
+  {
+   "lat": -44.767692,
+   "lon": 167.98015,
+   "name": "Moirs Mate",
+   "ele": 1811
+  },
+  {
+   "lat": -44.561918,
+   "lon": 167.981255,
+   "name": "Troglodyte",
+   "ele": 1804,
+   "wikidata": "Q31645894"
+  },
+  {
+   "lat": -44.510559,
+   "lon": 168.268561,
+   "name": "Sunset Peak",
+   "ele": 1800,
+   "wikidata": "Q31651999"
+  },
+  {
+   "lat": -44.673235,
+   "lon": 167.814437,
+   "name": "Terror Peak",
+   "ele": 1786,
+   "wikidata": "Q31644916"
+  },
+  {
+   "lat": -44.770137,
+   "lon": 167.806077,
+   "name": "Mount Kepka",
+   "ele": 1781,
+   "wikidata": "Q31645001"
+  },
+  {
+   "lat": -44.545271,
+   "lon": 168.033,
+   "name": "Puketūroto Peak",
+   "name_en": "Puketūroto Peak",
+   "ele": 1780,
+   "wikidata": "Q31645986"
+  },
+  {
+   "lat": -44.521778,
+   "lon": 168.269198,
+   "name": "Fohn Peak",
+   "ele": 1777,
+   "wikidata": "Q31652092"
+  },
+  {
+   "lat": -44.773373,
+   "lon": 167.967109,
+   "name": "Gulliver Peak",
+   "ele": 1776,
+   "wikidata": "Q31645687"
+  },
+  {
+   "lat": -45.122225,
+   "lon": 168.041481,
+   "name": "Winton Peak",
+   "ele": 1771,
+   "wikidata": "Q31647718"
+  },
+  {
+   "lat": -45.23209,
+   "lon": 167.27302,
+   "name": "Coronation Peak",
+   "ele": 1769,
+   "wikidata": "Q31646241"
+  },
+  {
+   "lat": -44.72146,
+   "lon": 168.020222,
+   "name": "The Sentinel",
+   "ele": 1768,
+   "wikidata": "Q31645350"
+  },
+  {
+   "lat": -44.926627,
+   "lon": 168.459724,
+   "name": "Minor Peak",
+   "ele": 1768,
+   "wikidata": "Q31653980"
+  },
+  {
+   "lat": -44.807508,
+   "lon": 167.742515,
+   "name": "Aiguille Rouge",
+   "ele": 1767,
+   "wikidata": "Q31649111"
+  },
+  {
+   "lat": -45.30109,
+   "lon": 167.57138,
+   "name": "Mount Owen",
+   "ele": 1763,
+   "wikidata": "Q31646383"
+  },
+  {
+   "lat": -45.60356,
+   "lon": 167.41104,
+   "name": "Flat Mount",
+   "ele": 1748,
+   "wikidata": "Q31646953"
+  },
+  {
+   "lat": -44.5872,
+   "lon": 167.943103,
+   "name": "Mitis Peak",
+   "ele": 1738,
+   "wikidata": "Q31645073"
+  },
+  {
+   "lat": -45.021976,
+   "lon": 167.677588,
+   "name": "Mount McDouall",
+   "ele": 1728,
+   "wikidata": "Q31648987"
+  },
+  {
+   "lat": -45.20393,
+   "lon": 168.25697,
+   "name": "Mount Lookup",
+   "ele": 1723,
+   "wikidata": "Q31654243"
+  },
+  {
+   "lat": -45.411438,
+   "lon": 167.440773,
+   "name": "Mount Axford",
+   "ele": 1720,
+   "wikidata": "Q31687234"
+  },
+  {
+   "lat": -45.66227,
+   "lon": 167.51814,
+   "name": "Mount Titiroa",
+   "name_en": "Mount Titiroa",
+   "ele": 1715,
+   "wikidata": "Q6924129"
+  },
+  {
+   "lat": -44.952991,
+   "lon": 167.738428,
+   "name": "Mount Kane",
+   "ele": 1714,
+   "wikidata": "Q31649002"
+  },
+  {
+   "lat": -45.60768,
+   "lon": 167.18101,
+   "name": "Mount Ward",
+   "ele": 1713,
+   "wikidata": "Q31646928"
+  },
+  {
+   "lat": -44.785309,
+   "lon": 167.796031,
+   "name": "Mount Wilmur",
+   "ele": 1710,
+   "wikidata": "Q31649127"
+  },
+  {
+   "lat": -44.963464,
+   "lon": 167.983449,
+   "name": "Largs Peak",
+   "ele": 1707,
+   "wikidata": "Q30508463"
+  },
+  {
+   "lat": -45.94379,
+   "lon": 167.19508,
+   "name": "Caroline Peak",
+   "ele": 1704,
+   "wikidata": "Q31647242"
+  },
+  {
+   "lat": -44.548981,
+   "lon": 167.918176,
+   "name": "Te Hau",
+   "ele": 1703,
+   "wikidata": "Q31663285"
+  },
+  {
+   "lat": -44.829984,
+   "lon": 168.463762,
+   "name": "Mount McIntosh",
+   "ele": 1701,
+   "wikidata": "Q31653752"
+  },
+  {
+   "lat": -45.396736,
+   "lon": 167.453485,
+   "name": "Spire Peak",
+   "ele": 1689,
+   "wikidata": "Q31646725"
+  },
+  {
+   "lat": -45.25749,
+   "lon": 168.20823,
+   "name": "Mount Campbell",
+   "ele": 1685,
+   "wikidata": "Q31654275"
+  },
+  {
+   "lat": -45.55275,
+   "lon": 167.04541,
+   "name": "Mount Crowfoot",
+   "ele": 1685,
+   "wikidata": "Q31644077"
+  },
+  {
+   "lat": -44.632577,
+   "lon": 167.854889,
+   "name": "Mitre Peak",
+   "name_en": "Mitre Peak",
+   "ele": 1683,
+   "wikidata": "Q1049584"
+  },
+  {
+   "lat": -45.06042,
+   "lon": 168.27038,
+   "name": "Sugar Loaf",
+   "ele": 1682,
+   "wikidata": "Q31653604"
+  },
+  {
+   "lat": -44.817452,
+   "lon": 167.712939,
+   "name": "Couloir Peak",
+   "ele": 1682,
+   "wikidata": "Q31649484"
+  },
+  {
+   "lat": -45.30384,
+   "lon": 167.61874,
+   "name": "Black Cone",
+   "ele": 1681,
+   "wikidata": "Q31646393"
+  },
+  {
+   "lat": -44.542736,
+   "lon": 167.971651,
+   "name": "Ongaruanuku",
+   "ele": 1681,
+   "wikidata": "Q34804167"
+  },
+  {
+   "lat": -44.875913,
+   "lon": 168.056882,
+   "name": "Melita Peak",
+   "ele": 1680,
+   "wikidata": "Q31649268"
+  },
+  {
+   "lat": -44.806475,
+   "lon": 167.746858,
+   "name": "Mount Hart",
+   "ele": 1679,
+   "wikidata": "Q31649095"
+  },
+  {
+   "lat": -44.540122,
+   "lon": 168.223825,
+   "name": "Fiery Peak",
+   "ele": 1679,
+   "wikidata": "Q31653159"
+  },
+  {
+   "lat": -45.23311,
+   "lon": 168.11108,
+   "name": "Mount Richmond",
+   "ele": 1673,
+   "wikidata": "Q31647730"
+  },
+  {
+   "lat": -44.730333,
+   "lon": 167.748784,
+   "name": "Mount Edgar",
+   "ele": 1673,
+   "wikidata": "Q31644952"
+  },
+  {
+   "lat": -44.895921,
+   "lon": 167.982477,
+   "name": "Triton Peak",
+   "ele": 1651,
+   "wikidata": "Q31649254"
+  },
+  {
+   "lat": -45.750978,
+   "lon": 167.787338,
+   "name": "Brunel Peaks",
+   "ele": 1650
+  },
+  {
+   "lat": -45.346573,
+   "lon": 167.437554,
+   "name": "Mount Pickering",
+   "ele": 1650,
+   "wikidata": "Q108881337"
+  },
+  {
+   "lat": -45.7457,
+   "lon": 167.40794,
+   "name": "Mount Burns",
+   "ele": 1645,
+   "wikidata": "Q31647062"
+  },
+  {
+   "lat": -44.706484,
+   "lon": 168.018634,
+   "name": "Mihj Peak",
+   "ele": 1644,
+   "wikidata": "Q31645328"
+  },
+  {
+   "lat": -44.766393,
+   "lon": 167.721018,
+   "name": "Mount Daniel",
+   "ele": 1643,
+   "wikidata": "Q31644989"
+  },
+  {
+   "lat": -45.69179,
+   "lon": 167.1683,
+   "name": "Tamatea Peak",
+   "name_en": "Tamatea Peak",
+   "ele": 1640,
+   "wikidata": "Q31647039"
+  },
+  {
+   "lat": -44.542049,
+   "lon": 168.19555,
+   "name": "Welshman Peak",
+   "ele": 1640,
+   "wikidata": "Q31646034"
+  },
+  {
+   "lat": -44.516701,
+   "lon": 168.022586,
+   "name": "Mount Thunder",
+   "ele": 1640,
+   "wikidata": "Q31647551"
+  },
+  {
+   "lat": -45.64098,
+   "lon": 167.40074,
+   "name": "Mount Crescent",
+   "ele": 1639,
+   "wikidata": "Q31646966"
+  },
+  {
+   "lat": -45.7172,
+   "lon": 167.85014,
+   "name": "Spence Peak",
+   "ele": 1634,
+   "wikidata": "Q31648124"
+  },
+  {
+   "lat": -44.713806,
+   "lon": 167.805132,
+   "name": "Steep Hill",
+   "ele": 1631,
+   "wikidata": "Q31644941"
+  },
+  {
+   "lat": -44.679518,
+   "lon": 167.862511,
+   "name": "Te Nohoaka-o-Tū / Devils Armchair",
+   "ele": 1627,
+   "wikidata": "Q31645162"
+  },
+  {
+   "lat": -45.25749,
+   "lon": 168.13957,
+   "name": "Mount Eldon",
+   "ele": 1625,
+   "wikidata": "Q31647742"
+  },
+  {
+   "lat": -45.21767,
+   "lon": 167.51541,
+   "name": "Mount Max",
+   "ele": 1625,
+   "wikidata": "Q31646349"
+  },
+  {
+   "lat": -45.33096,
+   "lon": 168.26454,
+   "name": "Smooth Peak",
+   "ele": 1623,
+   "wikidata": "Q31654290"
+  },
+  {
+   "lat": -44.783145,
+   "lon": 167.693728,
+   "name": "Twin Sisters",
+   "ele": 1622,
+   "wikidata": "Q31649512"
+  },
+  {
+   "lat": -44.731002,
+   "lon": 167.958902,
+   "name": "Mount Isolation",
+   "ele": 1620,
+   "wikidata": "Q31645244"
+  },
+  {
+   "lat": -45.17097,
+   "lon": 168.18969,
+   "name": "Cold Peak",
+   "ele": 1613,
+   "wikidata": "Q31654259"
+  },
+  {
+   "lat": -45.59257,
+   "lon": 167.04403,
+   "name": "Mount Cusack",
+   "ele": 1611,
+   "wikidata": "Q31644224"
+  },
+  {
+   "lat": -45.064227,
+   "lon": 167.41786,
+   "name": "Mount Donald",
+   "ele": 1610,
+   "wikidata": "Q31646477"
+  },
+  {
+   "lat": -44.922808,
+   "lon": 168.289015,
+   "name": "Home Hill",
+   "ele": 1610,
+   "wikidata": "Q31653920"
+  },
+  {
+   "lat": -44.784944,
+   "lon": 167.695831,
+   "name": "Twin Sisters",
+   "ele": 1609
+  },
+  {
+   "lat": -45.277279,
+   "lon": 167.362697,
+   "name": "Gerald Peak",
+   "ele": 1602,
+   "wikidata": "Q31646289"
+  },
+  {
+   "lat": -45.386101,
+   "lon": 167.246558,
+   "name": "Mount Soaker",
+   "ele": 1600,
+   "wikidata": "Q31646699"
+  },
+  {
+   "lat": -45.46211,
+   "lon": 167.22976,
+   "name": "Mount George",
+   "ele": 1598,
+   "wikidata": "Q31646612"
+  },
+  {
+   "lat": -45.72441,
+   "lon": 167.86868,
+   "name": "Wairaki Peaks",
+   "name_en": "Wairaki Peaks",
+   "ele": 1598,
+   "wikidata": "Q31648307"
+  },
+  {
+   "lat": -45.75462,
+   "lon": 167.43644,
+   "name": "Eldrig Peak",
+   "ele": 1595,
+   "wikidata": "Q31647074"
+  },
+  {
+   "lat": -44.80712,
+   "lon": 167.703585,
+   "name": "Mount Mackenzie",
+   "ele": 1592,
+   "wikidata": "Q31649062"
+  },
+  {
+   "lat": -45.53009,
+   "lon": 167.18203,
+   "name": "Koinga Peak",
+   "name_en": "Koinga Peak",
+   "ele": 1582,
+   "wikidata": "Q31646544"
+  },
+  {
+   "lat": -45.74844,
+   "lon": 167.77737,
+   "name": "Brunel Peaks",
+   "ele": 1582,
+   "wikidata": "Q31648091"
+  },
+  {
+   "lat": -45.82706,
+   "lon": 167.40313,
+   "name": "Cleughearn Peak",
+   "ele": 1578,
+   "wikidata": "Q31647111"
+  },
+  {
+   "lat": -45.76492,
+   "lon": 167.83537,
+   "name": "Telford Peak",
+   "ele": 1577,
+   "wikidata": "Q31648107"
+  },
+  {
+   "lat": -45.88234,
+   "lon": 167.24453,
+   "name": "White Peak",
+   "ele": 1574,
+   "wikidata": "Q31647290"
+  },
+  {
+   "lat": -45.27672,
+   "lon": 168.05992,
+   "name": "Snowdon Peak",
+   "ele": 1573,
+   "wikidata": "Q31647767"
+  },
+  {
+   "lat": -45.68596,
+   "lon": 167.87625,
+   "name": "Aparima Peaks",
+   "name_en": "Aparima Peaks",
+   "ele": 1570,
+   "wikidata": "Q31648277"
+  },
+  {
+   "lat": -45.336291,
+   "lon": 167.292428,
+   "name": "Mount Fannin",
+   "ele": 1569,
+   "wikidata": "Q31646842"
+  },
+  {
+   "lat": -45.64854,
+   "lon": 167.91572,
+   "name": "Gladstone Peak",
+   "ele": 1569,
+   "wikidata": "Q31648246"
+  },
+  {
+   "lat": -45.59017,
+   "lon": 167.13192,
+   "name": "Mount Bain",
+   "ele": 1569,
+   "wikidata": "Q31646891"
+  },
+  {
+   "lat": -45.58433,
+   "lon": 167.05293,
+   "name": "Mount Nantes",
+   "ele": 1568,
+   "wikidata": "Q31644214"
+  },
+  {
+   "lat": -45.732232,
+   "lon": 167.278117,
+   "name": "Mount Pūteketeke",
+   "name_en": "Mount Pūteketeke",
+   "ele": 1563,
+   "wikidata": "Q31647051"
+  },
+  {
+   "lat": -44.661509,
+   "lon": 167.950699,
+   "name": "Barren Peak",
+   "ele": 1561,
+   "wikidata": "Q31645175"
+  },
+  {
+   "lat": -45.11673,
+   "lon": 167.68054,
+   "name": "Flecked Peak",
+   "ele": 1560,
+   "wikidata": "Q30509057"
+  },
+  {
+   "lat": -45.694449,
+   "lon": 167.838797,
+   "name": "Revelation Peaks",
+   "ele": 1560
+  },
+  {
+   "lat": -45.34029,
+   "lon": 167.496741,
+   "name": "Mount Maury",
+   "ele": 1558,
+   "wikidata": "Q31646780"
+  },
+  {
+   "lat": -45.315246,
+   "lon": 167.36778,
+   "name": "Mount Kidd",
+   "ele": 1558,
+   "wikidata": "Q31711447"
+  },
+  {
+   "lat": -45.97401,
+   "lon": 167.25894,
+   "name": "Albert Edward Peak",
+   "ele": 1554,
+   "wikidata": "Q31647219"
+  },
+  {
+   "lat": -45.10952,
+   "lon": 167.49722,
+   "name": "Mount Pisgah",
+   "ele": 1551,
+   "wikidata": "Q31646403"
+  },
+  {
+   "lat": -45.63377,
+   "lon": 167.8244,
+   "name": "Excelsior Peak",
+   "ele": 1543,
+   "wikidata": "Q31648017"
+  },
+  {
+   "lat": -45.383358,
+   "lon": 167.511232,
+   "name": "Mount Tinsley",
+   "ele": 1537,
+   "wikidata": "Q106119992"
+  },
+  {
+   "lat": -45.29938,
+   "lon": 167.3372,
+   "name": "Mount Baird",
+   "ele": 1528,
+   "wikidata": "Q31646488"
+  },
+  {
+   "lat": -44.585916,
+   "lon": 167.854833,
+   "name": "Rover Peak",
+   "ele": 1524,
+   "wikidata": "Q31645026"
+  },
+  {
+   "lat": -45.32307,
+   "lon": 167.3125,
+   "name": "Mount Scott",
+   "ele": 1523,
+   "wikidata": "Q31646829"
+  },
+  {
+   "lat": -45.59292,
+   "lon": 167.21568,
+   "name": "Mount Watson",
+   "ele": 1521,
+   "wikidata": "Q31646940"
+  },
+  {
+   "lat": -45.58399,
+   "lon": 167.12951,
+   "name": "Heywood Peak",
+   "ele": 1515,
+   "wikidata": "Q31646879"
+  },
+  {
+   "lat": -44.721515,
+   "lon": 168.169107,
+   "name": "Conical Hill",
+   "ele": 1515,
+   "wikidata": "Q31646144"
+  },
+  {
+   "lat": -45.48649,
+   "lon": 167.12677,
+   "name": "Mount Troup",
+   "ele": 1512,
+   "wikidata": "Q31646499"
+  },
+  {
+   "lat": -45.14591,
+   "lon": 168.48358,
+   "name": "Afton Peak",
+   "ele": 1510,
+   "wikidata": "Q31710383"
+  },
+  {
+   "lat": -44.585397,
+   "lon": 167.879166,
+   "name": "Little Matterhorn",
+   "ele": 1508,
+   "wikidata": "Q31645038"
+  },
+  {
+   "lat": -44.590714,
+   "lon": 167.85994,
+   "name": "The Elephant",
+   "ele": 1508,
+   "wikidata": "Q31645050"
+  },
+  {
+   "lat": -45.98328,
+   "lon": 167.25827,
+   "name": "Alexandra Peak",
+   "ele": 1504,
+   "wikidata": "Q31647206"
+  },
+  {
+   "lat": -45.172,
+   "lon": 167.58613,
+   "name": "Miller Peak",
+   "ele": 1503,
+   "wikidata": "Q31646302"
+  },
+  {
+   "lat": -45.75325,
+   "lon": 167.87933,
+   "name": "Mackinnon Peaks",
+   "ele": 1502,
+   "wikidata": "Q31648335"
+  },
+  {
+   "lat": -45.55309,
+   "lon": 167.24795,
+   "name": "Mount Gray",
+   "ele": 1502,
+   "wikidata": "Q31483707"
+  },
+  {
+   "lat": -45.601218,
+   "lon": 167.497529,
+   "name": "Mount Moturau",
+   "name_en": "Mount Moturau",
+   "ele": 1497,
+   "wikidata": "Q6922301"
+  },
+  {
+   "lat": -45.7196,
+   "lon": 167.89547,
+   "name": "McLean Peaks",
+   "ele": 1495,
+   "wikidata": "Q31648292"
+  },
+  {
+   "lat": -45.502633,
+   "lon": 167.032796,
+   "name": "Mount Danae",
+   "ele": 1495,
+   "wikidata": "Q31644088"
+  },
+  {
+   "lat": -45.552707,
+   "lon": 167.458068,
+   "name": "Cone Peak",
+   "ele": 1495,
+   "wikidata": "Q31646660"
+  },
+  {
+   "lat": -45.56202,
+   "lon": 167.15318,
+   "name": "Mount Parker",
+   "ele": 1494,
+   "wikidata": "Q31646854"
+  },
+  {
+   "lat": -45.19638,
+   "lon": 167.26614,
+   "name": "Double Peak",
+   "ele": 1492,
+   "wikidata": "Q31646254"
+  },
+  {
+   "lat": -45.63034,
+   "lon": 167.92396,
+   "name": "Clare Peak",
+   "ele": 1490,
+   "wikidata": "Q31648231"
+  },
+  {
+   "lat": -45.698463,
+   "lon": 167.835337,
+   "name": "Revelation Peaks",
+   "ele": 1488,
+   "wikidata": "Q31648077"
+  },
+  {
+   "lat": -45.61455,
+   "lon": 168.01048,
+   "name": "Mount Hamilton",
+   "ele": 1487,
+   "wikidata": "Q31648378"
+  },
+  {
+   "lat": -45.61592,
+   "lon": 167.0368,
+   "name": "Mount Pember",
+   "ele": 1486,
+   "wikidata": "Q31644249"
+  },
+  {
+   "lat": -44.764183,
+   "lon": 167.562138,
+   "name": "Te Rakihuitahi / Mount Longsight",
+   "name_en": "Mount Longsight",
+   "ele": 1482,
+   "wikidata": "Q31646169"
+  },
+  {
+   "lat": -44.811053,
+   "lon": 168.445992,
+   "name": "Precipice Hill",
+   "ele": 1481,
+   "wikidata": "Q31653653"
+  },
+  {
+   "lat": -45.503445,
+   "lon": 167.270168,
+   "name": "Leaning Peak",
+   "ele": 1477,
+   "wikidata": "Q31646624"
+  },
+  {
+   "lat": -45.62931,
+   "lon": 167.13775,
+   "name": "McDonnell Peak",
+   "ele": 1477,
+   "wikidata": "Q31646989"
+  },
+  {
+   "lat": -45.42756,
+   "lon": 167.353465,
+   "name": "Saint Pauls Dome",
+   "ele": 1473,
+   "wikidata": "Q31646712"
+  },
+  {
+   "lat": -45.386113,
+   "lon": 167.590542,
+   "name": "Ō-te-horua-a-Te-Puhituia / Mount Luxmore",
+   "ele": 1472,
+   "wikidata": "Q16895465"
+  },
+  {
+   "lat": -45.62176,
+   "lon": 167.89375,
+   "name": "Brown Peak",
+   "ele": 1470,
+   "wikidata": "Q31648216"
+  },
+  {
+   "lat": -45.5555,
+   "lon": 167.14703,
+   "name": "Mount Gladstone",
+   "ele": 1468,
+   "wikidata": "Q1950485"
+  },
+  {
+   "lat": -45.86037,
+   "lon": 167.03991,
+   "name": "Cone Peak",
+   "ele": 1464,
+   "wikidata": "Q31644590"
+  },
+  {
+   "lat": -45.55,
+   "lon": 167.16589,
+   "name": "Matterhorn",
+   "ele": 1460,
+   "wikidata": "Q31646535"
+  },
+  {
+   "lat": -45.1981,
+   "lon": 167.26513,
+   "name": "Double Peak",
+   "ele": 1459
+  },
+  {
+   "lat": -45.27019,
+   "lon": 167.34341,
+   "name": "Mount Hall",
+   "ele": 1458,
+   "wikidata": "Q31646276"
+  },
+  {
+   "lat": -45.13115,
+   "lon": 168.39877,
+   "name": "Mount Nicholas",
+   "ele": 1458,
+   "wikidata": "Q31681080"
+  },
+  {
+   "lat": -45.72647,
+   "lon": 167.00694,
+   "name": "Te Ōmama / Mount Solitary",
+   "ele": 1454,
+   "wikidata": "Q31644369"
+  },
+  {
+   "lat": -45.81676,
+   "lon": 167.39489,
+   "name": "Rocky Top",
+   "ele": 1450,
+   "wikidata": "Q31647098"
+  },
+  {
+   "lat": -45.783873,
+   "lon": 167.785404,
+   "name": "Corner Peaks",
+   "ele": 1448
+  },
+  {
+   "lat": -45.10677,
+   "lon": 167.36331,
+   "name": "Mount Pluvius",
+   "ele": 1446,
+   "wikidata": "Q31646360"
+  },
+  {
+   "lat": -44.666852,
+   "lon": 167.882381,
+   "name": "Mount Philipps",
+   "ele": 1446,
+   "wikidata": "Q31482491"
+  },
+  {
+   "lat": -45.31966,
+   "lon": 167.332844,
+   "name": "Ardneil Peak",
+   "ele": 1438,
+   "wikidata": "Q31646817"
+  },
+  {
+   "lat": -45.2544,
+   "lon": 167.28503,
+   "name": "Mount Wera",
+   "name_en": "Mount Wera",
+   "ele": 1435,
+   "wikidata": "Q31646230"
+  },
+  {
+   "lat": -45.76801,
+   "lon": 167.04953,
+   "name": "Kathryn Peak",
+   "ele": 1433,
+   "wikidata": "Q31644383"
+  },
+  {
+   "lat": -45.65094,
+   "lon": 167.13363,
+   "name": "Vincent Peak",
+   "ele": 1431,
+   "wikidata": "Q31647027"
+  },
+  {
+   "lat": -45.64579,
+   "lon": 167.8,
+   "name": "Tower Peak",
+   "ele": 1425,
+   "wikidata": "Q31648031"
+  },
+  {
+   "lat": -44.859913,
+   "lon": 168.438277,
+   "name": "Mount Judah",
+   "ele": 1416,
+   "wikidata": "Q31653686"
+  },
+  {
+   "lat": -45.60734,
+   "lon": 167.09962,
+   "name": "Aubrey Peak",
+   "ele": 1415,
+   "wikidata": "Q31644273"
+  },
+  {
+   "lat": -45.78312,
+   "lon": 167.78114,
+   "name": "Corner Peaks",
+   "ele": 1414,
+   "wikidata": "Q31648140"
+  },
+  {
+   "lat": -45.31551,
+   "lon": 167.398838,
+   "name": "Mount Martin",
+   "ele": 1413,
+   "wikidata": "Q31646791"
+  },
+  {
+   "lat": -45.23895,
+   "lon": 168.00703,
+   "name": "Dunton Peak",
+   "ele": 1412,
+   "wikidata": "Q31647694"
+  },
+  {
+   "lat": -45.62965,
+   "lon": 167.04469,
+   "name": "Mount Fitchett",
+   "ele": 1407,
+   "wikidata": "Q31644566"
+  },
+  {
+   "lat": -46.01726,
+   "lon": 167.04986,
+   "name": "Tower Peak",
+   "ele": 1406,
+   "wikidata": "Q31644758"
+  },
+  {
+   "lat": -45.59189,
+   "lon": 167.16281,
+   "name": "Mount Memphis",
+   "ele": 1405,
+   "wikidata": "Q31646916"
+  },
+  {
+   "lat": -45.480201,
+   "lon": 167.211413,
+   "name": "Mount Mainwaring",
+   "ele": 1403,
+   "wikidata": "Q31646599"
+  },
+  {
+   "lat": -45.68081,
+   "lon": 167.78799,
+   "name": "White Hill",
+   "ele": 1398,
+   "wikidata": "Q31648062"
+  },
+  {
+   "lat": -45.37456,
+   "lon": 168.1557,
+   "name": "Bald Hill",
+   "ele": 1394,
+   "wikidata": "Q31654740"
+  },
+  {
+   "lat": -44.773408,
+   "lon": 167.730791,
+   "name": "Mount Pillans",
+   "ele": 1391
+  },
+  {
+   "lat": -44.781989,
+   "lon": 167.739219,
+   "name": "Mount Pillans",
+   "ele": 1391,
+   "wikidata": "Q31649079"
+  },
+  {
+   "lat": -44.947212,
+   "lon": 167.959368,
+   "name": "Skelmorlie Peak",
+   "ele": 1390,
+   "wikidata": "Q31649193"
+  },
+  {
+   "lat": -45.58777,
+   "lon": 167.09002,
+   "name": "Mount Menteath",
+   "ele": 1389,
+   "wikidata": "Q31644555"
+  },
+  {
+   "lat": -45.12462,
+   "lon": 167.69874,
+   "name": "Hook Peaks",
+   "ele": 1385,
+   "wikidata": "Q31647670"
+  },
+  {
+   "lat": -44.991285,
+   "lon": 167.497095,
+   "name": "Mount Henry",
+   "ele": 1382,
+   "wikidata": "Q31694297"
+  },
+  {
+   "lat": -45.527706,
+   "lon": 167.388202,
+   "name": "Precipice Peak",
+   "ele": 1381,
+   "wikidata": "Q31646647"
+  },
+  {
+   "lat": -46.03718,
+   "lon": 167.192,
+   "name": "Helena Peak",
+   "ele": 1380,
+   "wikidata": "Q31647148"
+  },
+  {
+   "lat": -45.57197,
+   "lon": 167.12881,
+   "name": "Mount Horatio",
+   "ele": 1380,
+   "wikidata": "Q31646867"
+  },
+  {
+   "lat": -44.757164,
+   "lon": 168.361315,
+   "name": "Mount Alfred / Ari",
+   "name_en": "Mount Alfred",
+   "ele": 1375,
+   "wikidata": "Q31481957"
+  },
+  {
+   "lat": -45.12531,
+   "lon": 167.70596,
+   "name": "Hook Peaks",
+   "ele": 1372
+  },
+  {
+   "lat": -45.49232,
+   "lon": 167.3125,
+   "name": "Steep Peak",
+   "ele": 1372,
+   "wikidata": "Q31646636"
+  },
+  {
+   "lat": -45.48786,
+   "lon": 167.20471,
+   "name": "Mount Plaisted",
+   "ele": 1368,
+   "wikidata": "Q31646588"
+  },
+  {
+   "lat": -45.50174,
+   "lon": 167.213577,
+   "name": "Mount Barber",
+   "ele": 1364,
+   "wikidata": "Q31646687"
+  },
+  {
+   "lat": -45.07381,
+   "lon": 167.70869,
+   "name": "Halfway Peak",
+   "ele": 1359,
+   "wikidata": "Q31647645"
+  },
+  {
+   "lat": -45.81367,
+   "lon": 166.871,
+   "name": "Perpendicular Peak",
+   "ele": 1359,
+   "wikidata": "Q31644417"
+  },
+  {
+   "lat": -45.78552,
+   "lon": 167.03784,
+   "name": "Sea View Peak",
+   "ele": 1355,
+   "wikidata": "Q31644394"
+  },
+  {
+   "lat": -45.369409,
+   "lon": 167.571495,
+   "name": "Forward Peak",
+   "ele": 1354,
+   "wikidata": "Q31646750"
+  },
+  {
+   "lat": -45.31345,
+   "lon": 167.33688,
+   "name": "Mount Fowler",
+   "ele": 1348,
+   "wikidata": "Q31646804"
+  },
+  {
+   "lat": -45.57678,
+   "lon": 167.08316,
+   "name": "Mount Thornton",
+   "ele": 1341,
+   "wikidata": "Q31644236"
+  },
+  {
+   "lat": -45.92113,
+   "lon": 166.96403,
+   "name": "Houseroof Hill",
+   "ele": 1340,
+   "wikidata": "Q31644792"
+  },
+  {
+   "lat": -45.16617,
+   "lon": 168.36375,
+   "name": "Pasture Hill",
+   "ele": 1338,
+   "wikidata": "Q31654371"
+  },
+  {
+   "lat": -45.517852,
+   "lon": 167.221254,
+   "name": "Pāhiri Peak",
+   "name_en": "Pāhiri Peak",
+   "ele": 1333,
+   "wikidata": "Q31646566"
+  },
+  {
+   "lat": -44.700781,
+   "lon": 168.294108,
+   "name": "Sugar Loaf",
+   "ele": 1329,
+   "wikidata": "Q31652790"
+  },
+  {
+   "lat": -44.901413,
+   "lon": 167.523859,
+   "name": "Overhead Cone",
+   "ele": 1328,
+   "wikidata": "Q31643729"
+  },
+  {
+   "lat": -45.85899,
+   "lon": 167.10307,
+   "name": "End Peak",
+   "ele": 1325,
+   "wikidata": "Q31647314"
+  },
+  {
+   "lat": -45.34092,
+   "lon": 166.8672,
+   "name": "Mount Forbes",
+   "ele": 1311,
+   "wikidata": "Q31644141"
+  },
+  {
+   "lat": -44.81927,
+   "lon": 167.567413,
+   "name": "Mount Herbert",
+   "ele": 1309,
+   "wikidata": "Q31643755"
+  },
+  {
+   "lat": -45.014884,
+   "lon": 167.56869,
+   "name": "Mount Caldwell",
+   "ele": 1304,
+   "wikidata": "Q119348743"
+  },
+  {
+   "lat": -44.609964,
+   "lon": 167.884205,
+   "name": "The Lion",
+   "ele": 1302,
+   "wikidata": "Q31687985"
+  },
+  {
+   "lat": -45.19741,
+   "lon": 167.06942,
+   "name": "Mount Namu",
+   "name_en": "Mount Namu",
+   "ele": 1295,
+   "wikidata": "Q34803914"
+  },
+  {
+   "lat": -45.64648,
+   "lon": 167.05227,
+   "name": "Mount Thompson",
+   "ele": 1293,
+   "wikidata": "Q31644299"
+  },
+  {
+   "lat": -45.015528,
+   "lon": 167.478944,
+   "name": "East Peak Marguerite Peaks",
+   "ele": 1292,
+   "wikidata": "Q31643845"
+  },
+  {
+   "lat": -45.573,
+   "lon": 167.05432,
+   "name": "Mount Noble",
+   "ele": 1290,
+   "wikidata": "Q31644202"
+  },
+  {
+   "lat": -45.06935,
+   "lon": 167.26306,
+   "name": "Fleetwood Peak",
+   "ele": 1286,
+   "wikidata": "Q31646414"
+  },
+  {
+   "lat": -45.028275,
+   "lon": 167.516852,
+   "name": "Coote Hill",
+   "ele": 1286,
+   "wikidata": "Q31643768"
+  },
+  {
+   "lat": -45.67875,
+   "lon": 167.02069,
+   "name": "Mount Chisholm",
+   "ele": 1283,
+   "wikidata": "Q31644311"
+  },
+  {
+   "lat": -45.357714,
+   "lon": 167.308454,
+   "name": "1281 m",
+   "ele": 1281
+  },
+  {
+   "lat": -45.006318,
+   "lon": 167.260587,
+   "name": "Mount Alexander",
+   "ele": 1280,
+   "wikidata": "Q31643602"
+  },
+  {
+   "lat": -46.04576,
+   "lon": 167.15353,
+   "name": "West Peak",
+   "ele": 1275,
+   "wikidata": "Q31647160"
+  },
+  {
+   "lat": -45.2108,
+   "lon": 167.17517,
+   "name": "Key Peak",
+   "ele": 1273,
+   "wikidata": "Q31646264"
+  },
+  {
+   "lat": -45.775835,
+   "lon": 166.809357,
+   "name": "Paretao / Mount Burnett",
+   "ele": 1270,
+   "wikidata": "Q31644431"
+  },
+  {
+   "lat": -45.58399,
+   "lon": 168.21922,
+   "name": "Tarahau-kapiti / West Dome",
+   "ele": 1270,
+   "wikidata": "Q31654787"
+  },
+  {
+   "lat": -45.012806,
+   "lon": 167.469028,
+   "name": "West Peak Marguerite Peaks",
+   "ele": 1266,
+   "wikidata": "Q31643819"
+  },
+  {
+   "lat": -45.27637,
+   "lon": 167.24041,
+   "name": "Mount Patanga",
+   "name_en": "Mount Patanga",
+   "ele": 1264,
+   "wikidata": "Q31646218"
+  },
+  {
+   "lat": -45.18299,
+   "lon": 167.17517,
+   "name": "Saddle Back Peak",
+   "ele": 1264,
+   "wikidata": "Q31646314"
+  },
+  {
+   "lat": -44.592151,
+   "lon": 167.879766,
+   "name": "Hupokeka",
+   "ele": 1259,
+   "wikidata": "Q31645062"
+  },
+  {
+   "lat": -45.2671,
+   "lon": 167.06738,
+   "name": "Takiweka / Evans Peak",
+   "ele": 1258,
+   "wikidata": "Q31644030"
+  },
+  {
+   "lat": -45.44701,
+   "lon": 167.09895,
+   "name": "Commander Peak",
+   "ele": 1258,
+   "wikidata": "Q31644132"
+  },
+  {
+   "lat": -45.003278,
+   "lon": 167.52075,
+   "name": "Mount Elwood",
+   "ele": 1256,
+   "wikidata": "Q31643780"
+  },
+  {
+   "lat": -45.28908,
+   "lon": 167.19784,
+   "name": "Rectory Peak",
+   "ele": 1255,
+   "wikidata": "Q31646205"
+  },
+  {
+   "lat": -45.0563,
+   "lon": 167.90234,
+   "name": "End Peak",
+   "ele": 1254,
+   "wikidata": "Q31647683"
+  },
+  {
+   "lat": -45.63961,
+   "lon": 167.06256,
+   "name": "Mount McCorley",
+   "ele": 1254,
+   "wikidata": "Q31644286"
+  },
+  {
+   "lat": -45.80578,
+   "lon": 167.41757,
+   "name": "Mount Cuthbert",
+   "ele": 1248,
+   "wikidata": "Q31647085"
+  },
+  {
+   "lat": -45.492031,
+   "lon": 167.194816,
+   "name": "Turpentine",
+   "ele": 1245,
+   "wikidata": "Q31646577"
+  },
+  {
+   "lat": -45.1284,
+   "lon": 167.10411,
+   "name": "Te Iwi-o-Pātea / Command Peak",
+   "ele": 1245,
+   "wikidata": "Q31643917"
+  },
+  {
+   "lat": -45.015814,
+   "lon": 167.485274,
+   "name": "Mount Murrell",
+   "ele": 1244,
+   "wikidata": "Q31643871"
+  },
+  {
+   "lat": -44.985472,
+   "lon": 167.194306,
+   "name": "Mount Tanilba",
+   "ele": 1242,
+   "wikidata": "Q31643615"
+  },
+  {
+   "lat": -44.767163,
+   "lon": 167.547819,
+   "name": "Table Mount",
+   "ele": 1239,
+   "wikidata": "Q31646181"
+  },
+  {
+   "lat": -45.25028,
+   "lon": 167.05227,
+   "name": "Medley Peak",
+   "ele": 1232,
+   "wikidata": "Q31644018"
+  },
+  {
+   "lat": -45.00314,
+   "lon": 167.322826,
+   "name": "Spot Hill",
+   "ele": 1232,
+   "wikidata": "Q31643626"
+  },
+  {
+   "lat": -46.03168,
+   "lon": 167.08865,
+   "name": "Pōteriteri Peak",
+   "name_en": "Pōteriteri Peak",
+   "ele": 1228,
+   "wikidata": "Q31647136"
+  },
+  {
+   "lat": -45.69008,
+   "lon": 166.870796,
+   "name": "Mount Pender",
+   "ele": 1220,
+   "wikidata": "Q31644336"
+  },
+  {
+   "lat": -45.87753,
+   "lon": 167.48245,
+   "name": "Hindley Peak",
+   "ele": 1219,
+   "wikidata": "Q31647267"
+  },
+  {
+   "lat": -45.05974,
+   "lon": 167.35609,
+   "name": "Mary Peaks",
+   "ele": 1210,
+   "wikidata": "Q31646452"
+  },
+  {
+   "lat": -45.36289,
+   "lon": 168.05374,
+   "name": "Bare Peak",
+   "ele": 1209,
+   "wikidata": "Q31647904"
+  },
+  {
+   "lat": -45.23792,
+   "lon": 167.12814,
+   "name": "Glengarry Peak",
+   "ele": 1209,
+   "wikidata": "Q31643971"
+  },
+  {
+   "lat": -44.639241,
+   "lon": 167.926791,
+   "name": "Cascade Peak",
+   "ele": 1209,
+   "wikidata": "Q31645119"
+  },
+  {
+   "lat": -44.866194,
+   "lon": 167.539194,
+   "name": "Rugged Peak",
+   "ele": 1206,
+   "wikidata": "Q31643716"
+  },
+  {
+   "lat": -45.70878,
+   "lon": 167.451334,
+   "name": "Borland",
+   "ele": 1206,
+   "wikidata": "Q125757747"
+  },
+  {
+   "lat": -45.06145,
+   "lon": 167.35852,
+   "name": "Mary Peaks",
+   "ele": 1205
+  },
+  {
+   "lat": -45.531239,
+   "lon": 166.842291,
+   "name": "Mount Kellard",
+   "ele": 1201,
+   "wikidata": "Q31644065"
+  },
+  {
+   "lat": -44.999431,
+   "lon": 167.423105,
+   "name": "Saddle Hill",
+   "ele": 1200,
+   "wikidata": "Q31643671"
+  },
+  {
+   "lat": -45.22625,
+   "lon": 167.05844,
+   "name": "Observation Rock",
+   "ele": 1197,
+   "wikidata": "Q31644006"
+  },
+  {
+   "lat": -44.890372,
+   "lon": 167.331708,
+   "name": "Mount Elder",
+   "ele": 1197,
+   "wikidata": "Q31643589"
+  },
+  {
+   "lat": -45.26539,
+   "lon": 166.95202,
+   "name": "Mount Grono",
+   "name_en": "Mount Grono",
+   "ele": 1196,
+   "wikidata": "Q31643896"
+  },
+  {
+   "lat": -45.14831,
+   "lon": 167.02755,
+   "name": "Mount Napier",
+   "ele": 1195,
+   "wikidata": "Q31681938"
+  },
+  {
+   "lat": -45.9819,
+   "lon": 166.95715,
+   "name": "Rugged Mount",
+   "ele": 1190,
+   "wikidata": "Q31644686"
+  },
+  {
+   "lat": -46.13777,
+   "lon": 166.99974,
+   "name": "Mount Aitkin",
+   "ele": 1189,
+   "wikidata": "Q31644891"
+  },
+  {
+   "lat": -45.27912,
+   "lon": 167.17654,
+   "name": "Forden Peak",
+   "ele": 1185,
+   "wikidata": "Q31646193"
+  },
+  {
+   "lat": -45.65094,
+   "lon": 167.11749,
+   "name": "Mount Reeves",
+   "ele": 1185,
+   "wikidata": "Q31647014"
+  },
+  {
+   "lat": -45.06592,
+   "lon": 168.48842,
+   "name": "Jessie Peak",
+   "ele": 1182,
+   "wikidata": "Q31653582"
+  },
+  {
+   "lat": -46.0461,
+   "lon": 167.0097,
+   "name": "Solitary Peak",
+   "ele": 1180,
+   "wikidata": "Q31644734"
+  },
+  {
+   "lat": -45.033327,
+   "lon": 167.364124,
+   "name": "Vigil Peak",
+   "ele": 1179,
+   "wikidata": "Q31646464"
+  },
+  {
+   "lat": -45.03325,
+   "lon": 167.370444,
+   "name": "Virgil Peak",
+   "ele": 1179,
+   "wikidata": "Q31646464"
+  },
+  {
+   "lat": -45.46005,
+   "lon": 166.92111,
+   "name": "Depth Peak",
+   "ele": 1172,
+   "wikidata": "Q31644098"
+  },
+  {
+   "lat": -45.68149,
+   "lon": 166.98875,
+   "name": "Mount Vera",
+   "ele": 1167,
+   "wikidata": "Q31644324"
+  },
+  {
+   "lat": -45.90568,
+   "lon": 166.84524,
+   "name": "Needle Peak",
+   "ele": 1167,
+   "wikidata": "Q31644781"
+  },
+  {
+   "lat": -44.717046,
+   "lon": 167.63279,
+   "name": "Rugged Mountain",
+   "ele": 1166,
+   "wikidata": "Q31644977"
+  },
+  {
+   "lat": -45.12119,
+   "lon": 167.18443,
+   "name": "Victor Peak",
+   "ele": 1162,
+   "wikidata": "Q31646325"
+  },
+  {
+   "lat": -45.43121,
+   "lon": 166.81091,
+   "name": "Stephens Peak",
+   "ele": 1156,
+   "wikidata": "Q31644122"
+  },
+  {
+   "lat": -46.05434,
+   "lon": 166.88644,
+   "name": "Caton Peak",
+   "ele": 1153,
+   "wikidata": "Q31644722"
+  },
+  {
+   "lat": -45.22522,
+   "lon": 167.03645,
+   "name": "Hamley Peak",
+   "ele": 1150,
+   "wikidata": "Q31643995"
+  },
+  {
+   "lat": -46.1364,
+   "lon": 166.92181,
+   "name": "Mount McGavock",
+   "ele": 1149,
+   "wikidata": "Q31644866"
+  },
+  {
+   "lat": -45.034873,
+   "lon": 167.155114,
+   "name": "Kāti Wairaki / Mount Paulina",
+   "ele": 1140,
+   "wikidata": "Q31643883"
+  },
+  {
+   "lat": -45.886621,
+   "lon": 166.6289,
+   "name": "The Stopper",
+   "ele": 1139,
+   "wikidata": "Q31644641"
+  },
+  {
+   "lat": -45.236476,
+   "lon": 166.918366,
+   "name": "All Round Peak",
+   "ele": 1130,
+   "wikidata": "Q31644042"
+  },
+  {
+   "lat": -46.14189,
+   "lon": 166.84489,
+   "name": "Wednesday Peak",
+   "ele": 1130,
+   "wikidata": "Q31644842"
+  },
+  {
+   "lat": -44.703955,
+   "lon": 167.832512,
+   "name": "Shoulder Hill",
+   "ele": 1129
+  },
+  {
+   "lat": -44.985943,
+   "lon": 167.48349,
+   "name": "Middle Peak",
+   "ele": 1127,
+   "wikidata": "Q31643793"
+  },
+  {
+   "lat": -44.971609,
+   "lon": 168.458693,
+   "name": "Big Geordie",
+   "ele": 1127,
+   "wikidata": "Q31654010"
+  },
+  {
+   "lat": -46.00937,
+   "lon": 166.89297,
+   "name": "Arnett Peak",
+   "ele": 1123,
+   "wikidata": "Q31644746"
+  },
+  {
+   "lat": -46.13399,
+   "lon": 166.87167,
+   "name": "Overseen Peak",
+   "ele": 1120,
+   "wikidata": "Q31644879"
+  },
+  {
+   "lat": -45.47413,
+   "lon": 166.75976,
+   "name": "Pukepōuri / Calm Peak",
+   "ele": 1109,
+   "wikidata": "Q31644110"
+  },
+  {
+   "lat": -45.88097,
+   "lon": 166.6358,
+   "name": "Mount Inaccessible",
+   "ele": 1108,
+   "wikidata": "Q31644628"
+  },
+  {
+   "lat": -45.58605,
+   "lon": 166.81982,
+   "name": "Mount Wallis",
+   "ele": 1107,
+   "wikidata": "Q31644164"
+  },
+  {
+   "lat": -45.76836,
+   "lon": 166.87991,
+   "name": "Mount Edgecumbe",
+   "ele": 1105,
+   "wikidata": "Q6920557"
+  },
+  {
+   "lat": -45.08411,
+   "lon": 167.07115,
+   "name": "Turn Peak",
+   "ele": 1103,
+   "wikidata": "Q31643906"
+  },
+  {
+   "lat": -45.915855,
+   "lon": 167.415619,
+   "name": "Ardeer Peak",
+   "ele": 1099,
+   "wikidata": "Q31480102"
+  },
+  {
+   "lat": -45.62038,
+   "lon": 166.99322,
+   "name": "Tussock Peak",
+   "ele": 1097,
+   "wikidata": "Q31644262"
+  },
+  {
+   "lat": -44.986686,
+   "lon": 167.468327,
+   "name": "Nita Peak",
+   "ele": 1092,
+   "wikidata": "Q31643806"
+  },
+  {
+   "lat": -45.79479,
+   "lon": 166.66705,
+   "name": "Mount Evans",
+   "ele": 1084,
+   "wikidata": "Q31644443"
+  },
+  {
+   "lat": -45.6657,
+   "lon": 168.02182,
+   "name": "North Braxton",
+   "ele": 1080,
+   "wikidata": "Q31648393"
+  },
+  {
+   "lat": -45.2108,
+   "lon": 167.00833,
+   "name": "Crayfish Heights",
+   "ele": 1079,
+   "wikidata": "Q31643982"
+  },
+  {
+   "lat": -45.871275,
+   "lon": 167.500679,
+   "name": "Edge Peak",
+   "ele": 1079,
+   "wikidata": "Q31647279"
+  },
+  {
+   "lat": -45.605211,
+   "lon": 167.968404,
+   "name": "Waterloo Peak",
+   "ele": 1077,
+   "wikidata": "Q31648262"
+  },
+  {
+   "lat": -46.03649,
+   "lon": 166.82431,
+   "name": "Forgotten Peak",
+   "ele": 1077,
+   "wikidata": "Q31644709"
+  },
+  {
+   "lat": -45.58021,
+   "lon": 166.87716,
+   "name": "Mount Anderson",
+   "ele": 1071,
+   "wikidata": "Q31644177"
+  },
+  {
+   "lat": -45.398089,
+   "lon": 167.133286,
+   "name": "Solitary Cone",
+   "ele": 1070,
+   "wikidata": "Q31481046"
+  },
+  {
+   "lat": -45.687611,
+   "lon": 166.686111,
+   "name": "Te Papanui-o-Tū / Mount Clerke",
+   "ele": 1069,
+   "wikidata": "Q31644508"
+  },
+  {
+   "lat": -46.107169,
+   "lon": 167.327245,
+   "name": "The Hump",
+   "ele": 1067,
+   "wikidata": "Q31647172"
+  },
+  {
+   "lat": -45.18745,
+   "lon": 167.03442,
+   "name": "Dunsterville Peaks",
+   "ele": 1064,
+   "wikidata": "Q31643951"
+  },
+  {
+   "lat": -45.58708,
+   "lon": 167.17654,
+   "name": "Pinnacle",
+   "ele": 1049,
+   "wikidata": "Q31646903"
+  },
+  {
+   "lat": -46.00216,
+   "lon": 166.69934,
+   "name": "Te Horo / Treble Mountain",
+   "ele": 1043,
+   "wikidata": "Q31644697"
+  },
+  {
+   "lat": -45.69832,
+   "lon": 166.76867,
+   "name": "Mount Hodges",
+   "ele": 1042,
+   "wikidata": "Q31644358"
+  },
+  {
+   "lat": -45.42263,
+   "lon": 168.16325,
+   "name": "Lincoln Hill",
+   "ele": 1042,
+   "wikidata": "Q31654755"
+  },
+  {
+   "lat": -45.260558,
+   "lon": 166.928479,
+   "name": "The Hub",
+   "ele": 1034,
+   "wikidata": "Q31644054"
+  },
+  {
+   "lat": -45.68664,
+   "lon": 166.76043,
+   "name": "Mount Forster",
+   "ele": 1028,
+   "wikidata": "Q31644347"
+  },
+  {
+   "lat": -45.81299,
+   "lon": 167.80346,
+   "name": "Mount Nichols",
+   "ele": 1007,
+   "wikidata": "Q31648172"
+  },
+  {
+   "lat": -45.96542,
+   "lon": 167.35919,
+   "name": "Oblong Hill",
+   "ele": 996,
+   "wikidata": "Q31647230"
+  },
+  {
+   "lat": -45.70759,
+   "lon": 166.68388,
+   "name": "Mount Lyall",
+   "ele": 995,
+   "wikidata": "Q31644478"
+  },
+  {
+   "lat": -45.84492,
+   "lon": 166.56646,
+   "name": "Mount Bradshaw",
+   "ele": 980,
+   "wikidata": "Q31644577"
+  },
+  {
+   "lat": -45.88097,
+   "lon": 166.74121,
+   "name": "Square Top",
+   "ele": 977,
+   "wikidata": "Q31644601"
+  },
+  {
+   "lat": -45.63721,
+   "lon": 166.66877,
+   "name": "Mount Wales",
+   "ele": 974,
+   "wikidata": "Q31644543"
+  },
+  {
+   "lat": -45.88474,
+   "lon": 166.72987,
+   "name": "Saddle Hill",
+   "ele": 973,
+   "wikidata": "Q31644614"
+  },
+  {
+   "lat": -45.59498,
+   "lon": 167.91949,
+   "name": "Woodhen Hill",
+   "ele": 969,
+   "wikidata": "Q31647829"
+  },
+  {
+   "lat": -45.80269,
+   "lon": 166.63891,
+   "name": "Mount Sparrman",
+   "ele": 969,
+   "wikidata": "Q31644455"
+  },
+  {
+   "lat": -45.413062,
+   "lon": 167.949799,
+   "name": "Mount Prospect",
+   "ele": 968,
+   "wikidata": "Q31647928"
+  },
+  {
+   "lat": -45.78209,
+   "lon": 167.98439,
+   "name": "Letham Hill",
+   "ele": 962,
+   "wikidata": "Q31648474"
+  },
+  {
+   "lat": -45.66021,
+   "lon": 166.63821,
+   "name": "Mount Lort",
+   "ele": 952,
+   "wikidata": "Q31644531"
+  },
+  {
+   "lat": -45.79822,
+   "lon": 167.86114,
+   "name": "The Pate",
+   "ele": 946,
+   "wikidata": "Q31648350"
+  },
+  {
+   "lat": -45.563722,
+   "lon": 166.699674,
+   "name": "Te Nohoaka-o-Tū / Mount Richards",
+   "ele": 940,
+   "wikidata": "Q31644152"
+  },
+  {
+   "lat": -45.009874,
+   "lon": 167.373989,
+   "name": "Tor Hill",
+   "ele": 938,
+   "wikidata": "Q31481204"
+  },
+  {
+   "lat": -45.71857,
+   "lon": 166.688,
+   "name": "Mount Forbes",
+   "ele": 930,
+   "wikidata": "Q31644466"
+  },
+  {
+   "lat": -45.57609,
+   "lon": 168.31433,
+   "name": "Gyzeh",
+   "ele": 920,
+   "wikidata": "Q31654803"
+  },
+  {
+   "lat": -45.66845,
+   "lon": 166.61557,
+   "name": "Mount Roa",
+   "name_en": "Mount Roa",
+   "ele": 918,
+   "wikidata": "Q31644519"
+  },
+  {
+   "lat": -44.815132,
+   "lon": 168.127428,
+   "name": "Key Summit",
+   "ele": 918,
+   "wikidata": "Q126094378"
+  },
+  {
+   "lat": -45.6554,
+   "lon": 168.47912,
+   "name": "Lowther Peak",
+   "ele": 912,
+   "wikidata": "Q31655132"
+  },
+  {
+   "lat": -45.63446,
+   "lon": 167.63316,
+   "name": "Paddock Hill",
+   "ele": 905
+  },
+  {
+   "lat": -45.63137,
+   "lon": 167.10273,
+   "name": "Tripod Hill",
+   "ele": 895,
+   "wikidata": "Q31647001"
+  },
+  {
+   "lat": -44.867854,
+   "lon": 167.477057,
+   "name": "Woodcutters Peak",
+   "ele": 895,
+   "wikidata": "Q31643683"
+  },
+  {
+   "lat": -44.854961,
+   "lon": 167.528014,
+   "name": "Kāti Hāwea / Mutiny Peak",
+   "ele": 892,
+   "wikidata": "Q31643703"
+  },
+  {
+   "lat": -45.93212,
+   "lon": 166.70001,
+   "name": "The Lump",
+   "ele": 889,
+   "wikidata": "Q31644769"
+  },
+  {
+   "lat": -45.51807,
+   "lon": 168.15707,
+   "name": "Coal Hill",
+   "ele": 888,
+   "wikidata": "Q31654772"
+  },
+  {
+   "lat": -45.79548,
+   "lon": 168.04617,
+   "name": "Mount Rouse",
+   "ele": 886,
+   "wikidata": "Q31648503"
+  },
+  {
+   "lat": -45.719559,
+   "lon": 166.624523,
+   "name": "Mount Philipps",
+   "name_en": "Mount Philipps",
+   "ele": 872,
+   "wikidata": "Q31482509"
+  },
+  {
+   "lat": -45.64648,
+   "lon": 166.75047,
+   "name": "Mount Patten",
+   "ele": 864,
+   "wikidata": "Q31644190"
+  },
+  {
+   "lat": -44.699182,
+   "lon": 168.478456,
+   "name": "Cone Hill",
+   "ele": 864,
+   "wikidata": "Q31652823"
+  },
+  {
+   "lat": -45.31345,
+   "lon": 168.24806,
+   "name": "Pretty Hill",
+   "ele": 860,
+   "wikidata": "Q31654307"
+  },
+  {
+   "lat": -45.86174,
+   "lon": 168.01872,
+   "name": "Beaumont Hill",
+   "ele": 841,
+   "wikidata": "Q31648551"
+  },
+  {
+   "lat": -44.644506,
+   "lon": 167.874652,
+   "name": "Footstool",
+   "ele": 835,
+   "wikidata": "Q31645150"
+  },
+  {
+   "lat": -45.791363,
+   "lon": 167.752951,
+   "name": "The Knob",
+   "ele": 821,
+   "wikidata": "Q31648155"
+  },
+  {
+   "lat": -45.58124,
+   "lon": 168.09184,
+   "name": "Tāwhirirauti / Centre Hill",
+   "ele": 818,
+   "wikidata": "Q31704258"
+  },
+  {
+   "lat": -44.805801,
+   "lon": 167.520154,
+   "name": "Turn Round Hill",
+   "ele": 802
+  },
+  {
+   "lat": -45.89573,
+   "lon": 167.54666,
+   "name": "Pukekura / Dean Hill",
+   "ele": 777,
+   "wikidata": "Q114342332"
+  },
+  {
+   "lat": -46.248834,
+   "lon": 167.839129,
+   "name": "Longwood",
+   "ele": 764,
+   "wikidata": "Q116775017"
+  },
+  {
+   "lat": -45.80784,
+   "lon": 168.06541,
+   "name": "Chimney",
+   "ele": 754,
+   "wikidata": "Q31648519"
+  },
+  {
+   "lat": -45.44598,
+   "lon": 167.91984,
+   "name": "Danby Hill",
+   "ele": 724,
+   "wikidata": "Q31647941"
+  },
+  {
+   "lat": -45.83565,
+   "lon": 167.84567,
+   "name": "Gibraltar Hill",
+   "ele": 704,
+   "wikidata": "Q31648581"
+  },
+  {
+   "lat": -45.58811,
+   "lon": 167.87796,
+   "name": "Wood Hill",
+   "ele": 702,
+   "wikidata": "Q31647818"
+  },
+  {
+   "lat": -45.76389,
+   "lon": 168.08464,
+   "name": "Saddle Hill",
+   "ele": 682,
+   "wikidata": "Q31648426"
+  },
+  {
+   "lat": -44.952435,
+   "lon": 167.902184,
+   "name": "Te Rau / Foliage Hill",
+   "ele": 682,
+   "wikidata": "Q117829026"
+  },
+  {
+   "lat": -45.32684,
+   "lon": 168.04138,
+   "name": "Limestone Hill",
+   "ele": 678,
+   "wikidata": "Q31647780"
+  },
+  {
+   "lat": -45.86208,
+   "lon": 167.91847,
+   "name": "Wether Hill",
+   "ele": 676,
+   "wikidata": "Q31648610"
+  },
+  {
+   "lat": -45.8147,
+   "lon": 167.91708,
+   "name": "Nugget Hill",
+   "ele": 675,
+   "wikidata": "Q31648364"
+  },
+  {
+   "lat": -45.850524,
+   "lon": 168.207921,
+   "name": "Taringatura Hill",
+   "name_en": "Taringatura Hill",
+   "ele": 666,
+   "wikidata": "Q31654944"
+  },
+  {
+   "lat": -45.83427,
+   "lon": 167.96963,
+   "name": "Morley Hill",
+   "ele": 665,
+   "wikidata": "Q31648535"
+  },
+  {
+   "lat": -45.459524,
+   "lon": 167.657018,
+   "name": "Harts Hill",
+   "ele": 645,
+   "wikidata": "Q31647806"
+  },
+  {
+   "lat": -45.56991,
+   "lon": 167.96618,
+   "name": "Spear Peak",
+   "ele": 630,
+   "wikidata": "Q31647840"
+  },
+  {
+   "lat": -46.131318,
+   "lon": 167.884369,
+   "name": "Ferndunlaw",
+   "ele": 621,
+   "wikidata": "Q30509077"
+  },
+  {
+   "lat": -46.076028,
+   "lon": 167.41725,
+   "name": "Haukore / Helmet Hill",
+   "ele": 606,
+   "wikidata": "Q31647182"
+  },
+  {
+   "lat": -45.79994,
+   "lon": 168.3363,
+   "name": "Wether Hill",
+   "ele": 602,
+   "wikidata": "Q31655036"
+  },
+  {
+   "lat": -45.85075,
+   "lon": 167.88377,
+   "name": "Midnight Hill",
+   "ele": 600,
+   "wikidata": "Q31648595"
+  },
+  {
+   "lat": -45.837952,
+   "lon": 168.20839,
+   "name": "Grassridge",
+   "ele": 597,
+   "wikidata": "Q31654959"
+  },
+  {
+   "lat": -45.49379,
+   "lon": 167.515823,
+   "name": "Te Tukeroa / Beehive",
+   "ele": 587,
+   "wikidata": "Q31646674"
+  },
+  {
+   "lat": -44.764857,
+   "lon": 167.752406,
+   "name": "Dumpling Hill",
+   "ele": 575,
+   "wikidata": "Q125767350"
+  },
+  {
+   "lat": -46.19408,
+   "lon": 166.98875,
+   "name": "Mount Bates",
+   "ele": 571,
+   "wikidata": "Q31644902"
+  },
+  {
+   "lat": -44.804847,
+   "lon": 167.561378,
+   "name": "Alarm Mountain",
+   "ele": 570,
+   "wikidata": "Q31643742"
+  },
+  {
+   "lat": -45.900056,
+   "lon": 168.23275,
+   "name": "Raggedy Hill",
+   "ele": 551,
+   "wikidata": "Q31655237"
+  },
+  {
+   "lat": -45.924254,
+   "lon": 168.223506,
+   "name": "Break My Neck",
+   "ele": 549,
+   "wikidata": "Q31655223"
+  },
+  {
+   "lat": -45.41885,
+   "lon": 168.05957,
+   "name": "Little Hill",
+   "ele": 548,
+   "wikidata": "Q31647965"
+  },
+  {
+   "lat": -45.868306,
+   "lon": 168.242778,
+   "name": "Little Cairn Peak",
+   "ele": 540,
+   "wikidata": "Q31654973"
+  },
+  {
+   "lat": -45.939958,
+   "lon": 168.237765,
+   "name": "Cairn Peak",
+   "ele": 516,
+   "wikidata": "Q31655268"
+  },
+  {
+   "lat": -45.84492,
+   "lon": 167.62423,
+   "name": "Diggers Hill",
+   "ele": 515,
+   "wikidata": "Q31647977"
+  },
+  {
+   "lat": -45.47584,
+   "lon": 168.11964,
+   "name": "Windy Hill",
+   "ele": 515,
+   "wikidata": "Q31647891"
+  },
+  {
+   "lat": -45.868448,
+   "lon": 168.457846,
+   "name": "Otapiri Peak / Ōtaupiri",
+   "ele": 515,
+   "wikidata": "Q31655069"
+  },
+  {
+   "lat": -46.01555,
+   "lon": 167.89959,
+   "name": "Woodlaw",
+   "ele": 513,
+   "wikidata": "Q31648657"
+  },
+  {
+   "lat": -45.33886,
+   "lon": 167.88449,
+   "name": "Te Anau Hill",
+   "name_en": "Te Anau Hill",
+   "ele": 504,
+   "wikidata": "Q31647878"
+  },
+  {
+   "lat": -45.89161,
+   "lon": 167.85598,
+   "name": "Mount Linton",
+   "ele": 499,
+   "wikidata": "Q31648734"
+  },
+  {
+   "lat": -46.18103,
+   "lon": 166.85417,
+   "name": "Kākāpō Hill",
+   "name_en": "Kākāpō Hill",
+   "ele": 496,
+   "wikidata": "Q31644854"
+  },
+  {
+   "lat": -45.80578,
+   "lon": 167.59265,
+   "name": "White Hill",
+   "ele": 478,
+   "wikidata": "Q31647124"
+  },
+  {
+   "lat": -45.872389,
+   "lon": 168.243556,
+   "name": "Red Castle",
+   "ele": 472,
+   "wikidata": "Q31654988"
+  },
+  {
+   "lat": -45.935222,
+   "lon": 168.188611,
+   "name": "Rocky Peak",
+   "ele": 468,
+   "wikidata": "Q31655209"
+  },
+  {
+   "lat": -45.577053,
+   "lon": 167.545552,
+   "name": "Monument",
+   "ele": 466
+  },
+  {
+   "lat": -45.11639,
+   "lon": 168.45645,
+   "name": "Signal Hill",
+   "ele": 447,
+   "wikidata": "Q31654419"
+  },
+  {
+   "lat": -46.08387,
+   "lon": 166.72302,
+   "name": "Revolver Hill",
+   "ele": 445,
+   "wikidata": "Q31644804"
+  },
+  {
+   "lat": -44.979634,
+   "lon": 168.437722,
+   "name": "Wee Geordie",
+   "ele": 437,
+   "wikidata": "Q31654025"
+  },
+  {
+   "lat": -44.753139,
+   "lon": 168.413167,
+   "name": "Camp Hill",
+   "ele": 436,
+   "wikidata": "Q31652709"
+  },
+  {
+   "lat": -45.8329,
+   "lon": 167.67575,
+   "name": "McIvors Hill",
+   "ele": 424
+  },
+  {
+   "lat": -45.90328,
+   "lon": 167.90301,
+   "name": "Mount Franklin",
+   "ele": 418,
+   "wikidata": "Q14950637"
+  },
+  {
+   "lat": -46.029056,
+   "lon": 167.464627,
+   "name": "Goldie Hill",
+   "ele": 410,
+   "wikidata": "Q31647195"
+  },
+  {
+   "lat": -46.14532,
+   "lon": 166.70483,
+   "name": "The Knob",
+   "ele": 389,
+   "wikidata": "Q31644816"
+  },
+  {
+   "lat": -46.008667,
+   "lon": 167.953181,
+   "name": "Pohatu",
+   "ele": 386
+  },
+  {
+   "lat": -45.87115,
+   "lon": 167.668375,
+   "name": "Waiau",
+   "ele": 373
+  },
+  {
+   "lat": -45.52631,
+   "lon": 167.78216,
+   "name": "Fern Hill",
+   "ele": 351,
+   "wikidata": "Q31647793"
+  },
+  {
+   "lat": -45.56923,
+   "lon": 167.64895,
+   "name": "Freestone Hill",
+   "ele": 336,
+   "wikidata": "Q126091862"
+  },
+  {
+   "lat": -45.99563,
+   "lon": 167.97065,
+   "name": "Wairio Hill",
+   "name_en": "Wairio Hill",
+   "ele": 330
+  },
+  {
+   "lat": -45.804833,
+   "lon": 168.2935,
+   "name": "Castle Rock",
+   "ele": 321,
+   "wikidata": "Q31655019"
+  },
+  {
+   "lat": -45.36735,
+   "lon": 167.76535,
+   "name": "Te Titiro-o-Tukare / Lookout Hill",
+   "ele": 312,
+   "wikidata": "Q31647853"
+  },
+  {
+   "lat": -45.90912,
+   "lon": 167.96275,
+   "name": "Malakoff Hill",
+   "ele": 272
+  },
+  {
+   "lat": -46.29364,
+   "lon": 167.79144,
+   "name": "Kā Puketai / Round Hill",
+   "ele": 260
+  },
+  {
+   "lat": -45.87616,
+   "lon": 168.11279,
+   "name": "The Mole",
+   "ele": 257
+  },
+  {
+   "lat": -46.1285,
+   "lon": 167.5906,
+   "name": "Masons Hill",
+   "ele": 250
+  },
+  {
+   "lat": -46.09451,
+   "lon": 167.52844,
+   "name": "White Hill",
+   "ele": 248,
+   "wikidata": "Q126720094"
+  },
+  {
+   "lat": -45.60871,
+   "lon": 167.58749,
+   "name": "Pudding Hill",
+   "ele": 239,
+   "wikidata": "Q31646976"
+  },
+  {
+   "lat": -46.18034,
+   "lon": 168.42796,
+   "name": "Ōtewao / Forest Hill",
+   "ele": 232,
+   "wikidata": "Q31655376"
+  },
+  {
+   "lat": -45.970397,
+   "lon": 167.789354,
+   "name": "Reipihi",
+   "ele": 228
+  },
+  {
+   "lat": -46.32351,
+   "lon": 167.70596,
+   "name": "Ōmāwhero / Pahia Hill",
+   "ele": 227
+  },
+  {
+   "lat": -45.930298,
+   "lon": 167.701848,
+   "name": "Wairaki",
+   "ele": 213,
+   "wikidata": "Q138657165"
+  },
+  {
+   "lat": -45.9922,
+   "lon": 168.01254,
+   "name": "Little Wairio Hill",
+   "name_en": "Little Wairio Hill",
+   "ele": 212,
+   "wikidata": "Q31648625"
+  },
+  {
+   "lat": -46.108186,
+   "lon": 167.76607,
+   "name": "Pukemaori",
+   "ele": 197
+  },
+  {
+   "lat": -45.969847,
+   "lon": 167.733838,
+   "name": "Otahu",
+   "ele": 195
+  },
+  {
+   "lat": -46.037909,
+   "lon": 167.702741,
+   "name": "Ngapari",
+   "ele": 180,
+   "wikidata": "Q126113668"
+  },
+  {
+   "lat": -46.054,
+   "lon": 166.61453,
+   "name": "Valley Peak",
+   "ele": 179,
+   "wikidata": "Q31644674"
+  },
+  {
+   "lat": -45.773856,
+   "lon": 167.594605,
+   "name": "Monowai",
+   "ele": 165
+  },
+  {
+   "lat": -46.154688,
+   "lon": 167.608302,
+   "name": "Papatotara",
+   "ele": 164,
+   "wikidata": "Q137459380"
+  },
+  {
+   "lat": -46.380906,
+   "lon": 167.870896,
+   "name": "Oraka",
+   "ele": 163
+  },
+  {
+   "lat": -46.359171,
+   "lon": 167.739902,
+   "name": "Ōruahine / Ruahine Hill",
+   "ele": 141,
+   "wikidata": "Q126885638"
+  },
+  {
+   "lat": -46.109819,
+   "lon": 167.635691,
+   "name": "Waimotu",
+   "ele": 136
+  },
+  {
+   "lat": -46.21982,
+   "lon": 168.46847,
+   "name": "Sharks Tooth Hill",
+   "ele": 106,
+   "wikidata": "Q134981035"
+  },
+  {
+   "lat": -46.120597,
+   "lon": 167.722753,
+   "name": "Pikopiko",
+   "ele": 104
+  },
+  {
+   "lat": -45.982061,
+   "lon": 166.54249,
+   "name": "Red Point",
+   "ele": 78
+  },
+  {
+   "lat": -46.24557,
+   "lon": 167.72758,
+   "name": "Stucks Hill",
+   "wikidata": "Q31648763"
+  },
+  {
+   "lat": -45.9613,
+   "lon": 168.41731,
+   "name": "The Bastion",
+   "wikidata": "Q31655299"
+  },
+  {
+   "lat": -46.05709,
+   "lon": 168.34692,
+   "name": "Woody Knoll"
+  },
+  {
+   "lat": -46.00044,
+   "lon": 168.48254,
+   "name": "Ben Bolt",
+   "wikidata": "Q31655330"
+  },
+  {
+   "lat": -46.00525,
+   "lon": 168.41458,
+   "name": "The Cone",
+   "wikidata": "Q31655315"
+  },
+  {
+   "lat": -46.1182,
+   "lon": 168.3919,
+   "name": "Winton Hill",
+   "wikidata": "Q125510760"
+  },
+  {
+   "lat": -45.94757,
+   "lon": 168.03555,
+   "name": "The Nightcaps",
+   "wikidata": "Q31648690"
+  },
+  {
+   "lat": -45.79822,
+   "lon": 168.03657,
+   "name": "Etal Hill",
+   "wikidata": "Q31648488"
+  },
+  {
+   "lat": -45.86002,
+   "lon": 167.76637,
+   "name": "Loudon Hill",
+   "wikidata": "Q31648187"
+  },
+  {
+   "lat": -45.76939,
+   "lon": 167.96206,
+   "name": "Coral Bluff",
+   "wikidata": "Q31648320"
+  },
+  {
+   "lat": -45.9304,
+   "lon": 166.56338,
+   "name": "The Brothers",
+   "wikidata": "Q31483208"
+  },
+  {
+   "lat": -45.05733,
+   "lon": 167.94146,
+   "name": "Annick Peak",
+   "wikidata": "Q31649499"
+  },
+  {
+   "lat": -45.75531,
+   "lon": 167.6596,
+   "name": "Black Mount",
+   "wikidata": "Q31648004"
+  },
+  {
+   "lat": -45.94517,
+   "lon": 167.81033,
+   "name": "Sharpridge"
+  },
+  {
+   "lat": -45.85728,
+   "lon": 167.68638,
+   "name": "Bellmount / Bell Mount",
+   "name_en": "Bellmount / Bell Mount",
+   "wikidata": "Q31647990"
+  },
+  {
+   "lat": -45.89847,
+   "lon": 167.45944,
+   "name": "Knoll Peak",
+   "wikidata": "Q31647255"
+  },
+  {
+   "lat": -45.07416,
+   "lon": 167.30908,
+   "name": "Christmas Hill",
+   "wikidata": "Q31646426"
+  },
+  {
+   "lat": -45.75497,
+   "lon": 167.87625,
+   "name": "Mackinnon Peaks"
+  },
+  {
+   "lat": -45.54039,
+   "lon": 167.62321,
+   "name": "View Hill"
+  },
+  {
+   "lat": -45.2956,
+   "lon": 168.30264,
+   "name": "Hummock Peak",
+   "wikidata": "Q31654323"
+  },
+  {
+   "lat": -45.5191,
+   "lon": 167.13569,
+   "name": "Black Giants",
+   "wikidata": "Q31646511"
+  },
+  {
+   "lat": -45.28049,
+   "lon": 168.13441,
+   "name": "Mount Cerberus",
+   "wikidata": "Q31647754"
+  },
+  {
+   "lat": -46.16833,
+   "lon": 167.8323,
+   "name": "Bald Hill",
+   "wikidata": "Q30508828"
+  },
+  {
+   "lat": -45.72681,
+   "lon": 167.86834,
+   "name": "Wairaki Peaks"
+  },
+  {
+   "lat": -45.33817,
+   "lon": 167.96069,
+   "name": "Dale Hill",
+   "wikidata": "Q31647916"
+  },
+  {
+   "lat": -45.51842,
+   "lon": 167.13844,
+   "name": "Black Giants"
+  },
+  {
+   "lat": -45.71308,
+   "lon": 168.48048,
+   "name": "Lintley Hill",
+   "wikidata": "Q31655101"
+  },
+  {
+   "lat": -45.51395,
+   "lon": 167.1786,
+   "name": "Mount Wilmot",
+   "wikidata": "Q31646554"
+  },
+  {
+   "lat": -45.74741,
+   "lon": 167.8,
+   "name": "Brunel Peaks"
+  },
+  {
+   "lat": -45.93727,
+   "lon": 166.56303,
+   "name": "The Brothers"
+  },
+  {
+   "lat": -45.68802,
+   "lon": 168.44305,
+   "name": "Elbow Head",
+   "wikidata": "Q31655117"
+  },
+  {
+   "lat": -45.6887,
+   "lon": 167.88894,
+   "name": "Aparima Peaks"
+  },
+  {
+   "lat": -46.095096,
+   "lon": 166.816946,
+   "name": "Kā Pukehore / Bald Peaks",
+   "wikidata": "Q31644829"
+  },
+  {
+   "lat": -45.76527,
+   "lon": 168.29922,
+   "name": "White Hill",
+   "wikidata": "Q31655003"
+  },
+  {
+   "lat": -45.977883,
+   "lon": 167.892092,
+   "name": "Twinlaw",
+   "wikidata": "Q31648674"
+  },
+  {
+   "lat": -45.69763,
+   "lon": 168.01974,
+   "name": "South Braxton",
+   "wikidata": "Q31648409"
+  },
+  {
+   "lat": -45.562116,
+   "lon": 167.739095,
+   "name": "Mount York",
+   "wikidata": "Q31647954"
+  },
+  {
+   "lat": -44.833778,
+   "lon": 167.477722,
+   "name": "Bare Cone",
+   "wikidata": "Q31643693"
+  },
+  {
+   "lat": -44.929983,
+   "lon": 167.5649,
+   "name": "Mount Sydney Dacres",
+   "wikidata": "Q125757866"
+  },
+  {
+   "lat": -45.021884,
+   "lon": 167.352075,
+   "name": "The Knob Hill",
+   "wikidata": "Q31643648"
+  },
+  {
+   "lat": -45.031449,
+   "lon": 167.308388,
+   "name": "Camp Hill",
+   "wikidata": "Q31646439"
+  },
+  {
+   "lat": -44.991076,
+   "lon": 167.346291,
+   "name": "Expedition Peak",
+   "wikidata": "Q31643659"
+  },
+  {
+   "lat": -46.007,
+   "lon": 167.193861,
+   "name": "Alice Peaks",
+   "wikidata": "Q31647302"
+  },
+  {
+   "lat": -45.053222,
+   "lon": 167.591273,
+   "name": "Smith Peak"
+  },
+  {
+   "lat": -45.949083,
+   "lon": 168.245667,
+   "name": "Big Hill",
+   "wikidata": "Q31655284"
+  },
+  {
+   "lat": -45.807972,
+   "lon": 168.403611,
+   "name": "Ram Hill",
+   "wikidata": "Q31655052"
+  },
+  {
+   "lat": -45.922528,
+   "lon": 168.450083,
+   "name": "Ben More",
+   "wikidata": "Q31655162"
+  },
+  {
+   "lat": -46.036854,
+   "lon": 167.873218,
+   "name": "Scotts Gap"
+  },
+  {
+   "lat": -46.006237,
+   "lon": 167.839833,
+   "name": "Braida Crags",
+   "wikidata": "Q31711848"
+  },
+  {
+   "lat": -45.041292,
+   "lon": 168.38176,
+   "name": "The Hummocks",
+   "wikidata": "Q31653556"
+  },
+  {
+   "lat": -45.909465,
+   "lon": 168.060242,
+   "name": "Gowan Hill"
+  },
+  {
+   "lat": -46.058021,
+   "lon": 167.816167,
+   "name": "Orawia"
+  },
+  {
+   "lat": -46.092276,
+   "lon": 167.855164,
+   "name": "Merrivale"
+  },
+  {
+   "lat": -46.013209,
+   "lon": 167.760483,
+   "name": "Eastern Bush"
+  },
+  {
+   "lat": -46.232686,
+   "lon": 167.677867,
+   "name": "The Downs"
+  },
+  {
+   "lat": -46.249125,
+   "lon": 167.711918,
+   "name": "Te Tumutu"
+  },
+  {
+   "lat": -44.529264,
+   "lon": 168.195041,
+   "name": "Courtenay Peak",
+   "wikidata": "Q31646046"
+  },
+  {
+   "lat": -44.555173,
+   "lon": 168.190386,
+   "name": "Barrington Peak",
+   "wikidata": "Q31646022"
+  },
+  {
+   "lat": -44.569315,
+   "lon": 168.184181,
+   "name": "Frenchman Peak",
+   "wikidata": "Q31646010"
+  },
+  {
+   "lat": -44.60614,
+   "lon": 168.16097,
+   "name": "Prospector Peak",
+   "wikidata": "Q31645998"
+  },
+  {
+   "lat": -44.565464,
+   "lon": 168.052279,
+   "name": "Mount Dot",
+   "wikidata": "Q31645949"
+  },
+  {
+   "lat": -44.583807,
+   "lon": 168.039383,
+   "name": "Alice Peak",
+   "wikidata": "Q31645882"
+  },
+  {
+   "lat": -44.92006,
+   "lon": 167.987684,
+   "name": "Disappearing Peaks",
+   "wikidata": "Q31711914"
+  },
+  {
+   "lat": -44.97525,
+   "lon": 168.140806,
+   "name": "David Peaks",
+   "wikidata": "Q31649558"
+  },
+  {
+   "lat": -44.573607,
+   "lon": 168.295822,
+   "name": "East Peak"
+  },
+  {
+   "lat": -44.569122,
+   "lon": 168.28969,
+   "name": "West Peak"
+  },
+  {
+   "lat": -44.513779,
+   "lon": 168.276836,
+   "name": "Brenda Peak",
+   "wikidata": "Q31652030"
+  },
+  {
+   "lat": -44.522899,
+   "lon": 168.318179,
+   "name": "McBride Peaks",
+   "wikidata": "Q31727693"
+  },
+  {
+   "lat": -44.508592,
+   "lon": 168.347704,
+   "name": "Hedin Peak",
+   "wikidata": "Q31652122"
+  },
+  {
+   "lat": -44.665,
+   "lon": 167.933361,
+   "name": "Bowen Hill",
+   "wikidata": "Q31706733"
+  }
+ ]
+}

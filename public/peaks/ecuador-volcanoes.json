@@ -1,0 +1,3335 @@
+{
+ "region": "ecuador-volcanoes",
+ "generated": "2026-08-12T10:54:55+00:00",
+ "peaks": [
+  {
+   "lat": -1.467477,
+   "lon": -78.822635,
+   "name": "Pico Veintimilla",
+   "ele": 6228
+  },
+  {
+   "lat": -1.473387,
+   "lon": -78.804569,
+   "name": "Cumbre Politécnica",
+   "ele": 5820
+  },
+  {
+   "lat": -1.47465,
+   "lon": -78.798014,
+   "name": "C. Nicolás Martínez",
+   "ele": 5570
+  },
+  {
+   "lat": -1.684589,
+   "lon": -78.422798,
+   "name": "Obispo",
+   "ele": 5319
+  },
+  {
+   "lat": -1.658869,
+   "lon": -78.423779,
+   "name": "Canónigo",
+   "ele": 5260
+  },
+  {
+   "lat": -1.666594,
+   "lon": -78.417869,
+   "name": "Canon",
+   "ele": 5259
+  },
+  {
+   "lat": -1.674615,
+   "lon": -78.409151,
+   "name": "Tabernáculo",
+   "ele": 5193
+  },
+  {
+   "lat": -1.685168,
+   "lon": -78.416511,
+   "name": "Monja Grande",
+   "ele": 5160
+  },
+  {
+   "lat": -1.682701,
+   "lon": -78.411941,
+   "name": "Monja Chica",
+   "ele": 5080
+  },
+  {
+   "lat": -1.664984,
+   "lon": -78.410332,
+   "name": "Fraile Oriental",
+   "ele": 5060
+  },
+  {
+   "lat": -0.712795,
+   "lon": -78.441364,
+   "name": "Morurco",
+   "ele": 4880
+  },
+  {
+   "lat": -0.174531,
+   "lon": -78.60072,
+   "name": "Guagua Pichincha",
+   "ele": 4776
+  },
+  {
+   "lat": -0.581521,
+   "lon": -78.506555,
+   "name": "Rumiňahui norte",
+   "ele": 4721
+  },
+  {
+   "lat": -1.75457,
+   "lon": -78.465641,
+   "name": "Cerro Cubillín",
+   "ele": 4711
+  },
+  {
+   "lat": -2.335766,
+   "lon": -78.545632,
+   "name": "Cerro Soroche",
+   "ele": 4689,
+   "wikidata": "Q2946777"
+  },
+  {
+   "lat": -0.100386,
+   "lon": -77.932325,
+   "name": "Saraurcu",
+   "ele": 4677
+  },
+  {
+   "lat": -0.461826,
+   "lon": -78.200483,
+   "name": "Chosalongo Grande",
+   "ele": 4661
+  },
+  {
+   "lat": -2.238136,
+   "lon": -78.539126,
+   "name": "Cerro Achipungu",
+   "ele": 4630
+  },
+  {
+   "lat": -0.588937,
+   "lon": -78.508028,
+   "name": "Rumiňahui central",
+   "ele": 4630
+  },
+  {
+   "lat": -1.7813,
+   "lon": -78.47826,
+   "name": "Cerro Ayanchi",
+   "ele": 4606
+  },
+  {
+   "lat": -0.170349,
+   "lon": -78.576728,
+   "name": "Padre Encantado",
+   "name_ru": "Падре Анкантадо",
+   "ele": 4600
+  },
+  {
+   "lat": -2.24131,
+   "lon": -78.515694,
+   "name": "Cerro de Sasquín",
+   "ele": 4580
+  },
+  {
+   "lat": -0.161101,
+   "lon": -78.576971,
+   "name": "Ladrillos",
+   "name_ru": "Ладрильос",
+   "ele": 4577
+  },
+  {
+   "lat": -1.087351,
+   "lon": -78.845953,
+   "name": "Pugyucuchoy",
+   "ele": 4560
+  },
+  {
+   "lat": 0.481812,
+   "lon": -78.330657,
+   "name": "Yanaurcu de Piñán",
+   "ele": 4535,
+   "wikidata": "Q23870163"
+  },
+  {
+   "lat": -1.042527,
+   "lon": -78.882067,
+   "name": "Cerro Sumiurcu",
+   "ele": 4525
+  },
+  {
+   "lat": -2.394814,
+   "lon": -78.841818,
+   "name": "Ñaupán",
+   "ele": 4514
+  },
+  {
+   "lat": -1.19165,
+   "lon": -78.86253,
+   "name": "Cerro El Alumbre Pungu",
+   "ele": 4510
+  },
+  {
+   "lat": -1.124251,
+   "lon": -78.797137,
+   "name": "Quillushapa",
+   "ele": 4509
+  },
+  {
+   "lat": -1.223806,
+   "lon": -78.287718,
+   "name": "Cerro Hermoso",
+   "ele": 4506,
+   "wikidata": "Q23880390"
+  },
+  {
+   "lat": -0.573074,
+   "lon": -78.513842,
+   "name": "Rumiñahui noroccidental",
+   "ele": 4490
+  },
+  {
+   "lat": -2.422657,
+   "lon": -78.832518,
+   "name": "Mashua",
+   "ele": 4470
+  },
+  {
+   "lat": -1.736153,
+   "lon": -78.403036,
+   "name": "Cerro Negro",
+   "ele": 4458
+  },
+  {
+   "lat": -0.187,
+   "lon": -78.204088,
+   "name": "Cerro Puntas",
+   "ele": 4453,
+   "wikidata": "Q23873221"
+  },
+  {
+   "lat": -1.392379,
+   "lon": -78.925412,
+   "name": "Cerro Añimullo",
+   "ele": 4452
+  },
+  {
+   "lat": -0.793584,
+   "lon": -78.195677,
+   "name": "El Descanso",
+   "ele": 4440
+  },
+  {
+   "lat": -2.383333,
+   "lon": -78.8,
+   "name": "Tres Cruces",
+   "ele": 4431
+  },
+  {
+   "lat": -1.493284,
+   "lon": -78.640797,
+   "name": "Cerro Igualata",
+   "ele": 4430
+  },
+  {
+   "lat": -1.160135,
+   "lon": -78.781716,
+   "name": "Casahuala",
+   "ele": 4429,
+   "wikidata": "Q23885320"
+  },
+  {
+   "lat": -1.02348,
+   "lon": -78.914684,
+   "name": "Cerro Soldado Mapa",
+   "ele": 4425
+  },
+  {
+   "lat": 0.484135,
+   "lon": -78.339409,
+   "name": "Yanaurcu",
+   "ele": 4417
+  },
+  {
+   "lat": -1.809268,
+   "lon": -78.475857,
+   "name": "Cerro Quilimas",
+   "ele": 4414
+  },
+  {
+   "lat": -1.811798,
+   "lon": -78.422856,
+   "name": "Cerro Cuiche",
+   "ele": 4413
+  },
+  {
+   "lat": -2.326349,
+   "lon": -78.561352,
+   "name": "Cerro Tintillán Grande",
+   "ele": 4410
+  },
+  {
+   "lat": -2.335343,
+   "lon": -78.809202,
+   "name": "Cerro Cisarán",
+   "ele": 4400
+  },
+  {
+   "lat": -1.719755,
+   "lon": -78.407081,
+   "name": "Cerro pintado",
+   "ele": 4386
+  },
+  {
+   "lat": -1.151254,
+   "lon": -78.803447,
+   "name": "Hualajaló",
+   "ele": 4385
+  },
+  {
+   "lat": -0.360467,
+   "lon": -78.629751,
+   "name": "Cerro Arenal",
+   "ele": 4384
+  },
+  {
+   "lat": -1.856236,
+   "lon": -78.483582,
+   "name": "Cerro Cacadron",
+   "ele": 4383
+  },
+  {
+   "lat": -1.016524,
+   "lon": -78.922065,
+   "name": "Cerro Rumicruz",
+   "ele": 4377
+  },
+  {
+   "lat": -0.183525,
+   "lon": -78.579067,
+   "name": "Cerro Chuquiragua",
+   "ele": 4374
+  },
+  {
+   "lat": -2.433989,
+   "lon": -78.823771,
+   "name": "Mangan",
+   "ele": 4370
+  },
+  {
+   "lat": -0.267509,
+   "lon": -78.202028,
+   "name": "Loma Juña",
+   "ele": 4357
+  },
+  {
+   "lat": -2.223808,
+   "lon": -78.574626,
+   "name": "Cerro La Torre",
+   "ele": 4357
+  },
+  {
+   "lat": -1.732314,
+   "lon": -78.417102,
+   "name": "Cerro Condorazo",
+   "ele": 4355
+  },
+  {
+   "lat": -1.410269,
+   "lon": -78.902967,
+   "name": "Cerro Cusumunllo",
+   "ele": 4350
+  },
+  {
+   "lat": -1.911412,
+   "lon": -78.484378,
+   "name": "Cerro Chimblas",
+   "ele": 4340
+  },
+  {
+   "lat": -0.265792,
+   "lon": -78.234643,
+   "name": "Loma Pishanga",
+   "ele": 4335
+  },
+  {
+   "lat": -1.963226,
+   "lon": -78.579824,
+   "name": "Pan de Azúcar",
+   "ele": 4322,
+   "wikidata": "Q23875547"
+  },
+  {
+   "lat": -2.035647,
+   "lon": -78.545122,
+   "name": "Cerro Escalera",
+   "ele": 4317
+  },
+  {
+   "lat": -2.05306,
+   "lon": -78.506584,
+   "name": "Cerro Tazamplan",
+   "ele": 4317
+  },
+  {
+   "lat": -2.015833,
+   "lon": -78.595505,
+   "name": "Cerro Tocazan",
+   "ele": 4314
+  },
+  {
+   "lat": -1.852247,
+   "lon": -78.397322,
+   "name": "Shilile",
+   "ele": 4306
+  },
+  {
+   "lat": -1.182662,
+   "lon": -78.407424,
+   "name": "Cerro Quillotura",
+   "ele": 4302
+  },
+  {
+   "lat": -1.908664,
+   "lon": -78.850987,
+   "name": "Chanlor",
+   "ele": 4283,
+   "wikidata": "Q23884336"
+  },
+  {
+   "lat": 0.485773,
+   "lon": -78.346631,
+   "name": "Cerro Chimborazo",
+   "ele": 4266
+  },
+  {
+   "lat": -0.811072,
+   "lon": -78.804305,
+   "name": "Cerro Jatún Munca",
+   "ele": 4263
+  },
+  {
+   "lat": -1.130873,
+   "lon": -78.731947,
+   "name": "Cabuito",
+   "ele": 4261
+  },
+  {
+   "lat": -0.091385,
+   "lon": -78.023672,
+   "name": "Cerro Quinde Machay",
+   "ele": 4254
+  },
+  {
+   "lat": -2.071416,
+   "lon": -78.528814,
+   "name": "Cerro Verdecocha",
+   "ele": 4246
+  },
+  {
+   "lat": -0.329649,
+   "lon": -78.249578,
+   "name": "Cerro Yanaurcu",
+   "ele": 4245
+  },
+  {
+   "lat": -2.422016,
+   "lon": -78.874504,
+   "name": "Yanahurco",
+   "ele": 4244
+  },
+  {
+   "lat": -1.226727,
+   "lon": -78.798237,
+   "name": "Chiriquin",
+   "ele": 4232
+  },
+  {
+   "lat": -1.94753,
+   "lon": -78.814736,
+   "name": "Lalanguso",
+   "ele": 4226,
+   "wikidata": "Q23878831"
+  },
+  {
+   "lat": -1.517995,
+   "lon": -78.907347,
+   "name": "Cerro Tinajas",
+   "ele": 4225
+  },
+  {
+   "lat": -1.615118,
+   "lon": -78.366568,
+   "name": "Cerro de las Viudas",
+   "ele": 4222
+  },
+  {
+   "lat": 0.752942,
+   "lon": -77.974356,
+   "name": "Chiles",
+   "ele": 4218
+  },
+  {
+   "lat": -0.139965,
+   "lon": -78.175077,
+   "name": "Loma Cangagua Pucará",
+   "ele": 4217
+  },
+  {
+   "lat": -1.796678,
+   "lon": -78.432147,
+   "name": "Cerro Collanes",
+   "ele": 4216
+  },
+  {
+   "lat": -1.119719,
+   "lon": -78.745494,
+   "name": "Cerro Pullahuaita",
+   "ele": 4209
+  },
+  {
+   "lat": -2.154829,
+   "lon": -78.517184,
+   "name": "Cerro Yanatorre",
+   "ele": 4198
+  },
+  {
+   "lat": -0.984062,
+   "lon": -78.903108,
+   "name": "Cerro Padre Urcu",
+   "ele": 4197
+  },
+  {
+   "lat": -0.954624,
+   "lon": -78.43402,
+   "name": "Cerro Condor Pasa",
+   "ele": 4192
+  },
+  {
+   "lat": -2.148525,
+   "lon": -78.547611,
+   "name": "Cerro Nagrapungu",
+   "ele": 4186
+  },
+  {
+   "lat": -1.715841,
+   "lon": -78.842242,
+   "name": "Yana-ashpa",
+   "ele": 4185
+  },
+  {
+   "lat": -1.145671,
+   "lon": -78.674339,
+   "name": "Palorumi",
+   "ele": 4179
+  },
+  {
+   "lat": -0.983378,
+   "lon": -78.889778,
+   "name": "Cerro Sachaucho",
+   "ele": 4178
+  },
+  {
+   "lat": -0.990917,
+   "lon": -78.891507,
+   "name": "Cerro Tiopungu",
+   "ele": 4175
+  },
+  {
+   "lat": -0.15181,
+   "lon": -78.129243,
+   "name": "Cerro Arrabal Sipamba",
+   "ele": 4161
+  },
+  {
+   "lat": -2.032604,
+   "lon": -78.836981,
+   "name": "Cobo",
+   "ele": 4154,
+   "wikidata": "Q23884656"
+  },
+  {
+   "lat": 0.12406,
+   "lon": -78.276888,
+   "name": "Cerro Colangal",
+   "ele": 4134
+  },
+  {
+   "lat": -1.12128,
+   "lon": -78.734599,
+   "name": "Cerro Josefo Chiquito",
+   "ele": 4128
+  },
+  {
+   "lat": -2.429559,
+   "lon": -78.695963,
+   "name": "Yanaurco",
+   "ele": 4119
+  },
+  {
+   "lat": -0.460243,
+   "lon": -78.479999,
+   "name": "Pasochoa 2",
+   "ele": 4110
+  },
+  {
+   "lat": -0.390421,
+   "lon": -78.618249,
+   "name": "San Francisco El Picatcho",
+   "ele": 4085
+  },
+  {
+   "lat": -0.999432,
+   "lon": -78.876824,
+   "name": "Cerro Cabeza",
+   "ele": 4070
+  },
+  {
+   "lat": -2.180474,
+   "lon": -78.454142,
+   "name": "Canuito",
+   "ele": 4060
+  },
+  {
+   "lat": -1.393291,
+   "lon": -78.708902,
+   "name": "Cerro Pitiunga",
+   "ele": 4054
+  },
+  {
+   "lat": -0.936343,
+   "lon": -78.839607,
+   "name": "Amina / Cabeza de gorilla",
+   "ele": 4021
+  },
+  {
+   "lat": -2.15603,
+   "lon": -78.449378,
+   "name": "Zambalan",
+   "ele": 4014
+  },
+  {
+   "lat": -0.166637,
+   "lon": -78.525363,
+   "name": "Loma Cóndor Rumi",
+   "ele": 3995
+  },
+  {
+   "lat": -1.398728,
+   "lon": -78.678992,
+   "name": "Cerro Puñalica",
+   "ele": 3988
+  },
+  {
+   "lat": 0.107996,
+   "lon": -78.254938,
+   "name": "Loma Mojanda",
+   "ele": 3978,
+   "wikidata": "Q3046481"
+  },
+  {
+   "lat": -2.12214,
+   "lon": -78.493838,
+   "name": "Cerro Ushugsha",
+   "ele": 3974
+  },
+  {
+   "lat": 0.943956,
+   "lon": -77.072624,
+   "name": "Cerro Patascoy",
+   "ele": 3950
+  },
+  {
+   "lat": -0.188275,
+   "lon": -78.535047,
+   "name": "Cruz Loma",
+   "ele": 3945
+  },
+  {
+   "lat": -0.863895,
+   "lon": -78.891212,
+   "name": "Monte Juyende (3930)",
+   "ele": 3930
+  },
+  {
+   "lat": 0.272796,
+   "lon": -77.828495,
+   "name": "Aulucunga",
+   "ele": 3923
+  },
+  {
+   "lat": -0.893803,
+   "lon": -78.740618,
+   "name": "Milín",
+   "ele": 3921,
+   "wikidata": "Q23877272"
+  },
+  {
+   "lat": -1.134606,
+   "lon": -78.352604,
+   "name": "Mesa Tablon",
+   "ele": 3915
+  },
+  {
+   "lat": -2.486726,
+   "lon": -78.656833,
+   "name": "Quinualoma",
+   "ele": 3907,
+   "wikidata": "Q23873422"
+  },
+  {
+   "lat": -2.303011,
+   "lon": -78.852246,
+   "name": "Cerro Malpán",
+   "ele": 3895
+  },
+  {
+   "lat": -0.974161,
+   "lon": -78.893367,
+   "name": "Cerro Cruzurco",
+   "ele": 3892
+  },
+  {
+   "lat": -1.437855,
+   "lon": -78.543294,
+   "name": "Mulmul",
+   "ele": 3878,
+   "wikidata": "Q23877455"
+  },
+  {
+   "lat": 0.342505,
+   "lon": -77.841783,
+   "name": "Loma El Corazon",
+   "ele": 3869
+  },
+  {
+   "lat": -0.97008,
+   "lon": -78.900408,
+   "name": "Cerro Tacaiza",
+   "ele": 3850
+  },
+  {
+   "lat": -1.284347,
+   "lon": -78.448537,
+   "name": "Cerro San Borja",
+   "ele": 3841
+  },
+  {
+   "lat": -0.632687,
+   "lon": -78.64054,
+   "name": "Loma Saquigua",
+   "ele": 3839
+  },
+  {
+   "lat": -0.305021,
+   "lon": -78.60589,
+   "name": "Cerro Pailón",
+   "ele": 3813
+  },
+  {
+   "lat": 0.368104,
+   "lon": -77.822149,
+   "name": "Las Garzas",
+   "ele": 3788
+  },
+  {
+   "lat": -0.414024,
+   "lon": -78.607692,
+   "name": "Cerro Viudita",
+   "ele": 3786
+  },
+  {
+   "lat": 0.790919,
+   "lon": -77.463239,
+   "name": "Cerro San Francisco",
+   "ele": 3763
+  },
+  {
+   "lat": -1.39991,
+   "lon": -78.57142,
+   "name": "Cerro Huisla",
+   "ele": 3732
+  },
+  {
+   "lat": -1.383388,
+   "lon": -78.57361,
+   "name": "Cerro Llimpi",
+   "ele": 3708
+  },
+  {
+   "lat": -1.340123,
+   "lon": -78.365882,
+   "name": "Cerro Santa Ana",
+   "ele": 3703
+  },
+  {
+   "lat": -1.610663,
+   "lon": -78.800881,
+   "name": "Shobolurcu",
+   "ele": 3699
+  },
+  {
+   "lat": 0.577778,
+   "lon": -77.927257,
+   "name": "Cerotal",
+   "ele": 3649
+  },
+  {
+   "lat": 0.616224,
+   "lon": -77.894232,
+   "name": "Muyurcu II",
+   "ele": 3633
+  },
+  {
+   "lat": 0.815621,
+   "lon": -77.385298,
+   "name": "Cerro Azuayo",
+   "ele": 3604
+  },
+  {
+   "lat": 0.75964,
+   "lon": -77.504064,
+   "name": "Cerro Mirador",
+   "ele": 3595
+  },
+  {
+   "lat": -0.237455,
+   "lon": -78.558221,
+   "name": "Cerro Ungüí",
+   "ele": 3578
+  },
+  {
+   "lat": -0.545598,
+   "lon": -78.624257,
+   "name": "La Moya",
+   "ele": 3522
+  },
+  {
+   "lat": 0.854063,
+   "lon": -77.447426,
+   "name": "Cerro El Encino",
+   "ele": 3515
+  },
+  {
+   "lat": -0.271633,
+   "lon": -78.603487,
+   "name": "Ambato Loma",
+   "ele": 3501
+  },
+  {
+   "lat": -0.466731,
+   "lon": -78.671102,
+   "name": "Cerro Bombolí",
+   "ele": 3500
+  },
+  {
+   "lat": -0.034035,
+   "lon": -78.478725,
+   "name": "Volcán Casitagua",
+   "ele": 3499
+  },
+  {
+   "lat": 0.885902,
+   "lon": -77.463412,
+   "name": "Cerro Derrumbe",
+   "ele": 3461
+  },
+  {
+   "lat": -0.257128,
+   "lon": -78.572072,
+   "name": "Cashaloma",
+   "ele": 3430
+  },
+  {
+   "lat": -1.517778,
+   "lon": -78.466887,
+   "name": "LOMA GUANTAL",
+   "ele": 3400
+  },
+  {
+   "lat": -0.05,
+   "lon": -78.55,
+   "name": "Ililagua",
+   "ele": 3362,
+   "wikidata": "Q23880524"
+  },
+  {
+   "lat": 0.0351,
+   "lon": -78.46558,
+   "name": "Sincholagua",
+   "ele": 3356,
+   "wikidata": "Q15277853"
+  },
+  {
+   "lat": -0.037132,
+   "lon": -78.152913,
+   "name": "Cuniburo",
+   "ele": 3346,
+   "wikidata": "Q23882358"
+  },
+  {
+   "lat": -0.093144,
+   "lon": -78.579737,
+   "name": "San Rafael",
+   "ele": 3319,
+   "wikidata": "Q23871384"
+  },
+  {
+   "lat": 0.059982,
+   "lon": -78.478855,
+   "name": "Cerro Will",
+   "ele": 3260
+  },
+  {
+   "lat": -2.331535,
+   "lon": -78.970892,
+   "name": "Cerro de Puñay",
+   "ele": 3230
+  },
+  {
+   "lat": -0.258002,
+   "lon": -78.410616,
+   "name": "Ilaló",
+   "ele": 3150
+  },
+  {
+   "lat": 1.170193,
+   "lon": -77.835275,
+   "name": "Cerro Negro",
+   "ele": 3090
+  },
+  {
+   "lat": 0.080043,
+   "lon": -78.481525,
+   "name": "Cerro Lulumbamba",
+   "ele": 3079
+  },
+  {
+   "lat": -1.535305,
+   "lon": -78.496865,
+   "name": "LOMA DE UTUÑAG",
+   "ele": 3033
+  },
+  {
+   "lat": -0.2288,
+   "lon": -78.518657,
+   "name": "Panecillo",
+   "ele": 3016,
+   "wikidata": "Q1871347"
+  },
+  {
+   "lat": -0.277211,
+   "lon": -78.745437,
+   "name": "Pico Oriental",
+   "ele": 3010
+  },
+  {
+   "lat": -1.611606,
+   "lon": -78.570314,
+   "name": "Cerro Rulchi",
+   "ele": 2930
+  },
+  {
+   "lat": -1.618184,
+   "lon": -78.573407,
+   "name": "Usucul",
+   "ele": 2850
+  },
+  {
+   "lat": 1.322689,
+   "lon": -77.643997,
+   "name": "Cerro Inga",
+   "ele": 2840
+  },
+  {
+   "lat": 0.017445,
+   "lon": -78.322916,
+   "name": "Loma de Moronga",
+   "ele": 2806
+  },
+  {
+   "lat": -0.049269,
+   "lon": -78.644077,
+   "name": "Cerro Guarumos",
+   "ele": 2764
+  },
+  {
+   "lat": -0.219444,
+   "lon": -78.482522,
+   "name": "Cashaloma",
+   "ele": 2713
+  },
+  {
+   "lat": -0.290241,
+   "lon": -78.39334,
+   "name": "Pillivaro",
+   "ele": 2671,
+   "wikidata": "Q23875793"
+  },
+  {
+   "lat": 0.032032,
+   "lon": -78.381691,
+   "name": "Loma Cabuyal",
+   "ele": 2650
+  },
+  {
+   "lat": -1.977863,
+   "lon": -79.055476,
+   "name": "Pucarrumi",
+   "ele": 2642
+  },
+  {
+   "lat": -1.876167,
+   "lon": -78.989768,
+   "name": "Pucarrumi",
+   "ele": 2642
+  },
+  {
+   "lat": -0.478938,
+   "lon": -79.030175,
+   "name": "El Centinela",
+   "ele": 2570
+  },
+  {
+   "lat": -0.455245,
+   "lon": -79.095602,
+   "name": "El Colorado",
+   "ele": 2340
+  },
+  {
+   "lat": -2.240743,
+   "lon": -78.87226,
+   "name": "Cóndor Puñuna",
+   "ele": 2318
+  },
+  {
+   "lat": -1.381543,
+   "lon": -78.406513,
+   "name": "Cara del Perro",
+   "ele": 2260
+  },
+  {
+   "lat": -1.386286,
+   "lon": -78.385872,
+   "name": "la piedra de la luz",
+   "ele": 2240
+  },
+  {
+   "lat": -0.085078,
+   "lon": -78.866464,
+   "name": "Saloya (1831 msnm)",
+   "ele": 1831
+  },
+  {
+   "lat": -0.24649,
+   "lon": -79.192936,
+   "name": "Bombolí",
+   "ele": 680
+  },
+  {
+   "lat": 0.807865,
+   "lon": -79.667133,
+   "name": "Gatazo",
+   "ele": 487
+  },
+  {
+   "lat": -0.043344,
+   "lon": -79.994631,
+   "name": "Cerro Pata de Mula",
+   "ele": 464
+  },
+  {
+   "lat": -1.372395,
+   "lon": -80.300424,
+   "name": "La Palanca",
+   "ele": 392
+  },
+  {
+   "lat": -1.393975,
+   "lon": -80.283043,
+   "name": "El Achiote",
+   "ele": 325
+  },
+  {
+   "lat": -1.328368,
+   "lon": -80.263281,
+   "name": "Cerro Pancora",
+   "ele": 316
+  },
+  {
+   "lat": -1.929353,
+   "lon": -79.764103,
+   "name": "Cerro Samborondon",
+   "ele": 286
+  },
+  {
+   "lat": -2.180169,
+   "lon": -79.883485,
+   "name": "Cerro El Carmen",
+   "ele": 101,
+   "wikidata": "Q23886290"
+  },
+  {
+   "lat": -0.424891,
+   "lon": -78.326958,
+   "name": "Cerro Achupallas",
+   "wikidata": "Q23886348"
+  },
+  {
+   "lat": 0.216667,
+   "lon": -78.383333,
+   "name": "Cerro de Anagumba",
+   "wikidata": "Q23885445"
+  },
+  {
+   "lat": -1.056825,
+   "lon": -78.315985,
+   "name": "Amina"
+  },
+  {
+   "lat": -0.685885,
+   "lon": -78.504844,
+   "name": "Ami Grande",
+   "wikidata": "Q23885438"
+  },
+  {
+   "lat": -0.396568,
+   "lon": -78.317945,
+   "name": "Añaro",
+   "wikidata": "Q23885450"
+  },
+  {
+   "lat": 0.083149,
+   "lon": -78.200602,
+   "name": "Árbol",
+   "wikidata": "Q23885494"
+  },
+  {
+   "lat": -2.439509,
+   "lon": -79.574362,
+   "name": "Cerro de Batang"
+  },
+  {
+   "lat": 0.216667,
+   "lon": -78.333333,
+   "name": "Cerro Blanco"
+  },
+  {
+   "lat": -2.033333,
+   "lon": -80.0,
+   "name": "Cerro de Candelaria",
+   "wikidata": "Q23885216"
+  },
+  {
+   "lat": -2.183333,
+   "lon": -78.916667,
+   "name": "Calahuín",
+   "wikidata": "Q23885819"
+  },
+  {
+   "lat": 0.200583,
+   "lon": -78.368313,
+   "name": "Cerro Calera",
+   "wikidata": "Q23885175"
+  },
+  {
+   "lat": -2.396656,
+   "lon": -78.783204,
+   "name": "Canurumi",
+   "wikidata": "Q23885244"
+  },
+  {
+   "lat": 0.111861,
+   "lon": -78.042876,
+   "name": "Churuloma",
+   "wikidata": "Q23884627"
+  },
+  {
+   "lat": 0.733317,
+   "lon": -77.957498,
+   "name": "Cerro Payurco"
+  },
+  {
+   "lat": -2.383333,
+   "lon": -78.9,
+   "name": "Coronado",
+   "wikidata": "Q23882182"
+  },
+  {
+   "lat": -2.393374,
+   "lon": -79.669977,
+   "name": "Cerro de Cimalón"
+  },
+  {
+   "lat": -1.35,
+   "lon": -78.7,
+   "name": "Cruzmaqui",
+   "wikidata": "Q23882267"
+  },
+  {
+   "lat": -1.666672,
+   "lon": -78.7,
+   "name": "Culai",
+   "wikidata": "Q23882315"
+  },
+  {
+   "lat": -1.036151,
+   "lon": -78.489209,
+   "name": "Loma Cumbijín Urcu"
+  },
+  {
+   "lat": 0.1,
+   "lon": -78.066667,
+   "name": "Cotoloma",
+   "wikidata": "Q23882215"
+  },
+  {
+   "lat": -2.133333,
+   "lon": -78.883333,
+   "name": "Danas"
+  },
+  {
+   "lat": -1.218016,
+   "lon": -78.802588,
+   "name": "Doliurcu"
+  },
+  {
+   "lat": 0.191331,
+   "lon": -78.327954,
+   "name": "Cushirrumi",
+   "wikidata": "Q23882400"
+  },
+  {
+   "lat": 0.316667,
+   "lon": -78.05,
+   "name": "El Redondo"
+  },
+  {
+   "lat": -1.633333,
+   "lon": -77.833333,
+   "name": "El Sigüín",
+   "wikidata": "Q23882621"
+  },
+  {
+   "lat": -0.383333,
+   "lon": -77.666667,
+   "name": "Cerro Guagra-urcu",
+   "wikidata": "Q23880211"
+  },
+  {
+   "lat": 0.518341,
+   "lon": -78.518871,
+   "name": "Güitig Alto"
+  },
+  {
+   "lat": -0.95,
+   "lon": -78.5,
+   "name": "Guangotasín",
+   "wikidata": "Q23880273"
+  },
+  {
+   "lat": -0.066506,
+   "lon": -78.399878,
+   "name": "Gualagüincha",
+   "wikidata": "Q23880223"
+  },
+  {
+   "lat": -2.116667,
+   "lon": -78.85,
+   "name": "Gualinag",
+   "wikidata": "Q23880237"
+  },
+  {
+   "lat": -0.631663,
+   "lon": -78.819146,
+   "name": "Loma Gualucasi"
+  },
+  {
+   "lat": -1.200026,
+   "lon": -78.633333,
+   "name": "Inapisí",
+   "wikidata": "Q23880547"
+  },
+  {
+   "lat": -0.361635,
+   "lon": -78.302238,
+   "name": "Cerro Ilinpitsi",
+   "wikidata": "Q23880526"
+  },
+  {
+   "lat": -0.654774,
+   "lon": -78.28505,
+   "name": "Cerro Laurel"
+  },
+  {
+   "lat": 0.0,
+   "lon": -77.3,
+   "name": "Cerro Lumbaquí",
+   "wikidata": "Q23879054"
+  },
+  {
+   "lat": 0.733333,
+   "lon": -77.833333,
+   "name": "La Piedra",
+   "wikidata": "Q23878863"
+  },
+  {
+   "lat": 0.6,
+   "lon": -77.65,
+   "name": "Cerro Mirador",
+   "wikidata": "Q23877301"
+  },
+  {
+   "lat": -0.348912,
+   "lon": -78.290947,
+   "name": "Mongourcu",
+   "wikidata": "Q23877355"
+  },
+  {
+   "lat": -1.766667,
+   "lon": -78.75,
+   "name": "Monjas Colta",
+   "wikidata": "Q23877366"
+  },
+  {
+   "lat": 0.083333,
+   "lon": -78.383333,
+   "name": "Magotilla",
+   "wikidata": "Q23879088"
+  },
+  {
+   "lat": -2.398176,
+   "lon": -79.683538,
+   "name": "Cerro de Masvale"
+  },
+  {
+   "lat": -0.314787,
+   "lon": -78.292862,
+   "name": "Cerro Ñuñurcu",
+   "wikidata": "Q23877585"
+  },
+  {
+   "lat": -2.383333,
+   "lon": -80.483333,
+   "name": "Cerro Pachanga",
+   "wikidata": "Q23901041"
+  },
+  {
+   "lat": -2.0,
+   "lon": -80.1,
+   "name": "Cerro de Paco",
+   "wikidata": "Q23877665"
+  },
+  {
+   "lat": 0.113581,
+   "lon": -78.108684,
+   "name": "Muyurcu"
+  },
+  {
+   "lat": 0.083333,
+   "lon": -78.233333,
+   "name": "Mulapotrero",
+   "wikidata": "Q23877436"
+  },
+  {
+   "lat": -1.040434,
+   "lon": -78.322251,
+   "name": "Mulatos"
+  },
+  {
+   "lat": -0.05655,
+   "lon": -78.260145,
+   "name": "Monteserín"
+  },
+  {
+   "lat": -2.133333,
+   "lon": -78.716667,
+   "name": "Nagüirán",
+   "wikidata": "Q23877468"
+  },
+  {
+   "lat": -2.466667,
+   "lon": -80.316667,
+   "name": "Cerro Pelado"
+  },
+  {
+   "lat": -2.407094,
+   "lon": -79.639421,
+   "name": "Cerro de Perequete"
+  },
+  {
+   "lat": 0.065885,
+   "lon": -78.333748,
+   "name": "Paligal"
+  },
+  {
+   "lat": 0.238185,
+   "lon": -78.444762,
+   "name": "Pusagcocha"
+  },
+  {
+   "lat": -0.25,
+   "lon": -78.1,
+   "name": "Puntas"
+  },
+  {
+   "lat": 0.133267,
+   "lon": -78.2,
+   "name": "Pucará de Tupigachi"
+  },
+  {
+   "lat": -0.733333,
+   "lon": -78.216667,
+   "name": "Predicador"
+  },
+  {
+   "lat": 0.06667,
+   "lon": -78.284115,
+   "name": "Romerillos",
+   "wikidata": "Q23873605"
+  },
+  {
+   "lat": -0.651611,
+   "lon": -78.63296,
+   "name": "Santa Cruz"
+  },
+  {
+   "lat": 0.105817,
+   "lon": -78.304079,
+   "name": "San Bartolo",
+   "wikidata": "Q23873940"
+  },
+  {
+   "lat": 0.116667,
+   "lon": -78.366667,
+   "name": "Cerro Tabiro",
+   "wikidata": "Q23871755"
+  },
+  {
+   "lat": -0.666667,
+   "lon": -78.600241,
+   "name": "Sumi Loma",
+   "wikidata": "Q23871729"
+  },
+  {
+   "lat": -2.166667,
+   "lon": -78.683333,
+   "name": "Sillacaja"
+  },
+  {
+   "lat": -2.066667,
+   "lon": -78.65,
+   "name": "Shiñigually"
+  },
+  {
+   "lat": 0.683333,
+   "lon": -77.616667,
+   "name": "Cerro de la Virgen Negra"
+  },
+  {
+   "lat": -0.36479,
+   "lon": -78.31558,
+   "name": "Tolontag",
+   "wikidata": "Q23869823"
+  },
+  {
+   "lat": -2.3,
+   "lon": -78.633333,
+   "name": "Tioloma",
+   "wikidata": "Q23869798"
+  },
+  {
+   "lat": -0.403291,
+   "lon": -78.281678,
+   "name": "Tucurrasín",
+   "wikidata": "Q23869879"
+  },
+  {
+   "lat": -0.339728,
+   "lon": -78.314207,
+   "name": "Torrecillas",
+   "wikidata": "Q23869837"
+  },
+  {
+   "lat": -1.366667,
+   "lon": -78.733333,
+   "name": "Tzunantza",
+   "wikidata": "Q23869948"
+  },
+  {
+   "lat": 0.150361,
+   "lon": -78.033798,
+   "name": "Turucuchu",
+   "wikidata": "Q23869935"
+  },
+  {
+   "lat": -2.435279,
+   "lon": -80.489075,
+   "name": "Cerro Verde",
+   "wikidata": "Q23870041"
+  },
+  {
+   "lat": 0.991275,
+   "lon": -79.617154,
+   "name": "Peña del Salto"
+  },
+  {
+   "lat": -0.845,
+   "lon": -80.329167,
+   "name": "Cerros de Balsamo",
+   "wikidata": "Q23886062"
+  },
+  {
+   "lat": 0.062222,
+   "lon": -77.486389,
+   "name": "Cerro Chiquapiña",
+   "wikidata": "Q23886829"
+  },
+  {
+   "lat": -0.076213,
+   "lon": -78.50755,
+   "name": "Lulunurcu",
+   "wikidata": "Q23879053"
+  },
+  {
+   "lat": -0.182428,
+   "lon": -78.526819,
+   "name": "Loma El Mirador"
+  },
+  {
+   "lat": 0.019654,
+   "lon": -78.491214,
+   "name": "Loma El Mirador"
+  },
+  {
+   "lat": -2.0671,
+   "lon": -78.447095,
+   "name": "Sacraurcu"
+  },
+  {
+   "lat": 1.016667,
+   "lon": -77.816667,
+   "name": "Cerro Buenavista"
+  },
+  {
+   "lat": 0.95,
+   "lon": -77.516667,
+   "name": "Cerro Manzano"
+  },
+  {
+   "lat": 0.966667,
+   "lon": -77.5,
+   "name": "Cerro Chilltazon"
+  },
+  {
+   "lat": 0.85,
+   "lon": -77.733333,
+   "name": "Cerro Cuaspud"
+  },
+  {
+   "lat": 0.853869,
+   "lon": -77.916798,
+   "name": "Cerro Portachuelo"
+  },
+  {
+   "lat": 0.916667,
+   "lon": -77.666667,
+   "name": "Cerro Gordo"
+  },
+  {
+   "lat": 0.75,
+   "lon": -77.583333,
+   "name": "Cerro Negro"
+  },
+  {
+   "lat": 0.733333,
+   "lon": -77.45,
+   "name": "Cerro Palacios"
+  },
+  {
+   "lat": 0.733333,
+   "lon": -77.633333,
+   "name": "Cerro Culachi"
+  },
+  {
+   "lat": 0.916667,
+   "lon": -77.683333,
+   "name": "Cerro Pelado"
+  },
+  {
+   "lat": 1.366667,
+   "lon": -77.35,
+   "name": "Cerro Espada"
+  },
+  {
+   "lat": 1.316667,
+   "lon": -77.783333,
+   "name": "Cuchilla de Astarón"
+  },
+  {
+   "lat": 1.0,
+   "lon": -77.266667,
+   "name": "Cerro Caballo Rucio"
+  },
+  {
+   "lat": 1.287774,
+   "lon": -77.215189,
+   "name": "Cerro Morasurco"
+  },
+  {
+   "lat": 0.966667,
+   "lon": -77.283333,
+   "name": "Cerro Picudo"
+  },
+  {
+   "lat": 0.983333,
+   "lon": -77.25,
+   "name": "Cerro Alca"
+  },
+  {
+   "lat": 0.933333,
+   "lon": -77.316667,
+   "name": "Cerro Negro"
+  },
+  {
+   "lat": 1.499885,
+   "lon": -77.377753,
+   "name": "Loma del Brinco"
+  },
+  {
+   "lat": 0.971397,
+   "lon": -78.057171,
+   "name": "Cordillera Del Dorado"
+  },
+  {
+   "lat": 0.834707,
+   "lon": -77.88507,
+   "name": "Loma Pascala"
+  },
+  {
+   "lat": 0.873136,
+   "lon": -77.90222,
+   "name": "Loma Hueco Oscuro"
+  },
+  {
+   "lat": 0.882931,
+   "lon": -77.908468,
+   "name": "Loma El Abra"
+  },
+  {
+   "lat": 0.859622,
+   "lon": -77.881689,
+   "name": "Loma El Granizo"
+  },
+  {
+   "lat": 0.847794,
+   "lon": -77.828385,
+   "name": "Loma La Piedra"
+  },
+  {
+   "lat": 1.009651,
+   "lon": -77.788707,
+   "name": "Loma Las Lagunas"
+  },
+  {
+   "lat": 0.977908,
+   "lon": -77.79799,
+   "name": "Cuchilla Hoyo De Arena"
+  },
+  {
+   "lat": 0.981652,
+   "lon": -77.816407,
+   "name": "Loma La Yegua"
+  },
+  {
+   "lat": 1.022088,
+   "lon": -77.838954,
+   "name": "Cerro De La Cruz"
+  },
+  {
+   "lat": 0.750986,
+   "lon": -77.685378,
+   "name": "Cerro La Quinta"
+  },
+  {
+   "lat": 0.841954,
+   "lon": -77.656346,
+   "name": "Loma La Ravija"
+  },
+  {
+   "lat": 0.842748,
+   "lon": -77.654656,
+   "name": "Loma La Ravija"
+  },
+  {
+   "lat": 0.871645,
+   "lon": -77.346906,
+   "name": "Cerro Negro"
+  },
+  {
+   "lat": 0.928212,
+   "lon": -77.670769,
+   "name": "Cerro Gordo"
+  },
+  {
+   "lat": 0.939164,
+   "lon": -77.56566,
+   "name": "Loma Del Medio"
+  },
+  {
+   "lat": 0.941122,
+   "lon": -77.578953,
+   "name": "Loma Panecillo"
+  },
+  {
+   "lat": 0.960091,
+   "lon": -77.604989,
+   "name": "Loma Imbula Grande"
+  },
+  {
+   "lat": 0.951757,
+   "lon": -77.564261,
+   "name": "Loma El Caliente"
+  },
+  {
+   "lat": 0.960851,
+   "lon": -77.591966,
+   "name": "Loma Del Medio"
+  },
+  {
+   "lat": 0.966169,
+   "lon": -77.53096,
+   "name": "Loma De Argotes"
+  },
+  {
+   "lat": 0.960432,
+   "lon": -77.563282,
+   "name": "Loma Pailon"
+  },
+  {
+   "lat": 0.984946,
+   "lon": -77.659191,
+   "name": "Alto Valvanera"
+  },
+  {
+   "lat": 1.019233,
+   "lon": -77.618914,
+   "name": "Alto San Jorge"
+  },
+  {
+   "lat": 0.967008,
+   "lon": -77.575315,
+   "name": "Loma Redonda"
+  },
+  {
+   "lat": 0.974284,
+   "lon": -77.587488,
+   "name": "Loma La Gorgona"
+  },
+  {
+   "lat": 0.969527,
+   "lon": -77.562582,
+   "name": "Loma Larga"
+  },
+  {
+   "lat": 1.03585,
+   "lon": -77.481707,
+   "name": "Loma El Picacho"
+  },
+  {
+   "lat": 1.047464,
+   "lon": -77.469953,
+   "name": "Loma Alta"
+  },
+  {
+   "lat": 1.042287,
+   "lon": -77.490102,
+   "name": "Loma Cambutes"
+  },
+  {
+   "lat": 1.038649,
+   "lon": -77.379143,
+   "name": "Loma El Picacho"
+  },
+  {
+   "lat": 1.040747,
+   "lon": -77.345702,
+   "name": "Loma Gradon"
+  },
+  {
+   "lat": 1.127889,
+   "lon": -77.714663,
+   "name": "Cuchilla El Tablon"
+  },
+  {
+   "lat": 1.1822,
+   "lon": -77.868098,
+   "name": "Cuchilla Maestra"
+  },
+  {
+   "lat": 1.200592,
+   "lon": -77.842496,
+   "name": "Cuchilla Del Faya"
+  },
+  {
+   "lat": 1.167166,
+   "lon": -77.779723,
+   "name": "Cerro Guadula"
+  },
+  {
+   "lat": 1.319165,
+   "lon": -77.792652,
+   "name": "Cuchilla Rayo"
+  },
+  {
+   "lat": 1.298895,
+   "lon": -77.982816,
+   "name": "Cerro Guayambi"
+  },
+  {
+   "lat": 1.058378,
+   "lon": -77.520325,
+   "name": "Loma Los Pluntes"
+  },
+  {
+   "lat": 1.128835,
+   "lon": -77.598401,
+   "name": "Loma El Cardo"
+  },
+  {
+   "lat": 1.118803,
+   "lon": -77.601246,
+   "name": "Loma Quitasol"
+  },
+  {
+   "lat": 1.12652,
+   "lon": -77.559924,
+   "name": "Loma Santa Bárbara"
+  },
+  {
+   "lat": 1.100634,
+   "lon": -77.540754,
+   "name": "Loma El Paramo"
+  },
+  {
+   "lat": 1.154225,
+   "lon": -77.575175,
+   "name": "Morro Palo Blanco"
+  },
+  {
+   "lat": 1.146669,
+   "lon": -77.539355,
+   "name": "Morro Llano Verde"
+  },
+  {
+   "lat": 1.176752,
+   "lon": -77.573916,
+   "name": "Loma El Almorzadero"
+  },
+  {
+   "lat": 1.16374,
+   "lon": -77.563701,
+   "name": "Loma Ahumada Claqueza"
+  },
+  {
+   "lat": 1.222507,
+   "lon": -77.560623,
+   "name": "Cerro Gordo"
+  },
+  {
+   "lat": 1.19956,
+   "lon": -77.588468,
+   "name": "Loma El Cuervo"
+  },
+  {
+   "lat": 1.097416,
+   "lon": -77.462258,
+   "name": "Loma Alta"
+  },
+  {
+   "lat": 1.120643,
+   "lon": -77.471912,
+   "name": "Morro El Revolcadero"
+  },
+  {
+   "lat": 1.134496,
+   "lon": -77.51291,
+   "name": "Loma El Encino"
+  },
+  {
+   "lat": 1.125261,
+   "lon": -77.518646,
+   "name": "Loma Larga"
+  },
+  {
+   "lat": 1.104972,
+   "lon": -77.487723,
+   "name": "Cerro Gordo"
+  },
+  {
+   "lat": 1.059357,
+   "lon": -77.354377,
+   "name": "Loma El Cusillo"
+  },
+  {
+   "lat": 1.171855,
+   "lon": -77.456521,
+   "name": "Alto Cariaco"
+  },
+  {
+   "lat": 1.164999,
+   "lon": -77.424338,
+   "name": "Loma Tamborcillo"
+  },
+  {
+   "lat": 1.199519,
+   "lon": -77.415529,
+   "name": "Alto Bombona"
+  },
+  {
+   "lat": 1.21803,
+   "lon": -77.398732,
+   "name": "Cuchilla Calbozo"
+  },
+  {
+   "lat": 1.192564,
+   "lon": -77.410626,
+   "name": "Cuchilla Ciénaga Chiquita"
+  },
+  {
+   "lat": 1.239718,
+   "lon": -77.393276,
+   "name": "Loma Redonda"
+  },
+  {
+   "lat": 1.308979,
+   "lon": -77.36711,
+   "name": "Alto La Cruz"
+  },
+  {
+   "lat": 1.327169,
+   "lon": -77.444207,
+   "name": "Loma El Picacho"
+  },
+  {
+   "lat": 1.394396,
+   "lon": -77.465416,
+   "name": "Loma Tamajoy"
+  },
+  {
+   "lat": 1.336544,
+   "lon": -77.423499,
+   "name": "Loma El Cajon"
+  },
+  {
+   "lat": 1.370406,
+   "lon": -77.364591,
+   "name": "Loma Larga"
+  },
+  {
+   "lat": 0.645025,
+   "lon": -77.299552,
+   "name": "Cerro Negro"
+  },
+  {
+   "lat": 1.032072,
+   "lon": -77.318837,
+   "name": "Loma Las Gradones"
+  },
+  {
+   "lat": 1.01878,
+   "lon": -77.306523,
+   "name": "Loma Peñas Blancas"
+  },
+  {
+   "lat": 1.03101,
+   "lon": -77.147593,
+   "name": "Cuchilla Naranjal"
+  },
+  {
+   "lat": 1.037384,
+   "lon": -77.126327,
+   "name": "Cuchilla Naranjal"
+  },
+  {
+   "lat": 1.10889,
+   "lon": -77.321355,
+   "name": "Morro El Gallo"
+  },
+  {
+   "lat": 1.11538,
+   "lon": -77.258473,
+   "name": "Loma La Isla"
+  },
+  {
+   "lat": 1.105529,
+   "lon": -77.257747,
+   "name": "Loma Alta"
+  },
+  {
+   "lat": 1.130578,
+   "lon": -77.259929,
+   "name": "Cerro El Verde"
+  },
+  {
+   "lat": 1.142039,
+   "lon": -77.283128,
+   "name": "Alto El Cipres"
+  },
+  {
+   "lat": 1.124561,
+   "lon": -77.233484,
+   "name": "Loma Casanare"
+  },
+  {
+   "lat": 1.150166,
+   "lon": -77.277877,
+   "name": "Cuchilla Campanero"
+  },
+  {
+   "lat": 1.168046,
+   "lon": -77.228364,
+   "name": "Loma Tierra Blanca"
+  },
+  {
+   "lat": 1.161781,
+   "lon": -77.192766,
+   "name": "Cuchilla del Tábano"
+  },
+  {
+   "lat": 1.189926,
+   "lon": -77.169474,
+   "name": "Cuchilla El Tabano"
+  },
+  {
+   "lat": 1.222647,
+   "lon": -77.18507,
+   "name": "Alto Zapayurco"
+  },
+  {
+   "lat": 1.184175,
+   "lon": -77.124087,
+   "name": "Loma El Mirador"
+  },
+  {
+   "lat": 1.251943,
+   "lon": -77.291005,
+   "name": "Loma Campoalegre"
+  },
+  {
+   "lat": 1.30716,
+   "lon": -77.282317,
+   "name": "Loma Puerta Del Paramo"
+  },
+  {
+   "lat": 1.240977,
+   "lon": -77.16842,
+   "name": "Loma La Palma"
+  },
+  {
+   "lat": 1.239733,
+   "lon": -77.180657,
+   "name": "Alto San Miguel"
+  },
+  {
+   "lat": 1.251331,
+   "lon": -77.216693,
+   "name": "Alto las Ánimas"
+  },
+  {
+   "lat": 1.248567,
+   "lon": -77.195951,
+   "name": "Loma Buenavista"
+  },
+  {
+   "lat": 1.26403,
+   "lon": -77.21529,
+   "name": "Loma Tacines"
+  },
+  {
+   "lat": 1.27148,
+   "lon": -77.180173,
+   "name": "Loma La Aguada"
+  },
+  {
+   "lat": 1.28939,
+   "lon": -77.214034,
+   "name": "Alto Moras"
+  },
+  {
+   "lat": 1.298905,
+   "lon": -77.242719,
+   "name": "Loma La Cocha"
+  },
+  {
+   "lat": 1.278616,
+   "lon": -77.195285,
+   "name": "Loma Papasacha"
+  },
+  {
+   "lat": 1.291209,
+   "lon": -77.183111,
+   "name": "Loma Las Dalias"
+  },
+  {
+   "lat": 1.308,
+   "lon": -77.184651,
+   "name": "Loma Gorda"
+  },
+  {
+   "lat": 1.350816,
+   "lon": -77.278399,
+   "name": "Cerro Hato Viejo"
+  },
+  {
+   "lat": 1.352216,
+   "lon": -77.25867,
+   "name": "Cerro La Vernera"
+  },
+  {
+   "lat": 1.391114,
+   "lon": -77.271123,
+   "name": "Cerro Peña Negra"
+  },
+  {
+   "lat": 1.401189,
+   "lon": -77.273502,
+   "name": "Cuchilla La Toma"
+  },
+  {
+   "lat": 1.408992,
+   "lon": -77.295019,
+   "name": "Loma Yungapea"
+  },
+  {
+   "lat": 1.321992,
+   "lon": -77.173597,
+   "name": "Cerro El Cerote"
+  },
+  {
+   "lat": 1.36201,
+   "lon": -77.22187,
+   "name": "Loma Sanchez"
+  },
+  {
+   "lat": 1.341721,
+   "lon": -77.227467,
+   "name": "Loma La Cruz"
+  },
+  {
+   "lat": 1.349557,
+   "lon": -77.229426,
+   "name": "Loma Del Medio"
+  },
+  {
+   "lat": 1.39769,
+   "lon": -77.224249,
+   "name": "Cerro Las Minas"
+  },
+  {
+   "lat": 1.370126,
+   "lon": -77.176255,
+   "name": "Loma Pajajoy"
+  },
+  {
+   "lat": 1.403847,
+   "lon": -77.207318,
+   "name": "Loma Guayabillo"
+  },
+  {
+   "lat": 1.252311,
+   "lon": -77.166741,
+   "name": "Alto El Comun"
+  },
+  {
+   "lat": 1.286075,
+   "lon": -77.159558,
+   "name": "Alto Monserrate"
+  },
+  {
+   "lat": 1.278896,
+   "lon": -77.13106,
+   "name": "Loma Del Moham"
+  },
+  {
+   "lat": 1.306181,
+   "lon": -77.007928,
+   "name": "Loma El Helechal"
+  },
+  {
+   "lat": 1.356273,
+   "lon": -77.162123,
+   "name": "Loma Gorda"
+  },
+  {
+   "lat": 1.360471,
+   "lon": -77.094261,
+   "name": "Loma De Eugenio"
+  },
+  {
+   "lat": 1.320873,
+   "lon": -77.161843,
+   "name": "Loma Medina"
+  },
+  {
+   "lat": 1.341581,
+   "lon": -77.153588,
+   "name": "Loma El Salado"
+  },
+  {
+   "lat": 1.385237,
+   "lon": -77.120006,
+   "name": "Loma Moras Pamba"
+  },
+  {
+   "lat": 1.39783,
+   "lon": -77.106154,
+   "name": "Alto Las Cruces"
+  },
+  {
+   "lat": 1.36215,
+   "lon": -77.074671,
+   "name": "Loma La Piedra"
+  },
+  {
+   "lat": 1.405526,
+   "lon": -77.07649,
+   "name": "Loma Gavilanera"
+  },
+  {
+   "lat": 1.377822,
+   "lon": -77.014505,
+   "name": "Cerro El Machete De Doña Juana"
+  },
+  {
+   "lat": 1.491712,
+   "lon": -77.593692,
+   "name": "Cerro Negro"
+  },
+  {
+   "lat": 1.415881,
+   "lon": -77.423639,
+   "name": "Loma Larga"
+  },
+  {
+   "lat": 1.473389,
+   "lon": -77.354377,
+   "name": "Loma La Ovejera"
+  },
+  {
+   "lat": 1.460236,
+   "lon": -77.350879,
+   "name": "Loma Santa Maria"
+  },
+  {
+   "lat": 1.422457,
+   "lon": -77.313659,
+   "name": "Cerro El Bosque"
+  },
+  {
+   "lat": 1.43435,
+   "lon": -77.290432,
+   "name": "Loma Tomasillo"
+  },
+  {
+   "lat": 1.457717,
+   "lon": -77.326532,
+   "name": "Cerro Portugues"
+  },
+  {
+   "lat": 1.475488,
+   "lon": -77.329331,
+   "name": "Loma Sicsal"
+  },
+  {
+   "lat": 1.433511,
+   "lon": -77.244677,
+   "name": "Cerro De Piedra"
+  },
+  {
+   "lat": 1.43533,
+   "lon": -77.170099,
+   "name": "Loma La Grada"
+  },
+  {
+   "lat": 1.423996,
+   "lon": -77.22229,
+   "name": "Loma San Luis"
+  },
+  {
+   "lat": 1.478986,
+   "lon": -77.249435,
+   "name": "Cerro El Escollo"
+  },
+  {
+   "lat": 1.486821,
+   "lon": -77.246497,
+   "name": "Cuchilla Alta"
+  },
+  {
+   "lat": 1.493957,
+   "lon": -77.219491,
+   "name": "Loma Bellavista"
+  },
+  {
+   "lat": 1.478146,
+   "lon": -77.218372,
+   "name": "Loma Armenia"
+  },
+  {
+   "lat": 1.450721,
+   "lon": -77.177655,
+   "name": "Loma De Nariño"
+  },
+  {
+   "lat": 1.456318,
+   "lon": -77.20298,
+   "name": "Cerro San Pablo"
+  },
+  {
+   "lat": 1.407485,
+   "lon": -77.158765,
+   "name": "Loma Pan De Los Muertos"
+  },
+  {
+   "lat": 1.441067,
+   "lon": -77.166601,
+   "name": "Loma Juan Diaz"
+  },
+  {
+   "lat": 1.440507,
+   "lon": -77.13162,
+   "name": "Cerro La Tulpa"
+  },
+  {
+   "lat": 1.430852,
+   "lon": -77.156946,
+   "name": "Loma Redonda"
+  },
+  {
+   "lat": 1.439388,
+   "lon": -77.14883,
+   "name": "Loma La Cañada"
+  },
+  {
+   "lat": 1.443026,
+   "lon": -77.090343,
+   "name": "Loma El Tambo"
+  },
+  {
+   "lat": 1.480945,
+   "lon": -77.120846,
+   "name": "Loma La Sortija"
+  },
+  {
+   "lat": 1.43449,
+   "lon": -77.048086,
+   "name": "Loma Del Toro"
+  },
+  {
+   "lat": 1.498855,
+   "lon": -77.128542,
+   "name": "Loma El Osal"
+  },
+  {
+   "lat": 1.135128,
+   "lon": -77.275874,
+   "name": "Morro El Gallo"
+  },
+  {
+   "lat": -1.154465,
+   "lon": -78.665427,
+   "name": "Cerro Pilisurco"
+  },
+  {
+   "lat": 0.335559,
+   "lon": -78.213273,
+   "name": "Loma Pailatola"
+  },
+  {
+   "lat": -2.071865,
+   "lon": -79.901354,
+   "name": "Bosque Protector Cerro Colorado"
+  },
+  {
+   "lat": -2.165556,
+   "lon": -79.957583,
+   "name": "Cerro Azul"
+  },
+  {
+   "lat": 0.470798,
+   "lon": -77.965043,
+   "name": "Cerro Cabras"
+  },
+  {
+   "lat": -1.69625,
+   "lon": -78.77825,
+   "name": "CUSHCA COLTA"
+  },
+  {
+   "lat": -2.180678,
+   "lon": -79.87893,
+   "name": "El Carmen"
+  },
+  {
+   "lat": -0.03865,
+   "lon": -78.511331,
+   "name": "Condorcocha"
+  },
+  {
+   "lat": -1.859937,
+   "lon": -79.159039,
+   "name": "Mina de Piedra"
+  },
+  {
+   "lat": -1.664662,
+   "lon": -78.406856,
+   "name": "Fraile Beato"
+  },
+  {
+   "lat": -1.662368,
+   "lon": -78.413304,
+   "name": "Fraile Central"
+  },
+  {
+   "lat": -1.660468,
+   "lon": -78.416055,
+   "name": "Fraile Grande"
+  },
+  {
+   "lat": -1.706089,
+   "lon": -78.699548,
+   "name": "Cerro Cacha"
+  },
+  {
+   "lat": -1.691234,
+   "lon": -78.455021,
+   "name": "Cerro cascajal"
+  },
+  {
+   "lat": -0.139998,
+   "lon": -78.574539,
+   "name": "Ingapirca"
+  },
+  {
+   "lat": -1.719368,
+   "lon": -78.872046,
+   "name": "Cerro Puyal"
+  },
+  {
+   "lat": -1.265841,
+   "lon": -78.64811,
+   "name": "Loma Casigana"
+  },
+  {
+   "lat": -2.261234,
+   "lon": -79.160646,
+   "name": "CERRO CUTUGUAY"
+  },
+  {
+   "lat": 0.628762,
+   "lon": -78.003085,
+   "name": "Cerro Iguán"
+  },
+  {
+   "lat": -0.735934,
+   "lon": -78.835271,
+   "name": "Cerro Simaurco"
+  },
+  {
+   "lat": 0.029206,
+   "lon": -78.576668,
+   "name": "Loma Redonda"
+  },
+  {
+   "lat": -1.673639,
+   "lon": -78.808354,
+   "name": "Apugloma"
+  },
+  {
+   "lat": -2.345774,
+   "lon": -78.211461,
+   "name": "Cerro de los Machos"
+  },
+  {
+   "lat": -1.105313,
+   "lon": -78.827924,
+   "name": "El Puente"
+  },
+  {
+   "lat": -1.104878,
+   "lon": -78.840825,
+   "name": "Sala Urdu"
+  },
+  {
+   "lat": -1.070541,
+   "lon": -78.842585,
+   "name": "Cuchihuasi"
+  },
+  {
+   "lat": -1.113283,
+   "lon": -78.821969,
+   "name": "Cuchillas de Gradas Pungu"
+  },
+  {
+   "lat": -1.11701,
+   "lon": -78.804208,
+   "name": "Iglesia"
+  },
+  {
+   "lat": -1.113481,
+   "lon": -78.812265,
+   "name": "Novillo Pungu"
+  },
+  {
+   "lat": -1.141714,
+   "lon": -78.789992,
+   "name": "Yanarumi"
+  },
+  {
+   "lat": -1.131491,
+   "lon": -78.789273,
+   "name": "Pucajata"
+  },
+  {
+   "lat": -1.136215,
+   "lon": -78.764005,
+   "name": "Cóndor Anana"
+  },
+  {
+   "lat": -1.141589,
+   "lon": -78.730821,
+   "name": "Negro Puñona"
+  },
+  {
+   "lat": -1.149484,
+   "lon": -78.717109,
+   "name": "Quilapungo"
+  },
+  {
+   "lat": -1.148326,
+   "lon": -78.688506,
+   "name": "Chambio Urcu"
+  },
+  {
+   "lat": -1.042992,
+   "lon": -78.836069,
+   "name": "Chaquishcacocha"
+  },
+  {
+   "lat": -1.232244,
+   "lon": -78.891095,
+   "name": "Guagua Pari"
+  },
+  {
+   "lat": -1.203046,
+   "lon": -78.874058,
+   "name": "Cruz Lozan"
+  },
+  {
+   "lat": 0.950403,
+   "lon": -77.896736,
+   "name": "Cráter"
+  },
+  {
+   "lat": -1.053729,
+   "lon": -78.439306,
+   "name": "capulisacha"
+  },
+  {
+   "lat": -1.076159,
+   "lon": -78.446397,
+   "name": "tungilarca"
+  },
+  {
+   "lat": -1.082583,
+   "lon": -78.535198,
+   "name": "Loma Cuzin"
+  },
+  {
+   "lat": -1.062535,
+   "lon": -78.434574,
+   "name": "patsolobin"
+  },
+  {
+   "lat": -2.437178,
+   "lon": -78.948634,
+   "name": "Cerro Carzhao"
+  },
+  {
+   "lat": -2.419106,
+   "lon": -78.911512,
+   "name": "Cerro Estero"
+  },
+  {
+   "lat": -2.424336,
+   "lon": -78.987579,
+   "name": "Cerro Tipococha"
+  },
+  {
+   "lat": 0.739236,
+   "lon": -78.039405,
+   "name": "Cerro Los Socabones"
+  },
+  {
+   "lat": 0.731386,
+   "lon": -77.925639,
+   "name": "Cerro El Crespo"
+  },
+  {
+   "lat": -0.38305,
+   "lon": -78.641244,
+   "name": "Niñahullca"
+  },
+  {
+   "lat": -1.074182,
+   "lon": -78.456501,
+   "name": "Sillaloma"
+  },
+  {
+   "lat": -2.134609,
+   "lon": -78.514652,
+   "name": "Cerro Shilile"
+  },
+  {
+   "lat": 0.999094,
+   "lon": -77.761704,
+   "name": "Morro de Kuyima"
+  },
+  {
+   "lat": -1.967011,
+   "lon": -79.781493,
+   "name": "Cerro Zapán"
+  },
+  {
+   "lat": -1.010753,
+   "lon": -78.889358,
+   "name": "Cerro Chorrera"
+  },
+  {
+   "lat": -1.5399,
+   "lon": -78.884071,
+   "name": "Bosque de Polylepis"
+  },
+  {
+   "lat": 0.694096,
+   "lon": -79.331503,
+   "name": "Cerro Hondo"
+  },
+  {
+   "lat": 0.689204,
+   "lon": -79.2976,
+   "name": "Cerro Alto"
+  },
+  {
+   "lat": 0.741385,
+   "lon": -79.492478,
+   "name": "Cerro Nine"
+  },
+  {
+   "lat": -0.069523,
+   "lon": -78.892565,
+   "name": "Cerro Macas"
+  },
+  {
+   "lat": -0.412799,
+   "lon": -78.252482,
+   "name": "Antisanilla"
+  },
+  {
+   "lat": -0.548278,
+   "lon": -78.366766,
+   "name": "Cerro Soldado Machay"
+  },
+  {
+   "lat": -1.797343,
+   "lon": -78.148606,
+   "name": "Tiririco"
+  },
+  {
+   "lat": 0.750267,
+   "lon": -79.50104,
+   "name": "Cerro Nine"
+  },
+  {
+   "lat": -1.928729,
+   "lon": -79.081221,
+   "name": "Cerro Cuchicahua"
+  },
+  {
+   "lat": -2.394408,
+   "lon": -78.887329,
+   "name": "Cerro Tijaneras"
+  },
+  {
+   "lat": -2.218405,
+   "lon": -78.996656,
+   "name": "Cerro Quriquingue"
+  },
+  {
+   "lat": 0.209898,
+   "lon": -78.044901,
+   "name": "Rumiloma"
+  },
+  {
+   "lat": 0.176253,
+   "lon": -78.05181,
+   "name": "Loma Negra Tola"
+  },
+  {
+   "lat": 0.083449,
+   "lon": -78.79607,
+   "name": "Cerro San Luis"
+  },
+  {
+   "lat": 0.092697,
+   "lon": -78.752146,
+   "name": "Loma Mirador"
+  },
+  {
+   "lat": -0.863699,
+   "lon": -79.015464,
+   "name": "Cascada de Caballo Blanco"
+  },
+  {
+   "lat": -0.820857,
+   "lon": -79.021182,
+   "name": "Cerro Patalo"
+  },
+  {
+   "lat": -0.851752,
+   "lon": -78.953526,
+   "name": "Puntusurcu"
+  },
+  {
+   "lat": -0.850637,
+   "lon": -78.976765,
+   "name": "Condor Urcu"
+  },
+  {
+   "lat": -0.998375,
+   "lon": -78.900965,
+   "name": "Cerro Artiza"
+  },
+  {
+   "lat": -1.028561,
+   "lon": -78.911233,
+   "name": "Cerro Rumi Cruz"
+  },
+  {
+   "lat": -1.023745,
+   "lon": -78.884625,
+   "name": "Cerro Yacutimbo"
+  },
+  {
+   "lat": -0.98887,
+   "lon": -78.900271,
+   "name": "Condormatzi"
+  },
+  {
+   "lat": -0.952275,
+   "lon": -78.925567,
+   "name": "Cerro Achayanchidi"
+  },
+  {
+   "lat": -0.982756,
+   "lon": -78.84995,
+   "name": "Cerro de Casca"
+  },
+  {
+   "lat": -0.992732,
+   "lon": -78.838448,
+   "name": "Cerro Edoga"
+  },
+  {
+   "lat": -1.004334,
+   "lon": -78.830305,
+   "name": "Cerro Quillupasu"
+  },
+  {
+   "lat": -1.007568,
+   "lon": -78.823718,
+   "name": "Cerro Huayrapungu"
+  },
+  {
+   "lat": -1.017003,
+   "lon": -78.819163,
+   "name": "Cerro Pucaurcu"
+  },
+  {
+   "lat": -0.920629,
+   "lon": -78.969464,
+   "name": "Pucaguitza"
+  },
+  {
+   "lat": -0.749967,
+   "lon": -78.80064,
+   "name": "Cerro Isintsituro"
+  },
+  {
+   "lat": -0.743187,
+   "lon": -78.804502,
+   "name": "Cerro Rondobalin"
+  },
+  {
+   "lat": -0.743573,
+   "lon": -78.766737,
+   "name": "Jatun Pungo"
+  },
+  {
+   "lat": -0.704695,
+   "lon": -78.719959,
+   "name": "Cerro Tishi Cuchi"
+  },
+  {
+   "lat": -0.88518,
+   "lon": -78.389897,
+   "name": "Cerro Languarumi"
+  },
+  {
+   "lat": -0.802748,
+   "lon": -78.389597,
+   "name": "Cerro El Morro"
+  },
+  {
+   "lat": -1.591482,
+   "lon": -78.494471,
+   "name": "Chuzalongo"
+  },
+  {
+   "lat": -1.586635,
+   "lon": -78.461845,
+   "name": "Cerro Matus Huaycu"
+  },
+  {
+   "lat": -1.604481,
+   "lon": -78.459721,
+   "name": "Cerro Cubillin Chico"
+  },
+  {
+   "lat": -2.014117,
+   "lon": -78.558684,
+   "name": "Cerro Runashayana"
+  },
+  {
+   "lat": -2.026812,
+   "lon": -78.448219,
+   "name": "Cerro Pancahuan"
+  },
+  {
+   "lat": -2.01446,
+   "lon": -78.442211,
+   "name": "Cerro Shanganao"
+  },
+  {
+   "lat": -2.008155,
+   "lon": -78.483968,
+   "name": "Cerro Tres Cruces"
+  },
+  {
+   "lat": -1.958832,
+   "lon": -78.489525,
+   "name": "Cerro Pusutiaco"
+  },
+  {
+   "lat": 0.885223,
+   "lon": -79.54814,
+   "name": "CerroTapira"
+  },
+  {
+   "lat": 0.885523,
+   "lon": -79.530287,
+   "name": "Loma Zapallo"
+  },
+  {
+   "lat": -1.389548,
+   "lon": -78.951917,
+   "name": "Chuquiragua"
+  },
+  {
+   "lat": -1.355119,
+   "lon": -78.938109,
+   "name": "Tinajera"
+  },
+  {
+   "lat": -1.33386,
+   "lon": -79.107742,
+   "name": "Cerro Mashallingo"
+  },
+  {
+   "lat": -1.394439,
+   "lon": -79.292793,
+   "name": "Cerro Santa Rosa"
+  },
+  {
+   "lat": -1.394782,
+   "lon": -79.325752,
+   "name": "Cerro Mata de Platano"
+  },
+  {
+   "lat": -1.389119,
+   "lon": -79.355621,
+   "name": "Cerro El Pailon"
+  },
+  {
+   "lat": -2.172312,
+   "lon": -79.927008,
+   "name": "Cima Cerro Paraíso"
+  },
+  {
+   "lat": -1.378067,
+   "lon": -78.565263,
+   "name": "Padre Loma"
+  },
+  {
+   "lat": -1.392208,
+   "lon": -78.566434,
+   "name": "Loma Lomoturcu"
+  },
+  {
+   "lat": -1.40296,
+   "lon": -78.719853,
+   "name": "Cerro Santa Rosa"
+  },
+  {
+   "lat": -1.414297,
+   "lon": -78.690619,
+   "name": "Loma Shiñagote"
+  },
+  {
+   "lat": -1.408961,
+   "lon": -78.678229,
+   "name": "Puñalica chico"
+  },
+  {
+   "lat": -1.405231,
+   "lon": -78.711307,
+   "name": "Loma Pucará"
+  },
+  {
+   "lat": -1.369387,
+   "lon": -78.553901,
+   "name": "Loma Arrayán"
+  },
+  {
+   "lat": -1.483014,
+   "lon": -78.643719,
+   "name": "Loma El Arenal"
+  },
+  {
+   "lat": -1.483186,
+   "lon": -78.633558,
+   "name": "Loma Pugyupamba"
+  },
+  {
+   "lat": -1.476112,
+   "lon": -78.631214,
+   "name": "Loma Turugacocha"
+  },
+  {
+   "lat": -1.470659,
+   "lon": -78.659671,
+   "name": "Loma Silla"
+  },
+  {
+   "lat": -1.263358,
+   "lon": -78.681698,
+   "name": "Loma Mogato"
+  },
+  {
+   "lat": -1.479627,
+   "lon": -78.64297,
+   "name": "Loma Cóndor Punuña"
+  },
+  {
+   "lat": -1.475953,
+   "lon": -78.653859,
+   "name": "Loma Chimborazo"
+  },
+  {
+   "lat": -1.469508,
+   "lon": -78.646572,
+   "name": "Loma Garza"
+  },
+  {
+   "lat": -1.472756,
+   "lon": -78.64139,
+   "name": "Loma Monteurcu"
+  },
+  {
+   "lat": -0.965171,
+   "lon": -78.887231,
+   "name": "Cerro Tiguán"
+  },
+  {
+   "lat": -0.98858,
+   "lon": -78.841375,
+   "name": "Cerro Ñuñuurcu"
+  },
+  {
+   "lat": -1.001,
+   "lon": -78.820015,
+   "name": "Cerro Yuracrumi"
+  },
+  {
+   "lat": -1.297821,
+   "lon": -80.185862,
+   "name": "Cerro El Gallinazo"
+  },
+  {
+   "lat": -1.316355,
+   "lon": -80.20895,
+   "name": "Cerro Los Escalones"
+  },
+  {
+   "lat": -1.330599,
+   "lon": -80.216332,
+   "name": "Cerro Tronador"
+  },
+  {
+   "lat": -1.308547,
+   "lon": -80.241909,
+   "name": "Cerro Piedra Blanca"
+  },
+  {
+   "lat": -1.309576,
+   "lon": -80.259676,
+   "name": "Cerro Buenavista"
+  },
+  {
+   "lat": -1.356728,
+   "lon": -80.220838,
+   "name": "Cerro Los Guayacanes"
+  },
+  {
+   "lat": -1.365437,
+   "lon": -80.214229,
+   "name": "Cerro Punta Alta"
+  },
+  {
+   "lat": -1.364793,
+   "lon": -80.201397,
+   "name": "Loma Carne Asada"
+  },
+  {
+   "lat": -1.362863,
+   "lon": -80.185776,
+   "name": "Cerro La Lopez"
+  },
+  {
+   "lat": -1.382813,
+   "lon": -80.159512,
+   "name": "Cerro Montenegro"
+  },
+  {
+   "lat": -1.412072,
+   "lon": -80.203285,
+   "name": "Loma La Piedra"
+  },
+  {
+   "lat": 0.350788,
+   "lon": -77.867403,
+   "name": "Pan de Azucar"
+  },
+  {
+   "lat": 0.356753,
+   "lon": -77.813137,
+   "name": "Mainas"
+  },
+  {
+   "lat": 0.272426,
+   "lon": -78.043656,
+   "name": "Cunurrumi"
+  },
+  {
+   "lat": 0.188355,
+   "lon": -78.031425,
+   "name": "Cerro Ventana Grande"
+  },
+  {
+   "lat": 0.228778,
+   "lon": -78.097116,
+   "name": "Cuno"
+  },
+  {
+   "lat": 0.522487,
+   "lon": -78.36668,
+   "name": "Cerro Pilabo"
+  },
+  {
+   "lat": 0.285686,
+   "lon": -78.631682,
+   "name": "Cerro El Mirrador"
+  },
+  {
+   "lat": 0.263499,
+   "lon": -78.498001,
+   "name": "Cerro El Quinde"
+  },
+  {
+   "lat": 0.174815,
+   "lon": -78.812292,
+   "name": "Cerro Parcayacu"
+  },
+  {
+   "lat": 0.15045,
+   "lon": -78.826529,
+   "name": "Cerro Puntas Urcu"
+  },
+  {
+   "lat": 0.117073,
+   "lon": -78.836303,
+   "name": "Cerro La Chontilla"
+  },
+  {
+   "lat": 0.059567,
+   "lon": -78.590784,
+   "name": "Cerro Montecristi"
+  },
+  {
+   "lat": 0.130591,
+   "lon": -78.579583,
+   "name": "Cerro Campana"
+  },
+  {
+   "lat": 0.022852,
+   "lon": -78.455794,
+   "name": "Cerro La Marca"
+  },
+  {
+   "lat": -0.38778,
+   "lon": -78.679061,
+   "name": "Cerro Minasguilca"
+  },
+  {
+   "lat": -0.398079,
+   "lon": -78.763304,
+   "name": "Cerro Padre"
+  },
+  {
+   "lat": -0.790046,
+   "lon": -79.092593,
+   "name": "Cerro Tilipulo"
+  },
+  {
+   "lat": -0.624835,
+   "lon": -79.04736,
+   "name": "Cerro Ashcuhuacana"
+  },
+  {
+   "lat": -1.369191,
+   "lon": -78.462875,
+   "name": "Chonta"
+  },
+  {
+   "lat": -0.471389,
+   "lon": -78.186947,
+   "name": "Antisanilla"
+  },
+  {
+   "lat": 0.03709,
+   "lon": -78.494171,
+   "name": "Cerro El Chivo"
+  },
+  {
+   "lat": 0.07051,
+   "lon": -78.484139,
+   "name": "Loma El Lavadero"
+  },
+  {
+   "lat": 0.064716,
+   "lon": -78.479505,
+   "name": "Loma Maucaquito"
+  },
+  {
+   "lat": 0.053988,
+   "lon": -78.47811,
+   "name": "Pargo Loma"
+  },
+  {
+   "lat": 0.044503,
+   "lon": -78.465257,
+   "name": "Cerro Mamavento"
+  },
+  {
+   "lat": 0.04873,
+   "lon": -78.46575,
+   "name": "Loma del Hospital"
+  },
+  {
+   "lat": 0.026479,
+   "lon": -78.485921,
+   "name": "Loma La Monja"
+  },
+  {
+   "lat": 0.053612,
+   "lon": -78.489322,
+   "name": "Pan de Azúcar"
+  },
+  {
+   "lat": -1.553671,
+   "lon": -78.829251,
+   "name": "Piedra Negra"
+  },
+  {
+   "lat": -0.206199,
+   "lon": -78.528941,
+   "name": "CANTERA VIRGEN DE LA MERDED"
+  },
+  {
+   "lat": -0.246506,
+   "lon": -78.617971,
+   "name": "Guayasamín"
+  },
+  {
+   "lat": -2.176023,
+   "lon": -80.007056,
+   "name": "Cerro Bototillo"
+  },
+  {
+   "lat": -0.547169,
+   "lon": -78.427296,
+   "name": "Bosque Sincholagua Camping"
+  },
+  {
+   "lat": 1.110623,
+   "lon": -77.760364,
+   "name": "Loma Chiquita"
+  },
+  {
+   "lat": 1.10003,
+   "lon": -77.73991,
+   "name": "Cuchilla de La Cruz"
+  },
+  {
+   "lat": 1.119405,
+   "lon": -77.737193,
+   "name": "Loma La Palma"
+  },
+  {
+   "lat": 1.035829,
+   "lon": -77.810218,
+   "name": "Cerro La Chorrera"
+  },
+  {
+   "lat": 1.05458,
+   "lon": -77.885331,
+   "name": "Loma Alto Sano"
+  },
+  {
+   "lat": 1.060718,
+   "lon": -77.758033,
+   "name": "Sabanas Caquilulo"
+  },
+  {
+   "lat": 1.048633,
+   "lon": -77.778049,
+   "name": "Alto Quimangual"
+  },
+  {
+   "lat": 1.029162,
+   "lon": -77.867628,
+   "name": "Cerro de La Cruz"
+  },
+  {
+   "lat": 1.016667,
+   "lon": -77.816667,
+   "name": "Cerro Buenavista"
+  },
+  {
+   "lat": 0.998943,
+   "lon": -77.777267,
+   "name": "Cerro Morro Chiquito"
+  },
+  {
+   "lat": 1.012669,
+   "lon": -77.788175,
+   "name": "Loma Las Lagunetas"
+  },
+  {
+   "lat": 1.010588,
+   "lon": -77.801727,
+   "name": "Loma Las Burras"
+  },
+  {
+   "lat": 0.989223,
+   "lon": -77.800667,
+   "name": "Loma Alto Nascal"
+  },
+  {
+   "lat": 0.988109,
+   "lon": -77.789748,
+   "name": "Alto Piedra Colorada"
+  },
+  {
+   "lat": 0.982644,
+   "lon": -77.786103,
+   "name": "Loma La Cruz"
+  },
+  {
+   "lat": 1.173965,
+   "lon": -77.856351,
+   "name": "Cerro El Valdío"
+  },
+  {
+   "lat": 1.166373,
+   "lon": -77.790137,
+   "name": "Páramo del Porvenir"
+  },
+  {
+   "lat": 1.167666,
+   "lon": -77.763768,
+   "name": "Cerro Guacalá"
+  },
+  {
+   "lat": 1.162815,
+   "lon": -77.766978,
+   "name": "Cerro El Dedo de Dios"
+  },
+  {
+   "lat": 1.237364,
+   "lon": -77.993318,
+   "name": "Cerro Guayambi"
+  },
+  {
+   "lat": 1.332533,
+   "lon": -78.140308,
+   "name": "Loma de Pimbi"
+  },
+  {
+   "lat": 1.321886,
+   "lon": -78.138706,
+   "name": "Loma La Guaña"
+  },
+  {
+   "lat": 1.422189,
+   "lon": -78.089514,
+   "name": "Loma El Tronco"
+  },
+  {
+   "lat": 1.461909,
+   "lon": -78.089379,
+   "name": "Loma El Tronco"
+  },
+  {
+   "lat": 1.474945,
+   "lon": -78.099039,
+   "name": "Loma El Chazudo"
+  },
+  {
+   "lat": -2.081024,
+   "lon": -79.930655,
+   "name": "Cerro Jordán"
+  },
+  {
+   "lat": -0.469744,
+   "lon": -78.48478,
+   "name": "Pasochoa West"
+  }
+ ]
+}

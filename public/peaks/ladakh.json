@@ -1,0 +1,5025 @@
+{
+ "region": "ladakh",
+ "generated": "2026-08-12T10:55:00+00:00",
+ "peaks": [
+  {
+   "lat": 35.399561,
+   "lon": 76.847329,
+   "name": "萨尔托洛岗日峰 Saltoro Kangri",
+   "name_en": "Saltoro Kangri",
+   "ele": 7742,
+   "wikidata": "Q728639"
+  },
+  {
+   "lat": 35.40607,
+   "lon": 76.847201,
+   "name": "Saltoro Kangri II",
+   "ele": 7705
+  },
+  {
+   "lat": 34.866504,
+   "lon": 77.752274,
+   "name": "Saser Kangri I",
+   "ele": 7672
+  },
+  {
+   "lat": 35.142153,
+   "lon": 77.577388,
+   "name": "Mamostong Kangri",
+   "ele": 7516,
+   "wikidata": "Q937361"
+  },
+  {
+   "lat": 34.804477,
+   "lon": 77.8054,
+   "name": "Saser Kangri II",
+   "ele": 7513,
+   "wikidata": "Q19308481"
+  },
+  {
+   "lat": 34.844801,
+   "lon": 77.784567,
+   "name": "Saser Kangri III",
+   "ele": 7495,
+   "wikidata": "Q19308483"
+  },
+  {
+   "lat": 35.295452,
+   "lon": 77.021868,
+   "name": "K12",
+   "ele": 7428,
+   "wikidata": "Q1148854"
+  },
+  {
+   "lat": 34.873855,
+   "lon": 77.735339,
+   "name": "Saser Kangri IV",
+   "ele": 7415
+  },
+  {
+   "lat": 35.354573,
+   "lon": 77.368287,
+   "name": "Rimo I",
+   "ele": 7385
+  },
+  {
+   "lat": 35.472222,
+   "lon": 76.78437,
+   "name": "Sherpi Kangri",
+   "ele": 7380,
+   "wikidata": "Q7495310"
+  },
+  {
+   "lat": 34.843039,
+   "lon": 77.740782,
+   "name": "Plateau Peak (Saser Kangri V)",
+   "ele": 7287
+  },
+  {
+   "lat": 35.418112,
+   "lon": 76.55182,
+   "name": "K6 Peak",
+   "ele": 7282,
+   "wikidata": "Q1584568"
+  },
+  {
+   "lat": 35.374818,
+   "lon": 77.361824,
+   "name": "Rimo III",
+   "ele": 7233
+  },
+  {
+   "lat": 35.377803,
+   "lon": 77.379757,
+   "name": "Rimo IV",
+   "ele": 7169
+  },
+  {
+   "lat": 33.982089,
+   "lon": 76.024367,
+   "name": "Nun",
+   "ele": 7135,
+   "wikidata": "Q1537198"
+  },
+  {
+   "lat": 34.013927,
+   "lon": 76.056612,
+   "name": "Kun",
+   "ele": 7077,
+   "wikidata": "Q6444117"
+  },
+  {
+   "lat": 35.194541,
+   "lon": 77.584734,
+   "name": "Chong Kumdan Ri I",
+   "ele": 7071
+  },
+  {
+   "lat": 35.441377,
+   "lon": 76.594271,
+   "name": "Link Sar",
+   "ele": 7041,
+   "wikidata": "Q1307768"
+  },
+  {
+   "lat": 34.812277,
+   "lon": 77.783993,
+   "name": "Sakang Peak",
+   "ele": 7040
+  },
+  {
+   "lat": 35.441782,
+   "lon": 77.181171,
+   "name": "Padmanabh",
+   "ele": 7030,
+   "wikidata": "Q20191132"
+  },
+  {
+   "lat": 35.077899,
+   "lon": 77.636452,
+   "name": "Skyampoche Ri",
+   "ele": 7016,
+   "wikidata": "Q25378306"
+  },
+  {
+   "lat": 35.197856,
+   "lon": 77.53894,
+   "name": "Chong Kumdan Ri II",
+   "ele": 7004
+  },
+  {
+   "lat": 34.884745,
+   "lon": 77.802035,
+   "name": "Chamshen Kangri",
+   "ele": 6950,
+   "wikidata": "Q61790186"
+  },
+  {
+   "lat": 35.409501,
+   "lon": 77.218057,
+   "name": "Mahashrung",
+   "ele": 6940,
+   "wikidata": "Q61790312"
+  },
+  {
+   "lat": 35.465979,
+   "lon": 76.574804,
+   "name": "K7",
+   "ele": 6934,
+   "wikidata": "Q1718347"
+  },
+  {
+   "lat": 35.170725,
+   "lon": 77.828507,
+   "name": "Shahi Kangri",
+   "ele": 6934,
+   "wikidata": "Q25378455"
+  },
+  {
+   "lat": 34.021995,
+   "lon": 76.079984,
+   "name": "Lingsarmo",
+   "ele": 6930
+  },
+  {
+   "lat": 34.862006,
+   "lon": 77.879877,
+   "name": "Chhushku Kangri",
+   "ele": 6925
+  },
+  {
+   "lat": 34.941105,
+   "lon": 78.182652,
+   "name": "Kataklik Kangri I",
+   "ele": 6897
+  },
+  {
+   "lat": 35.148227,
+   "lon": 77.620658,
+   "name": "Thangman Kangri",
+   "ele": 6864,
+   "wikidata": "Q25378310"
+  },
+  {
+   "lat": 35.398678,
+   "lon": 77.314138,
+   "name": "Terong Kangri",
+   "ele": 6863
+  },
+  {
+   "lat": 35.462698,
+   "lon": 77.176091,
+   "name": "Lakshmi",
+   "ele": 6850,
+   "wikidata": "Q61791271"
+  },
+  {
+   "lat": 35.026639,
+   "lon": 77.148221,
+   "name": "La Yongma Ri",
+   "ele": 6826,
+   "wikidata": "Q25380796"
+  },
+  {
+   "lat": 34.902188,
+   "lon": 78.207679,
+   "name": "Kataklik Kangri II",
+   "ele": 6820
+  },
+  {
+   "lat": 34.028833,
+   "lon": 76.081695,
+   "name": "P 6800",
+   "ele": 6800,
+   "wikidata": "Q7196307"
+  },
+  {
+   "lat": 32.530688,
+   "lon": 78.395112,
+   "name": "盖亚山 Gya",
+   "name_en": "Gya",
+   "ele": 6794,
+   "wikidata": "Q13574054"
+  },
+  {
+   "lat": 34.605812,
+   "lon": 77.899814,
+   "name": "Arganglas Kangri",
+   "ele": 6789
+  },
+  {
+   "lat": 34.784087,
+   "lon": 78.416644,
+   "name": "加勒万冈日峰",
+   "name_en": "Galwan Kangri",
+   "ele": 6780
+  },
+  {
+   "lat": 35.208558,
+   "lon": 76.988653,
+   "name": "چومیک",
+   "name_en": "Chumik Kangri",
+   "ele": 6754,
+   "wikidata": "Q25380765"
+  },
+  {
+   "lat": 34.619063,
+   "lon": 78.077811,
+   "name": "Kunchang Kangri",
+   "ele": 6751
+  },
+  {
+   "lat": 34.095525,
+   "lon": 79.840261,
+   "name": "太冬杰久",
+   "name_en": "Taidong Jiejiu",
+   "ele": 6735
+  },
+  {
+   "lat": 35.136497,
+   "lon": 77.066297,
+   "name": "Gyong Kangri",
+   "ele": 6727,
+   "wikidata": "Q25380766"
+  },
+  {
+   "lat": 33.725261,
+   "lon": 78.527437,
+   "name": "Kangju Kangri",
+   "ele": 6725,
+   "wikidata": "Q19459387"
+  },
+  {
+   "lat": 34.526314,
+   "lon": 78.286468,
+   "name": "Charbagh Kangri",
+   "ele": 6685
+  },
+  {
+   "lat": 32.93301,
+   "lon": 78.457156,
+   "name": "Lungser Kangri",
+   "ele": 6666,
+   "wikidata": "Q20191026"
+  },
+  {
+   "lat": 34.99037,
+   "lon": 77.225282,
+   "name": "Thusa Kangri",
+   "ele": 6659
+  },
+  {
+   "lat": 35.200008,
+   "lon": 78.637994,
+   "name": "团结峰",
+   "ele": 6644
+  },
+  {
+   "lat": 32.572964,
+   "lon": 78.309427,
+   "name": "Undung Kangri",
+   "ele": 6642
+  },
+  {
+   "lat": 32.961333,
+   "lon": 78.442632,
+   "name": "Chamser Kangri",
+   "ele": 6622,
+   "wikidata": "Q20190802"
+  },
+  {
+   "lat": 33.606939,
+   "lon": 76.130612,
+   "name": "Sickle Moon",
+   "ele": 6574
+  },
+  {
+   "lat": 33.675489,
+   "lon": 76.308008,
+   "name": "Doda",
+   "ele": 6573,
+   "wikidata": "Q20190826"
+  },
+  {
+   "lat": 33.988925,
+   "lon": 76.038443,
+   "name": "White Needle",
+   "ele": 6560
+  },
+  {
+   "lat": 35.425335,
+   "lon": 76.507837,
+   "name": "Thanda Parbat",
+   "ele": 6553
+  },
+  {
+   "lat": 33.128598,
+   "lon": 78.443518,
+   "name": "Chalung",
+   "ele": 6546,
+   "wikidata": "Q20828725"
+  },
+  {
+   "lat": 35.429993,
+   "lon": 76.510823,
+   "name": "Kapura Peak",
+   "ele": 6544
+  },
+  {
+   "lat": 34.222968,
+   "lon": 78.657509,
+   "name": "Chang Chenmo Kangri",
+   "ele": 6536
+  },
+  {
+   "lat": 33.397262,
+   "lon": 78.441783,
+   "name": "Chakula",
+   "ele": 6534
+  },
+  {
+   "lat": 34.909757,
+   "lon": 77.144153,
+   "name": "Rirap",
+   "ele": 6523
+  },
+  {
+   "lat": 35.076636,
+   "lon": 76.972139,
+   "name": "Gharkun",
+   "ele": 6521
+  },
+  {
+   "lat": 32.545996,
+   "lon": 77.411538,
+   "name": "Mulkila",
+   "ele": 6517
+  },
+  {
+   "lat": 33.544905,
+   "lon": 76.464513,
+   "name": "Hagshu",
+   "ele": 6515,
+   "wikidata": "Q20164842"
+  },
+  {
+   "lat": 34.934284,
+   "lon": 77.638176,
+   "name": "Laknak Kangri",
+   "ele": 6496
+  },
+  {
+   "lat": 33.455023,
+   "lon": 76.15553,
+   "name": "Brammah II",
+   "ele": 6485
+  },
+  {
+   "lat": 34.033273,
+   "lon": 76.093084,
+   "name": "Rungofarka",
+   "ele": 6485
+  },
+  {
+   "lat": 35.442887,
+   "lon": 76.212225,
+   "name": "Honboro Peak",
+   "ele": 6459
+  },
+  {
+   "lat": 35.425759,
+   "lon": 76.457826,
+   "name": "Drifika Peak",
+   "ele": 6447
+  },
+  {
+   "lat": 35.104142,
+   "lon": 78.299391,
+   "name": "大园山",
+   "name_en": "Dayuan",
+   "ele": 6433
+  },
+  {
+   "lat": 33.386151,
+   "lon": 76.812635,
+   "name": "Skarma Mindruk Ri",
+   "ele": 6431
+  },
+  {
+   "lat": 32.996523,
+   "lon": 78.488858,
+   "name": "Shukule West",
+   "ele": 6430
+  },
+  {
+   "lat": 34.109397,
+   "lon": 78.298187,
+   "name": "Angtung",
+   "ele": 6419
+  },
+  {
+   "lat": 33.503499,
+   "lon": 76.048619,
+   "name": "Brammah I",
+   "ele": 6416
+  },
+  {
+   "lat": 32.919556,
+   "lon": 76.711167,
+   "name": "Menthosa",
+   "ele": 6416,
+   "wikidata": "Q26816285"
+  },
+  {
+   "lat": 32.708658,
+   "lon": 78.727259,
+   "name": "斯诺乌山 Shinowu",
+   "name_en": "Shinowu",
+   "ele": 6410
+  },
+  {
+   "lat": 33.003787,
+   "lon": 78.504386,
+   "name": "Shukule North",
+   "ele": 6410
+  },
+  {
+   "lat": 33.152139,
+   "lon": 78.420263,
+   "name": "Chalung North",
+   "ele": 6405
+  },
+  {
+   "lat": 33.748507,
+   "lon": 77.556842,
+   "name": "Kang Yatse I",
+   "name_en": "Kang Yatze I",
+   "ele": 6400,
+   "wikidata": "Q1723714"
+  },
+  {
+   "lat": 34.144869,
+   "lon": 79.009899,
+   "name": "Kulong 2",
+   "name_en": "Kulong 2",
+   "ele": 6395
+  },
+  {
+   "lat": 35.023907,
+   "lon": 77.005807,
+   "name": "NJ9842",
+   "ele": 6389,
+   "wikidata": "Q3334454"
+  },
+  {
+   "lat": 33.307389,
+   "lon": 78.198304,
+   "name": "Pologongka",
+   "ele": 6385
+  },
+  {
+   "lat": 33.138047,
+   "lon": 78.17385,
+   "name": "Spangnak Ri North",
+   "ele": 6380
+  },
+  {
+   "lat": 33.331809,
+   "lon": 78.181136,
+   "name": "Guide Ri",
+   "ele": 6364
+  },
+  {
+   "lat": 34.656031,
+   "lon": 77.845262,
+   "name": "Dagarpheth Kangri",
+   "ele": 6350
+  },
+  {
+   "lat": 35.167832,
+   "lon": 77.087005,
+   "name": "Crane",
+   "ele": 6330
+  },
+  {
+   "lat": 33.089967,
+   "lon": 78.461983,
+   "name": "Lagpo North",
+   "ele": 6330
+  },
+  {
+   "lat": 33.048868,
+   "lon": 78.47855,
+   "name": "Mt Ashutosh Ri",
+   "ele": 6330
+  },
+  {
+   "lat": 35.465354,
+   "lon": 76.458222,
+   "name": "Namika",
+   "ele": 6325
+  },
+  {
+   "lat": 35.319527,
+   "lon": 77.430765,
+   "name": "Lharimo",
+   "ele": 6309
+  },
+  {
+   "lat": 34.536655,
+   "lon": 78.029294,
+   "name": "Sagtogpa Kangri",
+   "ele": 6305
+  },
+  {
+   "lat": 33.716517,
+   "lon": 77.560932,
+   "name": "Ibsti Kangri",
+   "ele": 6300
+  },
+  {
+   "lat": 33.820111,
+   "lon": 78.232692,
+   "name": "Peak 6295m",
+   "ele": 6295
+  },
+  {
+   "lat": 33.578502,
+   "lon": 76.380381,
+   "name": "Barnaj II",
+   "ele": 6290
+  },
+  {
+   "lat": 34.369415,
+   "lon": 78.771629,
+   "name": "Dada",
+   "name_en": "Dada",
+   "ele": 6285
+  },
+  {
+   "lat": 33.725139,
+   "lon": 77.573519,
+   "name": "Dzo Jongo West",
+   "ele": 6280
+  },
+  {
+   "lat": 33.48116,
+   "lon": 76.728265,
+   "name": "Remalaye (H5 - Sakamoto)",
+   "ele": 6278
+  },
+  {
+   "lat": 33.250951,
+   "lon": 76.867361,
+   "name": "Lama Jimsa Kangri",
+   "ele": 6276
+  },
+  {
+   "lat": 33.114751,
+   "lon": 78.416478,
+   "name": "P6270",
+   "ele": 6270
+  },
+  {
+   "lat": 33.479799,
+   "lon": 76.721399,
+   "name": "Remalaye West",
+   "ele": 6266
+  },
+  {
+   "lat": 32.975708,
+   "lon": 78.115777,
+   "name": "Gyama Central",
+   "ele": 6260
+  },
+  {
+   "lat": 35.070454,
+   "lon": 78.146674,
+   "name": "白头峰",
+   "ele": 6256
+  },
+  {
+   "lat": 33.584665,
+   "lon": 76.36837,
+   "name": "Barnaj I",
+   "ele": 6250
+  },
+  {
+   "lat": 32.986476,
+   "lon": 78.113414,
+   "name": "Gyama North",
+   "ele": 6250
+  },
+  {
+   "lat": 32.631686,
+   "lon": 77.64395,
+   "name": "Unclimbed Pt",
+   "ele": 6250
+  },
+  {
+   "lat": 33.105024,
+   "lon": 78.422959,
+   "name": "P6250",
+   "ele": 6250
+  },
+  {
+   "lat": 33.48309,
+   "lon": 79.336642,
+   "name": "拉日巧达栋",
+   "ele": 6250
+  },
+  {
+   "lat": 32.654445,
+   "lon": 78.043195,
+   "name": "Monto II",
+   "ele": 6250
+  },
+  {
+   "lat": 32.640797,
+   "lon": 79.295689,
+   "name": "伊里里亚山 Irira",
+   "ele": 6245
+  },
+  {
+   "lat": 34.475389,
+   "lon": 78.063373,
+   "name": "Lingthran Kangri",
+   "ele": 6245
+  },
+  {
+   "lat": 33.17627,
+   "lon": 76.94454,
+   "name": "Mutik Skal",
+   "ele": 6243
+  },
+  {
+   "lat": 34.531119,
+   "lon": 78.008033,
+   "name": "Phokto Scheyok",
+   "ele": 6235
+  },
+  {
+   "lat": 32.768343,
+   "lon": 78.146129,
+   "name": "Kharpa",
+   "ele": 6234
+  },
+  {
+   "lat": 33.01329,
+   "lon": 78.076093,
+   "name": "Point 6230",
+   "ele": 6230
+  },
+  {
+   "lat": 32.653772,
+   "lon": 78.182079,
+   "name": "P6230",
+   "ele": 6230
+  },
+  {
+   "lat": 33.295513,
+   "lon": 79.765958,
+   "name": "君麦雪外岗日",
+   "name_en": "Gyoinmaixoi'og Kangri",
+   "ele": 6223
+  },
+  {
+   "lat": 33.728538,
+   "lon": 77.583421,
+   "name": "Dzo Jongo East",
+   "ele": 6220
+  },
+  {
+   "lat": 33.462586,
+   "lon": 76.703823,
+   "name": "Vajrayogni",
+   "ele": 6218
+  },
+  {
+   "lat": 35.118956,
+   "lon": 78.200529,
+   "name": "天河岭",
+   "name_en": "Tianheling",
+   "ele": 6215
+  },
+  {
+   "lat": 33.267482,
+   "lon": 76.877714,
+   "name": "Ri Pok Te / Sakamoto R4",
+   "ele": 6210
+  },
+  {
+   "lat": 32.967785,
+   "lon": 78.120145,
+   "name": "Gyama South",
+   "ele": 6208
+  },
+  {
+   "lat": 33.832297,
+   "lon": 78.272886,
+   "name": "Peak 1 6205",
+   "ele": 6205
+  },
+  {
+   "lat": 33.352717,
+   "lon": 76.350589,
+   "name": "Agyasol",
+   "ele": 6200
+  },
+  {
+   "lat": 33.702083,
+   "lon": 77.56132,
+   "name": "Shan Ri",
+   "ele": 6200
+  },
+  {
+   "lat": 33.701949,
+   "lon": 77.589944,
+   "name": "Gapo Ri",
+   "ele": 6200
+  },
+  {
+   "lat": 34.50923,
+   "lon": 77.314059,
+   "name": "Unclimbed Peak 6200",
+   "ele": 6200
+  },
+  {
+   "lat": 34.556881,
+   "lon": 78.070288,
+   "name": "Pt 6195",
+   "ele": 6195
+  },
+  {
+   "lat": 33.475806,
+   "lon": 76.700774,
+   "name": "H5 Sakamoto",
+   "ele": 6193
+  },
+  {
+   "lat": 33.754983,
+   "lon": 77.551227,
+   "name": "Kang Yatse II",
+   "name_en": "Kang Yatze II",
+   "ele": 6185
+  },
+  {
+   "lat": 34.124681,
+   "lon": 78.826103,
+   "name": "羌臣摩山",
+   "name_en": "Changchenmo Shan",
+   "ele": 6185
+  },
+  {
+   "lat": 34.560256,
+   "lon": 77.34531,
+   "name": "Spanpuk",
+   "ele": 6183
+  },
+  {
+   "lat": 33.83104,
+   "lon": 78.270631,
+   "name": "Peak 2 6181",
+   "ele": 6181
+  },
+  {
+   "lat": 32.818811,
+   "lon": 78.678674,
+   "name": "Handlung",
+   "ele": 6180
+  },
+  {
+   "lat": 33.824723,
+   "lon": 78.270168,
+   "name": "Peak 3 6169",
+   "ele": 6169
+  },
+  {
+   "lat": 34.032008,
+   "lon": 78.669,
+   "name": "塔玛山",
+   "name_en": "Tamah",
+   "ele": 6155
+  },
+  {
+   "lat": 33.348894,
+   "lon": 76.576864,
+   "name": "Cerro Kishtwar",
+   "ele": 6155,
+   "wikidata": "Q20164779"
+  },
+  {
+   "lat": 33.41699,
+   "lon": 76.821254,
+   "name": "Ubarak Kangri",
+   "ele": 6150
+  },
+  {
+   "lat": 33.739989,
+   "lon": 77.540967,
+   "name": "Kang Yatse 4 North",
+   "ele": 6150
+  },
+  {
+   "lat": 33.344055,
+   "lon": 78.120987,
+   "name": "P. 6150m",
+   "ele": 6150
+  },
+  {
+   "lat": 33.094418,
+   "lon": 76.580458,
+   "name": "Bahai jar",
+   "ele": 6142
+  },
+  {
+   "lat": 33.986291,
+   "lon": 77.442149,
+   "name": "Stok Kangri",
+   "ele": 6140,
+   "wikidata": "Q1507962"
+  },
+  {
+   "lat": 33.567788,
+   "lon": 76.588065,
+   "name": "Khang Chan Chenmo",
+   "ele": 6135
+  },
+  {
+   "lat": 33.349461,
+   "lon": 76.787508,
+   "name": "Antimatterhorn",
+   "ele": 6130
+  },
+  {
+   "lat": 33.84219,
+   "lon": 78.700229,
+   "name": "Pangong Kangri",
+   "name_en": "Pangong Kangri",
+   "ele": 6126
+  },
+  {
+   "lat": 34.413047,
+   "lon": 79.074011,
+   "name": "三坎山",
+   "name_en": "Samkang",
+   "ele": 6125
+  },
+  {
+   "lat": 33.576219,
+   "lon": 78.885111,
+   "name": "曼冬日",
+   "name_en": "Matung Nyungtsa",
+   "ele": 6120
+  },
+  {
+   "lat": 32.934694,
+   "lon": 78.18137,
+   "name": "Mentok III",
+   "ele": 6120
+  },
+  {
+   "lat": 33.397893,
+   "lon": 76.808747,
+   "name": "Haftal Kangri",
+   "ele": 6120
+  },
+  {
+   "lat": 33.157065,
+   "lon": 78.202926,
+   "name": "Mt. Pranita",
+   "ele": 6120
+  },
+  {
+   "lat": 32.578267,
+   "lon": 76.711018,
+   "name": "Goutam Parbat",
+   "ele": 6113
+  },
+  {
+   "lat": 32.590885,
+   "lon": 77.637127,
+   "name": "Tagne",
+   "ele": 6111
+  },
+  {
+   "lat": 32.568456,
+   "lon": 77.457335,
+   "name": "CB-9",
+   "ele": 6108
+  },
+  {
+   "lat": 32.989639,
+   "lon": 78.135938,
+   "name": "Gyama East",
+   "ele": 6108
+  },
+  {
+   "lat": 33.33432,
+   "lon": 76.78523,
+   "name": "T9",
+   "ele": 6107
+  },
+  {
+   "lat": 32.624593,
+   "lon": 78.087151,
+   "name": "Thongmeth Kangri",
+   "ele": 6105
+  },
+  {
+   "lat": 33.46583,
+   "lon": 76.090266,
+   "name": "Flat Top",
+   "ele": 6103
+  },
+  {
+   "lat": 34.423596,
+   "lon": 79.225596,
+   "name": "察坎山",
+   "name_en": "Chāmkang",
+   "ele": 6100
+  },
+  {
+   "lat": 33.165625,
+   "lon": 76.621702,
+   "name": "Sersank Peak",
+   "ele": 6100
+  },
+  {
+   "lat": 32.81876,
+   "lon": 77.404555,
+   "name": "Yunam",
+   "ele": 6100
+  },
+  {
+   "lat": 33.541681,
+   "lon": 76.41077,
+   "name": "Chiring",
+   "ele": 6100
+  },
+  {
+   "lat": 35.363631,
+   "lon": 78.433863,
+   "name": "虎形山",
+   "ele": 6100
+  },
+  {
+   "lat": 33.212395,
+   "lon": 76.855279,
+   "name": "Tetleh Kangri",
+   "ele": 6100
+  },
+  {
+   "lat": 34.3939,
+   "lon": 77.431722,
+   "name": "Sahib Chera",
+   "name_en": "Shabib Chhera",
+   "ele": 6100
+  },
+  {
+   "lat": 33.123869,
+   "lon": 78.217079,
+   "name": "Kiager Ri",
+   "ele": 6100
+  },
+  {
+   "lat": 34.189735,
+   "lon": 79.05376,
+   "name": "Kulang 1",
+   "name_en": "Kulang 1",
+   "ele": 6100
+  },
+  {
+   "lat": 33.501134,
+   "lon": 77.691932,
+   "name": "NDS Kangri",
+   "ele": 6094
+  },
+  {
+   "lat": 33.320385,
+   "lon": 79.026909,
+   "name": "萨巨山/Sajum",
+   "name_ru": "Сабджу-Ри",
+   "name_en": "Mount Sajum",
+   "ele": 6091
+  },
+  {
+   "lat": 33.044925,
+   "lon": 78.236391,
+   "name": "Korzok Kangri",
+   "ele": 6090
+  },
+  {
+   "lat": 33.30669,
+   "lon": 78.652036,
+   "name": "Nechung",
+   "ele": 6087
+  },
+  {
+   "lat": 34.02948,
+   "lon": 76.793137,
+   "name": "Machu Kangri",
+   "ele": 6086
+  },
+  {
+   "lat": 34.137846,
+   "lon": 78.794686,
+   "name": "Tondo",
+   "name_en": "Tondo",
+   "ele": 6080
+  },
+  {
+   "lat": 33.058856,
+   "lon": 78.186062,
+   "name": "Yalung Nong South",
+   "ele": 6080
+  },
+  {
+   "lat": 33.738085,
+   "lon": 77.580285,
+   "name": "Reponi Mallari Ri I",
+   "ele": 6080
+  },
+  {
+   "lat": 35.344827,
+   "lon": 76.490367,
+   "name": "Ilford Peak",
+   "ele": 6080,
+   "wikidata": "Q85768989"
+  },
+  {
+   "lat": 33.461073,
+   "lon": 76.721901,
+   "name": "Chanrasrik Ri",
+   "ele": 6080
+  },
+  {
+   "lat": 34.355816,
+   "lon": 78.666156,
+   "name": "Subdian",
+   "ele": 6075
+  },
+  {
+   "lat": 33.329446,
+   "lon": 78.121338,
+   "name": "Pt.",
+   "ele": 6075
+  },
+  {
+   "lat": 34.437739,
+   "lon": 77.496694,
+   "name": "Lungmochey Kangri",
+   "ele": 6070
+  },
+  {
+   "lat": 32.968761,
+   "lon": 78.144427,
+   "name": "Gyama South East",
+   "ele": 6070
+  },
+  {
+   "lat": 32.845964,
+   "lon": 76.956026,
+   "name": "Tharang I",
+   "ele": 6066
+  },
+  {
+   "lat": 33.241561,
+   "lon": 76.847715,
+   "name": "Khumchu Ri",
+   "ele": 6064
+  },
+  {
+   "lat": 33.237704,
+   "lon": 76.90681,
+   "name": "Kun Long Ri",
+   "ele": 6064
+  },
+  {
+   "lat": 33.347785,
+   "lon": 78.099703,
+   "name": "P. 6060m",
+   "ele": 6060
+  },
+  {
+   "lat": 33.568904,
+   "lon": 77.650255,
+   "name": "Peak 6054m",
+   "ele": 6054
+  },
+  {
+   "lat": 33.780879,
+   "lon": 77.01678,
+   "name": "Ukharpu",
+   "ele": 6050
+  },
+  {
+   "lat": 33.569332,
+   "lon": 78.896928,
+   "name": "第拉山",
+   "name_en": "Dila peak",
+   "ele": 6045
+  },
+  {
+   "lat": 32.513823,
+   "lon": 76.876586,
+   "name": "Sanakdenk Jot",
+   "ele": 6045
+  },
+  {
+   "lat": 33.655882,
+   "lon": 77.621296,
+   "name": "Peak 6045",
+   "ele": 6045
+  },
+  {
+   "lat": 34.460885,
+   "lon": 78.059446,
+   "name": "Rangwang Kangri",
+   "ele": 6040
+  },
+  {
+   "lat": 34.522744,
+   "lon": 77.323354,
+   "name": "Oma Kangri",
+   "ele": 6037
+  },
+  {
+   "lat": 33.181869,
+   "lon": 79.151971,
+   "name": "Mandophoo",
+   "ele": 6035
+  },
+  {
+   "lat": 32.618805,
+   "lon": 77.634184,
+   "name": "Sagar Peak",
+   "ele": 6030
+  },
+  {
+   "lat": 33.512096,
+   "lon": 77.699841,
+   "name": "UT Kangri",
+   "ele": 6030
+  },
+  {
+   "lat": 32.686694,
+   "lon": 78.035705,
+   "name": "Monto IV",
+   "ele": 6030
+  },
+  {
+   "lat": 33.157417,
+   "lon": 77.035736,
+   "name": "Lama Soo L8",
+   "ele": 6020
+  },
+  {
+   "lat": 33.575605,
+   "lon": 76.107616,
+   "name": "Tarparun",
+   "ele": 6013
+  },
+  {
+   "lat": 32.838031,
+   "lon": 76.944836,
+   "name": "Tharang II",
+   "ele": 6011
+  },
+  {
+   "lat": 32.55308,
+   "lon": 78.251247,
+   "name": "Thongsal",
+   "ele": 6011
+  },
+  {
+   "lat": 33.477903,
+   "lon": 76.659906,
+   "name": "H10 Sakamoto",
+   "ele": 6010
+  },
+  {
+   "lat": 33.601883,
+   "lon": 76.323059,
+   "name": "Puita",
+   "ele": 6000
+  },
+  {
+   "lat": 32.825994,
+   "lon": 77.413407,
+   "name": "Pt 6000m",
+   "ele": 6000
+  },
+  {
+   "lat": 33.111009,
+   "lon": 78.95102,
+   "name": "Chumik",
+   "ele": 5985
+  },
+  {
+   "lat": 33.551946,
+   "lon": 76.381073,
+   "name": "Barnaj III",
+   "ele": 5980
+  },
+  {
+   "lat": 32.542626,
+   "lon": 79.387448,
+   "name": "岗叉索",
+   "ele": 5975
+  },
+  {
+   "lat": 34.887409,
+   "lon": 77.555494,
+   "name": "Wusak",
+   "ele": 5965
+  },
+  {
+   "lat": 33.300369,
+   "lon": 76.887405,
+   "name": "Moel Kangri",
+   "ele": 5930
+  },
+  {
+   "lat": 33.622166,
+   "lon": 78.906243,
+   "name": "拉班日",
+   "name_en": "Laban peak",
+   "ele": 5913
+  },
+  {
+   "lat": 33.511619,
+   "lon": 76.723799,
+   "name": "Starikatchan (Sakamoto H7)",
+   "ele": 5904
+  },
+  {
+   "lat": 33.703486,
+   "lon": 77.606131,
+   "name": "Shaldor Ri",
+   "ele": 5900
+  },
+  {
+   "lat": 32.992106,
+   "lon": 79.047712,
+   "name": "Chanalung",
+   "ele": 5900
+  },
+  {
+   "lat": 35.333038,
+   "lon": 76.468182,
+   "name": "Brakk Na Brakk",
+   "ele": 5872,
+   "wikidata": "Q135083786"
+  },
+  {
+   "lat": 34.323686,
+   "lon": 79.168555,
+   "name": "红岩山",
+   "ele": 5855
+  },
+  {
+   "lat": 34.076681,
+   "lon": 76.684412,
+   "name": "Chomotang III (Chomotang southwest)",
+   "ele": 5850
+  },
+  {
+   "lat": 35.429122,
+   "lon": 76.481713,
+   "name": "Changmah",
+   "ele": 5844
+  },
+  {
+   "lat": 33.456508,
+   "lon": 77.005363,
+   "name": "Stongde Kangri",
+   "ele": 5823
+  },
+  {
+   "lat": 32.700204,
+   "lon": 78.455547,
+   "name": "Kiang",
+   "ele": 5802
+  },
+  {
+   "lat": 33.546295,
+   "lon": 76.61243,
+   "name": "Chotzangma West",
+   "ele": 5800
+  },
+  {
+   "lat": 34.44178,
+   "lon": 77.376792,
+   "name": "Dawa Peak",
+   "ele": 5800
+  },
+  {
+   "lat": 33.565219,
+   "lon": 76.636704,
+   "name": "Chortan Rigib East",
+   "ele": 5800
+  },
+  {
+   "lat": 33.547182,
+   "lon": 76.618717,
+   "name": "Chotzangma East",
+   "ele": 5800
+  },
+  {
+   "lat": 34.772342,
+   "lon": 77.260828,
+   "name": "Tholambai",
+   "ele": 5765
+  },
+  {
+   "lat": 34.047372,
+   "lon": 76.100873,
+   "name": "Amaiur",
+   "ele": 5760
+  },
+  {
+   "lat": 33.514948,
+   "lon": 77.051421,
+   "name": "Cheringo",
+   "ele": 5752
+  },
+  {
+   "lat": 33.565748,
+   "lon": 76.633659,
+   "name": "Chortan Rigib West",
+   "ele": 5752
+  },
+  {
+   "lat": 34.121477,
+   "lon": 76.718204,
+   "name": "Nigutse South",
+   "ele": 5750
+  },
+  {
+   "lat": 33.408401,
+   "lon": 76.844627,
+   "name": "Paburigo",
+   "ele": 5740
+  },
+  {
+   "lat": 32.533753,
+   "lon": 77.134323,
+   "name": "Chachi Mug",
+   "ele": 5730
+  },
+  {
+   "lat": 35.264227,
+   "lon": 78.163599,
+   "name": "鸡蛋山",
+   "name_en": "Jidan peak",
+   "ele": 5710
+  },
+  {
+   "lat": 33.565629,
+   "lon": 76.641135,
+   "name": "Nochung Ri",
+   "ele": 5700
+  },
+  {
+   "lat": 34.062885,
+   "lon": 76.741584,
+   "name": "Hemar Ri",
+   "ele": 5699
+  },
+  {
+   "lat": 33.62299,
+   "lon": 78.773996,
+   "name": "秋迪日（三角山）",
+   "name_en": "Black Top",
+   "ele": 5685
+  },
+  {
+   "lat": 34.347405,
+   "lon": 77.291951,
+   "name": "Hanu",
+   "ele": 5680
+  },
+  {
+   "lat": 35.367516,
+   "lon": 78.125208,
+   "name": "三峰岭",
+   "name_en": "Sanfengling",
+   "ele": 5680
+  },
+  {
+   "lat": 35.335049,
+   "lon": 76.489097,
+   "name": "Brakk Truc",
+   "ele": 5672,
+   "wikidata": "Q135083633"
+  },
+  {
+   "lat": 35.33988,
+   "lon": 78.068133,
+   "name": "蛇山北坡",
+   "name_en": "She Shan North",
+   "ele": 5651
+  },
+  {
+   "lat": 33.508061,
+   "lon": 76.116379,
+   "name": "Crooked Finger",
+   "ele": 5630
+  },
+  {
+   "lat": 33.264602,
+   "lon": 76.532735,
+   "name": "Gupta",
+   "ele": 5618
+  },
+  {
+   "lat": 34.22664,
+   "lon": 77.694068,
+   "name": "Kang Kunze",
+   "ele": 5607
+  },
+  {
+   "lat": 33.583958,
+   "lon": 76.602849,
+   "name": "Rejam Ri",
+   "ele": 5600
+  },
+  {
+   "lat": 33.810188,
+   "lon": 76.988752,
+   "name": "Suskian",
+   "ele": 5590
+  },
+  {
+   "lat": 33.48328,
+   "lon": 78.814993,
+   "name": "姆巴热",
+   "ele": 5580
+  },
+  {
+   "lat": 35.344574,
+   "lon": 78.150392,
+   "name": "伏象山",
+   "name_en": "Fuxiang Shan",
+   "ele": 5570
+  },
+  {
+   "lat": 33.846088,
+   "lon": 77.051144,
+   "name": "Nangma",
+   "ele": 5550
+  },
+  {
+   "lat": 33.483292,
+   "lon": 78.814976,
+   "name": "毕隆日 - Mukhpari",
+   "ele": 5545
+  },
+  {
+   "lat": 35.330831,
+   "lon": 78.086351,
+   "name": "蛇山",
+   "name_en": "She Shan",
+   "ele": 5545
+  },
+  {
+   "lat": 32.957025,
+   "lon": 77.257164,
+   "name": "Gonbo Rangjon",
+   "ele": 5520
+  },
+  {
+   "lat": 34.013932,
+   "lon": 77.355815,
+   "name": "Manikeo",
+   "ele": 5520
+  },
+  {
+   "lat": 33.144969,
+   "lon": 78.067933,
+   "name": "Nuni Mountain",
+   "ele": 5500
+  },
+  {
+   "lat": 33.623213,
+   "lon": 78.757706,
+   "name": "邦普 Bump",
+   "name_en": "Bump",
+   "ele": 5500
+  },
+  {
+   "lat": 34.369264,
+   "lon": 76.656268,
+   "name": "Nindam",
+   "ele": 5499
+  },
+  {
+   "lat": 34.632604,
+   "lon": 77.19165,
+   "name": "Khormulung",
+   "ele": 5490
+  },
+  {
+   "lat": 33.513605,
+   "lon": 76.025223,
+   "name": "Brammah's Wife",
+   "ele": 5478
+  },
+  {
+   "lat": 35.27413,
+   "lon": 78.011347,
+   "name": "马鞍山",
+   "name_en": "Point 5459",
+   "ele": 5459
+  },
+  {
+   "lat": 33.645794,
+   "lon": 78.80703,
+   "name": "班公湖南山",
+   "name_en": "Pangong South",
+   "ele": 5455
+  },
+  {
+   "lat": 34.671278,
+   "lon": 76.576878,
+   "name": "Suchetego N.",
+   "ele": 5395
+  },
+  {
+   "lat": 35.334289,
+   "lon": 78.05506,
+   "name": "蛇山南坡",
+   "name_en": "Sheshan South Slope",
+   "ele": 5365
+  },
+  {
+   "lat": 34.325238,
+   "lon": 79.045366,
+   "name": "曲多日",
+   "name_en": "Qudo",
+   "ele": 5345
+  },
+  {
+   "lat": 34.650579,
+   "lon": 76.571832,
+   "name": "Suchetego S.",
+   "ele": 5345
+  },
+  {
+   "lat": 34.752331,
+   "lon": 76.406746,
+   "name": "Shangruti Top",
+   "ele": 5343
+  },
+  {
+   "lat": 33.186805,
+   "lon": 78.267159,
+   "name": "Nakpogoding",
+   "ele": 5340
+  },
+  {
+   "lat": 35.337247,
+   "lon": 78.050425,
+   "name": "蛇山西坡",
+   "name_en": "Sheshan West Slope",
+   "ele": 5340
+  },
+  {
+   "lat": 34.622602,
+   "lon": 76.2458,
+   "name": "Junkor",
+   "ele": 5335
+  },
+  {
+   "lat": 33.14607,
+   "lon": 78.269976,
+   "name": "Kamdar",
+   "ele": 5280
+  },
+  {
+   "lat": 34.250849,
+   "lon": 76.900606,
+   "name": "Manan",
+   "ele": 5277
+  },
+  {
+   "lat": 33.45999,
+   "lon": 76.94453,
+   "name": "Shingrugo",
+   "ele": 5240
+  },
+  {
+   "lat": 33.046224,
+   "lon": 78.791528,
+   "name": "Sango Chumik",
+   "ele": 5235
+  },
+  {
+   "lat": 34.62239,
+   "lon": 76.226709,
+   "name": "Junkar 17627",
+   "ele": 5235
+  },
+  {
+   "lat": 33.439516,
+   "lon": 78.839394,
+   "name": "热钦顶 - Rechin Top",
+   "name_en": "Rechin Top",
+   "ele": 5204
+  },
+  {
+   "lat": 34.033831,
+   "lon": 77.365631,
+   "name": "Ganda Ri",
+   "ele": 5200
+  },
+  {
+   "lat": 35.496632,
+   "lon": 76.496169,
+   "name": "Nayser Brakk",
+   "ele": 5200
+  },
+  {
+   "lat": 33.611622,
+   "lon": 78.753152,
+   "name": "Table Top - 桌顶",
+   "ele": 5188
+  },
+  {
+   "lat": 33.622723,
+   "lon": 78.717731,
+   "name": "普楚日",
+   "ele": 5167
+  },
+  {
+   "lat": 33.201529,
+   "lon": 78.346767,
+   "name": "Zoboshisha",
+   "ele": 5082
+  },
+  {
+   "lat": 33.187956,
+   "lon": 76.049524,
+   "name": "Thu Thu Shankar",
+   "ele": 5043
+  },
+  {
+   "lat": 32.846553,
+   "lon": 78.92248,
+   "name": "Raindong",
+   "ele": 5035
+  },
+  {
+   "lat": 32.599151,
+   "lon": 76.417773,
+   "name": "Chandrani",
+   "ele": 5030
+  },
+  {
+   "lat": 33.676229,
+   "lon": 78.845175,
+   "name": "尼玛垄",
+   "name_en": "Nimalong",
+   "ele": 5004
+  },
+  {
+   "lat": 34.389201,
+   "lon": 78.952306,
+   "name": "拉达山 Rada",
+   "name_en": "Rada",
+   "ele": 5000
+  },
+  {
+   "lat": 33.646639,
+   "lon": 78.728533,
+   "name": "头盔顶（Helmet Top）",
+   "name_en": "Helmet Top",
+   "ele": 4990
+  },
+  {
+   "lat": 34.289636,
+   "lon": 79.041277,
+   "name": "胜利山",
+   "name_en": "Shengli Hill (Victory Hill)",
+   "ele": 4960
+  },
+  {
+   "lat": 33.998097,
+   "lon": 78.455935,
+   "name": "Tso Lungkyok Ri",
+   "ele": 4920
+  },
+  {
+   "lat": 33.550219,
+   "lon": 78.79532,
+   "name": "班公洛",
+   "name_en": "Pangonglo",
+   "ele": 4884
+  },
+  {
+   "lat": 32.696585,
+   "lon": 79.435699,
+   "name": "典角拉日 Demchok Lhari",
+   "name_en": "Demchok Lhari",
+   "ele": 4865
+  },
+  {
+   "lat": 33.923722,
+   "lon": 77.223319,
+   "name": "Namlas",
+   "ele": 4830
+  },
+  {
+   "lat": 32.795077,
+   "lon": 78.854785,
+   "name": "Kaimaota",
+   "ele": 4820
+  },
+  {
+   "lat": 34.074853,
+   "lon": 76.193994,
+   "name": "Askatasunaren Dorrea",
+   "ele": 4800
+  },
+  {
+   "lat": 32.664761,
+   "lon": 78.57464,
+   "name": "Chumur peak",
+   "name_en": "Chumur peak",
+   "ele": 4576
+  },
+  {
+   "lat": 32.779884,
+   "lon": 78.962458,
+   "name": "Digpa Ratsa-Ri",
+   "ele": 4500
+  },
+  {
+   "lat": 33.188952,
+   "lon": 78.672,
+   "name": "Pariso",
+   "ele": 4440
+  },
+  {
+   "lat": 33.457234,
+   "lon": 79.751688,
+   "name": "多吾且普古",
+   "ele": 4380
+  },
+  {
+   "lat": 33.458836,
+   "lon": 79.774745,
+   "name": "且玛敖敖",
+   "ele": 4330
+  },
+  {
+   "lat": 34.604649,
+   "lon": 76.174936,
+   "name": "Point 13620",
+   "ele": 4330
+  },
+  {
+   "lat": 34.18539,
+   "lon": 77.567228,
+   "name": "Chham Kangri / Bakula Peak",
+   "ele": 4100
+  },
+  {
+   "lat": 34.330064,
+   "lon": 76.045914,
+   "name": "Chhobark"
+  },
+  {
+   "lat": 33.098687,
+   "lon": 76.288149,
+   "name": "Gindraban"
+  },
+  {
+   "lat": 33.734895,
+   "lon": 76.117545,
+   "name": "N8"
+  },
+  {
+   "lat": 33.566674,
+   "lon": 76.204315,
+   "name": "Dreikant"
+  },
+  {
+   "lat": 33.811166,
+   "lon": 76.161432,
+   "name": "Chiling-I"
+  },
+  {
+   "lat": 32.711719,
+   "lon": 78.307584,
+   "name": "Chumik"
+  },
+  {
+   "lat": 32.894205,
+   "lon": 78.223873,
+   "name": "Mentok I"
+  },
+  {
+   "lat": 32.919788,
+   "lon": 78.203323,
+   "name": "Mentok II"
+  },
+  {
+   "lat": 33.059615,
+   "lon": 78.324796,
+   "name": "Shashang"
+  },
+  {
+   "lat": 34.417967,
+   "lon": 78.845705,
+   "name": "马德山 Madh",
+   "name_en": "Madh"
+  },
+  {
+   "lat": 34.708185,
+   "lon": 78.257484,
+   "name": "连云山"
+  },
+  {
+   "lat": 34.973084,
+   "lon": 78.201476,
+   "name": "三角山"
+  },
+  {
+   "lat": 35.490667,
+   "lon": 77.853639,
+   "name": "界上峰"
+  },
+  {
+   "lat": 33.403532,
+   "lon": 78.938073,
+   "name": "巴皮山",
+   "name_en": "Bapi"
+  },
+  {
+   "lat": 33.456302,
+   "lon": 78.820971,
+   "name": "神炮山"
+  },
+  {
+   "lat": 33.474629,
+   "lon": 78.92905,
+   "name": "达给日巨",
+   "name_en": "Dage"
+  },
+  {
+   "lat": 33.577854,
+   "lon": 78.741739,
+   "name": "莫尔多日"
+  },
+  {
+   "lat": 33.746789,
+   "lon": 78.776071,
+   "name": "Green Top - 绿顶"
+  },
+  {
+   "lat": 33.752231,
+   "lon": 78.767724,
+   "name": "怂隆巴"
+  },
+  {
+   "lat": 33.783011,
+   "lon": 78.754835,
+   "name": "鲁鲁贡玛日"
+  },
+  {
+   "lat": 33.720513,
+   "lon": 78.76346,
+   "name": "第四指湖山（鸽子嘴）",
+   "name_en": "Finger-4 of Pangong Lake Ridge"
+  },
+  {
+   "lat": 33.980712,
+   "lon": 78.740601,
+   "name": "安拉强隆"
+  },
+  {
+   "lat": 34.091938,
+   "lon": 78.695126,
+   "name": "唐多山"
+  },
+  {
+   "lat": 34.120189,
+   "lon": 78.785174,
+   "name": "久琼日"
+  },
+  {
+   "lat": 34.140929,
+   "lon": 78.905806,
+   "name": "塔马特山",
+   "name_en": "Tamat"
+  },
+  {
+   "lat": 34.165558,
+   "lon": 78.871741,
+   "name": "昌格钦莫山"
+  },
+  {
+   "lat": 34.225003,
+   "lon": 78.943782,
+   "name": "西隆沃玛日",
+   "name_en": "Silung Womai Peak"
+  },
+  {
+   "lat": 34.241614,
+   "lon": 79.59066,
+   "name": "加过扎嘎",
+   "name_en": "Gyabgochaggar"
+  },
+  {
+   "lat": 34.281651,
+   "lon": 78.973172,
+   "name": "西隆贡玛日",
+   "name_en": "Silung Kongma Peak"
+  },
+  {
+   "lat": 32.579439,
+   "lon": 78.761927,
+   "name": "卡兰格山"
+  },
+  {
+   "lat": 32.602835,
+   "lon": 79.305851,
+   "name": "Nyilung Lingmar Ngo Ri",
+   "name_en": "Nyilung Lingmar Ngo Ri"
+  },
+  {
+   "lat": 32.992424,
+   "lon": 78.510017,
+   "name": "Shukule"
+  },
+  {
+   "lat": 33.699364,
+   "lon": 80.446634,
+   "name": "松德卜"
+  },
+  {
+   "lat": 34.409045,
+   "lon": 80.369994,
+   "name": "达拉木"
+  },
+  {
+   "lat": 34.266957,
+   "lon": 79.638623,
+   "name": "加过扎嘎",
+   "name_en": "Jiaguo Zhaga"
+  },
+  {
+   "lat": 34.415809,
+   "lon": 79.405267,
+   "name": "五峰山"
+  },
+  {
+   "lat": 33.441547,
+   "lon": 78.927502,
+   "name": "日琼隆",
+   "name_en": "Rechinlong"
+  },
+  {
+   "lat": 33.493192,
+   "lon": 79.173559,
+   "name": "桑日句容"
+  },
+  {
+   "lat": 33.496667,
+   "lon": 79.102584,
+   "name": "念多布",
+   "name_en": "Nianduobu"
+  },
+  {
+   "lat": 33.608789,
+   "lon": 78.976863,
+   "name": "班公山"
+  },
+  {
+   "lat": 33.908312,
+   "lon": 77.634151,
+   "name": "Hemis"
+  },
+  {
+   "lat": 34.510636,
+   "lon": 80.347316,
+   "name": "果只岗日",
+   "name_en": "Godrak gangri"
+  },
+  {
+   "lat": 33.893946,
+   "lon": 80.428095,
+   "name": "阿木隆",
+   "name_en": "Amuron"
+  },
+  {
+   "lat": 33.701866,
+   "lon": 80.28862,
+   "name": "松琼"
+  },
+  {
+   "lat": 33.687227,
+   "lon": 80.392389,
+   "name": "达公亚公"
+  },
+  {
+   "lat": 34.533729,
+   "lon": 80.375137,
+   "name": "多尔冬",
+   "name_en": "Dordon"
+  },
+  {
+   "lat": 34.551545,
+   "lon": 80.422344,
+   "name": "库多玛布",
+   "name_en": "Kudomab"
+  },
+  {
+   "lat": 34.372255,
+   "lon": 80.390744,
+   "name": "库多温布",
+   "name_en": "Kudowimb"
+  },
+  {
+   "lat": 33.968935,
+   "lon": 80.375996,
+   "name": "顿茨",
+   "name_en": "Dunz"
+  },
+  {
+   "lat": 33.633861,
+   "lon": 80.43273,
+   "name": "欧利",
+   "name_en": "Oli"
+  },
+  {
+   "lat": 33.577388,
+   "lon": 80.129661,
+   "name": "书嘎"
+  },
+  {
+   "lat": 33.622284,
+   "lon": 80.397539,
+   "name": "龙格",
+   "name_en": "Longge"
+  },
+  {
+   "lat": 33.53948,
+   "lon": 80.265102,
+   "name": "腾尔男"
+  },
+  {
+   "lat": 33.575958,
+   "lon": 80.157642,
+   "name": "普冬"
+  },
+  {
+   "lat": 33.574599,
+   "lon": 79.975939,
+   "name": "杂色"
+  },
+  {
+   "lat": 33.512863,
+   "lon": 80.099106,
+   "name": "松模"
+  },
+  {
+   "lat": 32.772079,
+   "lon": 76.797903,
+   "name": "Phabrang"
+  },
+  {
+   "lat": 32.720736,
+   "lon": 76.950243,
+   "name": "Neelkanth Peak"
+  },
+  {
+   "lat": 35.083938,
+   "lon": 76.968101,
+   "name": "Charkun",
+   "name_en": "Charkun"
+  },
+  {
+   "lat": 34.073017,
+   "lon": 78.20262,
+   "name": "Chigar"
+  },
+  {
+   "lat": 34.1705,
+   "lon": 77.072954,
+   "name": "Spangting"
+  },
+  {
+   "lat": 34.251346,
+   "lon": 77.030017,
+   "name": "Gira"
+  },
+  {
+   "lat": 33.161086,
+   "lon": 78.473732,
+   "name": "Ribil"
+  },
+  {
+   "lat": 32.539556,
+   "lon": 77.010101,
+   "name": "Drilbu Ri"
+  },
+  {
+   "lat": 34.321005,
+   "lon": 79.054237,
+   "name": "章图山",
+   "name_en": "Zhangtu"
+  },
+  {
+   "lat": 33.061407,
+   "lon": 76.517973,
+   "name": "Bhamsari Gali"
+  },
+  {
+   "lat": 33.028959,
+   "lon": 76.523208,
+   "name": "Sang Chakkar"
+  },
+  {
+   "lat": 32.874974,
+   "lon": 76.613846,
+   "name": "Malkutu Jot"
+  },
+  {
+   "lat": 32.9731,
+   "lon": 76.339874,
+   "name": "Cheni"
+  },
+  {
+   "lat": 32.942366,
+   "lon": 76.336398,
+   "name": "Paupdhar"
+  },
+  {
+   "lat": 32.904668,
+   "lon": 76.381245,
+   "name": "Biar Malera"
+  },
+  {
+   "lat": 32.819054,
+   "lon": 76.374571,
+   "name": "Kalo Ka Bhandar"
+  },
+  {
+   "lat": 33.144343,
+   "lon": 76.575651,
+   "name": "Ghun"
+  },
+  {
+   "lat": 33.368976,
+   "lon": 77.005416,
+   "name": "Gyarugo"
+  },
+  {
+   "lat": 32.928094,
+   "lon": 77.187399,
+   "name": "Zangskar"
+  },
+  {
+   "lat": 32.850245,
+   "lon": 77.132263,
+   "name": "Ramjak"
+  },
+  {
+   "lat": 32.899371,
+   "lon": 77.225089,
+   "name": "Shingo Ri"
+  },
+  {
+   "lat": 33.104556,
+   "lon": 77.331047,
+   "name": "Bring"
+  },
+  {
+   "lat": 33.943538,
+   "lon": 76.11002,
+   "name": "Z1"
+  },
+  {
+   "lat": 34.801758,
+   "lon": 76.480824,
+   "name": "Point 5310"
+  },
+  {
+   "lat": 32.602903,
+   "lon": 76.680919,
+   "name": "Dhar Khangar"
+  },
+  {
+   "lat": 34.490004,
+   "lon": 76.555824,
+   "name": "Largip"
+  },
+  {
+   "lat": 34.578849,
+   "lon": 79.207145,
+   "name": "牛郎山",
+   "name_en": "Niulang Mountain"
+  },
+  {
+   "lat": 34.63838,
+   "lon": 79.097319,
+   "name": "马鞍山",
+   "name_en": "Maanshan"
+  },
+  {
+   "lat": 34.604975,
+   "lon": 79.149931,
+   "name": "火烧云",
+   "name_en": "Huoshaoyun"
+  },
+  {
+   "lat": 34.525455,
+   "lon": 79.222334,
+   "name": "望南山"
+  },
+  {
+   "lat": 34.562922,
+   "lon": 79.648808,
+   "name": "红黄岭",
+   "name_en": "Honghuangling"
+  },
+  {
+   "lat": 34.648187,
+   "lon": 79.005924,
+   "name": "长平岭",
+   "name_en": "Changping Mountain"
+  },
+  {
+   "lat": 34.581854,
+   "lon": 79.380725,
+   "name": "金鱼山"
+  },
+  {
+   "lat": 34.086699,
+   "lon": 76.689177,
+   "name": "Chomotang I"
+  },
+  {
+   "lat": 33.577636,
+   "lon": 76.09732,
+   "name": "Kishtwar Eiger"
+  },
+  {
+   "lat": 33.750378,
+   "lon": 78.719475,
+   "name": "Finger 2 Pangong Lake ridge"
+  },
+  {
+   "lat": 33.734046,
+   "lon": 78.744633,
+   "name": "Finger 3 Pangong Lake ridge"
+  },
+  {
+   "lat": 33.756375,
+   "lon": 78.700173,
+   "name": "Finger 1 Pangong Lake ridge"
+  },
+  {
+   "lat": 33.721383,
+   "lon": 78.781581,
+   "name": "第五指湖山",
+   "name_en": "Finger-5 of Pangong Lake Ridge"
+  },
+  {
+   "lat": 33.725744,
+   "lon": 78.794351,
+   "name": "第六指湖山",
+   "name_en": "Finger-6 of Pangong Lake Ridge"
+  },
+  {
+   "lat": 33.73607,
+   "lon": 78.806751,
+   "name": "第七指湖山",
+   "name_en": "Finger-7 of Pangong Lake Ridge"
+  },
+  {
+   "lat": 33.739119,
+   "lon": 78.817587,
+   "name": "第八指湖山",
+   "name_en": "Finger-8 of Pangong Lake Ridge"
+  },
+  {
+   "lat": 33.527388,
+   "lon": 78.805203,
+   "name": "产岗哟",
+   "name_en": "Changangyo"
+  },
+  {
+   "lat": 33.749507,
+   "lon": 78.842375,
+   "name": "4400高地"
+  },
+  {
+   "lat": 33.737854,
+   "lon": 79.099232,
+   "name": "扎那纳布",
+   "name_en": "Zananab"
+  },
+  {
+   "lat": 33.719039,
+   "lon": 79.078012,
+   "name": "喀奇普",
+   "name_en": "Kachip"
+  },
+  {
+   "lat": 33.713032,
+   "lon": 79.145163,
+   "name": "阿容果",
+   "name_en": "Algrong Hill"
+  },
+  {
+   "lat": 33.672885,
+   "lon": 79.194699,
+   "name": "曲西拉",
+   "name_en": "Trisila"
+  },
+  {
+   "lat": 33.768019,
+   "lon": 79.147833,
+   "name": "白姆昌日"
+  },
+  {
+   "lat": 33.752798,
+   "lon": 79.574044,
+   "name": "白日"
+  },
+  {
+   "lat": 33.568289,
+   "lon": 79.450539,
+   "name": "玛绒"
+  },
+  {
+   "lat": 33.635467,
+   "lon": 79.725425,
+   "name": "虚果"
+  },
+  {
+   "lat": 33.658537,
+   "lon": 79.705291,
+   "name": "球巴多姜给日"
+  },
+  {
+   "lat": 33.65,
+   "lon": 78.77,
+   "name": "甲布隆仁莫",
+   "name_en": "Jablon Renmo"
+  },
+  {
+   "lat": 33.074138,
+   "lon": 78.467231,
+   "name": "Lagpo"
+  },
+  {
+   "lat": 33.385371,
+   "lon": 76.444802,
+   "name": "Kishtwar Shivling"
+  },
+  {
+   "lat": 33.456987,
+   "lon": 76.513778,
+   "name": "Klogaya Dost"
+  },
+  {
+   "lat": 32.862547,
+   "lon": 77.784085,
+   "name": "Lankagarh"
+  },
+  {
+   "lat": 32.860484,
+   "lon": 77.628536,
+   "name": "Lingti"
+  },
+  {
+   "lat": 33.447225,
+   "lon": 76.192127,
+   "name": "Arjuna"
+  },
+  {
+   "lat": 34.117454,
+   "lon": 76.04702,
+   "name": "Lingsarmo"
+  },
+  {
+   "lat": 33.704807,
+   "lon": 78.827569,
+   "name": "尖山咀（第一咀湖山）",
+   "name_en": "Jianshan Ju"
+  },
+  {
+   "lat": 32.806924,
+   "lon": 76.51398,
+   "name": "Charabu"
+  },
+  {
+   "lat": 32.681715,
+   "lon": 76.53446,
+   "name": "Dumgol"
+  },
+  {
+   "lat": 32.91523,
+   "lon": 76.526702,
+   "name": "Malanu"
+  },
+  {
+   "lat": 32.819022,
+   "lon": 76.552443,
+   "name": "Jatbam Jot"
+  },
+  {
+   "lat": 32.8217,
+   "lon": 76.600067,
+   "name": "Gurkha Parbat"
+  },
+  {
+   "lat": 33.323603,
+   "lon": 77.57297,
+   "name": "Djena"
+  },
+  {
+   "lat": 33.419537,
+   "lon": 77.033269,
+   "name": "Sulma Ri"
+  },
+  {
+   "lat": 32.674752,
+   "lon": 76.979812,
+   "name": "Kholumbar Goh"
+  },
+  {
+   "lat": 32.627177,
+   "lon": 76.991323,
+   "name": "Saro Goh"
+  },
+  {
+   "lat": 32.629073,
+   "lon": 77.064286,
+   "name": "Kair Kyoks"
+  },
+  {
+   "lat": 32.685865,
+   "lon": 77.261099,
+   "name": "Dartse"
+  },
+  {
+   "lat": 32.815507,
+   "lon": 77.532554,
+   "name": "Sarchu"
+  },
+  {
+   "lat": 33.13435,
+   "lon": 76.517688,
+   "name": "Tinglot"
+  },
+  {
+   "lat": 33.155707,
+   "lon": 76.82005,
+   "name": "Neverseen Tower"
+  },
+  {
+   "lat": 33.2133,
+   "lon": 77.199527,
+   "name": "Cho Kirze"
+  },
+  {
+   "lat": 33.156462,
+   "lon": 77.267359,
+   "name": "Zongabar"
+  },
+  {
+   "lat": 33.259552,
+   "lon": 76.981991,
+   "name": "Choshirok"
+  },
+  {
+   "lat": 33.126262,
+   "lon": 77.333279,
+   "name": "Shunpa"
+  },
+  {
+   "lat": 33.084191,
+   "lon": 77.399486,
+   "name": "Clek"
+  },
+  {
+   "lat": 32.750552,
+   "lon": 76.980404,
+   "name": "Gangsthang"
+  },
+  {
+   "lat": 32.853547,
+   "lon": 76.640474,
+   "name": "Duphao Jot"
+  },
+  {
+   "lat": 32.845408,
+   "lon": 76.670509,
+   "name": "Gurdhar"
+  },
+  {
+   "lat": 32.699314,
+   "lon": 76.875806,
+   "name": "Shilling"
+  },
+  {
+   "lat": 32.727078,
+   "lon": 76.920474,
+   "name": "Sattuda Par"
+  },
+  {
+   "lat": 32.775086,
+   "lon": 76.849992,
+   "name": "Siri Parbat"
+  },
+  {
+   "lat": 33.339132,
+   "lon": 76.538186,
+   "name": "Dandagoporum"
+  },
+  {
+   "lat": 33.333743,
+   "lon": 76.71808,
+   "name": "Padum Kangri"
+  },
+  {
+   "lat": 33.282428,
+   "lon": 76.48774,
+   "name": "Kalidahar"
+  },
+  {
+   "lat": 33.274372,
+   "lon": 76.367161,
+   "name": "Corner Peak"
+  },
+  {
+   "lat": 33.072531,
+   "lon": 76.71778,
+   "name": "Baleli"
+  },
+  {
+   "lat": 33.097568,
+   "lon": 76.734643,
+   "name": "Mund"
+  },
+  {
+   "lat": 32.884034,
+   "lon": 76.705914,
+   "name": "Churput Ghati"
+  },
+  {
+   "lat": 32.910837,
+   "lon": 76.837105,
+   "name": "Shingoti"
+  },
+  {
+   "lat": 32.935635,
+   "lon": 76.798028,
+   "name": "Dagai"
+  },
+  {
+   "lat": 33.299388,
+   "lon": 76.415193,
+   "name": "Topendo I"
+  },
+  {
+   "lat": 33.35775,
+   "lon": 76.492335,
+   "name": "Shibs Paher"
+  },
+  {
+   "lat": 33.352763,
+   "lon": 77.853615,
+   "name": "Rokchen"
+  },
+  {
+   "lat": 33.460355,
+   "lon": 76.378563,
+   "name": "Ganhar"
+  },
+  {
+   "lat": 33.683962,
+   "lon": 76.880531,
+   "name": "Pidmu"
+  },
+  {
+   "lat": 33.611587,
+   "lon": 76.892754,
+   "name": "Rinamphu"
+  },
+  {
+   "lat": 33.59968,
+   "lon": 76.95241,
+   "name": "Takpachangrigo"
+  },
+  {
+   "lat": 33.027231,
+   "lon": 76.368665,
+   "name": "Phindohar"
+  },
+  {
+   "lat": 32.964441,
+   "lon": 77.333037,
+   "name": "Kham Krap"
+  },
+  {
+   "lat": 32.69193,
+   "lon": 77.095976,
+   "name": "Gopathang"
+  },
+  {
+   "lat": 33.71304,
+   "lon": 78.555498,
+   "name": "Kangset Kangri"
+  },
+  {
+   "lat": 34.176441,
+   "lon": 78.874742,
+   "name": "Changchenmo"
+  },
+  {
+   "lat": 33.25015,
+   "lon": 78.795152,
+   "name": "Modu"
+  },
+  {
+   "lat": 32.692114,
+   "lon": 78.787277,
+   "name": "Zongchenmo"
+  },
+  {
+   "lat": 32.665375,
+   "lon": 78.038744,
+   "name": "Monto"
+  },
+  {
+   "lat": 33.069086,
+   "lon": 78.176046,
+   "name": "Yalung Nong"
+  },
+  {
+   "lat": 33.668068,
+   "lon": 77.787352,
+   "name": "Meru"
+  },
+  {
+   "lat": 33.912449,
+   "lon": 77.942792,
+   "name": "Pacheshpa"
+  },
+  {
+   "lat": 33.705225,
+   "lon": 78.079161,
+   "name": "Ichu"
+  },
+  {
+   "lat": 33.977416,
+   "lon": 78.046958,
+   "name": "Chilam"
+  },
+  {
+   "lat": 34.068762,
+   "lon": 78.052963,
+   "name": "Tangtse"
+  },
+  {
+   "lat": 34.192298,
+   "lon": 78.036991,
+   "name": "Shulung"
+  },
+  {
+   "lat": 34.174037,
+   "lon": 78.081634,
+   "name": "Parta"
+  },
+  {
+   "lat": 33.803552,
+   "lon": 78.466149,
+   "name": "Merag"
+  },
+  {
+   "lat": 33.436791,
+   "lon": 76.492724,
+   "name": "Bugjan"
+  },
+  {
+   "lat": 33.756574,
+   "lon": 76.338904,
+   "name": "Z3",
+   "wikidata": "Q20828817"
+  },
+  {
+   "lat": 33.829898,
+   "lon": 76.330755,
+   "name": "Z8"
+  },
+  {
+   "lat": 34.088298,
+   "lon": 76.695211,
+   "name": "Chomotang II"
+  },
+  {
+   "lat": 34.077027,
+   "lon": 76.673037,
+   "name": "Thorchuk I"
+  },
+  {
+   "lat": 33.734171,
+   "lon": 77.545027,
+   "name": "KY IV South Summit"
+  },
+  {
+   "lat": 33.724732,
+   "lon": 77.550195,
+   "name": "KY III"
+  },
+  {
+   "lat": 33.732976,
+   "lon": 77.576967,
+   "name": "RM II"
+  },
+  {
+   "lat": 33.845073,
+   "lon": 77.581358,
+   "name": "Nyimaling Kangri"
+  },
+  {
+   "lat": 33.959686,
+   "lon": 77.455277,
+   "name": "Shuku Kangri"
+  },
+  {
+   "lat": 33.935434,
+   "lon": 77.487082,
+   "name": "Golep Kangri"
+  },
+  {
+   "lat": 34.062809,
+   "lon": 77.324781,
+   "name": "Palam"
+  },
+  {
+   "lat": 34.050847,
+   "lon": 77.47395,
+   "name": "Rumbag kangri"
+  },
+  {
+   "lat": 34.009919,
+   "lon": 77.45335,
+   "name": "Parcha Kangri"
+  },
+  {
+   "lat": 33.888855,
+   "lon": 77.551542,
+   "name": "Matho Kangri"
+  },
+  {
+   "lat": 34.038435,
+   "lon": 77.084897,
+   "name": "Alam"
+  },
+  {
+   "lat": 33.411754,
+   "lon": 78.326753,
+   "name": "Kesar"
+  },
+  {
+   "lat": 33.579275,
+   "lon": 78.524136,
+   "name": "Phonka Kangri"
+  },
+  {
+   "lat": 33.700019,
+   "lon": 78.257503,
+   "name": "Largab"
+  },
+  {
+   "lat": 33.588433,
+   "lon": 78.019072,
+   "name": "Argi"
+  },
+  {
+   "lat": 33.678505,
+   "lon": 78.141745,
+   "name": "Nilashigo"
+  },
+  {
+   "lat": 33.612041,
+   "lon": 78.170173,
+   "name": "Kyungyam"
+  },
+  {
+   "lat": 33.48891,
+   "lon": 78.219944,
+   "name": "Gaplu"
+  },
+  {
+   "lat": 33.510151,
+   "lon": 78.043813,
+   "name": "Chokr"
+  },
+  {
+   "lat": 32.522313,
+   "lon": 77.354705,
+   "name": "M 8"
+  },
+  {
+   "lat": 32.531847,
+   "lon": 77.39971,
+   "name": "MULKILA M6"
+  },
+  {
+   "lat": 32.549156,
+   "lon": 77.402767,
+   "name": "M 5"
+  },
+  {
+   "lat": 34.172056,
+   "lon": 76.08624,
+   "name": "Lingsarmo"
+  },
+  {
+   "lat": 33.781786,
+   "lon": 76.198742,
+   "name": "Lalung-II"
+  },
+  {
+   "lat": 33.759852,
+   "lon": 76.235576,
+   "name": "Lalung-I"
+  },
+  {
+   "lat": 33.755986,
+   "lon": 76.198702,
+   "name": "Lalung III"
+  },
+  {
+   "lat": 32.624508,
+   "lon": 77.38973,
+   "name": "KR 7"
+  },
+  {
+   "lat": 32.629625,
+   "lon": 77.38859,
+   "name": "KR 6"
+  },
+  {
+   "lat": 32.640377,
+   "lon": 77.39203,
+   "name": "KR 5 , CB 7"
+  },
+  {
+   "lat": 32.6528,
+   "lon": 77.365761,
+   "name": "KR 4"
+  },
+  {
+   "lat": 32.667407,
+   "lon": 77.332884,
+   "name": "KR 3"
+  },
+  {
+   "lat": 32.677475,
+   "lon": 77.31891,
+   "name": "KR 2"
+  },
+  {
+   "lat": 32.668372,
+   "lon": 77.312312,
+   "name": "KR 1"
+  },
+  {
+   "lat": 33.523029,
+   "lon": 77.663865,
+   "name": "Khyam-II"
+  },
+  {
+   "lat": 33.502018,
+   "lon": 77.656436,
+   "name": "Khyam-I"
+  },
+  {
+   "lat": 33.946333,
+   "lon": 77.478945,
+   "name": "Kangri II"
+  },
+  {
+   "lat": 33.81733,
+   "lon": 76.163319,
+   "name": "Chiling-II"
+  },
+  {
+   "lat": 32.541926,
+   "lon": 77.444807,
+   "name": "CB 54"
+  },
+  {
+   "lat": 32.517326,
+   "lon": 77.396276,
+   "name": "CB 50"
+  },
+  {
+   "lat": 33.422935,
+   "lon": 76.119772,
+   "name": "Bobang"
+  },
+  {
+   "lat": 32.835118,
+   "lon": 76.58196,
+   "name": "Baihali Jot"
+  },
+  {
+   "lat": 34.046029,
+   "lon": 76.035164,
+   "name": "Pt 6148"
+  },
+  {
+   "lat": 33.646005,
+   "lon": 76.401639,
+   "name": "Pk.6000"
+  },
+  {
+   "lat": 32.666007,
+   "lon": 77.785232,
+   "name": "Nainghar Choti"
+  },
+  {
+   "lat": 32.686728,
+   "lon": 77.300694,
+   "name": "T2"
+  },
+  {
+   "lat": 32.539106,
+   "lon": 77.438484,
+   "name": "SHARMILI CB 53"
+  },
+  {
+   "lat": 33.93723,
+   "lon": 76.137594,
+   "name": "Shafat-III"
+  },
+  {
+   "lat": 34.034464,
+   "lon": 76.060378,
+   "name": "Rungofarka"
+  },
+  {
+   "lat": 32.506183,
+   "lon": 77.379049,
+   "name": "TILAKALHAR CB 49"
+  },
+  {
+   "lat": 32.533801,
+   "lon": 77.481856,
+   "name": "TAPU GIRI CB 57"
+  },
+  {
+   "lat": 32.535388,
+   "lon": 77.341983,
+   "name": "M 9"
+  },
+  {
+   "lat": 32.573821,
+   "lon": 77.412024,
+   "name": "M 3"
+  },
+  {
+   "lat": 32.601646,
+   "lon": 77.376135,
+   "name": "M 2"
+  },
+  {
+   "lat": 32.569589,
+   "lon": 77.32195,
+   "name": "M 10"
+  },
+  {
+   "lat": 32.613297,
+   "lon": 77.350842,
+   "name": "M 1"
+  },
+  {
+   "lat": 32.537913,
+   "lon": 77.454987,
+   "name": "CB 52"
+  },
+  {
+   "lat": 32.51535,
+   "lon": 77.418159,
+   "name": "CB 52"
+  },
+  {
+   "lat": 33.490538,
+   "lon": 77.631255,
+   "name": "Zara-I"
+  },
+  {
+   "lat": 33.699125,
+   "lon": 76.314081,
+   "name": "Z3"
+  },
+  {
+   "lat": 33.014683,
+   "lon": 76.091558,
+   "name": "Kukri da Sir"
+  },
+  {
+   "lat": 32.52276,
+   "lon": 77.381794,
+   "name": "TARAGIRI M 7"
+  },
+  {
+   "lat": 33.811589,
+   "lon": 76.104249,
+   "name": "Tanak"
+  },
+  {
+   "lat": 33.278497,
+   "lon": 77.097626,
+   "name": "Stiang"
+  },
+  {
+   "lat": 33.320299,
+   "lon": 77.091829,
+   "name": "Cha"
+  },
+  {
+   "lat": 33.37305,
+   "lon": 76.59046,
+   "name": "Chanochlor"
+  },
+  {
+   "lat": 33.427779,
+   "lon": 76.577786,
+   "name": "Umasi"
+  },
+  {
+   "lat": 32.720541,
+   "lon": 76.575351,
+   "name": "Balthal"
+  },
+  {
+   "lat": 32.855086,
+   "lon": 76.355643,
+   "name": "Kayon"
+  },
+  {
+   "lat": 32.90574,
+   "lon": 76.679753,
+   "name": "Piwa"
+  },
+  {
+   "lat": 32.95985,
+   "lon": 76.633801,
+   "name": "Kulma"
+  },
+  {
+   "lat": 33.990151,
+   "lon": 77.417467,
+   "name": "Choksti"
+  },
+  {
+   "lat": 34.09339,
+   "lon": 77.323466,
+   "name": "Phe"
+  },
+  {
+   "lat": 34.158389,
+   "lon": 77.256525,
+   "name": "Alchi"
+  },
+  {
+   "lat": 33.486865,
+   "lon": 77.75842,
+   "name": "Tanglang"
+  },
+  {
+   "lat": 33.545812,
+   "lon": 77.67482,
+   "name": "Gyamshu"
+  },
+  {
+   "lat": 33.412063,
+   "lon": 78.119059,
+   "name": "Kimne"
+  },
+  {
+   "lat": 33.809701,
+   "lon": 77.93726,
+   "name": "Kopni"
+  },
+  {
+   "lat": 33.810488,
+   "lon": 78.025395,
+   "name": "Tamki"
+  },
+  {
+   "lat": 33.877934,
+   "lon": 78.14676,
+   "name": "Rukheru"
+  },
+  {
+   "lat": 33.911098,
+   "lon": 78.339279,
+   "name": "Harong"
+  },
+  {
+   "lat": 34.173092,
+   "lon": 78.637197,
+   "name": "Pumdu"
+  },
+  {
+   "lat": 34.533324,
+   "lon": 76.727271,
+   "name": "Brok"
+  },
+  {
+   "lat": 34.390267,
+   "lon": 77.126555,
+   "name": "Shaili Kangri"
+  },
+  {
+   "lat": 34.452431,
+   "lon": 77.291393,
+   "name": "Ajangliung"
+  },
+  {
+   "lat": 34.443636,
+   "lon": 76.918609,
+   "name": "Spangpochigo"
+  },
+  {
+   "lat": 34.745033,
+   "lon": 77.37997,
+   "name": "Chimamur"
+  },
+  {
+   "lat": 33.625615,
+   "lon": 78.89751,
+   "name": "班公山"
+  },
+  {
+   "lat": 33.34489,
+   "lon": 78.718488,
+   "name": "Nechung"
+  },
+  {
+   "lat": 33.329019,
+   "lon": 78.106953,
+   "name": "Thugje"
+  },
+  {
+   "lat": 33.297754,
+   "lon": 78.7829,
+   "name": "Yaksir"
+  },
+  {
+   "lat": 33.630605,
+   "lon": 78.749043,
+   "name": "古朗山",
+   "name_en": "Gurung Hill"
+  },
+  {
+   "lat": 33.51448,
+   "lon": 78.789705,
+   "name": "玛格山",
+   "name_en": "Magar Hill"
+  },
+  {
+   "lat": 34.475525,
+   "lon": 77.847854,
+   "name": "Fatha"
+  },
+  {
+   "lat": 34.268468,
+   "lon": 77.494038,
+   "name": "Lasirmou"
+  },
+  {
+   "lat": 33.463553,
+   "lon": 79.780592,
+   "name": "朵赛宗"
+  },
+  {
+   "lat": 33.475474,
+   "lon": 79.747386,
+   "name": "查吉拉"
+  },
+  {
+   "lat": 33.487107,
+   "lon": 79.743652,
+   "name": "普古那隆"
+  },
+  {
+   "lat": 33.501067,
+   "lon": 78.80043,
+   "name": "穆赫帕里",
+   "name_en": "Mukhpari"
+  },
+  {
+   "lat": 33.541037,
+   "lon": 79.052596,
+   "name": "索拜邦阿",
+   "name_en": "Sobaibanga"
+  },
+  {
+   "lat": 33.570375,
+   "lon": 79.063759,
+   "name": "那嘎波",
+   "name_en": "Nagapo"
+  },
+  {
+   "lat": 33.798785,
+   "lon": 79.036592,
+   "name": "强隆贡玛",
+   "name_en": "Changlung Gongma"
+  },
+  {
+   "lat": 33.844682,
+   "lon": 78.920944,
+   "name": "沃玛隆"
+  },
+  {
+   "lat": 33.832939,
+   "lon": 78.850381,
+   "name": "尖山",
+   "name_en": "Jianshan"
+  },
+  {
+   "lat": 33.49275,
+   "lon": 79.157176,
+   "name": "扎嘎隆巴"
+  },
+  {
+   "lat": 33.451964,
+   "lon": 79.072572,
+   "name": "擦思岗"
+  },
+  {
+   "lat": 33.440183,
+   "lon": 79.005324,
+   "name": "索"
+  },
+  {
+   "lat": 33.461271,
+   "lon": 78.870067,
+   "name": "日庆隆",
+   "name_en": "Rechinlong"
+  },
+  {
+   "lat": 32.922519,
+   "lon": 76.590221,
+   "name": "Gokla Jot"
+  },
+  {
+   "lat": 32.899804,
+   "lon": 76.607623,
+   "name": "Tane Jot"
+  },
+  {
+   "lat": 35.484041,
+   "lon": 77.939579,
+   "name": "分水脊"
+  },
+  {
+   "lat": 32.84801,
+   "lon": 77.815389,
+   "name": "Bel"
+  },
+  {
+   "lat": 33.671819,
+   "lon": 78.750858,
+   "name": "鸭咀",
+   "name_en": "Yaju"
+  },
+  {
+   "lat": 33.676676,
+   "lon": 78.756823,
+   "name": "第五咀湖山",
+   "name_en": "Y5"
+  },
+  {
+   "lat": 33.684711,
+   "lon": 78.771973,
+   "name": "第四咀湖山",
+   "name_en": "Y4"
+  },
+  {
+   "lat": 33.687532,
+   "lon": 78.781672,
+   "name": "第三咀湖山",
+   "name_en": "Y3"
+  },
+  {
+   "lat": 33.693388,
+   "lon": 78.80712,
+   "name": "第二咀湖山",
+   "name_en": "Y2"
+  },
+  {
+   "lat": 32.744261,
+   "lon": 79.421443,
+   "name": "卡尔东",
+   "name_en": "Kardong"
+  },
+  {
+   "lat": 32.821416,
+   "lon": 79.356676,
+   "name": "Banchi",
+   "name_en": "Banchi"
+  },
+  {
+   "lat": 35.299014,
+   "lon": 78.018582,
+   "name": "长台子",
+   "name_en": "Changtaize"
+  },
+  {
+   "lat": 35.313905,
+   "lon": 78.041489,
+   "name": "观龙口",
+   "name_en": "Guanlongkou"
+  },
+  {
+   "lat": 35.303679,
+   "lon": 78.091706,
+   "name": "红山头"
+  },
+  {
+   "lat": 35.291828,
+   "lon": 78.076869,
+   "name": "黄羊山",
+   "name_en": "Huangyang"
+  },
+  {
+   "lat": 35.376771,
+   "lon": 78.20236,
+   "name": "天龙山"
+  },
+  {
+   "lat": 35.229918,
+   "lon": 78.082279,
+   "name": "太平山"
+  },
+  {
+   "lat": 35.150508,
+   "lon": 78.212162,
+   "name": "天鹰山",
+   "name_en": "Tianying"
+  },
+  {
+   "lat": 35.09677,
+   "lon": 78.241626,
+   "name": "大黑山",
+   "name_en": "Dahei"
+  },
+  {
+   "lat": 35.046453,
+   "lon": 78.26767,
+   "name": "牛蹄山"
+  },
+  {
+   "lat": 34.450971,
+   "lon": 79.119508,
+   "name": "陇坎山"
+  },
+  {
+   "lat": 33.073499,
+   "lon": 79.163885,
+   "name": "骆峰"
+  },
+  {
+   "lat": 34.634008,
+   "lon": 80.18939,
+   "name": "Drakgang Ri",
+   "name_en": "Drakgang Ri"
+  },
+  {
+   "lat": 33.739369,
+   "lon": 78.775668,
+   "name": "鲁鲁沃玛日"
+  },
+  {
+   "lat": 33.672292,
+   "lon": 78.708233,
+   "name": "Qiari"
+  },
+  {
+   "lat": 33.56903,
+   "lon": 78.733008,
+   "name": "莫尔多"
+  },
+  {
+   "lat": 33.589819,
+   "lon": 79.009021,
+   "name": "昌东日"
+  },
+  {
+   "lat": 33.77492,
+   "lon": 78.763787,
+   "name": "巴贡日"
+  },
+  {
+   "lat": 33.90467,
+   "lon": 78.763296,
+   "name": "德当日"
+  },
+  {
+   "lat": 33.99705,
+   "lon": 78.783484,
+   "name": "巴尔玛"
+  },
+  {
+   "lat": 34.03864,
+   "lon": 78.79957,
+   "name": "宁日",
+   "name_en": "Ningri"
+  },
+  {
+   "lat": 34.116673,
+   "lon": 78.824549,
+   "name": "荣那贡马恰荣",
+   "name_en": "Rongna Gongma"
+  },
+  {
+   "lat": 34.153452,
+   "lon": 78.928867,
+   "name": "西隆岗日",
+   "name_en": "Silungkang"
+  },
+  {
+   "lat": 35.240419,
+   "lon": 78.215044,
+   "name": "冰莲山",
+   "name_en": "Binglian"
+  },
+  {
+   "lat": 35.204031,
+   "lon": 78.212029,
+   "name": "碎石山",
+   "name_en": "Suishi peak"
+  },
+  {
+   "lat": 34.124784,
+   "lon": 79.033762,
+   "name": "平顶山",
+   "name_en": "Pingding"
+  },
+  {
+   "lat": 34.124927,
+   "lon": 79.072968,
+   "name": "五峰尖",
+   "name_en": "Wufeng Jian"
+  },
+  {
+   "lat": 34.081695,
+   "lon": 79.011901,
+   "name": "鼓风山"
+  },
+  {
+   "lat": 33.389793,
+   "lon": 79.527161,
+   "name": "曲念"
+  },
+  {
+   "lat": 33.421329,
+   "lon": 79.632257,
+   "name": "玛姆",
+   "name_en": "Mamu"
+  },
+  {
+   "lat": 33.421479,
+   "lon": 79.620087,
+   "name": "杨宫浦谷",
+   "name_en": "Yanggong"
+  },
+  {
+   "lat": 33.414298,
+   "lon": 79.620178,
+   "name": "日玛日",
+   "name_en": "Rima"
+  },
+  {
+   "lat": 33.411074,
+   "lon": 79.6129,
+   "name": "热达那卡",
+   "name_en": "Redanaka"
+  },
+  {
+   "lat": 33.412573,
+   "lon": 79.605506,
+   "name": "丁戛钦"
+  },
+  {
+   "lat": 33.424093,
+   "lon": 79.612798,
+   "name": "孔琼",
+   "name_en": "Kongqiong"
+  },
+  {
+   "lat": 33.428325,
+   "lon": 79.599581,
+   "name": "唐多萨仁"
+  },
+  {
+   "lat": 33.431379,
+   "lon": 79.622718,
+   "name": "炮嫁日"
+  },
+  {
+   "lat": 33.433756,
+   "lon": 79.639605,
+   "name": "董吉日"
+  },
+  {
+   "lat": 33.440795,
+   "lon": 79.641152,
+   "name": "嘎孜"
+  },
+  {
+   "lat": 33.44589,
+   "lon": 79.62549,
+   "name": "奇热曲果"
+  },
+  {
+   "lat": 33.451318,
+   "lon": 79.617546,
+   "name": "杂坑布路"
+  },
+  {
+   "lat": 33.455778,
+   "lon": 79.601414,
+   "name": "八巴日"
+  },
+  {
+   "lat": 33.545901,
+   "lon": 79.001741,
+   "name": "真隆"
+  },
+  {
+   "lat": 33.531385,
+   "lon": 78.80249,
+   "name": "大南山",
+   "name_en": "Mt. Onami"
+  },
+  {
+   "lat": 33.718723,
+   "lon": 79.186879,
+   "name": "夏岗",
+   "name_en": "Xiagang"
+  },
+  {
+   "lat": 33.625818,
+   "lon": 79.48365,
+   "name": "夏尔聂帕玛赖"
+  },
+  {
+   "lat": 33.007171,
+   "lon": 76.106257,
+   "name": "Melhar"
+  },
+  {
+   "lat": 33.199162,
+   "lon": 76.125156,
+   "name": "Rau"
+  },
+  {
+   "lat": 33.00926,
+   "lon": 76.47539,
+   "name": "Sauoh"
+  },
+  {
+   "lat": 33.35758,
+   "lon": 76.156197,
+   "name": "Kuninau"
+  },
+  {
+   "lat": 33.284946,
+   "lon": 76.232864,
+   "name": "Shamant Sund"
+  },
+  {
+   "lat": 33.399444,
+   "lon": 76.419954,
+   "name": "Madhav Rigo"
+  },
+  {
+   "lat": 33.356767,
+   "lon": 76.345989,
+   "name": "Raul"
+  },
+  {
+   "lat": 33.365657,
+   "lon": 76.317277,
+   "name": "Bion"
+  },
+  {
+   "lat": 33.300389,
+   "lon": 76.273188,
+   "name": "Garudeo"
+  },
+  {
+   "lat": 33.322533,
+   "lon": 76.298593,
+   "name": "Gharol"
+  },
+  {
+   "lat": 33.041936,
+   "lon": 76.404363,
+   "name": "Phinphar"
+  },
+  {
+   "lat": 33.042802,
+   "lon": 76.470519,
+   "name": "Piri"
+  },
+  {
+   "lat": 33.073035,
+   "lon": 76.458371,
+   "name": "Damman"
+  },
+  {
+   "lat": 33.183027,
+   "lon": 76.265518,
+   "name": "Manzot"
+  },
+  {
+   "lat": 33.428022,
+   "lon": 76.272786,
+   "name": "Zagal"
+  },
+  {
+   "lat": 33.497109,
+   "lon": 76.313004,
+   "name": "Tewari Kheng"
+  },
+  {
+   "lat": 33.07421,
+   "lon": 76.023503,
+   "name": "Nijan"
+  },
+  {
+   "lat": 33.058075,
+   "lon": 76.082554,
+   "name": "Manjini"
+  },
+  {
+   "lat": 33.14914,
+   "lon": 76.188558,
+   "name": "Diabu"
+  },
+  {
+   "lat": 33.169652,
+   "lon": 76.161265,
+   "name": "Sitegal"
+  },
+  {
+   "lat": 33.388843,
+   "lon": 76.255236,
+   "name": "Punchi"
+  },
+  {
+   "lat": 33.4048,
+   "lon": 76.19755,
+   "name": "Kuthal"
+  },
+  {
+   "lat": 33.36975,
+   "lon": 76.104475,
+   "name": "Nagini"
+  },
+  {
+   "lat": 33.455335,
+   "lon": 76.079931,
+   "name": "Bramah"
+  },
+  {
+   "lat": 33.755459,
+   "lon": 76.189585,
+   "name": "Lallung II"
+  },
+  {
+   "lat": 33.092978,
+   "lon": 76.331903,
+   "name": "Pirgao"
+  },
+  {
+   "lat": 32.812354,
+   "lon": 76.001197,
+   "name": "Shipan"
+  },
+  {
+   "lat": 32.657045,
+   "lon": 76.975987,
+   "name": "Ringun ka Dandi Tibba"
+  },
+  {
+   "lat": 32.564899,
+   "lon": 77.203546,
+   "name": "Goplang Goh"
+  },
+  {
+   "lat": 32.809713,
+   "lon": 77.142327,
+   "name": "Tingjuta"
+  },
+  {
+   "lat": 33.961091,
+   "lon": 77.746114,
+   "name": "Shisher"
+  },
+  {
+   "lat": 34.048493,
+   "lon": 77.102485,
+   "name": "Photaksar"
+  },
+  {
+   "lat": 34.168241,
+   "lon": 77.381311,
+   "name": "Nimu"
+  },
+  {
+   "lat": 32.506649,
+   "lon": 77.63802,
+   "name": "Pingulung Asma"
+  },
+  {
+   "lat": 32.752055,
+   "lon": 76.741905,
+   "name": "Dohbrang"
+  },
+  {
+   "lat": 32.768367,
+   "lon": 76.812072,
+   "name": "Siria Goh"
+  },
+  {
+   "lat": 32.742851,
+   "lon": 76.919317,
+   "name": "Sattu da Par"
+  },
+  {
+   "lat": 32.712525,
+   "lon": 76.981716,
+   "name": "Gumashbehi Goh"
+  },
+  {
+   "lat": 32.803544,
+   "lon": 76.47362,
+   "name": "Chhabaru"
+  },
+  {
+   "lat": 32.801542,
+   "lon": 76.491044,
+   "name": "Nain Gahar"
+  },
+  {
+   "lat": 32.851777,
+   "lon": 76.605284,
+   "name": "Duphao Jot"
+  },
+  {
+   "lat": 32.919475,
+   "lon": 76.352599,
+   "name": "Alipatan"
+  },
+  {
+   "lat": 32.53871,
+   "lon": 76.826062,
+   "name": "Grechu Jot"
+  },
+  {
+   "lat": 33.070362,
+   "lon": 76.689098,
+   "name": "Baleli Jot"
+  },
+  {
+   "lat": 32.926932,
+   "lon": 76.692874,
+   "name": "Dhupru Jot"
+  },
+  {
+   "lat": 33.582269,
+   "lon": 76.875908,
+   "name": "Chorila"
+  },
+  {
+   "lat": 34.01304,
+   "lon": 77.334394,
+   "name": "Manjkeo"
+  },
+  {
+   "lat": 33.882423,
+   "lon": 77.192302,
+   "name": "Namlas"
+  },
+  {
+   "lat": 34.090661,
+   "lon": 76.90846,
+   "name": "Shichan"
+  },
+  {
+   "lat": 34.133476,
+   "lon": 77.003088,
+   "name": "Changlung"
+  },
+  {
+   "lat": 34.361718,
+   "lon": 76.507459,
+   "name": "Singekhabar Dans"
+  },
+  {
+   "lat": 34.356617,
+   "lon": 76.522694,
+   "name": "Barqphoche"
+  },
+  {
+   "lat": 34.252109,
+   "lon": 76.671009,
+   "name": "Shorka"
+  },
+  {
+   "lat": 34.250974,
+   "lon": 76.696415,
+   "name": "Pamsi Phu"
+  },
+  {
+   "lat": 34.417248,
+   "lon": 76.588354,
+   "name": "Jhalde"
+  },
+  {
+   "lat": 34.367457,
+   "lon": 76.201987,
+   "name": "Zabra Chhupo"
+  },
+  {
+   "lat": 34.427656,
+   "lon": 76.343479,
+   "name": "Numi Go"
+  },
+  {
+   "lat": 34.471786,
+   "lon": 76.426477,
+   "name": "Thang"
+  },
+  {
+   "lat": 34.457279,
+   "lon": 76.417251,
+   "name": "Kayonli"
+  },
+  {
+   "lat": 34.449423,
+   "lon": 76.394033,
+   "name": "Biyachhuthasa"
+  },
+  {
+   "lat": 34.438558,
+   "lon": 76.375537,
+   "name": "Shakar Kayonli"
+  },
+  {
+   "lat": 34.439549,
+   "lon": 76.363778,
+   "name": "Kyonli"
+  },
+  {
+   "lat": 34.414026,
+   "lon": 76.172933,
+   "name": "Naktul"
+  },
+  {
+   "lat": 34.381484,
+   "lon": 76.058264,
+   "name": "Tsojon"
+  },
+  {
+   "lat": 34.370326,
+   "lon": 76.06144,
+   "name": "Jon"
+  },
+  {
+   "lat": 34.288637,
+   "lon": 76.154265,
+   "name": "Chhumeg Chen"
+  },
+  {
+   "lat": 34.426452,
+   "lon": 76.563077,
+   "name": "Saser Nyaga"
+  },
+  {
+   "lat": 34.528515,
+   "lon": 76.049466,
+   "name": "Somau"
+  },
+  {
+   "lat": 33.10603,
+   "lon": 79.364339,
+   "name": "则木日",
+   "name_en": "Tsemo"
+  },
+  {
+   "lat": 33.176489,
+   "lon": 79.515739,
+   "name": "хребет Дзомолунг-Ри",
+   "name_ru": "хребет Дзомолунг-Ри",
+   "name_en": "Zomolung peak"
+  },
+  {
+   "lat": 33.313409,
+   "lon": 76.625927,
+   "name": "Kishtwar Kailash"
+  },
+  {
+   "lat": 34.257301,
+   "lon": 79.170655,
+   "name": "Kepsang",
+   "name_en": "Kepsang"
+  },
+  {
+   "lat": 34.403971,
+   "lon": 77.604428,
+   "name": "Kardung"
+  },
+  {
+   "lat": 34.331246,
+   "lon": 77.610641,
+   "name": "Pulu Kardung"
+  },
+  {
+   "lat": 34.279914,
+   "lon": 77.721019,
+   "name": "Digar"
+  },
+  {
+   "lat": 34.306612,
+   "lon": 77.691793,
+   "name": "Nangtase"
+  },
+  {
+   "lat": 33.828501,
+   "lon": 77.603173,
+   "name": "Chogdo Ri"
+  },
+  {
+   "lat": 34.631901,
+   "lon": 77.526655,
+   "name": "Charasa"
+  },
+  {
+   "lat": 32.520919,
+   "lon": 76.912061,
+   "name": "Dharoni Jot"
+  },
+  {
+   "lat": 32.598806,
+   "lon": 77.035312,
+   "name": "Pt. 4560"
+  },
+  {
+   "lat": 33.664285,
+   "lon": 79.065307,
+   "name": "Mumkum",
+   "name_en": "Mumkum"
+  },
+  {
+   "lat": 32.664333,
+   "lon": 76.983974,
+   "name": "Yangring ka Dani"
+  },
+  {
+   "lat": 32.926827,
+   "lon": 76.661733,
+   "name": "Piwa"
+  },
+  {
+   "lat": 32.534723,
+   "lon": 76.864607,
+   "name": "Selti Choar"
+  },
+  {
+   "lat": 32.948984,
+   "lon": 76.672503,
+   "name": "Kaotal Jot"
+  },
+  {
+   "lat": 32.802033,
+   "lon": 76.242192,
+   "name": "Tali Tibba"
+  },
+  {
+   "lat": 35.340457,
+   "lon": 76.272969,
+   "name": "Bondit Peak"
+  },
+  {
+   "lat": 35.271043,
+   "lon": 76.430061,
+   "name": "Haldi Cones"
+  },
+  {
+   "lat": 32.680778,
+   "lon": 76.831384,
+   "name": "Sheling"
+  },
+  {
+   "lat": 35.472027,
+   "lon": 76.571939,
+   "name": "6577"
+  },
+  {
+   "lat": 33.583689,
+   "lon": 77.661217,
+   "name": "Pt 5885"
+  },
+  {
+   "lat": 33.536144,
+   "lon": 77.676093,
+   "name": "Pt 6055"
+  },
+  {
+   "lat": 33.28695,
+   "lon": 78.237756,
+   "name": "Chomo chonkar 1"
+  },
+  {
+   "lat": 33.29418,
+   "lon": 78.234536,
+   "name": "Chomo chankar 2"
+  },
+  {
+   "lat": 33.305648,
+   "lon": 78.242602,
+   "name": "Sirsi Kangri"
+  },
+  {
+   "lat": 33.145228,
+   "lon": 78.407385,
+   "name": "Lachit Kangri"
+  },
+  {
+   "lat": 33.143512,
+   "lon": 78.195735,
+   "name": "Zes Ri (6010 m)"
+  },
+  {
+   "lat": 33.125941,
+   "lon": 78.174631,
+   "name": "Spangnak Ri (6370 m)"
+  },
+  {
+   "lat": 33.143512,
+   "lon": 78.195735,
+   "name": "Zes Ri (6010 m)"
+  },
+  {
+   "lat": 33.125941,
+   "lon": 78.174631,
+   "name": "Spangnak Ri (6370 m)"
+  },
+  {
+   "lat": 32.527507,
+   "lon": 79.382328,
+   "name": "苏朗"
+  },
+  {
+   "lat": 32.573256,
+   "lon": 79.483686,
+   "name": "瓦热尔丁",
+   "wikidata": "Q28254787"
+  },
+  {
+   "lat": 32.650857,
+   "lon": 79.452395,
+   "name": "岗姆隆"
+  },
+  {
+   "lat": 32.810271,
+   "lon": 79.28622,
+   "name": "Sinaklung",
+   "name_en": "Sinaklung"
+  },
+  {
+   "lat": 32.851112,
+   "lon": 79.3258,
+   "name": "岗加纳尔"
+  },
+  {
+   "lat": 32.651298,
+   "lon": 79.548148,
+   "name": "色木扎"
+  },
+  {
+   "lat": 32.643676,
+   "lon": 79.56629,
+   "name": "甲不拉隆"
+  },
+  {
+   "lat": 32.676808,
+   "lon": 79.520744,
+   "name": "曾木山"
+  },
+  {
+   "lat": 32.771425,
+   "lon": 79.46618,
+   "name": "噶伦热"
+  },
+  {
+   "lat": 32.763136,
+   "lon": 79.453724,
+   "name": "索波热"
+  },
+  {
+   "lat": 32.788576,
+   "lon": 79.432298,
+   "name": "扎拉群宗"
+  },
+  {
+   "lat": 32.852257,
+   "lon": 79.408366,
+   "name": "丘多瓦隆"
+  },
+  {
+   "lat": 32.93188,
+   "lon": 79.398694,
+   "name": "俄耳东热"
+  },
+  {
+   "lat": 33.021889,
+   "lon": 79.37257,
+   "name": "生色科尔多"
+  },
+  {
+   "lat": 33.080115,
+   "lon": 79.366561,
+   "name": "莱盲那波"
+  },
+  {
+   "lat": 33.088257,
+   "lon": 79.331584,
+   "name": "尼早赛勒波"
+  },
+  {
+   "lat": 32.979346,
+   "lon": 79.210798,
+   "name": "那贡"
+  },
+  {
+   "lat": 32.539678,
+   "lon": 79.527287,
+   "name": "嘎戈木隆"
+  },
+  {
+   "lat": 32.58727,
+   "lon": 79.548195,
+   "name": "卡过"
+  },
+  {
+   "lat": 33.745905,
+   "lon": 78.877849,
+   "name": "蝙蝠山"
+  },
+  {
+   "lat": 32.971311,
+   "lon": 79.218939,
+   "name": "昂藏"
+  },
+  {
+   "lat": 34.618424,
+   "lon": 78.462996,
+   "name": "双平顶"
+  },
+  {
+   "lat": 32.754967,
+   "lon": 79.412755,
+   "name": "卡尔果-Kargo"
+  },
+  {
+   "lat": 32.917797,
+   "lon": 79.294066,
+   "name": "象山"
+  },
+  {
+   "lat": 32.898943,
+   "lon": 79.297962,
+   "name": "龟山"
+  },
+  {
+   "lat": 32.573904,
+   "lon": 79.373434,
+   "name": "如布顶"
+  },
+  {
+   "lat": 35.178184,
+   "lon": 78.055134,
+   "name": "大平山"
+  },
+  {
+   "lat": 35.065448,
+   "lon": 78.472986,
+   "name": "长虹山"
+  },
+  {
+   "lat": 35.025909,
+   "lon": 78.54519,
+   "name": "平台山"
+  },
+  {
+   "lat": 35.017434,
+   "lon": 78.589845,
+   "name": "红蛇山"
+  },
+  {
+   "lat": 35.004059,
+   "lon": 78.675265,
+   "name": "驼峰山南山"
+  },
+  {
+   "lat": 35.084758,
+   "lon": 78.546312,
+   "name": "龙山岭"
+  },
+  {
+   "lat": 35.135123,
+   "lon": 78.519413,
+   "name": "化石山"
+  },
+  {
+   "lat": 35.124672,
+   "lon": 78.459835,
+   "name": "豹子山"
+  },
+  {
+   "lat": 35.124554,
+   "lon": 78.402528,
+   "name": "红云顶"
+  },
+  {
+   "lat": 35.236561,
+   "lon": 78.417257,
+   "name": "天岭山"
+  },
+  {
+   "lat": 35.253231,
+   "lon": 78.463249,
+   "name": "长山岭"
+  },
+  {
+   "lat": 35.194619,
+   "lon": 78.74352,
+   "name": "尖山"
+  },
+  {
+   "lat": 35.384926,
+   "lon": 78.873394,
+   "name": "驼峰山西山"
+  },
+  {
+   "lat": 35.396456,
+   "lon": 78.892458,
+   "name": "驼峰山东山"
+  },
+  {
+   "lat": 35.008406,
+   "lon": 78.676724,
+   "name": "驼峰山北山"
+  },
+  {
+   "lat": 35.362433,
+   "lon": 78.792726,
+   "name": "长红山"
+  },
+  {
+   "lat": 35.429078,
+   "lon": 78.655876,
+   "name": "冬瓜山"
+  },
+  {
+   "lat": 35.477102,
+   "lon": 78.650908,
+   "name": "黑尖山"
+  },
+  {
+   "lat": 35.319885,
+   "lon": 78.643312,
+   "name": "石峰山"
+  },
+  {
+   "lat": 35.337206,
+   "lon": 78.631406,
+   "name": "黑山峰"
+  },
+  {
+   "lat": 35.364344,
+   "lon": 78.658167,
+   "name": "长山岭"
+  },
+  {
+   "lat": 35.328855,
+   "lon": 78.586596,
+   "name": "小红山"
+  },
+  {
+   "lat": 35.423442,
+   "lon": 78.473611,
+   "name": "红头岭"
+  },
+  {
+   "lat": 35.486314,
+   "lon": 78.432548,
+   "name": "红顶山"
+  },
+  {
+   "lat": 35.411971,
+   "lon": 78.363394,
+   "name": "克兹尔塔格"
+  },
+  {
+   "lat": 35.230263,
+   "lon": 78.260818,
+   "name": "红土岭"
+  },
+  {
+   "lat": 35.49258,
+   "lon": 78.118679,
+   "name": "白石山"
+  },
+  {
+   "lat": 35.465471,
+   "lon": 78.161164,
+   "name": "长形山"
+  },
+  {
+   "lat": 35.412117,
+   "lon": 78.181086,
+   "name": "绿头山"
+  },
+  {
+   "lat": 35.030634,
+   "lon": 78.158299,
+   "name": "石峡"
+  },
+  {
+   "lat": 35.114013,
+   "lon": 78.253737,
+   "name": "天河岭"
+  },
+  {
+   "lat": 35.132854,
+   "lon": 78.289615,
+   "name": "小红山"
+  },
+  {
+   "lat": 35.075439,
+   "lon": 78.308623,
+   "name": "半头崖"
+  },
+  {
+   "lat": 35.05342,
+   "lon": 78.357169,
+   "name": "场北顶"
+  },
+  {
+   "lat": 35.01609,
+   "lon": 78.365827,
+   "name": "场南顶"
+  },
+  {
+   "lat": 33.546664,
+   "lon": 76.616635,
+   "name": "Chotzanmga Central"
+  },
+  {
+   "lat": 33.362455,
+   "lon": 79.256572,
+   "name": "热玛日"
+  },
+  {
+   "lat": 33.495713,
+   "lon": 79.359296,
+   "name": "恰唐拉"
+  },
+  {
+   "lat": 33.49088,
+   "lon": 79.285067,
+   "name": "班公山"
+  },
+  {
+   "lat": 33.529771,
+   "lon": 79.268319,
+   "name": "吉隆尔苏"
+  },
+  {
+   "lat": 33.613436,
+   "lon": 79.25557,
+   "name": "董仁"
+  },
+  {
+   "lat": 33.549683,
+   "lon": 79.231163,
+   "name": "阿木隆日"
+  },
+  {
+   "lat": 33.563192,
+   "lon": 79.194632,
+   "name": "扎嘎勒"
+  },
+  {
+   "lat": 33.576674,
+   "lon": 79.174334,
+   "name": "羌隆日"
+  },
+  {
+   "lat": 33.589563,
+   "lon": 79.155137,
+   "name": "杂嘎日"
+  },
+  {
+   "lat": 33.621789,
+   "lon": 79.166964,
+   "name": "孜尼"
+  },
+  {
+   "lat": 33.704771,
+   "lon": 79.192761,
+   "name": "曼岗"
+  },
+  {
+   "lat": 33.478407,
+   "lon": 79.235011,
+   "name": "隆雄嘎尔波"
+  },
+  {
+   "lat": 33.44924,
+   "lon": 79.200603,
+   "name": "垄玛嘎岔"
+  },
+  {
+   "lat": 33.453135,
+   "lon": 79.172967,
+   "name": "念查"
+  },
+  {
+   "lat": 33.518904,
+   "lon": 79.131593,
+   "name": "塔坎巴"
+  },
+  {
+   "lat": 33.531973,
+   "lon": 79.039726,
+   "name": "昌拉波"
+  },
+  {
+   "lat": 35.069488,
+   "lon": 76.966441,
+   "name": "Chuchuri"
+  },
+  {
+   "lat": 32.734758,
+   "lon": 79.433283,
+   "name": "黄山头"
+  },
+  {
+   "lat": 32.730895,
+   "lon": 79.435833,
+   "name": "黑山头"
+  },
+  {
+   "lat": 34.549703,
+   "lon": 78.654494,
+   "name": "平顶光山"
+  },
+  {
+   "lat": 34.494268,
+   "lon": 78.782772,
+   "name": "二龙山"
+  },
+  {
+   "lat": 34.684392,
+   "lon": 78.77385,
+   "name": "大岭头"
+  },
+  {
+   "lat": 34.72053,
+   "lon": 78.773413,
+   "name": "长岭"
+  },
+  {
+   "lat": 34.752469,
+   "lon": 78.77219,
+   "name": "适应山"
+  },
+  {
+   "lat": 34.814326,
+   "lon": 78.76676,
+   "name": "红土山"
+  },
+  {
+   "lat": 34.802594,
+   "lon": 78.899983,
+   "name": "尖山"
+  },
+  {
+   "lat": 34.815078,
+   "lon": 78.853181,
+   "name": "拐角山"
+  },
+  {
+   "lat": 34.792332,
+   "lon": 78.81739,
+   "name": "光头山"
+  },
+  {
+   "lat": 34.77616,
+   "lon": 78.818708,
+   "name": "三角山"
+  },
+  {
+   "lat": 34.759953,
+   "lon": 78.854853,
+   "name": "象鼻山"
+  },
+  {
+   "lat": 34.737983,
+   "lon": 78.822397,
+   "name": "黑头山"
+  },
+  {
+   "lat": 34.704836,
+   "lon": 78.802764,
+   "name": "平山顶"
+  },
+  {
+   "lat": 34.701197,
+   "lon": 78.826032,
+   "name": "凤凰岭"
+  },
+  {
+   "lat": 34.706491,
+   "lon": 78.887079,
+   "name": "莲花山"
+  },
+  {
+   "lat": 34.676725,
+   "lon": 78.928477,
+   "name": "河边崖"
+  },
+  {
+   "lat": 34.692335,
+   "lon": 78.95837,
+   "name": "龟山"
+  },
+  {
+   "lat": 34.720078,
+   "lon": 78.929294,
+   "name": "靴形山"
+  },
+  {
+   "lat": 34.769232,
+   "lon": 78.940901,
+   "name": "盘龙山"
+  },
+  {
+   "lat": 34.781995,
+   "lon": 78.973671,
+   "name": "路边山"
+  },
+  {
+   "lat": 34.750595,
+   "lon": 78.971653,
+   "name": "鹰嘴山"
+  },
+  {
+   "lat": 34.738536,
+   "lon": 78.996582,
+   "name": "蛇山"
+  },
+  {
+   "lat": 34.665451,
+   "lon": 78.99054,
+   "name": "东红山"
+  },
+  {
+   "lat": 34.604909,
+   "lon": 79.02965,
+   "name": "长平岭"
+  },
+  {
+   "lat": 34.580859,
+   "lon": 79.059288,
+   "name": "红南山"
+  },
+  {
+   "lat": 34.547624,
+   "lon": 79.033385,
+   "name": "和尚顶"
+  },
+  {
+   "lat": 34.549425,
+   "lon": 79.016798,
+   "name": "长山"
+  },
+  {
+   "lat": 34.55945,
+   "lon": 79.089699,
+   "name": "神仙山"
+  },
+  {
+   "lat": 34.56616,
+   "lon": 79.155183,
+   "name": "笔架山"
+  },
+  {
+   "lat": 34.565997,
+   "lon": 79.259168,
+   "name": "月牙山"
+  },
+  {
+   "lat": 34.503843,
+   "lon": 79.274549,
+   "name": "歪头山"
+  },
+  {
+   "lat": 34.502379,
+   "lon": 79.326495,
+   "name": "棺材头"
+  },
+  {
+   "lat": 34.438216,
+   "lon": 79.381475,
+   "name": "沙雷塔格山"
+  },
+  {
+   "lat": 34.304277,
+   "lon": 79.380176,
+   "name": "眺望峰"
+  },
+  {
+   "lat": 34.275149,
+   "lon": 79.392432,
+   "name": "紫巾山"
+  },
+  {
+   "lat": 34.253485,
+   "lon": 79.297783,
+   "name": "月牙山"
+  },
+  {
+   "lat": 34.983749,
+   "lon": 78.291018,
+   "name": "两头尖"
+  },
+  {
+   "lat": 34.977706,
+   "lon": 78.331729,
+   "name": "独山头"
+  },
+  {
+   "lat": 34.970411,
+   "lon": 78.353841,
+   "name": "马鞍岭"
+  },
+  {
+   "lat": 34.963968,
+   "lon": 78.364486,
+   "name": "河西大雪山"
+  },
+  {
+   "lat": 34.945746,
+   "lon": 78.387491,
+   "name": "冬瓜山"
+  },
+  {
+   "lat": 34.927767,
+   "lon": 78.376634,
+   "name": "仙人尖"
+  },
+  {
+   "lat": 34.937834,
+   "lon": 78.350164,
+   "name": "小毛尖"
+  },
+  {
+   "lat": 34.940726,
+   "lon": 78.339852,
+   "name": "小毛尖"
+  },
+  {
+   "lat": 34.904881,
+   "lon": 78.350923,
+   "name": "宫殿山"
+  },
+  {
+   "lat": 34.930538,
+   "lon": 78.325888,
+   "name": "石云峰"
+  },
+  {
+   "lat": 34.948908,
+   "lon": 78.31326,
+   "name": "大帽顶"
+  },
+  {
+   "lat": 34.891086,
+   "lon": 78.405165,
+   "name": "云雾尖"
+  },
+  {
+   "lat": 34.880903,
+   "lon": 78.411085,
+   "name": "石蛇岭"
+  },
+  {
+   "lat": 34.903501,
+   "lon": 78.442391,
+   "name": "金龙山"
+  },
+  {
+   "lat": 34.884225,
+   "lon": 78.469249,
+   "name": "元宝山"
+  },
+  {
+   "lat": 34.946363,
+   "lon": 78.481599,
+   "name": "长岭"
+  },
+  {
+   "lat": 34.946025,
+   "lon": 78.543199,
+   "name": "鱼尾山"
+  },
+  {
+   "lat": 34.930673,
+   "lon": 78.601594,
+   "name": "元宝山"
+  },
+  {
+   "lat": 34.867235,
+   "lon": 78.513025,
+   "name": "横山"
+  },
+  {
+   "lat": 34.869796,
+   "lon": 78.269204,
+   "name": "双峰顶"
+  },
+  {
+   "lat": 34.881279,
+   "lon": 78.277765,
+   "name": "花石岩"
+  },
+  {
+   "lat": 34.740096,
+   "lon": 78.363256,
+   "name": "始策山"
+  },
+  {
+   "lat": 34.780349,
+   "lon": 78.393594,
+   "name": "玉顶峰"
+  },
+  {
+   "lat": 34.894603,
+   "lon": 78.676802,
+   "name": "大南山"
+  },
+  {
+   "lat": 34.872585,
+   "lon": 78.752276,
+   "name": "大平岗"
+  },
+  {
+   "lat": 34.896752,
+   "lon": 78.831687,
+   "name": "螺山"
+  },
+  {
+   "lat": 34.8415,
+   "lon": 78.708041,
+   "name": "元山"
+  },
+  {
+   "lat": 34.819171,
+   "lon": 78.698902,
+   "name": "红石山"
+  },
+  {
+   "lat": 34.794005,
+   "lon": 78.676263,
+   "name": "黑石山"
+  },
+  {
+   "lat": 34.734229,
+   "lon": 78.586355,
+   "name": "乌山"
+  },
+  {
+   "lat": 32.63046,
+   "lon": 79.406973,
+   "name": "格布尼都"
+  },
+  {
+   "lat": 33.73977,
+   "lon": 78.81569,
+   "name": "塞利穷"
+  },
+  {
+   "lat": 33.573653,
+   "lon": 78.737896,
+   "name": "骆驼背"
+  },
+  {
+   "lat": 33.852758,
+   "lon": 79.216151,
+   "name": "凤火山"
+  },
+  {
+   "lat": 33.972307,
+   "lon": 79.148075,
+   "name": "凤凰山"
+  },
+  {
+   "lat": 33.914882,
+   "lon": 79.219547,
+   "name": "黄土山"
+  },
+  {
+   "lat": 33.941204,
+   "lon": 79.241169,
+   "name": "梅花山"
+  },
+  {
+   "lat": 33.953514,
+   "lon": 79.210744,
+   "name": "八宝山"
+  },
+  {
+   "lat": 33.882016,
+   "lon": 79.135789,
+   "name": "月芽山"
+  },
+  {
+   "lat": 33.852663,
+   "lon": 79.13562,
+   "name": "岩头山"
+  },
+  {
+   "lat": 33.886985,
+   "lon": 79.096592,
+   "name": "五峰尖"
+  },
+  {
+   "lat": 33.937572,
+   "lon": 79.117604,
+   "name": "黑山头"
+  },
+  {
+   "lat": 33.943271,
+   "lon": 79.079437,
+   "name": "鱼尾山"
+  },
+  {
+   "lat": 33.945285,
+   "lon": 79.046871,
+   "name": "平顶山"
+  },
+  {
+   "lat": 33.835111,
+   "lon": 79.055571,
+   "name": "湖背山"
+  },
+  {
+   "lat": 33.876155,
+   "lon": 79.025996,
+   "name": "二峰山"
+  },
+  {
+   "lat": 33.90796,
+   "lon": 79.01759,
+   "name": "串家山"
+  },
+  {
+   "lat": 33.911849,
+   "lon": 79.042518,
+   "name": "分支山"
+  },
+  {
+   "lat": 33.958776,
+   "lon": 79.032374,
+   "name": "尖顶山"
+  },
+  {
+   "lat": 33.97552,
+   "lon": 79.057617,
+   "name": "长梁山"
+  },
+  {
+   "lat": 34.006013,
+   "lon": 79.049274,
+   "name": "长尾山"
+  },
+  {
+   "lat": 34.042972,
+   "lon": 79.100955,
+   "name": "马约帕姆山"
+  },
+  {
+   "lat": 34.050294,
+   "lon": 79.14464,
+   "name": "金斗山"
+  },
+  {
+   "lat": 34.100718,
+   "lon": 79.173859,
+   "name": "乌龟咀"
+  },
+  {
+   "lat": 34.146549,
+   "lon": 79.182807,
+   "name": "团山"
+  },
+  {
+   "lat": 34.081758,
+   "lon": 79.214549,
+   "name": "三峰尖"
+  },
+  {
+   "lat": 34.037081,
+   "lon": 79.231773,
+   "name": "长形山"
+  },
+  {
+   "lat": 33.897853,
+   "lon": 79.469261,
+   "name": "白丹勒"
+  },
+  {
+   "lat": 33.520477,
+   "lon": 76.369475,
+   "name": "Nagru pahad"
+  },
+  {
+   "lat": 33.016312,
+   "lon": 79.317282,
+   "name": "修普拉"
+  },
+  {
+   "lat": 33.043985,
+   "lon": 79.403585,
+   "name": "莱盲嘎勒波"
+  },
+  {
+   "lat": 33.515955,
+   "lon": 77.655147,
+   "name": "Khyam III"
+  }
+ ]
+}

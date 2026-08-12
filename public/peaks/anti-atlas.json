@@ -1,0 +1,711 @@
+{
+ "region": "anti-atlas",
+ "generated": "2026-08-12T10:54:51+00:00",
+ "peaks": [
+  {
+   "lat": 30.964341,
+   "lon": -8.443635,
+   "name": "Igdat",
+   "ele": 3580
+  },
+  {
+   "lat": 30.813391,
+   "lon": -8.828133,
+   "name": "Jbel Tinergwet",
+   "ele": 3555
+  },
+  {
+   "lat": 30.820659,
+   "lon": -8.805911,
+   "name": "Jbel Awlim",
+   "ele": 3450
+  },
+  {
+   "lat": 30.945815,
+   "lon": -8.555742,
+   "name": "Awrir-n-Said",
+   "ele": 3400
+  },
+  {
+   "lat": 30.935492,
+   "lon": -8.565639,
+   "name": "Amendach",
+   "ele": 3350
+  },
+  {
+   "lat": 30.895468,
+   "lon": -8.691741,
+   "name": "MouLay Ali",
+   "ele": 3349
+  },
+  {
+   "lat": 30.898306,
+   "lon": -8.65282,
+   "name": "Imaradene",
+   "ele": 3310
+  },
+  {
+   "lat": 30.704437,
+   "lon": -7.621501,
+   "name": "Djebel Siroua جبل سيروا",
+   "name_en": "Jebel Sirwa",
+   "ele": 3304
+  },
+  {
+   "lat": 30.857585,
+   "lon": -8.730021,
+   "name": "Mtdadene",
+   "ele": 3300
+  },
+  {
+   "lat": 30.863275,
+   "lon": -8.733343,
+   "name": "Aguer Skawn",
+   "ele": 3255
+  },
+  {
+   "lat": 30.810205,
+   "lon": -8.853762,
+   "name": "Mgount",
+   "ele": 3135
+  },
+  {
+   "lat": 30.935713,
+   "lon": -8.596753,
+   "name": "Azrou Asdim",
+   "ele": 3101
+  },
+  {
+   "lat": 30.697682,
+   "lon": -7.59141,
+   "name": "Aghiga",
+   "ele": 3051
+  },
+  {
+   "lat": 30.764287,
+   "lon": -7.630363,
+   "name": "Amzdour",
+   "ele": 3002
+  },
+  {
+   "lat": 30.733427,
+   "lon": -7.621472,
+   "name": "Tikniouine",
+   "ele": 2905
+  },
+  {
+   "lat": 30.815654,
+   "lon": -7.653054,
+   "name": "Ouzlim",
+   "ele": 2760
+  },
+  {
+   "lat": 30.758672,
+   "lon": -7.651076,
+   "name": "Goujgane",
+   "ele": 2760,
+   "wikidata": "Q29099214"
+  },
+  {
+   "lat": 30.805765,
+   "lon": -7.674309,
+   "name": "Amjjod",
+   "ele": 2730
+  },
+  {
+   "lat": 30.774903,
+   "lon": -7.631681,
+   "name": "Ighil Toumsmar",
+   "ele": 2730
+  },
+  {
+   "lat": 30.787959,
+   "lon": -7.65195,
+   "name": "Anrar",
+   "ele": 2720
+  },
+  {
+   "lat": 30.84211,
+   "lon": -7.645197,
+   "name": "Aghoughoui",
+   "ele": 2670
+  },
+  {
+   "lat": 30.801128,
+   "lon": -7.626829,
+   "name": "Tassift",
+   "ele": 2610
+  },
+  {
+   "lat": 30.77937,
+   "lon": -7.603203,
+   "name": "Foudrar",
+   "ele": 2560
+  },
+  {
+   "lat": 30.111277,
+   "lon": -8.271444,
+   "name": "Jebel Aklim",
+   "ele": 2531
+  },
+  {
+   "lat": 30.871399,
+   "lon": -7.61653,
+   "name": "Taouyalt",
+   "ele": 2502
+  },
+  {
+   "lat": 30.774496,
+   "lon": -7.701899,
+   "name": "Tagoundar",
+   "ele": 2473
+  },
+  {
+   "lat": 30.76802,
+   "lon": -7.575524,
+   "name": "Tazoult",
+   "ele": 2450
+  },
+  {
+   "lat": 30.925421,
+   "lon": -7.712832,
+   "name": "Timliline",
+   "ele": 2430
+  },
+  {
+   "lat": 29.795019,
+   "lon": -9.034886,
+   "name": "Jebel L'Kest",
+   "ele": 2359
+  },
+  {
+   "lat": 29.676649,
+   "lon": -8.912384,
+   "name": "Adrar Mqorn",
+   "name_en": "Adrar Mqorn",
+   "ele": 2344
+  },
+  {
+   "lat": 30.932268,
+   "lon": -7.639875,
+   "name": "Amchetrih",
+   "ele": 2334
+  },
+  {
+   "lat": 30.907895,
+   "lon": -7.60623,
+   "name": "Taghrat",
+   "ele": 2170
+  },
+  {
+   "lat": 30.946034,
+   "lon": -6.09995,
+   "name": "Jbel Bou Harazene",
+   "ele": 2090
+  },
+  {
+   "lat": 30.969873,
+   "lon": -6.076083,
+   "name": "Islane n'Oumdrous",
+   "ele": 2070
+  },
+  {
+   "lat": 30.879005,
+   "lon": -6.261048,
+   "name": "Pilier",
+   "ele": 2070
+  },
+  {
+   "lat": 29.603486,
+   "lon": -8.935945,
+   "name": "Adrar Iguer",
+   "ele": 2030
+  },
+  {
+   "lat": 30.861361,
+   "lon": -6.287688,
+   "name": "Ighichri",
+   "ele": 1940,
+   "wikidata": "Q29100904"
+  },
+  {
+   "lat": 30.960738,
+   "lon": -6.05756,
+   "name": "Tadlest",
+   "ele": 1890
+  },
+  {
+   "lat": 30.941894,
+   "lon": -6.085138,
+   "name": "Isfoula",
+   "ele": 1880
+  },
+  {
+   "lat": 29.68088,
+   "lon": -8.814384,
+   "name": "Twin Peaks",
+   "ele": 1850
+  },
+  {
+   "lat": 29.886188,
+   "lon": -8.66964,
+   "name": "Château قلعة",
+   "name_en": "Castle",
+   "ele": 1850
+  },
+  {
+   "lat": 30.850658,
+   "lon": -6.311173,
+   "name": "Anfwi",
+   "ele": 1830,
+   "wikidata": "Q29100890"
+  },
+  {
+   "lat": 30.2627,
+   "lon": -7.338095,
+   "name": "Jbel Timbouka",
+   "ele": 1821
+  },
+  {
+   "lat": 30.632403,
+   "lon": -6.756821,
+   "name": "Jebel Anaour",
+   "ele": 1751
+  },
+  {
+   "lat": 29.779246,
+   "lon": -8.969731,
+   "name": "Lion's Head ⴰⴳⴰⵢⵓ ⵏ ⵉⴼⵉⵙ رأس الأسد",
+   "name_en": "Lion's Head",
+   "ele": 1750
+  },
+  {
+   "lat": 30.82632,
+   "lon": -6.05764,
+   "name": "Takiyout",
+   "ele": 1700
+  },
+  {
+   "lat": 30.812398,
+   "lon": -6.310047,
+   "name": "Tasguilt",
+   "ele": 1660
+  },
+  {
+   "lat": 30.78406,
+   "lon": -6.119492,
+   "name": "Arhoulid n'Tanza",
+   "ele": 1660
+  },
+  {
+   "lat": 29.602534,
+   "lon": -9.006025,
+   "name": "Tighawn",
+   "ele": 1600
+  },
+  {
+   "lat": 30.657524,
+   "lon": -9.433656,
+   "name": "Mont Irhal",
+   "ele": 1600
+  },
+  {
+   "lat": 30.560247,
+   "lon": -7.154771,
+   "name": "Achafchid",
+   "ele": 1590
+  },
+  {
+   "lat": 30.367317,
+   "lon": -7.340348,
+   "name": "Jbel n'Tizoula",
+   "ele": 1540
+  },
+  {
+   "lat": 30.705088,
+   "lon": -6.401283,
+   "name": "Djebel Kissane",
+   "ele": 1531
+  },
+  {
+   "lat": 30.791894,
+   "lon": -6.385267,
+   "name": "Jbel La'fiyr",
+   "ele": 1500
+  },
+  {
+   "lat": 30.654158,
+   "lon": -6.258817,
+   "name": "Argba",
+   "ele": 1500
+  },
+  {
+   "lat": 30.817079,
+   "lon": -5.802678,
+   "name": "Tigguint",
+   "ele": 1438
+  },
+  {
+   "lat": 29.979472,
+   "lon": -7.236556,
+   "name": "Tizi Oula",
+   "ele": 1400
+  },
+  {
+   "lat": 29.820448,
+   "lon": -7.46567,
+   "name": "Magmoia Salhin",
+   "ele": 1392
+  },
+  {
+   "lat": 30.830648,
+   "lon": -5.851621,
+   "name": "Bou Itbirn",
+   "ele": 1368
+  },
+  {
+   "lat": 30.615941,
+   "lon": -9.443708,
+   "name": "Mont Simba et Agnese",
+   "ele": 1356
+  },
+  {
+   "lat": 29.89569,
+   "lon": -8.170292,
+   "name": "Adar",
+   "ele": 1350
+  },
+  {
+   "lat": 29.30445,
+   "lon": -9.223994,
+   "name": "أفا نتكدمين",
+   "name_en": "Afa Ntgdmin",
+   "ele": 1310
+  },
+  {
+   "lat": 29.324031,
+   "lon": -9.224548,
+   "name": "قمة جبل إكوصدر",
+   "name_en": "Eggosdr",
+   "ele": 1305
+  },
+  {
+   "lat": 29.909827,
+   "lon": -8.200075,
+   "name": "Tircht n Quaroun",
+   "ele": 1300
+  },
+  {
+   "lat": 30.208576,
+   "lon": -7.090613,
+   "name": "Adrar n'Taourda",
+   "ele": 1290
+  },
+  {
+   "lat": 30.537608,
+   "lon": -7.055667,
+   "name": "Gouirfarda",
+   "ele": 1280
+  },
+  {
+   "lat": 30.657992,
+   "lon": -6.309476,
+   "name": "Bou Ifâsene",
+   "ele": 1274
+  },
+  {
+   "lat": 30.611462,
+   "lon": -9.447552,
+   "name": "Mont Perdrix",
+   "ele": 1270
+  },
+  {
+   "lat": 29.313025,
+   "lon": -9.210078,
+   "name": "أفا أودرار العين",
+   "name_en": "Adrar Laaine",
+   "ele": 1260
+  },
+  {
+   "lat": 29.313575,
+   "lon": -9.219998,
+   "name": "أفا نتكاديرت",
+   "name_en": "Afa Ntgadirt",
+   "ele": 1240
+  },
+  {
+   "lat": 30.198136,
+   "lon": -7.145888,
+   "name": "Izgui",
+   "ele": 1220
+  },
+  {
+   "lat": 29.320089,
+   "lon": -9.214647,
+   "name": "أفا أوخضير",
+   "name_en": "Afa Ou Khdair",
+   "ele": 1190
+  },
+  {
+   "lat": 30.627207,
+   "lon": -9.464997,
+   "name": "Mont Bella",
+   "ele": 1180
+  },
+  {
+   "lat": 30.60204,
+   "lon": -9.454624,
+   "name": "montagne des chiens",
+   "ele": 1150
+  },
+  {
+   "lat": 30.184207,
+   "lon": -7.098981,
+   "name": "Agouti",
+   "ele": 1140
+  },
+  {
+   "lat": 30.805023,
+   "lon": -5.568855,
+   "name": "Aguerd Zaouer",
+   "ele": 1065
+  },
+  {
+   "lat": 30.602287,
+   "lon": -9.462643,
+   "name": "Mont Tribulla",
+   "ele": 1050
+  },
+  {
+   "lat": 29.306129,
+   "lon": -9.212416,
+   "name": "أفا نتمسولت",
+   "name_en": "Afa Ntmsolt",
+   "ele": 1050
+  },
+  {
+   "lat": 30.607577,
+   "lon": -9.487561,
+   "name": "Mont Zena",
+   "ele": 1045
+  },
+  {
+   "lat": 30.59901,
+   "lon": -9.468418,
+   "name": "mont Café",
+   "ele": 1030
+  },
+  {
+   "lat": 29.6075,
+   "lon": -8.457365,
+   "name": "Jebel Bou Temka",
+   "ele": 1016
+  },
+  {
+   "lat": 30.751919,
+   "lon": -5.466444,
+   "name": "Mont Serdrar",
+   "ele": 1000
+  },
+  {
+   "lat": 30.744855,
+   "lon": -5.452492,
+   "name": "Djebel Sredrar",
+   "ele": 988
+  },
+  {
+   "lat": 30.777627,
+   "lon": -5.40474,
+   "name": "Isk n' Brahim",
+   "ele": 985
+  },
+  {
+   "lat": 30.59235,
+   "lon": -9.478403,
+   "name": "Mont Fanta",
+   "ele": 965
+  },
+  {
+   "lat": 30.696708,
+   "lon": -5.309038,
+   "name": "Toukal",
+   "ele": 964
+  },
+  {
+   "lat": 30.320761,
+   "lon": -5.81873,
+   "name": "Djebel Zagora جبل زاكورة",
+   "ele": 960
+  },
+  {
+   "lat": 30.587822,
+   "lon": -9.49583,
+   "name": "mont latte",
+   "ele": 950
+  },
+  {
+   "lat": 30.677272,
+   "lon": -6.395665,
+   "name": "Taourirt Caid Ali",
+   "ele": 946
+  },
+  {
+   "lat": 30.05524,
+   "lon": -7.246084,
+   "name": "Ifrda",
+   "ele": 900
+  },
+  {
+   "lat": 30.071406,
+   "lon": -7.240334,
+   "name": "Imarfd",
+   "ele": 890
+  },
+  {
+   "lat": 29.75735,
+   "lon": -7.700715,
+   "name": "Boutguella",
+   "ele": 870
+  },
+  {
+   "lat": 30.07706,
+   "lon": -7.207332,
+   "name": "Mmizagane",
+   "ele": 870
+  },
+  {
+   "lat": 30.02864,
+   "lon": -7.103286,
+   "name": "Jbel el Gara",
+   "ele": 840
+  },
+  {
+   "lat": 29.770254,
+   "lon": -7.693302,
+   "name": "Sidi Boumehdi",
+   "ele": 780
+  },
+  {
+   "lat": 29.846005,
+   "lon": -5.42115,
+   "name": "Masmouda",
+   "ele": 642,
+   "wikidata": "Q27515169"
+  },
+  {
+   "lat": 29.923988,
+   "lon": -6.322115,
+   "name": "Erg L'Ghoul",
+   "ele": 514
+  },
+  {
+   "lat": 30.676001,
+   "lon": -6.297726,
+   "name": "The Ghreffa Plateau",
+   "ele": 25
+  },
+  {
+   "lat": 30.680849,
+   "lon": -6.292696,
+   "name": "The Geida Plateau",
+   "ele": 20
+  },
+  {
+   "lat": 29.681495,
+   "lon": -5.995516,
+   "name": "Zahar - Lion Dune",
+   "name_en": "Lion dune"
+  },
+  {
+   "lat": 29.581229,
+   "lon": -8.943971,
+   "name": "Tamzait"
+  },
+  {
+   "lat": 30.732792,
+   "lon": -5.248777,
+   "name": "Djebel Mrhorfi"
+  },
+  {
+   "lat": 29.911768,
+   "lon": -8.116452,
+   "name": "Ouatzloul"
+  },
+  {
+   "lat": 30.784726,
+   "lon": -5.577535,
+   "name": "Djebel Tabou Oualt"
+  },
+  {
+   "lat": 30.614611,
+   "lon": -7.224065,
+   "name": "Gayyoun"
+  },
+  {
+   "lat": 29.696887,
+   "lon": -8.966737,
+   "name": "Chapeau Napoleon"
+  },
+  {
+   "lat": 29.699179,
+   "lon": -8.924348,
+   "name": "جبل أماكور",
+   "wikidata": "Q27529408"
+  },
+  {
+   "lat": 30.810906,
+   "lon": -8.816243,
+   "name": "Adrar N'Dern"
+  },
+  {
+   "lat": 30.717727,
+   "lon": -5.349304,
+   "name": "foum-Tizza"
+  },
+  {
+   "lat": 29.383783,
+   "lon": -9.028604,
+   "name": "thorion de roche"
+  },
+  {
+   "lat": 29.64902,
+   "lon": -6.541543,
+   "name": "530"
+  },
+  {
+   "lat": 29.720099,
+   "lon": -6.520257,
+   "name": "650"
+  },
+  {
+   "lat": 29.724555,
+   "lon": -6.559836,
+   "name": "580"
+  },
+  {
+   "lat": 29.716947,
+   "lon": -6.566311,
+   "name": "590"
+  },
+  {
+   "lat": 29.719365,
+   "lon": -6.560844,
+   "name": "600"
+  },
+  {
+   "lat": 30.130263,
+   "lon": -5.567099,
+   "name": "1000"
+  },
+  {
+   "lat": 30.144403,
+   "lon": -5.5433,
+   "name": "1010"
+  },
+  {
+   "lat": 30.152159,
+   "lon": -5.531616,
+   "name": "1020"
+  }
+ ]
+}

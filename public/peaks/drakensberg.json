@@ -1,0 +1,7962 @@
+{
+ "region": "drakensberg",
+ "generated": "2026-08-12T10:54:54+00:00",
+ "peaks": [
+  {
+   "lat": -29.468173,
+   "lon": 29.269172,
+   "name": "Thabana Ntlenyana",
+   "name_en": "Thabana Ntlenyana",
+   "ele": 3482,
+   "wikidata": "Q733132"
+  },
+  {
+   "lat": -29.232344,
+   "lon": 29.288642,
+   "name": "Makheka",
+   "ele": 3462,
+   "wikidata": "Q27480720"
+  },
+  {
+   "lat": -29.44395,
+   "lon": 29.27955,
+   "name": "Thaba Putsoa",
+   "ele": 3455
+  },
+  {
+   "lat": -29.203459,
+   "lon": 29.358518,
+   "name": "Mafadi",
+   "ele": 3450,
+   "wikidata": "Q1883683"
+  },
+  {
+   "lat": -29.734622,
+   "lon": 29.114072,
+   "name": "Tsepeng",
+   "ele": 3436
+  },
+  {
+   "lat": -29.736467,
+   "lon": 28.96445,
+   "name": "Qhaliseng",
+   "ele": 3420
+  },
+  {
+   "lat": -29.781817,
+   "lon": 28.986367,
+   "name": "Makoaneng",
+   "ele": 3412
+  },
+  {
+   "lat": -29.204,
+   "lon": 29.371278,
+   "name": "Njesuthi",
+   "ele": 3410,
+   "wikidata": "Q303185"
+  },
+  {
+   "lat": -29.545732,
+   "lon": 29.130228,
+   "name": "Seqoqo",
+   "ele": 3394
+  },
+  {
+   "lat": -29.534686,
+   "lon": 29.121938,
+   "name": "Makheka",
+   "ele": 3394
+  },
+  {
+   "lat": -29.093642,
+   "lon": 29.331257,
+   "name": "Champagne Castle",
+   "ele": 3377,
+   "wikidata": "Q476745"
+  },
+  {
+   "lat": -29.187872,
+   "lon": 29.343758,
+   "name": "Lithobolong",
+   "ele": 3375
+  },
+  {
+   "lat": -29.517016,
+   "lon": 29.293326,
+   "name": "kaNtuba Peak",
+   "ele": 3366
+  },
+  {
+   "lat": -28.858028,
+   "lon": 28.805639,
+   "name": "Baneising",
+   "ele": 3355
+  },
+  {
+   "lat": -29.201276,
+   "lon": 29.38028,
+   "name": "Trojan Wall",
+   "ele": 3354
+  },
+  {
+   "lat": -29.170468,
+   "lon": 29.277964,
+   "name": "Seroto",
+   "ele": 3351
+  },
+  {
+   "lat": -29.101477,
+   "lon": 29.317081,
+   "name": "Thabana-Ts'oana",
+   "ele": 3346
+  },
+  {
+   "lat": -28.879057,
+   "lon": 28.74309,
+   "name": "Tsepeng",
+   "ele": 3344
+  },
+  {
+   "lat": -29.090393,
+   "lon": 29.256341,
+   "name": "Yodlers Peak II",
+   "ele": 3338
+  },
+  {
+   "lat": -29.082116,
+   "lon": 29.252467,
+   "name": "Yodlers Peak I",
+   "ele": 3338
+  },
+  {
+   "lat": -29.188167,
+   "lon": 29.357389,
+   "name": "Red Wall",
+   "ele": 3337
+  },
+  {
+   "lat": -29.075705,
+   "lon": 29.278195,
+   "name": "Pampiring",
+   "ele": 3337,
+   "wikidata": "Q31700074"
+  },
+  {
+   "lat": -29.764755,
+   "lon": 29.083796,
+   "name": "Moroke",
+   "ele": 3335
+  },
+  {
+   "lat": -29.101452,
+   "lon": 29.324934,
+   "name": "Botlolong",
+   "ele": 3333
+  },
+  {
+   "lat": -29.228735,
+   "lon": 29.406372,
+   "name": "Popple Peak (Khoko-Ntsho)",
+   "ele": 3331,
+   "wikidata": "Q7229539"
+  },
+  {
+   "lat": -29.352832,
+   "lon": 29.338609,
+   "name": "Leqheku",
+   "ele": 3330
+  },
+  {
+   "lat": -29.76738,
+   "lon": 29.114361,
+   "name": "Thamathu",
+   "ele": 3328,
+   "wikidata": "Q31683418"
+  },
+  {
+   "lat": -29.097667,
+   "lon": 29.326417,
+   "name": "Ships Prow",
+   "ele": 3325
+  },
+  {
+   "lat": -29.498912,
+   "lon": 29.299125,
+   "name": "Sehonghong",
+   "ele": 3324
+  },
+  {
+   "lat": -28.820028,
+   "lon": 28.787028,
+   "name": "Matseng",
+   "ele": 3324
+  },
+  {
+   "lat": -28.902519,
+   "lon": 28.758234,
+   "name": "Tri-Kolo",
+   "ele": 3322
+  },
+  {
+   "lat": -28.905579,
+   "lon": 28.782624,
+   "name": "Matsoku",
+   "ele": 3321
+  },
+  {
+   "lat": -29.079368,
+   "lon": 29.312847,
+   "name": "iNkosazana Peak",
+   "ele": 3318
+  },
+  {
+   "lat": -29.081745,
+   "lon": 29.328867,
+   "name": "Cowl View",
+   "ele": 3318
+  },
+  {
+   "lat": -28.914057,
+   "lon": 28.74401,
+   "name": "Konkonyane",
+   "ele": 3315
+  },
+  {
+   "lat": -29.345706,
+   "lon": 29.483557,
+   "name": "Giant's Castle",
+   "ele": 3315,
+   "wikidata": "Q3432135"
+  },
+  {
+   "lat": -29.486996,
+   "lon": 29.296325,
+   "name": "Mohlesi (Umkomass)",
+   "ele": 3310
+  },
+  {
+   "lat": -29.738976,
+   "lon": 29.137697,
+   "name": "Mashai Peak",
+   "ele": 3309
+  },
+  {
+   "lat": -29.413868,
+   "lon": 29.422673,
+   "name": "Redi",
+   "ele": 3309,
+   "wikidata": "Q31696055"
+  },
+  {
+   "lat": -29.767427,
+   "lon": 29.122833,
+   "name": "Walker's Peak",
+   "ele": 3306
+  },
+  {
+   "lat": -29.077811,
+   "lon": 29.32967,
+   "name": "Mhlwazini",
+   "ele": 3305
+  },
+  {
+   "lat": -29.2753,
+   "lon": 29.301857,
+   "name": "Thaba-Moea",
+   "ele": 3305
+  },
+  {
+   "lat": -29.259644,
+   "lon": 29.418608,
+   "name": "Sanqebethu",
+   "ele": 3301
+  },
+  {
+   "lat": -29.081252,
+   "lon": 29.268804,
+   "name": "Yodlers Ridge Peak",
+   "ele": 3301
+  },
+  {
+   "lat": -29.306028,
+   "lon": 29.438889,
+   "name": "Mount Durnford",
+   "ele": 3294
+  },
+  {
+   "lat": -29.339547,
+   "lon": 29.43141,
+   "name": "Thaba-Ntso",
+   "ele": 3294
+  },
+  {
+   "lat": -29.403556,
+   "lon": 29.41875,
+   "name": "Terateng",
+   "ele": 3293
+  },
+  {
+   "lat": -29.718064,
+   "lon": 29.145248,
+   "name": "Matebeng",
+   "ele": 3282
+  },
+  {
+   "lat": -28.7722,
+   "lon": 28.8731,
+   "name": "Mont-aux-Sources",
+   "ele": 3282,
+   "wikidata": "Q599532"
+  },
+  {
+   "lat": -29.001582,
+   "lon": 29.167401,
+   "name": "Cleft Peak",
+   "ele": 3277
+  },
+  {
+   "lat": -29.554164,
+   "lon": 29.305758,
+   "name": "Mqatsheni",
+   "ele": 3276
+  },
+  {
+   "lat": -29.0042,
+   "lon": 29.16,
+   "name": "Thaba-Chitja",
+   "ele": 3272
+  },
+  {
+   "lat": -29.355639,
+   "lon": 29.315529,
+   "name": "Ntloana-Ts'oana",
+   "ele": 3262
+  },
+  {
+   "lat": -29.109783,
+   "lon": 29.338817,
+   "name": "Starboard",
+   "ele": 3261
+  },
+  {
+   "lat": -29.343917,
+   "lon": 29.459278,
+   "name": "Long Wall",
+   "ele": 3260
+  },
+  {
+   "lat": -29.62425,
+   "lon": 29.2855,
+   "name": "Hodgson's Peak South",
+   "ele": 3257
+  },
+  {
+   "lat": -29.712634,
+   "lon": 29.146505,
+   "name": "Linotsing",
+   "ele": 3255
+  },
+  {
+   "lat": -29.726619,
+   "lon": 29.148458,
+   "name": "Wilson's Peak",
+   "ele": 3255
+  },
+  {
+   "lat": -29.0242,
+   "lon": 29.185,
+   "name": "Lomo-se-Fubelu",
+   "ele": 3255
+  },
+  {
+   "lat": -29.616889,
+   "lon": 29.293639,
+   "name": "Hodgson's Peak North",
+   "ele": 3251
+  },
+  {
+   "lat": -29.071409,
+   "lon": 29.253119,
+   "name": "Didima Cave Peak",
+   "ele": 3248
+  },
+  {
+   "lat": -28.818444,
+   "lon": 28.938833,
+   "name": "Icidi Buttress",
+   "ele": 3243
+  },
+  {
+   "lat": -29.74105,
+   "lon": 29.14625,
+   "name": "The Bollard",
+   "ele": 3233
+  },
+  {
+   "lat": -28.841,
+   "lon": 28.94763,
+   "name": "Stimela Peak",
+   "ele": 3232
+  },
+  {
+   "lat": -28.940158,
+   "lon": 29.057001,
+   "name": "Ts'eng-la-Likhomo",
+   "ele": 3231
+  },
+  {
+   "lat": -29.784137,
+   "lon": 28.558575,
+   "name": "Khathala",
+   "ele": 3230
+  },
+  {
+   "lat": -29.080525,
+   "lon": 29.345053,
+   "name": "Monk's Cowl",
+   "ele": 3229,
+   "wikidata": "Q31469543"
+  },
+  {
+   "lat": -28.894167,
+   "lon": 28.9745,
+   "name": "Pins Buttress",
+   "ele": 3225
+  },
+  {
+   "lat": -28.8825,
+   "lon": 28.96333,
+   "name": "Black and Tan Wall",
+   "ele": 3222
+  },
+  {
+   "lat": -29.054774,
+   "lon": 28.602063,
+   "name": "Boshoela-Ts'oene",
+   "ele": 3219
+  },
+  {
+   "lat": -29.8902,
+   "lon": 28.937774,
+   "name": "Thaba-li-Maqhoa",
+   "ele": 3214
+  },
+  {
+   "lat": -29.180767,
+   "lon": 29.360317,
+   "name": "Injisuthi Lesser Buttress",
+   "ele": 3212
+  },
+  {
+   "lat": -28.976437,
+   "lon": 29.092371,
+   "name": "Lithotobolong",
+   "ele": 3209
+  },
+  {
+   "lat": -29.088639,
+   "lon": 29.345528,
+   "name": "Champagne Castle Buttress",
+   "ele": 3206
+  },
+  {
+   "lat": -29.754389,
+   "lon": 29.140194,
+   "name": "Mzimude",
+   "ele": 3205
+  },
+  {
+   "lat": -29.1733,
+   "lon": 29.360917,
+   "name": "Injisuthi Greater Buttress",
+   "ele": 3202
+  },
+  {
+   "lat": -29.222528,
+   "lon": 29.415083,
+   "name": "The Judge",
+   "ele": 3197,
+   "wikidata": "Q31495075"
+  },
+  {
+   "lat": -29.210528,
+   "lon": 29.405611,
+   "name": "The Corner",
+   "ele": 3195
+  },
+  {
+   "lat": -28.823633,
+   "lon": 28.941933,
+   "name": "Caboose",
+   "ele": 3192
+  },
+  {
+   "lat": -28.8875,
+   "lon": 28.9275,
+   "name": "Mafereseng",
+   "ele": 3191
+  },
+  {
+   "lat": -29.738118,
+   "lon": 28.919804,
+   "name": "Thaba-Nts'o",
+   "ele": 3190
+  },
+  {
+   "lat": -29.18965,
+   "lon": 29.370367,
+   "name": "Western Triplet",
+   "ele": 3190
+  },
+  {
+   "lat": -29.122586,
+   "lon": 29.124799,
+   "name": "Thaba-Nts'o",
+   "ele": 3180
+  },
+  {
+   "lat": -29.378034,
+   "lon": 29.168379,
+   "name": "Khauaneng",
+   "ele": 3180
+  },
+  {
+   "lat": -29.067528,
+   "lon": 29.233028,
+   "name": "Didima Buttress",
+   "ele": 3179
+  },
+  {
+   "lat": -28.77063,
+   "lon": 28.92079,
+   "name": "Sekhong",
+   "ele": 3174
+  },
+  {
+   "lat": -29.466056,
+   "lon": 29.345778,
+   "name": "Ngaqamadolo (Ntshupe)",
+   "ele": 3166
+  },
+  {
+   "lat": -28.741444,
+   "lon": 28.890722,
+   "name": "Sentinel",
+   "ele": 3165,
+   "wikidata": "Q31691608"
+  },
+  {
+   "lat": -29.693972,
+   "lon": 29.162194,
+   "name": "Verkyker Peak",
+   "ele": 3164
+  },
+  {
+   "lat": -28.658017,
+   "lon": 28.679467,
+   "name": "Thaba Putsoa",
+   "ele": 3163
+  },
+  {
+   "lat": -28.868967,
+   "lon": 28.961717,
+   "name": "Rwanqa",
+   "ele": 3159
+  },
+  {
+   "lat": -29.220383,
+   "lon": 29.173859,
+   "name": "Tololi",
+   "ele": 3158
+  },
+  {
+   "lat": -29.298917,
+   "lon": 29.444222,
+   "name": "Bond",
+   "ele": 3156
+  },
+  {
+   "lat": -29.312028,
+   "lon": 29.442611,
+   "name": "Kambule",
+   "ele": 3154
+  },
+  {
+   "lat": -28.758806,
+   "lon": 28.883722,
+   "name": "Crow's Nest",
+   "ele": 3154
+  },
+  {
+   "lat": -28.91173,
+   "lon": 29.06368,
+   "name": "North Peak",
+   "ele": 3153
+  },
+  {
+   "lat": -29.191333,
+   "lon": 29.375806,
+   "name": "Eastern Triplet",
+   "ele": 3150
+  },
+  {
+   "lat": -29.077223,
+   "lon": 29.350266,
+   "name": "Cathkin Peak",
+   "ele": 3148,
+   "wikidata": "Q1051085"
+  },
+  {
+   "lat": -29.290778,
+   "lon": 29.441028,
+   "name": "Erskine",
+   "ele": 3148,
+   "wikidata": "Q31505420"
+  },
+  {
+   "lat": -28.805306,
+   "lon": 28.9455,
+   "name": "Ifidi Buttress",
+   "ele": 3148,
+   "wikidata": "Q31496823"
+  },
+  {
+   "lat": -29.1508,
+   "lon": 29.0908,
+   "name": "Mphokojoane",
+   "ele": 3144
+  },
+  {
+   "lat": -29.302667,
+   "lon": 29.444722,
+   "name": "Potterill",
+   "ele": 3141
+  },
+  {
+   "lat": -29.381133,
+   "lon": 29.44123,
+   "name": "The Tent (Kepising)",
+   "ele": 3141
+  },
+  {
+   "lat": -29.126967,
+   "lon": 29.3562,
+   "name": "Old Man",
+   "ele": 3137
+  },
+  {
+   "lat": -28.77043,
+   "lon": 28.93141,
+   "name": "Mount Amery",
+   "ele": 3131,
+   "wikidata": "Q31517885"
+  },
+  {
+   "lat": -29.56675,
+   "lon": 29.324194,
+   "name": "Thaba Phinong (Bitso-Lebe)",
+   "ele": 3126
+  },
+  {
+   "lat": -29.135051,
+   "lon": 28.259025,
+   "name": "Phatla-Khomo",
+   "ele": 3125
+  },
+  {
+   "lat": -29.650312,
+   "lon": 29.015788,
+   "name": "Makheka",
+   "ele": 3125
+  },
+  {
+   "lat": -28.745528,
+   "lon": 28.889111,
+   "name": "Beacon Buttress",
+   "ele": 3124,
+   "wikidata": "Q31515806"
+  },
+  {
+   "lat": -28.918306,
+   "lon": 29.077556,
+   "name": "South Peak",
+   "ele": 3118
+  },
+  {
+   "lat": -28.888283,
+   "lon": 29.0316,
+   "name": "Mponjwane",
+   "ele": 3117
+  },
+  {
+   "lat": -29.177045,
+   "lon": 29.155033,
+   "name": "Thaba-Nts'o",
+   "ele": 3116
+  },
+  {
+   "lat": -29.048807,
+   "lon": 29.109542,
+   "name": "Thaba-Moea",
+   "ele": 3110
+  },
+  {
+   "lat": -28.979556,
+   "lon": 29.131972,
+   "name": "Elephant",
+   "ele": 3109
+  },
+  {
+   "lat": -29.535383,
+   "lon": 29.3118,
+   "name": "Magaung",
+   "ele": 3106
+  },
+  {
+   "lat": -29.151424,
+   "lon": 29.345579,
+   "name": "Leslie's Pass Peak",
+   "ele": 3106
+  },
+  {
+   "lat": -29.914507,
+   "lon": 28.583107,
+   "name": "'Maqukhu",
+   "ele": 3104
+  },
+  {
+   "lat": -29.664999,
+   "lon": 29.18076,
+   "name": "Thaba-Nts'o",
+   "ele": 3104
+  },
+  {
+   "lat": -29.671056,
+   "lon": 29.189639,
+   "name": "No Man's Peak",
+   "ele": 3101
+  },
+  {
+   "lat": -29.558788,
+   "lon": 29.09449,
+   "name": "Thaba Lesoba",
+   "ele": 3100
+  },
+  {
+   "lat": -29.73147,
+   "lon": 27.926046,
+   "name": "Thaba Putsoa",
+   "ele": 3096,
+   "wikidata": "Q7708830"
+  },
+  {
+   "lat": -29.730385,
+   "lon": 27.920891,
+   "name": "Thaba-Putsoa (Range)",
+   "ele": 3096
+  },
+  {
+   "lat": -29.145322,
+   "lon": 28.227818,
+   "name": "Motlamisi",
+   "ele": 3094
+  },
+  {
+   "lat": -29.394472,
+   "lon": 29.437417,
+   "name": "The Hawk (Thabana-Dikorong)",
+   "ele": 3090
+  },
+  {
+   "lat": -29.454028,
+   "lon": 29.379778,
+   "name": "Mlahlangubo",
+   "ele": 3089
+  },
+  {
+   "lat": -29.484017,
+   "lon": 29.322917,
+   "name": "Nhlangeni Peak",
+   "ele": 3088
+  },
+  {
+   "lat": -29.626033,
+   "lon": 29.056679,
+   "name": "Thaba-ea-Mashee",
+   "ele": 3085
+  },
+  {
+   "lat": -28.787694,
+   "lon": 28.945278,
+   "name": "Thaba Edanyazana",
+   "ele": 3084
+  },
+  {
+   "lat": -29.025694,
+   "lon": 29.215806,
+   "name": "Little Saddle Peak (North)",
+   "ele": 3081
+  },
+  {
+   "lat": -29.6025,
+   "lon": 28.5208,
+   "name": "Qoqolosing",
+   "ele": 3080
+  },
+  {
+   "lat": -29.423133,
+   "lon": 29.150307,
+   "name": "Tekeseleng",
+   "ele": 3080
+  },
+  {
+   "lat": -29.032111,
+   "lon": 29.217806,
+   "name": "Little Saddle Peak (South)",
+   "ele": 3078
+  },
+  {
+   "lat": -29.320833,
+   "lon": 29.451444,
+   "name": "Katana",
+   "ele": 3076
+  },
+  {
+   "lat": -29.060194,
+   "lon": 29.230222,
+   "name": "Didima Dome",
+   "ele": 3076
+  },
+  {
+   "lat": -28.855028,
+   "lon": 28.952167,
+   "name": "Mbundini Abbey",
+   "ele": 3071
+  },
+  {
+   "lat": -29.020306,
+   "lon": 29.208694,
+   "name": "Windsor Castle",
+   "ele": 3071,
+   "wikidata": "Q31676345"
+  },
+  {
+   "lat": -29.03627,
+   "lon": 29.211973,
+   "name": "Bojela",
+   "ele": 3071
+  },
+  {
+   "lat": -29.591679,
+   "lon": 28.539348,
+   "name": "Thaba-Putsoa",
+   "ele": 3065
+  },
+  {
+   "lat": -29.797861,
+   "lon": 29.124417,
+   "name": "Thaba Ngwangwe / Thaba-Koto",
+   "ele": 3064
+  },
+  {
+   "lat": -29.787356,
+   "lon": 29.129687,
+   "name": "Andre's Knob",
+   "ele": 3064
+  },
+  {
+   "lat": -28.660883,
+   "lon": 28.733917,
+   "name": "Kgotjwanepiek",
+   "ele": 3061
+  },
+  {
+   "lat": -29.062278,
+   "lon": 29.263555,
+   "name": "Witch Peak",
+   "ele": 3061,
+   "wikidata": "Q31675754"
+  },
+  {
+   "lat": -29.258243,
+   "lon": 28.666482,
+   "name": "Thabana-Lisele",
+   "ele": 3061
+  },
+  {
+   "lat": -29.2242,
+   "lon": 28.2183,
+   "name": "Liotloaneng",
+   "ele": 3060
+  },
+  {
+   "lat": -29.712632,
+   "lon": 29.171669,
+   "name": "Rhino Peak",
+   "ele": 3056,
+   "wikidata": "Q31695540"
+  },
+  {
+   "lat": -29.006528,
+   "lon": 29.182472,
+   "name": "Castle Buttress",
+   "ele": 3046,
+   "wikidata": "Q31511171"
+  },
+  {
+   "lat": -29.139194,
+   "lon": 29.359861,
+   "name": "The Ape (Mahlabatshaneng)",
+   "ele": 3044
+  },
+  {
+   "lat": -29.517381,
+   "lon": 29.304122,
+   "name": "kaNtuba Buttress",
+   "ele": 3044
+  },
+  {
+   "lat": -29.27328,
+   "lon": 29.44369,
+   "name": "The Thumb",
+   "ele": 3043,
+   "wikidata": "Q31682976"
+  },
+  {
+   "lat": -29.450921,
+   "lon": 29.379523,
+   "name": "Hlohloloane",
+   "ele": 3041
+  },
+  {
+   "lat": -29.7867,
+   "lon": 27.8458,
+   "name": "'Mamahlanya",
+   "ele": 3039
+  },
+  {
+   "lat": -29.622731,
+   "lon": 28.460692,
+   "name": "Teletsana",
+   "ele": 3035
+  },
+  {
+   "lat": -30.430126,
+   "lon": 28.108278,
+   "name": "Quthing District High Point",
+   "ele": 3035
+  },
+  {
+   "lat": -29.2683,
+   "lon": 28.0333,
+   "name": "'Mamalapi",
+   "ele": 3030
+  },
+  {
+   "lat": -29.622517,
+   "lon": 28.481167,
+   "name": "Qoelle",
+   "ele": 3030
+  },
+  {
+   "lat": -29.613386,
+   "lon": 29.034269,
+   "name": "Metsokeleng",
+   "ele": 3026
+  },
+  {
+   "lat": -29.470361,
+   "lon": 29.363278,
+   "name": "Ntsupenyana",
+   "ele": 3024
+  },
+  {
+   "lat": -28.948027,
+   "lon": 29.116832,
+   "name": "Mitre",
+   "ele": 3023,
+   "wikidata": "Q31470842"
+  },
+  {
+   "lat": -29.629549,
+   "lon": 28.380024,
+   "name": "Thaba-Moea",
+   "ele": 3021
+  },
+  {
+   "lat": -30.466555,
+   "lon": 28.155872,
+   "name": "Kwaduma",
+   "ele": 3019
+  },
+  {
+   "lat": -30.543004,
+   "lon": 27.915492,
+   "name": "Thaba-Ntšo",
+   "ele": 3015
+  },
+  {
+   "lat": -28.638533,
+   "lon": 28.696667,
+   "name": "Metjhatijhane",
+   "ele": 3013
+  },
+  {
+   "lat": -29.8418,
+   "lon": 29.11335,
+   "name": "Devil's Knuckles",
+   "ele": 3010
+  },
+  {
+   "lat": -28.924779,
+   "lon": 29.133741,
+   "name": "Cathedral Peak",
+   "ele": 3005,
+   "wikidata": "Q1050879"
+  },
+  {
+   "lat": -28.939633,
+   "lon": 29.130591,
+   "name": "Outer Horn",
+   "ele": 3005,
+   "wikidata": "Q31700154"
+  },
+  {
+   "lat": -28.944936,
+   "lon": 29.129653,
+   "name": "Inner Horn",
+   "ele": 3005,
+   "wikidata": "Q31496295"
+  },
+  {
+   "lat": -29.842279,
+   "lon": 28.402033,
+   "name": "Thaba-Chitja",
+   "ele": 3003
+  },
+  {
+   "lat": -30.647779,
+   "lon": 27.935288,
+   "name": "Ben Macdhui",
+   "ele": 3001,
+   "wikidata": "Q4802660"
+  },
+  {
+   "lat": -29.326292,
+   "lon": 29.087205,
+   "name": "Phutha (Taung)",
+   "ele": 2995
+  },
+  {
+   "lat": -29.9642,
+   "lon": 28.8317,
+   "name": "Thaba-Koto",
+   "ele": 2990
+  },
+  {
+   "lat": -29.128395,
+   "lon": 29.36507,
+   "name": "Old Woman Grinding Corn",
+   "ele": 2986
+  },
+  {
+   "lat": -29.589478,
+   "lon": 28.899275,
+   "name": "Bokhoasa",
+   "ele": 2982
+  },
+  {
+   "lat": -29.349804,
+   "lon": 29.505025,
+   "name": "The Gable",
+   "ele": 2979
+  },
+  {
+   "lat": -29.068358,
+   "lon": 29.35162,
+   "name": "Sterkhorn",
+   "ele": 2973
+  },
+  {
+   "lat": -29.512341,
+   "lon": 28.930229,
+   "name": "Thaba-Nts'o",
+   "ele": 2967
+  },
+  {
+   "lat": -30.284644,
+   "lon": 27.893211,
+   "name": "Mokotjomela",
+   "ele": 2958
+  },
+  {
+   "lat": -29.807128,
+   "lon": 28.3758,
+   "name": "Bofoma-Lits'oene",
+   "ele": 2954
+  },
+  {
+   "lat": -29.6408,
+   "lon": 28.0675,
+   "name": "Thaba-Putsoa",
+   "ele": 2950
+  },
+  {
+   "lat": -29.2033,
+   "lon": 28.975,
+   "name": "Thaba-li-Mpe",
+   "ele": 2948
+  },
+  {
+   "lat": -29.190815,
+   "lon": 29.372166,
+   "name": "Middle Triplet",
+   "ele": 2946
+  },
+  {
+   "lat": -29.031004,
+   "lon": 28.503857,
+   "name": "Maleqatse",
+   "ele": 2942
+  },
+  {
+   "lat": -30.3483,
+   "lon": 28.035,
+   "name": "Thaba-Putsoa",
+   "ele": 2934
+  },
+  {
+   "lat": -29.590529,
+   "lon": 28.868529,
+   "name": "Pitseng",
+   "ele": 2933
+  },
+  {
+   "lat": -29.988996,
+   "lon": 28.482554,
+   "name": "Lits'oeneng",
+   "ele": 2933
+  },
+  {
+   "lat": -29.321792,
+   "lon": 29.071651,
+   "name": "Fikeng-le-Phats'oa",
+   "ele": 2930
+  },
+  {
+   "lat": -28.928481,
+   "lon": 29.126863,
+   "name": "Bell",
+   "ele": 2928,
+   "wikidata": "Q31515522"
+  },
+  {
+   "lat": -29.444227,
+   "lon": 29.403317,
+   "name": "Duart Castle",
+   "ele": 2926
+  },
+  {
+   "lat": -30.550835,
+   "lon": 28.10487,
+   "name": "Thaba-Putsoa",
+   "ele": 2925
+  },
+  {
+   "lat": -29.6942,
+   "lon": 28.0408,
+   "name": "Manong",
+   "ele": 2924
+  },
+  {
+   "lat": -30.6117,
+   "lon": 28.1125,
+   "name": "Sekibinyana",
+   "ele": 2921
+  },
+  {
+   "lat": -28.987867,
+   "lon": 29.161583,
+   "name": "Pyramid",
+   "ele": 2914,
+   "wikidata": "Q31696963"
+  },
+  {
+   "lat": -29.583363,
+   "lon": 29.305657,
+   "name": "Twelve Apostles",
+   "ele": 2913
+  },
+  {
+   "lat": -29.6983,
+   "lon": 27.932871,
+   "name": "Ponto",
+   "ele": 2912
+  },
+  {
+   "lat": -29.933775,
+   "lon": 28.136473,
+   "name": "Thaba-Nts'o",
+   "ele": 2911
+  },
+  {
+   "lat": -29.107584,
+   "lon": 28.20903,
+   "name": "Mokurusu",
+   "ele": 2910
+  },
+  {
+   "lat": -29.97362,
+   "lon": 27.710715,
+   "name": "Thaba-Putsoa",
+   "ele": 2907
+  },
+  {
+   "lat": -29.645231,
+   "lon": 29.280485,
+   "name": "Minaret",
+   "ele": 2906
+  },
+  {
+   "lat": -29.4142,
+   "lon": 27.9633,
+   "name": "Thaba-Putsoa",
+   "ele": 2895
+  },
+  {
+   "lat": -29.337369,
+   "lon": 28.079742,
+   "name": "Mohlesi",
+   "ele": 2894
+  },
+  {
+   "lat": -30.34659,
+   "lon": 28.256829,
+   "name": "'Makholo",
+   "ele": 2893
+  },
+  {
+   "lat": -28.871137,
+   "lon": 29.037737,
+   "name": "Outer Mnweni Needle",
+   "ele": 2890,
+   "wikidata": "Q31700143"
+  },
+  {
+   "lat": -29.960614,
+   "lon": 27.800864,
+   "name": "Thaba-ea-'Maephole",
+   "ele": 2887
+  },
+  {
+   "lat": -29.358398,
+   "lon": 27.895422,
+   "name": "Machache",
+   "ele": 2886
+  },
+  {
+   "lat": -29.30745,
+   "lon": 27.983392,
+   "name": "Nkokobe",
+   "ele": 2885
+  },
+  {
+   "lat": -29.636235,
+   "lon": 29.261956,
+   "name": "The Block",
+   "ele": 2885
+  },
+  {
+   "lat": -29.461422,
+   "lon": 28.217204,
+   "name": "Mphe-Lebeko",
+   "ele": 2884
+  },
+  {
+   "lat": -28.85268,
+   "lon": 28.405095,
+   "name": "Thaba-Nts'onyana",
+   "ele": 2880
+  },
+  {
+   "lat": -29.063398,
+   "lon": 29.240942,
+   "name": "Twin Peaks",
+   "ele": 2876
+  },
+  {
+   "lat": -29.358403,
+   "lon": 28.905714,
+   "name": "Fanyere",
+   "ele": 2874
+  },
+  {
+   "lat": -30.678035,
+   "lon": 28.108171,
+   "name": "Dooiemanskrans",
+   "ele": 2870
+  },
+  {
+   "lat": -29.383024,
+   "lon": 28.966641,
+   "name": "Tsoenene",
+   "ele": 2870
+  },
+  {
+   "lat": -29.412166,
+   "lon": 28.883121,
+   "name": "Thaba-Putsoa",
+   "ele": 2870
+  },
+  {
+   "lat": -30.663114,
+   "lon": 27.890324,
+   "name": "Breslin's Kop",
+   "ele": 2869,
+   "wikidata": "Q31512285"
+  },
+  {
+   "lat": -28.788618,
+   "lon": 28.956358,
+   "name": "Mount Oompie",
+   "ele": 2864
+  },
+  {
+   "lat": -29.655807,
+   "lon": 29.215746,
+   "name": "Sandleni Pinacle",
+   "ele": 2860
+  },
+  {
+   "lat": -29.336981,
+   "lon": 27.946743,
+   "name": "Pitsaneng",
+   "ele": 2859
+  },
+  {
+   "lat": -30.143569,
+   "lon": 28.400022,
+   "name": "Khamokha",
+   "ele": 2858
+  },
+  {
+   "lat": -29.5358,
+   "lon": 28.03,
+   "name": "Thaba-Kholo",
+   "ele": 2855
+  },
+  {
+   "lat": -30.008259,
+   "lon": 28.572285,
+   "name": "Maseepho",
+   "ele": 2854
+  },
+  {
+   "lat": -29.771707,
+   "lon": 28.660423,
+   "name": "Mats'eng",
+   "ele": 2846
+  },
+  {
+   "lat": -29.309422,
+   "lon": 28.13096,
+   "name": "Litsebe",
+   "ele": 2840
+  },
+  {
+   "lat": -30.654521,
+   "lon": 28.083785,
+   "name": "Ts'epeng",
+   "ele": 2826
+  },
+  {
+   "lat": -29.415,
+   "lon": 27.9925,
+   "name": "Mabele",
+   "ele": 2826
+  },
+  {
+   "lat": -29.258267,
+   "lon": 28.520907,
+   "name": "Terata",
+   "ele": 2826
+  },
+  {
+   "lat": -29.050443,
+   "lon": 29.226911,
+   "name": "Sphinx",
+   "ele": 2826
+  },
+  {
+   "lat": -29.983198,
+   "lon": 27.809382,
+   "name": "Thaba-Nts'o",
+   "ele": 2822
+  },
+  {
+   "lat": -29.901486,
+   "lon": 28.842368,
+   "name": "Ts'epeng",
+   "ele": 2822
+  },
+  {
+   "lat": -30.16862,
+   "lon": 28.364961,
+   "name": "Thaba-Kholo",
+   "ele": 2815
+  },
+  {
+   "lat": -28.565565,
+   "lon": 28.603201,
+   "name": "Ribbokkop",
+   "ele": 2812,
+   "wikidata": "Q31695451"
+  },
+  {
+   "lat": -29.686249,
+   "lon": 28.869576,
+   "name": "Monyetleng",
+   "ele": 2807
+  },
+  {
+   "lat": -29.5375,
+   "lon": 28.3258,
+   "name": "Thaba-Khubelu",
+   "ele": 2805
+  },
+  {
+   "lat": -29.823135,
+   "lon": 27.956985,
+   "name": "Khameng",
+   "ele": 2801
+  },
+  {
+   "lat": -29.938049,
+   "lon": 28.374936,
+   "name": "Lehoho",
+   "ele": 2799
+  },
+  {
+   "lat": -29.388864,
+   "lon": 28.232943,
+   "name": "Mphe-Lebeko / Litsumi",
+   "ele": 2798
+  },
+  {
+   "lat": -30.5425,
+   "lon": 28.1583,
+   "name": "Thaba-Kholo",
+   "ele": 2792
+  },
+  {
+   "lat": -28.662872,
+   "lon": 28.564131,
+   "name": "'Makalane",
+   "ele": 2790
+  },
+  {
+   "lat": -30.120027,
+   "lon": 28.358862,
+   "name": "Sekeleoane",
+   "ele": 2790
+  },
+  {
+   "lat": -30.1283,
+   "lon": 27.6567,
+   "name": "Khorebetloa",
+   "ele": 2782
+  },
+  {
+   "lat": -29.49484,
+   "lon": 28.334577,
+   "name": "Bloubere",
+   "ele": 2780
+  },
+  {
+   "lat": -28.878567,
+   "lon": 29.034676,
+   "name": "Inner Mnweni Needle",
+   "ele": 2774,
+   "wikidata": "Q31496273"
+  },
+  {
+   "lat": -30.057314,
+   "lon": 27.678847,
+   "name": "Thaba-ea-Mafika-Lisiu",
+   "ele": 2772
+  },
+  {
+   "lat": -29.372498,
+   "lon": 28.072599,
+   "name": "'Mepa /Tlali",
+   "ele": 2772
+  },
+  {
+   "lat": -30.709167,
+   "lon": 27.549444,
+   "name": "Avoca Peak",
+   "ele": 2760,
+   "wikidata": "Q31517416"
+  },
+  {
+   "lat": -28.551473,
+   "lon": 28.629411,
+   "name": "Generaalskop",
+   "ele": 2757,
+   "wikidata": "Q31503531"
+  },
+  {
+   "lat": -29.319492,
+   "lon": 29.051465,
+   "name": "Tsullung",
+   "ele": 2747
+  },
+  {
+   "lat": -29.169606,
+   "lon": 29.371713,
+   "name": "Scaly Peak",
+   "ele": 2734,
+   "wikidata": "Q31804315"
+  },
+  {
+   "lat": -29.828005,
+   "lon": 29.130276,
+   "name": "Senotlolong",
+   "ele": 2734
+  },
+  {
+   "lat": -30.233813,
+   "lon": 28.334186,
+   "name": "Nts'upe",
+   "ele": 2726
+  },
+  {
+   "lat": -29.2542,
+   "lon": 28.0625,
+   "name": "Baethonkha",
+   "ele": 2726
+  },
+  {
+   "lat": -29.7975,
+   "lon": 27.9925,
+   "name": "Thaba-Ts'oeu",
+   "ele": 2710
+  },
+  {
+   "lat": -30.186547,
+   "lon": 28.017355,
+   "name": "Telle",
+   "ele": 2705
+  },
+  {
+   "lat": -30.229889,
+   "lon": 28.330843,
+   "name": "Draken's Rock",
+   "ele": 2702
+  },
+  {
+   "lat": -28.967664,
+   "lon": 29.139422,
+   "name": "Mount Helga",
+   "ele": 2702,
+   "wikidata": "Q31499105"
+  },
+  {
+   "lat": -29.950228,
+   "lon": 27.948854,
+   "name": "Thaba-Telle",
+   "ele": 2699
+  },
+  {
+   "lat": -30.6625,
+   "lon": 27.7908,
+   "name": "Edge Hill",
+   "ele": 2693,
+   "wikidata": "Q31506824"
+  },
+  {
+   "lat": -30.494825,
+   "lon": 27.760562,
+   "name": "Ntozimande",
+   "ele": 2691
+  },
+  {
+   "lat": -30.155947,
+   "lon": 28.472752,
+   "name": "THE TWINS",
+   "ele": 2690,
+   "wikidata": "Q31680554"
+  },
+  {
+   "lat": -30.1358,
+   "lon": 28.2633,
+   "name": "Thaba-Nts'o",
+   "ele": 2690
+  },
+  {
+   "lat": -29.217144,
+   "lon": 28.034421,
+   "name": "Boitso-Lebe (Bochabela)",
+   "ele": 2688
+  },
+  {
+   "lat": -29.03725,
+   "lon": 29.228676,
+   "name": "Sugarloaf",
+   "ele": 2683
+  },
+  {
+   "lat": -29.062307,
+   "lon": 29.354312,
+   "name": "Turret",
+   "ele": 2670
+  },
+  {
+   "lat": -28.935378,
+   "lon": 28.318409,
+   "name": "Thaba-Khotso",
+   "ele": 2669
+  },
+  {
+   "lat": -29.564338,
+   "lon": 28.226063,
+   "name": "'Malehloana",
+   "ele": 2664
+  },
+  {
+   "lat": -29.96198,
+   "lon": 28.362917,
+   "name": "Thaba-Ts'epe",
+   "ele": 2664
+  },
+  {
+   "lat": -29.594557,
+   "lon": 27.805137,
+   "name": "Thaba-li-'Mele",
+   "ele": 2660
+  },
+  {
+   "lat": -29.5758,
+   "lon": 27.8258,
+   "name": "Qhaba",
+   "ele": 2654
+  },
+  {
+   "lat": -29.345036,
+   "lon": 29.512282,
+   "name": "The Needle",
+   "ele": 2645
+  },
+  {
+   "lat": -30.073514,
+   "lon": 28.69266,
+   "name": "Souru",
+   "ele": 2645
+  },
+  {
+   "lat": -29.362311,
+   "lon": 29.523012,
+   "name": "The Sisters",
+   "ele": 2643
+  },
+  {
+   "lat": -29.740276,
+   "lon": 28.434876,
+   "name": "Thaba-Lihlolo",
+   "ele": 2641
+  },
+  {
+   "lat": -30.785717,
+   "lon": 27.828388,
+   "name": "Bonnyvale Peak",
+   "ele": 2633,
+   "wikidata": "Q31513305"
+  },
+  {
+   "lat": -30.190809,
+   "lon": 28.22126,
+   "name": "Liotle",
+   "ele": 2633
+  },
+  {
+   "lat": -29.367215,
+   "lon": 29.523674,
+   "name": "The Sisters",
+   "ele": 2625
+  },
+  {
+   "lat": -30.1208,
+   "lon": 28.5525,
+   "name": "Fika-le-Motho",
+   "ele": 2620
+  },
+  {
+   "lat": -29.057149,
+   "lon": 29.355138,
+   "name": "Amphlette",
+   "ele": 2620
+  },
+  {
+   "lat": -29.51612,
+   "lon": 28.551613,
+   "name": "'Mamasoabi",
+   "ele": 2611
+  },
+  {
+   "lat": -30.122926,
+   "lon": 28.564938,
+   "name": "BS 17",
+   "ele": 2588
+  },
+  {
+   "lat": -29.043276,
+   "lon": 29.295041,
+   "name": "Eastman's Peak",
+   "ele": 2581,
+   "wikidata": "Q31506859"
+  },
+  {
+   "lat": -30.732249,
+   "lon": 27.657508,
+   "name": "Glen Gyle Peak",
+   "ele": 2580
+  },
+  {
+   "lat": -28.6067,
+   "lon": 28.7083,
+   "name": "Thabaputswa",
+   "ele": 2567,
+   "wikidata": "Q31683470"
+  },
+  {
+   "lat": -29.625399,
+   "lon": 29.331775,
+   "name": "The Hub",
+   "ele": 2557
+  },
+  {
+   "lat": -29.9533,
+   "lon": 29.0842,
+   "name": "Thule",
+   "ele": 2557
+  },
+  {
+   "lat": -29.9733,
+   "lon": 27.9367,
+   "name": "Telle",
+   "ele": 2546
+  },
+  {
+   "lat": -30.265369,
+   "lon": 27.585897,
+   "name": "Mok'hopha",
+   "ele": 2546
+  },
+  {
+   "lat": -30.219503,
+   "lon": 27.60139,
+   "name": "Thaba-ea-Qoele",
+   "ele": 2539
+  },
+  {
+   "lat": -28.719739,
+   "lon": 28.898317,
+   "name": "The Pudding",
+   "ele": 2534,
+   "wikidata": "Q31697109"
+  },
+  {
+   "lat": -30.0917,
+   "lon": 28.8417,
+   "name": "Resisi",
+   "ele": 2520
+  },
+  {
+   "lat": -29.928329,
+   "lon": 28.720751,
+   "name": "Mosalemane (Qoloqolong)",
+   "ele": 2517
+  },
+  {
+   "lat": -30.110354,
+   "lon": 28.225746,
+   "name": "BS 12",
+   "ele": 2505
+  },
+  {
+   "lat": -29.4942,
+   "lon": 27.8033,
+   "name": "Thaba-Chitja",
+   "ele": 2502
+  },
+  {
+   "lat": -30.607416,
+   "lon": 27.673451,
+   "name": "iNtabamnyama",
+   "ele": 2494,
+   "wikidata": "Q31496101"
+  },
+  {
+   "lat": -29.517011,
+   "lon": 28.77667,
+   "name": "Thaba-Telle",
+   "ele": 2493
+  },
+  {
+   "lat": -30.022379,
+   "lon": 28.081315,
+   "name": "Thaba-Ts'epe",
+   "ele": 2482
+  },
+  {
+   "lat": -28.4767,
+   "lon": 28.5133,
+   "name": "Koeberg",
+   "ele": 2470,
+   "wikidata": "Q31491229"
+  },
+  {
+   "lat": -29.803241,
+   "lon": 27.571827,
+   "name": "Matelile",
+   "ele": 2469,
+   "wikidata": "Q27480044"
+  },
+  {
+   "lat": -29.878047,
+   "lon": 29.198823,
+   "name": "iSanthlulube",
+   "ele": 2459
+  },
+  {
+   "lat": -29.50203,
+   "lon": 28.585931,
+   "name": "Thaba-Chitja",
+   "ele": 2454
+  },
+  {
+   "lat": -28.507162,
+   "lon": 28.455849,
+   "name": "Mount Horeb",
+   "ele": 2450,
+   "wikidata": "Q31497382"
+  },
+  {
+   "lat": -28.522318,
+   "lon": 28.317594,
+   "name": "Snymanshoekberg",
+   "ele": 2450,
+   "wikidata": "Q31688516"
+  },
+  {
+   "lat": -30.742703,
+   "lon": 27.580473,
+   "name": "Mount Newton",
+   "ele": 2448,
+   "wikidata": "Q31706299"
+  },
+  {
+   "lat": -29.597735,
+   "lon": 29.389203,
+   "name": "Sicocosebhaca",
+   "ele": 2439,
+   "wikidata": "Q31690827"
+  },
+  {
+   "lat": -30.797814,
+   "lon": 28.147095,
+   "name": "Newton Peak",
+   "ele": 2438
+  },
+  {
+   "lat": -29.524376,
+   "lon": 28.594763,
+   "name": "Thaba-Mahlanya",
+   "ele": 2438
+  },
+  {
+   "lat": -30.184504,
+   "lon": 27.691931,
+   "name": "Thaba-Ts'epe",
+   "ele": 2438
+  },
+  {
+   "lat": -28.4925,
+   "lon": 28.6333,
+   "name": "Wodehouse Kop",
+   "ele": 2433,
+   "wikidata": "Q31675249"
+  },
+  {
+   "lat": -30.549643,
+   "lon": 27.761228,
+   "name": "Nkebenge",
+   "ele": 2424
+  },
+  {
+   "lat": -28.532974,
+   "lon": 28.558429,
+   "name": "Swartkop",
+   "ele": 2423,
+   "wikidata": "Q31685326"
+  },
+  {
+   "lat": -29.743856,
+   "lon": 29.18813,
+   "name": "Swaiman",
+   "ele": 2420
+  },
+  {
+   "lat": -29.702583,
+   "lon": 29.305142,
+   "name": "Little Bamboo Mt.",
+   "ele": 2414
+  },
+  {
+   "lat": -28.705672,
+   "lon": 28.896652,
+   "name": "The Dome",
+   "ele": 2410,
+   "wikidata": "Q31508801"
+  },
+  {
+   "lat": -29.000556,
+   "lon": 29.189639,
+   "name": "Camel",
+   "ele": 2410
+  },
+  {
+   "lat": -28.641006,
+   "lon": 28.039908,
+   "name": "Visierkerf",
+   "ele": 2408
+  },
+  {
+   "lat": -29.044953,
+   "lon": 29.33784,
+   "name": "Intunja (Gatberg)",
+   "ele": 2408
+  },
+  {
+   "lat": -29.2858,
+   "lon": 27.905,
+   "name": "Lekhooana",
+   "ele": 2407
+  },
+  {
+   "lat": -28.271988,
+   "lon": 29.216569,
+   "name": "Platberg",
+   "ele": 2398
+  },
+  {
+   "lat": -28.662211,
+   "lon": 28.446116,
+   "name": "Qholaqhoe",
+   "ele": 2375
+  },
+  {
+   "lat": -30.7308,
+   "lon": 27.6158,
+   "name": "Loskop",
+   "ele": 2364,
+   "wikidata": "Q31480451"
+  },
+  {
+   "lat": -29.775232,
+   "lon": 29.303284,
+   "name": "Garden Castle",
+   "ele": 2359
+  },
+  {
+   "lat": -30.5017,
+   "lon": 27.69,
+   "name": "Qibing",
+   "ele": 2348
+  },
+  {
+   "lat": -28.507532,
+   "lon": 28.368341,
+   "name": "Zaaihoek",
+   "ele": 2346
+  },
+  {
+   "lat": -28.289793,
+   "lon": 29.207828,
+   "name": "Platberg",
+   "ele": 2345
+  },
+  {
+   "lat": -30.296694,
+   "lon": 27.651424,
+   "name": "Fika-la-Ts'oene",
+   "ele": 2344
+  },
+  {
+   "lat": -29.529741,
+   "lon": 28.614492,
+   "name": "Liphookoaneng",
+   "ele": 2335
+  },
+  {
+   "lat": -29.731406,
+   "lon": 27.671526,
+   "name": "Kena",
+   "ele": 2334
+  },
+  {
+   "lat": -28.5108,
+   "lon": 28.0133,
+   "name": "Swartkrans",
+   "ele": 2334,
+   "wikidata": "Q31401710"
+  },
+  {
+   "lat": -28.1617,
+   "lon": 29.5358,
+   "name": "Skeurklip",
+   "ele": 2331,
+   "wikidata": "Q31689520"
+  },
+  {
+   "lat": -29.745125,
+   "lon": 27.774925,
+   "name": "Nt'supe",
+   "ele": 2325
+  },
+  {
+   "lat": -28.243828,
+   "lon": 29.17096,
+   "name": "Platberg",
+   "ele": 2321
+  },
+  {
+   "lat": -29.415467,
+   "lon": 29.561231,
+   "name": "Sheba's Breasts",
+   "ele": 2318
+  },
+  {
+   "lat": -29.413184,
+   "lon": 29.562655,
+   "name": "Sheba's Breasts",
+   "ele": 2314
+  },
+  {
+   "lat": -28.699475,
+   "lon": 28.896271,
+   "name": "The Nek",
+   "ele": 2308
+  },
+  {
+   "lat": -28.575,
+   "lon": 28.9742,
+   "name": "Babangibone",
+   "ele": 2307
+  },
+  {
+   "lat": -30.042254,
+   "lon": 29.066448,
+   "name": "Bhakana",
+   "ele": 2303
+  },
+  {
+   "lat": -29.603002,
+   "lon": 27.734893,
+   "name": "Mautse",
+   "ele": 2293
+  },
+  {
+   "lat": -27.7117,
+   "lon": 29.3025,
+   "name": "Aasvoëlkop",
+   "ele": 2290,
+   "wikidata": "Q31518840"
+  },
+  {
+   "lat": -29.187738,
+   "lon": 29.442581,
+   "name": "Cloudland Col",
+   "ele": 2289
+  },
+  {
+   "lat": -28.189775,
+   "lon": 29.191039,
+   "name": "Mooihoekkop",
+   "ele": 2286
+  },
+  {
+   "lat": -29.7392,
+   "lon": 29.345,
+   "name": "Mvuleni",
+   "ele": 2284
+  },
+  {
+   "lat": -28.185291,
+   "lon": 29.188835,
+   "name": "Mooihoekkop",
+   "ele": 2281
+  },
+  {
+   "lat": -30.501703,
+   "lon": 28.87928,
+   "name": "Jumbla Mountain",
+   "ele": 2277
+  },
+  {
+   "lat": -30.053653,
+   "lon": 27.911764,
+   "name": "Thaba-Telle",
+   "ele": 2277
+  },
+  {
+   "lat": -28.0233,
+   "lon": 29.5908,
+   "name": "Mont Pelaan",
+   "ele": 2267,
+   "wikidata": "Q31699881"
+  },
+  {
+   "lat": -30.0267,
+   "lon": 29.1958,
+   "name": "Mount MacDonald",
+   "ele": 2267,
+   "wikidata": "Q31478939"
+  },
+  {
+   "lat": -30.617636,
+   "lon": 29.585737,
+   "name": "Ingeli Mountain",
+   "ele": 2263
+  },
+  {
+   "lat": -28.59,
+   "lon": 28.2575,
+   "name": "Ventersberg",
+   "ele": 2259
+  },
+  {
+   "lat": -30.337768,
+   "lon": 27.78889,
+   "name": "Thaba-Nts'o",
+   "ele": 2254
+  },
+  {
+   "lat": -29.865154,
+   "lon": 27.550204,
+   "name": "Thaba-Matelile",
+   "ele": 2253
+  },
+  {
+   "lat": -29.259003,
+   "lon": 27.819544,
+   "name": "Sefikeng",
+   "ele": 2242,
+   "wikidata": "Q27480128"
+  },
+  {
+   "lat": -29.9533,
+   "lon": 29.2217,
+   "name": "Mount Arthur",
+   "ele": 2240
+  },
+  {
+   "lat": -29.786968,
+   "lon": 27.632221,
+   "name": "'Malipela",
+   "ele": 2236
+  },
+  {
+   "lat": -29.065422,
+   "lon": 28.034968,
+   "name": "Kueneng",
+   "ele": 2236
+  },
+  {
+   "lat": -28.597501,
+   "lon": 28.014664,
+   "name": "Jacobsberg",
+   "ele": 2228
+  },
+  {
+   "lat": -28.4058,
+   "lon": 28.1092,
+   "name": "Oorsprongberg",
+   "ele": 2228
+  },
+  {
+   "lat": -30.473133,
+   "lon": 29.419586,
+   "name": "Mount Currie",
+   "ele": 2224,
+   "wikidata": "Q31510313"
+  },
+  {
+   "lat": -27.7033,
+   "lon": 29.2767,
+   "name": "Spitskop",
+   "ele": 2224,
+   "wikidata": "Q31402089"
+  },
+  {
+   "lat": -29.668304,
+   "lon": 29.38931,
+   "name": "2219",
+   "ele": 2219
+  },
+  {
+   "lat": -29.177844,
+   "lon": 27.976351,
+   "name": "Mahlatsa",
+   "ele": 2219
+  },
+  {
+   "lat": -30.046181,
+   "lon": 27.976035,
+   "name": "'Malinakane",
+   "ele": 2214
+  },
+  {
+   "lat": -29.822711,
+   "lon": 29.255808,
+   "name": "Bucquay Nek",
+   "ele": 2208,
+   "wikidata": "Q31512075"
+  },
+  {
+   "lat": -29.666746,
+   "lon": 29.403835,
+   "name": "Ndlovini",
+   "ele": 2206,
+   "wikidata": "Q31706867"
+  },
+  {
+   "lat": -30.145369,
+   "lon": 27.526149,
+   "name": "Thaba-Phiri",
+   "ele": 2195
+  },
+  {
+   "lat": -29.17486,
+   "lon": 29.465936,
+   "name": "iNtambamnyama",
+   "ele": 2194
+  },
+  {
+   "lat": -30.04793,
+   "lon": 29.081152,
+   "name": "Ntshungwana",
+   "ele": 2193
+  },
+  {
+   "lat": -28.395531,
+   "lon": 29.279016,
+   "name": "Rensburgskop",
+   "ele": 2190,
+   "wikidata": "Q31695667"
+  },
+  {
+   "lat": -30.1433,
+   "lon": 29.495,
+   "name": "Nsikeni",
+   "ele": 2189,
+   "wikidata": "Q31703441"
+  },
+  {
+   "lat": -28.1058,
+   "lon": 29.5442,
+   "name": "Aasvoëlkop",
+   "ele": 2189,
+   "wikidata": "Q31518823"
+  },
+  {
+   "lat": -28.69479,
+   "lon": 28.05234,
+   "name": "Mount Morkel",
+   "ele": 2185
+  },
+  {
+   "lat": -28.4158,
+   "lon": 29.2542,
+   "name": "Manyenyeza",
+   "ele": 2180,
+   "wikidata": "Q31475439"
+  },
+  {
+   "lat": -28.3842,
+   "lon": 28.19,
+   "name": "Blouberg",
+   "ele": 2178,
+   "wikidata": "Q31514717"
+  },
+  {
+   "lat": -29.400118,
+   "lon": 29.683085,
+   "name": "Gladstone's Nose",
+   "ele": 2174
+  },
+  {
+   "lat": -29.29323,
+   "lon": 27.792098,
+   "name": "Khamolane",
+   "ele": 2172
+  },
+  {
+   "lat": -28.875559,
+   "lon": 28.144294,
+   "name": "Qoqolosing",
+   "ele": 2170,
+   "wikidata": "Q27480122"
+  },
+  {
+   "lat": -28.649964,
+   "lon": 28.9409,
+   "name": "Cold Hill",
+   "ele": 2170
+  },
+  {
+   "lat": -28.2175,
+   "lon": 29.1525,
+   "name": "Loskop",
+   "ele": 2169,
+   "wikidata": "Q31480535"
+  },
+  {
+   "lat": -28.702258,
+   "lon": 28.913781,
+   "name": "Dooley",
+   "ele": 2168,
+   "wikidata": "Q31508684"
+  },
+  {
+   "lat": -29.67129,
+   "lon": 29.329192,
+   "name": "The Policeman",
+   "ele": 2167
+  },
+  {
+   "lat": -29.032,
+   "lon": 28.10594,
+   "name": "Leseling",
+   "ele": 2161
+  },
+  {
+   "lat": -27.9475,
+   "lon": 29.2258,
+   "name": "Tafelkop",
+   "ele": 2151,
+   "wikidata": "Q31684527"
+  },
+  {
+   "lat": -28.15511,
+   "lon": 29.157759,
+   "name": "Glen Paul",
+   "ele": 2142,
+   "wikidata": "Q31502824"
+  },
+  {
+   "lat": -29.4483,
+   "lon": 29.7975,
+   "name": "Spioenkop",
+   "ele": 2141,
+   "wikidata": "Q31687920"
+  },
+  {
+   "lat": -30.835,
+   "lon": 28.395,
+   "name": "Colon-koppe",
+   "ele": 2140,
+   "wikidata": "Q31510662"
+  },
+  {
+   "lat": -30.475696,
+   "lon": 29.432126,
+   "name": "Mt Fifty",
+   "ele": 2138
+  },
+  {
+   "lat": -29.677075,
+   "lon": 29.333115,
+   "name": "The Helmet",
+   "ele": 2136
+  },
+  {
+   "lat": -28.611877,
+   "lon": 28.449081,
+   "name": "Beginsel",
+   "ele": 2135
+  },
+  {
+   "lat": -28.593526,
+   "lon": 28.444959,
+   "name": "Verleisfontein",
+   "ele": 2135
+  },
+  {
+   "lat": -29.152039,
+   "lon": 29.480399,
+   "name": "Pimple Hill",
+   "ele": 2134
+  },
+  {
+   "lat": -30.1108,
+   "lon": 29.4983,
+   "name": "Mangeni",
+   "ele": 2133
+  },
+  {
+   "lat": -28.60499,
+   "lon": 28.959133,
+   "name": "Sungubala",
+   "ele": 2133
+  },
+  {
+   "lat": -30.73,
+   "lon": 28.4208,
+   "name": "Castle Rocks",
+   "ele": 2127,
+   "wikidata": "Q31511221"
+  },
+  {
+   "lat": -28.619592,
+   "lon": 28.946959,
+   "name": "Hlolela",
+   "ele": 2127
+  },
+  {
+   "lat": -28.706448,
+   "lon": 28.885954,
+   "name": "Breakfast Rock",
+   "ele": 2126,
+   "wikidata": "Q31512335"
+  },
+  {
+   "lat": -29.033108,
+   "lon": 28.227688,
+   "name": "Makhata",
+   "ele": 2124
+  },
+  {
+   "lat": -30.0033,
+   "lon": 28.2558,
+   "name": "Seberetlane",
+   "ele": 2122
+  },
+  {
+   "lat": -30.435,
+   "lon": 29.2433,
+   "name": "Mount Joel",
+   "ele": 2120,
+   "wikidata": "Q31495284"
+  },
+  {
+   "lat": -27.9058,
+   "lon": 29.2292,
+   "name": "Spitskop",
+   "ele": 2118,
+   "wikidata": "Q31687477"
+  },
+  {
+   "lat": -29.674163,
+   "lon": 29.339997,
+   "name": "Titty",
+   "ele": 2117
+  },
+  {
+   "lat": -29.676286,
+   "lon": 29.277153,
+   "name": "The Island",
+   "ele": 2115
+  },
+  {
+   "lat": -30.865,
+   "lon": 27.8042,
+   "name": "Bell Kop",
+   "ele": 2114,
+   "wikidata": "Q31515505"
+  },
+  {
+   "lat": -28.4117,
+   "lon": 28.23,
+   "name": "Libanon se Kop",
+   "ele": 2111,
+   "wikidata": "Q31481471"
+  },
+  {
+   "lat": -29.161561,
+   "lon": 29.461546,
+   "name": "eMapipini",
+   "ele": 2110
+  },
+  {
+   "lat": -30.4225,
+   "lon": 29.3775,
+   "name": "Mount Fifty",
+   "ele": 2109,
+   "wikidata": "Q31958470"
+  },
+  {
+   "lat": -29.517446,
+   "lon": 29.413243,
+   "name": "Watson's Hill",
+   "ele": 2109,
+   "wikidata": "Q31676983"
+  },
+  {
+   "lat": -29.138213,
+   "lon": 29.516144,
+   "name": "Manzimahle",
+   "ele": 2105
+  },
+  {
+   "lat": -29.14411,
+   "lon": 29.488376,
+   "name": "Ndanyana",
+   "ele": 2099
+  },
+  {
+   "lat": -28.613409,
+   "lon": 28.946738,
+   "name": "Elephant",
+   "ele": 2099
+  },
+  {
+   "lat": -30.01407,
+   "lon": 29.47658,
+   "name": "Mganu",
+   "ele": 2097,
+   "wikidata": "Q31471906"
+  },
+  {
+   "lat": -28.83778,
+   "lon": 28.168605,
+   "name": "Qoqolosaneng",
+   "ele": 2092
+  },
+  {
+   "lat": -28.4083,
+   "lon": 28.6433,
+   "name": "Rooiberg",
+   "ele": 2087
+  },
+  {
+   "lat": -29.619016,
+   "lon": 29.434228,
+   "name": "Pepper",
+   "ele": 2087
+  },
+  {
+   "lat": -30.131585,
+   "lon": 28.681076,
+   "name": "QK 17",
+   "ele": 2087
+  },
+  {
+   "lat": -30.0767,
+   "lon": 29.4683,
+   "name": "Tsawule",
+   "ele": 2081,
+   "wikidata": "Q31681755"
+  },
+  {
+   "lat": -30.300575,
+   "lon": 27.564204,
+   "name": "Tsatsana",
+   "ele": 2080
+  },
+  {
+   "lat": -29.37,
+   "lon": 29.7708,
+   "name": "Kamberg",
+   "ele": 2074,
+   "wikidata": "Q31494356"
+  },
+  {
+   "lat": -29.674065,
+   "lon": 29.34461,
+   "name": "Whaleback",
+   "ele": 2073
+  },
+  {
+   "lat": -29.018855,
+   "lon": 29.381593,
+   "name": "iNdanyana",
+   "ele": 2070
+  },
+  {
+   "lat": -29.1008,
+   "lon": 29.5583,
+   "name": "KwaNyikinya",
+   "ele": 2069,
+   "wikidata": "Q31484419"
+  },
+  {
+   "lat": -28.5242,
+   "lon": 29.1575,
+   "name": "Dumbe",
+   "ele": 2063,
+   "wikidata": "Q31507299"
+  },
+  {
+   "lat": -29.339087,
+   "lon": 29.617964,
+   "name": "kwa-Phathsuza",
+   "ele": 2059
+  },
+  {
+   "lat": -27.765832,
+   "lon": 29.38559,
+   "name": "Loskop",
+   "ele": 2059
+  },
+  {
+   "lat": -30.3258,
+   "lon": 29.365,
+   "name": "Pramberg",
+   "ele": 2050,
+   "wikidata": "Q31697677"
+  },
+  {
+   "lat": -28.678084,
+   "lon": 28.93141,
+   "name": "Plowman's Kop",
+   "ele": 2044,
+   "wikidata": "Q31698080"
+  },
+  {
+   "lat": -29.153956,
+   "lon": 29.506563,
+   "name": "Posonde",
+   "ele": 2041
+  },
+  {
+   "lat": -30.4467,
+   "lon": 29.4342,
+   "name": "Bushy Ridge",
+   "ele": 2040,
+   "wikidata": "Q31511666"
+  },
+  {
+   "lat": -27.759205,
+   "lon": 29.37426,
+   "name": "Titanic Kop",
+   "ele": 2038
+  },
+  {
+   "lat": -28.0783,
+   "lon": 29.405,
+   "name": "Metsana",
+   "ele": 2036,
+   "wikidata": "Q31472203"
+  },
+  {
+   "lat": -28.4967,
+   "lon": 29.265,
+   "name": "Tintwa",
+   "ele": 2032
+  },
+  {
+   "lat": -30.3742,
+   "lon": 29.5442,
+   "name": "Ngqungqu",
+   "ele": 2028,
+   "wikidata": "Q31705699"
+  },
+  {
+   "lat": -28.329658,
+   "lon": 29.066886,
+   "name": "Baker's Kop",
+   "ele": 2026,
+   "wikidata": "Q31516503"
+  },
+  {
+   "lat": -28.3583,
+   "lon": 28.9525,
+   "name": "Mount Paul",
+   "ele": 2023,
+   "wikidata": "Q31699950"
+  },
+  {
+   "lat": -29.235013,
+   "lon": 29.668107,
+   "name": "Hlatikulu",
+   "ele": 2000,
+   "wikidata": "Q31498606"
+  },
+  {
+   "lat": -28.6725,
+   "lon": 27.7133,
+   "name": "Wonderkop",
+   "ele": 1997,
+   "wikidata": "Q31674709"
+  },
+  {
+   "lat": -29.056266,
+   "lon": 29.423374,
+   "name": "Matterhorn",
+   "ele": 1995,
+   "wikidata": "Q31473547"
+  },
+  {
+   "lat": -30.3842,
+   "lon": 29.52,
+   "name": "Ben Nevis",
+   "ele": 1995,
+   "wikidata": "Q31706369"
+  },
+  {
+   "lat": -28.657068,
+   "lon": 28.94864,
+   "name": "The Diamond",
+   "ele": 1995,
+   "wikidata": "Q31509789"
+  },
+  {
+   "lat": -28.995362,
+   "lon": 29.350463,
+   "name": "Vaalribokkop",
+   "ele": 1993
+  },
+  {
+   "lat": -28.9967,
+   "lon": 28.1258,
+   "name": "Thaba Phatsoa",
+   "ele": 1993
+  },
+  {
+   "lat": -30.3508,
+   "lon": 28.77,
+   "name": "Makwaiskop",
+   "ele": 1991,
+   "wikidata": "Q31405618"
+  },
+  {
+   "lat": -28.4608,
+   "lon": 27.9633,
+   "name": "Kepskop",
+   "ele": 1988,
+   "wikidata": "Q31493243"
+  },
+  {
+   "lat": -28.4383,
+   "lon": 28.7742,
+   "name": "Skuinskop",
+   "ele": 1987,
+   "wikidata": "Q31689317"
+  },
+  {
+   "lat": -28.51905,
+   "lon": 29.21625,
+   "name": "Nondela",
+   "ele": 1986,
+   "wikidata": "Q31704117"
+  },
+  {
+   "lat": -28.3825,
+   "lon": 27.9017,
+   "name": "Witkop",
+   "ele": 1984,
+   "wikidata": "Q31675617"
+  },
+  {
+   "lat": -29.696468,
+   "lon": 29.346315,
+   "name": "The Pimple",
+   "ele": 1978
+  },
+  {
+   "lat": -29.54228,
+   "lon": 29.95279,
+   "name": "Nhlosane",
+   "ele": 1977,
+   "wikidata": "Q31704999"
+  },
+  {
+   "lat": -29.060211,
+   "lon": 29.397454,
+   "name": "Little Berg",
+   "ele": 1975
+  },
+  {
+   "lat": -29.679914,
+   "lon": 29.384388,
+   "name": "Emerald Dome",
+   "ele": 1974
+  },
+  {
+   "lat": -28.6908,
+   "lon": 27.6617,
+   "name": "Claassenskop",
+   "ele": 1972
+  },
+  {
+   "lat": -30.4483,
+   "lon": 29.5967,
+   "name": "Mount Emma",
+   "ele": 1970,
+   "wikidata": "Q31505877"
+  },
+  {
+   "lat": -28.3608,
+   "lon": 28.8375,
+   "name": "Elandsrivierkop",
+   "ele": 1970,
+   "wikidata": "Q31506242"
+  },
+  {
+   "lat": -30.4425,
+   "lon": 27.505,
+   "name": "Makalakaleng",
+   "ele": 1970,
+   "wikidata": "Q31477334"
+  },
+  {
+   "lat": -28.3008,
+   "lon": 28.765,
+   "name": "Korfskop",
+   "ele": 1965,
+   "wikidata": "Q31490166"
+  },
+  {
+   "lat": -28.54509,
+   "lon": 29.09632,
+   "name": "Mpokelana",
+   "ele": 1963,
+   "wikidata": "Q31468696"
+  },
+  {
+   "lat": -30.2475,
+   "lon": 29.3983,
+   "name": "Zembeni",
+   "ele": 1961,
+   "wikidata": "Q31674177"
+  },
+  {
+   "lat": -30.4233,
+   "lon": 29.5808,
+   "name": "Ben Carnie",
+   "ele": 1957
+  },
+  {
+   "lat": -27.5725,
+   "lon": 29.785,
+   "name": "Spioenkop",
+   "ele": 1955,
+   "wikidata": "Q31687986"
+  },
+  {
+   "lat": -30.2242,
+   "lon": 28.9142,
+   "name": "Gudlintaba",
+   "ele": 1951,
+   "wikidata": "Q31500534"
+  },
+  {
+   "lat": -28.7575,
+   "lon": 29.0942,
+   "name": "Qhozo",
+   "ele": 1950
+  },
+  {
+   "lat": -29.92,
+   "lon": 29.3408,
+   "name": "Ntabamsila",
+   "ele": 1948,
+   "wikidata": "Q31703170"
+  },
+  {
+   "lat": -29.420863,
+   "lon": 27.714938,
+   "name": "BS 61",
+   "name_en": "BS 61",
+   "ele": 1946
+  },
+  {
+   "lat": -29.245095,
+   "lon": 29.518883,
+   "name": "Sugar Loaf Kop",
+   "ele": 1942,
+   "wikidata": "Q31401808"
+  },
+  {
+   "lat": -29.8483,
+   "lon": 29.4675,
+   "name": "Sangwana",
+   "ele": 1933,
+   "wikidata": "Q31692149"
+  },
+  {
+   "lat": -28.66,
+   "lon": 28.2025,
+   "name": "Hoenderkop",
+   "ele": 1932,
+   "wikidata": "Q31497912"
+  },
+  {
+   "lat": -30.4058,
+   "lon": 29.0392,
+   "name": "Cedarberg",
+   "ele": 1931,
+   "wikidata": "Q31407751"
+  },
+  {
+   "lat": -30.3325,
+   "lon": 29.4183,
+   "name": "Franklin Hill",
+   "ele": 1927,
+   "wikidata": "Q31504645"
+  },
+  {
+   "lat": -28.712143,
+   "lon": 28.950515,
+   "name": "Lion",
+   "ele": 1923
+  },
+  {
+   "lat": -29.63,
+   "lon": 29.8133,
+   "name": "Mpendle",
+   "ele": 1910,
+   "wikidata": "Q31468888"
+  },
+  {
+   "lat": -29.216608,
+   "lon": 29.532598,
+   "name": "Chimney Pot",
+   "ele": 1894,
+   "wikidata": "Q31407747"
+  },
+  {
+   "lat": -29.7992,
+   "lon": 29.5158,
+   "name": "Hlokomo",
+   "ele": 1894
+  },
+  {
+   "lat": -28.6516,
+   "lon": 28.971649,
+   "name": "Camel's Hump",
+   "ele": 1892,
+   "wikidata": "Q31511450"
+  },
+  {
+   "lat": -28.769125,
+   "lon": 28.111063,
+   "name": "Litlhoatsaneng",
+   "ele": 1888
+  },
+  {
+   "lat": -29.249238,
+   "lon": 29.536327,
+   "name": "Redhill",
+   "ele": 1886
+  },
+  {
+   "lat": -28.956397,
+   "lon": 29.219846,
+   "name": "Tryme Hill",
+   "ele": 1882,
+   "wikidata": "Q31681821"
+  },
+  {
+   "lat": -30.585774,
+   "lon": 27.570614,
+   "name": "Ha-Mohlabane (FORT-HOOK)",
+   "ele": 1873
+  },
+  {
+   "lat": -28.653243,
+   "lon": 28.102815,
+   "name": "Dwarsberg",
+   "ele": 1873
+  },
+  {
+   "lat": -28.927269,
+   "lon": 29.205396,
+   "name": "Baboon Rock",
+   "ele": 1873
+  },
+  {
+   "lat": -28.513728,
+   "lon": 28.079188,
+   "name": "Castle Rock",
+   "ele": 1870
+  },
+  {
+   "lat": -28.617535,
+   "lon": 28.092773,
+   "name": "Rooikrans",
+   "ele": 1870
+  },
+  {
+   "lat": -29.167391,
+   "lon": 29.601713,
+   "name": "Mawuza",
+   "ele": 1869
+  },
+  {
+   "lat": -30.34,
+   "lon": 29.4983,
+   "name": "Spitskop",
+   "ele": 1865
+  },
+  {
+   "lat": -29.936735,
+   "lon": 29.499001,
+   "name": "Bungalow Kop",
+   "ele": 1861,
+   "wikidata": "Q31511778"
+  },
+  {
+   "lat": -28.759551,
+   "lon": 28.136851,
+   "name": "Nqechane",
+   "ele": 1845
+  },
+  {
+   "lat": -29.233403,
+   "lon": 29.534312,
+   "name": "World's View",
+   "ele": 1842,
+   "wikidata": "Q31674660"
+  },
+  {
+   "lat": -30.9792,
+   "lon": 28.1817,
+   "name": "Castle Kop",
+   "ele": 1841,
+   "wikidata": "Q31511139"
+  },
+  {
+   "lat": -28.28,
+   "lon": 27.7642,
+   "name": "Biddulphsberg",
+   "ele": 1840,
+   "wikidata": "Q31515172"
+  },
+  {
+   "lat": -29.9708,
+   "lon": 29.585,
+   "name": "Siweni",
+   "ele": 1831,
+   "wikidata": "Q31689695"
+  },
+  {
+   "lat": -28.2633,
+   "lon": 28.2808,
+   "name": "Wolhuterskop",
+   "ele": 1830
+  },
+  {
+   "lat": -28.629649,
+   "lon": 28.256131,
+   "name": "Help-me-kaar",
+   "ele": 1829
+  },
+  {
+   "lat": -30.225763,
+   "lon": 27.863118,
+   "name": "Hoae",
+   "ele": 1823
+  },
+  {
+   "lat": -30.216805,
+   "lon": 27.884706,
+   "name": "Thaba-Kholo",
+   "ele": 1822
+  },
+  {
+   "lat": -30.75,
+   "lon": 29.2133,
+   "name": "Sikhewini",
+   "ele": 1819
+  },
+  {
+   "lat": -29.0725,
+   "lon": 27.7275,
+   "name": "Kolonyama",
+   "ele": 1799
+  },
+  {
+   "lat": -30.05364,
+   "lon": 29.46448,
+   "name": "Elephant Hill",
+   "ele": 1796,
+   "wikidata": "Q31506156"
+  },
+  {
+   "lat": -28.6392,
+   "lon": 27.7367,
+   "name": "Tobieskop",
+   "ele": 1781,
+   "wikidata": "Q31401461"
+  },
+  {
+   "lat": -28.2125,
+   "lon": 30.0233,
+   "name": "KwaHlatikulu",
+   "ele": 1780,
+   "wikidata": "Q31486082"
+  },
+  {
+   "lat": -30.575,
+   "lon": 29.2575,
+   "name": "Kraaikop",
+   "ele": 1778,
+   "wikidata": "Q31489804"
+  },
+  {
+   "lat": -29.354293,
+   "lon": 27.671202,
+   "name": "Thaba-Bosiu",
+   "ele": 1776,
+   "wikidata": "Q2408243"
+  },
+  {
+   "lat": -29.287053,
+   "lon": 30.293401,
+   "name": "Mount Gilboa",
+   "ele": 1772,
+   "wikidata": "Q31503029"
+  },
+  {
+   "lat": -29.222368,
+   "lon": 29.610265,
+   "name": "Ntabansisa",
+   "ele": 1770
+  },
+  {
+   "lat": -30.9217,
+   "lon": 28.6383,
+   "name": "Ntaboduli",
+   "ele": 1770
+  },
+  {
+   "lat": -29.15,
+   "lon": 30.2542,
+   "name": "Proudfoot Peak",
+   "ele": 1751,
+   "wikidata": "Q31697146"
+  },
+  {
+   "lat": -29.401135,
+   "lon": 27.63262,
+   "name": "Thaba-Khupa",
+   "ele": 1750
+  },
+  {
+   "lat": -30.7233,
+   "lon": 28.5508,
+   "name": "Ntabelanga",
+   "ele": 1743,
+   "wikidata": "Q31702880"
+  },
+  {
+   "lat": -30.3725,
+   "lon": 27.6042,
+   "name": "Thaba-Nts'o",
+   "ele": 1742
+  },
+  {
+   "lat": -30.8367,
+   "lon": 29.3983,
+   "name": "iNtabamnyama",
+   "ele": 1737
+  },
+  {
+   "lat": -29.1975,
+   "lon": 29.8683,
+   "name": "Bray Hill",
+   "ele": 1733,
+   "wikidata": "Q31407851"
+  },
+  {
+   "lat": -28.584737,
+   "lon": 29.051809,
+   "name": "The Cone",
+   "ele": 1716,
+   "wikidata": "Q31407734"
+  },
+  {
+   "lat": -29.9667,
+   "lon": 29.735,
+   "name": "Hlabeni",
+   "ele": 1713,
+   "wikidata": "Q31498711"
+  },
+  {
+   "lat": -29.0025,
+   "lon": 30.2142,
+   "name": "Dodoci",
+   "ele": 1710
+  },
+  {
+   "lat": -27.9592,
+   "lon": 29.8542,
+   "name": "Leeukop",
+   "ele": 1706,
+   "wikidata": "Q31482192"
+  },
+  {
+   "lat": -30.592812,
+   "lon": 28.551802,
+   "name": "KwaSomgonyani",
+   "ele": 1687
+  },
+  {
+   "lat": -29.7867,
+   "lon": 29.7792,
+   "name": "Xosheyakhe",
+   "ele": 1680,
+   "wikidata": "Q31674410"
+  },
+  {
+   "lat": -29.054714,
+   "lon": 29.409054,
+   "name": "Maartenspiek",
+   "ele": 1675
+  },
+  {
+   "lat": -29.279199,
+   "lon": 29.996372,
+   "name": "Johnstone's Kop",
+   "ele": 1670,
+   "wikidata": "Q31406679"
+  },
+  {
+   "lat": -29.448779,
+   "lon": 27.690364,
+   "name": "RMA 31",
+   "name_en": "RMA 31",
+   "ele": 1668
+  },
+  {
+   "lat": -30.315,
+   "lon": 28.6742,
+   "name": "Stanford Hill",
+   "ele": 1662,
+   "wikidata": "Q31401907"
+  },
+  {
+   "lat": -30.1583,
+   "lon": 29.7508,
+   "name": "Myembe",
+   "ele": 1658
+  },
+  {
+   "lat": -30.586803,
+   "lon": 28.53789,
+   "name": "Zinatyaneni",
+   "ele": 1654
+  },
+  {
+   "lat": -29.01654,
+   "lon": 29.394021,
+   "name": "Steilberg",
+   "ele": 1651
+  },
+  {
+   "lat": -29.959441,
+   "lon": 29.533016,
+   "name": "eMadwaleni",
+   "ele": 1647,
+   "wikidata": "Q31506090"
+  },
+  {
+   "lat": -29.110147,
+   "lon": 27.582099,
+   "name": "Spitskop",
+   "ele": 1645,
+   "wikidata": "Q31402063"
+  },
+  {
+   "lat": -28.653053,
+   "lon": 28.989269,
+   "name": "Trilby Hill",
+   "ele": 1638
+  },
+  {
+   "lat": -30.307754,
+   "lon": 29.576448,
+   "name": "Government Hill",
+   "ele": 1627
+  },
+  {
+   "lat": -29.009784,
+   "lon": 29.39308,
+   "name": "Perdeklip",
+   "ele": 1625
+  },
+  {
+   "lat": -28.607368,
+   "lon": 29.027881,
+   "name": "Montusi Peak",
+   "ele": 1624
+  },
+  {
+   "lat": -30.8583,
+   "lon": 28.8417,
+   "name": "KuMafutha",
+   "ele": 1613,
+   "wikidata": "Q31488147"
+  },
+  {
+   "lat": -29.7242,
+   "lon": 30.07,
+   "name": "Elandskop",
+   "ele": 1608,
+   "wikidata": "Q31506346"
+  },
+  {
+   "lat": -28.8933,
+   "lon": 30.24,
+   "name": "uMhlumba",
+   "ele": 1602,
+   "wikidata": "Q31679968"
+  },
+  {
+   "lat": -28.9008,
+   "lon": 29.4375,
+   "name": "Arthur's Seat",
+   "ele": 1599,
+   "wikidata": "Q31517578"
+  },
+  {
+   "lat": -30.6325,
+   "lon": 29.2067,
+   "name": "KuCawenye",
+   "ele": 1599,
+   "wikidata": "Q31488757"
+  },
+  {
+   "lat": -28.8333,
+   "lon": 29.3483,
+   "name": "Nkunzi",
+   "ele": 1598,
+   "wikidata": "Q31704368"
+  },
+  {
+   "lat": -29.091167,
+   "lon": 29.853048,
+   "name": "Magebeni",
+   "ele": 1592
+  },
+  {
+   "lat": -29.134968,
+   "lon": 29.850901,
+   "name": "Spitskop",
+   "ele": 1591,
+   "wikidata": "Q31402062"
+  },
+  {
+   "lat": -29.1583,
+   "lon": 30.3083,
+   "name": "Ngwegwe",
+   "ele": 1587,
+   "wikidata": "Q31405042"
+  },
+  {
+   "lat": -29.8667,
+   "lon": 29.9492,
+   "name": "Mpongweni",
+   "ele": 1578
+  },
+  {
+   "lat": -29.072234,
+   "lon": 29.911466,
+   "name": "Beacon Hill",
+   "ele": 1576,
+   "wikidata": "Q31408235"
+  },
+  {
+   "lat": -28.0217,
+   "lon": 30.2408,
+   "name": "Nyanyadu",
+   "ele": 1570,
+   "wikidata": "Q31701554"
+  },
+  {
+   "lat": -28.3833,
+   "lon": 29.8875,
+   "name": "Jonono",
+   "ele": 1569,
+   "wikidata": "Q31406671"
+  },
+  {
+   "lat": -28.0125,
+   "lon": 30.4375,
+   "name": "Nhlonga",
+   "ele": 1566,
+   "wikidata": "Q31705069"
+  },
+  {
+   "lat": -30.7308,
+   "lon": 28.8967,
+   "name": "Ntabazencuka",
+   "ele": 1565,
+   "wikidata": "Q31702931"
+  },
+  {
+   "lat": -29.8075,
+   "lon": 29.79,
+   "name": "Mahutshwa",
+   "ele": 1560,
+   "wikidata": "Q31477482"
+  },
+  {
+   "lat": -29.082184,
+   "lon": 29.805206,
+   "name": "Ngqungqulu",
+   "ele": 1548,
+   "wikidata": "Q31705681"
+  },
+  {
+   "lat": -29.0893,
+   "lon": 29.904237,
+   "name": "Misty Kop",
+   "ele": 1547,
+   "wikidata": "Q31405325"
+  },
+  {
+   "lat": -30.052213,
+   "lon": 29.569836,
+   "name": "Bhosholweni",
+   "ele": 1540,
+   "wikidata": "Q31515222"
+  },
+  {
+   "lat": -30.9183,
+   "lon": 28.42,
+   "name": "Ntatyaneni",
+   "ele": 1531,
+   "wikidata": "Q31404855"
+  },
+  {
+   "lat": -28.8983,
+   "lon": 30.1442,
+   "name": "uMkholombe omkhulu",
+   "ele": 1524,
+   "wikidata": "Q31679917"
+  },
+  {
+   "lat": -30.3467,
+   "lon": 29.8392,
+   "name": "Nzimankulu",
+   "ele": 1517,
+   "wikidata": "Q31701439"
+  },
+  {
+   "lat": -28.875,
+   "lon": 30.3667,
+   "name": "iNtanyana",
+   "ele": 1515
+  },
+  {
+   "lat": -29.7283,
+   "lon": 29.79,
+   "name": "KaNomtshilwane",
+   "ele": 1497,
+   "wikidata": "Q31494078"
+  },
+  {
+   "lat": -28.91,
+   "lon": 30.125,
+   "name": "uMkholombe omncane",
+   "ele": 1491,
+   "wikidata": "Q31679899"
+  },
+  {
+   "lat": -30.3075,
+   "lon": 29.8708,
+   "name": "Malowe",
+   "ele": 1488,
+   "wikidata": "Q31476515"
+  },
+  {
+   "lat": -28.6725,
+   "lon": 30.1542,
+   "name": "Mhlumayo",
+   "ele": 1467,
+   "wikidata": "Q31471615"
+  },
+  {
+   "lat": -30.3225,
+   "lon": 29.8408,
+   "name": "Gudlintaba",
+   "ele": 1467,
+   "wikidata": "Q31500515"
+  },
+  {
+   "lat": -28.6492,
+   "lon": 29.5183,
+   "name": "Spioenkop",
+   "ele": 1464,
+   "wikidata": "Q7577689"
+  },
+  {
+   "lat": -28.599646,
+   "lon": 29.274403,
+   "name": "MGODOVIYA",
+   "ele": 1464,
+   "wikidata": "Q31405397"
+  },
+  {
+   "lat": -29.9142,
+   "lon": 29.9767,
+   "name": "Mnywaneni",
+   "ele": 1458
+  },
+  {
+   "lat": -29.592865,
+   "lon": 30.25349,
+   "name": "Swartkop",
+   "ele": 1451,
+   "wikidata": "Q31685312"
+  },
+  {
+   "lat": -29.8225,
+   "lon": 30.05,
+   "name": "Masangazana",
+   "ele": 1446,
+   "wikidata": "Q31474369"
+  },
+  {
+   "lat": -28.712965,
+   "lon": 29.256804,
+   "name": "iNdanyana",
+   "ele": 1444
+  },
+  {
+   "lat": -28.4117,
+   "lon": 29.8233,
+   "name": "Mjoli",
+   "ele": 1440,
+   "wikidata": "Q31405319"
+  },
+  {
+   "lat": -28.53307,
+   "lon": 29.295645,
+   "name": "Die Maanhaai",
+   "ele": 1420
+  },
+  {
+   "lat": -29.8542,
+   "lon": 30.1033,
+   "name": "Eweni",
+   "ele": 1411,
+   "wikidata": "Q31505104"
+  },
+  {
+   "lat": -28.576433,
+   "lon": 29.432135,
+   "name": "MAINS NEW",
+   "ele": 1405
+  },
+  {
+   "lat": -28.623426,
+   "lon": 29.490938,
+   "name": "WINTERBURN",
+   "ele": 1403
+  },
+  {
+   "lat": -28.583212,
+   "lon": 29.291074,
+   "name": "Bonyosa",
+   "ele": 1392,
+   "wikidata": "Q31407950"
+  },
+  {
+   "lat": -28.637184,
+   "lon": 29.30015,
+   "name": "KWAZITA",
+   "ele": 1387,
+   "wikidata": "Q31406080"
+  },
+  {
+   "lat": -28.7092,
+   "lon": 29.6683,
+   "name": "Tala",
+   "ele": 1375
+  },
+  {
+   "lat": -28.946932,
+   "lon": 29.611998,
+   "name": "Loskop",
+   "ele": 1364,
+   "wikidata": "Q31405818"
+  },
+  {
+   "lat": -28.6317,
+   "lon": 30.4842,
+   "name": "Nhlomula",
+   "ele": 1359,
+   "wikidata": "Q31705086"
+  },
+  {
+   "lat": -29.3508,
+   "lon": 30.2375,
+   "name": "Loskop",
+   "ele": 1325,
+   "wikidata": "Q31480494"
+  },
+  {
+   "lat": -30.77,
+   "lon": 29.0858,
+   "name": "KuSitshisa",
+   "ele": 1317,
+   "wikidata": "Q31406182"
+  },
+  {
+   "lat": -28.567902,
+   "lon": 29.36701,
+   "name": "ROOIHOEK",
+   "ele": 1316
+  },
+  {
+   "lat": -28.688744,
+   "lon": 29.43219,
+   "name": "Ntenjwa",
+   "ele": 1316,
+   "wikidata": "Q31404850"
+  },
+  {
+   "lat": -28.633152,
+   "lon": 29.459236,
+   "name": "CHILDES HILL",
+   "ele": 1298,
+   "wikidata": "Q31407748"
+  },
+  {
+   "lat": -28.513462,
+   "lon": 29.341628,
+   "name": "Geluksburgkop",
+   "ele": 1290,
+   "wikidata": "Q31407240"
+  },
+  {
+   "lat": -28.8767,
+   "lon": 30.0358,
+   "name": "uMthunzini",
+   "ele": 1280,
+   "wikidata": "Q31679812"
+  },
+  {
+   "lat": -28.702656,
+   "lon": 29.388487,
+   "name": "Sililosikulu",
+   "ele": 1270,
+   "wikidata": "Q31690271"
+  },
+  {
+   "lat": -29.58241,
+   "lon": 30.28094,
+   "name": "The Knoll",
+   "ele": 1263
+  },
+  {
+   "lat": -28.7058,
+   "lon": 29.9117,
+   "name": "Monte Cristo",
+   "ele": 1250
+  },
+  {
+   "lat": -28.5917,
+   "lon": 30.31,
+   "name": "Ntanyazulu",
+   "ele": 1233,
+   "wikidata": "Q31702552"
+  },
+  {
+   "lat": -28.659261,
+   "lon": 29.483786,
+   "name": "Three Tree Hill",
+   "ele": 1224,
+   "wikidata": "Q31401519"
+  },
+  {
+   "lat": -28.7508,
+   "lon": 30.0592,
+   "name": "Nhlawe",
+   "ele": 1177
+  },
+  {
+   "lat": -28.6617,
+   "lon": 30.3808,
+   "name": "Macanco",
+   "ele": 1163,
+   "wikidata": "Q31478983"
+  },
+  {
+   "lat": -28.9983,
+   "lon": 30.3533,
+   "name": "iMbalane",
+   "ele": 1144
+  },
+  {
+   "lat": -30.9533,
+   "lon": 29.1642,
+   "name": "KuMagqayi",
+   "ele": 1134,
+   "wikidata": "Q31488124"
+  },
+  {
+   "lat": -28.7167,
+   "lon": 30.2867,
+   "name": "Mashunka",
+   "ele": 1100,
+   "wikidata": "Q31474145"
+  },
+  {
+   "lat": -28.6492,
+   "lon": 30.2817,
+   "name": "Mzweni",
+   "ele": 1093,
+   "wikidata": "Q31707587"
+  },
+  {
+   "lat": -28.8375,
+   "lon": 30.4425,
+   "name": "eMbilana",
+   "ele": 1067
+  },
+  {
+   "lat": -29.581544,
+   "lon": 30.330015,
+   "name": "Town Hill",
+   "ele": 1058
+  },
+  {
+   "lat": -30.2908,
+   "lon": 30.3125,
+   "name": "Sihlutankungu",
+   "ele": 1058,
+   "wikidata": "Q31690468"
+  },
+  {
+   "lat": -30.8825,
+   "lon": 29.0817,
+   "name": "KuMrobi",
+   "ele": 1056
+  },
+  {
+   "lat": -28.62,
+   "lon": 30.2833,
+   "name": "Mpuntsheni",
+   "ele": 1036,
+   "wikidata": "Q31468483"
+  },
+  {
+   "lat": -30.0392,
+   "lon": 30.4475,
+   "name": "Mount Misery (iNhlazuke)",
+   "ele": 982
+  },
+  {
+   "lat": -30.125,
+   "lon": 30.4325,
+   "name": "Mkunya",
+   "ele": 905
+  },
+  {
+   "lat": -29.622704,
+   "lon": 30.341297,
+   "name": "Signal Hill",
+   "ele": 895,
+   "wikidata": "Q31402533"
+  },
+  {
+   "lat": -30.4275,
+   "lon": 30.4592,
+   "name": "Msikazi",
+   "ele": 560,
+   "wikidata": "Q31405171"
+  },
+  {
+   "lat": -30.107786,
+   "lon": 28.769063,
+   "name": "Thaba-Malapi"
+  },
+  {
+   "lat": -30.126992,
+   "lon": 28.533248,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -30.154789,
+   "lon": 28.460426,
+   "name": "Tafoleng"
+  },
+  {
+   "lat": -30.139045,
+   "lon": 28.516297,
+   "name": "Three-Sisters"
+  },
+  {
+   "lat": -28.770735,
+   "lon": 28.807295,
+   "name": "Namahadi Peak / Thabana Moholi"
+  },
+  {
+   "lat": -30.070755,
+   "lon": 28.879713,
+   "name": "Lipecheleng"
+  },
+  {
+   "lat": -30.105786,
+   "lon": 28.760271,
+   "name": "Motiki"
+  },
+  {
+   "lat": -30.148651,
+   "lon": 28.482594,
+   "name": "Nakalane"
+  },
+  {
+   "lat": -30.150216,
+   "lon": 28.492387,
+   "name": "Three-Sisters"
+  },
+  {
+   "lat": -30.154618,
+   "lon": 28.434994,
+   "name": "Thaba-Moliko"
+  },
+  {
+   "lat": -30.892778,
+   "lon": 28.091389,
+   "name": "Aurora Peak"
+  },
+  {
+   "lat": -30.669722,
+   "lon": 27.705278,
+   "name": "Balloch Peak",
+   "wikidata": "Q31516308"
+  },
+  {
+   "lat": -30.420556,
+   "lon": 30.444167,
+   "name": "Pulunjani"
+  },
+  {
+   "lat": -30.879167,
+   "lon": 28.105278,
+   "name": "Wetterhorn",
+   "wikidata": "Q31676767"
+  },
+  {
+   "lat": -28.6475,
+   "lon": 29.538056,
+   "name": "Twin Peaks",
+   "wikidata": "Q31401335"
+  },
+  {
+   "lat": -28.640341,
+   "lon": 28.942276,
+   "name": "Sugar Loaf",
+   "wikidata": "Q31686252"
+  },
+  {
+   "lat": -28.649644,
+   "lon": 28.961716,
+   "name": "Surprise Ridge",
+   "wikidata": "Q31686075"
+  },
+  {
+   "lat": -29.045604,
+   "lon": 28.675346,
+   "name": "'Matsaile"
+  },
+  {
+   "lat": -29.056052,
+   "lon": 28.640217,
+   "name": "Katib'a-Ts'oene"
+  },
+  {
+   "lat": -29.906164,
+   "lon": 28.187974,
+   "name": "Thabana-Liphofu"
+  },
+  {
+   "lat": -29.717957,
+   "lon": 29.017271,
+   "name": "Kepiseng"
+  },
+  {
+   "lat": -28.978127,
+   "lon": 28.70865,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -28.958283,
+   "lon": 28.722283,
+   "name": "Ntsupe"
+  },
+  {
+   "lat": -29.791904,
+   "lon": 28.966955,
+   "name": "Thaba-ea-Tomose"
+  },
+  {
+   "lat": -29.985301,
+   "lon": 27.692231,
+   "name": "'Mamokhorong"
+  },
+  {
+   "lat": -29.949376,
+   "lon": 28.516259,
+   "name": "Mpharane"
+  },
+  {
+   "lat": -28.88159,
+   "lon": 29.01755,
+   "name": "Ncedamabutho"
+  },
+  {
+   "lat": -28.675794,
+   "lon": 29.845984,
+   "name": "Railway Hill",
+   "wikidata": "Q31403806"
+  },
+  {
+   "lat": -28.604778,
+   "lon": 28.008852,
+   "name": "Second Pyramid"
+  },
+  {
+   "lat": -28.626651,
+   "lon": 28.04022,
+   "name": "Blaauwkrans"
+  },
+  {
+   "lat": -28.669125,
+   "lon": 28.033915,
+   "name": "Sikonjelashoed"
+  },
+  {
+   "lat": -30.791455,
+   "lon": 28.120882,
+   "name": "Scobell's Kop",
+   "wikidata": "Q31691921"
+  },
+  {
+   "lat": -30.594202,
+   "lon": 27.67484,
+   "name": "Ntabantatu"
+  },
+  {
+   "lat": -30.601217,
+   "lon": 27.564841,
+   "name": "Ha-Khaudi"
+  },
+  {
+   "lat": -30.619347,
+   "lon": 27.704551,
+   "name": "Nduma"
+  },
+  {
+   "lat": -29.87807,
+   "lon": 28.866469,
+   "name": "Tsoloane"
+  },
+  {
+   "lat": -29.710092,
+   "lon": 29.030717,
+   "name": "Macacacaneng"
+  },
+  {
+   "lat": -29.659144,
+   "lon": 29.16962,
+   "name": "Letsokung"
+  },
+  {
+   "lat": -28.942198,
+   "lon": 28.782343,
+   "name": "Ntlholohetsane"
+  },
+  {
+   "lat": -29.249908,
+   "lon": 29.175466,
+   "name": "Maphoong"
+  },
+  {
+   "lat": -29.344738,
+   "lon": 29.296585,
+   "name": "Tsaile"
+  },
+  {
+   "lat": -29.32979,
+   "lon": 29.244748,
+   "name": "Thaba-Mokoto"
+  },
+  {
+   "lat": -29.619844,
+   "lon": 29.277819,
+   "name": "Masobasoba"
+  },
+  {
+   "lat": -29.362035,
+   "lon": 27.849175,
+   "name": "Tsereoane"
+  },
+  {
+   "lat": -29.54143,
+   "lon": 27.726512,
+   "name": "Popa"
+  },
+  {
+   "lat": -29.566383,
+   "lon": 28.147363,
+   "name": "'Matsaile"
+  },
+  {
+   "lat": -30.087782,
+   "lon": 28.424624,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -30.015283,
+   "lon": 28.549787,
+   "name": "Tekesele"
+  },
+  {
+   "lat": -29.709326,
+   "lon": 27.875982,
+   "name": "Theetsoa"
+  },
+  {
+   "lat": -28.756041,
+   "lon": 28.104453,
+   "name": "Litlhoareng"
+  },
+  {
+   "lat": -30.409835,
+   "lon": 28.088772,
+   "name": "Thabana-Teletsana"
+  },
+  {
+   "lat": -28.801933,
+   "lon": 28.499817,
+   "name": "Makema"
+  },
+  {
+   "lat": -29.242449,
+   "lon": 28.084228,
+   "name": "Linakeng"
+  },
+  {
+   "lat": -30.091099,
+   "lon": 28.381697,
+   "name": "Penyola"
+  },
+  {
+   "lat": -28.234228,
+   "lon": 29.448225,
+   "name": "Nelson's Kop",
+   "wikidata": "Q31706457"
+  },
+  {
+   "lat": -28.230266,
+   "lon": 29.436771,
+   "name": "Two Sisters",
+   "wikidata": "Q31680538"
+  },
+  {
+   "lat": -28.760683,
+   "lon": 28.931355,
+   "name": "Devil's Tooth",
+   "wikidata": "Q31509838"
+  },
+  {
+   "lat": -28.798424,
+   "lon": 28.94792,
+   "name": "Ifidi"
+  },
+  {
+   "lat": -28.855874,
+   "lon": 28.95175,
+   "name": "Madonna and Her Worshippers"
+  },
+  {
+   "lat": -28.844167,
+   "lon": 28.952639,
+   "name": "Mbundini Buttress"
+  },
+  {
+   "lat": -28.768952,
+   "lon": 28.261542,
+   "name": "Makopo"
+  },
+  {
+   "lat": -28.714354,
+   "lon": 28.977977,
+   "name": "Crocodile",
+   "wikidata": "Q31510397"
+  },
+  {
+   "lat": -28.723031,
+   "lon": 28.976732,
+   "name": "Frog"
+  },
+  {
+   "lat": -28.710995,
+   "lon": 28.976979,
+   "name": "Sleeping Beauty"
+  },
+  {
+   "lat": -28.719369,
+   "lon": 28.977404,
+   "name": "Tortoise"
+  },
+  {
+   "lat": -28.945659,
+   "lon": 28.182348,
+   "name": "Serupane"
+  },
+  {
+   "lat": -29.724252,
+   "lon": 28.620908,
+   "name": "Nkokoane"
+  },
+  {
+   "lat": -28.956884,
+   "lon": 28.003384,
+   "name": "Lenyakoane"
+  },
+  {
+   "lat": -28.994612,
+   "lon": 27.972989,
+   "name": "thabaneng"
+  },
+  {
+   "lat": -28.961645,
+   "lon": 27.888851,
+   "name": "thabaneng"
+  },
+  {
+   "lat": -29.129333,
+   "lon": 28.126662,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -30.275872,
+   "lon": 27.68139,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -30.380635,
+   "lon": 27.800033,
+   "name": "Nts'oare-Butle"
+  },
+  {
+   "lat": -29.153554,
+   "lon": 28.832039,
+   "name": "Thaba Lihlolo"
+  },
+  {
+   "lat": -29.214321,
+   "lon": 28.220568,
+   "name": "'Malehloane"
+  },
+  {
+   "lat": -29.361525,
+   "lon": 28.733992,
+   "name": "'Manonyane"
+  },
+  {
+   "lat": -28.939251,
+   "lon": 28.331843,
+   "name": "Thaba-e-Telele"
+  },
+  {
+   "lat": -29.509894,
+   "lon": 27.95813,
+   "name": "Bethlehem"
+  },
+  {
+   "lat": -29.610926,
+   "lon": 28.874463,
+   "name": "'Mamakula"
+  },
+  {
+   "lat": -29.285986,
+   "lon": 28.622598,
+   "name": "Molobella"
+  },
+  {
+   "lat": -29.153926,
+   "lon": 28.253396,
+   "name": "Beteu"
+  },
+  {
+   "lat": -29.691252,
+   "lon": 28.223873,
+   "name": "Mok'honoanyane"
+  },
+  {
+   "lat": -29.751145,
+   "lon": 27.942483,
+   "name": "Phatla'-Khomo"
+  },
+  {
+   "lat": -29.30003,
+   "lon": 27.597322,
+   "name": "Thuathe Rock"
+  },
+  {
+   "lat": -28.839341,
+   "lon": 28.93816,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.212043,
+   "lon": 29.263313,
+   "name": "Khubetsoana"
+  },
+  {
+   "lat": -29.269268,
+   "lon": 29.184462,
+   "name": "Sampharane"
+  },
+  {
+   "lat": -28.982249,
+   "lon": 28.436599,
+   "name": "Pela-Ts'oeu"
+  },
+  {
+   "lat": -30.233544,
+   "lon": 27.881856,
+   "name": "Thaba-Moorosi"
+  },
+  {
+   "lat": -29.825954,
+   "lon": 28.427117,
+   "name": "Thaba-Manong"
+  },
+  {
+   "lat": -28.805518,
+   "lon": 28.258804,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -28.81365,
+   "lon": 28.279729,
+   "name": "Tsoung"
+  },
+  {
+   "lat": -28.806732,
+   "lon": 28.301542,
+   "name": "Pelong"
+  },
+  {
+   "lat": -28.819097,
+   "lon": 28.287354,
+   "name": "Tsounyaneng"
+  },
+  {
+   "lat": -29.513716,
+   "lon": 29.221523,
+   "name": "Kotisephola"
+  },
+  {
+   "lat": -29.502361,
+   "lon": 29.2523,
+   "name": "Kotisephola"
+  },
+  {
+   "lat": -28.814724,
+   "lon": 28.314273,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.679367,
+   "lon": 29.070089,
+   "name": "Ranketsi"
+  },
+  {
+   "lat": -29.675347,
+   "lon": 27.775411,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -29.867378,
+   "lon": 27.79892,
+   "name": "Maepho"
+  },
+  {
+   "lat": -29.562883,
+   "lon": 28.507419,
+   "name": "Lithabana-tsa-Thebeku"
+  },
+  {
+   "lat": -30.592942,
+   "lon": 28.024435,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.029677,
+   "lon": 28.707342,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -30.537456,
+   "lon": 27.849738,
+   "name": "Phaqoane"
+  },
+  {
+   "lat": -29.477367,
+   "lon": 27.797415,
+   "name": "Mt. Jude"
+  },
+  {
+   "lat": -30.514439,
+   "lon": 27.805474,
+   "name": "Thaba-Ts'epe"
+  },
+  {
+   "lat": -29.6453,
+   "lon": 27.7874,
+   "name": "Seqikiling"
+  },
+  {
+   "lat": -29.825106,
+   "lon": 28.90519,
+   "name": "Machache"
+  },
+  {
+   "lat": -29.547731,
+   "lon": 27.752863,
+   "name": "Betla"
+  },
+  {
+   "lat": -30.481147,
+   "lon": 27.845441,
+   "name": "Qoqoing"
+  },
+  {
+   "lat": -30.441157,
+   "lon": 27.932618,
+   "name": "Falatsa"
+  },
+  {
+   "lat": -29.353802,
+   "lon": 28.719935,
+   "name": "Thaba-ea-Lekhoa"
+  },
+  {
+   "lat": -29.249722,
+   "lon": 29.425972,
+   "name": "Gypaetus Point"
+  },
+  {
+   "lat": -29.553673,
+   "lon": 29.039375,
+   "name": "Thaba-e-Kholo"
+  },
+  {
+   "lat": -29.125641,
+   "lon": 28.800279,
+   "name": "Lomo-sa-Manong"
+  },
+  {
+   "lat": -29.346619,
+   "lon": 29.115703,
+   "name": "Masapong"
+  },
+  {
+   "lat": -29.221154,
+   "lon": 28.343398,
+   "name": "Telle"
+  },
+  {
+   "lat": -29.413872,
+   "lon": 28.654463,
+   "name": "Mpholloane"
+  },
+  {
+   "lat": -29.332989,
+   "lon": 29.406238,
+   "name": "Thaba Chitja"
+  },
+  {
+   "lat": -29.333288,
+   "lon": 28.569324,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.018724,
+   "lon": 29.499352,
+   "name": "Sundowner's Hill"
+  },
+  {
+   "lat": -29.024422,
+   "lon": 29.505989,
+   "name": "Ardmore Hill"
+  },
+  {
+   "lat": -29.314722,
+   "lon": 29.443167,
+   "name": "Carbineer Point"
+  },
+  {
+   "lat": -28.88825,
+   "lon": 28.979333,
+   "name": "Inner Mnweni Pinnacle"
+  },
+  {
+   "lat": -29.017139,
+   "lon": 29.186333,
+   "name": "Ndumeni Dome"
+  },
+  {
+   "lat": -29.8208,
+   "lon": 27.8208,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.6742,
+   "lon": 28.015,
+   "name": "Ntlholohetsane"
+  },
+  {
+   "lat": -28.398271,
+   "lon": 29.338366,
+   "name": "Moorddraai",
+   "wikidata": "Q31469437"
+  },
+  {
+   "lat": -29.0483,
+   "lon": 28.0842,
+   "name": "'Mak'holo"
+  },
+  {
+   "lat": -29.48801,
+   "lon": 27.992194,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -28.622706,
+   "lon": 28.944219,
+   "name": "Battleship"
+  },
+  {
+   "lat": -28.807517,
+   "lon": 28.73055,
+   "name": "Mahlasela"
+  },
+  {
+   "lat": -28.887293,
+   "lon": 28.755156,
+   "name": "Liramong"
+  },
+  {
+   "lat": -29.618829,
+   "lon": 28.533273,
+   "name": "Lerontšollo"
+  },
+  {
+   "lat": -29.132386,
+   "lon": 29.102014,
+   "name": "Moqhoalesa"
+  },
+  {
+   "lat": -29.219661,
+   "lon": 29.158551,
+   "name": "Tolotsana"
+  },
+  {
+   "lat": -29.222233,
+   "lon": 29.194467,
+   "name": "Mokoena"
+  },
+  {
+   "lat": -28.98095,
+   "lon": 29.138133,
+   "name": "Cockade",
+   "wikidata": "Q31510760"
+  },
+  {
+   "lat": -29.348195,
+   "lon": 27.686176,
+   "name": "Qiloane",
+   "wikidata": "Q27480611"
+  },
+  {
+   "lat": -29.507617,
+   "lon": 29.120983,
+   "name": "Mokenafatse"
+  },
+  {
+   "lat": -29.5088,
+   "lon": 29.146883,
+   "name": "Seqoqo"
+  },
+  {
+   "lat": -28.724874,
+   "lon": 30.060922,
+   "name": "Hippo Hill"
+  },
+  {
+   "lat": -29.716476,
+   "lon": 29.02187,
+   "name": "Kepiseng"
+  },
+  {
+   "lat": -29.735225,
+   "lon": 28.95426,
+   "name": "Qhaliseng"
+  },
+  {
+   "lat": -28.935767,
+   "lon": 28.734533,
+   "name": "Thaba Sephara"
+  },
+  {
+   "lat": -28.667966,
+   "lon": 28.645605,
+   "name": "Heising"
+  },
+  {
+   "lat": -29.88936,
+   "lon": 28.287027,
+   "name": "Mosuko-oa-Pere"
+  },
+  {
+   "lat": -29.824859,
+   "lon": 27.859375,
+   "name": "'Mamanong"
+  },
+  {
+   "lat": -29.822681,
+   "lon": 27.881649,
+   "name": "'Maletotobi"
+  },
+  {
+   "lat": -29.509846,
+   "lon": 28.908725,
+   "name": "Sebothong"
+  },
+  {
+   "lat": -29.78871,
+   "lon": 27.712573,
+   "name": "Thabana Qhoesha"
+  },
+  {
+   "lat": -29.808346,
+   "lon": 27.715416,
+   "name": "Thabana Motsunyana"
+  },
+  {
+   "lat": -29.819181,
+   "lon": 27.721531,
+   "name": "Sephokong"
+  },
+  {
+   "lat": -29.808811,
+   "lon": 27.771249,
+   "name": "Thaba-Khubelu"
+  },
+  {
+   "lat": -29.805395,
+   "lon": 27.794917,
+   "name": "Nts'upe"
+  },
+  {
+   "lat": -29.789074,
+   "lon": 27.778362,
+   "name": "'Mamoholi"
+  },
+  {
+   "lat": -29.392196,
+   "lon": 28.085239,
+   "name": "Khoaba-Lea-Bua"
+  },
+  {
+   "lat": -29.427675,
+   "lon": 27.990332,
+   "name": "Kolobere"
+  },
+  {
+   "lat": -29.460782,
+   "lon": 28.144414,
+   "name": "Polokoe"
+  },
+  {
+   "lat": -29.462047,
+   "lon": 28.168446,
+   "name": "'Masehlotho"
+  },
+  {
+   "lat": -29.28842,
+   "lon": 28.060284,
+   "name": "Mohlesinyane"
+  },
+  {
+   "lat": -29.344221,
+   "lon": 28.238994,
+   "name": "Litsumi"
+  },
+  {
+   "lat": -29.410091,
+   "lon": 28.973034,
+   "name": "Qiloane"
+  },
+  {
+   "lat": -29.42132,
+   "lon": 28.96348,
+   "name": "Thaba Phats'oa"
+  },
+  {
+   "lat": -29.428055,
+   "lon": 28.988899,
+   "name": "Ts'epeng"
+  },
+  {
+   "lat": -29.439189,
+   "lon": 28.969346,
+   "name": "Sephokong"
+  },
+  {
+   "lat": -29.462692,
+   "lon": 28.977148,
+   "name": "Fitoki"
+  },
+  {
+   "lat": -29.464971,
+   "lon": 29.093385,
+   "name": "Ts'soana-Makhulo"
+  },
+  {
+   "lat": -29.51176,
+   "lon": 29.031233,
+   "name": "Thaba Nts'o"
+  },
+  {
+   "lat": -29.531458,
+   "lon": 29.003284,
+   "name": "Thaba Chitja"
+  },
+  {
+   "lat": -29.578533,
+   "lon": 29.181361,
+   "name": "Thabana-Nts'onyana"
+  },
+  {
+   "lat": -29.604446,
+   "lon": 29.19036,
+   "name": "Bitso-Lebe"
+  },
+  {
+   "lat": -29.547186,
+   "lon": 29.200501,
+   "name": "Qiloane"
+  },
+  {
+   "lat": -29.615056,
+   "lon": 29.086556,
+   "name": "Tloling"
+  },
+  {
+   "lat": -29.636409,
+   "lon": 29.059138,
+   "name": "Mateleng"
+  },
+  {
+   "lat": -29.604702,
+   "lon": 29.013659,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.579636,
+   "lon": 28.901309,
+   "name": "Makhoaba"
+  },
+  {
+   "lat": -29.20748,
+   "lon": 28.810511,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.171068,
+   "lon": 28.746146,
+   "name": "Thaba-Sephara"
+  },
+  {
+   "lat": -29.19442,
+   "lon": 28.732418,
+   "name": "Thaba-Khobetsoana"
+  },
+  {
+   "lat": -29.21411,
+   "lon": 28.76387,
+   "name": "Motlomo"
+  },
+  {
+   "lat": -29.110748,
+   "lon": 28.83637,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.10862,
+   "lon": 28.875546,
+   "name": "Sechalochalo"
+  },
+  {
+   "lat": -29.132745,
+   "lon": 28.926927,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.124643,
+   "lon": 28.930357,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.215889,
+   "lon": 28.704936,
+   "name": "Liseleng"
+  },
+  {
+   "lat": -29.158558,
+   "lon": 28.68928,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.181428,
+   "lon": 28.675802,
+   "name": "Nqechane"
+  },
+  {
+   "lat": -29.186025,
+   "lon": 28.697595,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -29.196775,
+   "lon": 28.692429,
+   "name": "Malutleng"
+  },
+  {
+   "lat": -29.151407,
+   "lon": 28.737096,
+   "name": "Thaba-ea-Batlokoa"
+  },
+  {
+   "lat": -29.42589,
+   "lon": 28.645606,
+   "name": "Mpharane"
+  },
+  {
+   "lat": -29.431162,
+   "lon": 28.72884,
+   "name": "Lejoe-Leputsoa"
+  },
+  {
+   "lat": -29.389359,
+   "lon": 28.729921,
+   "name": "Thaba-Lehlaka"
+  },
+  {
+   "lat": -29.365341,
+   "lon": 28.758575,
+   "name": "Thaba-Morena"
+  },
+  {
+   "lat": -29.33608,
+   "lon": 28.720665,
+   "name": "Lehlabatheng"
+  },
+  {
+   "lat": -29.366412,
+   "lon": 28.680663,
+   "name": "Nqoellane"
+  },
+  {
+   "lat": -29.311769,
+   "lon": 28.661764,
+   "name": "Phutha-Lichaba"
+  },
+  {
+   "lat": -29.281423,
+   "lon": 28.579443,
+   "name": "Setarapung"
+  },
+  {
+   "lat": -29.258964,
+   "lon": 28.573031,
+   "name": "Phakoeng"
+  },
+  {
+   "lat": -29.500914,
+   "lon": 28.370229,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -29.482624,
+   "lon": 28.487892,
+   "name": "Thaba-Tikoe"
+  },
+  {
+   "lat": -29.539505,
+   "lon": 28.282285,
+   "name": "Thaba-Lets'otso"
+  },
+  {
+   "lat": -29.53915,
+   "lon": 28.288808,
+   "name": "'Maliphofu"
+  },
+  {
+   "lat": -29.531346,
+   "lon": 28.304472,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.540027,
+   "lon": 28.314235,
+   "name": "Mabokoka"
+  },
+  {
+   "lat": -29.539682,
+   "lon": 28.333536,
+   "name": "Chalebekeng"
+  },
+  {
+   "lat": -29.492813,
+   "lon": 28.185114,
+   "name": "Nyepa"
+  },
+  {
+   "lat": -29.544452,
+   "lon": 28.186466,
+   "name": "'Malifariki"
+  },
+  {
+   "lat": -29.515111,
+   "lon": 28.205187,
+   "name": "Mahleleme"
+  },
+  {
+   "lat": -29.496353,
+   "lon": 28.225594,
+   "name": "Mahlelebe"
+  },
+  {
+   "lat": -29.478683,
+   "lon": 28.234102,
+   "name": "Machache"
+  },
+  {
+   "lat": -29.590737,
+   "lon": 28.318473,
+   "name": "Thaba-ea-Matsolo"
+  },
+  {
+   "lat": -29.602193,
+   "lon": 28.335017,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -29.620484,
+   "lon": 28.365465,
+   "name": "Phehameng"
+  },
+  {
+   "lat": -29.586594,
+   "lon": 28.581726,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.545684,
+   "lon": 28.512445,
+   "name": "Thabana-ea-Manasa"
+  },
+  {
+   "lat": -29.559375,
+   "lon": 28.551128,
+   "name": "Khoimane"
+  },
+  {
+   "lat": -29.568633,
+   "lon": 28.539176,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.613111,
+   "lon": 28.275724,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -29.623264,
+   "lon": 28.301285,
+   "name": "Konkotia"
+  },
+  {
+   "lat": -29.72229,
+   "lon": 28.316622,
+   "name": "'Mabolilana"
+  },
+  {
+   "lat": -29.713094,
+   "lon": 28.25704,
+   "name": "Ntsoenereng"
+  },
+  {
+   "lat": -29.671494,
+   "lon": 28.308603,
+   "name": "Liphokojoe"
+  },
+  {
+   "lat": -29.641738,
+   "lon": 28.307755,
+   "name": "Lefikeng"
+  },
+  {
+   "lat": -29.621114,
+   "lon": 28.6418,
+   "name": "Ntlholohetsane"
+  },
+  {
+   "lat": -29.613179,
+   "lon": 28.627662,
+   "name": "Nkopane (Mpetsanana)"
+  },
+  {
+   "lat": -29.610719,
+   "lon": 28.618516,
+   "name": "Matsaneng"
+  },
+  {
+   "lat": -29.615121,
+   "lon": 28.599386,
+   "name": "Tsatsa-L-le-Lets'o"
+  },
+  {
+   "lat": -29.648736,
+   "lon": 28.552619,
+   "name": "Khomo-ea-Raha"
+  },
+  {
+   "lat": -29.675418,
+   "lon": 28.519365,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -29.681067,
+   "lon": 28.52054,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.664409,
+   "lon": 28.488858,
+   "name": "Sephokong"
+  },
+  {
+   "lat": -29.686589,
+   "lon": 28.435632,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -29.745274,
+   "lon": 28.484695,
+   "name": "Thaba-Bosiu"
+  },
+  {
+   "lat": -29.763106,
+   "lon": 28.494458,
+   "name": "Nchori"
+  },
+  {
+   "lat": -29.775739,
+   "lon": 28.516291,
+   "name": "Tumahole"
+  },
+  {
+   "lat": -29.799669,
+   "lon": 28.538876,
+   "name": "Thaba-Sefako"
+  },
+  {
+   "lat": -29.840153,
+   "lon": 28.354774,
+   "name": "'Mopo"
+  },
+  {
+   "lat": -29.810808,
+   "lon": 28.354511,
+   "name": "Lits'oene"
+  },
+  {
+   "lat": -29.731784,
+   "lon": 28.536322,
+   "name": "Ntlholohetsane"
+  },
+  {
+   "lat": -29.736396,
+   "lon": 28.529499,
+   "name": "Thaba-Sephara"
+  },
+  {
+   "lat": -29.668016,
+   "lon": 28.709266,
+   "name": "'Mankotsa"
+  },
+  {
+   "lat": -29.681482,
+   "lon": 28.659564,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -29.723884,
+   "lon": 28.576502,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -29.769947,
+   "lon": 28.36524,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.72311,
+   "lon": 28.438121,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.791825,
+   "lon": 28.459557,
+   "name": "Phofu-ea-Sethole"
+  },
+  {
+   "lat": -29.783019,
+   "lon": 28.472606,
+   "name": "Sekhele"
+  },
+  {
+   "lat": -29.381895,
+   "lon": 27.939584,
+   "name": "Sekuru"
+  },
+  {
+   "lat": -29.379361,
+   "lon": 27.91067,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.215388,
+   "lon": 28.126786,
+   "name": "Majorobela (Ihlo-Lets'o)"
+  },
+  {
+   "lat": -29.172112,
+   "lon": 28.218432,
+   "name": "Thaba-Khubelu"
+  },
+  {
+   "lat": -29.204539,
+   "lon": 28.225256,
+   "name": "Mahalesebene"
+  },
+  {
+   "lat": -29.151159,
+   "lon": 28.195456,
+   "name": "Thaba-li-'Mele"
+  },
+  {
+   "lat": -29.205312,
+   "lon": 28.317561,
+   "name": "Ts'oafo"
+  },
+  {
+   "lat": -29.112979,
+   "lon": 28.254154,
+   "name": "Lefikeng"
+  },
+  {
+   "lat": -29.115406,
+   "lon": 28.26102,
+   "name": "Mokena Hare"
+  },
+  {
+   "lat": -29.130562,
+   "lon": 28.226312,
+   "name": "Boitelo"
+  },
+  {
+   "lat": -29.025291,
+   "lon": 28.12147,
+   "name": "Thaba-Nala"
+  },
+  {
+   "lat": -29.070138,
+   "lon": 28.053981,
+   "name": "Thaba-Kueneng"
+  },
+  {
+   "lat": -29.060517,
+   "lon": 28.065391,
+   "name": "Lileing"
+  },
+  {
+   "lat": -29.052005,
+   "lon": 28.069779,
+   "name": "Motijoameng"
+  },
+  {
+   "lat": -29.056123,
+   "lon": 28.129334,
+   "name": "Lipetu"
+  },
+  {
+   "lat": -29.061065,
+   "lon": 28.181589,
+   "name": "Thabana-Morena"
+  },
+  {
+   "lat": -29.070677,
+   "lon": 28.172464,
+   "name": "Mapholi"
+  },
+  {
+   "lat": -29.09228,
+   "lon": 28.211871,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.102023,
+   "lon": 28.218215,
+   "name": "Mengata"
+  },
+  {
+   "lat": -29.464906,
+   "lon": 27.923856,
+   "name": "Thajana-Thajana"
+  },
+  {
+   "lat": -29.440971,
+   "lon": 27.945839,
+   "name": "'Ntseleli"
+  },
+  {
+   "lat": -29.521161,
+   "lon": 28.069618,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -29.493439,
+   "lon": 28.028505,
+   "name": "Thainyane"
+  },
+  {
+   "lat": -29.569622,
+   "lon": 27.995868,
+   "name": "Senamele"
+  },
+  {
+   "lat": -29.639546,
+   "lon": 27.931194,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.587882,
+   "lon": 27.940185,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -29.558927,
+   "lon": 27.945367,
+   "name": "Thainyane"
+  },
+  {
+   "lat": -29.52315,
+   "lon": 27.944187,
+   "name": "Rapere"
+  },
+  {
+   "lat": -29.502833,
+   "lon": 27.944284,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.503711,
+   "lon": 27.977457,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.520554,
+   "lon": 27.985482,
+   "name": "Lepaqoa"
+  },
+  {
+   "lat": -29.593044,
+   "lon": 28.126041,
+   "name": "Likonka"
+  },
+  {
+   "lat": -29.64309,
+   "lon": 28.093457,
+   "name": "Kepisi"
+  },
+  {
+   "lat": -29.611969,
+   "lon": 28.030908,
+   "name": "'Mamakhoba"
+  },
+  {
+   "lat": -29.59515,
+   "lon": 28.061424,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.677725,
+   "lon": 27.971835,
+   "name": "Sesene"
+  },
+  {
+   "lat": -29.728999,
+   "lon": 28.231012,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.67463,
+   "lon": 28.222418,
+   "name": "Mok'honoane"
+  },
+  {
+   "lat": -29.658148,
+   "lon": 28.212998,
+   "name": "Mautse"
+  },
+  {
+   "lat": -29.761625,
+   "lon": 28.113005,
+   "name": "Seleso"
+  },
+  {
+   "lat": -29.747193,
+   "lon": 28.085368,
+   "name": "Joala-Bobe"
+  },
+  {
+   "lat": -29.727079,
+   "lon": 28.106117,
+   "name": "Ts'oeunyane"
+  },
+  {
+   "lat": -29.945917,
+   "lon": 27.995567,
+   "name": "Khajoaneng"
+  },
+  {
+   "lat": -29.96371,
+   "lon": 28.049199,
+   "name": "Kubake"
+  },
+  {
+   "lat": -29.94628,
+   "lon": 28.108392,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.721303,
+   "lon": 27.955635,
+   "name": "Nts'upe"
+  },
+  {
+   "lat": -29.727249,
+   "lon": 27.949187,
+   "name": "Nts'upenyane"
+  },
+  {
+   "lat": -29.745432,
+   "lon": 27.91103,
+   "name": "Makheka"
+  },
+  {
+   "lat": -29.875713,
+   "lon": 27.971964,
+   "name": "Thaba-Ts'ehla"
+  },
+  {
+   "lat": -29.867729,
+   "lon": 27.991509,
+   "name": "Qoang"
+  },
+  {
+   "lat": -29.873192,
+   "lon": 28.003024,
+   "name": "Qoang"
+  },
+  {
+   "lat": -29.505233,
+   "lon": 27.796623,
+   "name": "Lipelaneng"
+  },
+  {
+   "lat": -29.50809,
+   "lon": 27.824896,
+   "name": "Temeki"
+  },
+  {
+   "lat": -29.53708,
+   "lon": 27.827291,
+   "name": "Bothunya-Lets'a"
+  },
+  {
+   "lat": -29.508958,
+   "lon": 27.777632,
+   "name": "Khoaba-lea-Bua"
+  },
+  {
+   "lat": -29.533839,
+   "lon": 27.743794,
+   "name": "Popanyane"
+  },
+  {
+   "lat": -29.498528,
+   "lon": 27.770165,
+   "name": "Nthethe"
+  },
+  {
+   "lat": -29.618055,
+   "lon": 27.787444,
+   "name": "Serooeng"
+  },
+  {
+   "lat": -29.608298,
+   "lon": 27.840943,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.700886,
+   "lon": 27.804047,
+   "name": "Koaba-lea-Bua"
+  },
+  {
+   "lat": -29.73661,
+   "lon": 27.826248,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.725337,
+   "lon": 27.855213,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.740672,
+   "lon": 27.847788,
+   "name": "'Mamoholi"
+  },
+  {
+   "lat": -29.749801,
+   "lon": 27.876155,
+   "name": "Topoeeane"
+  },
+  {
+   "lat": -29.767232,
+   "lon": 27.845669,
+   "name": "'Mamanong"
+  },
+  {
+   "lat": -29.604749,
+   "lon": 27.743831,
+   "name": "Lanaka"
+  },
+  {
+   "lat": -29.664096,
+   "lon": 27.90523,
+   "name": "Rapo-le-Boea"
+  },
+  {
+   "lat": -29.667285,
+   "lon": 27.896733,
+   "name": "Koti-Se-Phola"
+  },
+  {
+   "lat": -29.65047,
+   "lon": 27.846833,
+   "name": "Liphakoeng"
+  },
+  {
+   "lat": -29.662549,
+   "lon": 27.847306,
+   "name": "Thaba-Kootjo"
+  },
+  {
+   "lat": -29.68597,
+   "lon": 27.919366,
+   "name": "Khoaba-lea-Bua"
+  },
+  {
+   "lat": -29.694372,
+   "lon": 27.91892,
+   "name": "Thaba-Bosulu"
+  },
+  {
+   "lat": -29.693365,
+   "lon": 27.904308,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.711072,
+   "lon": 27.880184,
+   "name": "Sehaula"
+  },
+  {
+   "lat": -29.723527,
+   "lon": 27.897699,
+   "name": "Sekhoana"
+  },
+  {
+   "lat": -29.67848,
+   "lon": 29.038169,
+   "name": "Thaba-Ts'epe"
+  },
+  {
+   "lat": -29.585643,
+   "lon": 28.796078,
+   "name": "Qoello"
+  },
+  {
+   "lat": -29.600127,
+   "lon": 28.845386,
+   "name": "Table Mountain"
+  },
+  {
+   "lat": -29.587266,
+   "lon": 28.843188,
+   "name": "Maputsoe"
+  },
+  {
+   "lat": -29.692252,
+   "lon": 28.846117,
+   "name": "Sekoainyane"
+  },
+  {
+   "lat": -29.662045,
+   "lon": 28.887536,
+   "name": "Makhoareng"
+  },
+  {
+   "lat": -29.72011,
+   "lon": 29.096507,
+   "name": "Koma-li-Hare"
+  },
+  {
+   "lat": -29.691827,
+   "lon": 28.805484,
+   "name": "Moqotoane"
+  },
+  {
+   "lat": -29.746159,
+   "lon": 28.863037,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -28.567945,
+   "lon": 28.589702,
+   "name": "Snow Hills",
+   "wikidata": "Q31688574"
+  },
+  {
+   "lat": -29.837573,
+   "lon": 28.984519,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.811222,
+   "lon": 28.992265,
+   "name": "Blue Hoek"
+  },
+  {
+   "lat": -29.798868,
+   "lon": 28.881791,
+   "name": "Sephokong"
+  },
+  {
+   "lat": -29.827428,
+   "lon": 28.931551,
+   "name": "Thabana-Sephara"
+  },
+  {
+   "lat": -29.830797,
+   "lon": 28.939533,
+   "name": "Lomo-se-Sefubelu"
+  },
+  {
+   "lat": -29.810138,
+   "lon": 28.952596,
+   "name": "Ramaepho"
+  },
+  {
+   "lat": -29.853967,
+   "lon": 28.877985,
+   "name": "Tsolo"
+  },
+  {
+   "lat": -29.868329,
+   "lon": 29.000325,
+   "name": "Somalenge 2"
+  },
+  {
+   "lat": -29.874278,
+   "lon": 28.993057,
+   "name": "Somalenge 1"
+  },
+  {
+   "lat": -29.904293,
+   "lon": 28.773971,
+   "name": "Ts'ili'-Kopo"
+  },
+  {
+   "lat": -29.894141,
+   "lon": 28.851407,
+   "name": "Tharing"
+  },
+  {
+   "lat": -29.879388,
+   "lon": 28.914685,
+   "name": "Sebatana"
+  },
+  {
+   "lat": -29.987167,
+   "lon": 28.763688,
+   "name": "Monoana"
+  },
+  {
+   "lat": -29.926811,
+   "lon": 28.868975,
+   "name": "Makalane"
+  },
+  {
+   "lat": -29.937673,
+   "lon": 28.855741,
+   "name": "Thaba-ea-Makanyane (Machabela)"
+  },
+  {
+   "lat": -29.955035,
+   "lon": 28.8657,
+   "name": "Mosafeleng"
+  },
+  {
+   "lat": -29.945123,
+   "lon": 28.850318,
+   "name": "Mphahamela (Mokoting)"
+  },
+  {
+   "lat": -29.948121,
+   "lon": 28.833618,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.976963,
+   "lon": 28.82143,
+   "name": "Lits'oeneg"
+  },
+  {
+   "lat": -29.985499,
+   "lon": 28.798851,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.81038,
+   "lon": 28.774186,
+   "name": "Matsile"
+  },
+  {
+   "lat": -29.971108,
+   "lon": 28.986676,
+   "name": "Thaba-Bosiu"
+  },
+  {
+   "lat": -29.931521,
+   "lon": 28.990645,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.929796,
+   "lon": 28.929706,
+   "name": "Phokojoeng"
+  },
+  {
+   "lat": -29.982873,
+   "lon": 28.913977,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -30.00019,
+   "lon": 28.860408,
+   "name": "Mokeke"
+  },
+  {
+   "lat": -30.001309,
+   "lon": 28.825282,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.994833,
+   "lon": 28.82452,
+   "name": "Thina"
+  },
+  {
+   "lat": -29.915178,
+   "lon": 29.161481,
+   "name": "Phakaneng"
+  },
+  {
+   "lat": -29.884746,
+   "lon": 29.123621,
+   "name": "Kepising"
+  },
+  {
+   "lat": -29.884355,
+   "lon": 29.097204,
+   "name": "Mots'ea"
+  },
+  {
+   "lat": -29.884114,
+   "lon": 29.083815,
+   "name": "Kubetsane"
+  },
+  {
+   "lat": -29.865819,
+   "lon": 29.085107,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -29.451589,
+   "lon": 28.930591,
+   "name": "Mahlohloloaneng"
+  },
+  {
+   "lat": -29.472761,
+   "lon": 28.894429,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.534875,
+   "lon": 28.749011,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.519308,
+   "lon": 28.873594,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -29.470912,
+   "lon": 28.930371,
+   "name": "Likereseng"
+  },
+  {
+   "lat": -30.065496,
+   "lon": 28.854824,
+   "name": "Teletsana"
+  },
+  {
+   "lat": -30.101057,
+   "lon": 28.794804,
+   "name": "Ntsoebeane"
+  },
+  {
+   "lat": -30.09611,
+   "lon": 28.807236,
+   "name": "Ntai"
+  },
+  {
+   "lat": -29.396179,
+   "lon": 29.014689,
+   "name": "Libibing"
+  },
+  {
+   "lat": -29.398427,
+   "lon": 28.988564,
+   "name": "Tebebele"
+  },
+  {
+   "lat": -29.471855,
+   "lon": 28.736469,
+   "name": "Thaba-Sephara"
+  },
+  {
+   "lat": -28.95701,
+   "lon": 28.975067,
+   "name": "Tenteng"
+  },
+  {
+   "lat": -29.22581,
+   "lon": 28.968791,
+   "name": "Sollorong"
+  },
+  {
+   "lat": -29.111043,
+   "lon": 29.007806,
+   "name": "Mparane"
+  },
+  {
+   "lat": -29.094673,
+   "lon": 29.018632,
+   "name": "Lomo-Seputsoa"
+  },
+  {
+   "lat": -29.062659,
+   "lon": 29.003756,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.983648,
+   "lon": 28.888721,
+   "name": "Thaba-Sephara"
+  },
+  {
+   "lat": -29.135859,
+   "lon": 28.995672,
+   "name": "Seotlilane"
+  },
+  {
+   "lat": -28.942345,
+   "lon": 28.831387,
+   "name": "Mafisoaneng"
+  },
+  {
+   "lat": -28.941822,
+   "lon": 28.825126,
+   "name": "Mournyaneng"
+  },
+  {
+   "lat": -28.956597,
+   "lon": 28.83261,
+   "name": "Matoshela"
+  },
+  {
+   "lat": -28.99063,
+   "lon": 28.808191,
+   "name": "Mournyaneng"
+  },
+  {
+   "lat": -28.979162,
+   "lon": 28.616896,
+   "name": "Maphatsoe"
+  },
+  {
+   "lat": -28.973099,
+   "lon": 28.621413,
+   "name": "Terepe"
+  },
+  {
+   "lat": -28.727249,
+   "lon": 28.760834,
+   "name": "Tlholohatsi"
+  },
+  {
+   "lat": -28.75483,
+   "lon": 28.770575,
+   "name": "Ts'a-la-Likhama"
+  },
+  {
+   "lat": -28.745198,
+   "lon": 28.76667,
+   "name": "Ts'eng-la-Mabelete"
+  },
+  {
+   "lat": -28.732668,
+   "lon": 28.784566,
+   "name": "Ha Nonyamane"
+  },
+  {
+   "lat": -28.826046,
+   "lon": 28.897412,
+   "name": "Ts'eng-la-Matete"
+  },
+  {
+   "lat": -28.818958,
+   "lon": 28.82864,
+   "name": "Thaba-ea-Mots'eremeli"
+  },
+  {
+   "lat": -28.798502,
+   "lon": 28.862586,
+   "name": "Tsatsa-la-Ha Lerumo"
+  },
+  {
+   "lat": -28.762543,
+   "lon": 28.881555,
+   "name": "Majoana-Mabedi"
+  },
+  {
+   "lat": -28.802714,
+   "lon": 28.816538,
+   "name": "Mafuranyana"
+  },
+  {
+   "lat": -28.952428,
+   "lon": 28.899107,
+   "name": "Leoa-Lefubelu"
+  },
+  {
+   "lat": -28.961084,
+   "lon": 28.875225,
+   "name": "'Mamputule"
+  },
+  {
+   "lat": -28.932956,
+   "lon": 28.879741,
+   "name": "Leoa-Lets'o"
+  },
+  {
+   "lat": -28.920166,
+   "lon": 28.871555,
+   "name": "Thaba-Rolo"
+  },
+  {
+   "lat": -28.893981,
+   "lon": 28.851471,
+   "name": "Tsatsa-Motho"
+  },
+  {
+   "lat": -28.899542,
+   "lon": 28.8628,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -28.903299,
+   "lon": 28.850183,
+   "name": "Folisiring"
+  },
+  {
+   "lat": -28.866014,
+   "lon": 28.846536,
+   "name": "Sehlola"
+  },
+  {
+   "lat": -28.820312,
+   "lon": 28.780167,
+   "name": "Mahlasela"
+  },
+  {
+   "lat": -28.881638,
+   "lon": 28.901387,
+   "name": "Nyo-Ntso (Matebeleng)"
+  },
+  {
+   "lat": -28.92203,
+   "lon": 28.941985,
+   "name": "Lang-Pente"
+  },
+  {
+   "lat": -29.024686,
+   "lon": 28.442166,
+   "name": "Moepa-Mots'o"
+  },
+  {
+   "lat": -29.030282,
+   "lon": 28.435965,
+   "name": "Thaba-Tseka"
+  },
+  {
+   "lat": -29.064235,
+   "lon": 28.449794,
+   "name": "Kokobe"
+  },
+  {
+   "lat": -29.091793,
+   "lon": 28.514746,
+   "name": "Vuka-Mosotho"
+  },
+  {
+   "lat": -29.036485,
+   "lon": 28.481777,
+   "name": "Boritsa-Ts'oene"
+  },
+  {
+   "lat": -28.97079,
+   "lon": 29.110422,
+   "name": "Nceni"
+  },
+  {
+   "lat": -28.989166,
+   "lon": 29.105208,
+   "name": "Bafali"
+  },
+  {
+   "lat": -28.967364,
+   "lon": 29.023218,
+   "name": "Seqhobosho"
+  },
+  {
+   "lat": -28.961783,
+   "lon": 29.01471,
+   "name": "Likotopong"
+  },
+  {
+   "lat": -28.943204,
+   "lon": 29.007495,
+   "name": "Moseaneng"
+  },
+  {
+   "lat": -28.926059,
+   "lon": 29.008638,
+   "name": "Likotopong"
+  },
+  {
+   "lat": -29.134282,
+   "lon": 29.074159,
+   "name": "Thaba-Letsolo"
+  },
+  {
+   "lat": -29.14266,
+   "lon": 29.08109,
+   "name": "Thaba-Sephara"
+  },
+  {
+   "lat": -29.092299,
+   "lon": 29.210731,
+   "name": "Ts'oene-sea-Foma"
+  },
+  {
+   "lat": -29.052906,
+   "lon": 29.212518,
+   "name": "Bojela"
+  },
+  {
+   "lat": -29.032101,
+   "lon": 29.104629,
+   "name": "Moeneng"
+  },
+  {
+   "lat": -29.091136,
+   "lon": 29.103288,
+   "name": "Kholokoe"
+  },
+  {
+   "lat": -29.256296,
+   "lon": 29.323652,
+   "name": "Merareng"
+  },
+  {
+   "lat": -29.348412,
+   "lon": 29.382458,
+   "name": "Roikate"
+  },
+  {
+   "lat": -29.306581,
+   "lon": 29.385348,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.301127,
+   "lon": 29.432491,
+   "name": "Langa-le-Balele"
+  },
+  {
+   "lat": -29.302205,
+   "lon": 29.261428,
+   "name": "Fika-le-Motho"
+  },
+  {
+   "lat": -29.385788,
+   "lon": 29.413539,
+   "name": "Lithabaneng"
+  },
+  {
+   "lat": -29.374855,
+   "lon": 29.449539,
+   "name": "Thaba-Lits'oene"
+  },
+  {
+   "lat": -29.417432,
+   "lon": 29.401013,
+   "name": "Litseketseke"
+  },
+  {
+   "lat": -29.430854,
+   "lon": 29.204586,
+   "name": "Herehle"
+  },
+  {
+   "lat": -29.362971,
+   "lon": 29.157012,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.435963,
+   "lon": 29.058441,
+   "name": "Hoelehetsa"
+  },
+  {
+   "lat": -29.430805,
+   "lon": 29.075081,
+   "name": "Tlapa-la-Putsoa"
+  },
+  {
+   "lat": -29.445853,
+   "lon": 29.099039,
+   "name": "Khauaneng"
+  },
+  {
+   "lat": -29.406824,
+   "lon": 29.120559,
+   "name": "Sephokong"
+  },
+  {
+   "lat": -29.450169,
+   "lon": 29.120024,
+   "name": "Teletsana"
+  },
+  {
+   "lat": -29.447259,
+   "lon": 29.164506,
+   "name": "Botsoalla"
+  },
+  {
+   "lat": -29.476647,
+   "lon": 29.153531,
+   "name": "Thabana-Lihlolo"
+  },
+  {
+   "lat": -29.489629,
+   "lon": 29.181898,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.49625,
+   "lon": 29.199804,
+   "name": "Thaba-Khubelu"
+  },
+  {
+   "lat": -29.255504,
+   "lon": 29.131461,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.269563,
+   "lon": 29.153359,
+   "name": "Makhapung"
+  },
+  {
+   "lat": -29.293931,
+   "lon": 29.153316,
+   "name": "Lebitso"
+  },
+  {
+   "lat": -29.282085,
+   "lon": 29.179473,
+   "name": "Thaba-Lebitso"
+  },
+  {
+   "lat": -29.302249,
+   "lon": 29.208902,
+   "name": "Thabana-Limakala"
+  },
+  {
+   "lat": -29.306849,
+   "lon": 29.069323,
+   "name": "Sephokong"
+  },
+  {
+   "lat": -29.314692,
+   "lon": 29.111753,
+   "name": "Thaba-Khubelu"
+  },
+  {
+   "lat": -29.188229,
+   "lon": 29.05931,
+   "name": "Manyofaneng"
+  },
+  {
+   "lat": -29.205125,
+   "lon": 29.049343,
+   "name": "Letloepa"
+  },
+  {
+   "lat": -29.223787,
+   "lon": 29.043716,
+   "name": "Sekoka"
+  },
+  {
+   "lat": -29.203139,
+   "lon": 29.117492,
+   "name": "Thaba-Tsullu"
+  },
+  {
+   "lat": -29.183864,
+   "lon": 29.170804,
+   "name": "Qoulofo"
+  },
+  {
+   "lat": -29.469565,
+   "lon": 27.800799,
+   "name": "Tsekanyane"
+  },
+  {
+   "lat": -29.462437,
+   "lon": 27.787406,
+   "name": "Makhetha"
+  },
+  {
+   "lat": -29.507903,
+   "lon": 27.691051,
+   "name": "Fika-la-Raboshabane"
+  },
+  {
+   "lat": -30.100695,
+   "lon": 28.377557,
+   "name": "Petsana"
+  },
+  {
+   "lat": -29.449025,
+   "lon": 27.809701,
+   "name": "Malehloane"
+  },
+  {
+   "lat": -29.458713,
+   "lon": 27.831491,
+   "name": "Malehloaneng"
+  },
+  {
+   "lat": -29.417463,
+   "lon": 27.848188,
+   "name": "Thaba-Tseka"
+  },
+  {
+   "lat": -28.989067,
+   "lon": 29.15925,
+   "name": "Column",
+   "wikidata": "Q31510646"
+  },
+  {
+   "lat": -29.735385,
+   "lon": 27.687178,
+   "name": "Moshe"
+  },
+  {
+   "lat": -29.776549,
+   "lon": 27.642497,
+   "name": "Mochomokoane"
+  },
+  {
+   "lat": -28.573056,
+   "lon": 28.567693,
+   "name": "Langkrans",
+   "wikidata": "Q31482762"
+  },
+  {
+   "lat": -28.609183,
+   "lon": 28.706417,
+   "name": "Qoanikeng"
+  },
+  {
+   "lat": -28.616756,
+   "lon": 28.6938,
+   "name": "Khubetsoana"
+  },
+  {
+   "lat": -28.622689,
+   "lon": 28.699475,
+   "name": "Thaba Kholo"
+  },
+  {
+   "lat": -28.680997,
+   "lon": 28.630918,
+   "name": "Lejoe-le-Tseke"
+  },
+  {
+   "lat": -28.637869,
+   "lon": 28.491969,
+   "name": "Nts'o-Lesoba"
+  },
+  {
+   "lat": -28.643952,
+   "lon": 28.507008,
+   "name": "'Maliphoshoana"
+  },
+  {
+   "lat": -28.652803,
+   "lon": 28.53128,
+   "name": "Kaqanyane"
+  },
+  {
+   "lat": -28.643076,
+   "lon": 28.530775,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.629983,
+   "lon": 28.554658,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -28.65784,
+   "lon": 28.574629,
+   "name": "Ntelle"
+  },
+  {
+   "lat": -28.674596,
+   "lon": 28.594837,
+   "name": "Matlakeng"
+  },
+  {
+   "lat": -28.680272,
+   "lon": 28.603925,
+   "name": "Thaba-li-Makala"
+  },
+  {
+   "lat": -28.719811,
+   "lon": 28.586866,
+   "name": "Lehaheng"
+  },
+  {
+   "lat": -28.706007,
+   "lon": 28.569737,
+   "name": "Liqaleng"
+  },
+  {
+   "lat": -28.69814,
+   "lon": 28.557198,
+   "name": "Mosuaneng"
+  },
+  {
+   "lat": -28.692032,
+   "lon": 28.53924,
+   "name": "Khoaba-le-Bua"
+  },
+  {
+   "lat": -28.687734,
+   "lon": 28.489024,
+   "name": "Ntelle"
+  },
+  {
+   "lat": -28.676451,
+   "lon": 28.498342,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.723725,
+   "lon": 28.483837,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -28.762411,
+   "lon": 28.672619,
+   "name": "Ts'akholo"
+  },
+  {
+   "lat": -28.758884,
+   "lon": 28.696603,
+   "name": "Bitso-Lebe"
+  },
+  {
+   "lat": -28.752662,
+   "lon": 28.722588,
+   "name": "Tsupane"
+  },
+  {
+   "lat": -28.752516,
+   "lon": 28.640022,
+   "name": "Marete"
+  },
+  {
+   "lat": -28.740563,
+   "lon": 28.641972,
+   "name": "Mongolo"
+  },
+  {
+   "lat": -28.739342,
+   "lon": 28.57413,
+   "name": "Bitso-Lebe"
+  },
+  {
+   "lat": -28.732597,
+   "lon": 28.547383,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -28.731099,
+   "lon": 28.523219,
+   "name": "Khatibe"
+  },
+  {
+   "lat": -28.73708,
+   "lon": 28.514532,
+   "name": "'Malibatolo"
+  },
+  {
+   "lat": -28.778164,
+   "lon": 28.65685,
+   "name": "Nts'upe"
+  },
+  {
+   "lat": -28.789189,
+   "lon": 28.659162,
+   "name": "Lomo-sa-Makhoaba"
+  },
+  {
+   "lat": -28.780181,
+   "lon": 28.637184,
+   "name": "Ramashala"
+  },
+  {
+   "lat": -28.80627,
+   "lon": 28.636602,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -28.820487,
+   "lon": 28.693646,
+   "name": "Pitsong"
+  },
+  {
+   "lat": -28.791723,
+   "lon": 28.729495,
+   "name": "Hlanya-lea-Tapa"
+  },
+  {
+   "lat": -28.77159,
+   "lon": 28.727671,
+   "name": "Thaba-Boqele"
+  },
+  {
+   "lat": -28.806319,
+   "lon": 28.570161,
+   "name": "Meeling"
+  },
+  {
+   "lat": -28.77261,
+   "lon": 28.583271,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.771205,
+   "lon": 28.558445,
+   "name": "Polateng"
+  },
+  {
+   "lat": -28.781022,
+   "lon": 28.566634,
+   "name": "Manonyaneng"
+  },
+  {
+   "lat": -28.770781,
+   "lon": 28.526773,
+   "name": "Linokong Sehlabeng"
+  },
+  {
+   "lat": -28.778117,
+   "lon": 28.524992,
+   "name": "Nots'i"
+  },
+  {
+   "lat": -28.76847,
+   "lon": 28.540093,
+   "name": "Khamane"
+  },
+  {
+   "lat": -28.784913,
+   "lon": 28.552737,
+   "name": "Makelebetlong"
+  },
+  {
+   "lat": -28.816918,
+   "lon": 28.508138,
+   "name": "Ratsie"
+  },
+  {
+   "lat": -28.81635,
+   "lon": 28.537824,
+   "name": "Lomo-sa-Monyane"
+  },
+  {
+   "lat": -28.798154,
+   "lon": 28.53922,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.934515,
+   "lon": 28.486401,
+   "name": "Homolo"
+  },
+  {
+   "lat": -28.898424,
+   "lon": 28.504007,
+   "name": "Tlou-ea-Seloba"
+  },
+  {
+   "lat": -28.877692,
+   "lon": 28.516431,
+   "name": "Pitso-ea-Moea"
+  },
+  {
+   "lat": -28.99947,
+   "lon": 28.529831,
+   "name": "Ramapi"
+  },
+  {
+   "lat": -28.954482,
+   "lon": 28.533608,
+   "name": "Thaba-Phats'oa"
+  },
+  {
+   "lat": -28.91721,
+   "lon": 28.550935,
+   "name": "Thaba-Tseka"
+  },
+  {
+   "lat": -28.927132,
+   "lon": 28.53875,
+   "name": "Maoela-la-Oela"
+  },
+  {
+   "lat": -28.932928,
+   "lon": 28.514789,
+   "name": "Nyaong"
+  },
+  {
+   "lat": -28.876776,
+   "lon": 28.569356,
+   "name": "Solane"
+  },
+  {
+   "lat": -28.859216,
+   "lon": 28.551176,
+   "name": "Liqalaneng"
+  },
+  {
+   "lat": -28.83685,
+   "lon": 28.569378,
+   "name": "Masapong"
+  },
+  {
+   "lat": -28.854907,
+   "lon": 28.561519,
+   "name": "Maphuele"
+  },
+  {
+   "lat": -28.969053,
+   "lon": 28.568943,
+   "name": "Lebeteng"
+  },
+  {
+   "lat": -28.915931,
+   "lon": 28.584312,
+   "name": "Phokojoe-Khoaba"
+  },
+  {
+   "lat": -28.905924,
+   "lon": 28.601151,
+   "name": "Bokoka"
+  },
+  {
+   "lat": -28.841854,
+   "lon": 28.601618,
+   "name": "Tebaleng"
+  },
+  {
+   "lat": -28.869795,
+   "lon": 28.732971,
+   "name": "Ts'epong"
+  },
+  {
+   "lat": -28.853404,
+   "lon": 28.717114,
+   "name": "Malito"
+  },
+  {
+   "lat": -28.876537,
+   "lon": 28.699325,
+   "name": "Majoe-Liqhoba"
+  },
+  {
+   "lat": -28.887143,
+   "lon": 28.733668,
+   "name": "Mothae"
+  },
+  {
+   "lat": -28.989523,
+   "lon": 28.688457,
+   "name": "Motinkane (o Bochabela)"
+  },
+  {
+   "lat": -28.975896,
+   "lon": 28.68232,
+   "name": "Motinkane (o Bophirima)"
+  },
+  {
+   "lat": -28.956859,
+   "lon": 28.642795,
+   "name": "Nkokomohi"
+  },
+  {
+   "lat": -28.938881,
+   "lon": 28.685335,
+   "name": "Likumeng"
+  },
+  {
+   "lat": -29.067977,
+   "lon": 28.696396,
+   "name": "Putsoenyane"
+  },
+  {
+   "lat": -29.020319,
+   "lon": 28.713584,
+   "name": "Mpha-Ts'ehla"
+  },
+  {
+   "lat": -29.131002,
+   "lon": 28.600416,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.176794,
+   "lon": 28.555336,
+   "name": "Boranye"
+  },
+  {
+   "lat": -29.299812,
+   "lon": 28.549781,
+   "name": "Thabana-Lisiu"
+  },
+  {
+   "lat": -29.503452,
+   "lon": 28.692977,
+   "name": "Lihloaeleng"
+  },
+  {
+   "lat": -29.478347,
+   "lon": 28.690238,
+   "name": "'Mannyakoane"
+  },
+  {
+   "lat": -29.465247,
+   "lon": 28.671739,
+   "name": "Thaba-Khubelu"
+  },
+  {
+   "lat": -29.470426,
+   "lon": 28.545431,
+   "name": "Thabana-Ntlenyana"
+  },
+  {
+   "lat": -29.441672,
+   "lon": 28.522997,
+   "name": "Nyaba-Nyaba"
+  },
+  {
+   "lat": -29.448857,
+   "lon": 28.552308,
+   "name": "Taba-Tseka (Kolberg)"
+  },
+  {
+   "lat": -29.474587,
+   "lon": 28.585162,
+   "name": "Tsullung"
+  },
+  {
+   "lat": -29.010688,
+   "lon": 28.083281,
+   "name": "Thaba-Lesoba"
+  },
+  {
+   "lat": -29.079023,
+   "lon": 27.694623,
+   "name": "Kolonyama"
+  },
+  {
+   "lat": -28.97675,
+   "lon": 28.04919,
+   "name": "Mathokoane"
+  },
+  {
+   "lat": -28.952203,
+   "lon": 27.973026,
+   "name": "'Muela"
+  },
+  {
+   "lat": -29.008403,
+   "lon": 27.946258,
+   "name": "Babing"
+  },
+  {
+   "lat": -29.02561,
+   "lon": 27.893954,
+   "name": "Molumong"
+  },
+  {
+   "lat": -29.056151,
+   "lon": 27.862068,
+   "name": "Fobane"
+  },
+  {
+   "lat": -28.773329,
+   "lon": 28.269239,
+   "name": "Thabana-Mokhele"
+  },
+  {
+   "lat": -28.79121,
+   "lon": 28.256605,
+   "name": "Sechele"
+  },
+  {
+   "lat": -28.791897,
+   "lon": 28.264341,
+   "name": "Mokhenthane"
+  },
+  {
+   "lat": -28.783966,
+   "lon": 28.267436,
+   "name": "Thaba-Khubelu"
+  },
+  {
+   "lat": -28.80764,
+   "lon": 28.252351,
+   "name": "Setlokoane"
+  },
+  {
+   "lat": -28.832811,
+   "lon": 28.341379,
+   "name": "Lifatjaneng"
+  },
+  {
+   "lat": -28.942495,
+   "lon": 28.443968,
+   "name": "Fokotsane"
+  },
+  {
+   "lat": -28.958357,
+   "lon": 28.396831,
+   "name": "Sekuru"
+  },
+  {
+   "lat": -28.946265,
+   "lon": 28.388811,
+   "name": "Thaba-li-Makala"
+  },
+  {
+   "lat": -28.858426,
+   "lon": 28.410253,
+   "name": "Thaba-Nteletsana"
+  },
+  {
+   "lat": -28.850679,
+   "lon": 28.389702,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -28.845978,
+   "lon": 28.365355,
+   "name": "Masoalakahleng"
+  },
+  {
+   "lat": -28.842381,
+   "lon": 28.359736,
+   "name": "Thaba-Putsoanyana"
+  },
+  {
+   "lat": -28.871658,
+   "lon": 28.416283,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -29.098168,
+   "lon": 28.615871,
+   "name": "Thaba-Khopo"
+  },
+  {
+   "lat": -29.094183,
+   "lon": 28.558914,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.095592,
+   "lon": 28.548875,
+   "name": "Betloane"
+  },
+  {
+   "lat": -29.059044,
+   "lon": 28.579613,
+   "name": "Senyenyane"
+  },
+  {
+   "lat": -29.055119,
+   "lon": 28.560387,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.618978,
+   "lon": 29.434133,
+   "name": "Salt"
+  },
+  {
+   "lat": -29.208056,
+   "lon": 28.507676,
+   "name": "Mafika-Lisiu"
+  },
+  {
+   "lat": -29.162997,
+   "lon": 28.490033,
+   "name": "Thaba-li-'Mele"
+  },
+  {
+   "lat": -29.275431,
+   "lon": 28.522932,
+   "name": "Marumong"
+  },
+  {
+   "lat": -29.30522,
+   "lon": 28.536478,
+   "name": "Bolese"
+  },
+  {
+   "lat": -29.366505,
+   "lon": 28.519971,
+   "name": "Mohlothola"
+  },
+  {
+   "lat": -29.378529,
+   "lon": 28.509843,
+   "name": "Roibere"
+  },
+  {
+   "lat": -29.433412,
+   "lon": 28.511399,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.129296,
+   "lon": 28.455362,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -29.167569,
+   "lon": 28.430595,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.14095,
+   "lon": 28.407329,
+   "name": "'Malehloane"
+  },
+  {
+   "lat": -29.237817,
+   "lon": 28.433991,
+   "name": "Thaba-Sepharana"
+  },
+  {
+   "lat": -29.21786,
+   "lon": 28.429849,
+   "name": "Mohlonong"
+  },
+  {
+   "lat": -29.929354,
+   "lon": 27.881037,
+   "name": "Thaba-Sekoka"
+  },
+  {
+   "lat": -29.93636,
+   "lon": 27.83854,
+   "name": "Bokone"
+  },
+  {
+   "lat": -29.808383,
+   "lon": 27.891648,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.807931,
+   "lon": 27.855325,
+   "name": "Sekoatoana"
+  },
+  {
+   "lat": -29.857301,
+   "lon": 27.84804,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.8616,
+   "lon": 27.947819,
+   "name": "Kooma"
+  },
+  {
+   "lat": -29.840849,
+   "lon": 27.915903,
+   "name": "Popa"
+  },
+  {
+   "lat": -29.975262,
+   "lon": 27.810066,
+   "name": "Thaba-Kolbere"
+  },
+  {
+   "lat": -29.989797,
+   "lon": 27.817249,
+   "name": "Thaba-Letho"
+  },
+  {
+   "lat": -29.983366,
+   "lon": 27.826921,
+   "name": "Thaba-Mokomela"
+  },
+  {
+   "lat": -29.89335,
+   "lon": 27.74138,
+   "name": "Thaba-Monkhe"
+  },
+  {
+   "lat": -29.879862,
+   "lon": 27.732968,
+   "name": "Thaba-Kotjo"
+  },
+  {
+   "lat": -29.86815,
+   "lon": 27.721928,
+   "name": "Mahlatsa"
+  },
+  {
+   "lat": -29.909022,
+   "lon": 27.699258,
+   "name": "Thaba-ea-Maphohloane"
+  },
+  {
+   "lat": -29.918154,
+   "lon": 27.717792,
+   "name": "Thaba Sephoko"
+  },
+  {
+   "lat": -29.909673,
+   "lon": 27.718828,
+   "name": "Thaba-Teletsana"
+  },
+  {
+   "lat": -29.918173,
+   "lon": 27.729342,
+   "name": "Thaba-Ts'ehla"
+  },
+  {
+   "lat": -29.935635,
+   "lon": 27.75654,
+   "name": "Maleboli"
+  },
+  {
+   "lat": -29.956018,
+   "lon": 27.826513,
+   "name": "Thaba-Sekoka"
+  },
+  {
+   "lat": -29.982715,
+   "lon": 27.853357,
+   "name": "Thaba-Makhapu"
+  },
+  {
+   "lat": -29.995158,
+   "lon": 27.790046,
+   "name": "Thaba-Felechana"
+  },
+  {
+   "lat": -29.017396,
+   "lon": 28.388205,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.006911,
+   "lon": 28.281966,
+   "name": "Qaqome"
+  },
+  {
+   "lat": -29.022092,
+   "lon": 28.325849,
+   "name": "Nkoeneng"
+  },
+  {
+   "lat": -29.03151,
+   "lon": 28.354527,
+   "name": "Nkoeng"
+  },
+  {
+   "lat": -29.017739,
+   "lon": 28.353197,
+   "name": "Lomo-sa-Phalole"
+  },
+  {
+   "lat": -28.993769,
+   "lon": 28.353556,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -28.993408,
+   "lon": 28.336111,
+   "name": "Khakhathana"
+  },
+  {
+   "lat": -28.986173,
+   "lon": 28.320104,
+   "name": "Potsane"
+  },
+  {
+   "lat": -29.927918,
+   "lon": 27.98589,
+   "name": "Seroto"
+  },
+  {
+   "lat": -29.851011,
+   "lon": 27.758675,
+   "name": "Sariel"
+  },
+  {
+   "lat": -29.846302,
+   "lon": 27.781827,
+   "name": "Rooivel"
+  },
+  {
+   "lat": -29.072647,
+   "lon": 28.30812,
+   "name": "Khojoane"
+  },
+  {
+   "lat": -29.078488,
+   "lon": 28.323784,
+   "name": "Lomong-sa-Phakoe"
+  },
+  {
+   "lat": -29.070776,
+   "lon": 28.284726,
+   "name": "Thaba-Telle"
+  },
+  {
+   "lat": -29.045843,
+   "lon": 28.268402,
+   "name": "Khomo-Nala"
+  },
+  {
+   "lat": -29.875509,
+   "lon": 28.475103,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -29.901452,
+   "lon": 28.416631,
+   "name": "Qhafutsana"
+  },
+  {
+   "lat": -30.339568,
+   "lon": 28.188292,
+   "name": "Mabala"
+  },
+  {
+   "lat": -30.286392,
+   "lon": 28.127564,
+   "name": "Thaba-ea-Mabele"
+  },
+  {
+   "lat": -30.300093,
+   "lon": 28.188429,
+   "name": "Polateng"
+  },
+  {
+   "lat": -30.323212,
+   "lon": 28.173451,
+   "name": "Thaba-Bosulu"
+  },
+  {
+   "lat": -30.315395,
+   "lon": 28.151071,
+   "name": "Thaba-Selimo"
+  },
+  {
+   "lat": -30.310449,
+   "lon": 28.137403,
+   "name": "Tsekong"
+  },
+  {
+   "lat": -30.303697,
+   "lon": 28.11278,
+   "name": "Tafolekopo"
+  },
+  {
+   "lat": -29.955014,
+   "lon": 28.586235,
+   "name": "Sekhoholeng"
+  },
+  {
+   "lat": -30.070487,
+   "lon": 27.831996,
+   "name": "Thaba-ea-Baraka Tau"
+  },
+  {
+   "lat": -30.02773,
+   "lon": 27.819958,
+   "name": "Mangaung"
+  },
+  {
+   "lat": -30.026755,
+   "lon": 27.85723,
+   "name": "Maqharanqhe"
+  },
+  {
+   "lat": -30.033786,
+   "lon": 28.412694,
+   "name": "Ntloana-Ts'oana"
+  },
+  {
+   "lat": -30.048653,
+   "lon": 28.409,
+   "name": "Thaba-Bosiu"
+  },
+  {
+   "lat": -30.001385,
+   "lon": 28.454615,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.933366,
+   "lon": 28.546493,
+   "name": "Phohloko"
+  },
+  {
+   "lat": -30.005917,
+   "lon": 28.485982,
+   "name": "Thaba-Matseka"
+  },
+  {
+   "lat": -29.887834,
+   "lon": 28.540431,
+   "name": "'Maleshoane"
+  },
+  {
+   "lat": -29.815695,
+   "lon": 28.583738,
+   "name": "Thaba-Khubelu"
+  },
+  {
+   "lat": -29.391921,
+   "lon": 28.58568,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.389635,
+   "lon": 28.540667,
+   "name": "Lenyora"
+  },
+  {
+   "lat": -29.42275,
+   "lon": 28.522879,
+   "name": "Hleoheng"
+  },
+  {
+   "lat": -29.426992,
+   "lon": 28.555645,
+   "name": "Maapola"
+  },
+  {
+   "lat": -29.428469,
+   "lon": 28.584806,
+   "name": "Mosetoa"
+  },
+  {
+   "lat": -29.439401,
+   "lon": 28.607658,
+   "name": "Maapola"
+  },
+  {
+   "lat": -29.508426,
+   "lon": 28.624427,
+   "name": "Thaba-ea-Tseitsi"
+  },
+  {
+   "lat": -29.504309,
+   "lon": 28.646244,
+   "name": "Ha Mabele"
+  },
+  {
+   "lat": -29.518127,
+   "lon": 28.650402,
+   "name": "Liphookoaneng"
+  },
+  {
+   "lat": -29.528471,
+   "lon": 28.660927,
+   "name": "Matsaile"
+  },
+  {
+   "lat": -29.556286,
+   "lon": 28.631873,
+   "name": "Thabana-ea-Ramalapi"
+  },
+  {
+   "lat": -29.577899,
+   "lon": 28.611617,
+   "name": "Qasane"
+  },
+  {
+   "lat": -29.574036,
+   "lon": 28.599257,
+   "name": "Tutulung"
+  },
+  {
+   "lat": -29.554252,
+   "lon": 28.662429,
+   "name": "Tsatsa-Lets'o"
+  },
+  {
+   "lat": -29.569724,
+   "lon": 28.694251,
+   "name": "Kotjoane"
+  },
+  {
+   "lat": -29.573644,
+   "lon": 28.710473,
+   "name": "Mpharane"
+  },
+  {
+   "lat": -29.784222,
+   "lon": 28.693929,
+   "name": "Phokojoeng"
+  },
+  {
+   "lat": -29.848284,
+   "lon": 28.650799,
+   "name": "Thaba-Lot'soene"
+  },
+  {
+   "lat": -29.967278,
+   "lon": 28.617593,
+   "name": "Nts'upe"
+  },
+  {
+   "lat": -30.106162,
+   "lon": 28.568519,
+   "name": "Maqhaba"
+  },
+  {
+   "lat": -30.080644,
+   "lon": 28.522804,
+   "name": "Thabana-Teletsana"
+  },
+  {
+   "lat": -30.118482,
+   "lon": 28.521768,
+   "name": "Maoa-Mafubelu"
+  },
+  {
+   "lat": -30.058026,
+   "lon": 28.470479,
+   "name": "Thabana-ea-Liphakoe"
+  },
+  {
+   "lat": -30.093009,
+   "lon": 28.549561,
+   "name": "Thabana-Sephara"
+  },
+  {
+   "lat": -30.079966,
+   "lon": 28.462079,
+   "name": "Thaba-Ts'oeu"
+  },
+  {
+   "lat": -30.103925,
+   "lon": 28.440632,
+   "name": "Thaba-Liqala"
+  },
+  {
+   "lat": -30.107424,
+   "lon": 28.433261,
+   "name": "Nchocho"
+  },
+  {
+   "lat": -30.095446,
+   "lon": 28.316107,
+   "name": "Setlofe"
+  },
+  {
+   "lat": -30.088001,
+   "lon": 28.298952,
+   "name": "Kopi"
+  },
+  {
+   "lat": -30.155713,
+   "lon": 28.325817,
+   "name": "Likhameng"
+  },
+  {
+   "lat": -30.143513,
+   "lon": 28.265312,
+   "name": "Botheta"
+  },
+  {
+   "lat": -30.150397,
+   "lon": 28.339834,
+   "name": "Portberg"
+  },
+  {
+   "lat": -30.090187,
+   "lon": 28.347731,
+   "name": "Maboloka"
+  },
+  {
+   "lat": -30.197032,
+   "lon": 28.255677,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -30.219841,
+   "lon": 28.277264,
+   "name": "Monalana"
+  },
+  {
+   "lat": -30.132212,
+   "lon": 28.324664,
+   "name": "Phatl'a-Poho"
+  },
+  {
+   "lat": -30.194695,
+   "lon": 28.325264,
+   "name": "Matlakeng"
+  },
+  {
+   "lat": -30.182695,
+   "lon": 28.333987,
+   "name": "Matlakane"
+  },
+  {
+   "lat": -30.172085,
+   "lon": 28.342388,
+   "name": "Mphenya"
+  },
+  {
+   "lat": -30.18966,
+   "lon": 28.355541,
+   "name": "Khokhoma"
+  },
+  {
+   "lat": -29.239807,
+   "lon": 27.916024,
+   "name": "Pulane"
+  },
+  {
+   "lat": -29.233122,
+   "lon": 27.929971,
+   "name": "Pulanyane"
+  },
+  {
+   "lat": -29.238252,
+   "lon": 27.997563,
+   "name": "Thaba-Ntsonyane"
+  },
+  {
+   "lat": -29.241548,
+   "lon": 28.018141,
+   "name": "Thabana-Ntsonyane"
+  },
+  {
+   "lat": -29.226273,
+   "lon": 28.032705,
+   "name": "Mamalapi"
+  },
+  {
+   "lat": -29.215322,
+   "lon": 28.044292,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.21756,
+   "lon": 28.01445,
+   "name": "Boitso-Lebe (Bophirima)"
+  },
+  {
+   "lat": -29.221549,
+   "lon": 27.988261,
+   "name": "Thaba-Putsoa"
+  },
+  {
+   "lat": -29.225917,
+   "lon": 27.98228,
+   "name": "Lipalong"
+  },
+  {
+   "lat": -29.228703,
+   "lon": 27.964325,
+   "name": "Maqhoane"
+  },
+  {
+   "lat": -29.260719,
+   "lon": 27.983787,
+   "name": "Mohlana-oa-Pitsi"
+  },
+  {
+   "lat": -29.251545,
+   "lon": 27.978337,
+   "name": "Thaba-Phats'oa"
+  },
+  {
+   "lat": -29.292163,
+   "lon": 27.931194,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -29.592192,
+   "lon": 27.710051,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -30.034566,
+   "lon": 28.060209,
+   "name": "Lebitso-Lebe"
+  },
+  {
+   "lat": -30.072418,
+   "lon": 28.198857,
+   "name": "Nkong-ea-Lekhoaba"
+  },
+  {
+   "lat": -30.207427,
+   "lon": 28.220186,
+   "name": "Kopi"
+  },
+  {
+   "lat": -30.153032,
+   "lon": 28.194437,
+   "name": "Thaba-li-Hare"
+  },
+  {
+   "lat": -30.078824,
+   "lon": 28.169074,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -30.121665,
+   "lon": 28.013635,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -30.186377,
+   "lon": 28.072729,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -30.203977,
+   "lon": 28.145159,
+   "name": "Selomo-Putsoa"
+  },
+  {
+   "lat": -30.257306,
+   "lon": 28.165426,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -30.25309,
+   "lon": 28.087444,
+   "name": "Mathebana"
+  },
+  {
+   "lat": -30.217338,
+   "lon": 28.060091,
+   "name": "Tletsole"
+  },
+  {
+   "lat": -30.175,
+   "lon": 27.998486,
+   "name": "Mokhoro"
+  },
+  {
+   "lat": -30.215428,
+   "lon": 27.949659,
+   "name": "Thaba-Bolula"
+  },
+  {
+   "lat": -30.160843,
+   "lon": 27.967114,
+   "name": "Mokobobong"
+  },
+  {
+   "lat": -30.086906,
+   "lon": 27.924435,
+   "name": "Ts'oeu-ea-Penya"
+  },
+  {
+   "lat": -30.024916,
+   "lon": 27.975225,
+   "name": "Muro-Mots'o"
+  },
+  {
+   "lat": -30.013155,
+   "lon": 27.794681,
+   "name": "Thaba-ea-Lesokoaneng"
+  },
+  {
+   "lat": -30.018887,
+   "lon": 27.73653,
+   "name": "Thaba-Sephara"
+  },
+  {
+   "lat": -30.019444,
+   "lon": 27.72342,
+   "name": "Thaba-Mothutla"
+  },
+  {
+   "lat": -30.026374,
+   "lon": 27.68604,
+   "name": "Kobo-li-Nala"
+  },
+  {
+   "lat": -30.024163,
+   "lon": 27.702928,
+   "name": "Lerotsollonyane"
+  },
+  {
+   "lat": -30.019681,
+   "lon": 27.706463,
+   "name": "Lerotsollo"
+  },
+  {
+   "lat": -30.060115,
+   "lon": 27.689205,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -30.115369,
+   "lon": 27.759157,
+   "name": "Koping"
+  },
+  {
+   "lat": -30.123322,
+   "lon": 27.725501,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -30.114441,
+   "lon": 27.67588,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -30.087124,
+   "lon": 27.694527,
+   "name": "Thaba-ea-Hleoheng"
+  },
+  {
+   "lat": -30.158595,
+   "lon": 27.735023,
+   "name": "Thaba-Kholo"
+  },
+  {
+   "lat": -30.158338,
+   "lon": 27.750585,
+   "name": "Patue"
+  },
+  {
+   "lat": -30.184754,
+   "lon": 27.702118,
+   "name": "Thab-Lesoba"
+  },
+  {
+   "lat": -30.248864,
+   "lon": 27.791505,
+   "name": "Kuba-Kuba"
+  },
+  {
+   "lat": -30.245258,
+   "lon": 27.680215,
+   "name": "Bloubere"
+  },
+  {
+   "lat": -30.276043,
+   "lon": 27.933737,
+   "name": "Thaba-ea-Poone"
+  },
+  {
+   "lat": -30.241069,
+   "lon": 27.604351,
+   "name": "Thaba-ea-Mamaeshe"
+  },
+  {
+   "lat": -30.152744,
+   "lon": 27.649691,
+   "name": "'Malehloana"
+  },
+  {
+   "lat": -30.159479,
+   "lon": 27.634912,
+   "name": "Fika-le-Motho"
+  },
+  {
+   "lat": -30.18366,
+   "lon": 27.623062,
+   "name": "Qhoboshaneng"
+  },
+  {
+   "lat": -30.12683,
+   "lon": 28.81628,
+   "name": "iSayana"
+  },
+  {
+   "lat": -30.27356,
+   "lon": 28.084638,
+   "name": "Lomo-sa-Manonyane"
+  },
+  {
+   "lat": -30.328819,
+   "lon": 28.058229,
+   "name": "Fika-le-Mahloana"
+  },
+  {
+   "lat": -30.299325,
+   "lon": 28.048353,
+   "name": "Thaba-Lihlolo"
+  },
+  {
+   "lat": -30.401343,
+   "lon": 28.034792,
+   "name": "Thabana-Sephara"
+  },
+  {
+   "lat": -30.474716,
+   "lon": 28.005159,
+   "name": "Thaba-Ts'oeu"
+  },
+  {
+   "lat": -30.409625,
+   "lon": 27.940636,
+   "name": "Thaba-Ts'oeu"
+  },
+  {
+   "lat": -30.363785,
+   "lon": 27.972672,
+   "name": "Mosheba-Hang"
+  },
+  {
+   "lat": -30.469575,
+   "lon": 27.977736,
+   "name": "Morataleng"
+  },
+  {
+   "lat": -29.738608,
+   "lon": 29.436158,
+   "name": "Eland's Peak"
+  },
+  {
+   "lat": -30.553088,
+   "lon": 28.041127,
+   "name": "Maqoakeng"
+  },
+  {
+   "lat": -30.640694,
+   "lon": 28.034731,
+   "name": "Mahlo-Matala"
+  },
+  {
+   "lat": -30.526908,
+   "lon": 28.062886,
+   "name": "Nyoko-Soba"
+  },
+  {
+   "lat": -30.52013,
+   "lon": 27.776312,
+   "name": "Mathole"
+  },
+  {
+   "lat": -30.540539,
+   "lon": 27.796239,
+   "name": "Thaba-Limmele"
+  },
+  {
+   "lat": -30.600539,
+   "lon": 27.817407,
+   "name": "Tjana"
+  },
+  {
+   "lat": -30.59797,
+   "lon": 27.774835,
+   "name": "Thaba-Ntšo"
+  },
+  {
+   "lat": -30.505282,
+   "lon": 27.703716,
+   "name": "Ntabemdaka"
+  },
+  {
+   "lat": -30.498884,
+   "lon": 27.806976,
+   "name": "Thaba-Ts'epe"
+  },
+  {
+   "lat": -30.64706,
+   "lon": 27.737013,
+   "name": "Lundin's Nek"
+  },
+  {
+   "lat": -30.634884,
+   "lon": 27.686727,
+   "name": "Mkonto"
+  },
+  {
+   "lat": -30.553133,
+   "lon": 27.508639,
+   "name": "Diepnek"
+  },
+  {
+   "lat": -30.413909,
+   "lon": 27.857069,
+   "name": "Fokomo"
+  },
+  {
+   "lat": -30.427065,
+   "lon": 27.842542,
+   "name": "Telle"
+  },
+  {
+   "lat": -30.438878,
+   "lon": 27.843078,
+   "name": "Thaba-Nts'o"
+  },
+  {
+   "lat": -30.411207,
+   "lon": 27.809658,
+   "name": "Kolbere"
+  },
+  {
+   "lat": -30.272411,
+   "lon": 27.743289,
+   "name": "Thaba-Baeti"
+  },
+  {
+   "lat": -30.429928,
+   "lon": 27.552198,
+   "name": "Qobosheane"
+  },
+  {
+   "lat": -30.474531,
+   "lon": 27.551424,
+   "name": "Thaba-Chicha"
+  },
+  {
+   "lat": -30.460059,
+   "lon": 27.672281,
+   "name": "Nxowa"
+  },
+  {
+   "lat": -30.43935,
+   "lon": 27.604662,
+   "name": "Bolepeletsa"
+  },
+  {
+   "lat": -30.426399,
+   "lon": 27.608643,
+   "name": "Thabana-Ts'ooana"
+  },
+  {
+   "lat": -30.365653,
+   "lon": 27.504452,
+   "name": "Thaba-ea-Morobong"
+  },
+  {
+   "lat": -30.319892,
+   "lon": 27.542204,
+   "name": "Thaba-ea-Qoqotho"
+  },
+  {
+   "lat": -28.71457,
+   "lon": 28.450363,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.646937,
+   "lon": 28.48381,
+   "name": "'Maliphaqane"
+  },
+  {
+   "lat": -28.651739,
+   "lon": 28.469889,
+   "name": "Thaba-Baroa"
+  },
+  {
+   "lat": -29.344651,
+   "lon": 29.85981,
+   "name": "Flying Saucer Hill"
+  },
+  {
+   "lat": -28.607271,
+   "lon": 28.278873,
+   "name": "Bloenhoek"
+  },
+  {
+   "lat": -28.617199,
+   "lon": 28.258091,
+   "name": "Zaaihoek"
+  },
+  {
+   "lat": -28.642876,
+   "lon": 28.301693,
+   "name": "Spioenkop"
+  },
+  {
+   "lat": -28.610464,
+   "lon": 28.388618,
+   "name": "Surrender Hill"
+  },
+  {
+   "lat": -28.515122,
+   "lon": 28.065133,
+   "name": "Welgedacht"
+  },
+  {
+   "lat": -28.519213,
+   "lon": 28.167438,
+   "name": "Marokoskop"
+  },
+  {
+   "lat": -28.60242,
+   "lon": 28.218942,
+   "name": "Donkerpoort"
+  },
+  {
+   "lat": -28.774411,
+   "lon": 27.988636,
+   "name": "Morning Star"
+  },
+  {
+   "lat": -28.728829,
+   "lon": 28.060257,
+   "name": "The Sheep"
+  },
+  {
+   "lat": -28.665361,
+   "lon": 28.005298,
+   "name": "Wonderklip"
+  },
+  {
+   "lat": -28.661172,
+   "lon": 28.06648,
+   "name": "Klein-Qiloane"
+  },
+  {
+   "lat": -28.669108,
+   "lon": 28.064639,
+   "name": "Klein-Thaba Bosiu"
+  },
+  {
+   "lat": -28.646824,
+   "lon": 28.061925,
+   "name": "Loskop"
+  },
+  {
+   "lat": -28.612617,
+   "lon": 28.004848,
+   "name": "First Pyramid"
+  },
+  {
+   "lat": -28.597701,
+   "lon": 28.065391,
+   "name": "Westbourne"
+  },
+  {
+   "lat": -28.604304,
+   "lon": 28.089337,
+   "name": "Kranspoort"
+  },
+  {
+   "lat": -28.5663,
+   "lon": 28.101675,
+   "name": "Fraaiuitzicht"
+  },
+  {
+   "lat": -28.57787,
+   "lon": 28.003077,
+   "name": "The Sphinx"
+  },
+  {
+   "lat": -28.796699,
+   "lon": 28.46549,
+   "name": "Joala-Boholo"
+  },
+  {
+   "lat": -28.790839,
+   "lon": 28.496067,
+   "name": "Tarapane"
+  },
+  {
+   "lat": -28.737988,
+   "lon": 28.319986,
+   "name": "Manamela"
+  },
+  {
+   "lat": -28.85361,
+   "lon": 28.469396,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.829072,
+   "lon": 28.40351,
+   "name": "Helea"
+  },
+  {
+   "lat": -28.815997,
+   "lon": 28.389294,
+   "name": "Sebera"
+  },
+  {
+   "lat": -28.826201,
+   "lon": 28.44311,
+   "name": "Tsoelike"
+  },
+  {
+   "lat": -28.843847,
+   "lon": 28.446184,
+   "name": "Thaba-Kotja"
+  },
+  {
+   "lat": -28.802789,
+   "lon": 28.418747,
+   "name": "Thabana-ea-Banana"
+  },
+  {
+   "lat": -28.880454,
+   "lon": 28.375819,
+   "name": "Hlobolanyane"
+  },
+  {
+   "lat": -28.883554,
+   "lon": 28.365068,
+   "name": "Hlobola"
+  },
+  {
+   "lat": -28.732046,
+   "lon": 28.341454,
+   "name": "Lekhirika"
+  },
+  {
+   "lat": -28.874305,
+   "lon": 28.407775,
+   "name": "Thaba-Chitja"
+  },
+  {
+   "lat": -28.825975,
+   "lon": 28.371452,
+   "name": "Thaba-Teletsane"
+  },
+  {
+   "lat": -28.785747,
+   "lon": 28.348374,
+   "name": "Mamphaneng"
+  },
+  {
+   "lat": -28.777752,
+   "lon": 28.358915,
+   "name": "Qakobane"
+  },
+  {
+   "lat": -28.949912,
+   "lon": 28.343782,
+   "name": "Thaba Patsoa"
+  },
+  {
+   "lat": -28.938392,
+   "lon": 28.283443,
+   "name": "Patsue"
+  },
+  {
+   "lat": -28.93459,
+   "lon": 28.282671,
+   "name": "Nts'upe"
+  },
+  {
+   "lat": -28.937237,
+   "lon": 28.296404,
+   "name": "Belerisi"
+  },
+  {
+   "lat": -28.954794,
+   "lon": 28.35331,
+   "name": "Maharasoa"
+  },
+  {
+   "lat": -28.96987,
+   "lon": 28.377868,
+   "name": "Libono"
+  },
+  {
+   "lat": -28.794614,
+   "lon": 28.15268,
+   "name": "Phatšoe"
+  },
+  {
+   "lat": -30.042052,
+   "lon": 27.664304,
+   "name": "Thaba-ea-'Malehloane"
+  },
+  {
+   "lat": -30.028752,
+   "lon": 27.645657,
+   "name": "Lekhoekhoe"
+  },
+  {
+   "lat": -30.110125,
+   "lon": 27.51057,
+   "name": "Thaba-ea-Thoriso"
+  },
+  {
+   "lat": -30.104816,
+   "lon": 27.544956,
+   "name": "Thaba-ea-Litlolo"
+  },
+  {
+   "lat": -30.10773,
+   "lon": 27.559097,
+   "name": "Thaba-ea-Mokhele"
+  },
+  {
+   "lat": -30.050169,
+   "lon": 27.587518,
+   "name": "Phiring"
+  },
+  {
+   "lat": -30.013986,
+   "lon": 27.581547,
+   "name": "Nkosoba"
+  },
+  {
+   "lat": -30.144223,
+   "lon": 27.571864,
+   "name": "Thabana-Litlholo"
+  },
+  {
+   "lat": -28.79059,
+   "lon": 28.169814,
+   "name": "Molokong"
+  },
+  {
+   "lat": -29.054847,
+   "lon": 28.226849,
+   "name": "Makhata"
+  },
+  {
+   "lat": -29.071643,
+   "lon": 28.233232,
+   "name": "Qaqome"
+  },
+  {
+   "lat": -29.141479,
+   "lon": 28.114475,
+   "name": "Hleoheng"
+  },
+  {
+   "lat": -29.840202,
+   "lon": 27.554913,
+   "name": "Boloepeletsa"
+  },
+  {
+   "lat": -29.820289,
+   "lon": 27.555824,
+   "name": "Thaba-Fukufuku"
+  },
+  {
+   "lat": -29.009911,
+   "lon": 27.759031,
+   "name": "Thabana Lekope"
+  },
+  {
+   "lat": -29.282153,
+   "lon": 27.603664,
+   "name": "Fika-la-Spit"
+  },
+  {
+   "lat": -29.180482,
+   "lon": 27.589569,
+   "name": "Makebe"
+  }
+ ]
+}

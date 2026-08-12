@@ -1,0 +1,64 @@
+{
+ "region": "novaya-zemlya",
+ "generated": "2026-08-12T10:55:01+00:00",
+ "peaks": [
+  {
+   "lat": 75.175771,
+   "lon": 57.825951,
+   "name": "Крузенштерна",
+   "name_en": "Kruzenshtern",
+   "ele": 1549,
+   "wikidata": "Q31243910"
+  },
+  {
+   "lat": 72.968855,
+   "lon": 53.224041,
+   "name": "Mount Pervosvotrennaya",
+   "ele": 1291
+  },
+  {
+   "lat": 75.421962,
+   "lon": 58.942128,
+   "name": "Local H.P. (1116)",
+   "ele": 1116
+  },
+  {
+   "lat": 72.991181,
+   "lon": 54.94935,
+   "name": "Local H.P. (844)",
+   "ele": 844
+  },
+  {
+   "lat": 73.043931,
+   "lon": 53.433895,
+   "name": "Гора Фрейберга",
+   "name_en": "Mount Freiberg",
+   "ele": 641
+  },
+  {
+   "lat": 73.359889,
+   "lon": 54.343528,
+   "name": "Горa Литке",
+   "name_en": "Litke Mount",
+   "ele": 432
+  },
+  {
+   "lat": 73.69637,
+   "lon": 54.184385,
+   "name": "гора Фёдорова",
+   "ele": 306
+  },
+  {
+   "lat": 70.24696,
+   "lon": 58.752038,
+   "name": "Mont Jango-Jaha",
+   "ele": 60
+  },
+  {
+   "lat": 73.363281,
+   "lon": 54.234867,
+   "name": "Горы Литке",
+   "name_en": "Litke Mountains"
+  }
+ ]
+}

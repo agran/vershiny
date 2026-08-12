@@ -1,0 +1,1566 @@
+{
+ "region": "annapurna",
+ "generated": "2026-08-12T10:54:33+00:00",
+ "peaks": [
+  {
+   "lat": 28.697609,
+   "lon": 83.489488,
+   "name": "Dhaulagiri",
+   "name_ru": "Джаулагири",
+   "name_en": "Dhaulagiri",
+   "ele": 8167,
+   "wikidata": "Q165440"
+  },
+  {
+   "lat": 28.549983,
+   "lon": 84.559728,
+   "name": "मनास्लु",
+   "name_ru": "Манаслу",
+   "name_en": "Manaslu",
+   "ele": 8163,
+   "wikidata": "Q170070"
+  },
+  {
+   "lat": 28.595806,
+   "lon": 83.81992,
+   "name": "अन्नपूर्ण",
+   "name_ru": "Аннапурна I",
+   "name_en": "Annapurna I",
+   "ele": 8091,
+   "wikidata": "Q159621"
+  },
+  {
+   "lat": 28.554615,
+   "lon": 84.562379,
+   "name": "Manaslu East Pinnacle",
+   "ele": 7992
+  },
+  {
+   "lat": 28.534971,
+   "lon": 84.121822,
+   "name": "अन्नपूर्णा II",
+   "name_ru": "Аннапурна II",
+   "name_en": "Annapurna II",
+   "ele": 7937,
+   "wikidata": "Q449534"
+  },
+  {
+   "lat": 28.437727,
+   "lon": 84.636696,
+   "name": "Himachuli",
+   "ele": 7893,
+   "wikidata": "Q1145646"
+  },
+  {
+   "lat": 28.503927,
+   "lon": 84.567249,
+   "name": "Ngadi Chuli",
+   "ele": 7871,
+   "wikidata": "Q1754634"
+  },
+  {
+   "lat": 28.763159,
+   "lon": 83.387379,
+   "name": "Dhaulagiri II",
+   "ele": 7751,
+   "wikidata": "Q1207614"
+  },
+  {
+   "lat": 28.754026,
+   "lon": 83.377144,
+   "name": "Dhaulagiri III",
+   "ele": 7715
+  },
+  {
+   "lat": 28.735749,
+   "lon": 83.314379,
+   "name": "Dhaulagiri IV",
+   "ele": 7661,
+   "wikidata": "Q31653016"
+  },
+  {
+   "lat": 28.578303,
+   "lon": 83.800725,
+   "name": "Baraha Shikhar (Annapurna Fang Peak)",
+   "name_en": "Baraha Shikhar (Annapurna Fang Peak)",
+   "ele": 7647
+  },
+  {
+   "lat": 28.734057,
+   "lon": 83.360579,
+   "name": "Dhaulagiri V",
+   "ele": 7616,
+   "wikidata": "Q31653032"
+  },
+  {
+   "lat": 28.585351,
+   "lon": 83.989109,
+   "name": "अन्नपूर्णा III",
+   "name_ru": "Аннапурна III",
+   "name_en": "Annapurna III",
+   "ele": 7555,
+   "wikidata": "Q564576"
+  },
+  {
+   "lat": 28.536893,
+   "lon": 84.083562,
+   "name": "अन्नपूर्णा IV",
+   "name_ru": "Аннапурна IV",
+   "name_en": "Annapurna IV",
+   "ele": 7525,
+   "wikidata": "Q20757620"
+  },
+  {
+   "lat": 28.610814,
+   "lon": 83.862901,
+   "name": "Khangsar Kang",
+   "ele": 7485
+  },
+  {
+   "lat": 28.605655,
+   "lon": 83.963514,
+   "name": "Gangapurna",
+   "name_ru": "Гангапурна",
+   "name_en": "Gangapurna",
+   "ele": 7455,
+   "wikidata": "Q1133863"
+  },
+  {
+   "lat": 28.391715,
+   "lon": 85.127041,
+   "name": "央然康日峰",
+   "name_en": "Yangra",
+   "ele": 7422,
+   "wikidata": "Q1660406"
+  },
+  {
+   "lat": 28.70839,
+   "lon": 83.273196,
+   "name": "Dhaulagiri VI",
+   "ele": 7268
+  },
+  {
+   "lat": 28.747922,
+   "lon": 83.14544,
+   "name": "Putha Hiunchuli",
+   "ele": 7246,
+   "wikidata": "Q1377280"
+  },
+  {
+   "lat": 28.518396,
+   "lon": 83.806343,
+   "name": "Annapurna South",
+   "ele": 7219,
+   "wikidata": "Q20190791"
+  },
+  {
+   "lat": 28.607355,
+   "lon": 83.886437,
+   "name": "Tarke Kang",
+   "ele": 7193,
+   "wikidata": "Q31652628"
+  },
+  {
+   "lat": 28.674102,
+   "lon": 83.275664,
+   "name": "Gurja Himal",
+   "name_en": "Mount Gurja",
+   "ele": 7193,
+   "wikidata": "Q20757619"
+  },
+  {
+   "lat": 28.736327,
+   "lon": 84.417796,
+   "name": "Nimjung",
+   "ele": 7140,
+   "wikidata": "Q6991183"
+  },
+  {
+   "lat": 28.601464,
+   "lon": 83.941071,
+   "name": "Asapurna",
+   "ele": 7140
+  },
+  {
+   "lat": 28.682918,
+   "lon": 83.811479,
+   "name": "Tilicho Peak",
+   "ele": 7134,
+   "wikidata": "Q2143811"
+  },
+  {
+   "lat": 28.77233,
+   "lon": 84.4218,
+   "name": "Himlung",
+   "ele": 7126
+  },
+  {
+   "lat": 28.716579,
+   "lon": 83.276387,
+   "name": "Gama Peak",
+   "ele": 7120
+  },
+  {
+   "lat": 28.378902,
+   "lon": 85.055186,
+   "name": "Ganesh NW",
+   "ele": 7118,
+   "wikidata": "Q5520839"
+  },
+  {
+   "lat": 28.345208,
+   "lon": 85.079578,
+   "name": "Pabil",
+   "ele": 7104,
+   "wikidata": "Q19298140"
+  },
+  {
+   "lat": 28.555085,
+   "lon": 84.943723,
+   "name": "Chamar",
+   "ele": 7100,
+   "wikidata": "Q5069463"
+  },
+  {
+   "lat": 28.721745,
+   "lon": 83.276516,
+   "name": "Junction Peak",
+   "ele": 7080
+  },
+  {
+   "lat": 28.606596,
+   "lon": 83.911158,
+   "name": "Tare Kang",
+   "ele": 7069
+  },
+  {
+   "lat": 28.528885,
+   "lon": 84.523315,
+   "name": "Thulagi Chuli",
+   "ele": 7069,
+   "wikidata": "Q20757646"
+  },
+  {
+   "lat": 28.689076,
+   "lon": 83.744055,
+   "name": "Nilgiri North",
+   "ele": 7061
+  },
+  {
+   "lat": 28.336396,
+   "lon": 85.120491,
+   "name": "Salasungo",
+   "ele": 7043,
+   "wikidata": "Q7403706"
+  },
+  {
+   "lat": 28.734933,
+   "lon": 84.366936,
+   "name": "Gyaji Kang",
+   "ele": 7038,
+   "wikidata": "Q19946258"
+  },
+  {
+   "lat": 28.86498,
+   "lon": 84.375236,
+   "name": "Ratna Chuli",
+   "ele": 7035,
+   "wikidata": "Q20191208"
+  },
+  {
+   "lat": 28.583923,
+   "lon": 84.549137,
+   "name": "Manaslu North",
+   "ele": 6994
+  },
+  {
+   "lat": 28.49798,
+   "lon": 83.945876,
+   "name": "Machapuchare",
+   "ele": 6993,
+   "wikidata": "Q1051394"
+  },
+  {
+   "lat": 28.489508,
+   "lon": 84.188609,
+   "name": "Lamjung Himal",
+   "ele": 6983,
+   "wikidata": "Q20190988"
+  },
+  {
+   "lat": 28.658155,
+   "lon": 84.300885,
+   "name": "Kang Guru",
+   "ele": 6981
+  },
+  {
+   "lat": 28.773258,
+   "lon": 83.240181,
+   "name": "Kaya Chuli",
+   "ele": 6975
+  },
+  {
+   "lat": 28.678379,
+   "lon": 83.735384,
+   "name": "Nilgiri Central",
+   "ele": 6940
+  },
+  {
+   "lat": 28.744953,
+   "lon": 83.557406,
+   "name": "Tukuche Peak",
+   "ele": 6920,
+   "wikidata": "Q31652811"
+  },
+  {
+   "lat": 28.260119,
+   "lon": 85.498672,
+   "name": "Luri Himal",
+   "ele": 6918
+  },
+  {
+   "lat": 28.369728,
+   "lon": 85.061474,
+   "name": "Ganesh V",
+   "ele": 6908
+  },
+  {
+   "lat": 28.654108,
+   "lon": 83.729646,
+   "name": "Nilgiri South",
+   "ele": 6839
+  },
+  {
+   "lat": 28.331245,
+   "lon": 85.162826,
+   "name": "Ganesh VI",
+   "ele": 6816
+  },
+  {
+   "lat": 28.3314,
+   "lon": 85.161171,
+   "name": "扎拉松果康日",
+   "ele": 6772
+  },
+  {
+   "lat": 28.658616,
+   "lon": 85.431719,
+   "name": "Chalung Ri",
+   "ele": 6767,
+   "wikidata": "Q25378749"
+  },
+  {
+   "lat": 28.888992,
+   "lon": 84.126882,
+   "name": "Khumjungar",
+   "ele": 6759,
+   "wikidata": "Q20190930"
+  },
+  {
+   "lat": 28.687513,
+   "lon": 84.325031,
+   "name": "Chombi",
+   "ele": 6704
+  },
+  {
+   "lat": 28.461454,
+   "lon": 84.686938,
+   "name": "Rani peak",
+   "ele": 6693
+  },
+  {
+   "lat": 28.391646,
+   "lon": 85.186797,
+   "name": "普拥 Puyung",
+   "name_en": "Puyung",
+   "ele": 6676
+  },
+  {
+   "lat": 28.376229,
+   "lon": 84.676811,
+   "name": "Bhauda Himal",
+   "ele": 6672
+  },
+  {
+   "lat": 28.873629,
+   "lon": 84.159884,
+   "name": "Chhiv Himal",
+   "ele": 6650,
+   "wikidata": "Q20190813"
+  },
+  {
+   "lat": 28.49749,
+   "lon": 85.157297,
+   "name": "Langbo Kangri / Riogbanba",
+   "ele": 6648,
+   "wikidata": "Q21000021"
+  },
+  {
+   "lat": 28.581255,
+   "lon": 85.49812,
+   "name": "夏当北峰",
+   "name_en": "Xatang North Peak",
+   "ele": 6643
+  },
+  {
+   "lat": 28.779789,
+   "lon": 83.460735,
+   "name": "Mukut Himal",
+   "ele": 6639
+  },
+  {
+   "lat": 28.629594,
+   "lon": 84.6823,
+   "name": "Pangpoche I",
+   "ele": 6620
+  },
+  {
+   "lat": 28.782078,
+   "lon": 83.483832,
+   "name": "Sita Chuchura",
+   "ele": 6611,
+   "wikidata": "Q20757642"
+  },
+  {
+   "lat": 28.246151,
+   "lon": 85.469952,
+   "name": "Lirung II",
+   "ele": 6600
+  },
+  {
+   "lat": 28.736823,
+   "lon": 84.035097,
+   "name": "Chulu",
+   "ele": 6584
+  },
+  {
+   "lat": 28.590948,
+   "lon": 85.497364,
+   "name": "吉纳巴杂峰",
+   "name_en": "Jinabaza Peal",
+   "ele": 6578
+  },
+  {
+   "lat": 28.659996,
+   "lon": 83.304856,
+   "name": "Konabon Peak",
+   "ele": 6570
+  },
+  {
+   "lat": 28.814101,
+   "lon": 84.430504,
+   "name": "Phu Khang North",
+   "ele": 6566
+  },
+  {
+   "lat": 28.843187,
+   "lon": 83.496775,
+   "name": "Hongde",
+   "ele": 6556
+  },
+  {
+   "lat": 28.767302,
+   "lon": 83.098742,
+   "name": "Dogari Himal",
+   "ele": 6536
+  },
+  {
+   "lat": 28.681015,
+   "lon": 83.245366,
+   "name": "Ghustang",
+   "ele": 6529,
+   "wikidata": "Q20999853"
+  },
+  {
+   "lat": 28.830673,
+   "lon": 84.400829,
+   "name": "Phungi",
+   "ele": 6524
+  },
+  {
+   "lat": 28.642668,
+   "lon": 85.439066,
+   "name": "都当峰",
+   "name_en": "Dudang Peak",
+   "ele": 6513
+  },
+  {
+   "lat": 28.589489,
+   "lon": 83.881506,
+   "name": "Singu Chull",
+   "ele": 6501
+  },
+  {
+   "lat": 28.800597,
+   "lon": 84.016799,
+   "name": "Purpung Himal",
+   "ele": 6500
+  },
+  {
+   "lat": 28.777777,
+   "lon": 83.918292,
+   "name": "Khatung Kang",
+   "ele": 6484,
+   "wikidata": "Q4217498"
+  },
+  {
+   "lat": 28.808901,
+   "lon": 83.941934,
+   "name": "Yakawa Kang",
+   "ele": 6482,
+   "wikidata": "Q4536616"
+  },
+  {
+   "lat": 28.51,
+   "lon": 83.85,
+   "name": "Hiunchuli",
+   "ele": 6441
+  },
+  {
+   "lat": 28.697179,
+   "lon": 85.422369,
+   "name": "扎峰",
+   "name_en": "Chag Peak",
+   "ele": 6440
+  },
+  {
+   "lat": 28.725103,
+   "lon": 84.052158,
+   "name": "Chulu East",
+   "ele": 6429
+  },
+  {
+   "lat": 28.78365,
+   "lon": 84.397131,
+   "name": "Karma Himal",
+   "ele": 6421
+  },
+  {
+   "lat": 28.745405,
+   "lon": 84.022832,
+   "name": "Chulu West",
+   "ele": 6419
+  },
+  {
+   "lat": 28.689171,
+   "lon": 83.379961,
+   "name": "Tsaurabong Peak",
+   "ele": 6395
+  },
+  {
+   "lat": 28.835161,
+   "lon": 84.169925,
+   "name": "Amotsang",
+   "ele": 6393
+  },
+  {
+   "lat": 28.651593,
+   "lon": 83.46722,
+   "name": "Manapathi East",
+   "ele": 6384
+  },
+  {
+   "lat": 28.647609,
+   "lon": 83.455348,
+   "name": "Manapathi",
+   "ele": 6380
+  },
+  {
+   "lat": 28.844507,
+   "lon": 84.344359,
+   "name": "Nagoru Lake Peak",
+   "ele": 6374
+  },
+  {
+   "lat": 28.813321,
+   "lon": 84.226942,
+   "name": "Pokarkang",
+   "ele": 6372
+  },
+  {
+   "lat": 28.601281,
+   "lon": 85.487333,
+   "name": "拉峰",
+   "name_en": "La Peak",
+   "ele": 6370
+  },
+  {
+   "lat": 28.893082,
+   "lon": 84.226156,
+   "name": "普丽古蒂塞尔",
+   "ele": 6361
+  },
+  {
+   "lat": 28.844795,
+   "lon": 83.481727,
+   "name": "Honde Himal",
+   "ele": 6338
+  },
+  {
+   "lat": 28.636402,
+   "lon": 84.694665,
+   "name": "桑木多康日 Samdo",
+   "name_en": "Samdo",
+   "ele": 6335
+  },
+  {
+   "lat": 28.885,
+   "lon": 84.171912,
+   "name": "Saribung Peak",
+   "ele": 6328
+  },
+  {
+   "lat": 28.685785,
+   "lon": 85.439887,
+   "name": "查果那莫",
+   "name_en": "Chagonagmo",
+   "ele": 6310
+  },
+  {
+   "lat": 28.800126,
+   "lon": 83.166475,
+   "name": "Kāṅg Tokal",
+   "ele": 6294
+  },
+  {
+   "lat": 28.66187,
+   "lon": 83.321115,
+   "name": "Myagumath",
+   "ele": 6273
+  },
+  {
+   "lat": 28.399571,
+   "lon": 85.012516,
+   "name": "Lumbo Himal",
+   "ele": 6250
+  },
+  {
+   "lat": 28.627987,
+   "lon": 84.543531,
+   "name": "Larkya Peak",
+   "ele": 6249
+  },
+  {
+   "lat": 28.539169,
+   "lon": 83.959837,
+   "name": "Gandharba Chull",
+   "ele": 6248
+  },
+  {
+   "lat": 28.62306,
+   "lon": 85.454753,
+   "name": "色玛然峰",
+   "name_en": "Sermaran Peak",
+   "ele": 6248
+  },
+  {
+   "lat": 28.61376,
+   "lon": 84.753941,
+   "name": "古当康日东峰",
+   "ele": 6235
+  },
+  {
+   "lat": 29.301743,
+   "lon": 83.812356,
+   "name": "曼塞尔",
+   "ele": 6235
+  },
+  {
+   "lat": 28.606942,
+   "lon": 84.587817,
+   "name": "Naike Peak",
+   "ele": 6211
+  },
+  {
+   "lat": 28.871469,
+   "lon": 83.503376,
+   "name": "Tongu Himal",
+   "ele": 6200
+  },
+  {
+   "lat": 28.855559,
+   "lon": 84.207473,
+   "name": "Sahasar",
+   "ele": 6188
+  },
+  {
+   "lat": 28.532754,
+   "lon": 85.166386,
+   "name": "卓当岗日 / 巴束沃",
+   "name_en": "Zhogdam Kangri / Pashuwo",
+   "ele": 6177
+  },
+  {
+   "lat": 28.63342,
+   "lon": 84.713424,
+   "name": "卡羊康日",
+   "name_en": "Khayang peak",
+   "ele": 6168
+  },
+  {
+   "lat": 28.827963,
+   "lon": 83.982407,
+   "name": "Purkung",
+   "ele": 6166
+  },
+  {
+   "lat": 28.847266,
+   "lon": 84.302031,
+   "name": "Nagoru Central",
+   "ele": 6165
+  },
+  {
+   "lat": 28.841507,
+   "lon": 84.308126,
+   "name": "Nagoru East",
+   "ele": 6145
+  },
+  {
+   "lat": 28.845527,
+   "lon": 84.326756,
+   "name": "Nagoru Far East",
+   "ele": 6145
+  },
+  {
+   "lat": 28.781969,
+   "lon": 83.926878,
+   "name": "Thorong Peak",
+   "ele": 6144
+  },
+  {
+   "lat": 28.7849,
+   "lon": 84.032194,
+   "name": "Jinjang",
+   "ele": 6111
+  },
+  {
+   "lat": 29.045897,
+   "lon": 84.187923,
+   "name": "苟吉里",
+   "ele": 6110
+  },
+  {
+   "lat": 28.729371,
+   "lon": 85.423101,
+   "name": "卡穷",
+   "name_en": "Kaqung",
+   "ele": 6110
+  },
+  {
+   "lat": 28.648653,
+   "lon": 84.18809,
+   "name": "Pisang Peak",
+   "ele": 6091,
+   "wikidata": "Q18388748"
+  },
+  {
+   "lat": 28.817038,
+   "lon": 83.480211,
+   "name": "Mukot Himal",
+   "ele": 6087
+  },
+  {
+   "lat": 29.120261,
+   "lon": 83.073533,
+   "name": "Norbung Kang",
+   "ele": 6085
+  },
+  {
+   "lat": 28.852103,
+   "lon": 84.29655,
+   "name": "Nagoru West",
+   "ele": 6075
+  },
+  {
+   "lat": 28.623254,
+   "lon": 83.448944,
+   "name": "Jirbang",
+   "ele": 6062
+  },
+  {
+   "lat": 29.235517,
+   "lon": 83.361154,
+   "name": "Chanmar Lek",
+   "ele": 6050
+  },
+  {
+   "lat": 28.730828,
+   "lon": 84.085445,
+   "name": "Chulu Far East",
+   "ele": 6038
+  },
+  {
+   "lat": 29.217684,
+   "lon": 83.839776,
+   "name": "Kyangkung Dula",
+   "ele": 6037
+  },
+  {
+   "lat": 29.176593,
+   "lon": 83.656591,
+   "name": "阿尼哥峰 Araniko Chuli",
+   "name_en": "Araniko Chuli",
+   "ele": 6034
+  },
+  {
+   "lat": 28.410751,
+   "lon": 85.002764,
+   "name": "Lumbo Himal North",
+   "ele": 6030
+  },
+  {
+   "lat": 28.766909,
+   "lon": 83.939257,
+   "name": "Syagang",
+   "ele": 6026
+  },
+  {
+   "lat": 28.797951,
+   "lon": 83.606446,
+   "name": "Thapa Peak",
+   "name_en": "Dhampus Peak",
+   "ele": 6012,
+   "wikidata": "Q31652826"
+  },
+  {
+   "lat": 28.411461,
+   "lon": 84.994317,
+   "name": "Tewa Himal",
+   "ele": 6008
+  },
+  {
+   "lat": 29.036348,
+   "lon": 84.250727,
+   "name": "Dhechyan Kang",
+   "ele": 6000
+  },
+  {
+   "lat": 28.58197,
+   "lon": 84.869305,
+   "name": "查尊康日",
+   "ele": 5996
+  },
+  {
+   "lat": 28.812556,
+   "lon": 83.608705,
+   "name": "Sechi Lek",
+   "ele": 5981
+  },
+  {
+   "lat": 28.840863,
+   "lon": 84.153633,
+   "name": "Amatsan Himal",
+   "ele": 5975
+  },
+  {
+   "lat": 28.735147,
+   "lon": 84.57162,
+   "name": "甲拉康 Gyala Peak",
+   "name_en": "Gyala Peak",
+   "ele": 5973
+  },
+  {
+   "lat": 28.326128,
+   "lon": 85.04668,
+   "name": "Phyaphala Danda",
+   "ele": 5961
+  },
+  {
+   "lat": 28.844395,
+   "lon": 84.051002,
+   "name": "Teri Himal",
+   "ele": 5935
+  },
+  {
+   "lat": 28.786597,
+   "lon": 83.079799,
+   "name": "Samjaṅ",
+   "name_en": "Samjang",
+   "ele": 5924
+  },
+  {
+   "lat": 28.725318,
+   "lon": 85.115761,
+   "name": "K’o-chiang",
+   "name_en": "K’o-chiang",
+   "ele": 5912,
+   "wikidata": "Q31652349"
+  },
+  {
+   "lat": 28.277378,
+   "lon": 85.187181,
+   "name": "Paldor",
+   "ele": 5903,
+   "wikidata": "Q19298179"
+  },
+  {
+   "lat": 29.180946,
+   "lon": 83.60709,
+   "name": "扎那卧洛",
+   "ele": 5897
+  },
+  {
+   "lat": 28.570411,
+   "lon": 84.857116,
+   "name": "Lapchung",
+   "ele": 5880
+  },
+  {
+   "lat": 29.101339,
+   "lon": 83.04501,
+   "name": "Jhyarko Dingla",
+   "ele": 5850
+  },
+  {
+   "lat": 29.239765,
+   "lon": 83.327013,
+   "name": "Kirphuk Lek",
+   "ele": 5850
+  },
+  {
+   "lat": 28.808646,
+   "lon": 83.182453,
+   "name": "Tagachhyu",
+   "ele": 5790
+  },
+  {
+   "lat": 28.614969,
+   "lon": 83.464146,
+   "name": "Ruyachaur Dhuri",
+   "ele": 5724
+  },
+  {
+   "lat": 28.561994,
+   "lon": 83.88942,
+   "name": "Tharpu Chull",
+   "ele": 5695,
+   "wikidata": "Q3695902"
+  },
+  {
+   "lat": 28.572315,
+   "lon": 83.886883,
+   "name": "Aldul-Point",
+   "ele": 5680
+  },
+  {
+   "lat": 29.458696,
+   "lon": 83.351494,
+   "name": "马勇",
+   "ele": 5630
+  },
+  {
+   "lat": 28.587439,
+   "lon": 84.971424,
+   "name": "巴马康日",
+   "ele": 5590
+  },
+  {
+   "lat": 29.451178,
+   "lon": 83.354016,
+   "name": "坡拉东",
+   "ele": 5590
+  },
+  {
+   "lat": 28.473769,
+   "lon": 83.927535,
+   "name": "Mardi Himal",
+   "ele": 5553,
+   "wikidata": "Q31652736"
+  },
+  {
+   "lat": 28.680767,
+   "lon": 84.672608,
+   "name": "大沙康日 Tasa Peak",
+   "name_en": "Tasa Peak",
+   "ele": 5543
+  },
+  {
+   "lat": 28.285169,
+   "lon": 85.159611,
+   "name": "Dilpu",
+   "ele": 5450
+  },
+  {
+   "lat": 28.912043,
+   "lon": 85.393389,
+   "name": "马拉山",
+   "name_en": "Jakyungla peak",
+   "ele": 5435
+  },
+  {
+   "lat": 29.174133,
+   "lon": 83.097949,
+   "name": "5410",
+   "ele": 5410
+  },
+  {
+   "lat": 28.768091,
+   "lon": 84.365552,
+   "name": "Himnadi Chuli",
+   "ele": 5408
+  },
+  {
+   "lat": 28.671433,
+   "lon": 84.704514,
+   "name": "查安觉",
+   "name_en": "Chhaamjo",
+   "ele": 5382
+  },
+  {
+   "lat": 29.163973,
+   "lon": 83.197506,
+   "name": "Buddha Ri",
+   "ele": 5370
+  },
+  {
+   "lat": 28.775935,
+   "lon": 83.961654,
+   "name": "Thoraṅ Phedi",
+   "ele": 5350
+  },
+  {
+   "lat": 28.965348,
+   "lon": 83.025378,
+   "name": "Dingla Dhuri",
+   "ele": 5348
+  },
+  {
+   "lat": 28.761796,
+   "lon": 83.987022,
+   "name": "Gundang",
+   "ele": 5312
+  },
+  {
+   "lat": 29.159484,
+   "lon": 83.03597,
+   "name": "5215",
+   "ele": 5215
+  },
+  {
+   "lat": 28.670341,
+   "lon": 84.646448,
+   "name": "Samdo Peak",
+   "ele": 5177
+  },
+  {
+   "lat": 29.294092,
+   "lon": 84.089085,
+   "name": "Chaklo",
+   "ele": 5177
+  },
+  {
+   "lat": 29.173508,
+   "lon": 83.191654,
+   "name": "Buddha Ri",
+   "ele": 5167
+  },
+  {
+   "lat": 29.284891,
+   "lon": 84.068875,
+   "name": "邦拉莫",
+   "ele": 5156
+  },
+  {
+   "lat": 29.142863,
+   "lon": 83.23295,
+   "name": "Pawo Ri",
+   "ele": 5155
+  },
+  {
+   "lat": 28.083797,
+   "lon": 85.443434,
+   "name": "Surya Peak",
+   "ele": 5150
+  },
+  {
+   "lat": 28.089923,
+   "lon": 85.443345,
+   "name": "SN-5140",
+   "ele": 5140
+  },
+  {
+   "lat": 28.083186,
+   "lon": 85.439347,
+   "name": "SN-5090",
+   "ele": 5090
+  },
+  {
+   "lat": 28.092182,
+   "lon": 85.440041,
+   "name": "SN-5080",
+   "ele": 5080
+  },
+  {
+   "lat": 28.099231,
+   "lon": 85.444373,
+   "name": "SN",
+   "ele": 5070
+  },
+  {
+   "lat": 28.080305,
+   "lon": 85.432019,
+   "name": "Gosainkund Ri",
+   "ele": 5053
+  },
+  {
+   "lat": 28.613096,
+   "lon": 83.562021,
+   "name": "Sarpang Dhuri",
+   "ele": 5007
+  },
+  {
+   "lat": 28.083179,
+   "lon": 85.42663,
+   "name": "SN",
+   "ele": 4930
+  },
+  {
+   "lat": 28.280365,
+   "lon": 85.447527,
+   "name": "Machhuwa Dada",
+   "ele": 4900
+  },
+  {
+   "lat": 28.229208,
+   "lon": 85.198064,
+   "name": "Lari",
+   "ele": 4850
+  },
+  {
+   "lat": 28.088643,
+   "lon": 85.415912,
+   "name": "Cholangpatidanda",
+   "ele": 4788
+  },
+  {
+   "lat": 28.104038,
+   "lon": 85.420601,
+   "name": "SN",
+   "ele": 4770
+  },
+  {
+   "lat": 28.781081,
+   "lon": 84.267456,
+   "name": "Gurusangbo",
+   "ele": 4746
+  },
+  {
+   "lat": 28.624828,
+   "lon": 83.355095,
+   "name": "Malbas",
+   "ele": 4625
+  },
+  {
+   "lat": 29.115957,
+   "lon": 83.190179,
+   "name": "Dho Ri",
+   "ele": 4578
+  },
+  {
+   "lat": 28.361635,
+   "lon": 85.404646,
+   "name": "陇卓",
+   "ele": 4522
+  },
+  {
+   "lat": 28.42731,
+   "lon": 84.328115,
+   "name": "Sundar",
+   "ele": 4331
+  },
+  {
+   "lat": 28.816491,
+   "lon": 83.808856,
+   "name": "Puchchhardanda",
+   "ele": 3971
+  },
+  {
+   "lat": 28.806244,
+   "lon": 83.830845,
+   "name": "Dhangladanda",
+   "ele": 3918
+  },
+  {
+   "lat": 28.471127,
+   "lon": 83.29343,
+   "name": "Jugja Pahad",
+   "ele": 3721
+  },
+  {
+   "lat": 28.420502,
+   "lon": 83.732983,
+   "name": "Muldai",
+   "ele": 3637
+  },
+  {
+   "lat": 28.356199,
+   "lon": 83.302549,
+   "name": "Bhitribang",
+   "ele": 3531
+  },
+  {
+   "lat": 28.534122,
+   "lon": 83.444909,
+   "name": "Asnam Dhuri",
+   "ele": 3507
+  },
+  {
+   "lat": 28.155277,
+   "lon": 84.799037,
+   "name": "Dharche Hill (3220m)",
+   "name_en": "Dharche Hill (3220m)",
+   "ele": 3380
+  },
+  {
+   "lat": 28.371366,
+   "lon": 83.679409,
+   "name": "Mohare Danda",
+   "ele": 3313
+  },
+  {
+   "lat": 28.530945,
+   "lon": 83.396524,
+   "name": "Barun Dhuri",
+   "ele": 3273
+  },
+  {
+   "lat": 28.400043,
+   "lon": 83.68954,
+   "name": "Pun Danda",
+   "name_ru": "Пунхил",
+   "name_en": "Poon Hill",
+   "ele": 3210
+  },
+  {
+   "lat": 28.537407,
+   "lon": 83.314017,
+   "name": "Dadar Dhuri",
+   "ele": 3175
+  },
+  {
+   "lat": 28.444205,
+   "lon": 83.438125,
+   "name": "Malka Pahad",
+   "ele": 3169
+  },
+  {
+   "lat": 28.308477,
+   "lon": 84.148462,
+   "name": "Kurpu Danda",
+   "ele": 3050
+  },
+  {
+   "lat": 28.230033,
+   "lon": 83.795095,
+   "name": "Gurung Hill Tower/Panchase",
+   "ele": 2515
+  },
+  {
+   "lat": 28.123146,
+   "lon": 84.492649,
+   "name": "Rainaskot Peak",
+   "name_en": "Rainaskot Peak",
+   "ele": 1640
+  },
+  {
+   "lat": 28.246251,
+   "lon": 83.948753,
+   "name": "Sarangkot Tower",
+   "name_ru": "Смотровая башня Сарангкот",
+   "name_en": "Sarangkot Tower",
+   "ele": 1592
+  },
+  {
+   "lat": 28.062426,
+   "lon": 84.526625,
+   "name": "Liglig",
+   "ele": 1418
+  },
+  {
+   "lat": 28.28749,
+   "lon": 85.289108,
+   "name": "纳格山"
+  },
+  {
+   "lat": 28.288085,
+   "lon": 85.272875,
+   "name": "嘎罗山"
+  },
+  {
+   "lat": 28.637052,
+   "lon": 85.009238,
+   "name": "塔普勒康日"
+  },
+  {
+   "lat": 28.672692,
+   "lon": 85.078224,
+   "name": "央卓康日"
+  },
+  {
+   "lat": 28.686948,
+   "lon": 85.114831,
+   "name": "科姜康日"
+  },
+  {
+   "lat": 28.757765,
+   "lon": 84.457741,
+   "name": "白丽康日"
+  },
+  {
+   "lat": 29.289346,
+   "lon": 84.015708,
+   "name": "曲哥玛布惹"
+  },
+  {
+   "lat": 29.32295,
+   "lon": 83.915381,
+   "name": "土珠"
+  },
+  {
+   "lat": 29.410782,
+   "lon": 83.41643,
+   "name": "苟德木雪山"
+  },
+  {
+   "lat": 28.200215,
+   "lon": 83.951128,
+   "name": "1075"
+  },
+  {
+   "lat": 28.390882,
+   "lon": 83.674776,
+   "name": "Upper Phulbari"
+  },
+  {
+   "lat": 29.236284,
+   "lon": 83.702717,
+   "name": "木斯塘雪山"
+  },
+  {
+   "lat": 28.780137,
+   "lon": 84.405403,
+   "name": "Ana Peak"
+  },
+  {
+   "lat": 28.765099,
+   "lon": 84.452947,
+   "name": "杰奥"
+  },
+  {
+   "lat": 28.151831,
+   "lon": 84.088903,
+   "name": "Chowi Niwas",
+   "name_en": "Chowi Niwas"
+  },
+  {
+   "lat": 29.220201,
+   "lon": 84.008755,
+   "name": "4135"
+  },
+  {
+   "lat": 28.086948,
+   "lon": 85.406301,
+   "name": "SN"
+  },
+  {
+   "lat": 28.091437,
+   "lon": 85.424418,
+   "name": "SN"
+  },
+  {
+   "lat": 28.021246,
+   "lon": 85.393767,
+   "name": "Lalit Peak"
+  },
+  {
+   "lat": 28.417865,
+   "lon": 84.186766,
+   "name": "Kori"
+  },
+  {
+   "lat": 28.426872,
+   "lon": 84.204071,
+   "name": "Thulek"
+  },
+  {
+   "lat": 28.409065,
+   "lon": 84.212985,
+   "name": "Tiuche"
+  },
+  {
+   "lat": 28.471916,
+   "lon": 83.728068,
+   "name": "3990"
+  },
+  {
+   "lat": 28.42164,
+   "lon": 83.731615,
+   "name": "3637"
+  },
+  {
+   "lat": 28.438269,
+   "lon": 83.872427,
+   "name": "3670"
+  },
+  {
+   "lat": 28.45688,
+   "lon": 83.885863,
+   "name": "4130"
+  },
+  {
+   "lat": 28.463973,
+   "lon": 83.903488,
+   "name": "4520"
+  },
+  {
+   "lat": 29.244849,
+   "lon": 83.992456,
+   "name": "4180"
+  },
+  {
+   "lat": 29.234046,
+   "lon": 84.023008,
+   "name": "4372"
+  },
+  {
+   "lat": 28.969405,
+   "lon": 83.815402,
+   "name": "3950"
+  },
+  {
+   "lat": 29.143052,
+   "lon": 83.899712,
+   "name": "4247"
+  },
+  {
+   "lat": 29.105469,
+   "lon": 84.006525,
+   "name": "4030"
+  },
+  {
+   "lat": 29.102643,
+   "lon": 84.002632,
+   "name": "3900"
+  },
+  {
+   "lat": 29.043417,
+   "lon": 83.972481,
+   "name": "3936"
+  },
+  {
+   "lat": 28.778972,
+   "lon": 84.308152,
+   "name": "4806"
+  },
+  {
+   "lat": 28.76881,
+   "lon": 84.367589,
+   "name": "5405"
+  },
+  {
+   "lat": 28.824902,
+   "lon": 84.189156,
+   "name": "6142"
+  },
+  {
+   "lat": 29.291647,
+   "lon": 83.810294,
+   "name": "惹嘎康日"
+  },
+  {
+   "lat": 28.976042,
+   "lon": 84.241122,
+   "name": "达莫德尔康日"
+  },
+  {
+   "lat": 28.732446,
+   "lon": 84.630105,
+   "name": "尼亚辛雪山"
+  },
+  {
+   "lat": 28.728419,
+   "lon": 84.640267,
+   "name": "石木康日"
+  },
+  {
+   "lat": 28.725141,
+   "lon": 84.644697,
+   "name": "学罗康"
+  },
+  {
+   "lat": 28.699969,
+   "lon": 84.657895,
+   "name": "莫友尔雪山"
+  },
+  {
+   "lat": 28.694288,
+   "lon": 84.665922,
+   "name": "拉青雪山"
+  },
+  {
+   "lat": 28.617202,
+   "lon": 84.741441,
+   "name": "古当康日西峰"
+  },
+  {
+   "lat": 28.594041,
+   "lon": 84.900976,
+   "name": "堆尊康日"
+  },
+  {
+   "lat": 28.56224,
+   "lon": 85.185932,
+   "name": "达康亚日"
+  },
+  {
+   "lat": 28.482528,
+   "lon": 85.146843,
+   "name": "基布康日"
+  },
+  {
+   "lat": 28.464221,
+   "lon": 85.107115,
+   "name": "竹尔盖康日"
+  },
+  {
+   "lat": 28.314545,
+   "lon": 85.312323,
+   "name": "色金马"
+  },
+  {
+   "lat": 28.3283,
+   "lon": 85.373094,
+   "name": "亚丁"
+  },
+  {
+   "lat": 28.306105,
+   "lon": 85.378221,
+   "name": "谢勤坡"
+  },
+  {
+   "lat": 29.354362,
+   "lon": 84.003965,
+   "name": "茶若"
+  },
+  {
+   "lat": 28.735127,
+   "lon": 84.609352,
+   "name": "石木扎热"
+  },
+  {
+   "lat": 28.714171,
+   "lon": 84.683306,
+   "name": "彭顶拉"
+  },
+  {
+   "lat": 28.656166,
+   "lon": 85.030482,
+   "name": "扎当康日"
+  },
+  {
+   "lat": 28.762446,
+   "lon": 84.334808,
+   "name": "Rock Point"
+  }
+ ]
+}

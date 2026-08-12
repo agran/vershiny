@@ -1,0 +1,1624 @@
+{
+ "region": "kashmir",
+ "generated": "2026-08-12T10:54:58+00:00",
+ "peaks": [
+  {
+   "lat": 34.105486,
+   "lon": 75.713096,
+   "name": "Pt 19590",
+   "ele": 5971
+  },
+  {
+   "lat": 34.556072,
+   "lon": 75.8353,
+   "name": "Point 5608",
+   "ele": 5608
+  },
+  {
+   "lat": 34.164588,
+   "lon": 75.326943,
+   "name": "Kolahoi Peak",
+   "ele": 5425,
+   "wikidata": "Q6427004"
+  },
+  {
+   "lat": 34.257216,
+   "lon": 75.535726,
+   "name": "Mechoi peak",
+   "ele": 5390
+  },
+  {
+   "lat": 34.525674,
+   "lon": 75.69866,
+   "name": "Point 5350",
+   "ele": 5352
+  },
+  {
+   "lat": 34.823003,
+   "lon": 73.724912,
+   "name": "Malika Parbat",
+   "ele": 5290,
+   "wikidata": "Q3305550"
+  },
+  {
+   "lat": 34.513112,
+   "lon": 75.784839,
+   "name": "Point 5289",
+   "ele": 5289
+  },
+  {
+   "lat": 34.516928,
+   "lon": 75.708278,
+   "name": "Point 5240",
+   "ele": 5240
+  },
+  {
+   "lat": 34.225102,
+   "lon": 75.491971,
+   "name": "Amarnath Peak",
+   "name_en": "Amarnath Peak",
+   "ele": 5186,
+   "wikidata": "Q4740316"
+  },
+  {
+   "lat": 34.508184,
+   "lon": 75.77872,
+   "name": "Point 5140",
+   "ele": 5140
+  },
+  {
+   "lat": 34.038649,
+   "lon": 75.50487,
+   "name": "Koh e Noor",
+   "ele": 5136
+  },
+  {
+   "lat": 34.533609,
+   "lon": 75.67462,
+   "name": "Point 5105",
+   "ele": 5105
+  },
+  {
+   "lat": 34.041707,
+   "lon": 75.515084,
+   "name": "Koh e Noor",
+   "ele": 5098
+  },
+  {
+   "lat": 34.40392,
+   "lon": 74.902006,
+   "name": "Harmukh",
+   "ele": 5080
+  },
+  {
+   "lat": 34.483752,
+   "lon": 75.66172,
+   "name": "Tiger Hill, Kargil",
+   "ele": 5062,
+   "wikidata": "Q7801416"
+  },
+  {
+   "lat": 34.821884,
+   "lon": 75.966864,
+   "name": "طورغن لا",
+   "name_en": "Torghon La",
+   "ele": 5000
+  },
+  {
+   "lat": 34.037333,
+   "lon": 75.454402,
+   "name": "Kallāttip",
+   "ele": 4900
+  },
+  {
+   "lat": 33.750091,
+   "lon": 74.466565,
+   "name": "Tatakuti peak",
+   "ele": 4760
+  },
+  {
+   "lat": 34.043221,
+   "lon": 75.464838,
+   "name": "Kalāttip",
+   "ele": 4716
+  },
+  {
+   "lat": 34.289354,
+   "lon": 75.027705,
+   "name": "Loharkut peak (4,558)",
+   "ele": 4558
+  },
+  {
+   "lat": 33.829713,
+   "lon": 74.425506,
+   "name": "PATHRI PEAK (POONCH)",
+   "ele": 4460
+  },
+  {
+   "lat": 33.861032,
+   "lon": 74.399032,
+   "name": "Khare ka neza (poonch)",
+   "ele": 4350
+  },
+  {
+   "lat": 34.270512,
+   "lon": 75.026951,
+   "name": "Kutbal/ Kotwal peak",
+   "ele": 4345
+  },
+  {
+   "lat": 33.601122,
+   "lon": 75.53465,
+   "name": "Wandar Dūr",
+   "ele": 4333
+  },
+  {
+   "lat": 33.835832,
+   "lon": 74.416667,
+   "name": "KHAN PEAK",
+   "ele": 4326
+  },
+  {
+   "lat": 33.628896,
+   "lon": 75.499841,
+   "name": "Hoksar",
+   "ele": 4284
+  },
+  {
+   "lat": 34.015889,
+   "lon": 74.331059,
+   "name": "Shark's Fin",
+   "ele": 4218
+  },
+  {
+   "lat": 33.658198,
+   "lon": 75.583192,
+   "name": "Tumulasar",
+   "ele": 4156
+  },
+  {
+   "lat": 34.02044,
+   "lon": 74.336994,
+   "name": "Apharwat",
+   "ele": 4143
+  },
+  {
+   "lat": 34.152142,
+   "lon": 74.987411,
+   "name": "Mount Mahadev",
+   "ele": 3966,
+   "wikidata": "Q17560880"
+  },
+  {
+   "lat": 34.078075,
+   "lon": 73.779693,
+   "name": "Ganga Choti",
+   "ele": 3044
+  },
+  {
+   "lat": 33.030029,
+   "lon": 74.963048,
+   "name": "Trikuta Peak Ii",
+   "ele": 2610
+  },
+  {
+   "lat": 33.027636,
+   "lon": 74.959553,
+   "name": "Trikuta peak I",
+   "ele": 2580
+  },
+  {
+   "lat": 33.695852,
+   "lon": 74.169044,
+   "name": "DANI PIR (KHANETAR)",
+   "ele": 2200
+  },
+  {
+   "lat": 33.7182,
+   "lon": 74.111109,
+   "name": "kalsan top (khanetar)",
+   "ele": 2100
+  },
+  {
+   "lat": 33.702135,
+   "lon": 74.134026,
+   "name": "khanetar top or charoon top",
+   "ele": 2050
+  },
+  {
+   "lat": 33.756481,
+   "lon": 75.225533,
+   "name": "Mattan Hills",
+   "ele": 2040
+  },
+  {
+   "lat": 34.079043,
+   "lon": 74.843718,
+   "name": "Shankaracharya Hill",
+   "ele": 1852,
+   "wikidata": "Q24883877"
+  },
+  {
+   "lat": 33.72947,
+   "lon": 75.159543,
+   "name": "Janglat Mandi Hill",
+   "ele": 1800
+  },
+  {
+   "lat": 33.800908,
+   "lon": 74.048254,
+   "name": "5724",
+   "ele": 1720
+  },
+  {
+   "lat": 34.105964,
+   "lon": 74.81639,
+   "name": "Hari Parbat",
+   "ele": 1705,
+   "wikidata": "Q52152668"
+  },
+  {
+   "lat": 34.044551,
+   "lon": 74.391377,
+   "name": "Monkey Hills"
+  },
+  {
+   "lat": 33.344341,
+   "lon": 75.068047,
+   "name": "Pahl Bathali"
+  },
+  {
+   "lat": 33.679983,
+   "lon": 74.540374,
+   "name": "Sunset peak"
+  },
+  {
+   "lat": 33.571311,
+   "lon": 74.331648,
+   "name": "Shahdara"
+  },
+  {
+   "lat": 33.571734,
+   "lon": 74.306848,
+   "name": "Pritpal"
+  },
+  {
+   "lat": 33.216884,
+   "lon": 74.955328,
+   "name": "Lapri"
+  },
+  {
+   "lat": 33.292598,
+   "lon": 75.591119,
+   "name": "Piparan"
+  },
+  {
+   "lat": 33.401128,
+   "lon": 75.472611,
+   "name": "Nimajpal"
+  },
+  {
+   "lat": 34.369866,
+   "lon": 75.23695,
+   "name": "Pandshur Bal"
+  },
+  {
+   "lat": 33.155782,
+   "lon": 75.21701,
+   "name": "Sankhpal"
+  },
+  {
+   "lat": 33.108371,
+   "lon": 74.897447,
+   "name": "Kandwar"
+  },
+  {
+   "lat": 33.043444,
+   "lon": 75.051486,
+   "name": "Siroli"
+  },
+  {
+   "lat": 33.027326,
+   "lon": 74.963112,
+   "name": "Suaj Kund"
+  },
+  {
+   "lat": 33.375292,
+   "lon": 75.044657,
+   "name": "Sarkanth Mal"
+  },
+  {
+   "lat": 33.350722,
+   "lon": 75.007659,
+   "name": "Mundli"
+  },
+  {
+   "lat": 33.348096,
+   "lon": 75.088205,
+   "name": "Shainsh Talao"
+  },
+  {
+   "lat": 33.328915,
+   "lon": 75.098977,
+   "name": "Gehru"
+  },
+  {
+   "lat": 33.481997,
+   "lon": 74.988298,
+   "name": "Gagar Mandu"
+  },
+  {
+   "lat": 33.492878,
+   "lon": 74.941091,
+   "name": "Nikkan"
+  },
+  {
+   "lat": 33.399274,
+   "lon": 75.024433,
+   "name": "Muni Mal"
+  },
+  {
+   "lat": 33.413102,
+   "lon": 75.012503,
+   "name": "Muni Mal"
+  },
+  {
+   "lat": 33.477344,
+   "lon": 75.018682,
+   "name": "Didam"
+  },
+  {
+   "lat": 33.242421,
+   "lon": 74.896803,
+   "name": "Kopra"
+  },
+  {
+   "lat": 33.481854,
+   "lon": 74.836807,
+   "name": "Baram Sakli"
+  },
+  {
+   "lat": 33.403286,
+   "lon": 75.42552,
+   "name": "Sundar Kanth"
+  },
+  {
+   "lat": 33.363725,
+   "lon": 75.381092,
+   "name": "Kaukut"
+  },
+  {
+   "lat": 33.398271,
+   "lon": 75.330334,
+   "name": "Hansraj"
+  },
+  {
+   "lat": 33.437601,
+   "lon": 75.288792,
+   "name": "Shafawoin Bal"
+  },
+  {
+   "lat": 33.505332,
+   "lon": 75.09799,
+   "name": "Sundartop"
+  },
+  {
+   "lat": 33.282288,
+   "lon": 74.654363,
+   "name": "Chorusira"
+  },
+  {
+   "lat": 33.497402,
+   "lon": 74.619922,
+   "name": "Dhakiār peak"
+  },
+  {
+   "lat": 34.214428,
+   "lon": 74.241915,
+   "name": "Chitrakot"
+  },
+  {
+   "lat": 34.12765,
+   "lon": 75.319991,
+   "name": "Roof of Armium"
+  },
+  {
+   "lat": 34.172506,
+   "lon": 75.307181,
+   "name": "Dudhnag peak"
+  },
+  {
+   "lat": 34.149766,
+   "lon": 75.327485,
+   "name": "Buttress peak"
+  },
+  {
+   "lat": 34.582203,
+   "lon": 74.531164,
+   "name": "Grang"
+  },
+  {
+   "lat": 34.628264,
+   "lon": 74.901438,
+   "name": "Habkhatun"
+  },
+  {
+   "lat": 34.672147,
+   "lon": 74.936199,
+   "name": "Laging"
+  },
+  {
+   "lat": 34.680653,
+   "lon": 74.73321,
+   "name": "Durmat"
+  },
+  {
+   "lat": 34.400819,
+   "lon": 74.908304,
+   "name": "Eastern summit"
+  },
+  {
+   "lat": 34.414263,
+   "lon": 74.889724,
+   "name": "Station Peak"
+  },
+  {
+   "lat": 33.804256,
+   "lon": 74.452801,
+   "name": "Farish"
+  },
+  {
+   "lat": 33.887945,
+   "lon": 74.416151,
+   "name": "Chinamarg"
+  },
+  {
+   "lat": 33.895105,
+   "lon": 74.444776,
+   "name": "Shup Nag"
+  },
+  {
+   "lat": 33.905043,
+   "lon": 74.432931,
+   "name": "Shin Mahinu"
+  },
+  {
+   "lat": 34.046259,
+   "lon": 75.521307,
+   "name": "Koh e Noor (NE)"
+  },
+  {
+   "lat": 34.261118,
+   "lon": 75.260725,
+   "name": "Thajiwas peak)"
+  },
+  {
+   "lat": 34.244588,
+   "lon": 75.287676,
+   "name": "Umberella peak"
+  },
+  {
+   "lat": 34.235577,
+   "lon": 75.299692,
+   "name": "Eastern pinnacle"
+  },
+  {
+   "lat": 34.223939,
+   "lon": 75.321665,
+   "name": "crystal peak"
+  },
+  {
+   "lat": 34.211873,
+   "lon": 75.352392,
+   "name": "innominate peak"
+  },
+  {
+   "lat": 34.130421,
+   "lon": 75.406809,
+   "name": "Razdam"
+  },
+  {
+   "lat": 34.14692,
+   "lon": 75.54652,
+   "name": "Nichhang"
+  },
+  {
+   "lat": 34.115926,
+   "lon": 75.687647,
+   "name": "Pt 18234ft"
+  },
+  {
+   "lat": 34.059344,
+   "lon": 75.737343,
+   "name": "Retsheriah peak"
+  },
+  {
+   "lat": 33.978314,
+   "lon": 75.966425,
+   "name": "Barmal",
+   "name_en": "Barmal Peak",
+   "wikidata": "Q134882318"
+  },
+  {
+   "lat": 34.043628,
+   "lon": 75.767641,
+   "name": "Icy peak"
+  },
+  {
+   "lat": 33.692174,
+   "lon": 74.566956,
+   "name": "madhani ko nezo"
+  },
+  {
+   "lat": 33.032341,
+   "lon": 74.575453,
+   "name": "Kalidhar"
+  },
+  {
+   "lat": 33.541752,
+   "lon": 74.452457,
+   "name": "Ratan Pir"
+  },
+  {
+   "lat": 33.586524,
+   "lon": 74.289808,
+   "name": "Gajna"
+  },
+  {
+   "lat": 34.682205,
+   "lon": 74.276419,
+   "name": "Sonapindi"
+  },
+  {
+   "lat": 34.694556,
+   "lon": 74.353924,
+   "name": "Razdain"
+  },
+  {
+   "lat": 34.660181,
+   "lon": 74.399671,
+   "name": "Birindur"
+  },
+  {
+   "lat": 34.602411,
+   "lon": 74.432802,
+   "name": "Hunmar"
+  },
+  {
+   "lat": 34.650014,
+   "lon": 74.363193,
+   "name": "Rangtop"
+  },
+  {
+   "lat": 34.579306,
+   "lon": 74.368687,
+   "name": "Dedbal"
+  },
+  {
+   "lat": 34.589269,
+   "lon": 74.376325,
+   "name": "Hamnag"
+  },
+  {
+   "lat": 34.588987,
+   "lon": 74.422245,
+   "name": "Khobalmarg"
+  },
+  {
+   "lat": 34.615749,
+   "lon": 74.471039,
+   "name": "Kainagrad"
+  },
+  {
+   "lat": 34.499271,
+   "lon": 74.479752,
+   "name": "Poslut"
+  },
+  {
+   "lat": 34.437354,
+   "lon": 74.382591,
+   "name": "Menganwar"
+  },
+  {
+   "lat": 33.771299,
+   "lon": 75.493755,
+   "name": "Nagakat"
+  },
+  {
+   "lat": 33.814312,
+   "lon": 75.455389,
+   "name": "Neil top"
+  },
+  {
+   "lat": 33.829,
+   "lon": 75.443802,
+   "name": "Adari"
+  },
+  {
+   "lat": 33.937379,
+   "lon": 75.389557,
+   "name": "Saribal peak"
+  },
+  {
+   "lat": 33.964636,
+   "lon": 75.396689,
+   "name": "Katsal peak"
+  },
+  {
+   "lat": 33.744897,
+   "lon": 75.472984,
+   "name": "Tangdari"
+  },
+  {
+   "lat": 34.168032,
+   "lon": 75.127709,
+   "name": "Deo Masjid"
+  },
+  {
+   "lat": 34.233625,
+   "lon": 75.234117,
+   "name": "Basmai peak"
+  },
+  {
+   "lat": 34.427868,
+   "lon": 75.018918,
+   "name": "Tsurnar"
+  },
+  {
+   "lat": 33.986797,
+   "lon": 75.049323,
+   "name": "Pastun Bal"
+  },
+  {
+   "lat": 34.581418,
+   "lon": 74.076272,
+   "name": "Pharkian Gali"
+  },
+  {
+   "lat": 34.460349,
+   "lon": 75.809522,
+   "name": "Point 4169"
+  },
+  {
+   "lat": 34.46902,
+   "lon": 75.735686,
+   "name": "Point 4196"
+  },
+  {
+   "lat": 34.510064,
+   "lon": 75.720851,
+   "name": "Point 5100"
+  },
+  {
+   "lat": 34.540341,
+   "lon": 75.670211,
+   "name": "Point 5145"
+  },
+  {
+   "lat": 34.470925,
+   "lon": 75.795156,
+   "name": "Tololing Top"
+  },
+  {
+   "lat": 34.493683,
+   "lon": 75.142407,
+   "name": "Baro Nagai Chhish"
+  },
+  {
+   "lat": 34.236002,
+   "lon": 75.315029,
+   "name": "Valehead peak"
+  },
+  {
+   "lat": 34.238892,
+   "lon": 75.317299,
+   "name": "mosquito peak"
+  },
+  {
+   "lat": 34.249265,
+   "lon": 75.283063,
+   "name": "Cafn Carnedd"
+  },
+  {
+   "lat": 34.248256,
+   "lon": 75.278035,
+   "name": "The Blade"
+  },
+  {
+   "lat": 33.210761,
+   "lon": 75.903147,
+   "name": "Selo Paliri"
+  },
+  {
+   "lat": 33.157635,
+   "lon": 75.810367,
+   "name": "Bhonshir"
+  },
+  {
+   "lat": 33.198386,
+   "lon": 75.982237,
+   "name": "Thalli"
+  },
+  {
+   "lat": 33.198674,
+   "lon": 75.86654,
+   "name": "Khanoi"
+  },
+  {
+   "lat": 33.68431,
+   "lon": 75.508135,
+   "name": "Khairmandu"
+  },
+  {
+   "lat": 33.716867,
+   "lon": 75.573211,
+   "name": "Pasar Bal"
+  },
+  {
+   "lat": 33.549831,
+   "lon": 75.748019,
+   "name": "Krankalhaura"
+  },
+  {
+   "lat": 33.560204,
+   "lon": 75.680561,
+   "name": "Sarwal"
+  },
+  {
+   "lat": 33.70456,
+   "lon": 75.798526,
+   "name": "Dangarhel"
+  },
+  {
+   "lat": 33.379334,
+   "lon": 75.950142,
+   "name": "Kianyal"
+  },
+  {
+   "lat": 33.430288,
+   "lon": 75.94914,
+   "name": "Iyargad"
+  },
+  {
+   "lat": 33.513156,
+   "lon": 75.997326,
+   "name": "Karihal"
+  },
+  {
+   "lat": 33.426935,
+   "lon": 75.890449,
+   "name": "Taurwani"
+  },
+  {
+   "lat": 33.441117,
+   "lon": 75.924772,
+   "name": "Sablotan"
+  },
+  {
+   "lat": 33.300702,
+   "lon": 75.848483,
+   "name": "Naginsheru"
+  },
+  {
+   "lat": 33.35847,
+   "lon": 75.941596,
+   "name": "Langot"
+  },
+  {
+   "lat": 33.662838,
+   "lon": 75.658803,
+   "name": "Nand"
+  },
+  {
+   "lat": 33.518107,
+   "lon": 75.52371,
+   "name": "Yel"
+  },
+  {
+   "lat": 33.644555,
+   "lon": 75.628892,
+   "name": "Dolwas"
+  },
+  {
+   "lat": 34.284602,
+   "lon": 74.962817,
+   "name": "Karkut"
+  },
+  {
+   "lat": 33.962664,
+   "lon": 75.033957,
+   "name": "Wustarwan"
+  },
+  {
+   "lat": 34.40375,
+   "lon": 74.896646,
+   "name": "Western Summit"
+  },
+  {
+   "lat": 34.411303,
+   "lon": 74.902404,
+   "name": "Northern Summit"
+  },
+  {
+   "lat": 34.377564,
+   "lon": 74.895172,
+   "name": "Tilwānkaīn"
+  },
+  {
+   "lat": 34.235741,
+   "lon": 75.375066,
+   "name": "Raenur peak"
+  },
+  {
+   "lat": 34.245819,
+   "lon": 75.308288,
+   "name": "sunday buttress/crag"
+  },
+  {
+   "lat": 33.756733,
+   "lon": 75.4402,
+   "name": "Astanbal"
+  },
+  {
+   "lat": 33.689161,
+   "lon": 75.755691,
+   "name": "Lahinkoz"
+  },
+  {
+   "lat": 33.407156,
+   "lon": 75.801544,
+   "name": "Puzansheru"
+  },
+  {
+   "lat": 33.058817,
+   "lon": 75.851561,
+   "name": "Batiri da Siru"
+  },
+  {
+   "lat": 33.024548,
+   "lon": 75.942655,
+   "name": "Khakri"
+  },
+  {
+   "lat": 33.091487,
+   "lon": 75.972989,
+   "name": "Gaehir"
+  },
+  {
+   "lat": 33.198293,
+   "lon": 75.763978,
+   "name": "Nagin Dhar"
+  },
+  {
+   "lat": 34.394095,
+   "lon": 75.251644,
+   "name": "Aihanzan Hijhan"
+  },
+  {
+   "lat": 33.68135,
+   "lon": 74.546605,
+   "name": "Chhata pani ko nezo"
+  },
+  {
+   "lat": 34.181897,
+   "lon": 75.046921,
+   "name": "Hokasar"
+  },
+  {
+   "lat": 34.234591,
+   "lon": 74.853463,
+   "name": "Harawar"
+  },
+  {
+   "lat": 34.178157,
+   "lon": 74.994828,
+   "name": "Chatchul"
+  },
+  {
+   "lat": 34.208912,
+   "lon": 74.902506,
+   "name": "Burzakut"
+  },
+  {
+   "lat": 33.774567,
+   "lon": 74.50688,
+   "name": "Bod Angan"
+  },
+  {
+   "lat": 34.588852,
+   "lon": 74.722682,
+   "name": "Handmagar"
+  },
+  {
+   "lat": 34.52722,
+   "lon": 74.535495,
+   "name": "Pathardar"
+  },
+  {
+   "lat": 33.715709,
+   "lon": 74.534628,
+   "name": "Kanmarg"
+  },
+  {
+   "lat": 33.728237,
+   "lon": 74.529979,
+   "name": "Musha Mashid"
+  },
+  {
+   "lat": 33.976742,
+   "lon": 74.478677,
+   "name": "Dumkut"
+  },
+  {
+   "lat": 34.049837,
+   "lon": 74.262602,
+   "name": "Garang Patri"
+  },
+  {
+   "lat": 34.426196,
+   "lon": 74.364844,
+   "name": "Darnar"
+  },
+  {
+   "lat": 34.423223,
+   "lon": 74.345422,
+   "name": "Dional"
+  },
+  {
+   "lat": 34.67347,
+   "lon": 74.342251,
+   "name": "Churung"
+  },
+  {
+   "lat": 34.726178,
+   "lon": 74.492168,
+   "name": "Kor"
+  },
+  {
+   "lat": 33.95026,
+   "lon": 74.475239,
+   "name": "Krala Sangri"
+  },
+  {
+   "lat": 33.465838,
+   "lon": 74.450969,
+   "name": "Dadaruni"
+  },
+  {
+   "lat": 33.583253,
+   "lon": 74.374279,
+   "name": "Danna"
+  },
+  {
+   "lat": 33.003915,
+   "lon": 75.851236,
+   "name": "Batarnu Siru"
+  },
+  {
+   "lat": 33.274505,
+   "lon": 75.990731,
+   "name": "Tokar"
+  },
+  {
+   "lat": 33.72128,
+   "lon": 75.779262,
+   "name": "Kunsar"
+  },
+  {
+   "lat": 33.042479,
+   "lon": 75.720917,
+   "name": "Sawar Dhar"
+  },
+  {
+   "lat": 33.215056,
+   "lon": 75.71353,
+   "name": "Pral Choi"
+  },
+  {
+   "lat": 33.479816,
+   "lon": 75.63897,
+   "name": "Naginsur"
+  },
+  {
+   "lat": 33.443248,
+   "lon": 75.638829,
+   "name": "Sapati Maidan"
+  },
+  {
+   "lat": 33.49384,
+   "lon": 75.692264,
+   "name": "Astan Mandu"
+  },
+  {
+   "lat": 33.590544,
+   "lon": 75.620611,
+   "name": "Nandanwas"
+  },
+  {
+   "lat": 33.559486,
+   "lon": 75.5695,
+   "name": "Drungiwas"
+  },
+  {
+   "lat": 33.780087,
+   "lon": 75.508852,
+   "name": "Tratimandu"
+  },
+  {
+   "lat": 33.988022,
+   "lon": 75.60605,
+   "name": "Tumulasar"
+  },
+  {
+   "lat": 33.874079,
+   "lon": 75.620875,
+   "name": "Gurusaran"
+  },
+  {
+   "lat": 33.829708,
+   "lon": 75.604283,
+   "name": "Cherisar"
+  },
+  {
+   "lat": 33.786234,
+   "lon": 75.742183,
+   "name": "Sutukhoi"
+  },
+  {
+   "lat": 33.765807,
+   "lon": 75.681885,
+   "name": "Watraj"
+  },
+  {
+   "lat": 33.843758,
+   "lon": 75.65682,
+   "name": "Tumulasar"
+  },
+  {
+   "lat": 33.871062,
+   "lon": 75.727048,
+   "name": "Jabbal"
+  },
+  {
+   "lat": 33.975486,
+   "lon": 75.651921,
+   "name": "Muidalau"
+  },
+  {
+   "lat": 34.003408,
+   "lon": 75.572764,
+   "name": "Hoksar"
+  },
+  {
+   "lat": 33.3415,
+   "lon": 75.345958,
+   "name": "Dudhpawa"
+  },
+  {
+   "lat": 33.451796,
+   "lon": 75.401611,
+   "name": "Ganj Gundi"
+  },
+  {
+   "lat": 33.467765,
+   "lon": 75.300573,
+   "name": "Burzpathar"
+  },
+  {
+   "lat": 33.278659,
+   "lon": 75.371565,
+   "name": "Sharuwa"
+  },
+  {
+   "lat": 33.408467,
+   "lon": 75.481468,
+   "name": "Agash Mandu"
+  },
+  {
+   "lat": 33.48291,
+   "lon": 75.471581,
+   "name": "Bandaun"
+  },
+  {
+   "lat": 33.499083,
+   "lon": 75.466789,
+   "name": "Sultansiya Mandu"
+  },
+  {
+   "lat": 33.526807,
+   "lon": 75.312681,
+   "name": "Dundu"
+  },
+  {
+   "lat": 33.639757,
+   "lon": 75.497123,
+   "name": "Hoksar"
+  },
+  {
+   "lat": 33.691868,
+   "lon": 75.47449,
+   "name": "Hamgur"
+  },
+  {
+   "lat": 33.666882,
+   "lon": 75.4522,
+   "name": "Kindraj"
+  },
+  {
+   "lat": 33.988363,
+   "lon": 75.268272,
+   "name": "Hodasarbal"
+  },
+  {
+   "lat": 33.884272,
+   "lon": 75.367921,
+   "name": "Kreplin"
+  },
+  {
+   "lat": 33.833816,
+   "lon": 75.393315,
+   "name": "Krasnak"
+  },
+  {
+   "lat": 33.792817,
+   "lon": 75.330474,
+   "name": "Rajdhani"
+  },
+  {
+   "lat": 33.769827,
+   "lon": 75.31255,
+   "name": "Gantap"
+  },
+  {
+   "lat": 33.784519,
+   "lon": 75.481999,
+   "name": "Kalburu"
+  },
+  {
+   "lat": 33.851315,
+   "lon": 75.434506,
+   "name": "peak"
+  },
+  {
+   "lat": 33.86608,
+   "lon": 75.12063,
+   "name": "Baiyat Bayun"
+  },
+  {
+   "lat": 33.875169,
+   "lon": 75.13261,
+   "name": "Kralatup"
+  },
+  {
+   "lat": 33.902435,
+   "lon": 75.167087,
+   "name": "Kalaitrag"
+  },
+  {
+   "lat": 33.952785,
+   "lon": 75.225438,
+   "name": "Tsuru Pantsal"
+  },
+  {
+   "lat": 33.996464,
+   "lon": 75.220909,
+   "name": "Zithyar"
+  },
+  {
+   "lat": 34.084293,
+   "lon": 75.036561,
+   "name": "Burzawas"
+  },
+  {
+   "lat": 34.427206,
+   "lon": 75.211923,
+   "name": "Serkur Bal"
+  },
+  {
+   "lat": 34.410972,
+   "lon": 75.214067,
+   "name": "Pandshur"
+  },
+  {
+   "lat": 33.237471,
+   "lon": 75.415851,
+   "name": "Jowartha"
+  },
+  {
+   "lat": 34.346071,
+   "lon": 74.77794,
+   "name": "Kanzdor"
+  },
+  {
+   "lat": 34.315889,
+   "lon": 74.840582,
+   "name": "Dandwar"
+  },
+  {
+   "lat": 34.546853,
+   "lon": 74.774875,
+   "name": "Jatun"
+  },
+  {
+   "lat": 34.588093,
+   "lon": 74.830276,
+   "name": "Kisar"
+  },
+  {
+   "lat": 34.529697,
+   "lon": 74.815316,
+   "name": "Brakun"
+  },
+  {
+   "lat": 34.525483,
+   "lon": 74.852948,
+   "name": "Mianmarg"
+  },
+  {
+   "lat": 33.164025,
+   "lon": 74.674005,
+   "name": "Sangamarg"
+  },
+  {
+   "lat": 34.281875,
+   "lon": 74.713297,
+   "name": "Safapura"
+  },
+  {
+   "lat": 34.313696,
+   "lon": 74.745608,
+   "name": "Gralawal"
+  },
+  {
+   "lat": 34.389216,
+   "lon": 74.738434,
+   "name": "Danar"
+  },
+  {
+   "lat": 34.576077,
+   "lon": 74.68535,
+   "name": "Ninao"
+  },
+  {
+   "lat": 34.534678,
+   "lon": 74.632243,
+   "name": "Razdhainangan"
+  },
+  {
+   "lat": 34.71803,
+   "lon": 74.537962,
+   "name": "Tingrei Gali"
+  },
+  {
+   "lat": 34.705792,
+   "lon": 74.650994,
+   "name": "Losar"
+  },
+  {
+   "lat": 34.085974,
+   "lon": 74.290428,
+   "name": "Washtu"
+  },
+  {
+   "lat": 34.402583,
+   "lon": 74.484418,
+   "name": "Hapatbut"
+  },
+  {
+   "lat": 34.57869,
+   "lon": 74.349198,
+   "name": "Lainat"
+  },
+  {
+   "lat": 33.754793,
+   "lon": 74.328143,
+   "name": "Nangi"
+  },
+  {
+   "lat": 33.803408,
+   "lon": 74.429205,
+   "name": "Handnal"
+  },
+  {
+   "lat": 34.067002,
+   "lon": 74.260414,
+   "name": "Mar Pathri"
+  },
+  {
+   "lat": 33.715235,
+   "lon": 75.35239,
+   "name": "Hornag"
+  },
+  {
+   "lat": 33.677533,
+   "lon": 75.358079,
+   "name": "Watalmal"
+  },
+  {
+   "lat": 33.540743,
+   "lon": 75.296274,
+   "name": "Satargir"
+  },
+  {
+   "lat": 34.2224,
+   "lon": 75.094341,
+   "name": "Hampathar"
+  },
+  {
+   "lat": 33.589403,
+   "lon": 74.533191,
+   "name": "Khushkidar"
+  },
+  {
+   "lat": 33.83541,
+   "lon": 74.672614,
+   "name": "Barinbal"
+  },
+  {
+   "lat": 34.149973,
+   "lon": 75.3413,
+   "name": "Burdalau Peak"
+  },
+  {
+   "lat": 34.178092,
+   "lon": 75.00914,
+   "name": "Seribal (4042)"
+  },
+  {
+   "lat": 34.694984,
+   "lon": 74.323346,
+   "name": "Naglat"
+  },
+  {
+   "lat": 34.737732,
+   "lon": 74.333237,
+   "name": "Tand"
+  },
+  {
+   "lat": 34.495297,
+   "lon": 73.920609,
+   "name": "Ismail di dori"
+  },
+  {
+   "lat": 34.381165,
+   "lon": 75.920076,
+   "name": "Dandaldang"
+  },
+  {
+   "lat": 34.18085,
+   "lon": 75.88038,
+   "name": "Spangsar"
+  },
+  {
+   "lat": 34.112752,
+   "lon": 75.826025,
+   "name": "Bresara"
+  },
+  {
+   "lat": 34.109373,
+   "lon": 75.817523,
+   "name": "Shisang (Pt 18701)"
+  },
+  {
+   "lat": 34.079254,
+   "lon": 74.840841,
+   "name": "Takht e Sulaiman"
+  },
+  {
+   "lat": 33.851466,
+   "lon": 75.429154,
+   "name": "Kralsar"
+  },
+  {
+   "lat": 33.90567,
+   "lon": 75.337632,
+   "name": "Prangam"
+  },
+  {
+   "lat": 33.815311,
+   "lon": 74.461015,
+   "name": "Guruwan Kharang"
+  },
+  {
+   "lat": 33.796939,
+   "lon": 74.481875,
+   "name": "Khari Lab"
+  },
+  {
+   "lat": 34.394891,
+   "lon": 75.783181,
+   "name": "Lamochan"
+  },
+  {
+   "lat": 34.290537,
+   "lon": 75.789841,
+   "name": "Machai peak"
+  },
+  {
+   "lat": 34.26642,
+   "lon": 75.777526,
+   "name": "Karpolakpa peak"
+  },
+  {
+   "lat": 34.269076,
+   "lon": 75.793702,
+   "name": "Brilpah peak"
+  },
+  {
+   "lat": 34.274486,
+   "lon": 75.771583,
+   "name": "Karpolakpa rocks"
+  },
+  {
+   "lat": 34.311795,
+   "lon": 75.799499,
+   "name": "Jarkhesh peak"
+  },
+  {
+   "lat": 34.334114,
+   "lon": 75.792887,
+   "name": "Furbah peak"
+  },
+  {
+   "lat": 34.156683,
+   "lon": 75.694656,
+   "name": "Pt 17280 ft"
+  },
+  {
+   "lat": 34.251965,
+   "lon": 75.728282,
+   "name": "Tahpoh peak"
+  },
+  {
+   "lat": 34.240124,
+   "lon": 75.756755,
+   "name": "Point 18719 ft"
+  },
+  {
+   "lat": 34.271848,
+   "lon": 75.708175,
+   "name": "Rakesha peak"
+  },
+  {
+   "lat": 34.269046,
+   "lon": 75.738704,
+   "name": "Soh peak"
+  },
+  {
+   "lat": 34.16545,
+   "lon": 75.689722,
+   "name": "SAI needle"
+  },
+  {
+   "lat": 34.13545,
+   "lon": 75.61816,
+   "name": "Dhrumgam peak"
+  },
+  {
+   "lat": 34.121811,
+   "lon": 75.739738,
+   "name": "North Krowa Peak"
+  },
+  {
+   "lat": 34.110787,
+   "lon": 75.741931,
+   "name": "South Krowa Peak"
+  },
+  {
+   "lat": 34.123183,
+   "lon": 75.727578,
+   "name": "Yellow Tower"
+  },
+  {
+   "lat": 34.023817,
+   "lon": 75.722056,
+   "name": "Ketpah"
+  },
+  {
+   "lat": 34.052966,
+   "lon": 75.768749,
+   "name": "Bobang peak"
+  },
+  {
+   "lat": 34.102581,
+   "lon": 75.793902,
+   "name": "White peak"
+  },
+  {
+   "lat": 34.10114,
+   "lon": 75.781934,
+   "name": "Beigoh east"
+  },
+  {
+   "lat": 34.105067,
+   "lon": 75.755218,
+   "name": "Beigoh west"
+  },
+  {
+   "lat": 34.12001,
+   "lon": 75.783642,
+   "name": "Uchenomosom",
+   "name_en": "3 sisters"
+  },
+  {
+   "lat": 34.124688,
+   "lon": 75.779684,
+   "name": "Uchenomosom peak",
+   "name_en": "3 sisters"
+  },
+  {
+   "lat": 34.121313,
+   "lon": 75.782521,
+   "name": "Uchenomosom peak",
+   "name_en": "3 sisters"
+  },
+  {
+   "lat": 34.142972,
+   "lon": 75.790045,
+   "name": "Pt 18367"
+  },
+  {
+   "lat": 34.306716,
+   "lon": 75.736892,
+   "name": "Karposhama peak"
+  },
+  {
+   "lat": 34.29116,
+   "lon": 75.733917,
+   "name": "Nakpola peak",
+   "name_en": "Black mountain"
+  },
+  {
+   "lat": 34.128549,
+   "lon": 75.719129,
+   "name": "Marpola peak"
+  },
+  {
+   "lat": 34.283674,
+   "lon": 75.715916,
+   "name": "Nakpohkhap peak",
+   "name_en": "Black needle"
+  },
+  {
+   "lat": 34.266526,
+   "lon": 75.726535,
+   "name": "Karma peak",
+   "name_en": "Star"
+  },
+  {
+   "lat": 34.344312,
+   "lon": 75.780559,
+   "name": "Neigoh peak"
+  },
+  {
+   "lat": 34.259317,
+   "lon": 75.520013,
+   "name": "Pinnacle Ridge"
+  },
+  {
+   "lat": 34.436512,
+   "lon": 75.329148,
+   "name": "Kinari Darkush"
+  },
+  {
+   "lat": 33.535087,
+   "lon": 74.895552,
+   "name": "Pahil gul"
+  },
+  {
+   "lat": 34.158264,
+   "lon": 75.323293,
+   "name": "Katarnag Peak"
+  },
+  {
+   "lat": 34.041972,
+   "lon": 74.458968,
+   "name": "Baderkote"
+  },
+  {
+   "lat": 34.22602,
+   "lon": 74.865755,
+   "name": "Aleshteng"
+  }
+ ]
+}

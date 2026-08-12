@@ -1,0 +1,369 @@
+{
+ "region": "jan-mayen",
+ "generated": "2026-08-12T10:54:58+00:00",
+ "peaks": [
+  {
+   "lat": 71.076734,
+   "lon": -8.16395,
+   "name": "Wordietoppen",
+   "ele": 2213,
+   "wikidata": "Q31549978"
+  },
+  {
+   "lat": 71.076955,
+   "lon": -8.141044,
+   "name": "Mercantontoppen",
+   "ele": 2192,
+   "wikidata": "Q31550178"
+  },
+  {
+   "lat": 71.087182,
+   "lon": -8.136004,
+   "name": "Hakluyttoppen",
+   "ele": 2188,
+   "wikidata": "Q31550278"
+  },
+  {
+   "lat": 71.092533,
+   "lon": -8.147124,
+   "name": "Gjuvtinden",
+   "ele": 2085,
+   "wikidata": "Q31551534"
+  },
+  {
+   "lat": 71.0868,
+   "lon": -8.181813,
+   "name": "Kongshamaren",
+   "ele": 1954,
+   "wikidata": "Q31550195"
+  },
+  {
+   "lat": 71.067294,
+   "lon": -8.168861,
+   "name": "Sørnuten",
+   "ele": 1745,
+   "wikidata": "Q31551319"
+  },
+  {
+   "lat": 70.891654,
+   "lon": -8.87014,
+   "name": "Rudolftoppen",
+   "ele": 769,
+   "wikidata": "Q11998576"
+  },
+  {
+   "lat": 71.07445,
+   "lon": -8.305516,
+   "name": "Bylandt-Rheytkrateret",
+   "ele": 733,
+   "wikidata": "Q31454522"
+  },
+  {
+   "lat": 70.886968,
+   "lon": -8.869435,
+   "name": "Franz Josefs Topp",
+   "ele": 732,
+   "wikidata": "Q140690689"
+  },
+  {
+   "lat": 70.880511,
+   "lon": -8.878039,
+   "name": "Elisabethtoppen",
+   "ele": 714,
+   "wikidata": "Q31550324"
+  },
+  {
+   "lat": 70.887463,
+   "lon": -8.896265,
+   "name": "Svartfjelltoppane",
+   "ele": 688,
+   "wikidata": "Q140690861"
+  },
+  {
+   "lat": 70.877109,
+   "lon": -8.905503,
+   "name": "Inndalsmøya",
+   "ele": 640,
+   "wikidata": "Q140690697"
+  },
+  {
+   "lat": 70.898252,
+   "lon": -8.839531,
+   "name": "Blinddalstoppane",
+   "ele": 633,
+   "wikidata": "Q140690871"
+  },
+  {
+   "lat": 70.901835,
+   "lon": -8.870945,
+   "name": "Bombellestoppen",
+   "ele": 606,
+   "wikidata": "Q140690874"
+  },
+  {
+   "lat": 70.87003,
+   "lon": -8.887258,
+   "name": "Tåkefjellet",
+   "ele": 591,
+   "wikidata": "Q31549996"
+  },
+  {
+   "lat": 70.865097,
+   "lon": -8.919568,
+   "name": "Skrukkefjellet",
+   "ele": 579,
+   "wikidata": "Q31550046"
+  },
+  {
+   "lat": 70.855662,
+   "lon": -8.939574,
+   "name": "Solheimfjellet",
+   "ele": 577,
+   "wikidata": "Q31550029"
+  },
+  {
+   "lat": 70.903786,
+   "lon": -8.812398,
+   "name": "Sternecktoppen",
+   "ele": 570,
+   "wikidata": "Q140690880"
+  },
+  {
+   "lat": 70.939689,
+   "lon": -8.72641,
+   "name": "Karl Stephantoppen",
+   "ele": 551,
+   "wikidata": "Q31454521"
+  },
+  {
+   "lat": 70.907824,
+   "lon": -8.823127,
+   "name": "Kuppelen",
+   "ele": 550,
+   "wikidata": "Q140690885"
+  },
+  {
+   "lat": 70.844512,
+   "lon": -8.956426,
+   "name": "Skjoldkollen",
+   "ele": 540
+  },
+  {
+   "lat": 70.916964,
+   "lon": -8.790989,
+   "name": "Midtfjellet",
+   "ele": 534,
+   "wikidata": "Q31550160"
+  },
+  {
+   "lat": 70.915762,
+   "lon": -8.772394,
+   "name": "Borga",
+   "ele": 522,
+   "wikidata": "Q140690600"
+  },
+  {
+   "lat": 70.932497,
+   "lon": -8.768774,
+   "name": "Frognertoppen",
+   "ele": 515,
+   "wikidata": "Q31550368"
+  },
+  {
+   "lat": 70.934033,
+   "lon": -8.743512,
+   "name": "Partoppane",
+   "ele": 510,
+   "wikidata": "Q140690506"
+  },
+  {
+   "lat": 70.932125,
+   "lon": -8.755009,
+   "name": "Askheimtoppen",
+   "ele": 508,
+   "wikidata": "Q31550368"
+  },
+  {
+   "lat": 70.851496,
+   "lon": -8.967928,
+   "name": "Dollartoppen",
+   "ele": 458,
+   "wikidata": "Q140690825"
+  },
+  {
+   "lat": 71.005959,
+   "lon": -8.349978,
+   "name": "Vogtfjellet",
+   "ele": 430,
+   "wikidata": "Q31454507"
+  },
+  {
+   "lat": 70.875608,
+   "lon": -8.835194,
+   "name": "Avdalsmøya",
+   "ele": 425,
+   "wikidata": "Q140690868"
+  },
+  {
+   "lat": 70.853818,
+   "lon": -8.924541,
+   "name": "Fløya",
+   "ele": 424,
+   "wikidata": "Q140690710"
+  },
+  {
+   "lat": 70.91963,
+   "lon": -8.751472,
+   "name": "Trollslottet",
+   "ele": 419,
+   "wikidata": "Q140690612"
+  },
+  {
+   "lat": 70.876465,
+   "lon": -8.818932,
+   "name": "Flykollen",
+   "ele": 419,
+   "wikidata": "Q31550309"
+  },
+  {
+   "lat": 70.933685,
+   "lon": -8.717308,
+   "name": "Kanthøgda",
+   "ele": 417
+  },
+  {
+   "lat": 70.860735,
+   "lon": -8.889699,
+   "name": "Stuptinden",
+   "ele": 415,
+   "wikidata": "Q140690856"
+  },
+  {
+   "lat": 70.940562,
+   "lon": -8.702155,
+   "name": "Parasittane",
+   "ele": 373
+  },
+  {
+   "lat": 70.945091,
+   "lon": -8.73268,
+   "name": "Jekselen",
+   "ele": 371,
+   "wikidata": "Q140690490"
+  },
+  {
+   "lat": 70.83496,
+   "lon": -9.014224,
+   "name": "Ronden",
+   "ele": 362,
+   "wikidata": "Q31550114"
+  },
+  {
+   "lat": 71.003614,
+   "lon": -8.382256,
+   "name": "Lyngehaugen",
+   "ele": 349,
+   "wikidata": "Q140690467"
+  },
+  {
+   "lat": 70.835615,
+   "lon": -8.948339,
+   "name": "Hjelmen",
+   "ele": 341,
+   "wikidata": "Q31550246"
+  },
+  {
+   "lat": 70.828768,
+   "lon": -9.005351,
+   "name": "Sørkappfjellet",
+   "ele": 341,
+   "wikidata": "Q140690852"
+  },
+  {
+   "lat": 70.866645,
+   "lon": -8.988548,
+   "name": "Boldvatoppen",
+   "ele": 319,
+   "wikidata": "Q31550352"
+  },
+  {
+   "lat": 70.851974,
+   "lon": -8.992149,
+   "name": "Kingtoppen",
+   "ele": 285,
+   "wikidata": "Q140690843"
+  },
+  {
+   "lat": 70.987765,
+   "lon": -8.526099,
+   "name": "Danielssenkrateret",
+   "ele": 279,
+   "wikidata": "Q31454520"
+  },
+  {
+   "lat": 70.954567,
+   "lon": -8.654625,
+   "name": "Hannberget",
+   "ele": 236,
+   "wikidata": "Q31266807"
+  },
+  {
+   "lat": 70.999309,
+   "lon": -8.27908,
+   "name": "Slagghaugen",
+   "ele": 231,
+   "wikidata": "Q140690451"
+  },
+  {
+   "lat": 70.981928,
+   "lon": -8.545165,
+   "name": "Pukkelen",
+   "ele": 220
+  },
+  {
+   "lat": 70.97192,
+   "lon": -8.391314,
+   "name": "Eggøya",
+   "ele": 217
+  },
+  {
+   "lat": 70.828944,
+   "lon": -9.026942,
+   "name": "Kikut",
+   "ele": 216,
+   "wikidata": "Q140690852"
+  },
+  {
+   "lat": 70.969852,
+   "lon": -8.62813,
+   "name": "Neumayertoppen",
+   "ele": 192,
+   "wikidata": "Q31266799"
+  },
+  {
+   "lat": 70.98432,
+   "lon": -8.556803,
+   "name": "Kota",
+   "ele": 183
+  },
+  {
+   "lat": 70.922533,
+   "lon": -8.858199,
+   "name": "Tåhetta",
+   "ele": 176,
+   "wikidata": "Q140690905"
+  },
+  {
+   "lat": 70.9754,
+   "lon": -8.687812,
+   "name": "Kvalrossen",
+   "ele": 156
+  },
+  {
+   "lat": 70.98029,
+   "lon": -8.580997,
+   "name": "Kveisa",
+   "ele": 117
+  }
+ ]
+}

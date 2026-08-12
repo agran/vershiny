@@ -4,5 +4,6 @@ __pycache__/
 *.pyc
 .venv/
 data/
-public/tiles/
-public/peaks/
+# Пики и тайлы генерируются инструментами, но публикуются на Pages
+# public/tiles/
+# public/peaks/

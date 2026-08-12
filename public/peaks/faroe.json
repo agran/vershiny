@@ -1,0 +1,2131 @@
+{
+ "region": "faroe",
+ "generated": "2026-08-12T10:54:55+00:00",
+ "peaks": [
+  {
+   "lat": 62.296717,
+   "lon": -7.0132,
+   "name": "Slættaratindur",
+   "ele": 880,
+   "wikidata": "Q738746"
+  },
+  {
+   "lat": 62.310733,
+   "lon": -6.9987,
+   "name": "Gráfelli",
+   "ele": 856,
+   "wikidata": "Q1028361"
+  },
+  {
+   "lat": 62.381029,
+   "lon": -6.556145,
+   "name": "Villingadalsfjall",
+   "ele": 841
+  },
+  {
+   "lat": 62.313421,
+   "lon": -6.669384,
+   "name": "Kúvingafjall",
+   "ele": 830
+  },
+  {
+   "lat": 62.32332,
+   "lon": -6.672467,
+   "name": "Teigafjall",
+   "ele": 825
+  },
+  {
+   "lat": 62.362844,
+   "lon": -6.69049,
+   "name": "Kunoyarnakkur",
+   "ele": 819
+  },
+  {
+   "lat": 62.340906,
+   "lon": -6.68916,
+   "name": "Havnartindur",
+   "ele": 818
+  },
+  {
+   "lat": 62.292915,
+   "lon": -6.641751,
+   "name": "Urðafjall",
+   "ele": 817
+  },
+  {
+   "lat": 62.309787,
+   "lon": -6.650684,
+   "name": "Middagsfjall",
+   "ele": 805
+  },
+  {
+   "lat": 62.256467,
+   "lon": -6.997833,
+   "name": "Svartbakstindur",
+   "ele": 801
+  },
+  {
+   "lat": 62.266917,
+   "lon": -7.00395,
+   "name": "Blámansfjall",
+   "ele": 790
+  },
+  {
+   "lat": 62.228466,
+   "lon": -7.206644,
+   "name": "Koppsenni",
+   "ele": 789
+  },
+  {
+   "lat": 62.350422,
+   "lon": -6.798485,
+   "name": "Nestindar",
+   "ele": 788
+  },
+  {
+   "lat": 62.23535,
+   "lon": -6.90265,
+   "name": "Múlatindur",
+   "ele": 786
+  },
+  {
+   "lat": 62.208479,
+   "lon": -7.157234,
+   "name": "Ørvisfelli",
+   "ele": 783
+  },
+  {
+   "lat": 62.225335,
+   "lon": -7.215917,
+   "name": "Malaknúkur",
+   "ele": 777
+  },
+  {
+   "lat": 62.295083,
+   "lon": -6.565875,
+   "name": "Norðanfyri Lokkaskarð",
+   "ele": 772
+  },
+  {
+   "lat": 62.278681,
+   "lon": -6.630636,
+   "name": "Galvsskorafjall",
+   "ele": 768
+  },
+  {
+   "lat": 62.089008,
+   "lon": -6.985427,
+   "name": "Skælingsfjall",
+   "ele": 767
+  },
+  {
+   "lat": 62.265789,
+   "lon": -7.171083,
+   "name": "Melin",
+   "ele": 764
+  },
+  {
+   "lat": 62.1932,
+   "lon": -6.90465,
+   "name": "Halgafelstindur",
+   "ele": 757
+  },
+  {
+   "lat": 62.174369,
+   "lon": -6.862137,
+   "name": "Reyðafelstindur",
+   "ele": 757
+  },
+  {
+   "lat": 62.198176,
+   "lon": -7.183231,
+   "name": "Mosarøkur",
+   "ele": 756
+  },
+  {
+   "lat": 62.290765,
+   "lon": -6.557541,
+   "name": "Lokki",
+   "ele": 754
+  },
+  {
+   "lat": 62.38951,
+   "lon": -6.565671,
+   "name": "Nakkurin (norðari)",
+   "ele": 754
+  },
+  {
+   "lat": 62.262228,
+   "lon": -6.892923,
+   "name": "Sandfelli",
+   "ele": 754
+  },
+  {
+   "lat": 62.319455,
+   "lon": -6.988411,
+   "name": "Sandfelli",
+   "ele": 752
+  },
+  {
+   "lat": 62.273533,
+   "lon": -6.999183,
+   "name": "Norðanfyri Blámansfjall",
+   "ele": 751
+  },
+  {
+   "lat": 62.34456,
+   "lon": -6.539082,
+   "name": "Malinsfjall",
+   "ele": 750
+  },
+  {
+   "lat": 62.068774,
+   "lon": -6.967036,
+   "name": "Sornfelli",
+   "ele": 749
+  },
+  {
+   "lat": 62.165895,
+   "lon": -7.046321,
+   "name": "Sneis",
+   "ele": 747
+  },
+  {
+   "lat": 62.337096,
+   "lon": -6.596843,
+   "name": "Omanfyri Klivsdal",
+   "ele": 747
+  },
+  {
+   "lat": 62.243745,
+   "lon": -6.692076,
+   "name": "Botnstindur",
+   "ele": 744
+  },
+  {
+   "lat": 62.307255,
+   "lon": -6.56701,
+   "name": "Norðanfyri Kvíggjaskarð",
+   "ele": 739
+  },
+  {
+   "lat": 62.236367,
+   "lon": -6.862267,
+   "name": "Blábjørg",
+   "ele": 732
+  },
+  {
+   "lat": 62.278267,
+   "lon": -7.013667,
+   "name": "Vaðhorn",
+   "ele": 727
+  },
+  {
+   "lat": 62.131388,
+   "lon": -7.436057,
+   "name": "Árnafjall",
+   "ele": 722,
+   "wikidata": "Q683438"
+  },
+  {
+   "lat": 62.254017,
+   "lon": -6.924867,
+   "name": "Dalkinsfjall",
+   "ele": 719
+  },
+  {
+   "lat": 62.133228,
+   "lon": -6.957092,
+   "name": "Árnadalstindur",
+   "ele": 718
+  },
+  {
+   "lat": 62.116887,
+   "lon": -7.397865,
+   "name": "Eysturtindur",
+   "ele": 715,
+   "wikidata": "Q1459480"
+  },
+  {
+   "lat": 62.189512,
+   "lon": -7.129885,
+   "name": "Stígarnir",
+   "ele": 710
+  },
+  {
+   "lat": 62.261697,
+   "lon": -7.153567,
+   "name": "Víkartindur",
+   "ele": 703
+  },
+  {
+   "lat": 62.260523,
+   "lon": -6.617777,
+   "name": "Suður á Nakki",
+   "ele": 703
+  },
+  {
+   "lat": 62.248133,
+   "lon": -6.8925,
+   "name": "Gomlumannatindur",
+   "ele": 703
+  },
+  {
+   "lat": 62.253924,
+   "lon": -7.150606,
+   "name": "Gívrufelli",
+   "ele": 701
+  },
+  {
+   "lat": 62.234789,
+   "lon": -6.679472,
+   "name": "Gríslatindur",
+   "ele": 700
+  },
+  {
+   "lat": 62.208931,
+   "lon": -6.943697,
+   "name": "Knúkur",
+   "ele": 699
+  },
+  {
+   "lat": 62.240017,
+   "lon": -6.86155,
+   "name": "Hjarðardalstindur",
+   "ele": 699
+  },
+  {
+   "lat": 62.274217,
+   "lon": -6.9753,
+   "name": "Húsafjall",
+   "ele": 695
+  },
+  {
+   "lat": 62.283425,
+   "lon": -7.180987,
+   "name": "Heyggjurin Mikli",
+   "ele": 692
+  },
+  {
+   "lat": 62.247956,
+   "lon": -6.562598,
+   "name": "Myrkjanoyrarfjall",
+   "ele": 689
+  },
+  {
+   "lat": 62.31926,
+   "lon": -6.502499,
+   "name": "Filthatturin",
+   "ele": 688
+  },
+  {
+   "lat": 62.380373,
+   "lon": -6.538955,
+   "name": "Oyggjarskoratindur",
+   "ele": 687
+  },
+  {
+   "lat": 62.246167,
+   "lon": -6.981333,
+   "name": "Skerðingur",
+   "ele": 687
+  },
+  {
+   "lat": 62.059995,
+   "lon": -6.95743,
+   "name": "Fjallið millum Botnar",
+   "ele": 686
+  },
+  {
+   "lat": 62.07703,
+   "lon": -7.127526,
+   "name": "Malinstindur",
+   "ele": 683
+  },
+  {
+   "lat": 62.275639,
+   "lon": -6.543249,
+   "name": "Depilsknúkur",
+   "ele": 681
+  },
+  {
+   "lat": 62.22665,
+   "lon": -6.850917,
+   "name": "Gjógvarafjall",
+   "ele": 678,
+   "wikidata": "Q728389"
+  },
+  {
+   "lat": 62.082037,
+   "lon": -7.187847,
+   "name": "Reynsatindur",
+   "ele": 676
+  },
+  {
+   "lat": 62.112552,
+   "lon": -7.391256,
+   "name": "Jatnagarðar",
+   "ele": 676
+  },
+  {
+   "lat": 62.280065,
+   "lon": -7.201931,
+   "name": "Húgvan",
+   "ele": 674
+  },
+  {
+   "lat": 62.157868,
+   "lon": -7.047856,
+   "name": "Lágafjall",
+   "ele": 663
+  },
+  {
+   "lat": 62.192886,
+   "lon": -7.114561,
+   "name": "Múlin",
+   "ele": 663
+  },
+  {
+   "lat": 62.2032,
+   "lon": -7.176634,
+   "name": "Bøllufjall",
+   "ele": 658
+  },
+  {
+   "lat": 62.235383,
+   "lon": -6.974675,
+   "name": "Miðafelli",
+   "ele": 655
+  },
+  {
+   "lat": 62.296476,
+   "lon": -6.488248,
+   "name": "Enni",
+   "ele": 651
+  },
+  {
+   "lat": 62.271832,
+   "lon": -7.207688,
+   "name": "Eggjarmúli",
+   "ele": 651
+  },
+  {
+   "lat": 62.192979,
+   "lon": -7.140597,
+   "name": "Heygamúli",
+   "ele": 650
+  },
+  {
+   "lat": 62.146628,
+   "lon": -6.994805,
+   "name": "Gívrufjall",
+   "ele": 649
+  },
+  {
+   "lat": 62.209249,
+   "lon": -6.584886,
+   "name": "Háfjall",
+   "ele": 648
+  },
+  {
+   "lat": 62.2128,
+   "lon": -6.94225,
+   "name": "Lokkafelli",
+   "ele": 646
+  },
+  {
+   "lat": 62.262317,
+   "lon": -6.563424,
+   "name": "Snæfelli",
+   "ele": 644
+  },
+  {
+   "lat": 62.291949,
+   "lon": -6.737648,
+   "name": "Hattardalstindur",
+   "ele": 644
+  },
+  {
+   "lat": 62.215921,
+   "lon": -7.227955,
+   "name": "Tosskorarhorn",
+   "ele": 644
+  },
+  {
+   "lat": 62.349705,
+   "lon": -6.686313,
+   "name": "Klubbin",
+   "ele": 644
+  },
+  {
+   "lat": 62.345389,
+   "lon": -6.599543,
+   "name": "Knúkur",
+   "ele": 642
+  },
+  {
+   "lat": 62.265236,
+   "lon": -6.50201,
+   "name": "Krúnufjall",
+   "ele": 642
+  },
+  {
+   "lat": 62.231204,
+   "lon": -7.170473,
+   "name": "Borgin",
+   "ele": 642
+  },
+  {
+   "lat": 62.213888,
+   "lon": -6.752078,
+   "name": "Ritafjall",
+   "ele": 641
+  },
+  {
+   "lat": 62.202721,
+   "lon": -6.798914,
+   "name": "Tyril",
+   "ele": 639
+  },
+  {
+   "lat": 62.169634,
+   "lon": -7.121821,
+   "name": "Loysingarfjall",
+   "ele": 639
+  },
+  {
+   "lat": 62.255193,
+   "lon": -7.231023,
+   "name": "Høvdin",
+   "ele": 635
+  },
+  {
+   "lat": 62.291316,
+   "lon": -6.469806,
+   "name": "Sneis",
+   "ele": 634
+  },
+  {
+   "lat": 62.136531,
+   "lon": -6.927592,
+   "name": "Vørlufjall",
+   "ele": 633
+  },
+  {
+   "lat": 62.107332,
+   "lon": -7.374926,
+   "name": "Knattarheyggjur",
+   "ele": 630
+  },
+  {
+   "lat": 62.2512,
+   "lon": -6.79445,
+   "name": "Húsafelli",
+   "ele": 626
+  },
+  {
+   "lat": 62.189047,
+   "lon": -7.215513,
+   "name": "Postulakirkja",
+   "ele": 626
+  },
+  {
+   "lat": 62.189434,
+   "lon": -6.648335,
+   "name": "Gøtunestindur",
+   "ele": 625
+  },
+  {
+   "lat": 62.2488,
+   "lon": -6.84,
+   "name": "Slætnatindur",
+   "ele": 625
+  },
+  {
+   "lat": 62.182127,
+   "lon": -7.134837,
+   "name": "Moskursfjall",
+   "ele": 624
+  },
+  {
+   "lat": 62.293084,
+   "lon": -7.224116,
+   "name": "Snubburnar",
+   "ele": 623
+  },
+  {
+   "lat": 62.15888,
+   "lon": -6.997073,
+   "name": "Navirnar",
+   "ele": 622
+  },
+  {
+   "lat": 62.339422,
+   "lon": -6.321379,
+   "name": "Klubbin",
+   "ele": 621
+  },
+  {
+   "lat": 62.258638,
+   "lon": -6.485417,
+   "name": "Landsuðursfjall",
+   "ele": 621
+  },
+  {
+   "lat": 62.138709,
+   "lon": -7.088352,
+   "name": "Egilsfjall",
+   "ele": 618
+  },
+  {
+   "lat": 62.105089,
+   "lon": -7.352928,
+   "name": "Snældansfjall",
+   "ele": 617
+  },
+  {
+   "lat": 62.17021,
+   "lon": -7.026531,
+   "name": "Bollin",
+   "ele": 616
+  },
+  {
+   "lat": 62.310156,
+   "lon": -7.03177,
+   "name": "Mannsetur",
+   "ele": 615
+  },
+  {
+   "lat": 62.085566,
+   "lon": -6.961942,
+   "name": "Stallur",
+   "ele": 614
+  },
+  {
+   "lat": 62.214864,
+   "lon": -7.204983,
+   "name": "Pætursfjall",
+   "ele": 613
+  },
+  {
+   "lat": 62.19831,
+   "lon": -6.692783,
+   "name": "Sigatindur",
+   "ele": 612
+  },
+  {
+   "lat": 62.12276,
+   "lon": -7.451644,
+   "name": "Heinanøva",
+   "ele": 612
+  },
+  {
+   "lat": 62.144173,
+   "lon": -6.815706,
+   "name": "Kambur",
+   "ele": 611,
+   "wikidata": "Q3812672"
+  },
+  {
+   "lat": 62.267185,
+   "lon": -6.519684,
+   "name": "Toftaknúkur",
+   "ele": 607
+  },
+  {
+   "lat": 62.324124,
+   "lon": -6.774831,
+   "name": "Gásafjall",
+   "ele": 606
+  },
+  {
+   "lat": 61.543582,
+   "lon": -6.888749,
+   "name": "Herðablaðið",
+   "ele": 605
+  },
+  {
+   "lat": 62.166721,
+   "lon": -7.019902,
+   "name": "Vitin",
+   "ele": 605
+  },
+  {
+   "lat": 62.31065,
+   "lon": -6.94535,
+   "name": "Middagsfjall",
+   "ele": 601
+  },
+  {
+   "lat": 62.240317,
+   "lon": -7.117184,
+   "name": "Langafjall",
+   "ele": 599
+  },
+  {
+   "lat": 62.183158,
+   "lon": -7.091863,
+   "name": "Miðalfelli",
+   "ele": 596
+  },
+  {
+   "lat": 62.094726,
+   "lon": -6.987602,
+   "name": "Trantur",
+   "ele": 595
+  },
+  {
+   "lat": 62.081924,
+   "lon": -7.120224,
+   "name": "Breiðistíggjur",
+   "ele": 594
+  },
+  {
+   "lat": 62.314115,
+   "lon": -6.514506,
+   "name": "Tunnafjall",
+   "ele": 593
+  },
+  {
+   "lat": 62.199385,
+   "lon": -6.577599,
+   "name": "Miðfjall",
+   "ele": 593
+  },
+  {
+   "lat": 61.541431,
+   "lon": -6.888944,
+   "name": "Mjóstíggjur",
+   "ele": 592
+  },
+  {
+   "lat": 62.312291,
+   "lon": -6.766878,
+   "name": "Heimarafjall",
+   "ele": 591
+  },
+  {
+   "lat": 62.05688,
+   "lon": -7.107941,
+   "name": "Húsafelli",
+   "ele": 591
+  },
+  {
+   "lat": 62.239939,
+   "lon": -6.549984,
+   "name": "Fýramarkaknúkur",
+   "ele": 591
+  },
+  {
+   "lat": 62.3288,
+   "lon": -7.009283,
+   "name": "Horn",
+   "ele": 591
+  },
+  {
+   "lat": 62.131372,
+   "lon": -7.272582,
+   "name": "Tungufelli",
+   "ele": 591
+  },
+  {
+   "lat": 62.236302,
+   "lon": -7.110355,
+   "name": "Knúkurin",
+   "ele": 589
+  },
+  {
+   "lat": 62.093137,
+   "lon": -6.861958,
+   "name": "Kaldbakskambur",
+   "ele": 588
+  },
+  {
+   "lat": 62.274826,
+   "lon": -6.396852,
+   "name": "Havnartindur",
+   "ele": 586
+  },
+  {
+   "lat": 62.142333,
+   "lon": -6.987223,
+   "name": "Bøllufjall",
+   "ele": 585
+  },
+  {
+   "lat": 62.076985,
+   "lon": -7.196998,
+   "name": "Jógvansfjall",
+   "ele": 585
+  },
+  {
+   "lat": 62.284609,
+   "lon": -6.727769,
+   "name": "Miðardalstindur",
+   "ele": 579
+  },
+  {
+   "lat": 62.138287,
+   "lon": -7.104457,
+   "name": "Tindur",
+   "ele": 579
+  },
+  {
+   "lat": 62.188747,
+   "lon": -7.234345,
+   "name": "Tindur",
+   "ele": 579
+  },
+  {
+   "lat": 62.353437,
+   "lon": -6.787246,
+   "name": "Hádegisfjall",
+   "ele": 576
+  },
+  {
+   "lat": 61.503491,
+   "lon": -6.845288,
+   "name": "Borgarknappur",
+   "ele": 574,
+   "wikidata": "Q754872"
+  },
+  {
+   "lat": 62.053725,
+   "lon": -7.094543,
+   "name": "Krosstindur",
+   "ele": 574
+  },
+  {
+   "lat": 62.095826,
+   "lon": -7.185883,
+   "name": "Gásafelli",
+   "ele": 572
+  },
+  {
+   "lat": 62.199881,
+   "lon": -6.933308,
+   "name": "Sandfelli",
+   "ele": 572
+  },
+  {
+   "lat": 62.082944,
+   "lon": -7.103179,
+   "name": "Heldarstindur",
+   "ele": 572
+  },
+  {
+   "lat": 62.201554,
+   "lon": -7.1361,
+   "name": "FjalIið Litla",
+   "ele": 572
+  },
+  {
+   "lat": 62.243617,
+   "lon": -6.785533,
+   "name": "Borgin",
+   "ele": 571
+  },
+  {
+   "lat": 61.504837,
+   "lon": -6.859641,
+   "name": "Borgin",
+   "ele": 570
+  },
+  {
+   "lat": 61.547897,
+   "lon": -6.901223,
+   "name": "Galvurin",
+   "ele": 569
+  },
+  {
+   "lat": 62.1549,
+   "lon": -6.728383,
+   "name": "Stórafjall",
+   "ele": 567
+  },
+  {
+   "lat": 62.296616,
+   "lon": -7.217934,
+   "name": "Mýlingur",
+   "ele": 564
+  },
+  {
+   "lat": 62.211418,
+   "lon": -6.51421,
+   "name": "Hæddin",
+   "ele": 563
+  },
+  {
+   "lat": 62.138308,
+   "lon": -7.27939,
+   "name": "Jatnagarðar",
+   "ele": 563
+  },
+  {
+   "lat": 62.225933,
+   "lon": -6.9606,
+   "name": "Lítlafelli",
+   "ele": 562
+  },
+  {
+   "lat": 62.097847,
+   "lon": -6.885333,
+   "name": "Rustin",
+   "ele": 562
+  },
+  {
+   "lat": 61.49352,
+   "lon": -6.839537,
+   "name": "Hvannafelli",
+   "ele": 560
+  },
+  {
+   "lat": 62.103383,
+   "lon": -7.581783,
+   "name": "Knúkur",
+   "ele": 560
+  },
+  {
+   "lat": 62.313881,
+   "lon": -6.439282,
+   "name": "Talvborð",
+   "ele": 557
+  },
+  {
+   "lat": 62.150567,
+   "lon": -6.825833,
+   "name": "Slættafelli",
+   "ele": 553
+  },
+  {
+   "lat": 62.309436,
+   "lon": -6.763204,
+   "name": "Klubbin",
+   "ele": 551
+  },
+  {
+   "lat": 61.564098,
+   "lon": -6.926742,
+   "name": "Nakkur",
+   "ele": 547
+  },
+  {
+   "lat": 62.046965,
+   "lon": -6.909087,
+   "name": "StiðjafjalI",
+   "ele": 547
+  },
+  {
+   "lat": 62.217689,
+   "lon": -6.836411,
+   "name": "Kambur",
+   "ele": 545
+  },
+  {
+   "lat": 62.115572,
+   "lon": -7.229031,
+   "name": "Krossafelli",
+   "ele": 545
+  },
+  {
+   "lat": 62.1618,
+   "lon": -6.826417,
+   "name": "Borgarfelli",
+   "ele": 543
+  },
+  {
+   "lat": 62.074024,
+   "lon": -6.948005,
+   "name": "Knópanir",
+   "ele": 543
+  },
+  {
+   "lat": 62.362083,
+   "lon": -6.811159,
+   "name": "Borgarin",
+   "ele": 537
+  },
+  {
+   "lat": 62.22543,
+   "lon": -7.098406,
+   "name": "Sandfelli",
+   "ele": 537
+  },
+  {
+   "lat": 61.5045,
+   "lon": -6.874182,
+   "name": "Glopprók",
+   "ele": 535
+  },
+  {
+   "lat": 62.355953,
+   "lon": -6.601824,
+   "name": "Tindur",
+   "ele": 535
+  },
+  {
+   "lat": 62.315005,
+   "lon": -6.920363,
+   "name": "Tyril",
+   "ele": 535
+  },
+  {
+   "lat": 62.250282,
+   "lon": -6.445376,
+   "name": "Búrhella",
+   "ele": 534
+  },
+  {
+   "lat": 62.284517,
+   "lon": -6.888467,
+   "name": "Skoratindur",
+   "ele": 529
+  },
+  {
+   "lat": 61.50703,
+   "lon": -6.880293,
+   "name": "Høgøksl",
+   "ele": 525
+  },
+  {
+   "lat": 62.276896,
+   "lon": -6.717161,
+   "name": "Nøv",
+   "ele": 524
+  },
+  {
+   "lat": 62.094579,
+   "lon": -7.384972,
+   "name": "Berinartindur",
+   "ele": 524
+  },
+  {
+   "lat": 62.146498,
+   "lon": -7.299262,
+   "name": "Grímstaðfjall",
+   "ele": 523
+  },
+  {
+   "lat": 62.13495,
+   "lon": -6.793817,
+   "name": "Klórarin",
+   "ele": 523
+  },
+  {
+   "lat": 62.260038,
+   "lon": -6.520856,
+   "name": "Tólvmarkaknúkur",
+   "ele": 519
+  },
+  {
+   "lat": 62.170467,
+   "lon": -6.745967,
+   "name": "Støðlafjall",
+   "ele": 517
+  },
+  {
+   "lat": 62.062208,
+   "lon": -7.382735,
+   "name": "Høgafjall",
+   "ele": 515
+  },
+  {
+   "lat": 61.559801,
+   "lon": -6.927911,
+   "name": "Tindur",
+   "ele": 514
+  },
+  {
+   "lat": 62.093308,
+   "lon": -7.327482,
+   "name": "Vatnsdalsfjall",
+   "ele": 514
+  },
+  {
+   "lat": 62.258683,
+   "lon": -6.781233,
+   "name": "Róvin",
+   "ele": 513
+  },
+  {
+   "lat": 62.300004,
+   "lon": -6.423184,
+   "name": "Mølin",
+   "ele": 511
+  },
+  {
+   "lat": 62.243948,
+   "lon": -6.49497,
+   "name": "Múlin",
+   "ele": 510
+  },
+  {
+   "lat": 62.162506,
+   "lon": -6.71216,
+   "name": "Miðafelli",
+   "ele": 505
+  },
+  {
+   "lat": 62.287233,
+   "lon": -6.859183,
+   "name": "Tindur",
+   "ele": 503
+  },
+  {
+   "lat": 62.218604,
+   "lon": -6.606493,
+   "name": "Hálgafelli",
+   "ele": 502
+  },
+  {
+   "lat": 62.331673,
+   "lon": -6.789365,
+   "name": "Slættafjall",
+   "ele": 500
+  },
+  {
+   "lat": 62.078218,
+   "lon": -6.895612,
+   "name": "Ritufelli",
+   "ele": 499
+  },
+  {
+   "lat": 62.150888,
+   "lon": -6.674159,
+   "name": "Lambareyn",
+   "ele": 495
+  },
+  {
+   "lat": 61.571875,
+   "lon": -6.897204,
+   "name": "Tempilsklettur",
+   "ele": 493
+  },
+  {
+   "lat": 62.01338,
+   "lon": -6.89918,
+   "name": "KonufelIi",
+   "ele": 491
+  },
+  {
+   "lat": 61.512217,
+   "lon": -6.831601,
+   "name": "Laðanfelli",
+   "ele": 487
+  },
+  {
+   "lat": 61.574089,
+   "lon": -6.76762,
+   "name": "Bustin",
+   "ele": 487
+  },
+  {
+   "lat": 62.102803,
+   "lon": -7.419919,
+   "name": "Knavin",
+   "ele": 485
+  },
+  {
+   "lat": 61.487244,
+   "lon": -6.81236,
+   "name": "Vágfelli",
+   "ele": 483
+  },
+  {
+   "lat": 61.569923,
+   "lon": -6.790907,
+   "name": "Froðbiarkambur",
+   "ele": 483
+  },
+  {
+   "lat": 62.26205,
+   "lon": -6.82755,
+   "name": "Rustartindur",
+   "ele": 483
+  },
+  {
+   "lat": 62.126648,
+   "lon": -6.788758,
+   "name": "Fjallið",
+   "ele": 483
+  },
+  {
+   "lat": 62.255405,
+   "lon": -6.80864,
+   "name": "Mjóstíggjur",
+   "ele": 482
+  },
+  {
+   "lat": 62.113113,
+   "lon": -6.944804,
+   "name": "Dyllan",
+   "ele": 481
+  },
+  {
+   "lat": 62.304511,
+   "lon": -6.417429,
+   "name": "Nakkurin",
+   "ele": 481
+  },
+  {
+   "lat": 61.846424,
+   "lon": -6.744309,
+   "name": "Tindur",
+   "ele": 479
+  },
+  {
+   "lat": 62.026322,
+   "lon": -6.889262,
+   "name": "Murufelli",
+   "ele": 479
+  },
+  {
+   "lat": 61.993731,
+   "lon": -6.998,
+   "name": "Uppi á Oyggj",
+   "ele": 477
+  },
+  {
+   "lat": 62.137511,
+   "lon": -7.065278,
+   "name": "Gásafelli",
+   "ele": 477
+  },
+  {
+   "lat": 61.574067,
+   "lon": -6.951414,
+   "name": "Prestfjall",
+   "ele": 471
+  },
+  {
+   "lat": 62.29944,
+   "lon": -6.638447,
+   "name": "Lítlafjall",
+   "ele": 471
+  },
+  {
+   "lat": 61.420204,
+   "lon": -6.760756,
+   "name": "Beinisvørð",
+   "ele": 470,
+   "wikidata": "Q792079"
+  },
+  {
+   "lat": 62.284575,
+   "lon": -7.134785,
+   "name": "Hægstafjall",
+   "ele": 470
+  },
+  {
+   "lat": 61.5283,
+   "lon": -6.856905,
+   "name": "Fjallið Mikla",
+   "ele": 469
+  },
+  {
+   "lat": 62.330426,
+   "lon": -6.970231,
+   "name": "Fjallið",
+   "ele": 469
+  },
+  {
+   "lat": 62.103905,
+   "lon": -7.572765,
+   "name": "Oddarnir",
+   "ele": 466
+  },
+  {
+   "lat": 62.099043,
+   "lon": -7.416472,
+   "name": "Rógvukollur",
+   "ele": 464
+  },
+  {
+   "lat": 62.29532,
+   "lon": -6.348574,
+   "name": "Keldufjall",
+   "ele": 463
+  },
+  {
+   "lat": 62.205314,
+   "lon": -6.730263,
+   "name": "Knúkur",
+   "ele": 463
+  },
+  {
+   "lat": 62.260864,
+   "lon": -6.380126,
+   "name": "Knúkur, vestari",
+   "ele": 463
+  },
+  {
+   "lat": 61.42586,
+   "lon": -6.738887,
+   "name": "Spáafelli",
+   "ele": 462,
+   "wikidata": "Q3967340"
+  },
+  {
+   "lat": 62.202782,
+   "lon": -6.484718,
+   "name": "Gásafelli",
+   "ele": 461
+  },
+  {
+   "lat": 62.262301,
+   "lon": -6.354423,
+   "name": "Knúkur",
+   "ele": 460
+  },
+  {
+   "lat": 61.849584,
+   "lon": -6.768729,
+   "name": "Skorarnar",
+   "ele": 460
+  },
+  {
+   "lat": 62.209477,
+   "lon": -6.892192,
+   "name": "Skálafjall",
+   "ele": 459
+  },
+  {
+   "lat": 62.056387,
+   "lon": -7.354437,
+   "name": "Bolafløttur",
+   "ele": 458
+  },
+  {
+   "lat": 62.209271,
+   "lon": -7.055697,
+   "name": "Rossafelli",
+   "ele": 453
+  },
+  {
+   "lat": 61.856625,
+   "lon": -6.784658,
+   "name": "Endin",
+   "ele": 452
+  },
+  {
+   "lat": 62.341542,
+   "lon": -6.263569,
+   "name": "Eystfelli",
+   "ele": 449
+  },
+  {
+   "lat": 62.087183,
+   "lon": -7.330566,
+   "name": "Eindalsfjall",
+   "ele": 449
+  },
+  {
+   "lat": 61.839544,
+   "lon": -6.727195,
+   "name": "Pætursfjall",
+   "ele": 447
+  },
+  {
+   "lat": 62.348663,
+   "lon": -6.6747,
+   "name": "Klettur",
+   "ele": 444
+  },
+  {
+   "lat": 62.246499,
+   "lon": -6.372382,
+   "name": "Múlin",
+   "ele": 443
+  },
+  {
+   "lat": 61.546857,
+   "lon": -6.851101,
+   "name": "Oyrnafjall",
+   "ele": 443
+  },
+  {
+   "lat": 62.123607,
+   "lon": -7.253715,
+   "name": "Tungufellið Lítla",
+   "ele": 443
+  },
+  {
+   "lat": 62.218767,
+   "lon": -7.184462,
+   "name": "Reynini",
+   "ele": 443
+  },
+  {
+   "lat": 61.51397,
+   "lon": -6.808143,
+   "name": "Høguskorar",
+   "ele": 440
+  },
+  {
+   "lat": 62.314546,
+   "lon": -6.756669,
+   "name": "Byttufelli",
+   "ele": 439
+  },
+  {
+   "lat": 61.425573,
+   "lon": -6.747496,
+   "name": "Spinarnir",
+   "ele": 439,
+   "wikidata": "Q3966753"
+  },
+  {
+   "lat": 62.099183,
+   "lon": -7.575283,
+   "name": "Heðinsskorarfjall",
+   "ele": 433
+  },
+  {
+   "lat": 61.450074,
+   "lon": -6.800904,
+   "name": "Rávan",
+   "ele": 432
+  },
+  {
+   "lat": 61.644628,
+   "lon": -6.923964,
+   "name": "Borgin",
+   "ele": 429
+  },
+  {
+   "lat": 62.263325,
+   "lon": -7.124687,
+   "name": "Vatnfelli",
+   "ele": 429
+  },
+  {
+   "lat": 61.519564,
+   "lon": -6.830127,
+   "name": "Nónfjall",
+   "ele": 427
+  },
+  {
+   "lat": 62.253378,
+   "lon": -7.213454,
+   "name": "Ytriheyggjur",
+   "ele": 425
+  },
+  {
+   "lat": 61.517105,
+   "lon": -6.797744,
+   "name": "Enni",
+   "ele": 424
+  },
+  {
+   "lat": 62.115505,
+   "lon": -7.3727,
+   "name": "Mølin",
+   "ele": 423
+  },
+  {
+   "lat": 62.262572,
+   "lon": -6.34008,
+   "name": "Middagur",
+   "ele": 422
+  },
+  {
+   "lat": 61.95837,
+   "lon": -6.911608,
+   "name": "Eggjarók",
+   "ele": 421
+  },
+  {
+   "lat": 61.964713,
+   "lon": -6.917266,
+   "name": "Múlin",
+   "ele": 421
+  },
+  {
+   "lat": 62.2851,
+   "lon": -6.845867,
+   "name": "Oyndfjarðarfjall",
+   "ele": 421
+  },
+  {
+   "lat": 62.00355,
+   "lon": -6.872225,
+   "name": "Fjallið",
+   "ele": 417
+  },
+  {
+   "lat": 61.514588,
+   "lon": -6.780504,
+   "name": "Kolheyggjur",
+   "ele": 415
+  },
+  {
+   "lat": 61.633007,
+   "lon": -6.710648,
+   "name": "Rávan",
+   "ele": 414
+  },
+  {
+   "lat": 62.235825,
+   "lon": -6.616604,
+   "name": "Klakkur",
+   "ele": 413
+  },
+  {
+   "lat": 61.874336,
+   "lon": -6.907177,
+   "name": "Eiriksfjall",
+   "ele": 412
+  },
+  {
+   "lat": 62.253093,
+   "lon": -7.205319,
+   "name": "Heimariheyggjur",
+   "ele": 409
+  },
+  {
+   "lat": 61.870087,
+   "lon": -6.902168,
+   "name": "Kneysurin",
+   "ele": 404
+  },
+  {
+   "lat": 62.121713,
+   "lon": -7.413559,
+   "name": "Orrtindur",
+   "ele": 402
+  },
+  {
+   "lat": 61.884383,
+   "lon": -6.907648,
+   "name": "Endin",
+   "ele": 401
+  },
+  {
+   "lat": 61.514606,
+   "lon": -6.764953,
+   "name": "Hovstúgva",
+   "ele": 400
+  },
+  {
+   "lat": 62.259844,
+   "lon": -7.102685,
+   "name": "Gásafelli",
+   "ele": 399
+  },
+  {
+   "lat": 61.804228,
+   "lon": -6.71362,
+   "name": "Vestfelli",
+   "ele": 397
+  },
+  {
+   "lat": 61.694957,
+   "lon": -6.764024,
+   "name": "Høgoyggj",
+   "ele": 396
+  },
+  {
+   "lat": 61.796969,
+   "lon": -6.690185,
+   "name": "Stórafjall",
+   "ele": 396
+  },
+  {
+   "lat": 61.768177,
+   "lon": -6.855367,
+   "name": "Knútur",
+   "ele": 392,
+   "wikidata": "Q3780262"
+  },
+  {
+   "lat": 62.173569,
+   "lon": -6.543883,
+   "name": "Borðoyarnes",
+   "ele": 392
+  },
+  {
+   "lat": 62.143242,
+   "lon": -7.316274,
+   "name": "Antinisfjall",
+   "ele": 392
+  },
+  {
+   "lat": 61.753907,
+   "lon": -6.679829,
+   "name": "Skorin",
+   "ele": 391
+  },
+  {
+   "lat": 61.750053,
+   "lon": -6.821982,
+   "name": "Skorin",
+   "ele": 391
+  },
+  {
+   "lat": 61.575799,
+   "lon": -6.873008,
+   "name": "Rossaklettur",
+   "ele": 389
+  },
+  {
+   "lat": 62.174983,
+   "lon": -7.211584,
+   "name": "Árndalsfjall",
+   "ele": 382
+  },
+  {
+   "lat": 61.43126,
+   "lon": -6.720275,
+   "name": "Tindur",
+   "ele": 379
+  },
+  {
+   "lat": 62.025475,
+   "lon": -7.201901,
+   "name": "Ritubergsnøva",
+   "ele": 376
+  },
+  {
+   "lat": 61.619733,
+   "lon": -6.950645,
+   "name": "Skálafjall",
+   "ele": 374
+  },
+  {
+   "lat": 61.989238,
+   "lon": -6.652674,
+   "name": "Eggjarklettur",
+   "ele": 372
+  },
+  {
+   "lat": 61.887647,
+   "lon": -6.844944,
+   "name": "Knúkur",
+   "ele": 369
+  },
+  {
+   "lat": 62.065936,
+   "lon": -7.347265,
+   "name": "Skeiðin",
+   "name_en": "Skeidin",
+   "ele": 368,
+   "wikidata": "Q7534344"
+  },
+  {
+   "lat": 62.056482,
+   "lon": -7.330559,
+   "name": "Nónfjall",
+   "ele": 367
+  },
+  {
+   "lat": 61.628754,
+   "lon": -6.987662,
+   "name": "Glyvraberg",
+   "ele": 366
+  },
+  {
+   "lat": 62.04324,
+   "lon": -6.870825,
+   "name": "Lambafelli",
+   "ele": 366
+  },
+  {
+   "lat": 61.88844,
+   "lon": -6.838175,
+   "name": "Fjallið",
+   "ele": 362
+  },
+  {
+   "lat": 61.443325,
+   "lon": -6.756682,
+   "name": "Siglifelli",
+   "ele": 359
+  },
+  {
+   "lat": 61.451325,
+   "lon": -6.813601,
+   "name": "Rútarfelli",
+   "ele": 356
+  },
+  {
+   "lat": 61.767858,
+   "lon": -6.679383,
+   "name": "Skúvoyarfjall",
+   "ele": 354
+  },
+  {
+   "lat": 61.986899,
+   "lon": -6.645469,
+   "name": "Uppi á Manni",
+   "ele": 352
+  },
+  {
+   "lat": 62.120177,
+   "lon": -7.362795,
+   "name": "Klubbin",
+   "ele": 352
+  },
+  {
+   "lat": 62.318933,
+   "lon": -7.1033,
+   "name": "Eiðiskollur",
+   "ele": 352
+  },
+  {
+   "lat": 62.089373,
+   "lon": -7.16367,
+   "name": "Lírisfelli",
+   "ele": 351
+  },
+  {
+   "lat": 61.984848,
+   "lon": -6.813315,
+   "name": "Kirkjubøreyn",
+   "ele": 351
+  },
+  {
+   "lat": 62.094783,
+   "lon": -7.5524,
+   "name": "Árnafjall",
+   "ele": 350
+  },
+  {
+   "lat": 61.641758,
+   "lon": -6.95443,
+   "name": "Fjallið",
+   "ele": 350
+  },
+  {
+   "lat": 62.162928,
+   "lon": -7.162415,
+   "name": "Reynið",
+   "ele": 349
+  },
+  {
+   "lat": 61.556765,
+   "lon": -6.766995,
+   "name": "Kaguklettur",
+   "ele": 347
+  },
+  {
+   "lat": 61.473069,
+   "lon": -6.850964,
+   "name": "Gjógvaráfjall",
+   "ele": 345
+  },
+  {
+   "lat": 62.023374,
+   "lon": -6.822436,
+   "name": "Húsareyn",
+   "ele": 345,
+   "wikidata": "Q3467615"
+  },
+  {
+   "lat": 62.26635,
+   "lon": -7.112016,
+   "name": "Lómfelli",
+   "ele": 345
+  },
+  {
+   "lat": 62.289769,
+   "lon": -6.288171,
+   "name": "Eysturhøvdi",
+   "ele": 344
+  },
+  {
+   "lat": 62.030617,
+   "lon": -7.183895,
+   "name": "Middagsfjall",
+   "ele": 343
+  },
+  {
+   "lat": 62.232176,
+   "lon": -6.570329,
+   "name": "Kjølur",
+   "ele": 342
+  },
+  {
+   "lat": 61.64363,
+   "lon": -6.978255,
+   "name": "Nakkur",
+   "ele": 330
+  },
+  {
+   "lat": 61.416204,
+   "lon": -6.708532,
+   "name": "Knúkin",
+   "ele": 329
+  },
+  {
+   "lat": 61.597482,
+   "lon": -6.981922,
+   "name": "Grímsfjall",
+   "ele": 327
+  },
+  {
+   "lat": 61.553923,
+   "lon": -6.742491,
+   "name": "Nakkur",
+   "ele": 325
+  },
+  {
+   "lat": 61.43423,
+   "lon": -6.713666,
+   "name": "Hólmsskorafjall",
+   "ele": 322
+  },
+  {
+   "lat": 61.419505,
+   "lon": -6.74852,
+   "name": "Uttarafjall",
+   "ele": 320
+  },
+  {
+   "lat": 61.855031,
+   "lon": -6.871888,
+   "name": "Bøllufjall",
+   "ele": 312
+  },
+  {
+   "lat": 61.685705,
+   "lon": -6.74607,
+   "name": "Á Kletti",
+   "ele": 308
+  },
+  {
+   "lat": 61.954798,
+   "lon": -6.778746,
+   "name": "Kirkjubøkambur",
+   "ele": 306
+  },
+  {
+   "lat": 62.044764,
+   "lon": -7.27802,
+   "name": "Suður á FjaIli",
+   "ele": 305
+  },
+  {
+   "lat": 62.118783,
+   "lon": -6.6856,
+   "name": "Glyvrafjall",
+   "ele": 303
+  },
+  {
+   "lat": 61.479859,
+   "lon": -6.854865,
+   "name": "Tindur",
+   "ele": 298
+  },
+  {
+   "lat": 62.153298,
+   "lon": -7.198879,
+   "name": "Hægstafjall",
+   "ele": 296
+  },
+  {
+   "lat": 62.161054,
+   "lon": -7.196672,
+   "name": "Melin",
+   "ele": 293
+  },
+  {
+   "lat": 61.684485,
+   "lon": -6.743784,
+   "name": "Húgvan",
+   "ele": 288
+  },
+  {
+   "lat": 62.071341,
+   "lon": -7.405941,
+   "name": "Sundsnøva",
+   "ele": 286
+  },
+  {
+   "lat": 61.569083,
+   "lon": -6.82472,
+   "name": "Skornasaklettur",
+   "ele": 286
+  },
+  {
+   "lat": 61.410439,
+   "lon": -6.696625,
+   "name": "Skálin",
+   "ele": 286,
+   "wikidata": "Q3962670"
+  },
+  {
+   "lat": 61.416065,
+   "lon": -6.737747,
+   "name": "Eystarafjall",
+   "ele": 285,
+   "wikidata": "Q3736304"
+  },
+  {
+   "lat": 62.078713,
+   "lon": -7.291073,
+   "name": "Vørufelli",
+   "ele": 284,
+   "wikidata": "Q3467630"
+  },
+  {
+   "lat": 62.133517,
+   "lon": -6.711383,
+   "name": "Hæddin",
+   "ele": 274
+  },
+  {
+   "lat": 61.989589,
+   "lon": -6.841163,
+   "name": "Tvørfelli",
+   "ele": 273
+  },
+  {
+   "lat": 61.904441,
+   "lon": -6.937454,
+   "name": "Gleðin",
+   "ele": 271
+  },
+  {
+   "lat": 62.033333,
+   "lon": -7.166667,
+   "name": "Ravnsfjall",
+   "ele": 269
+  },
+  {
+   "lat": 61.816793,
+   "lon": -6.672724,
+   "name": "Heiðafjall",
+   "ele": 266
+  },
+  {
+   "lat": 62.118117,
+   "lon": -6.705917,
+   "name": "Høgaleiti",
+   "ele": 264
+  },
+  {
+   "lat": 62.068216,
+   "lon": -7.403793,
+   "name": "Kvívíksskoranøva",
+   "ele": 263
+  },
+  {
+   "lat": 61.575699,
+   "lon": -6.831931,
+   "name": "Fjallið",
+   "ele": 259
+  },
+  {
+   "lat": 61.778971,
+   "lon": -6.838012,
+   "name": "Klettarnir",
+   "ele": 256
+  },
+  {
+   "lat": 61.755533,
+   "lon": -6.680828,
+   "name": "Nakkur",
+   "ele": 251
+  },
+  {
+   "lat": 61.54103,
+   "lon": -6.822239,
+   "name": "Vørðan",
+   "ele": 237
+  },
+  {
+   "lat": 61.438248,
+   "lon": -6.782501,
+   "name": "Kirviskollur",
+   "ele": 236,
+   "wikidata": "Q3815616"
+  },
+  {
+   "lat": 61.404893,
+   "lon": -6.686867,
+   "name": "Lambaklettur",
+   "ele": 235
+  },
+  {
+   "lat": 61.970877,
+   "lon": -6.634676,
+   "name": "Skúvafjall",
+   "ele": 234
+  },
+  {
+   "lat": 62.109737,
+   "lon": -6.654875,
+   "name": "Gásafelli",
+   "ele": 231
+  },
+  {
+   "lat": 62.007694,
+   "lon": -6.815665,
+   "name": "Fjallið",
+   "ele": 222,
+   "wikidata": "Q3746307"
+  },
+  {
+   "lat": 61.938389,
+   "lon": -6.869788,
+   "name": "Navirnar",
+   "ele": 211
+  },
+  {
+   "lat": 61.48697,
+   "lon": -6.735838,
+   "name": "Kambur",
+   "ele": 206
+  },
+  {
+   "lat": 61.829268,
+   "lon": -6.637312,
+   "name": "Skálhøvdi",
+   "ele": 203
+  },
+  {
+   "lat": 62.003563,
+   "lon": -6.81973,
+   "name": "Lítlafjall",
+   "ele": 198,
+   "wikidata": "Q3841114"
+  },
+  {
+   "lat": 61.980376,
+   "lon": -6.662403,
+   "name": "Ærgisklettur",
+   "ele": 191
+  },
+  {
+   "lat": 62.280371,
+   "lon": -7.103259,
+   "name": "Fjallið",
+   "ele": 188
+  },
+  {
+   "lat": 62.285167,
+   "lon": -7.0677,
+   "name": "Norðarafjall",
+   "ele": 172
+  },
+  {
+   "lat": 62.281933,
+   "lon": -7.062033,
+   "name": "Sunnarafjall",
+   "ele": 171
+  },
+  {
+   "lat": 61.935785,
+   "lon": -6.865625,
+   "name": "Høgaleiti",
+   "ele": 171
+  },
+  {
+   "lat": 62.072033,
+   "lon": -6.709617,
+   "name": "Vørðan",
+   "ele": 169
+  },
+  {
+   "lat": 62.104433,
+   "lon": -6.70445,
+   "name": "Vatnfelli",
+   "ele": 165
+  },
+  {
+   "lat": 61.961524,
+   "lon": -6.620454,
+   "name": "Líðarfjall",
+   "ele": 152
+  },
+  {
+   "lat": 62.020901,
+   "lon": -7.230086,
+   "name": "Trælanípa",
+   "ele": 142,
+   "wikidata": "Q1679748"
+  },
+  {
+   "lat": 61.82006,
+   "lon": -6.877003,
+   "name": "Salthøvdi",
+   "ele": 139
+  },
+  {
+   "lat": 61.784212,
+   "lon": -6.852848,
+   "name": "Høvdin",
+   "ele": 134
+  },
+  {
+   "lat": 62.058293,
+   "lon": -6.692881,
+   "name": "Eystnes",
+   "ele": 130
+  },
+  {
+   "lat": 62.094197,
+   "lon": -6.730836,
+   "name": "Húsklond",
+   "ele": 129
+  },
+  {
+   "lat": 62.10845,
+   "lon": -6.775633,
+   "name": "Brigðufelli",
+   "ele": 122
+  },
+  {
+   "lat": 62.10685,
+   "lon": -6.73775,
+   "name": "Høganes",
+   "ele": 115
+  },
+  {
+   "lat": 61.980563,
+   "lon": -6.964547,
+   "name": "Fjallið Mikla",
+   "ele": 101
+  },
+  {
+   "lat": 62.049997,
+   "lon": -7.216668,
+   "name": "Vørðuklettar"
+  },
+  {
+   "lat": 62.083333,
+   "lon": -6.833333,
+   "name": "Múlin"
+  },
+  {
+   "lat": 61.546283,
+   "lon": -6.89301,
+   "name": "Gluggarnir"
+  },
+  {
+   "lat": 62.033333,
+   "lon": -6.966667,
+   "name": "Dalsnípa"
+  },
+  {
+   "lat": 62.03671,
+   "lon": -6.897804,
+   "name": "TungulíðfjalI"
+  },
+  {
+   "lat": 62.114107,
+   "lon": -7.009155,
+   "name": "Sátan"
+  },
+  {
+   "lat": 62.053186,
+   "lon": -6.940582,
+   "name": "Núgvan"
+  },
+  {
+   "lat": 62.197824,
+   "lon": -6.722259,
+   "name": "Leirvíksfjall"
+  }
+ ]
+}
