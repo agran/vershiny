@@ -9,4 +9,5 @@ export default defineConfig({
   worker: {
     format: 'es',
   },
+  // PWA: регистрация SW через main.ts (без плагина — контроль над кешами)
 });

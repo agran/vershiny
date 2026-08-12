@@ -14,6 +14,13 @@ const REGION = 'elbrus';
 const statusEl = document.getElementById('status')!;
 const appEl = document.getElementById('app')!;
 
+// Регистрация Service Worker (PWA, офлайн-режим)
+if ('serviceWorker' in navigator && !import.meta.env.DEV) {
+  navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
+    // Офлайн-режим не критичен в dev
+  });
+}
+
 function setStatus(text: string): void {
   statusEl.textContent = text;
   statusEl.style.display = text ? 'block' : 'none';
@@ -72,6 +79,24 @@ canvas.addEventListener('pointermove', (ev) => {
   draw();
 });
 canvas.addEventListener('pointerup', () => (dragging = false));
+
+// --- Ориентация устройства (сенсоры + ручная подстройка) ---
+import { orientationTracker } from './core/orientation';
+
+orientationTracker.start((state) => {
+  if (state.source === 'sensor') {
+    view.centerAzRad = state.azimuthRad;
+    view.tiltRad = Math.max(-MAX_TILT, Math.min(MAX_TILT, state.tiltRad));
+    draw();
+  }
+});
+
+// При ручном свайпе — добавляем оффсет к сенсорному азимуту
+canvas.addEventListener('pointermove', (ev) => {
+  if (!dragging || orientationTracker.current.source !== 'sensor') return;
+  const dx = ev.clientX - lastX;
+  orientationTracker.addManualOffset(-(dx / canvas.clientWidth) * view.fovRad);
+});
 
 // --- Worker горизонта ---
 const worker = new Worker(new URL('./workers/horizon.worker.ts', import.meta.url), {
