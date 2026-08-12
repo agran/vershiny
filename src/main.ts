@@ -10,7 +10,7 @@ import { t } from './core/i18n';
 import { downloadRegion, type DownloadProgress } from './ui/download';
 import type { ResultMessage, WorkerOutMessage } from './workers/horizon.worker';
 
-const REGION = 'elbrus';
+let currentRegion = 'elbrus';
 
 const statusEl = document.getElementById('status')!;
 const appEl = document.getElementById('app')!;
@@ -132,19 +132,19 @@ async function main(): Promise<void> {
   // Пики: сеть → офлайн-кеш (IndexedDB). Без них панорама всё равно строится.
   // Vite на 404 отдаёт index.html (SPA-fallback) — проверяем Content-Type.
   let peaks: PeaksFile['peaks'] = [];
-  const peaksRes = await fetch(`${base}peaks/${REGION}.json`).catch(() => null);
+  const peaksRes = await fetch(`${base}peaks/${currentRegion}.json`).catch(() => null);
   if (peaksRes && isJson(peaksRes)) {
     peaks = ((await peaksRes.json()) as PeaksFile).peaks;
   } else {
     const { getPeaks } = await import('./core/db');
-    peaks = ((await getPeaks(REGION)) ?? []) as PeaksFile['peaks'];
+    peaks = ((await getPeaks(currentRegion)) ?? []) as PeaksFile['peaks'];
   }
 
   // Локальный DEM-патч — если сгенерирован; иначе глобальный Terrarium
   // (docs/new-geo-data.md, слой 1). Офлайн: Terrarium из IndexedDB.
   let patchBaseUrl: string | undefined;
-  const patchProbe = await fetch(`${base}tiles/${REGION}/index.json`).catch(() => null);
-  if (patchProbe && isJson(patchProbe)) patchBaseUrl = `${base}tiles/${REGION}`;
+  const patchProbe = await fetch(`${base}tiles/${currentRegion}/index.json`).catch(() => null);
+  if (patchProbe && isJson(patchProbe)) patchBaseUrl = `${base}tiles/${currentRegion}`;
 
   worker.postMessage({ type: 'init', patchBaseUrl });
 
@@ -167,7 +167,7 @@ function setupDownloadButton(origin: LatLon): void {
     busy = true;
     btn.disabled = true;
     try {
-      await downloadRegion(REGION, origin, (p: DownloadProgress) => {
+      await downloadRegion(currentRegion, origin, (p: DownloadProgress) => {
         if (p.phase === 'peaks') {
           setStatus(t('downloadPeaks'));
         } else if (p.phase === 'tiles') {
@@ -205,6 +205,32 @@ function makeButton(icon: string, title: string, pos: string): HTMLButtonElement
 
 /** Кнопки AR и фото (появляются после первого расчёта панорамы) */
 function setupActionButtons(origin: LatLon, observerH: number): void {
+  // Настройки (⚙) — выбор региона, язык, сброс оффсета
+  const settingsBtn = makeButton('⚙', t('settings'), 'left:16px;top:16px');
+  let settingsClose: (() => void) | null = null;
+  settingsBtn.onclick = async () => {
+    if (settingsClose) {
+      settingsClose();
+      settingsClose = null;
+      return;
+    }
+    const { openSettings } = await import('./ui/settings');
+    settingsClose = openSettings(currentRegion, {
+      onRegionChange: (currentRegion) => {
+        currentRegion = currentRegion;
+        // Перезагружаем панораму с новым регионом
+        main();
+      },
+      onLocaleChange: () => {
+        // Перерисовываем интерфейс
+        draw();
+      },
+      onClose: () => {
+        settingsClose = null;
+      },
+    });
+  };
+
   // AR-режим
   let arStop: (() => void) | null = null;
   const arBtn = makeButton('📷', t('arMode'), 'right:16px;bottom:76px');
@@ -236,7 +262,7 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
     const blob = await capturePhoto(panorama, view, {
       origin,
       observerH,
-      region: REGION,
+      region: currentRegion,
     });
     await sharePhoto(blob);
   };

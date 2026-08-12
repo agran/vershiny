@@ -57,7 +57,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   region: { ru: 'Регион', en: 'Region' },
   language: { ru: 'Язык', en: 'Language' },
   compassAccuracy: { ru: 'Точность компаса', en: 'Compass accuracy' },
+  compassUnknown: { ru: 'нет данных', en: 'no data' },
   resetOffset: { ru: 'Сбросить подстройку', en: 'Reset offset' },
+  downloadedRegions: { ru: 'Скачанные регионы', en: 'Downloaded regions' },
+  noDownloadedRegions: { ru: 'пока нет', en: 'none yet' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },
