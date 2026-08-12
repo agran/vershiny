@@ -23,6 +23,8 @@ export interface PanoramaState {
   distanceToHorizonM?: Float32Array;
   /** Фронты видимости по лучам (для точных маркеров) */
   fronts?: import('../core/horizon').VisibleFront[][];
+  /** Гребни силуэта по корзинам дистанций [корзина][луч] */
+  crests?: Float32Array[];
 }
 
 export interface ViewState {
@@ -38,8 +40,13 @@ export interface ViewState {
 
 const SKY_TOP = '#0d1b2a';
 const SKY_HORIZON = '#415a77';
-// Слои дальности: светлее = ближе (воздушная перспектива)
-const LAYER_COLORS = ['#1a1a2e', '#22223b', '#2b2d42', '#4a4e69', '#6c757d'];
+const SKY_BOTTOM = '#16202c';
+/** Контур гребня: чёрная линия сверху, белая снизу (для наложения на кадр камеры) */
+const RIDGE_DARK = 'rgba(0,0,0,0.85)';
+const RIDGE_LIGHT = 'rgba(255,255,255,0.95)';
+/** Толщина/сдвиг контура в CSS-пикселях (масштабируются по devicePixelRatio) */
+const RIDGE_WIDTH_CSS = 1.4;
+const RIDGE_OFFSET_CSS = 1.1;
 const LABEL_COLOR = '#f1faee';
 const LABEL_DIM = '#a8dadc';
 const LABEL_HIDDEN = 'rgba(168,218,220,0.5)';
@@ -53,66 +60,56 @@ export function renderPanorama(
   const { width, height } = ctx.canvas;
   const horizonY = height * 0.62; // линия горизонта чуть ниже центра
 
-  // Небо — градиент
-  const sky = ctx.createLinearGradient(0, 0, 0, horizonY);
+  // Фон — единый градиент на весь кадр (без горизонтальной «ступеньки»)
+  const sky = ctx.createLinearGradient(0, 0, 0, height);
   sky.addColorStop(0, SKY_TOP);
-  sky.addColorStop(1, SKY_HORIZON);
+  sky.addColorStop(horizonY / height, SKY_HORIZON);
+  sky.addColorStop(1, SKY_BOTTOM);
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = LAYER_COLORS[LAYER_COLORS.length - 1];
-  ctx.fillRect(0, horizonY, width, height - horizonY);
 
   const azToX = (az: number): number =>
     (wrapAngle(az - view.centerAzRad) / view.fovRad) * width + width / 2;
   const elevToY = (elev: number): number =>
     horizonY - ((elev - view.tiltRad) / view.fovVRad) * height;
 
-  // Силуэт горизонта: слои сзади-вперёд (дальние → ближние)
   const { horizon, stepRad } = state;
-  // layers[0] = ближний (0–5 км), layers[4] = дальний (100–200 км)
-  // horizon = layers[0] (ближний), но может быть пустым если нет данных в 0–5 км
   const layers = state.layers ?? [horizon];
-  // Если ближний слой пуст (все −Infinity), используем horizon как fallback
-  const nearEmpty = layers[0] && layers[0].every((v) => v === -Infinity);
-  if (nearEmpty && horizon.some((v) => v !== -Infinity)) {
-    layers[0] = horizon;
+
+  // Отладка: доступ к данным из консоли
+  (window as unknown as Record<string, unknown>).__pano = state;
+
+  // Профили силуэта: видимые гребни по возрастанию дистанции.
+  // Гребень = локальный максимум угла вдоль луча (то, что реально видно как линия).
+  const profiles: Float32Array[] = [];
+  if (state.crests?.length) {
+    profiles.push(...state.crests);
+  } else {
+    for (const layer of layers) if (layer) profiles.push(layer);
   }
 
-  for (let layerIdx = layers.length - 1; layerIdx >= 0; layerIdx--) {
-    const layer = layers[layerIdx];
-    if (!layer) continue;
+  if (profiles.length) {
+    const rayCount = profiles[0].length;
+    // Масштаб линий под плотность пикселей (canvas.width может быть в 2–3× больше CSS)
+    const dpr = ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1;
+    const ridgeWidth = RIDGE_WIDTH_CSS * dpr;
+    const ridgeOffset = RIDGE_OFFSET_CSS * dpr;
+    // Окклюзия: гребень виден только там, где он выше всех более близких
+    const runningMax = new Float32Array(rayCount).fill(-Infinity);
+    const EPS = 5e-4; // ~0.03° — не рисуем «дрожание» на одном уровне
 
-    ctx.beginPath();
-    ctx.moveTo(0, height);
-    // Сглаженная кривая через середины отрезков (Chaikin-стиль)
-    let prevX = 0;
-    let prevY = height;
-    for (let i = 0; i < layer.length; i++) {
-      const az = i * stepRad;
-      const x = azToX(az);
-      if (x < -50 || x > width + 50) continue;
-      const y = layer[i] === -Infinity ? horizonY : elevToY(layer[i]);
-      const cy = Math.max(-50, Math.min(height, y));
-      if (i > 0 && prevX !== 0) {
-        // Кривая через середину
-        const mx = (prevX + x) / 2;
-        const my = (prevY + cy) / 2;
-        ctx.quadraticCurveTo(prevX, prevY, mx, my);
+    for (const prof of profiles) {
+      const segments = buildRidgeSegments(
+        prof, runningMax, EPS, stepRad, azToX, elevToY, width, height,
+      );
+      if (segments.length) {
+        strokeRidge(ctx, segments, -ridgeOffset, RIDGE_DARK, ridgeWidth);
+        strokeRidge(ctx, segments, +ridgeOffset, RIDGE_LIGHT, ridgeWidth);
       }
-      prevX = x;
-      prevY = cy;
+      for (let i = 0; i < rayCount; i++) {
+        if (prof[i] > runningMax[i]) runningMax[i] = prof[i];
+      }
     }
-    ctx.lineTo(width, height);
-    ctx.closePath();
-
-    // Цвет слоя: ближний = темнее и контрастнее
-    ctx.fillStyle = LAYER_COLORS[Math.min(layerIdx, LAYER_COLORS.length - 1)];
-    ctx.fill();
-
-    // Светлый контур для ВСЕХ слоёв (различимость гор друг за другом)
-    ctx.strokeStyle = `rgba(241,250,238,${0.3 + (layers.length - 1 - layerIdx) * 0.15})`;
-    ctx.lineWidth = layerIdx === 0 ? 1.5 : 1;
-    ctx.stroke();
   }
 
   // Шкала азимутов: каждые 15°, подписи сторон света
@@ -136,6 +133,82 @@ export function renderPanorama(
 
   // Подписи пиков с кластеризацией
   drawLabels(ctx, state.peaks, azToX, elevToY, view, state);
+}
+
+/**
+ * Разбивает профиль на непрерывные видимые сегменты.
+ * Точка входит в сегмент, если: есть данные, она выше окклюдера (runningMax),
+ * попадает на экран и не образует разрыв по x.
+ */
+function buildRidgeSegments(
+  prof: Float32Array,
+  runningMax: Float32Array,
+  eps: number,
+  stepRad: number,
+  azToX: (az: number) => number,
+  elevToY: (elev: number) => number,
+  width: number,
+  height: number,
+): { x: number; y: number }[][] {
+  const segments: { x: number; y: number }[][] = [];
+  let current: { x: number; y: number }[] = [];
+  let prevX = NaN;
+  const maxGap = width * 0.25; // разрыв при заходе за край панорамы
+
+  const flush = (): void => {
+    if (current.length > 1) segments.push(current);
+    current = [];
+    prevX = NaN;
+  };
+
+  for (let i = 0; i < prof.length; i++) {
+    const v = prof[i];
+    if (v === -Infinity || v <= runningMax[i] + eps) {
+      flush();
+      continue;
+    }
+    const x = azToX(i * stepRad);
+    if (x < -20 || x > width + 20) {
+      flush();
+      continue;
+    }
+    const y = elevToY(v);
+    if (y < -height || y > height * 2) {
+      flush();
+      continue;
+    }
+    if (!Number.isNaN(prevX) && Math.abs(x - prevX) > maxGap) flush();
+    current.push({ x, y });
+    prevX = x;
+  }
+  flush();
+  return segments;
+}
+
+/** Обводка гребня со сдвигом по вертикали (для двойной линии чёрная/белая) */
+function strokeRidge(
+  ctx: CanvasRenderingContext2D,
+  segments: { x: number; y: number }[][],
+  offsetY: number,
+  style: string,
+  lineWidth: number,
+): void {
+  ctx.beginPath();
+  for (const pts of segments) {
+    ctx.moveTo(pts[0].x, pts[0].y + offsetY);
+    for (let k = 1; k < pts.length - 1; k++) {
+      const mx = (pts[k].x + pts[k + 1].x) / 2;
+      const my = (pts[k].y + pts[k + 1].y) / 2 + offsetY;
+      ctx.quadraticCurveTo(pts[k].x, pts[k].y + offsetY, mx, my);
+    }
+    const last = pts[pts.length - 1];
+    ctx.lineTo(last.x, last.y + offsetY);
+  }
+  ctx.strokeStyle = style;
+  ctx.lineWidth = lineWidth;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.stroke();
 }
 
 interface LabelBox {

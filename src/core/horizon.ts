@@ -33,6 +33,16 @@ export interface HorizonOptions {
 export const LAYER_BOUNDS = [0, 5_000, 15_000, 40_000, 100_000, 200_000] as const;
 export const LAYER_COUNT = LAYER_BOUNDS.length - 1;
 
+/**
+ * Дистанционные корзины для гребней (метры).
+ * Гребень = точка, где угол возвышения вдоль луча достиг локального максимума
+ * и дальше падает: именно такие точки видны в кадре как линия силуэта.
+ */
+export const CREST_BOUNDS = [0, 800, 2_000, 5_000, 12_000, 30_000, 70_000, 200_001] as const;
+export const CREST_COUNT = CREST_BOUNDS.length - 1;
+/** Насколько угол должен упасть после максимума, чтобы это считалось гребнем, рад (~0.09°) */
+const CREST_DROP_RAD = 0.0015;
+
 /** Видимый фронт: участок рельефа, пробивающийся над ближним */
 export interface VisibleFront {
   /** Дистанция начала фронта, м */
@@ -54,6 +64,8 @@ export interface LayeredHorizon {
   distanceToHorizonM: Float32Array;
   /** Для каждого луча: фронты видимости (локальные максимумы по дистанции) */
   fronts: VisibleFront[][];
+  /** Гребни по дистанционным корзинам: [корзина][луч] — углы видимых перегибов */
+  crests: Float32Array[];
 }
 
 export interface VisiblePeak extends Peak {
@@ -140,6 +152,8 @@ export function computeLayeredHorizon(
   const layers = Array.from({ length: LAYER_COUNT }, () => new Float32Array(rayCount).fill(-Infinity));
   const distanceToHorizonM = new Float32Array(rayCount).fill(Infinity);
   const fronts: VisibleFront[][] = Array.from({ length: rayCount }, () => []);
+  // Гребни: видимые перегибы силуэта по корзинам дистанций
+  const crests = Array.from({ length: CREST_COUNT }, () => new Float32Array(rayCount).fill(-Infinity));
 
   // Марш начинаем с 1.5 ячейки DEM (численная стабильность atan2)
   const marchStart = minDist * 1.5; // ~135 м для 90 м DEM
@@ -158,6 +172,23 @@ export function computeLayeredHorizon(
     // Пропускаем ближнюю зону для фронтов (0–500 м): мы на этом склоне
     const nearSkip = 500;
 
+    // Гребни: отслеживаем текущий максимум угла и дистанцию, на которой он достигнут
+    let crestMax = -Infinity;
+    let crestDist = 0;
+    let crestPending = false;
+    const recordCrest = (): void => {
+      if (!crestPending) return;
+      let b = CREST_COUNT - 1;
+      for (let k = 0; k < CREST_COUNT; k++) {
+        if (crestDist >= CREST_BOUNDS[k] && crestDist < CREST_BOUNDS[k + 1]) {
+          b = k;
+          break;
+        }
+      }
+      if (crestMax > crests[b][i]) crests[b][i] = crestMax;
+      crestPending = false;
+    };
+
     for (let d = marchStart; d <= maxDist; d += nextRayStep(d)) {
       const p = destination(origin, az, d);
       const h = sample(p, d);
@@ -175,18 +206,19 @@ export function computeLayeredHorizon(
         if (d >= LAYER_BOUNDS[LAYER_COUNT]) bin = LAYER_COUNT - 1;
       }
 
-      // Ближний слой (0–5 км): исключаем точки ВЫШЕ наблюдателя
-      // (мы на склоне — всё что выше нас не горизонт, а стена)
-      if (bin === 0 && apparentH > hO) continue; // выше нас — пропускаем
-
       if (angle > binMax[bin]) {
         binMax[bin] = angle;
         binDist[bin] = d;
       }
 
-      if (angle > binMax[bin]) {
-        binMax[bin] = angle;
-        binDist[bin] = d;
+      // Гребни: фиксируем локальный максимум угла вдоль луча.
+      // Растёт — запоминаем; заметно упал — значит проехали перегиб (видимый гребень).
+      if (angle > crestMax) {
+        crestMax = angle;
+        crestDist = d;
+        crestPending = true;
+      } else if (crestPending && angle < crestMax - CREST_DROP_RAD) {
+        recordCrest();
       }
 
       // Фронт: новый максимум = начало или продолжение
@@ -217,6 +249,9 @@ export function computeLayeredHorizon(
       if (d > 60_000 && angle < binMax[bin] - 0.02 && binMax[bin] < -0.005) break;
     }
 
+    // Последний максимум по лучу — это линия неба (skyline)
+    recordCrest();
+
     // Слои
     for (let b = 0; b < LAYER_COUNT; b++) {
       if (binMax[b] > -Infinity) {
@@ -233,7 +268,7 @@ export function computeLayeredHorizon(
   // Адаптивное сглаживание с защитой разрывов дистанции
   const smoothed = smoothLayers(layers, distanceToHorizonM, stepRad);
 
-  return { layers: smoothed, stepRad, distanceToHorizonM, fronts };
+  return { layers: smoothed, stepRad, distanceToHorizonM, fronts, crests };
 }
 
 /** Адаптивное сглаживание силуэта: ширина окна ~ полразмера ячейки в лучах */

@@ -36,16 +36,26 @@ const ctx = canvas.getContext('2d')!;
 function resize(): void {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio);
   canvas.height = Math.round(canvas.clientHeight * devicePixelRatio);
+  syncVerticalFov();
 }
 new ResizeObserver(resize).observe(canvas);
-resize();
 
 const view: ViewState = {
   centerAzRad: 0,
   tiltRad: 0,
   fovRad: toRad(60),
-  fovVRad: toRad(25),
+  fovVRad: toRad(45),
 };
+
+/**
+ * Вертикальный FOV выводим из горизонтального и пропорций холста —
+ * иначе картинка растянута/сжата по вертикали и не совместится с кадром камеры.
+ */
+function syncVerticalFov(): void {
+  if (!canvas.width || !canvas.height) return;
+  view.fovVRad = 2 * Math.atan(Math.tan(view.fovRad / 2) * (canvas.height / canvas.width));
+}
+resize();
 
 /** Предел наклона камеры, рад */
 const MAX_TILT = toRad(45);
@@ -233,6 +243,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     layers: r.layers,
     distanceToHorizonM: r.distanceToHorizonM,
     fronts: r.fronts,
+    crests: r.crests,
   };
   lastObserverH = r.observerH;
   // Обновляем индикатор высоты
