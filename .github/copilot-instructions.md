@@ -1,0 +1,48 @@
+# Инструкции для Copilot (и других чатов)
+
+## Проект
+«Вершины» — open-source PWA-аналог PeakFinder. Репозиторий: agran/vershiny. Документация — `docs/`. Код — MIT/Apache-2.0.
+
+## Стек
+- Vanilla TS + Vite, Canvas 2D (без WebGL/фреймворков — см. docs/ARCHITECTURE.md)
+- Web Worker для ray-marching горизонта
+- Python 3.12 для инструментов данных (`tools/`)
+- Тесты: vitest (`npm test`), типы: `npx tsc`, сборка: `npm run build`
+
+## Данные
+- Глобальный DEM: AWS Terrarium (онлайн, весь мир) — `src/core/terrarium.ts`
+- Офлайн-патчи: int16-тайлы 256×256 — `tools/dem-to-tiles/`
+- Вершины: planet.osm.pbf → `tools/planet-peaks/planet_peaks.py --regions-dir` → `tools/peaks-to-json/peaks_to_json.py --region X --from-file`
+- Реестр регионов: `tools/regions.json` (115 регионов, двуязычие)
+
+## Конвенции
+- **Двуязычие обязательно**: UI (i18n.ts), вершины (`name_ru`/`name_en`), регионы (`title_ru`/`title_en`, `core_ru`/`core_en`)
+- Комментарии и документация — по-русски; идентификаторы и коммиты — по-английски
+- Без сервера: всё прекомпилируется в статику (GitHub Pages)
+- Без GPL-зависимостей
+- Данные вершин правятся в OpenStreetMap, не в локальных файлах
+
+## Полезные команды
+```powershell
+npm run dev          # http://localhost:5173/vershiny/
+npm test             # vitest
+npx tsc              # проверка типов
+npm run build        # прод-сборка
+
+# Пики региона из planet.jsonl
+python tools\peaks-to-json\peaks_to_json.py --region elbrus --from-file data\peaks-by-region\elbrus.jsonl -o public\peaks\elbrus.json
+
+# DEM-патч региона (после gdalwarp в EPSG:4326)
+python tools\dem-to-tiles\dem_to_tiles.py input.tif -o public\tiles\elbrus
+```
+
+## Отладка в браузере
+- URL-параметры позиции: `?lat=43.318&lon=42.458` (Приют 11)
+- Локаль: `localStorage.setItem('vershiny-locale', 'en')` → перезагрузка
+- Консоль: `Горизонт: 3600 лучей, N пиков, наблюдатель XXXX м, YYY мс`
+
+## Частые ловушки
+- Vite на 404 отдаёт index.html (SPA-fallback) — проверяйте Content-Type при fetch данных
+- Windows-консоль (cp1251) не выводит Unicode — в Python-скриптах: `sys.stdout.reconfigure(encoding="utf-8", errors="replace")`
+- Terrarium z15: пиксель 4.8 м на экваторе, но данные ~90 м — зумы выше z12 впустую качают пиксели
+- planet.osm.pbf: DenseNodes поля могут повторяться (packed) — накапливать, не перезаписывать
