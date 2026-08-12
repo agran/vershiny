@@ -97,7 +97,7 @@
     "core_ru": "Тхабана-Нтленьяна (3482м), Amphitheatre, Giants Castle",
     "core_en": "Thabana Ntlenyana (3482m), Amphitheatre, Giants Castle",
     "priority": 1,
-    "group": "Южная Африка"
+    "group": "Африка — Южная"
   },
   "ecuador-volcanoes": {
     "title_ru": "Эквадор — Аллея вулканов",
@@ -548,7 +548,7 @@
     "group": "Альпы"
   },
   "anti-atlas": {
-    "title_ru": "Анти-Атлас и Сироуа (Марокко)",
+    "title_ru": "Анти-Атлас и Сироуа",
     "title_en": "Anti-Atlas and Siroua (Morocco)",
     "bbox": [
       -9.5,
@@ -559,7 +559,7 @@
     "core_ru": "Сироуа (3305м), Акхсас, Джебель-Сагхро",
     "core_en": "Siroua (3305m), Akhsas, Jbel Saghro",
     "priority": 3,
-    "group": "Атлас"
+    "group": "Африка — Атлас"
   },
   "baikal-east": {
     "title_ru": "Забайкалье",
@@ -912,7 +912,7 @@
     "group": "Аппалачи"
   },
   "atlas": {
-    "title_ru": "Атлас",
+    "title_ru": "Атлас (Марокко)",
     "title_en": "Atlas Mountains",
     "bbox": [
       -10.5,
@@ -923,7 +923,7 @@
     "core_ru": "Тубкаль, Мгун",
     "core_en": "Toubkal, M'Goun",
     "priority": 4,
-    "group": "Атлас"
+    "group": "Африка — Атлас"
   },
   "australia": {
     "title_ru": "Австралия и Тасмания",
@@ -993,7 +993,7 @@
     "core_ru": "Тейде, Табуриенте",
     "core_en": "Teide, Taburiente",
     "priority": 4,
-    "group": "Канары"
+    "group": "Африка — Острова"
   },
   "carpathians": {
     "title_ru": "Карпаты",
@@ -1038,8 +1038,8 @@
     "group": "Командоры"
   },
   "east-africa": {
-    "title_ru": "Восточная Африка",
-    "title_en": "East Africa",
+    "title_ru": "Восточная Африка — Килиманджаро, Кения",
+    "title_en": "East Africa — Kilimanjaro, Kenya",
     "bbox": [
       32.0,
       -5.0,
@@ -1049,7 +1049,7 @@
     "core_ru": "Килиманджаро, Кения, Рувензори",
     "core_en": "Kilimanjaro, Kenya, Rwenzori",
     "priority": 4,
-    "group": "Восточная Африка"
+    "group": "Африка — Восточная"
   },
   "ethiopia": {
     "title_ru": "Эфиопия и Африканский Рог",
@@ -1063,7 +1063,7 @@
     "core_ru": "Рас-Дашен, Симиен",
     "core_en": "Ras Dashen, Simien",
     "priority": 4,
-    "group": "Эфиопия"
+    "group": "Африка — Восточная"
   },
   "faroe": {
     "title_ru": "Фарерские острова",
@@ -1315,7 +1315,7 @@
     "core_ru": "Марумукутру",
     "core_en": "Maromokotro",
     "priority": 4,
-    "group": "Мадагаскар"
+    "group": "Африка — Острова"
   },
   "mexico": {
     "title_ru": "Мексика и Центральная Америка",
@@ -1497,7 +1497,7 @@
     "core_ru": "Табл-Маунтин, Драконовы горы (Мфади)",
     "core_en": "Table Mountain, Drakensberg (Mafadi)",
     "priority": 4,
-    "group": "Южная Африка"
+    "group": "Африка — Южная"
   },
   "suntar-khayata": {
     "title_ru": "Сунтар-Хаята",
