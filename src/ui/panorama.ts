@@ -69,7 +69,14 @@ export function renderPanorama(
 
   // Силуэт горизонта: слои сзади-вперёд (дальние → ближние)
   const { horizon, stepRad } = state;
+  // layers[0] = ближний (0–5 км), layers[4] = дальний (100–200 км)
+  // horizon = layers[0] (ближний), но может быть пустым если нет данных в 0–5 км
   const layers = state.layers ?? [horizon];
+  // Если ближний слой пуст (все −Infinity), используем horizon как fallback
+  const nearEmpty = layers[0] && layers[0].every((v) => v === -Infinity);
+  if (nearEmpty && horizon.some((v) => v !== -Infinity)) {
+    layers[0] = horizon;
+  }
 
   for (let layerIdx = layers.length - 1; layerIdx >= 0; layerIdx--) {
     const layer = layers[layerIdx];

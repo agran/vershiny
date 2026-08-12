@@ -150,6 +150,9 @@ export function computeLayeredHorizon(
     let currentMax = -Infinity;
     let frontStartDist = 0;
 
+    // Пропускаем ближнюю зону (0–500 м): мы на этом склоне, это не горизонт
+    const nearSkip = 500;
+
     for (let d = minDist; d <= maxDist; d += nextRayStep(d)) {
       const p = destination(origin, az, d);
       const h = sample(p, d);
@@ -167,13 +170,26 @@ export function computeLayeredHorizon(
         if (d >= LAYER_BOUNDS[LAYER_COUNT]) bin = LAYER_COUNT - 1;
       }
 
+      // Ближняя зона (0–500 м): не исключаем, но и не даём огромным углам
+      // (мы на склоне — угол вверх до 45° нормален, но не 80°+)
+      if (bin === 0 && d < nearSkip) {
+        // Ограничиваем угол: максимум 30° (0.52 рад) для ближней зоны
+        // чтобы «своя гора» не превращалась в стену
+        const cappedAngle = Math.min(angle, 0.52);
+        if (cappedAngle > binMax[bin]) {
+          binMax[bin] = cappedAngle;
+          binDist[bin] = d;
+        }
+        continue; // в фронты не включаем
+      }
+
       if (angle > binMax[bin]) {
         binMax[bin] = angle;
         binDist[bin] = d;
       }
 
       // Фронт: новый максимум = начало или продолжение
-      if (angle > currentMax) {
+      if (angle > currentMax && d >= nearSkip) {
         if (rayFronts.length === 0 || d - rayFronts[rayFronts.length - 1].distEndM > 2000) {
           // Новый фронт (после провала >2 км)
           rayFronts.push({
