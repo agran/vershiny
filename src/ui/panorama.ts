@@ -101,7 +101,7 @@ export function renderPanorama(
   }
 
   // Подписи пиков с кластеризацией
-  drawLabels(ctx, state.peaks, azToX, elevToY, view);
+  drawLabels(ctx, state.peaks, azToX, elevToY, view, state);
 }
 
 interface LabelBox {
@@ -119,6 +119,7 @@ function drawLabels(
   azToX: (az: number) => number,
   elevToY: (elev: number) => number,
   view: ViewState,
+  state: PanoramaState,
 ): void {
   void view;
   const { width } = ctx.canvas;
@@ -157,16 +158,18 @@ function drawLabels(
       const best = sorted[0];
       const extra = sorted.length - 1;
       drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''));
-      // Маркер: от подписи вниз к вершине
-      const peakY = elevToY(best.elevationRad);
+      // Маркер: от подписи вниз к ближайшей точке силуэта
+      const peakAz = best.azimuthRad;
+      const horizonY = horizonAtAzimuth(state, peakAz, elevToY);
       const labelBottom = box.y + box.h;
-      drawMarker(ctx, azToX(best.azimuthRad), labelBottom, peakY);
+      drawMarker(ctx, azToX(peakAz), labelBottom, horizonY);
     } else if (box.peak) {
       drawLabel(ctx, box, labelText(box.peak));
-      // Маркер: от подписи вниз к вершине
-      const peakY = elevToY(box.peak.elevationRad);
+      // Маркер: от подписи вниз к ближайшей точке силуэта
+      const peakAz = box.peak.azimuthRad;
+      const horizonY = horizonAtAzimuth(state, peakAz, elevToY);
       const labelBottom = box.y + box.h;
-      drawMarker(ctx, azToX(box.peak.azimuthRad), labelBottom, peakY);
+      drawMarker(ctx, azToX(peakAz), labelBottom, horizonY);
     }
   }
 }
@@ -200,6 +203,22 @@ function drawMarker(
   ctx.moveTo(x, fromY);
   ctx.lineTo(x, toY);
   ctx.stroke();
+}
+
+/** Высота силуэта на заданном азимуте (интерполяция между лучами) */
+function horizonAtAzimuth(
+  state: PanoramaState,
+  azRad: number,
+  elevToY: (elev: number) => number,
+): number {
+  const { horizon, stepRad } = state;
+  const idx = azRad / stepRad;
+  const i0 = Math.floor(idx) % horizon.length;
+  const i1 = (i0 + 1) % horizon.length;
+  const frac = idx - Math.floor(idx);
+  const a0 = horizon[i0] === -Infinity ? 0 : horizon[i0];
+  const a1 = horizon[i1] === -Infinity ? 0 : horizon[i1];
+  return elevToY(a0 + (a1 - a0) * frac);
 }
 
 function overlaps(a: LabelBox, b: LabelBox): boolean {
