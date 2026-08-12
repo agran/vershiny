@@ -44,6 +44,14 @@ describe('transliterate', () => {
     expect(translitToLatin('გვანდრა - Гвандра')).toBe('Gvandra - Gvandra');
   });
 
+  it('китайский → пиньинь (Эверест, горные термины)', () => {
+    expect(translitToLatin('珠穆朗玛峰')).toBe('Zhu Mu Lang Ma Feng');
+    expect(translitToLatin('天山')).toBe('Tian Shan');
+    expect(translitToLatin('黄山')).toBe('Huang Shan');
+    expect(translitToLatin('昆仑山')).toBe('Kun Lun Shan');
+    expect(translitToLatin('喜马拉雅山')).toBe('Xi Ma La Ya Shan');
+  });
+
   it('латиница остаётся как есть', () => {
     expect(translitToLatin('Elbrus')).toBe('Elbrus');
     expect(translitToLatin('Mont Blanc')).toBe('Mont Blanc');

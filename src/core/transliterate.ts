@@ -176,8 +176,13 @@ const KO_MAP: Record<string, string> = {
   '백': 'baek', '산': 'san',
 };
 
-// --- Китайский: оставляем пиньинь (латиница) как есть; иероглифы → pinyin
-//     невозможен без словаря, поэтому иероглифы пропускаем (показываем как есть).
+// --- Китайский: словарь пиньиня для географических иероглифов ---
+// Источник: mozillazg/pinyin-data (MIT), kMandarin_8105.txt.
+// Покрывает ~217 частотных иероглифов топонимов; прочие — как есть.
+
+import { ZH_GEO_PINYIN } from './zh-pinyin';
+
+const ZH_MAP: Record<string, string> = ZH_GEO_PINYIN;
 
 // --- API ---
 
@@ -232,24 +237,47 @@ const MAPS: Partial<Record<Script, Record<string, string>>> = {
   ethiopic: AM_MAP,
   japanese: JA_MAP,
   korean: KO_MAP,
+  chinese: ZH_MAP,
 };
 
 /** Транслитерация → латиница (любая письменность, включая смешанные строки) */
 export function translitToLatin(s: string): string {
-  const result = s
-    .split('')
-    .map((ch) => {
-      const script = detectScript(ch);
-      if (script === 'latin') return ch;
-      const map = MAPS[script];
-      if (!map) return ch; // chinese и прочие — оставляем как есть
-      const lower = ch.toLowerCase();
-      const tr = map[lower] ?? map[ch];
-      if (tr === undefined) return ch;
-      return ch === lower ? tr : tr.charAt(0).toUpperCase() + tr.slice(1);
-    })
-    .join('');
-  // Капитализация первого символа после не-букв (начало строки, пробел, дефис)
+  const parts: string[] = [];
+  for (const ch of s) {
+    const script = detectScript(ch);
+    if (script === 'latin') {
+      parts.push(ch);
+      continue;
+    }
+    const map = MAPS[script];
+    if (!map) {
+      parts.push(ch);
+      continue;
+    }
+    const tr = map[ch.toLowerCase()] ?? map[ch];
+    if (tr === undefined) {
+      parts.push(ch);
+      continue;
+    }
+    // Капитализация: первый символ слога/слова — заглавный.
+    // Для китайского: каждый иероглиф = отдельный слог → всегда капитализируем.
+    const isStart =
+      parts.length === 0 ||
+      /[\s\-–—(]/.test(parts[parts.length - 1]) ||
+      script === 'chinese';
+    parts.push(isStart ? tr.charAt(0).toUpperCase() + tr.slice(1) : tr);
+  }
+  let result = parts.join('');
+
+  // Китайский: каждый иероглиф = отдельный слог. Разделяем по границам слогов.
+  // Слоги в пиньине: начинаются с согласной или a/e/o, заканчиваются гласной или -n/-ng/-r.
+  // Но проще: если в исходной строке был иероглиф, разделяем каждый слог пробелом.
+  if (/[\u4E00-\u9FFF]/.test(s)) {
+    // Каждая заглавная буква после строчной — граница слога
+    result = result.replace(/([a-z])([A-Z])/g, '$1 $2');
+  }
+
+  // Капитализация после не-букв (начало строки, пробел, дефис)
   return result.replace(/(^|[\s\-–—(])(\w)/g, (_, sep: string, c: string) => sep + c.toUpperCase());
 }
 
