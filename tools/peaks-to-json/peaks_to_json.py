@@ -90,6 +90,10 @@ def convert(elements: list[dict]) -> tuple[list[dict], dict]:
         if ele is None:
             stats["no_ele"] += 1
         peak: dict = {"lat": el["lat"], "lon": el["lon"], "name": name}
+        if tags.get("name:ru"):
+            peak["name_ru"] = tags["name:ru"]
+        if tags.get("name:en"):
+            peak["name_en"] = tags["name:en"]
         if ele is not None:
             peak["ele"] = round(ele)
         if tags.get("wikidata"):
@@ -118,6 +122,8 @@ def convert_jsonl(path: Path) -> tuple[list[dict], dict]:
                 "lat": p["lat"],
                 "lon": p["lon"],
                 "name": p["name"],
+                **({"name_ru": p["name_ru"]} if p.get("name_ru") else {}),
+                **({"name_en": p["name_en"]} if p.get("name_en") else {}),
                 **({"ele": p["ele"]} if p.get("ele") is not None else {}),
                 **({"wikidata": p["wikidata"]} if p.get("wikidata") else {}),
             }

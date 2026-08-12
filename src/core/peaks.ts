@@ -10,8 +10,12 @@ export interface Peak {
   lon: number;
   /** Высота, м (может отсутствовать в OSM — тогда из DEM) */
   ele?: number;
-  /** Название: ru → name → en */
+  /** Название (name из OSM — локальное) */
   name: string;
+  /** Русское название (name:ru), если есть */
+  name_ru?: string;
+  /** Английское название (name:en), если есть */
+  name_en?: string;
   /** Wikidata QID, если есть */
   wikidata?: string;
 }

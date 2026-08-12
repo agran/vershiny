@@ -8,6 +8,7 @@
 import { toDeg, wrapAngle } from '../core/geo';
 import type { VisiblePeak } from '../core/horizon';
 import { peakScore } from '../core/peaks';
+import { getLocale, peakName, t } from '../core/i18n';
 
 export interface PanoramaState {
   /** Углы горизонта по лучам, рад (0 = север) */
@@ -159,8 +160,10 @@ function drawLabels(
 
 function labelText(peak: VisiblePeak): string {
   const km = (peak.distanceM / 1000).toFixed(peak.distanceM < 10_000 ? 1 : 0);
-  const ele = peak.ele !== undefined ? `${Math.round(peak.ele)} м` : '';
-  return `${peak.name}${ele ? ' · ' + ele : ''} · ${km} км`;
+  const unit = getLocale() === 'ru' ? 'м' : 'm';
+  const kmUnit = getLocale() === 'ru' ? 'км' : 'km';
+  const ele = peak.ele !== undefined ? `${Math.round(peak.ele)} ${unit}` : '';
+  return `${peakName(peak)}${ele ? ' · ' + ele : ''} · ${km} ${kmUnit}`;
 }
 
 function drawLabel(ctx: CanvasRenderingContext2D, box: LabelBox, text: string): void {
@@ -185,8 +188,8 @@ function overlaps(a: LabelBox, b: LabelBox): boolean {
 }
 
 function cardinal(deg: number): string {
-  const names = ['С', 'СВ', 'В', 'ЮВ', 'Ю', 'ЮЗ', 'З', 'СЗ'];
-  return `${names[deg / 45]} ${deg}°`;
+  const names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] as const;
+  return `${t(names[deg / 45])} ${deg}°`;
 }
 
 /** Форматирование азимута для HUD */

@@ -148,7 +148,8 @@ def parse_string_table(r: PBReader) -> list[bytes]:
 
 
 def pick_name(tags: dict[str, str]) -> str | None:
-    return tags.get("name:ru") or tags.get("name") or tags.get("name:en")
+    """Локальное имя (name) как есть; ru/en идут в отдельные поля."""
+    return tags.get("name") or tags.get("name:ru") or tags.get("name:en")
 
 
 def parse_ele(raw: str | None) -> float | None:
@@ -181,6 +182,10 @@ def emit_peak(
         stats["no_name"] += 1
         return
     peak: dict = {"lat": round(lat, 6), "lon": round(lon, 6), "name": name}
+    if tags.get("name:ru"):
+        peak["name_ru"] = tags["name:ru"]
+    if tags.get("name:en"):
+        peak["name_en"] = tags["name:en"]
     ele = parse_ele(tags.get("ele"))
     if ele is not None:
         peak["ele"] = round(ele)

@@ -6,6 +6,7 @@
 import { renderPanorama, type PanoramaState, type ViewState } from './ui/panorama';
 import type { PeaksFile } from './core/peaks';
 import { toRad, type LatLon } from './core/geo';
+import { t } from './core/i18n';
 import type { ResultMessage, WorkerOutMessage } from './workers/horizon.worker';
 
 const REGION = 'elbrus';
@@ -80,7 +81,7 @@ const worker = new Worker(new URL('./workers/horizon.worker.ts', import.meta.url
 worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   const msg = ev.data;
   if (msg.type === 'error') {
-    setStatus(`Ошибка: ${msg.message}`);
+    setStatus(`${t('error')}: ${msg.message}`);
     return;
   }
   const r = msg as ResultMessage;
@@ -94,7 +95,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
 };
 
 async function main(): Promise<void> {
-  setStatus('Загрузка региона…');
+  setStatus(t('loadingRegion'));
 
   const base = import.meta.env.BASE_URL;
 
@@ -116,7 +117,7 @@ async function main(): Promise<void> {
 
   // Позиция: GPS, fallback — Приют 11 (контрольная точка MVP-ACCEPTANCE)
   const origin = await getPosition();
-  setStatus('Расчёт панорамы…');
+  setStatus(t('computing'));
   worker.postMessage({ type: 'compute', origin, peaks });
 }
 

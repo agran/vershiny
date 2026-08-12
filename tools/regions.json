@@ -2,7 +2,8 @@
   "$schema": "Реестр регионов «Вершины». bbox = [minLon, minLat, maxLon, maxLat].",
   "$comment": "Ядро = горная система, буфер ≥200 км (max дальность видимости). Размер патча ориентировочно 5–20 МБ (пики + DEM). priority: 1 = MVP/первые.",
   "ala-archa": {
-    "title": "Ала-Арча и Заилийский Алатау",
+    "title_ru": "Ала-Арча и Заилийский Алатау",
+    "title_en": "Ala-Archa and Trans-Ili Alatau",
     "bbox": [
       74.0,
       42.0,
@@ -13,7 +14,8 @@
     "priority": 1
   },
   "altai": {
-    "title": "Алтай",
+    "title_ru": "Алтай",
+    "title_en": "Altai",
     "bbox": [
       83.5,
       47.8,
@@ -24,7 +26,8 @@
     "priority": 1
   },
   "annapurna": {
-    "title": "Регион Аннапурна",
+    "title_ru": "Регион Аннапурна",
+    "title_en": "Annapurna Region",
     "bbox": [
       83.0,
       28.0,
@@ -35,7 +38,8 @@
     "priority": 1
   },
   "cordillera-blanca": {
-    "title": "Кордильера-Бланка",
+    "title_ru": "Кордильера-Бланка",
+    "title_en": "Cordillera Blanca",
     "bbox": [
       -78.0,
       -10.5,
@@ -46,7 +50,8 @@
     "priority": 1
   },
   "cordillera-real": {
-    "title": "Кордильера-Реаль (Боливия)",
+    "title_ru": "Кордильера-Реаль (Боливия)",
+    "title_en": "Cordillera Real (Bolivia)",
     "bbox": [
       -69.5,
       -17.5,
@@ -57,7 +62,8 @@
     "priority": 1
   },
   "dolomites": {
-    "title": "Доломиты",
+    "title_ru": "Доломиты",
+    "title_en": "Dolomites",
     "bbox": [
       10.5,
       45.5,
@@ -68,7 +74,8 @@
     "priority": 1
   },
   "drakensberg": {
-    "title": "Дракенсберг и Лесото",
+    "title_ru": "Дракенсберг и Лесото",
+    "title_en": "Drakensberg and Lesotho",
     "bbox": [
       27.5,
       -31.0,
@@ -79,7 +86,8 @@
     "priority": 1
   },
   "ecuador-volcanoes": {
-    "title": "Эквадор — Аллея вулканов",
+    "title_ru": "Эквадор — Аллея вулканов",
+    "title_en": "Ecuador — Avenue of the Volcanoes",
     "bbox": [
       -80.5,
       -2.5,
@@ -90,7 +98,8 @@
     "priority": 1
   },
   "elbrus": {
-    "title": "Приэльбрусье",
+    "title_ru": "Приэльбрусье",
+    "title_en": "Elbrus Region",
     "bbox": [
       41.0,
       42.0,
@@ -101,7 +110,8 @@
     "priority": 1
   },
   "everest-region": {
-    "title": "Кхумбу — регион Эверест",
+    "title_ru": "Кхумбу — регион Эверест",
+    "title_en": "Everest Region / Khumbu",
     "bbox": [
       85.5,
       27.5,
@@ -112,7 +122,8 @@
     "priority": 1
   },
   "fann": {
-    "title": "Фанские горы",
+    "title_ru": "Фанские горы",
+    "title_en": "Fann Mountains",
     "bbox": [
       67.5,
       38.0,
@@ -123,7 +134,8 @@
     "priority": 1
   },
   "fiordland": {
-    "title": "Фьордленд и Милфорд",
+    "title_ru": "Фьордленд и Милфорд",
+    "title_en": "Fiordland / Milford Sound",
     "bbox": [
       166.5,
       -46.5,
@@ -134,7 +146,8 @@
     "priority": 1
   },
   "garhwal": {
-    "title": "Гархвал — Уттаракханд",
+    "title_ru": "Гархвал — Уттаракханд",
+    "title_en": "Garhwal — Uttarakhand",
     "bbox": [
       78.0,
       29.5,
@@ -145,7 +158,8 @@
     "priority": 1
   },
   "hawaii": {
-    "title": "Гавайи",
+    "title_ru": "Гавайи",
+    "title_en": "Hawaii",
     "bbox": [
       -156.5,
       18.5,
@@ -156,7 +170,8 @@
     "priority": 1
   },
   "jotunheimen": {
-    "title": "Йотунхеймен",
+    "title_ru": "Йотунхеймен",
+    "title_en": "Jotunheimen (Norway)",
     "bbox": [
       7.5,
       61.0,
@@ -167,7 +182,8 @@
     "priority": 1
   },
   "khibiny": {
-    "title": "Хибины и Кольский",
+    "title_ru": "Хибины и Кольский",
+    "title_en": "Khibiny and Kola Peninsula",
     "bbox": [
       27.5,
       66.3,
@@ -178,7 +194,8 @@
     "priority": 1
   },
   "ladakh": {
-    "title": "Ладакх и Занскар",
+    "title_ru": "Ладакх и Занскар",
+    "title_en": "Ladakh",
     "bbox": [
       76.0,
       32.5,
@@ -189,7 +206,8 @@
     "priority": 1
   },
   "tasmania": {
-    "title": "Тасмания",
+    "title_ru": "Тасмания",
+    "title_en": "Tasmania",
     "bbox": [
       143.5,
       -44.5,
@@ -200,7 +218,8 @@
     "priority": 1
   },
   "tatry": {
-    "title": "Татры",
+    "title_ru": "Татры",
+    "title_en": "Tatra Mountains",
     "bbox": [
       19.0,
       49.0,
@@ -211,7 +230,8 @@
     "priority": 1
   },
   "ak-suu": {
-    "title": "Ак-Суу и Терскей Ала-Тоо",
+    "title_ru": "Ак-Суу и Терскей Ала-Тоо",
+    "title_en": "Ak-Suu and Terskey Ala-Too",
     "bbox": [
       76.5,
       41.5,
@@ -222,7 +242,8 @@
     "priority": 2
   },
   "bhutan": {
-    "title": "Бутан",
+    "title_ru": "Бутан",
+    "title_en": "Bhutan",
     "bbox": [
       88.5,
       26.5,
@@ -233,7 +254,8 @@
     "priority": 2
   },
   "caucasus-east": {
-    "title": "Восточный Кавказ",
+    "title_ru": "Восточный Кавказ",
+    "title_en": "Eastern Caucasus",
     "bbox": [
       43.5,
       41.3,
@@ -244,7 +266,8 @@
     "priority": 2
   },
   "caucasus-west": {
-    "title": "Западный Кавказ",
+    "title_ru": "Западный Кавказ",
+    "title_en": "Western Caucasus",
     "bbox": [
       38.0,
       42.5,
@@ -255,7 +278,8 @@
     "priority": 2
   },
   "central-america-volcanoes": {
-    "title": "Вулканы Гватемалы и Коста-Рики",
+    "title_ru": "Вулканы Гватемалы и Коста-Рики",
+    "title_en": "Guatemala and Costa Rica Volcanoes",
     "bbox": [
       -92.5,
       8.0,
@@ -266,7 +290,8 @@
     "priority": 2
   },
   "kamchatka-north": {
-    "title": "Северная Камчатка",
+    "title_ru": "Северная Камчатка",
+    "title_en": "Northern Kamchatka",
     "bbox": [
       156.0,
       53.0,
@@ -277,7 +302,8 @@
     "priority": 2
   },
   "kamchatka-south": {
-    "title": "Южная Камчатка",
+    "title_ru": "Южная Камчатка",
+    "title_en": "Southern Kamchatka",
     "bbox": [
       155.0,
       50.5,
@@ -288,7 +314,8 @@
     "priority": 2
   },
   "langtang": {
-    "title": "Лангтанг",
+    "title_ru": "Лангтанг",
+    "title_en": "Langtang",
     "bbox": [
       84.5,
       27.8,
@@ -299,7 +326,8 @@
     "priority": 2
   },
   "lofoten": {
-    "title": "Лофотенские острова",
+    "title_ru": "Лофотенские острова",
+    "title_en": "Lofoten Islands",
     "bbox": [
       13.0,
       67.5,
@@ -310,7 +338,8 @@
     "priority": 2
   },
   "mongolia-altai": {
-    "title": "Монгольский Алтай",
+    "title_ru": "Монгольский Алтай",
+    "title_en": "Mongolian Altai",
     "bbox": [
       88.0,
       45.5,
@@ -321,7 +350,8 @@
     "priority": 2
   },
   "rila-pirin": {
-    "title": "Рила и Пирин (Болгария)",
+    "title_ru": "Рила и Пирин (Болгария)",
+    "title_en": "Rila and Pirin (Bulgaria)",
     "bbox": [
       22.5,
       41.0,
@@ -332,7 +362,8 @@
     "priority": 2
   },
   "sayan-east": {
-    "title": "Восточный Саян и Прибайкалье",
+    "title_ru": "Восточный Саян и Прибайкалье",
+    "title_en": "Eastern Sayan and Baikal area",
     "bbox": [
       95.0,
       50.5,
@@ -343,7 +374,8 @@
     "priority": 2
   },
   "sayan-west": {
-    "title": "Западный Саян",
+    "title_ru": "Западный Саян",
+    "title_en": "Western Sayan",
     "bbox": [
       88.0,
       50.5,
@@ -354,7 +386,8 @@
     "priority": 2
   },
   "scottish-highlands": {
-    "title": "Шотландское нагорье",
+    "title_ru": "Шотландское нагорье",
+    "title_en": "Scottish Highlands",
     "bbox": [
       -7.5,
       56.0,
@@ -365,7 +398,8 @@
     "priority": 2
   },
   "tiva-mongun": {
-    "title": "Тыва — Монгун-Тайга",
+    "title_ru": "Тыва — Монгун-Тайга",
+    "title_en": "Tuva — Mongun-Taiga",
     "bbox": [
       89.0,
       49.5,
@@ -376,7 +410,8 @@
     "priority": 2
   },
   "ural-north": {
-    "title": "Северный и Полярный Урал",
+    "title_ru": "Северный и Полярный Урал",
+    "title_en": "Northern and Polar Urals",
     "bbox": [
       57.5,
       59.0,
@@ -387,7 +422,8 @@
     "priority": 2
   },
   "ural-south": {
-    "title": "Южный Урал",
+    "title_ru": "Южный Урал",
+    "title_en": "Southern Urals",
     "bbox": [
       56.5,
       51.0,
@@ -398,7 +434,8 @@
     "priority": 2
   },
   "yunnan-meili": {
-    "title": "Юньнань — Меили и Хаба",
+    "title_ru": "Юньнань — Меили и Хаба",
+    "title_en": "Yunnan — Meili and Haba",
     "bbox": [
       98.0,
       27.0,
@@ -409,7 +446,8 @@
     "priority": 2
   },
   "alps-east": {
-    "title": "Восточные Альпы",
+    "title_ru": "Восточные Альпы",
+    "title_en": "Eastern Alps",
     "bbox": [
       8.5,
       45.5,
@@ -420,7 +458,8 @@
     "priority": 3
   },
   "alps-west": {
-    "title": "Западные Альпы",
+    "title_ru": "Западные Альпы",
+    "title_en": "Western Alps",
     "bbox": [
       4.0,
       43.5,
@@ -431,7 +470,8 @@
     "priority": 3
   },
   "anti-atlas": {
-    "title": "Анти-Атлас и Сироуа (Марокко)",
+    "title_ru": "Анти-Атлас и Сироуа (Марокко)",
+    "title_en": "Anti-Atlas and Siroua (Morocco)",
     "bbox": [
       -9.5,
       28.5,
@@ -442,7 +482,8 @@
     "priority": 3
   },
   "baikal-east": {
-    "title": "Забайкалье",
+    "title_ru": "Забайкалье",
+    "title_en": "Transbaikalia",
     "bbox": [
       107.0,
       49.5,
@@ -453,7 +494,8 @@
     "priority": 3
   },
   "blue-mountains": {
-    "title": "Голубые горы (Австралия)",
+    "title_ru": "Голубые горы (Австралия)",
+    "title_en": "Blue Mountains (Australia)",
     "bbox": [
       149.5,
       -34.5,
@@ -464,7 +506,8 @@
     "priority": 3
   },
   "colombia-snsmarta": {
-    "title": "Сьерра-Невада-де-Санта-Марта",
+    "title_ru": "Сьерра-Невада-де-Санта-Марта",
+    "title_en": "Sierra Nevada de Santa Marta",
     "bbox": [
       -74.5,
       10.0,
@@ -475,7 +518,8 @@
     "priority": 3
   },
   "himalaya-central": {
-    "title": "Центральная Гималаи",
+    "title_ru": "Центральная Гималаи",
+    "title_en": "Central Himalaya",
     "bbox": [
       80.0,
       25.5,
@@ -486,7 +530,8 @@
     "priority": 3
   },
   "kashmir": {
-    "title": "Кашмир и Пир-Панджал",
+    "title_ru": "Кашмир и Пир-Панджал",
+    "title_en": "Kashmir and Pir Panjal",
     "bbox": [
       73.5,
       33.0,
@@ -497,7 +542,8 @@
     "priority": 3
   },
   "kuznetsk-alatau": {
-    "title": "Кузнецкий Алатау и Шория",
+    "title_ru": "Кузнецкий Алатау и Шория",
+    "title_en": "Kuznetsk Alatau and Shoria",
     "bbox": [
       86.5,
       51.5,
@@ -508,7 +554,8 @@
     "priority": 3
   },
   "pamir": {
-    "title": "Памир",
+    "title_ru": "Памир",
+    "title_en": "Pamir",
     "bbox": [
       70.5,
       36.5,
@@ -519,7 +566,8 @@
     "priority": 3
   },
   "patagonia-argentina": {
-    "title": "Барилоче и Науэль-Уапи",
+    "title_ru": "Барилоче и Науэль-Уапи",
+    "title_en": "Bariloche and Nahuel Huapi",
     "bbox": [
       -72.5,
       -42.5,
@@ -530,7 +578,8 @@
     "priority": 3
   },
   "putorana": {
-    "title": "Плато Путорана",
+    "title_ru": "Плато Путорана",
+    "title_en": "Putorana Plateau",
     "bbox": [
       90.0,
       66.5,
@@ -541,7 +590,8 @@
     "priority": 3
   },
   "qinghai-gansu": {
-    "title": "Цинхай и Ганьсу",
+    "title_ru": "Цинхай и Ганьсу",
+    "title_en": "Qinghai and Gansu",
     "bbox": [
       95.0,
       34.0,
@@ -552,7 +602,8 @@
     "priority": 3
   },
   "sakhalin": {
-    "title": "Сахалин",
+    "title_ru": "Сахалин",
+    "title_en": "Sakhalin",
     "bbox": [
       141.5,
       46.0,
@@ -563,7 +614,8 @@
     "priority": 3
   },
   "sikhote-alin": {
-    "title": "Сихотэ-Алинь",
+    "title_ru": "Сихотэ-Алинь",
+    "title_en": "Sikhote-Alin",
     "bbox": [
       133.0,
       43.0,
@@ -574,7 +626,8 @@
     "priority": 3
   },
   "stolby-yenisei": {
-    "title": "Красноярские Столбы и Манское Белогорье",
+    "title_ru": "Красноярские Столбы и Манское Белогорье",
+    "title_en": "Stolby and Yenisei area",
     "bbox": [
       91.0,
       53.5,
@@ -585,7 +638,8 @@
     "priority": 3
   },
   "tashkent-mountains": {
-    "title": "Западный Тянь-Шань — Чимган",
+    "title_ru": "Западный Тянь-Шань — Чимган",
+    "title_en": "Western Tian Shan — Chimgan",
     "bbox": [
       68.5,
       40.0,
@@ -596,7 +650,8 @@
     "priority": 3
   },
   "tien-shan": {
-    "title": "Тянь-Шань",
+    "title_ru": "Тянь-Шань",
+    "title_en": "Tian Shan",
     "bbox": [
       73.0,
       39.5,
@@ -607,7 +662,8 @@
     "priority": 3
   },
   "turkey-kackar": {
-    "title": "Качкар и Понтийские горы",
+    "title_ru": "Качкар и Понтийские горы",
+    "title_en": "Kaçkar and Pontic Mountains",
     "bbox": [
       39.5,
       40.0,
@@ -618,7 +674,8 @@
     "priority": 3
   },
   "white-mountains-ne": {
-    "title": "Белые горы и Адирондак",
+    "title_ru": "Белые горы и Адирондак",
+    "title_en": "White Mountains and Adirondacks",
     "bbox": [
       -75.5,
       43.0,
@@ -629,7 +686,8 @@
     "priority": 3
   },
   "xinjiang-altai": {
-    "title": "Синьцзян — Канасу и Алтай",
+    "title_ru": "Синьцзян — Канасу и Алтай",
+    "title_en": "Xinjiang — Kanas and Altai",
     "bbox": [
       85.5,
       46.5,
@@ -640,7 +698,8 @@
     "priority": 3
   },
   "alaska": {
-    "title": "Аляска",
+    "title_ru": "Аляска",
+    "title_en": "Alaska",
     "bbox": [
       -170.0,
       54.0,
@@ -651,7 +710,8 @@
     "priority": 4
   },
   "andes-central": {
-    "title": "Центральные Анды",
+    "title_ru": "Центральные Анды",
+    "title_en": "Central Andes",
     "bbox": [
       -81.0,
       -23.0,
@@ -662,7 +722,8 @@
     "priority": 4
   },
   "andes-north": {
-    "title": "Северные Анды",
+    "title_ru": "Северные Анды",
+    "title_en": "Northern Andes",
     "bbox": [
       -81.0,
       -5.0,
@@ -673,7 +734,8 @@
     "priority": 4
   },
   "andes-south": {
-    "title": "Южные Анды",
+    "title_ru": "Южные Анды",
+    "title_en": "Southern Andes",
     "bbox": [
       -74.0,
       -41.0,
@@ -684,7 +746,8 @@
     "priority": 4
   },
   "antarctica": {
-    "title": "Антарктида",
+    "title_ru": "Антарктида",
+    "title_en": "Antarctica",
     "bbox": [
       -180.0,
       -90.0,
@@ -695,7 +758,8 @@
     "priority": 4
   },
   "apennines": {
-    "title": "Апеннины и острова Средиземноморья",
+    "title_ru": "Апеннины и острова Средиземноморья",
+    "title_en": "Apennines and Mediterranean Islands",
     "bbox": [
       7.5,
       36.5,
@@ -706,7 +770,8 @@
     "priority": 4
   },
   "appalachians": {
-    "title": "Аппалачи",
+    "title_ru": "Аппалачи",
+    "title_en": "Appalachians",
     "bbox": [
       -85.0,
       30.0,
@@ -717,7 +782,8 @@
     "priority": 4
   },
   "atlas": {
-    "title": "Атлас",
+    "title_ru": "Атлас",
+    "title_en": "Atlas Mountains",
     "bbox": [
       -10.5,
       29.0,
@@ -728,7 +794,8 @@
     "priority": 4
   },
   "australia": {
-    "title": "Австралия и Тасмания",
+    "title_ru": "Австралия и Тасмания",
+    "title_en": "Australia and Tasmania",
     "bbox": [
       112.0,
       -44.0,
@@ -739,7 +806,8 @@
     "priority": 4
   },
   "balkans": {
-    "title": "Балканы",
+    "title_ru": "Балканы",
+    "title_en": "Balkans",
     "bbox": [
       18.5,
       39.0,
@@ -750,7 +818,8 @@
     "priority": 4
   },
   "brazil": {
-    "title": "Бразилия и Гвиана",
+    "title_ru": "Бразилия и Гвиана",
+    "title_en": "Brazil and Guiana",
     "bbox": [
       -74.0,
       -34.0,
@@ -761,7 +830,8 @@
     "priority": 4
   },
   "british-isles": {
-    "title": "Британия и Ирландия",
+    "title_ru": "Британия и Ирландия",
+    "title_en": "Britain and Ireland",
     "bbox": [
       -11.0,
       49.5,
@@ -772,7 +842,8 @@
     "priority": 4
   },
   "canaries": {
-    "title": "Канарские острова",
+    "title_ru": "Канарские острова",
+    "title_en": "Canary Islands",
     "bbox": [
       -19.0,
       27.0,
@@ -783,7 +854,8 @@
     "priority": 4
   },
   "carpathians": {
-    "title": "Карпаты",
+    "title_ru": "Карпаты",
+    "title_en": "Carpathians",
     "bbox": [
       17.0,
       44.0,
@@ -794,7 +866,8 @@
     "priority": 4
   },
   "chukotka": {
-    "title": "Чукотское нагорье",
+    "title_ru": "Чукотское нагорье",
+    "title_en": "Chukotka",
     "bbox": [
       164.0,
       62.5,
@@ -805,7 +878,8 @@
     "priority": 4
   },
   "commanders": {
-    "title": "Командорские острова",
+    "title_ru": "Командорские острова",
+    "title_en": "Commander Islands",
     "bbox": [
       166.0,
       54.5,
@@ -816,7 +890,8 @@
     "priority": 4
   },
   "east-africa": {
-    "title": "Восточная Африка",
+    "title_ru": "Восточная Африка",
+    "title_en": "East Africa",
     "bbox": [
       32.0,
       -5.0,
@@ -827,7 +902,8 @@
     "priority": 4
   },
   "ethiopia": {
-    "title": "Эфиопия и Африканский Рог",
+    "title_ru": "Эфиопия и Африканский Рог",
+    "title_en": "Ethiopia and the Horn of Africa",
     "bbox": [
       32.0,
       3.0,
@@ -838,7 +914,8 @@
     "priority": 4
   },
   "faroe": {
-    "title": "Фарерские острова",
+    "title_ru": "Фарерские острова",
+    "title_en": "Faroe Islands",
     "bbox": [
       -8.0,
       61.3,
@@ -849,7 +926,8 @@
     "priority": 4
   },
   "franz-josef-land": {
-    "title": "Земля Франца-Иосифа",
+    "title_ru": "Земля Франца-Иосифа",
+    "title_en": "Franz Josef Land",
     "bbox": [
       44.0,
       79.5,
@@ -860,7 +938,8 @@
     "priority": 4
   },
   "greenland": {
-    "title": "Гренландия",
+    "title_ru": "Гренландия",
+    "title_en": "Greenland",
     "bbox": [
       -58.0,
       59.0,
@@ -871,7 +950,8 @@
     "priority": 4
   },
   "himalaya-east": {
-    "title": "Восточная Гималаи",
+    "title_ru": "Восточная Гималаи",
+    "title_en": "Eastern Himalaya",
     "bbox": [
       88.0,
       26.0,
@@ -882,7 +962,8 @@
     "priority": 4
   },
   "himalaya-west": {
-    "title": "Западная Гималаи и Каракорум",
+    "title_ru": "Западная Гималаи и Каракорум",
+    "title_en": "Western Himalaya and Karakoram",
     "bbox": [
       73.0,
       30.0,
@@ -893,7 +974,8 @@
     "priority": 4
   },
   "hindu-kush": {
-    "title": "Гиндукуш и Памир (запад)",
+    "title_ru": "Гиндукуш и Памир (запад)",
+    "title_en": "Hindu Kush",
     "bbox": [
       66.0,
       34.0,
@@ -904,7 +986,8 @@
     "priority": 4
   },
   "iberia": {
-    "title": "Пиренейский полуостров",
+    "title_ru": "Пиренейский полуостров",
+    "title_en": "Iberian Peninsula",
     "bbox": [
       -10.0,
       35.5,
@@ -915,7 +998,8 @@
     "priority": 4
   },
   "iceland": {
-    "title": "Исландия",
+    "title_ru": "Исландия",
+    "title_en": "Iceland",
     "bbox": [
       -25.0,
       63.0,
@@ -926,7 +1010,8 @@
     "priority": 4
   },
   "indonesia": {
-    "title": "Индонезия",
+    "title_ru": "Индонезия",
+    "title_en": "Indonesia",
     "bbox": [
       95.0,
       -11.0,
@@ -937,7 +1022,8 @@
     "priority": 4
   },
   "iran-zagros": {
-    "title": "Загрос (Иран)",
+    "title_ru": "Загрос (Иран)",
+    "title_en": "Zagros (Iran)",
     "bbox": [
       44.5,
       29.0,
@@ -948,7 +1034,8 @@
     "priority": 4
   },
   "jan-mayen": {
-    "title": "Ян-Майен",
+    "title_ru": "Ян-Майен",
+    "title_en": "Jan Mayen",
     "bbox": [
       -10.5,
       70.5,
@@ -959,7 +1046,8 @@
     "priority": 4
   },
   "japan": {
-    "title": "Япония",
+    "title_ru": "Япония",
+    "title_en": "Japan",
     "bbox": [
       128.0,
       30.0,
@@ -970,7 +1058,8 @@
     "priority": 4
   },
   "khangai": {
-    "title": "Хангай (Монголия)",
+    "title_ru": "Хангай (Монголия)",
+    "title_en": "Khangai (Mongolia)",
     "bbox": [
       96.0,
       45.5,
@@ -981,7 +1070,8 @@
     "priority": 4
   },
   "kolyma-magadan": {
-    "title": "Магаданские горы и Колыма",
+    "title_ru": "Магаданские горы и Колыма",
+    "title_en": "Magadan Mountains",
     "bbox": [
       147.0,
       59.0,
@@ -992,7 +1082,8 @@
     "priority": 4
   },
   "korea": {
-    "title": "Корея",
+    "title_ru": "Корея",
+    "title_en": "Korea",
     "bbox": [
       126.0,
       34.0,
@@ -1003,7 +1094,8 @@
     "priority": 4
   },
   "koryakia": {
-    "title": "Корякское нагорье",
+    "title_ru": "Корякское нагорье",
+    "title_en": "Koryak Highlands",
     "bbox": [
       158.0,
       58.0,
@@ -1014,7 +1106,8 @@
     "priority": 4
   },
   "kurily": {
-    "title": "Курильские острова",
+    "title_ru": "Курильские острова",
+    "title_en": "Kuril Islands",
     "bbox": [
       145.5,
       44.0,
@@ -1025,7 +1118,8 @@
     "priority": 4
   },
   "madagascar": {
-    "title": "Мадагаскар",
+    "title_ru": "Мадагаскар",
+    "title_en": "Madagascar",
     "bbox": [
       42.5,
       -26.0,
@@ -1036,7 +1130,8 @@
     "priority": 4
   },
   "mexico": {
-    "title": "Мексика и Центральная Америка",
+    "title_ru": "Мексика и Центральная Америка",
+    "title_en": "Mexico and Central America",
     "bbox": [
       -118.0,
       14.0,
@@ -1047,7 +1142,8 @@
     "priority": 4
   },
   "middle-east": {
-    "title": "Ближний Восток",
+    "title_ru": "Ближний Восток",
+    "title_en": "Middle East",
     "bbox": [
       34.0,
       27.0,
@@ -1058,7 +1154,8 @@
     "priority": 4
   },
   "new-guinea": {
-    "title": "Новая Гвинея",
+    "title_ru": "Новая Гвинея",
+    "title_en": "New Guinea",
     "bbox": [
       130.0,
       -11.0,
@@ -1069,7 +1166,8 @@
     "priority": 4
   },
   "new-zealand": {
-    "title": "Новая Зеландия",
+    "title_ru": "Новая Зеландия",
+    "title_en": "New Zealand",
     "bbox": [
       166.0,
       -47.5,
@@ -1080,7 +1178,8 @@
     "priority": 4
   },
   "novaya-zemlya": {
-    "title": "Новая Земля",
+    "title_ru": "Новая Земля",
+    "title_en": "Novaya Zemlya",
     "bbox": [
       50.5,
       70.0,
@@ -1091,7 +1190,8 @@
     "priority": 4
   },
   "patagonia": {
-    "title": "Патагония",
+    "title_ru": "Патагония",
+    "title_en": "Patagonia",
     "bbox": [
       -75.0,
       -56.0,
@@ -1102,7 +1202,8 @@
     "priority": 4
   },
   "pyrenees": {
-    "title": "Пиренеи",
+    "title_ru": "Пиренеи",
+    "title_en": "Pyrenees",
     "bbox": [
       -2.5,
       41.5,
@@ -1113,7 +1214,8 @@
     "priority": 4
   },
   "rockies-north": {
-    "title": "Северные Скалистые горы",
+    "title_ru": "Северные Скалистые горы",
+    "title_en": "Northern Rockies",
     "bbox": [
       -125.0,
       48.0,
@@ -1124,7 +1226,8 @@
     "priority": 4
   },
   "rockies-south": {
-    "title": "Южные Скалистые горы",
+    "title_ru": "Южные Скалистые горы",
+    "title_en": "Southern Rockies",
     "bbox": [
       -112.0,
       35.0,
@@ -1135,7 +1238,8 @@
     "priority": 4
   },
   "scandinavia": {
-    "title": "Скандинавия",
+    "title_ru": "Скандинавия",
+    "title_en": "Scandinavia",
     "bbox": [
       4.0,
       57.5,
@@ -1146,7 +1250,8 @@
     "priority": 4
   },
   "sichuan": {
-    "title": "Сычуань и Юньнань",
+    "title_ru": "Сычуань и Юньнань",
+    "title_en": "Sichuan and Yunnan",
     "bbox": [
       97.0,
       22.0,
@@ -1157,7 +1262,8 @@
     "priority": 4
   },
   "sierra-cascades": {
-    "title": "Сьерра-Невада и Каскады",
+    "title_ru": "Сьерра-Невада и Каскады",
+    "title_en": "Sierra Nevada and Cascades",
     "bbox": [
       -125.0,
       35.0,
@@ -1168,7 +1274,8 @@
     "priority": 4
   },
   "southern-africa": {
-    "title": "Южная Африка",
+    "title_ru": "Южная Африка",
+    "title_en": "Southern Africa",
     "bbox": [
       16.0,
       -35.0,
@@ -1179,7 +1286,8 @@
     "priority": 4
   },
   "suntar-khayata": {
-    "title": "Сунтар-Хаята",
+    "title_ru": "Сунтар-Хаята",
+    "title_en": "Suntar-Khayata",
     "bbox": [
       138.0,
       60.0,
@@ -1190,7 +1298,8 @@
     "priority": 4
   },
   "svalbard": {
-    "title": "Шпицберген",
+    "title_ru": "Шпицберген",
+    "title_en": "Svalbard",
     "bbox": [
       10.0,
       76.0,
@@ -1201,7 +1310,8 @@
     "priority": 4
   },
   "taiwan": {
-    "title": "Тайвань",
+    "title_ru": "Тайвань",
+    "title_en": "Taiwan",
     "bbox": [
       119.0,
       21.5,
@@ -1212,7 +1322,8 @@
     "priority": 4
   },
   "tibet": {
-    "title": "Тибет и Центральная Азия",
+    "title_ru": "Тибет и Центральная Азия",
+    "title_en": "Tibet and Central Asia",
     "bbox": [
       78.0,
       28.0,
@@ -1223,7 +1334,8 @@
     "priority": 4
   },
   "ural-mid": {
-    "title": "Средний Урал",
+    "title_ru": "Средний Урал",
+    "title_en": "Central Urals",
     "bbox": [
       56.0,
       54.5,
@@ -1234,7 +1346,8 @@
     "priority": 4
   },
   "wrangel": {
-    "title": "Остров Врангеля",
+    "title_ru": "Остров Врангеля",
+    "title_en": "Wrangel Island",
     "bbox": [
       177.5,
       70.5,
@@ -1245,7 +1358,8 @@
     "priority": 4
   },
   "yakutia-chersky": {
-    "title": "Хребет Черского",
+    "title_ru": "Хребет Черского",
+    "title_en": "Chersky Range",
     "bbox": [
       143.0,
       62.0,
@@ -1256,7 +1370,8 @@
     "priority": 4
   },
   "yukon": {
-    "title": "Юкон и Северо-Западная Канада",
+    "title_ru": "Юкон и Северо-Западная Канада",
+    "title_en": "Yukon and NW Canada",
     "bbox": [
       -141.0,
       59.0,
