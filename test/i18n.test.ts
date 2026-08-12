@@ -41,8 +41,8 @@ describe('i18n', () => {
     expect(peakName({ name: 'Gvandra' })).toBe('Гвандра');
   });
 
-  it('peakName: mixed name (груз + рус) транслитерирует кириллическую часть', () => {
+  it('peakName: mixed name (груз + рус) транслитерирует обе части в латиницу', () => {
     setLocale('en');
-    expect(peakName({ name: 'გვანდრა - Гвандра' })).toBe('გვანდრა - Gvandra');
+    expect(peakName({ name: 'გვანდრა - Гвандра' })).toBe('Gvandra - Gvandra');
   });
 });
