@@ -114,11 +114,15 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   panorama = { horizon: r.horizon, stepRad: r.stepRad, peaks: r.peaks };
   setStatus('');
   draw();
+  // Кнопки AR/фото — после первого результата
+  setupActionButtons(lastOrigin, r.observerH);
   console.info(
     `Горизонт: ${r.horizon.length} лучей, ${r.peaks.length} пиков, ` +
       `наблюдатель ${r.observerH.toFixed(0)} м, ${r.computeMs.toFixed(0)} мс`,
   );
 };
+
+let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
 
 async function main(): Promise<void> {
   setStatus(t('loadingRegion'));
@@ -146,25 +150,17 @@ async function main(): Promise<void> {
 
   // Позиция: GPS, fallback — Приют 11 (контрольная точка MVP-ACCEPTANCE)
   const origin = await getPosition();
+  lastOrigin = origin;
   setStatus(t('computing'));
   worker.postMessage({ type: 'compute', origin, peaks });
 
-  // Кнопка офлайн-загрузки региона (появляется после первого расчёта)
+  // Кнопки действий (появляются после первого расчёта)
   setupDownloadButton(origin);
 }
 
 /** Кнопка «Скачать для офлайна» в углу экрана */
 function setupDownloadButton(origin: LatLon): void {
-  const btn = document.createElement('button');
-  btn.id = 'download-btn';
-  btn.textContent = '⬇';
-  btn.title = t('downloadRegion');
-  btn.style.cssText =
-    'position:fixed;right:16px;bottom:16px;width:48px;height:48px;' +
-    'border-radius:50%;border:none;background:#415a77;color:#f1faee;' +
-    'font-size:22px;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.4)';
-  document.body.appendChild(btn);
-
+  const btn = makeButton('⬇', t('downloadRegion'), 'right:16px;bottom:16px');
   let busy = false;
   btn.onclick = async () => {
     if (busy) return;
@@ -190,6 +186,59 @@ function setupDownloadButton(origin: LatLon): void {
       busy = false;
       btn.disabled = false;
     }
+  };
+}
+
+/** Фабрика круглых кнопок действий */
+function makeButton(icon: string, title: string, pos: string): HTMLButtonElement {
+  const btn = document.createElement('button');
+  btn.textContent = icon;
+  btn.title = title;
+  btn.style.cssText =
+    `position:fixed;${pos};width:48px;height:48px;` +
+    'border-radius:50%;border:none;background:#415a77;color:#f1faee;' +
+    'font-size:20px;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.4);' +
+    'display:flex;align-items:center;justify-content:center';
+  document.body.appendChild(btn);
+  return btn;
+}
+
+/** Кнопки AR и фото (появляются после первого расчёта панорамы) */
+function setupActionButtons(origin: LatLon, observerH: number): void {
+  // AR-режим
+  let arStop: (() => void) | null = null;
+  const arBtn = makeButton('📷', t('arMode'), 'right:16px;bottom:76px');
+  arBtn.onclick = async () => {
+    if (arStop) {
+      arStop();
+      arStop = null;
+      arBtn.style.background = '#415a77';
+      return;
+    }
+    if (!panorama) return;
+    try {
+      const { startAr } = await import('./ui/ar');
+      const video = document.createElement('video');
+      video.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1';
+      document.body.prepend(video);
+      arStop = await startAr(video, canvas, panorama, view);
+      arBtn.style.background = '#e63946';
+    } catch (err) {
+      setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
+    }
+  };
+
+  // Фото с подписями
+  const photoBtn = makeButton('📸', t('photo'), 'right:16px;bottom:136px');
+  photoBtn.onclick = async () => {
+    if (!panorama) return;
+    const { capturePhoto, sharePhoto } = await import('./ui/photo');
+    const blob = await capturePhoto(panorama, view, {
+      origin,
+      observerH,
+      region: REGION,
+    });
+    await sharePhoto(blob);
   };
 }
 

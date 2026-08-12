@@ -46,6 +46,18 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   },
   downloadPeaks: { ru: 'Загрузка вершин…', en: 'Downloading peaks…' },
   downloadTiles: { ru: 'Загрузка тайлов', en: 'Downloading tiles' },
+  appTitle: { ru: 'Вершины — панорама гор', en: 'Vershiny — Mountain Panorama' },
+  shareText: {
+    ru: 'Панорама гор из приложения «Вершины»',
+    en: 'Mountain panorama from Vershiny app',
+  },
+  arMode: { ru: 'AR-режим', en: 'AR mode' },
+  photo: { ru: 'Фото с подписями', en: 'Photo with labels' },
+  settings: { ru: 'Настройки', en: 'Settings' },
+  region: { ru: 'Регион', en: 'Region' },
+  language: { ru: 'Язык', en: 'Language' },
+  compassAccuracy: { ru: 'Точность компаса', en: 'Compass accuracy' },
+  resetOffset: { ru: 'Сбросить подстройку', en: 'Reset offset' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },
