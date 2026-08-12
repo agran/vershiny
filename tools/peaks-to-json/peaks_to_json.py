@@ -125,12 +125,24 @@ def convert_jsonl(path: Path) -> tuple[list[dict], dict]:
     return peaks, stats
 
 
+def load_region_bbox(region: str) -> tuple[float, float, float, float] | None:
+    """bbox региона из tools/regions.json (единый реестр)."""
+    registry = Path(__file__).parent.parent / "regions.json"
+    if not registry.exists():
+        return None
+    data = json.loads(registry.read_text(encoding="utf-8"))
+    entry = data.get(region)
+    if not isinstance(entry, dict) or "bbox" not in entry:
+        return None
+    return tuple(entry["bbox"])  # type: ignore[return-value]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Overpass/JSONL → peaks/{region}.json")
     parser.add_argument("--region", required=True, help="Имя региона (elbrus, altai, …)")
     parser.add_argument(
         "--bbox",
-        help="minLon,minLat,maxLon,maxLat — с запасом 200 км за видимый край!",
+        help="minLon,minLat,maxLon,maxLat — переопределить bbox из regions.json",
     )
     parser.add_argument(
         "--from-file",
@@ -140,15 +152,32 @@ def main() -> None:
     parser.add_argument("-o", "--out", type=Path, required=True)
     args = parser.parse_args()
 
-    if args.from_file:
-        peaks, stats = convert_jsonl(args.from_file)
-    else:
-        if not args.bbox:
-            sys.exit("Нужен --bbox (или --from-file)")
+    # bbox: явный --bbox > regions.json
+    bbox = None
+    if args.bbox:
         bbox = tuple(float(x) for x in args.bbox.split(","))
         if len(bbox) != 4:
             sys.exit("bbox: minLon,minLat,maxLon,maxLat")
-        elements = fetch_peaks(bbox)  # type: ignore[arg-type]
+    else:
+        bbox = load_region_bbox(args.region)
+
+    if args.from_file:
+        # JSONL уже может быть отфильтрован; режем по bbox, если он известен
+        peaks, stats = convert_jsonl(args.from_file)
+        if bbox:
+            min_lon, min_lat, max_lon, max_lat = bbox
+            peaks = [
+                p
+                for p in peaks
+                if min_lon <= p["lon"] <= max_lon and min_lat <= p["lat"] <= max_lat
+            ]
+    else:
+        if not bbox:
+            sys.exit(
+                f"Неизвестный регион «{args.region}»: добавьте в tools/regions.json "
+                "или передайте --bbox"
+            )
+        elements = fetch_peaks(bbox)
         peaks, stats = convert(elements)
 
     out = {
