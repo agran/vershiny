@@ -292,6 +292,7 @@ async function main(): Promise<void> {
   // Кнопки действий (появляются после первого расчёта)
   setupDownloadButton(origin);
   setupSearchButton(origin);
+  setupNavPad();
 }
 
 /** Поиск вершины: поле ввода поверх панорамы + переход с отступом */
@@ -451,6 +452,56 @@ function makeButton(icon: string, title: string, pos: string): HTMLButtonElement
     'display:flex;align-items:center;justify-content:center';
   document.body.appendChild(btn);
   return btn;
+}
+
+/** Экранный джойстик: перемещение по земле + сброс на GPS */
+function setupNavPad(): void {
+  const padSize = 120;
+  const pad = document.createElement('div');
+  pad.style.cssText =
+    `position:fixed;left:16px;bottom:76px;width:${padSize}px;height:${padSize}px;` +
+    'z-index:10;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);' +
+    'gap:2px';
+  document.body.appendChild(pad);
+
+  const dirs = [
+    { icon: '↖', az: -Math.PI * 0.75, label: 'Влево-назад' },
+    { icon: '↑', az: 0, label: 'Вперёд' },
+    { icon: '↗', az: Math.PI * 0.75, label: 'Вправо-вперёд' },
+    { icon: '←', az: -Math.PI / 2, label: 'Влево' },
+    { icon: '📍', az: 0, label: 'К GPS', action: 'gps' },
+    { icon: '→', az: Math.PI / 2, label: 'Вправо' },
+    { icon: '↙', az: -Math.PI * 1.25, label: 'Влево-назад' },
+    { icon: '↓', az: Math.PI, label: 'Назад' },
+    { icon: '↘', az: Math.PI * 1.25, label: 'Вправо-назад' },
+  ];
+
+  for (const d of dirs) {
+    const btn = document.createElement('button');
+    btn.textContent = d.icon;
+    btn.title = d.label;
+    btn.style.cssText =
+      'border:none;border-radius:8px;background:#415a77;color:#f1faee;' +
+      'font-size:16px;cursor:pointer;min-width:0;min-height:0';
+    if (d.action === 'gps') {
+      btn.onclick = () => {
+        getPosition().then((pos) => {
+          lastOrigin = pos;
+          worker.postMessage({ type: 'compute', origin: pos, peaks: currentPeaks });
+          setStatus(t('computing'));
+        });
+      };
+    } else {
+      btn.onclick = () => {
+        const az = view.centerAzRad + d.az;
+        const newPos = destination(lastOrigin, az, MOVE_STEP_M);
+        lastOrigin = newPos;
+        worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
+        setStatus(t('computing'));
+      };
+    }
+    pad.appendChild(btn);
+  }
 }
 
 /** Кнопки AR и фото (появляются после первого расчёта панорамы) */
