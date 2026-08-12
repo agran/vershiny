@@ -65,6 +65,9 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   download: { ru: 'Скачать', en: 'Download' },
   downloaded: { ru: 'Скачан', en: 'Downloaded' },
   close: { ru: 'Закрыть', en: 'Close' },
+  searchPeak: { ru: 'Поиск вершины', en: 'Search peak' },
+  searchPrompt: { ru: 'Название вершины:', en: 'Peak name:' },
+  peakNotFound: { ru: 'Вершина не найдена', en: 'Peak not found' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },

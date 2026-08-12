@@ -4,7 +4,7 @@
  */
 
 import { renderPanorama, type PanoramaState, type ViewState } from './ui/panorama';
-import type { PeaksFile } from './core/peaks';
+import type { Peak, PeaksFile } from './core/peaks';
 import { toRad, type LatLon } from './core/geo';
 import { t } from './core/i18n';
 import { downloadRegion, type DownloadProgress } from './ui/download';
@@ -12,6 +12,7 @@ import type { ResultMessage, WorkerOutMessage } from './workers/horizon.worker';
 
 let currentRegion = 'elbrus';
 let manualRegion = false; // true = пользователь выбрал вручную в настройках
+let currentPeaks: PeaksFile['peaks'] = []; // пики текущего региона (для навигации)
 
 const statusEl = document.getElementById('status')!;
 const appEl = document.getElementById('app')!;
@@ -86,8 +87,77 @@ canvas.addEventListener('pointermove', (ev) => {
 });
 canvas.addEventListener('pointerup', () => (dragging = false));
 
+// --- Навигация: WASD/стрелки + PageUp/PageDown ---
+const MOVE_STEP_M = 500; // шаг перемещения по земле
+const HEIGHT_STEP_M = 100; // шаг по высоте
+
+window.addEventListener('keydown', (ev) => {
+  if (!panorama) return;
+  const az = view.centerAzRad;
+  let dAz = 0;
+  let dDist = 0;
+  let dHeight = 0;
+
+  switch (ev.key) {
+    case 'ArrowUp':
+    case 'w':
+    case 'W':
+      dDist = MOVE_STEP_M; // вперёд по азимуту взгляда
+      break;
+    case 'ArrowDown':
+    case 's':
+    case 'S':
+      dDist = -MOVE_STEP_M; // назад
+      break;
+    case 'ArrowLeft':
+    case 'a':
+    case 'A':
+      dAz = -Math.PI / 2; // влево (перпендикулярно взгляду)
+      dDist = MOVE_STEP_M;
+      break;
+    case 'ArrowRight':
+    case 'd':
+    case 'D':
+      dAz = Math.PI / 2; // вправо
+      dDist = MOVE_STEP_M;
+      break;
+    case 'PageUp':
+      dHeight = HEIGHT_STEP_M;
+      break;
+    case 'PageDown':
+      dHeight = -HEIGHT_STEP_M;
+      break;
+    default:
+      return;
+  }
+
+  ev.preventDefault();
+  if (dHeight !== 0) {
+    // Высота: пока просто логируем (нужен пересчёт с новой высотой наблюдателя)
+    console.info(`Высота наблюдателя: ${dHeight > 0 ? '+' : ''}${dHeight} м (не реализовано)`);
+    return;
+  }
+
+  // Перемещение по земле
+  const newAz = az + dAz;
+  const newPos = destination(lastOrigin, newAz, Math.abs(dDist));
+  if (dDist < 0) {
+    // Назад: дистанция отрицательная — идём в противоположную сторону
+    newPos.lat = lastOrigin.lat;
+    newPos.lon = lastOrigin.lon;
+    const backAz = az + Math.PI;
+    const backPos = destination(lastOrigin, backAz, MOVE_STEP_M);
+    newPos.lat = backPos.lat;
+    newPos.lon = backPos.lon;
+  }
+  lastOrigin = newPos;
+  setStatus(t('computing'));
+  worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
+});
+
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
 import { orientationTracker } from './core/orientation';
+import { destination } from './core/geo';
 
 orientationTracker.start((state) => {
   if (state.source === 'sensor') {
@@ -165,6 +235,7 @@ async function main(): Promise<void> {
     const { getPeaks } = await import('./core/db');
     peaks = ((await getPeaks(currentRegion)) ?? []) as PeaksFile['peaks'];
   }
+  currentPeaks = peaks; // сохраняем для навигации
 
   // Локальный DEM-патч — если сгенерирован; иначе глобальный Terrarium
   // (docs/new-geo-data.md, слой 1). Офлайн: Terrarium из IndexedDB.
@@ -179,6 +250,61 @@ async function main(): Promise<void> {
 
   // Кнопки действий (появляются после первого расчёта)
   setupDownloadButton(origin);
+  setupSearchButton(origin);
+}
+
+/** Поиск вершины: поле ввода + переход с отступом */
+function setupSearchButton(origin: LatLon): void {
+  const btn = makeButton('🔍', t('searchPeak'), 'left:16px;bottom:16px');
+  btn.onclick = async () => {
+    const query = prompt(t('searchPrompt'));
+    if (!query) return;
+    const peak = findPeakByName(query, currentPeaks);
+    if (!peak) {
+      setStatus(t('peakNotFound'));
+      setTimeout(() => setStatus(''), 3000);
+      return;
+    }
+    // Переход к вершине + отступ 5 км назад (чтобы видеть её со стороны)
+    const distToPeak = 5000; // 5 км
+    const azToPeak = Math.atan2(peak.lon - origin.lon, peak.lat - origin.lat); // упрощённо
+    const backAz = azToPeak + Math.PI;
+    const { destination } = await import('./core/geo');
+    const viewPos = destination({ lat: peak.lat, lon: peak.lon }, backAz, distToPeak);
+    lastOrigin = viewPos;
+    setStatus(t('computing'));
+    worker.postMessage({ type: 'compute', origin: viewPos, peaks: currentPeaks });
+    // Смотрим на вершину
+    view.centerAzRad = azToPeak;
+    draw();
+  };
+}
+
+/** Поиск вершины по имени (частичное совпадение, без учёта регистра) */
+function findPeakByName(query: string, peaks: PeaksFile['peaks']): Peak | null {
+  const q = query.toLowerCase().trim();
+  if (!q) return null;
+  // Точное совпадение по name/name_ru/name_en
+  for (const p of peaks) {
+    if (
+      p.name.toLowerCase() === q ||
+      p.name_ru?.toLowerCase() === q ||
+      p.name_en?.toLowerCase() === q
+    ) {
+      return p;
+    }
+  }
+  // Частичное совпадение
+  for (const p of peaks) {
+    if (
+      p.name.toLowerCase().includes(q) ||
+      p.name_ru?.toLowerCase().includes(q) ||
+      p.name_en?.toLowerCase().includes(q)
+    ) {
+      return p;
+    }
+  }
+  return null;
 }
 
 /** Кнопка «Скачать для офлайна» в углу экрана */
