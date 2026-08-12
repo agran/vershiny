@@ -29,6 +29,19 @@ export interface HorizonOptions {
   observerElevationM?: number;
 }
 
+/** Дистанционные корзины для слоёв (метры) */
+export const LAYER_BOUNDS = [0, 5_000, 15_000, 40_000, 100_000, 200_000] as const;
+export const LAYER_COUNT = LAYER_BOUNDS.length - 1;
+
+export interface LayeredHorizon {
+  /** Для каждого слоя: углы горизонта по лучам */
+  layers: Float32Array[];
+  /** Шаг между лучами, рад */
+  stepRad: number;
+  /** Для каждого луча: дистанция до видимой точки горизонта (для классификации пиков) */
+  distanceToHorizonM: Float32Array;
+}
+
 export interface VisiblePeak extends Peak {
   /** Истинный азимут на пик, рад [0, 2π) */
   azimuthRad: number;
@@ -36,6 +49,8 @@ export interface VisiblePeak extends Peak {
   elevationRad: number;
   /** Расстояние, м */
   distanceM: number;
+  /** Видимость: выше горизонта / на склоне / скрыт хребтом */
+  visibility: 'visible' | 'onSlope' | 'hidden';
 }
 
 const TWO_PI = 2 * Math.PI;
@@ -91,14 +106,80 @@ export function computeHorizon(
 }
 
 /**
+ * Слоистый горизонт: для каждой корзины дистанций — свой профиль.
+ * Для классификации пиков также храним дистанцию до точки, формирующей горизонт.
+ */
+export function computeLayeredHorizon(
+  origin: LatLon,
+  observerH: number,
+  sample: SampleFn,
+  options: HorizonOptions = {},
+): LayeredHorizon {
+  const stepRad = options.azimuthStepRad ?? (0.1 * Math.PI) / 180;
+  const maxDist = options.maxDistM ?? 200_000;
+  const minDist = options.minDistM ?? 100;
+  const hO = observerH + (options.observerElevationM ?? 1.7);
+
+  const rayCount = Math.ceil(TWO_PI / stepRad);
+  const layers = Array.from({ length: LAYER_COUNT }, () => new Float32Array(rayCount).fill(-Infinity));
+  const distanceToHorizonM = new Float32Array(rayCount).fill(Infinity);
+
+  for (let i = 0; i < rayCount; i++) {
+    const az = i * stepRad;
+    // Для каждой корзины — свой максимум
+    const binMax = new Float64Array(LAYER_COUNT).fill(-Infinity);
+    const binDist = new Float64Array(LAYER_COUNT).fill(Infinity);
+
+    for (let d = minDist; d <= maxDist; d += nextRayStep(d)) {
+      const p = destination(origin, az, d);
+      const h = sample(p, d);
+      if (Number.isNaN(h)) continue;
+      const apparentH = h - earthDrop(d);
+      const angle = Math.atan2(apparentH - hO, d);
+
+      // Корзина по дистанции
+      let bin = 0;
+      for (let b = 0; b < LAYER_COUNT; b++) {
+        if (d >= LAYER_BOUNDS[b] && d < LAYER_BOUNDS[b + 1]) {
+          bin = b;
+          break;
+        }
+        if (d >= LAYER_BOUNDS[LAYER_COUNT]) bin = LAYER_COUNT - 1;
+      }
+
+      if (angle > binMax[bin]) {
+        binMax[bin] = angle;
+        binDist[bin] = d;
+      }
+
+      // Ранний выход: рельеф опустился ниже −0.5° и мы далеко
+      if (d > 60_000 && angle < binMax[bin] - 0.02 && binMax[bin] < -0.005) break;
+    }
+
+    // Слой = первый (ближний) корзина с данными; остальные — только если выше
+    for (let b = 0; b < LAYER_COUNT; b++) {
+      if (binMax[b] > -Infinity) {
+        layers[b][i] = binMax[b];
+        if (b === 0 || binDist[b] < distanceToHorizonM[i]) {
+          distanceToHorizonM[i] = binDist[b];
+        }
+      }
+    }
+  }
+
+  return { layers, stepRad, distanceToHorizonM };
+}
+
+/**
  * Видимость пика: точный луч в его азимуте (ALGORITHMS.md §2).
- * Пик виден, если его угол возвышения ≥ профиля луча − ε.
+ * Классификация: visible (выше горизонта) / onSlope (на видимом склоне) / hidden (за хребтом).
  */
 export function checkPeakVisibility(
   origin: LatLon,
   observerH: number,
   peak: Peak,
   sample: SampleFn,
+  distanceToHorizonM: number,
   epsilonRad = 0.0009, // ~0.05°
 ): VisiblePeak | null {
   const target: LatLon = { lat: peak.lat, lon: peak.lon };
@@ -120,13 +201,28 @@ export function checkPeakVisibility(
   }
 
   const peakAngle = elevationAngleRad(hO, peak.ele, dist);
-  if (peakAngle < maxAngle - epsilonRad) return null;
+
+  // Классификация по углу и дистанции до горизонта
+  if (peakAngle < maxAngle - epsilonRad) {
+    // Пик ниже профиля луча — скрыт или на склоне
+    if (dist < distanceToHorizonM) {
+      return {
+        ...peak,
+        azimuthRad: az,
+        elevationRad: peakAngle,
+        distanceM: dist,
+        visibility: 'onSlope',
+      };
+    }
+    return null; // скрыт хребтом — не показываем
+  }
 
   return {
     ...peak,
     azimuthRad: az,
     elevationRad: peakAngle,
     distanceM: dist,
+    visibility: 'visible',
   };
 }
 
@@ -136,13 +232,23 @@ export function filterVisiblePeaks(
   observerH: number,
   peaks: Peak[],
   sample: SampleFn,
+  layered?: LayeredHorizon,
 ): VisiblePeak[] {
   const result: VisiblePeak[] = [];
   for (const peak of peaks) {
-    const visible = checkPeakVisibility(origin, observerH, peak, sample);
+    const distToHorizon = layered
+      ? layered.distanceToHorizonM[Math.round(azimuthRad(origin, peak) / layered.stepRad) % layered.distanceToHorizonM.length]
+      : Infinity;
+    const visible = checkPeakVisibility(origin, observerH, peak, sample, distToHorizon);
     if (visible) result.push(visible);
   }
-  // Ближние и высокие — первыми (для кластеризации подписей)
-  result.sort((a, b) => (b.ele ?? 0) / b.distanceM - (a.ele ?? 0) / a.distanceM);
+  // Сортировка: видимые → на склоне → скрытые; внутри — по score
+  const order = { visible: 0, onSlope: 1, hidden: 2 };
+  result.sort((a, b) => {
+    const oa = order[a.visibility];
+    const ob = order[b.visibility];
+    if (oa !== ob) return oa - ob;
+    return (b.ele ?? 0) / b.distanceM - (a.ele ?? 0) / a.distanceM;
+  });
   return result;
 }

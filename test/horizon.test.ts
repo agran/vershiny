@@ -56,11 +56,11 @@ describe('ray-marching горизонта', () => {
 
     // Рельеф: хребет 4000 м на 30 км — закрывает дальний пик
     const blocked = conicSampler(ORIGIN, Math.PI / 2, 30_000, 4000);
-    expect(checkPeakVisibility(ORIGIN, 1000, far, blocked)).toBeNull();
+    expect(checkPeakVisibility(ORIGIN, 1000, far, blocked, 30_000)).toBeNull();
 
     // Ровная земля — пик виден (угол ~0.4°)
     const flat: SampleFn = () => 0;
-    const visible = checkPeakVisibility(ORIGIN, 1000, far, flat);
+    const visible = checkPeakVisibility(ORIGIN, 1000, far, flat, Infinity);
     expect(visible).not.toBeNull();
     expect(visible!.distanceM).toBeCloseTo(80_000, -3);
   });
@@ -69,6 +69,6 @@ describe('ray-marching горизонта', () => {
     const flat: SampleFn = () => 0;
     const farPos = destination(ORIGIN, 0, 250_000);
     const peak: Peak = { ...farPos, name: 'Очень дальняя', ele: 8000 };
-    expect(checkPeakVisibility(ORIGIN, 1000, peak, flat)).toBeNull();
+    expect(checkPeakVisibility(ORIGIN, 1000, peak, flat, Infinity)).toBeNull();
   });
 });

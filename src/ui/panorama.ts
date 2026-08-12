@@ -11,12 +11,16 @@ import { peakScore } from '../core/peaks';
 import { getLocale, peakName, t } from '../core/i18n';
 
 export interface PanoramaState {
-  /** Углы горизонта по лучам, рад (0 = север) */
+  /** Углы горизонта по лучам, рад (0 = север) — верхний слой */
   horizon: Float32Array;
   /** Шаг между лучами, рад */
   stepRad: number;
   /** Видимые пики (уже отсортированы по приоритету) */
   peaks: VisiblePeak[];
+  /** Слои горизонта по дистанционным корзинам (0 = ближний) */
+  layers?: Float32Array[];
+  /** Дистанция до точки горизонта по лучам (для классификации пиков) */
+  distanceToHorizonM?: Float32Array;
 }
 
 export interface ViewState {
@@ -32,10 +36,11 @@ export interface ViewState {
 
 const SKY_TOP = '#0d1b2a';
 const SKY_HORIZON = '#415a77';
-const RIDGE_NEAR = '#2b2d42';
-const RIDGE_FAR = '#4a4e69';
+// Слои дальности: светлее = ближе (воздушная перспектива)
+const LAYER_COLORS = ['#1a1a2e', '#22223b', '#2b2d42', '#4a4e69', '#6c757d'];
 const LABEL_COLOR = '#f1faee';
 const LABEL_DIM = '#a8dadc';
+const LABEL_HIDDEN = 'rgba(168,218,220,0.5)';
 
 /** Рендер одного кадра панорамы */
 export function renderPanorama(
@@ -52,7 +57,7 @@ export function renderPanorama(
   sky.addColorStop(1, SKY_HORIZON);
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = RIDGE_FAR;
+  ctx.fillStyle = LAYER_COLORS[LAYER_COLORS.length - 1];
   ctx.fillRect(0, horizonY, width, height - horizonY);
 
   const azToX = (az: number): number =>
@@ -60,26 +65,37 @@ export function renderPanorama(
   const elevToY = (elev: number): number =>
     horizonY - ((elev - view.tiltRad) / view.fovVRad) * height;
 
-  // Силуэт горизонта: ближние — светлый контур, дальние — без
-  ctx.beginPath();
-  ctx.moveTo(0, height);
+  // Силуэт горизонта: слои сзади-вперёд (дальние → ближние)
   const { horizon, stepRad } = state;
-  for (let i = 0; i < horizon.length; i++) {
-    const az = i * stepRad;
-    const x = azToX(az);
-    if (x < -50 || x > width + 50) continue;
-    const y = horizon[i] === -Infinity ? horizonY : elevToY(horizon[i]);
-    ctx.lineTo(x, Math.max(-50, Math.min(height, y)));
-  }
-  ctx.lineTo(width, height);
-  ctx.closePath();
-  ctx.fillStyle = RIDGE_NEAR;
-  ctx.fill();
+  const layers = state.layers ?? [horizon];
 
-  // Светлый контур ближнего силуэта (чтобы отличался от дальнего)
-  ctx.strokeStyle = 'rgba(241,250,238,0.6)';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
+  for (let layerIdx = layers.length - 1; layerIdx >= 0; layerIdx--) {
+    const layer = layers[layerIdx];
+    if (!layer) continue;
+
+    ctx.beginPath();
+    ctx.moveTo(0, height);
+    for (let i = 0; i < layer.length; i++) {
+      const az = i * stepRad;
+      const x = azToX(az);
+      if (x < -50 || x > width + 50) continue;
+      const y = layer[i] === -Infinity ? horizonY : elevToY(layer[i]);
+      ctx.lineTo(x, Math.max(-50, Math.min(height, y)));
+    }
+    ctx.lineTo(width, height);
+    ctx.closePath();
+
+    // Цвет слоя: ближний = темнее и контрастнее
+    ctx.fillStyle = LAYER_COLORS[Math.min(layerIdx, LAYER_COLORS.length - 1)];
+    ctx.fill();
+
+    // Контур только для ближнего слоя
+    if (layerIdx === 0) {
+      ctx.strokeStyle = 'rgba(241,250,238,0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
 
   // Шкала азимутов: каждые 15°, подписи сторон света
   ctx.font = '12px system-ui, sans-serif';
@@ -122,54 +138,80 @@ function drawLabels(
   state: PanoramaState,
 ): void {
   void view;
-  const { width } = ctx.canvas;
+  const { width, height } = ctx.canvas;
   ctx.font = '13px system-ui, sans-serif';
   ctx.textAlign = 'left';
 
+  // Полки: 3 ряда подписей над горизонтом
+  const horizonY = height * 0.62;
+  const ROW_H = 24;
+  const GAP = 12;
+  const shelves = [horizonY - GAP, horizonY - GAP - ROW_H, horizonY - GAP - ROW_H * 2];
+
+  // Сортировка по score (уже отсортированы в filterVisiblePeaks)
   const placed: LabelBox[] = [];
+  const clusters = new Map<LabelBox, VisiblePeak[]>();
+
   for (const peak of peaks) {
     const x = azToX(peak.azimuthRad);
     if (x < 0 || x > width) continue;
-    const peakY = elevToY(peak.elevationRad);
-    // Подпись над вершиной: маркер от вершины вверх, текст над маркером
-    const y = peakY - 30;
+
     const text = labelText(peak);
     const w = ctx.measureText(text).width + 10;
-    const box: LabelBox = { x: x - w / 2, y: y - 16, w, h: 20, peak };
 
-    const hit = placed.find((b) => overlaps(b, box));
-    if (hit) {
-      // Жадная кластеризация: проигравший уходит в кластер «+N»
-      if (!hit.cluster) {
-        hit.cluster = hit.peak ? [hit.peak] : [];
-        hit.peak = undefined;
+    // Пробуем полки сверху вниз: ищем свободное место по x на этой полке
+    let placedBox: LabelBox | null = null;
+    for (let s = 0; s < shelves.length; s++) {
+      const shelfY = shelves[s];
+      // Проверяем перекрытие только с подписями на ТОЙ ЖЕ полке
+      const conflict = placed.some(
+        (b) => Math.abs(b.y - (shelfY - 16)) < 2 && // та же полка
+               x - w / 2 < b.x + b.w + 4 && // левый край левее правого края существующего + зазор
+               x + w / 2 > b.x - 4,          // правый край правее левого края
+      );
+      if (!conflict) {
+        placedBox = { x: x - w / 2, y: shelfY - 16, w, h: 20, peak };
+        placed.push(placedBox);
+        break;
       }
-      hit.cluster.push(peak);
-    } else {
-      placed.push(box);
+    }
+
+    if (!placedBox) {
+      // Все полки заняты — в кластер ближайшего по x
+      if (placed.length === 0) continue;
+      const nearest = placed.reduce((best, b) => {
+        const distBest = Math.abs(b.x + b.w / 2 - x);
+        const distB = Math.abs(b.x + b.w / 2 - x);
+        return distB < distBest ? b : best;
+      });
+      if (!clusters.has(nearest)) clusters.set(nearest, []);
+      clusters.get(nearest)!.push(peak);
+      if (!nearest.cluster) nearest.cluster = [];
+      nearest.cluster.push(peak);
     }
   }
 
+  // Рендер: сначала кластеры, потом одиночные
   for (const box of placed) {
-    if (box.cluster) {
-      const sorted = [...box.cluster].sort(
+    const cluster = clusters.get(box);
+    if (cluster) {
+      const sorted = [...cluster].sort(
         (a, b) => peakScore(b, b.distanceM) - peakScore(a, a.distanceM),
       );
       const best = sorted[0];
       const extra = sorted.length - 1;
-      drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''));
-      // Маркер: от подписи вниз к ближайшей точке силуэта
-      const peakAz = best.azimuthRad;
-      const horizonY = horizonAtAzimuth(state, peakAz, elevToY);
-      const labelBottom = box.y + box.h;
-      drawMarker(ctx, azToX(peakAz), labelBottom, horizonY);
+      drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''), best.visibility);
+      // Маркер к точке пика (visible/onSlope) или к силуэту (hidden)
+      const markerY = best.visibility === 'hidden'
+        ? horizonAtAzimuth(state, best.azimuthRad, elevToY)
+        : elevToY(best.elevationRad);
+      drawMarker(ctx, azToX(best.azimuthRad), box.y + box.h, markerY, best.visibility);
     } else if (box.peak) {
-      drawLabel(ctx, box, labelText(box.peak));
-      // Маркер: от подписи вниз к ближайшей точке силуэта
-      const peakAz = box.peak.azimuthRad;
-      const horizonY = horizonAtAzimuth(state, peakAz, elevToY);
-      const labelBottom = box.y + box.h;
-      drawMarker(ctx, azToX(peakAz), labelBottom, horizonY);
+      drawLabel(ctx, box, labelText(box.peak), box.peak.visibility);
+      const markerY = box.peak.visibility === 'hidden'
+        ? horizonAtAzimuth(state, box.peak.azimuthRad, elevToY)
+        : elevToY(box.peak.elevationRad);
+      drawMarker(ctx, azToX(box.peak.azimuthRad), box.y + box.h, markerY, box.peak.visibility);
     }
   }
 }
@@ -182,12 +224,17 @@ function labelText(peak: VisiblePeak): string {
   return `${peakName(peak)}${ele ? ' · ' + ele : ''} · ${km} ${kmUnit}`;
 }
 
-function drawLabel(ctx: CanvasRenderingContext2D, box: LabelBox, text: string): void {
+function drawLabel(
+  ctx: CanvasRenderingContext2D,
+  box: LabelBox,
+  text: string,
+  visibility: 'visible' | 'onSlope' | 'hidden' = 'visible',
+): void {
   ctx.fillStyle = 'rgba(13,27,42,0.72)';
   ctx.beginPath();
   ctx.roundRect(box.x, box.y, box.w, box.h, 4);
   ctx.fill();
-  ctx.fillStyle = LABEL_COLOR;
+  ctx.fillStyle = visibility === 'hidden' ? LABEL_HIDDEN : LABEL_COLOR;
   ctx.fillText(text, box.x + 5, box.y + 13.5);
 }
 
@@ -196,13 +243,29 @@ function drawMarker(
   x: number,
   fromY: number,
   toY: number,
+  visibility: 'visible' | 'onSlope' | 'hidden' = 'visible',
 ): void {
-  ctx.strokeStyle = 'rgba(241,250,238,0.8)';
+  if (visibility === 'hidden') {
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = 'rgba(168,218,220,0.4)';
+  } else {
+    ctx.setLineDash([]);
+    ctx.strokeStyle = 'rgba(241,250,238,0.8)';
+  }
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(x, fromY);
   ctx.lineTo(x, toY);
   ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Точка-якорь на вершине (только для видимых)
+  if (visibility === 'visible') {
+    ctx.fillStyle = 'rgba(241,250,238,0.9)';
+    ctx.beginPath();
+    ctx.arc(x, toY, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
 }
 
 /** Высота силуэта на заданном азимуте (интерполяция между лучами) */
@@ -221,9 +284,6 @@ function horizonAtAzimuth(
   return elevToY(a0 + (a1 - a0) * frac);
 }
 
-function overlaps(a: LabelBox, b: LabelBox): boolean {
-  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
-}
 
 function cardinal(deg: number): string {
   const names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] as const;

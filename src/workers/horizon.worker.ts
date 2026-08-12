@@ -11,7 +11,7 @@
 
 import { DemSource } from '../core/dem-source';
 import {
-  computeHorizon,
+  computeLayeredHorizon,
   filterVisiblePeaks,
   type VisiblePeak,
 } from '../core/horizon';
@@ -32,10 +32,14 @@ export interface ComputeMessage {
 
 export interface ResultMessage {
   type: 'result';
-  /** Углы горизонта по лучам, рад */
+  /** Углы горизонта по лучам, рад (верхний слой) */
   horizon: Float32Array;
   /** Шаг между лучами, рад */
   stepRad: number;
+  /** Слои горизонта по дистанционным корзинам */
+  layers: Float32Array[];
+  /** Дистанция до точки горизонта по лучам */
+  distanceToHorizonM: Float32Array;
   /** Видимые пики */
   peaks: VisiblePeak[];
   /** Высота наблюдателя из DEM */
@@ -73,13 +77,15 @@ async function compute(origin: LatLon, peaks: Peak[]): Promise<ResultMessage> {
 
   const sample = (pos: LatLon, distM: number): number => dem!.sample(pos, distM);
 
-  const { angles, stepRad } = computeHorizon(origin, observerH, sample);
-  const visible = filterVisiblePeaks(origin, observerH, peaks, sample);
+  const layered = computeLayeredHorizon(origin, observerH, sample);
+  const visible = filterVisiblePeaks(origin, observerH, peaks, sample, layered);
 
   return {
     type: 'result',
-    horizon: angles,
-    stepRad,
+    horizon: layered.layers[0], // ближний слой = основной горизонт
+    stepRad: layered.stepRad,
+    layers: layered.layers,
+    distanceToHorizonM: layered.distanceToHorizonM,
     peaks: visible,
     observerH,
     computeMs: performance.now() - t0,

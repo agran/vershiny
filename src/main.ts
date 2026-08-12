@@ -65,7 +65,11 @@ canvas.addEventListener('pointerdown', (ev) => {
   dragging = true;
   lastX = ev.clientX;
   lastY = ev.clientY;
-  canvas.setPointerCapture(ev.pointerId);
+  try {
+    canvas.setPointerCapture(ev.pointerId);
+  } catch {
+    // Playwright/синтетические события не имеют pointerId — пропускаем
+  }
 });
 canvas.addEventListener('pointermove', (ev) => {
   if (!dragging) return;
@@ -112,7 +116,13 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     return;
   }
   const r = msg as ResultMessage;
-  panorama = { horizon: r.horizon, stepRad: r.stepRad, peaks: r.peaks };
+  panorama = {
+    horizon: r.horizon,
+    stepRad: r.stepRad,
+    peaks: r.peaks,
+    layers: r.layers,
+    distanceToHorizonM: r.distanceToHorizonM,
+  };
   setStatus('');
   draw();
   // Кнопки AR/фото — после первого результата
