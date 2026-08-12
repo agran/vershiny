@@ -234,6 +234,10 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     distanceToHorizonM: r.distanceToHorizonM,
     fronts: r.fronts,
   };
+  lastObserverH = r.observerH;
+  // Обновляем индикатор высоты
+  const heightEl = document.getElementById('height-indicator');
+  if (heightEl) heightEl.textContent = `${Math.round(r.observerH)} м`;
   setStatus('');
   draw();
   // Кнопки AR/фото — после первого результата
@@ -502,6 +506,48 @@ function setupNavPad(): void {
     }
     pad.appendChild(btn);
   }
+
+  // Высота: вверх/вниз + индикатор
+  const heightPad = document.createElement('div');
+  heightPad.style.cssText =
+    'position:fixed;left:16px;bottom:204px;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center';
+  document.body.appendChild(heightPad);
+
+  const upBtn = document.createElement('button');
+  upBtn.textContent = '⬆';
+  upBtn.title = 'Выше (+100 м)';
+  upBtn.style.cssText =
+    'border:none;border-radius:8px;background:#415a77;color:#f1faee;width:40px;height:32px;cursor:pointer';
+  upBtn.onclick = () => adjustHeight(100);
+  heightPad.appendChild(upBtn);
+
+  const heightLabel = document.createElement('div');
+  heightLabel.id = 'height-indicator';
+  heightLabel.style.cssText =
+    'background:rgba(13,27,42,0.8);color:#f1faee;border-radius:6px;padding:2px 8px;font-size:12px;font-family:system-ui';
+  heightLabel.textContent = `${Math.round(lastObserverH)} м`;
+  heightPad.appendChild(heightLabel);
+
+  const downBtn = document.createElement('button');
+  downBtn.textContent = '⬇';
+  downBtn.title = 'Ниже (−100 м)';
+  downBtn.style.cssText =
+    'border:none;border-radius:8px;background:#415a77;color:#f1faee;width:40px;height:32px;cursor:pointer';
+  downBtn.onclick = () => adjustHeight(-100);
+  heightPad.appendChild(downBtn);
+}
+
+/** Текущая высота наблюдателя (из DEM) */
+let lastObserverH = 0;
+
+/** Изменение высоты наблюдателя (пересчёт панорамы) */
+function adjustHeight(deltaM: number): void {
+  lastObserverH += deltaM;
+  const el = document.getElementById('height-indicator');
+  if (el) el.textContent = `${Math.round(lastObserverH)} м`;
+  // Пересчёт с новой высотой
+  worker.postMessage({ type: 'compute', origin: lastOrigin, peaks: currentPeaks, observerHeightOverride: lastObserverH });
+  setStatus(t('computing'));
 }
 
 /** Кнопки AR и фото (появляются после первого расчёта панорамы) */

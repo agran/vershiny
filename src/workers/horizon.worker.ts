@@ -28,6 +28,8 @@ export interface ComputeMessage {
   type: 'compute';
   origin: LatLon;
   peaks: Peak[];
+  /** Переопределение высоты наблюдателя (для навигации вверх/вниз) */
+  observerHeightOverride?: number;
 }
 
 export interface ResultMessage {
@@ -62,11 +64,11 @@ let dem: DemSource | null = null;
 /** Максимальная дальность луча — синхронизирована с computeHorizon */
 const MAX_DIST_M = 200_000;
 
-async function compute(origin: LatLon, peaks: Peak[]): Promise<ResultMessage> {
+async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): Promise<ResultMessage> {
   if (!dem) throw new Error('Worker не инициализирован (init)');
   const t0 = performance.now();
 
-  const observerH = await dem.observerHeight(origin);
+  const observerH = heightOverride ?? (await dem.observerHeight(origin));
 
   // Предзагрузка тайлов веером лучей (шаг 5° — достаточно для покрытия)
   const prefetchTasks: Promise<void>[] = [];
@@ -104,7 +106,7 @@ self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
       return;
     }
     if (msg.type === 'compute') {
-      const result = await compute(msg.origin, msg.peaks);
+      const result = await compute(msg.origin, msg.peaks, msg.observerHeightOverride);
       // Передаём буфер горизонта без копирования
       (self as unknown as Worker).postMessage(result, [result.horizon.buffer]);
     }
