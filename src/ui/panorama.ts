@@ -60,7 +60,7 @@ export function renderPanorama(
   const elevToY = (elev: number): number =>
     horizonY - ((elev - view.tiltRad) / view.fovVRad) * height;
 
-  // Силуэт горизонта
+  // Силуэт горизонта: ближние — светлый контур, дальние — без
   ctx.beginPath();
   ctx.moveTo(0, height);
   const { horizon, stepRad } = state;
@@ -75,6 +75,11 @@ export function renderPanorama(
   ctx.closePath();
   ctx.fillStyle = RIDGE_NEAR;
   ctx.fill();
+
+  // Светлый контур ближнего силуэта (чтобы отличался от дальнего)
+  ctx.strokeStyle = 'rgba(241,250,238,0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
 
   // Шкала азимутов: каждые 15°, подписи сторон света
   ctx.font = '12px system-ui, sans-serif';
@@ -124,10 +129,12 @@ function drawLabels(
   for (const peak of peaks) {
     const x = azToX(peak.azimuthRad);
     if (x < 0 || x > width) continue;
-    const y = elevToY(peak.elevationRad) - 14;
+    const peakY = elevToY(peak.elevationRad);
+    // Подпись над вершиной: маркер от вершины вверх, текст над маркером
+    const y = peakY - 30;
     const text = labelText(peak);
     const w = ctx.measureText(text).width + 10;
-    const box: LabelBox = { x: x - w / 2, y: y - 14, w, h: 18, peak };
+    const box: LabelBox = { x: x - w / 2, y: y - 16, w, h: 20, peak };
 
     const hit = placed.find((b) => overlaps(b, box));
     if (hit) {
@@ -150,10 +157,16 @@ function drawLabels(
       const best = sorted[0];
       const extra = sorted.length - 1;
       drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''));
-      drawMarker(ctx, azToX(best.azimuthRad), elevToY(best.elevationRad));
+      // Маркер: от подписи вниз к вершине
+      const peakY = elevToY(best.elevationRad);
+      const labelBottom = box.y + box.h;
+      drawMarker(ctx, azToX(best.azimuthRad), labelBottom, peakY);
     } else if (box.peak) {
       drawLabel(ctx, box, labelText(box.peak));
-      drawMarker(ctx, azToX(box.peak.azimuthRad), elevToY(box.peak.elevationRad));
+      // Маркер: от подписи вниз к вершине
+      const peakY = elevToY(box.peak.elevationRad);
+      const labelBottom = box.y + box.h;
+      drawMarker(ctx, azToX(box.peak.azimuthRad), labelBottom, peakY);
     }
   }
 }
@@ -175,11 +188,17 @@ function drawLabel(ctx: CanvasRenderingContext2D, box: LabelBox, text: string): 
   ctx.fillText(text, box.x + 5, box.y + 13.5);
 }
 
-function drawMarker(ctx: CanvasRenderingContext2D, x: number, y: number): void {
+function drawMarker(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  fromY: number,
+  toY: number,
+): void {
   ctx.strokeStyle = 'rgba(241,250,238,0.8)';
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(x, y - 2);
-  ctx.lineTo(x, y - 12);
+  ctx.moveTo(x, fromY);
+  ctx.lineTo(x, toY);
   ctx.stroke();
 }
 
