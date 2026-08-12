@@ -97,7 +97,7 @@
     "core_ru": "Тхабана-Нтленьяна (3482м), Amphitheatre, Giants Castle",
     "core_en": "Thabana Ntlenyana (3482m), Amphitheatre, Giants Castle",
     "priority": 1,
-    "group": "Африка — Южная"
+    "group": "Южная Африка"
   },
   "ecuador-volcanoes": {
     "title_ru": "Эквадор — Аллея вулканов",
@@ -559,7 +559,7 @@
     "core_ru": "Сироуа (3305м), Акхсас, Джебель-Сагхро",
     "core_en": "Siroua (3305m), Akhsas, Jbel Saghro",
     "priority": 3,
-    "group": "Африка — Атлас"
+    "group": "Атлас"
   },
   "baikal-east": {
     "title_ru": "Забайкалье",
@@ -923,7 +923,7 @@
     "core_ru": "Тубкаль, Мгун",
     "core_en": "Toubkal, M'Goun",
     "priority": 4,
-    "group": "Африка — Атлас"
+    "group": "Атлас"
   },
   "australia": {
     "title_ru": "Австралия и Тасмания",
@@ -993,7 +993,7 @@
     "core_ru": "Тейде, Табуриенте",
     "core_en": "Teide, Taburiente",
     "priority": 4,
-    "group": "Африка — Острова"
+    "group": "Канары"
   },
   "carpathians": {
     "title_ru": "Карпаты",
@@ -1049,7 +1049,7 @@
     "core_ru": "Килиманджаро, Кения, Рувензори",
     "core_en": "Kilimanjaro, Kenya, Rwenzori",
     "priority": 4,
-    "group": "Африка — Восточная"
+    "group": "Восточная Африка"
   },
   "ethiopia": {
     "title_ru": "Эфиопия и Африканский Рог",
@@ -1063,7 +1063,7 @@
     "core_ru": "Рас-Дашен, Симиен",
     "core_en": "Ras Dashen, Simien",
     "priority": 4,
-    "group": "Африка — Восточная"
+    "group": "Эфиопия"
   },
   "faroe": {
     "title_ru": "Фарерские острова",
@@ -1315,7 +1315,7 @@
     "core_ru": "Марумукутру",
     "core_en": "Maromokotro",
     "priority": 4,
-    "group": "Африка — Острова"
+    "group": "Мадагаскар"
   },
   "mexico": {
     "title_ru": "Мексика и Центральная Америка",
@@ -1497,7 +1497,7 @@
     "core_ru": "Табл-Маунтин, Драконовы горы (Мфади)",
     "core_en": "Table Mountain, Drakensberg (Mafadi)",
     "priority": 4,
-    "group": "Африка — Южная"
+    "group": "Южная Африка"
   },
   "suntar-khayata": {
     "title_ru": "Сунтар-Хаята",
