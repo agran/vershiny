@@ -9,6 +9,13 @@ import { destination, type LatLon } from '../core/geo';
 import { savePeaks } from '../core/db';
 import { getLocale } from '../core/i18n';
 
+export interface RegionInfo {
+  title_ru?: string;
+  title_en?: string;
+  bbox: [number, number, number, number];
+  priority?: number;
+}
+
 export interface DownloadProgress {
   /** Загружено тайлов */
   done: number;
@@ -92,6 +99,28 @@ export async function loadRegions(): Promise<Record<string, RegionInfo>> {
   const res = await fetch(`${base}regions.json`);
   if (!res.ok) return {};
   return (await res.json()) as Record<string, RegionInfo>;
+}
+
+/** Авто-выбор региона по позиции: первый, чей bbox содержит точку.
+ *  При пересечении — приоритет меньше = конкретнее. */
+export function findRegionForPosition(
+  pos: LatLon,
+  regions: Record<string, RegionInfo>,
+): string | null {
+  let best: string | null = null;
+  let bestPriority = Infinity;
+  for (const [key, info] of Object.entries(regions)) {
+    if (key.startsWith('$') || typeof info !== 'object' || !info.bbox) continue;
+    const [minLon, minLat, maxLon, maxLat] = info.bbox;
+    if (pos.lon >= minLon && pos.lon <= maxLon && pos.lat >= minLat && pos.lat <= maxLat) {
+      const priority = (info as RegionInfo & { priority?: number }).priority ?? 9;
+      if (priority < bestPriority) {
+        best = key;
+        bestPriority = priority;
+      }
+    }
+  }
+  return best;
 }
 
 /** Имя региона для UI с учётом локали */

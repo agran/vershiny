@@ -11,6 +11,7 @@ import { downloadRegion, type DownloadProgress } from './ui/download';
 import type { ResultMessage, WorkerOutMessage } from './workers/horizon.worker';
 
 let currentRegion = 'elbrus';
+let manualRegion = false; // true = пользователь выбрал вручную в настройках
 
 const statusEl = document.getElementById('status')!;
 const appEl = document.getElementById('app')!;
@@ -129,6 +130,21 @@ async function main(): Promise<void> {
 
   const base = import.meta.env.BASE_URL;
 
+  // Позиция: GPS, fallback — Приют 11 (контрольная точка MVP-ACCEPTANCE)
+  const origin = await getPosition();
+  lastOrigin = origin;
+
+  // Авто-выбор региона по GPS (если пользователь не выбрал вручную)
+  if (!manualRegion) {
+    const { loadRegions, findRegionForPosition } = await import('./ui/download');
+    const regions = await loadRegions();
+    const autoRegion = findRegionForPosition(origin, regions);
+    if (autoRegion && autoRegion !== currentRegion) {
+      currentRegion = autoRegion;
+      console.info(`Авто-регион: ${autoRegion}`);
+    }
+  }
+
   // Пики: сеть → офлайн-кеш (IndexedDB). Без них панорама всё равно строится.
   // Vite на 404 отдаёт index.html (SPA-fallback) — проверяем Content-Type.
   let peaks: PeaksFile['peaks'] = [];
@@ -148,9 +164,6 @@ async function main(): Promise<void> {
 
   worker.postMessage({ type: 'init', patchBaseUrl });
 
-  // Позиция: GPS, fallback — Приют 11 (контрольная точка MVP-ACCEPTANCE)
-  const origin = await getPosition();
-  lastOrigin = origin;
   setStatus(t('computing'));
   worker.postMessage({ type: 'compute', origin, peaks });
 
@@ -216,8 +229,9 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
     }
     const { openSettings } = await import('./ui/settings');
     settingsClose = openSettings(currentRegion, lastOrigin, {
-      onRegionChange: (currentRegion) => {
-        currentRegion = currentRegion;
+      onRegionChange: (region) => {
+        currentRegion = region;
+        manualRegion = true; // больше не переключаем автоматически
         // Перезагружаем панораму с новым регионом
         main();
       },
