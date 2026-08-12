@@ -378,6 +378,7 @@ def main() -> None:
     stats = {"peaks": 0, "outside": 0, "no_name": 0, "no_ele": 0, "written": 0}
     t0 = time.time()
     blocks = 0
+    file_size = args.input.stat().st_size
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.input.open("rb") as f, args.out.open("w", encoding="utf-8") as out:
@@ -390,11 +391,17 @@ def main() -> None:
                 raw = read_blob(f, datasize)
                 parse_primitive_block(raw, out, bbox, stats)
                 blocks += 1
-                if blocks % 1000 == 0:
+                if blocks % 50 == 0:
                     elapsed = time.time() - t0
+                    pos = f.tell()
+                    pct = 100 * pos / file_size
+                    speed = pos / max(elapsed, 1) / 1e6
+                    eta_min = (file_size - pos) / max(pos / elapsed, 1) / 60
                     print(
-                        f"  {blocks} блоков, {stats['peaks']} пиков найдено, "
-                        f"{stats['written']} записано, {elapsed / 60:.1f} мин",
+                        f"  {pct:5.1f}% | {blocks} блоков | "
+                        f"{stats['peaks']} пиков, записано {stats['written']} | "
+                        f"{speed:.1f} МБ/с | прошло {elapsed / 60:.1f} мин, "
+                        f"осталось ~{eta_min:.1f} мин",
                         flush=True,
                     )
             else:  # OSMHeader — пропускаем
