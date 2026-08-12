@@ -170,14 +170,12 @@ export function computeLayeredHorizon(
         if (d >= LAYER_BOUNDS[LAYER_COUNT]) bin = LAYER_COUNT - 1;
       }
 
-      // Ближняя зона (0–500 м): не исключаем, но и не даём огромным углам
-      // (мы на склоне — угол вверх до 45° нормален, но не 80°+)
+      // Ближняя зона (0–500 м): исключаем точки ВЫШЕ наблюдателя
+      // (мы на склоне — всё что выше нас не горизонт, а стена)
       if (bin === 0 && d < nearSkip) {
-        // Ограничиваем угол: максимум 30° (0.52 рад) для ближней зоны
-        // чтобы «своя гора» не превращалась в стену
-        const cappedAngle = Math.min(angle, 0.52);
-        if (cappedAngle > binMax[bin]) {
-          binMax[bin] = cappedAngle;
+        if (apparentH > hO) continue; // выше нас — пропускаем
+        if (angle > binMax[bin]) {
+          binMax[bin] = angle;
           binDist[bin] = d;
         }
         continue; // в фронты не включаем
