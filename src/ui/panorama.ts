@@ -199,13 +199,12 @@ function drawLabels(
       const best = sorted[0];
       const extra = sorted.length - 1;
       drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''), best.visibility);
-      // Маркер к силуэту на азимуте пика (не к расчётной точке — DEM vs OSM расходятся)
-      const markerY = horizonAtAzimuth(state, best.azimuthRad, elevToY);
+      // Маркер: к точке пика (visible) или к силуэту на его дистанции (onSlope/hidden)
+      const markerY = markerYForPeak(best, state, elevToY);
       drawMarker(ctx, azToX(best.azimuthRad), box.y + box.h, markerY, best.visibility);
     } else if (box.peak) {
       drawLabel(ctx, box, labelText(box.peak), box.peak.visibility);
-      // Маркер к силуэту на азимуте пика
-      const markerY = horizonAtAzimuth(state, box.peak.azimuthRad, elevToY);
+      const markerY = markerYForPeak(box.peak, state, elevToY);
       drawMarker(ctx, azToX(box.peak.azimuthRad), box.y + box.h, markerY, box.peak.visibility);
     }
   }
@@ -277,6 +276,24 @@ function horizonAtAzimuth(
   const a0 = horizon[i0] === -Infinity ? 0 : horizon[i0];
   const a1 = horizon[i1] === -Infinity ? 0 : horizon[i1];
   return elevToY(a0 + (a1 - a0) * frac);
+}
+
+/**
+ * Y маркера для пика:
+ * - visible: точка пика (расчётная высота, может немного отличаться от DEM)
+ * - onSlope: силуэт на азимуте (пик на видимом склоне)
+ * - hidden: силуэт на азимуте (пунктир, полупрозрачный)
+ */
+function markerYForPeak(
+  peak: VisiblePeak,
+  state: PanoramaState,
+  elevToY: (elev: number) => number,
+): number {
+  if (peak.visibility === 'visible') {
+    return elevToY(peak.elevationRad);
+  }
+  // onSlope и hidden: силуэт на азимуте пика
+  return horizonAtAzimuth(state, peak.azimuthRad, elevToY);
 }
 
 
