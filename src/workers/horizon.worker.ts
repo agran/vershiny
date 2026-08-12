@@ -68,7 +68,8 @@ async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): 
   if (!dem) throw new Error('Worker не инициализирован (init)');
   const t0 = performance.now();
 
-  const observerH = heightOverride ?? (await dem.observerHeight(origin));
+  // Высота наблюдателя: max по окрестности 3×3 (не ниже поверхности)
+  const observerH = heightOverride ?? (await dem.observerHeightSafe(origin));
 
   // Предзагрузка тайлов веером лучей (шаг 5° — достаточно для покрытия)
   const prefetchTasks: Promise<void>[] = [];

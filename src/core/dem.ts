@@ -206,6 +206,50 @@ export class DemSampler {
     return h;
   }
 
+  /**
+   * Высота наблюдателя с защитой от занижения (для ray-marching):
+   * max по окрестности 3×3 ячейки + рост глаз. На крутом склоне
+   * билинейная интерполяция занижает — соседняя ячейка выше нас.
+   */
+  async observerHeightSafe(pos: LatLon): Promise<number> {
+    await this.loadIndex();
+    const lod = this.index!.lods[0];
+    const cellDeg = lod.cellDeg;
+    const [minLon, , , maxLat] = this.index!.bbox;
+
+    // Окрестность 3×3 ячейки вокруг точки
+    const gx = (pos.lon - minLon) / cellDeg;
+    const gy = (maxLat - pos.lat) / cellDeg;
+    const cx = Math.floor(gx);
+    const cy = Math.floor(gy);
+
+    // Загружаем тайлы для окрестности
+    const tx0 = Math.floor((cx - 1) / TILE_SIZE);
+    const ty0 = Math.floor((cy - 1) / TILE_SIZE);
+    const tx1 = Math.floor((cx + 1) / TILE_SIZE);
+    const ty1 = Math.floor((cy + 1) / TILE_SIZE);
+    const tiles: Promise<unknown>[] = [];
+    for (let ty = ty0; ty <= ty1; ty++) {
+      for (let tx = tx0; tx <= tx1; tx++) {
+        tiles.push(this.loadTile(0, tx, ty));
+      }
+    }
+    await Promise.all(tiles);
+
+    // Max по 3×3
+    let maxH = -Infinity;
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const cellX = cx + dx;
+        const cellY = cy + dy;
+        const h = this.cell(0, cellX, cellY);
+        if (h !== null && h > maxH) maxH = h;
+      }
+    }
+    if (maxH === -Infinity) throw new Error('Точка вне покрытия DEM');
+    return maxH + 2; // +2 м рост глаз
+  }
+
   /** Высота над уровнем моря с учётом высоты наблюдателя над землёй */
   async groundHeightAt(pos: LatLon): Promise<number> {
     return this.observerHeight(pos);

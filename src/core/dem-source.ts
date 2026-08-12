@@ -88,4 +88,13 @@ export class DemSource {
     }
     return this.terrarium.heightAt(pos);
   }
+
+  /** Высота с защитой от занижения (max 3×3 + 2 м) — для ray-marching */
+  async observerHeightSafe(pos: LatLon): Promise<number> {
+    if (this.patch && this.inPatch(pos)) {
+      return this.patch.observerHeightSafe(pos);
+    }
+    // Terrarium: упрощённо — обычная высота (там нет такой проблемы)
+    return this.terrarium.heightAt(pos);
+  }
 }

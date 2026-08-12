@@ -84,12 +84,23 @@ export function renderPanorama(
 
     ctx.beginPath();
     ctx.moveTo(0, height);
+    // Сглаженная кривая через середины отрезков (Chaikin-стиль)
+    let prevX = 0;
+    let prevY = height;
     for (let i = 0; i < layer.length; i++) {
       const az = i * stepRad;
       const x = azToX(az);
       if (x < -50 || x > width + 50) continue;
       const y = layer[i] === -Infinity ? horizonY : elevToY(layer[i]);
-      ctx.lineTo(x, Math.max(-50, Math.min(height, y)));
+      const cy = Math.max(-50, Math.min(height, y));
+      if (i > 0 && prevX !== 0) {
+        // Кривая через середину
+        const mx = (prevX + x) / 2;
+        const my = (prevY + cy) / 2;
+        ctx.quadraticCurveTo(prevX, prevY, mx, my);
+      }
+      prevX = x;
+      prevY = cy;
     }
     ctx.lineTo(width, height);
     ctx.closePath();

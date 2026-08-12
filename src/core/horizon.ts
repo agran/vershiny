@@ -122,6 +122,8 @@ export function computeHorizon(
 /**
  * Слоистый горизонт: для каждой корзины дистанций — свой профиль.
  * Также собираем фронты видимости (локальные максимумы по дистанции).
+ *
+ * После сбора — адаптивное сглаживание с защитой разрывов дистанции.
  */
 export function computeLayeredHorizon(
   origin: LatLon,
@@ -139,6 +141,9 @@ export function computeLayeredHorizon(
   const distanceToHorizonM = new Float32Array(rayCount).fill(Infinity);
   const fronts: VisibleFront[][] = Array.from({ length: rayCount }, () => []);
 
+  // Марш начинаем с 1.5 ячейки DEM (численная стабильность atan2)
+  const marchStart = minDist * 1.5; // ~135 м для 90 м DEM
+
   for (let i = 0; i < rayCount; i++) {
     const az = i * stepRad;
     // Для каждой корзины — свой максимум
@@ -153,7 +158,7 @@ export function computeLayeredHorizon(
     // Пропускаем ближнюю зону для фронтов (0–500 м): мы на этом склоне
     const nearSkip = 500;
 
-    for (let d = minDist; d <= maxDist; d += nextRayStep(d)) {
+    for (let d = marchStart; d <= maxDist; d += nextRayStep(d)) {
       const p = destination(origin, az, d);
       const h = sample(p, d);
       if (Number.isNaN(h)) continue;
@@ -225,7 +230,54 @@ export function computeLayeredHorizon(
     fronts[i] = rayFronts;
   }
 
-  return { layers, stepRad, distanceToHorizonM, fronts };
+  // Адаптивное сглаживание с защитой разрывов дистанции
+  const smoothed = smoothLayers(layers, distanceToHorizonM, stepRad);
+
+  return { layers: smoothed, stepRad, distanceToHorizonM, fronts };
+}
+
+/** Адаптивное сглаживание силуэта: ширина окна ~ полразмера ячейки в лучах */
+function smoothLayers(
+  layers: Float32Array[],
+  distanceToHorizonM: Float32Array,
+  stepRad: number,
+): Float32Array[] {
+  const rayCount = layers[0].length;
+  const smoothed = layers.map((layer) => new Float32Array(layer.length));
+
+  for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
+    const layer = layers[layerIdx];
+    const out = smoothed[layerIdx];
+
+    for (let i = 0; i < rayCount; i++) {
+      if (layer[i] === -Infinity) {
+        out[i] = -Infinity;
+        continue;
+      }
+
+      // Полразмера ячейки в лучах: (90 / dist) / stepRad
+      const dist = distanceToHorizonM[i];
+      const cellSizeM = 90; // DEM 90 м
+      const halfWin = Math.min(
+        8,
+        Math.max(0, Math.round((cellSizeM / 2 / dist) / stepRad)),
+      );
+
+      let sum = 0;
+      let n = 0;
+      for (let j = -halfWin; j <= halfWin; j++) {
+        const k = (i + j + rayCount) % rayCount;
+        // Не сглаживать через разрывы дистанции
+        if (Math.abs(distanceToHorizonM[k] - dist) / dist > 0.5) continue;
+        if (layer[k] === -Infinity) continue;
+        sum += layer[k];
+        n++;
+      }
+      out[i] = n > 0 ? sum / n : layer[i];
+    }
+  }
+
+  return smoothed;
 }
 
 /**
