@@ -6,7 +6,7 @@
 
 import { TerrariumSampler, lonLatToTile, zoomForDistance } from '../core/terrarium';
 import { destination, type LatLon } from '../core/geo';
-import { savePeaks } from '../core/db';
+import { savePeaks, markRegionDownloaded } from '../core/db';
 import { getLocale } from '../core/i18n';
 
 export interface RegionInfo {
@@ -93,6 +93,8 @@ export async function downloadRegion(
   }
 
   onProgress({ done: keys.length, total: keys.length, phase: 'done' });
+  // Отмечаем регион как скачанный (для списка в настройках)
+  await markRegionDownloaded(region);
   return keys.length;
 }
 

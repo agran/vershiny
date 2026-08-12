@@ -4,10 +4,11 @@
  */
 
 const DB_NAME = 'vershiny';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const STORE_TILES = 'dem-tiles';
 const STORE_PEAKS = 'peaks';
 const STORE_TERRARIUM = 'terrarium';
+const STORE_META = 'meta';
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -22,6 +23,9 @@ function openDb(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains(STORE_TERRARIUM)) {
         db.createObjectStore(STORE_TERRARIUM);
+      }
+      if (!db.objectStoreNames.contains(STORE_META)) {
+        db.createObjectStore(STORE_META);
       }
     };
     req.onsuccess = () => resolve(req.result);
@@ -88,19 +92,19 @@ export async function getPeaks(region: string): Promise<unknown[] | undefined> {
   return get<unknown[]>(STORE_PEAKS, region);
 }
 
-/** Список скачанных регионов */
+/** Отметить регион как скачанный */
+export async function markRegionDownloaded(region: string): Promise<void> {
+  await set(STORE_META, `region:${region}`, {
+    downloadedAt: new Date().toISOString(),
+  });
+}
+
+/** Список скачанных регионов (из метаданных) */
 export async function getDownloadedRegions(): Promise<string[]> {
-  const tileKeys = await keys(STORE_TILES);
-  const regions = new Set<string>();
-  for (const key of tileKeys) {
-    const region = key.split('/')[0];
-    if (region) regions.add(region);
-  }
-  const peakKeys = await keys(STORE_PEAKS);
-  for (const key of peakKeys) {
-    regions.add(key);
-  }
-  return [...regions];
+  const metaKeys = await keys(STORE_META);
+  return metaKeys
+    .filter((k) => k.startsWith('region:'))
+    .map((k) => k.replace('region:', ''));
 }
 
 /** Оценка места на диске (примерно) */
