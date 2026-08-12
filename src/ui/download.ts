@@ -4,8 +4,8 @@
  * (тайлы патч-формата появятся позже из tools/dem-to-tiles).
  */
 
-import { TerrariumSampler, lonLatToTile, zoomForDistance } from '../core/terrarium';
-import { destination, type LatLon } from '../core/geo';
+import { TerrariumSampler } from '../core/terrarium';
+import type { LatLon } from '../core/geo';
 import { savePeaks, markRegionDownloaded } from '../core/db';
 import { getLocale } from '../core/i18n';
 
@@ -39,7 +39,7 @@ export interface RegionInfo {
 /**
  * Загрузка региона для офлайна:
  * 1. peaks/{region}.json → IndexedDB
- * 2. Terrarium-тайлы веером 360° × 200 км вокруг origin → IndexedDB
+ * 2. Terrarium-тайлы по всему bbox региона (не веер от точки) → IndexedDB
  *
  * Возвращает итоговое число загруженных тайлов.
  */
@@ -48,6 +48,7 @@ export async function downloadRegion(
   origin: LatLon,
   onProgress: (p: DownloadProgress) => void,
 ): Promise<number> {
+  void origin; // больше не используем — скачиваем весь bbox
   const base = import.meta.env.BASE_URL;
 
   // 1. Пики
@@ -61,16 +62,33 @@ export async function downloadRegion(
     await savePeaks(region, data.peaks ?? []);
   }
 
-  // 2. Тайлы Terrarium веером лучей (та же логика, что у worker'а)
+  // 2. Terrarium-тайлы по bbox региона (все зумы для покрытия)
+  const regions = await loadRegions();
+  const info = regions[region];
+  if (!info?.bbox) {
+    throw new Error(`Регион ${region} не найден в реестре`);
+  }
+
+  const [minLon, minLat, maxLon, maxLat] = info.bbox;
   const sampler = new TerrariumSampler();
-  const MAX_DIST_M = 200_000;
   const tileKeys = new Set<string>();
-  for (let az = 0; az < 2 * Math.PI; az += (5 * Math.PI) / 180) {
-    for (let d = 0; d <= MAX_DIST_M; d += 8_000) {
-      const p = destination(origin, az, d);
-      const z = zoomForDistance(d);
-      const { x, y } = lonLatToTile(p, z);
-      tileKeys.add(`${z}/${x}/${y}`);
+
+  // Для каждого зума: сетка тайлов, покрывающая bbox
+  // z12 для деталей, z9 для покрытия (компромисс размер/скорость)
+  for (const zoom of [12, 11, 10, 9]) {
+    const n = 2 ** zoom;
+    const x0 = Math.floor(((minLon + 180) / 360) * n);
+    const x1 = Math.ceil(((maxLon + 180) / 360) * n);
+    const y0 = Math.floor(
+      ((1 - Math.log(Math.tan((maxLat * Math.PI) / 180) + 1 / Math.cos((maxLat * Math.PI) / 180)) / Math.PI) / 2) * n,
+    );
+    const y1 = Math.ceil(
+      ((1 - Math.log(Math.tan((minLat * Math.PI) / 180) + 1 / Math.cos((minLat * Math.PI) / 180)) / Math.PI) / 2) * n,
+    );
+    for (let x = x0; x < x1; x++) {
+      for (let y = y0; y < y1; y++) {
+        tileKeys.add(`${zoom}/${x}/${y}`);
+      }
     }
   }
 
