@@ -88,10 +88,24 @@ export class TerrariumSampler {
   private pending = new Map<string, Promise<Float32Array | null>>();
   private canvas: OffscreenCanvas | null = null;
   private ctx: OffscreenCanvasRenderingContext2D | null = null;
+  /** Офлайн-кеш (IndexedDB); undefined = ещё не инициализирован */
+  private dbCache: typeof import('./db') | null | undefined;
 
   constructor(options: TerrariumOptions = {}) {
     this.baseUrl = (options.baseUrl ?? TERRARIUM_BASE_URL).replace(/\/$/, '');
     this.fetchFn = options.fetchFn ?? fetch.bind(globalThis);
+  }
+
+  /** Ленивая загрузка db.ts (в тестах IndexedDB может не быть) */
+  private async db() {
+    if (this.dbCache === undefined) {
+      try {
+        this.dbCache = await import('./db');
+      } catch {
+        this.dbCache = null;
+      }
+    }
+    return this.dbCache;
   }
 
   private ensureCanvas(): OffscreenCanvasRenderingContext2D {
@@ -112,6 +126,18 @@ export class TerrariumSampler {
     if (inflight) return inflight;
 
     const promise = (async () => {
+      // 1. Офлайн-кеш (IndexedDB) — работает без сети
+      const db = await this.db();
+      if (db) {
+        const offline = await db.getTerrariumTile(key);
+        if (offline) {
+          this.tiles.set(key, offline);
+          this.pending.delete(key);
+          return offline;
+        }
+      }
+
+      // 2. Сеть (через SW cache-first, если он зарегистрирован)
       const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
       let tile: Float32Array | null = null;
       if (res.ok) {
@@ -125,6 +151,8 @@ export class TerrariumSampler {
         for (let i = 0; i < tile.length; i++) {
           tile[i] = decodeTerrarium(img[i * 4], img[i * 4 + 1], img[i * 4 + 2]);
         }
+        // Сохраняем в офлайн-кеш для следующего запуска
+        if (db) db.saveTerrariumTile(key, tile).catch(() => {});
       } else if (res.status === 404) {
         tile = null; // вне покрытия (океан южнее/севернее 85°)
       } else {

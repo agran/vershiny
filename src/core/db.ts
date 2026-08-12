@@ -4,9 +4,10 @@
  */
 
 const DB_NAME = 'vershiny';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_TILES = 'dem-tiles';
 const STORE_PEAKS = 'peaks';
+const STORE_TERRARIUM = 'terrarium';
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -18,6 +19,9 @@ function openDb(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains(STORE_PEAKS)) {
         db.createObjectStore(STORE_PEAKS);
+      }
+      if (!db.objectStoreNames.contains(STORE_TERRARIUM)) {
+        db.createObjectStore(STORE_TERRARIUM);
       }
     };
     req.onsuccess = () => resolve(req.result);
@@ -109,4 +113,29 @@ export async function estimateStorage(): Promise<{ usedMB: number; quotaMB: numb
     usedMB: Math.round((est.usage ?? 0) / 1e6),
     quotaMB: Math.round((est.quota ?? 0) / 1e6),
   };
+}
+
+// --- Terrarium (декодированные тайлы, офлайн-кеш глобального слоя) ---
+
+/** Сохранить декодированный Terrarium-тайл (ключ: z/x/y) */
+export async function saveTerrariumTile(key: string, data: Float32Array): Promise<void> {
+  await set(STORE_TERRARIUM, key, data);
+}
+
+/** Получить Terrarium-тайл из офлайн-кеша */
+export async function getTerrariumTile(key: string): Promise<Float32Array | undefined> {
+  return get<Float32Array>(STORE_TERRARIUM, key);
+}
+
+/** Удалить регион целиком (патч-тайлы + пики) */
+export async function deleteRegion(region: string): Promise<void> {
+  const db = await openDb();
+  const tileKeys = (await keys(STORE_TILES)).filter((k) => k.startsWith(region + '/'));
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction([STORE_TILES, STORE_PEAKS], 'readwrite');
+    for (const key of tileKeys) tx.objectStore(STORE_TILES).delete(key);
+    tx.objectStore(STORE_PEAKS).delete(region);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
 }

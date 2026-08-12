@@ -7,6 +7,7 @@ import { renderPanorama, type PanoramaState, type ViewState } from './ui/panoram
 import type { PeaksFile } from './core/peaks';
 import { toRad, type LatLon } from './core/geo';
 import { t } from './core/i18n';
+import { downloadRegion, type DownloadProgress } from './ui/download';
 import type { ResultMessage, WorkerOutMessage } from './workers/horizon.worker';
 
 const REGION = 'elbrus';
@@ -124,19 +125,22 @@ async function main(): Promise<void> {
 
   const base = import.meta.env.BASE_URL;
 
-  // Пики региона — опционально; без них панорама всё равно строится.
+  // Пики: сеть → офлайн-кеш (IndexedDB). Без них панорама всё равно строится.
   // Vite на 404 отдаёт index.html (SPA-fallback) — проверяем Content-Type.
   let peaks: PeaksFile['peaks'] = [];
-  const peaksRes = await fetch(`${base}peaks/${REGION}.json`);
-  if (isJson(peaksRes)) {
+  const peaksRes = await fetch(`${base}peaks/${REGION}.json`).catch(() => null);
+  if (peaksRes && isJson(peaksRes)) {
     peaks = ((await peaksRes.json()) as PeaksFile).peaks;
+  } else {
+    const { getPeaks } = await import('./core/db');
+    peaks = ((await getPeaks(REGION)) ?? []) as PeaksFile['peaks'];
   }
 
   // Локальный DEM-патч — если сгенерирован; иначе глобальный Terrarium
-  // (docs/new-geo-data.md, слой 1)
+  // (docs/new-geo-data.md, слой 1). Офлайн: Terrarium из IndexedDB.
   let patchBaseUrl: string | undefined;
-  const patchProbe = await fetch(`${base}tiles/${REGION}/index.json`);
-  if (isJson(patchProbe)) patchBaseUrl = `${base}tiles/${REGION}`;
+  const patchProbe = await fetch(`${base}tiles/${REGION}/index.json`).catch(() => null);
+  if (patchProbe && isJson(patchProbe)) patchBaseUrl = `${base}tiles/${REGION}`;
 
   worker.postMessage({ type: 'init', patchBaseUrl });
 
@@ -144,6 +148,49 @@ async function main(): Promise<void> {
   const origin = await getPosition();
   setStatus(t('computing'));
   worker.postMessage({ type: 'compute', origin, peaks });
+
+  // Кнопка офлайн-загрузки региона (появляется после первого расчёта)
+  setupDownloadButton(origin);
+}
+
+/** Кнопка «Скачать для офлайна» в углу экрана */
+function setupDownloadButton(origin: LatLon): void {
+  const btn = document.createElement('button');
+  btn.id = 'download-btn';
+  btn.textContent = '⬇';
+  btn.title = t('downloadRegion');
+  btn.style.cssText =
+    'position:fixed;right:16px;bottom:16px;width:48px;height:48px;' +
+    'border-radius:50%;border:none;background:#415a77;color:#f1faee;' +
+    'font-size:22px;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.4)';
+  document.body.appendChild(btn);
+
+  let busy = false;
+  btn.onclick = async () => {
+    if (busy) return;
+    busy = true;
+    btn.disabled = true;
+    try {
+      await downloadRegion(REGION, origin, (p: DownloadProgress) => {
+        if (p.phase === 'peaks') {
+          setStatus(t('downloadPeaks'));
+        } else if (p.phase === 'tiles') {
+          setStatus(`${t('downloadTiles')}: ${p.done}/${p.total}`);
+        } else if (p.phase === 'done') {
+          setStatus('');
+          btn.textContent = '✓';
+          setTimeout(() => (btn.textContent = '⬇'), 3000);
+        }
+      });
+    } catch (err) {
+      setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
+      btn.textContent = '✗';
+      setTimeout(() => (btn.textContent = '⬇'), 3000);
+    } finally {
+      busy = false;
+      btn.disabled = false;
+    }
+  };
 }
 
 /** Ответ — JSON, а не SPA-fallback index.html? */

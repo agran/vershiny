@@ -40,6 +40,12 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   error: { ru: 'Ошибка', en: 'Error' },
   peaks: { ru: 'вершин', en: 'peaks' },
   observer: { ru: 'наблюдатель', en: 'observer' },
+  downloadRegion: {
+    ru: 'Скачать регион для офлайна',
+    en: 'Download region for offline use',
+  },
+  downloadPeaks: { ru: 'Загрузка вершин…', en: 'Downloading peaks…' },
+  downloadTiles: { ru: 'Загрузка тайлов', en: 'Downloading tiles' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },
