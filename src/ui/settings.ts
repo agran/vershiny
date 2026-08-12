@@ -142,7 +142,7 @@ export function openSettings(
           const rowEl = document.createElement('div');
           rowEl.style.cssText =
             'display:flex;align-items:center;gap:8px;padding:6px 8px;' +
-            `border-radius:8px;background:${isCurrent ? '#2b4a6f' : '#1f2833'};` +
+            'border-radius:8px;background:#1f2833;' +
             'border:1px solid #415a77;margin-left:8px';
 
           // Название + ключевые вершины + размер
@@ -206,8 +206,9 @@ export function openSettings(
           }
           rowEl.appendChild(btn);
 
-          // Пометка текущего региона
+          // Пометка текущего региона — рамка + точка, без заливки
           if (isCurrent) {
+            rowEl.style.border = '2px solid #4cc9f0';
             const badge = document.createElement('span');
             badge.textContent = '●';
             badge.style.cssText = 'color:#4cc9f0;font-size:10px';
