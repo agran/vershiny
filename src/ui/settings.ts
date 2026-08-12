@@ -58,11 +58,12 @@ export function openSettings(
   langRow.appendChild(langSelect);
   panel.appendChild(langRow);
 
-  // --- Регион ---
+  // --- Регион (только для информации, выбор — кликом по строке ниже) ---
   const regionRow = row(t('region'));
-  const regionSelect = document.createElement('select');
-  regionSelect.style.cssText = selectStyle();
-  regionRow.appendChild(regionSelect);
+  const regionValue = document.createElement('span');
+  regionValue.textContent = currentRegion;
+  regionValue.style.cssText = 'color:#f1faee;font-weight:500';
+  regionRow.appendChild(regionValue);
   panel.appendChild(regionRow);
 
   // --- Точность компаса ---
@@ -143,7 +144,12 @@ export function openSettings(
           rowEl.style.cssText =
             'display:flex;align-items:center;gap:8px;padding:6px 8px;' +
             'border-radius:8px;background:#1f2833;' +
-            'border:1px solid #415a77;margin-left:8px';
+            'border:1px solid #415a77;margin-left:8px;cursor:pointer';
+          // Клик по строке = выбор активного региона
+          rowEl.onclick = () => {
+            callbacks.onRegionChange(key);
+            close();
+          };
 
           // Название + ключевые вершины + размер
           const nameWrap = document.createElement('div');
@@ -180,7 +186,8 @@ export function openSettings(
             btn.textContent = t('download');
             btn.style.background = '#415a77';
             btn.style.color = '#f1faee';
-            btn.onclick = async () => {
+            btn.onclick = async (ev) => {
+              ev.stopPropagation(); // не выбирать регион при клике на скачивание
               btn.disabled = true;
               btn.textContent = '…';
               try {
@@ -219,23 +226,13 @@ export function openSettings(
         }
       }
 
-      // Обновление выпадающего списка (плоское, по алфавиту)
-      const flatEntries = [...groups.values()].flat().sort(([, a], [, b]) =>
-        regionLabel(a).localeCompare(regionLabel(b)),
-      );
-      for (const [key, info] of flatEntries) {
-        const opt = document.createElement('option');
-        opt.value = key;
-        opt.textContent = regionLabel(info);
-        if (key === currentRegion) opt.selected = true;
-        regionSelect.appendChild(opt);
+      // Обновление подписи текущего региона
+      const currentInfo = (regions as Record<string, RegionInfo>)[currentRegion];
+      if (currentInfo) {
+        regionValue.textContent = regionLabel(currentInfo);
       }
     },
   );
-
-  regionSelect.onchange = () => {
-    callbacks.onRegionChange(regionSelect.value);
-  };
 
   // Кнопка закрытия (✕) — явная, в углу
   const closeBtn = document.createElement('button');
