@@ -1038,8 +1038,8 @@
     "group": "Командоры"
   },
   "east-africa": {
-    "title_ru": "Восточная Африка — Килиманджаро, Кения",
-    "title_en": "East Africa — Kilimanjaro, Kenya",
+    "title_ru": "Восточная Африка",
+    "title_en": "East Africa",
     "bbox": [
       32.0,
       -5.0,
