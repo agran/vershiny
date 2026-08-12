@@ -344,18 +344,25 @@ function setupSearchButton(origin: LatLon): void {
     searchBtn.style.cssText =
       'background:#4cc9f0;color:#1a1a2e;border:none;border-radius:8px;' +
       'padding:8px 16px;font-size:14px;cursor:pointer;font-weight:500';
-    searchBtn.onclick = () => {
+    searchBtn.onclick = async () => {
       const query = input.value.trim();
       if (!query) return;
-      const peak = findPeakByName(query, currentPeaks);
+      const found = await findPeakInAllRegions(query);
       searchOverlay?.remove();
       searchOverlay = null;
-      if (!peak) {
+      if (!found) {
         setStatus(t('peakNotFound'));
         setTimeout(() => setStatus(''), 3000);
         return;
       }
-      jumpToPeak(peak, origin);
+      // Если вершина в другом регионе — переключаемся
+      if (found.region !== currentRegion) {
+        currentRegion = found.region;
+        manualRegion = true;
+        const { getPeaks } = await import('./core/db');
+        currentPeaks = ((await getPeaks(found.region)) ?? []) as PeaksFile['peaks'];
+      }
+      jumpToPeak(found.peak, origin);
     };
 
     input.onkeydown = (ev) => {
@@ -409,6 +416,25 @@ function findPeakByName(query: string, peaks: PeaksFile['peaks']): Peak | null {
     ) {
       return p;
     }
+  }
+  return null;
+}
+
+/** Поиск по всем скачанным регионам, если не нашли в текущем */
+async function findPeakInAllRegions(query: string): Promise<{ peak: Peak; region: string } | null> {
+  // 1. Текущий регион
+  const peak = findPeakByName(query, currentPeaks);
+  if (peak) return { peak, region: currentRegion };
+
+  // 2. Другие скачанные регионы
+  const { getDownloadedRegions, getPeaks } = await import('./core/db');
+  const downloaded = await getDownloadedRegions();
+  for (const region of downloaded) {
+    if (region === currentRegion) continue;
+    const peaks = (await getPeaks(region)) as PeaksFile['peaks'] | undefined;
+    if (!peaks) continue;
+    const found = findPeakByName(query, peaks);
+    if (found) return { peak: found, region };
   }
   return null;
 }
