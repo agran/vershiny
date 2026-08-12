@@ -232,6 +232,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     peaks: r.peaks,
     layers: r.layers,
     distanceToHorizonM: r.distanceToHorizonM,
+    fronts: r.fronts,
   };
   setStatus('');
   draw();

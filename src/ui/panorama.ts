@@ -21,6 +21,8 @@ export interface PanoramaState {
   layers?: Float32Array[];
   /** Дистанция до точки горизонта по лучам (для классификации пиков) */
   distanceToHorizonM?: Float32Array;
+  /** Фронты видимости по лучам (для точных маркеров) */
+  fronts?: import('../core/horizon').VisibleFront[][];
 }
 
 export interface ViewState {
@@ -199,13 +201,17 @@ function drawLabels(
       const best = sorted[0];
       const extra = sorted.length - 1;
       drawLabel(ctx, box, labelText(best) + (extra > 0 ? `  +${extra}` : ''), best.visibility);
-      // Маркер: к точке пика (visible) или к силуэту на его дистанции (onSlope/hidden)
-      const markerY = markerYForPeak(best, state, elevToY);
-      drawMarker(ctx, azToX(best.azimuthRad), box.y + box.h, markerY, best.visibility);
+      // Маркер: точная позиция вершины на силуэте
+      const marker = findPeakMarkerPosition(best, state, azToX, elevToY);
+      if (marker) {
+        drawMarker(ctx, marker.x, box.y + box.h, marker.y, best.visibility);
+      }
     } else if (box.peak) {
       drawLabel(ctx, box, labelText(box.peak), box.peak.visibility);
-      const markerY = markerYForPeak(box.peak, state, elevToY);
-      drawMarker(ctx, azToX(box.peak.azimuthRad), box.y + box.h, markerY, box.peak.visibility);
+      const marker = findPeakMarkerPosition(box.peak, state, azToX, elevToY);
+      if (marker) {
+        drawMarker(ctx, marker.x, box.y + box.h, marker.y, box.peak.visibility);
+      }
     }
   }
 }
@@ -279,23 +285,62 @@ function horizonAtAzimuth(
 }
 
 /**
- * Y маркера для пика:
- * - visible: точка пика (расчётная высота, может немного отличаться от DEM)
- * - onSlope: силуэт на азимуте (пик на видимом склоне)
- * - hidden: силуэт на азимуте (пунктир, полупрозрачный)
+ * Точная позиция маркера вершины на силуэте.
+ * Алгоритм из промта: матчинг по дистанции фронта, не по углу.
  */
-function markerYForPeak(
+function findPeakMarkerPosition(
   peak: VisiblePeak,
   state: PanoramaState,
+  azToX: (az: number) => number,
   elevToY: (elev: number) => number,
-): number {
-  if (peak.visibility === 'visible') {
-    return elevToY(peak.elevationRad);
+): { x: number; y: number } | null {
+  if (!state.layers || !state.fronts) {
+    // Fallback: силуэт на азимуте
+    return { x: azToX(peak.azimuthRad), y: horizonAtAzimuth(state, peak.azimuthRad, elevToY) };
   }
-  // onSlope и hidden: силуэт на азимуте пика
-  return horizonAtAzimuth(state, peak.azimuthRad, elevToY);
-}
 
+  // Окно азимутов: ширина зависит от дистанции (ближние горы шире)
+  const windowRad = Math.max(0.009, Math.min(0.052, Math.atan2(1500, peak.distanceM)));
+  const stepRad = state.stepRad;
+  const centerIdx = Math.round(peak.azimuthRad / stepRad);
+  const windowRays = Math.ceil(windowRad / stepRad);
+
+  // Ищем фронт, соответствующий дистанции пика
+  const distTolerance = Math.max(2000, peak.distanceM * 0.15);
+  let best: { az: number; elev: number; score: number } | null = null;
+
+  for (let i = Math.max(0, centerIdx - windowRays); i <= Math.min(state.fronts.length - 1, centerIdx + windowRays); i++) {
+    const az = i * stepRad;
+    const rayFronts = state.fronts[i];
+    if (!rayFronts) continue;
+
+    for (const front of rayFronts) {
+      const dDist = peak.distanceM < front.distM
+        ? front.distM - peak.distanceM
+        : peak.distanceM > front.distEndM
+          ? peak.distanceM - front.distEndM
+          : 0;
+      if (dDist > distTolerance) continue;
+
+      const dAz = Math.abs(((az - peak.azimuthRad + Math.PI) % (2 * Math.PI)) - Math.PI);
+      const score =
+        -(dDist / distTolerance) * 0.4
+        - (dAz / windowRad) * 0.3
+        + (front.elevMaxRad / 0.3) * 0.3;
+
+      if (!best || score > best.score) {
+        best = { az, elev: front.elevMaxRad, score };
+      }
+    }
+  }
+
+  if (best) {
+    return { x: azToX(best.az), y: elevToY(best.elev) };
+  }
+
+  // Не нашли фронт — fallback: силуэт на азимуте
+  return { x: azToX(peak.azimuthRad), y: horizonAtAzimuth(state, peak.azimuthRad, elevToY) };
+}
 
 function cardinal(deg: number): string {
   const names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] as const;

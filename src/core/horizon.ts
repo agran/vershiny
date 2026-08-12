@@ -33,6 +33,18 @@ export interface HorizonOptions {
 export const LAYER_BOUNDS = [0, 5_000, 15_000, 40_000, 100_000, 200_000] as const;
 export const LAYER_COUNT = LAYER_BOUNDS.length - 1;
 
+/** Видимый фронт: участок рельефа, пробивающийся над ближним */
+export interface VisibleFront {
+  /** Дистанция начала фронта, м */
+  distM: number;
+  /** Дистанция конца фронта (где перекрывается следующим), м */
+  distEndM: number;
+  /** Угол, с которого фронт виден (низ видимой части), рад */
+  elevStartRad: number;
+  /** Максимальный угол внутри фронта (гребень), рад */
+  elevMaxRad: number;
+}
+
 export interface LayeredHorizon {
   /** Для каждого слоя: углы горизонта по лучам */
   layers: Float32Array[];
@@ -40,6 +52,8 @@ export interface LayeredHorizon {
   stepRad: number;
   /** Для каждого луча: дистанция до видимой точки горизонта (для классификации пиков) */
   distanceToHorizonM: Float32Array;
+  /** Для каждого луча: фронты видимости (локальные максимумы по дистанции) */
+  fronts: VisibleFront[][];
 }
 
 export interface VisiblePeak extends Peak {
@@ -107,7 +121,7 @@ export function computeHorizon(
 
 /**
  * Слоистый горизонт: для каждой корзины дистанций — свой профиль.
- * Для классификации пиков также храним дистанцию до точки, формирующей горизонт.
+ * Также собираем фронты видимости (локальные максимумы по дистанции).
  */
 export function computeLayeredHorizon(
   origin: LatLon,
@@ -123,12 +137,18 @@ export function computeLayeredHorizon(
   const rayCount = Math.ceil(TWO_PI / stepRad);
   const layers = Array.from({ length: LAYER_COUNT }, () => new Float32Array(rayCount).fill(-Infinity));
   const distanceToHorizonM = new Float32Array(rayCount).fill(Infinity);
+  const fronts: VisibleFront[][] = Array.from({ length: rayCount }, () => []);
 
   for (let i = 0; i < rayCount; i++) {
     const az = i * stepRad;
     // Для каждой корзины — свой максимум
     const binMax = new Float64Array(LAYER_COUNT).fill(-Infinity);
     const binDist = new Float64Array(LAYER_COUNT).fill(Infinity);
+
+    // Фронты: точки, где рельеф пробивает текущий максимум
+    const rayFronts: VisibleFront[] = [];
+    let currentMax = -Infinity;
+    let frontStartDist = 0;
 
     for (let d = minDist; d <= maxDist; d += nextRayStep(d)) {
       const p = destination(origin, az, d);
@@ -152,11 +172,35 @@ export function computeLayeredHorizon(
         binDist[bin] = d;
       }
 
-      // Ранний выход: рельеф опустился ниже −0.5° и мы далеко
+      // Фронт: новый максимум = начало или продолжение
+      if (angle > currentMax) {
+        if (rayFronts.length === 0 || d - rayFronts[rayFronts.length - 1].distEndM > 2000) {
+          // Новый фронт (после провала >2 км)
+          rayFronts.push({
+            distM: d,
+            distEndM: d,
+            elevStartRad: angle,
+            elevMaxRad: angle,
+          });
+          frontStartDist = d;
+        } else {
+          // Продолжение текущего фронта
+          const front = rayFronts[rayFronts.length - 1];
+          front.distEndM = d;
+          if (angle > front.elevMaxRad) front.elevMaxRad = angle;
+        }
+        currentMax = angle;
+      } else if (rayFronts.length > 0 && d - frontStartDist > 2000) {
+        // Провал — закрываем фронт
+        const front = rayFronts[rayFronts.length - 1];
+        front.distEndM = d;
+      }
+
+      // Ранний выход
       if (d > 60_000 && angle < binMax[bin] - 0.02 && binMax[bin] < -0.005) break;
     }
 
-    // Слой = первый (ближний) корзина с данными; остальные — только если выше
+    // Слои
     for (let b = 0; b < LAYER_COUNT; b++) {
       if (binMax[b] > -Infinity) {
         layers[b][i] = binMax[b];
@@ -165,9 +209,11 @@ export function computeLayeredHorizon(
         }
       }
     }
+
+    fronts[i] = rayFronts;
   }
 
-  return { layers, stepRad, distanceToHorizonM };
+  return { layers, stepRad, distanceToHorizonM, fronts };
 }
 
 /**

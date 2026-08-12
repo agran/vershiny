@@ -40,6 +40,8 @@ export interface ResultMessage {
   layers: Float32Array[];
   /** Дистанция до точки горизонта по лучам */
   distanceToHorizonM: Float32Array;
+  /** Фронты видимости по лучам (для точных маркеров) */
+  fronts: import('../core/horizon').VisibleFront[][];
   /** Видимые пики */
   peaks: VisiblePeak[];
   /** Высота наблюдателя из DEM */
@@ -86,6 +88,7 @@ async function compute(origin: LatLon, peaks: Peak[]): Promise<ResultMessage> {
     stepRad: layered.stepRad,
     layers: layered.layers,
     distanceToHorizonM: layered.distanceToHorizonM,
+    fronts: layered.fronts,
     peaks: visible,
     observerH,
     computeMs: performance.now() - t0,
