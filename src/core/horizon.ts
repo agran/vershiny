@@ -150,7 +150,7 @@ export function computeLayeredHorizon(
     let currentMax = -Infinity;
     let frontStartDist = 0;
 
-    // Пропускаем ближнюю зону (0–500 м): мы на этом склоне, это не горизонт
+    // Пропускаем ближнюю зону для фронтов (0–500 м): мы на этом склоне
     const nearSkip = 500;
 
     for (let d = minDist; d <= maxDist; d += nextRayStep(d)) {
@@ -170,15 +170,13 @@ export function computeLayeredHorizon(
         if (d >= LAYER_BOUNDS[LAYER_COUNT]) bin = LAYER_COUNT - 1;
       }
 
-      // Ближняя зона (0–500 м): исключаем точки ВЫШЕ наблюдателя
+      // Ближний слой (0–5 км): исключаем точки ВЫШЕ наблюдателя
       // (мы на склоне — всё что выше нас не горизонт, а стена)
-      if (bin === 0 && d < nearSkip) {
-        if (apparentH > hO) continue; // выше нас — пропускаем
-        if (angle > binMax[bin]) {
-          binMax[bin] = angle;
-          binDist[bin] = d;
-        }
-        continue; // в фронты не включаем
+      if (bin === 0 && apparentH > hO) continue; // выше нас — пропускаем
+
+      if (angle > binMax[bin]) {
+        binMax[bin] = angle;
+        binDist[bin] = d;
       }
 
       if (angle > binMax[bin]) {
