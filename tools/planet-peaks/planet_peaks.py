@@ -162,20 +162,19 @@ def parse_ele(raw: str | None) -> float | None:
 
 
 def emit_peak(
-    outs: list,
+    out,
     lat: float,
     lon: float,
     tags: dict[str, str],
     bbox: tuple[float, float, float, float] | None,
     stats: dict,
+    region_writers: dict | None = None,
 ) -> None:
     stats["peaks"] += 1
-    in_bbox = True
     if bbox:
         min_lon, min_lat, max_lon, max_lat = bbox
-        in_bbox = min_lon <= lon <= max_lon and min_lat <= lat <= max_lat
-    if not in_bbox:
-        stats["outside"] += 1
+        if not (min_lon <= lon <= max_lon and min_lat <= lat <= max_lat):
+            stats["outside"] += 1
 
     name = pick_name(tags)
     if not name:
@@ -191,12 +190,16 @@ def emit_peak(
         peak["wikidata"] = tags["wikidata"]
     line = json.dumps(peak, ensure_ascii=False) + "\n"
 
-    # outs[0] — полный файл (весь мир); outs[1] (если есть) — только bbox
-    outs[0].write(line)
+    out.write(line)
     stats["written"] += 1
-    if in_bbox and len(outs) > 1:
-        outs[1].write(line)
-        stats["written_bbox"] = stats.get("written_bbox", 0) + 1
+
+    # Региональные выжимки (все регионы из regions.json за один проход)
+    if region_writers:
+        for region_name, (rbbox, fh) in region_writers.items():
+            rmin_lon, rmin_lat, rmax_lon, rmax_lat = rbbox
+            if rmin_lon <= lon <= rmax_lon and rmin_lat <= lat <= rmax_lat:
+                fh.write(line)
+                stats[f"region:{region_name}"] = stats.get(f"region:{region_name}", 0) + 1
 
 
 def parse_dense_nodes(
@@ -205,9 +208,10 @@ def parse_dense_nodes(
     granularity: int,
     lat_offset: int,
     lon_offset: int,
-    outs,
+    out,
     bbox,
     stats: dict,
+    region_writers: dict | None = None,
 ) -> None:
     r = PBReader(data)
     ids: list[int] = []
@@ -271,12 +275,12 @@ def parse_dense_nodes(
         kv_pos += 1  # разделитель 0
 
         if tags.get("natural") == "peak":
-            emit_peak(outs, lat, lon, tags, bbox, stats)
+            emit_peak(out, lat, lon, tags, bbox, stats, region_writers)
 
 
 def parse_node(
     data: bytes, strings: list[bytes], granularity: int, lat_offset: int, lon_offset: int,
-    out, bbox, stats: dict,
+    out, bbox, stats: dict, region_writers: dict | None = None,
 ) -> None:
     r = PBReader(data)
     lat = lon = 0
@@ -308,17 +312,18 @@ def parse_node(
     }
     if tags.get("natural") == "peak":
         emit_peak(
-            outs,
+            out,
             (lat_offset + granularity * lat) / 1e9,
             (lon_offset + granularity * lon) / 1e9,
             tags,
             bbox,
             stats,
+            region_writers,
         )
 
 
 def parse_primitive_block(
-    data: bytes, out, bbox, stats: dict,
+    data: bytes, out, bbox, stats: dict, region_writers: dict | None = None,
 ) -> None:
     r = PBReader(data)
     strings: list[bytes] = []
@@ -353,13 +358,13 @@ def parse_primitive_block(
                     break
                 continue
             if gfield == 1:  # nodes (редко в планете)
-                parse_node(gr.bytes(), strings, granularity, lat_offset, lon_offset, out, bbox, stats)
+                parse_node(gr.bytes(), strings, granularity, lat_offset, lon_offset, out, bbox, stats, region_writers)
             elif gfield == 2:  # dense
                 data = gr.bytes()
                 # Защита от битых/пустых dense (встречаются в планете)
                 if len(data) >= 16:
                     parse_dense_nodes(
-                        data, strings, granularity, lat_offset, lon_offset, out, bbox, stats
+                        data, strings, granularity, lat_offset, lon_offset, out, bbox, stats, region_writers
                     )
             else:  # ways (3), relations (4) и прочее — пропускаем
                 gr.bytes()
@@ -373,12 +378,12 @@ def main() -> None:
     parser.add_argument("-o", "--out", type=Path, required=True, help="JSONL на выход")
     parser.add_argument(
         "--bbox",
-        help="minLon,minLat,maxLon,maxLat — дополнительно писать пики области в --bbox-out",
+        help="minLon,minLat,maxLon,maxLat — статистика «вне bbox» (необязательно)",
     )
     parser.add_argument(
-        "--bbox-out",
+        "--regions-dir",
         type=Path,
-        help="JSONL только для bbox (требует --bbox); без него bbox игнорируется",
+        help="Каталог: для КАЖДОГО региона из tools/regions.json писать {dir}/{name}.jsonl",
     )
     args = parser.parse_args()
 
@@ -387,8 +392,19 @@ def main() -> None:
         bbox = tuple(float(x) for x in args.bbox.split(","))
         if len(bbox) != 4:
             sys.exit("bbox: minLon,minLat,maxLon,maxLat")
-        if not args.bbox_out:
-            sys.exit("--bbox без --bbox-out бесполезен: укажите --bbox-out")
+
+    # Региональные writer'ы: открываем все файлы сразу, пишем на лету
+    region_writers: dict[str, tuple] = {}
+    if args.regions_dir:
+        registry = Path(__file__).parent.parent / "regions.json"
+        regions = json.loads(registry.read_text(encoding="utf-8"))
+        args.regions_dir.mkdir(parents=True, exist_ok=True)
+        for name, entry in regions.items():
+            if not isinstance(entry, dict) or "bbox" not in entry:
+                continue
+            fh = (args.regions_dir / f"{name}.jsonl").open("w", encoding="utf-8")
+            region_writers[name] = (tuple(entry["bbox"]), fh)
+        print(f"Регионов открыто: {len(region_writers)} → {args.regions_dir}")
 
     stats = {"peaks": 0, "outside": 0, "no_name": 0, "no_ele": 0, "written": 0}
     t0 = time.time()
@@ -396,13 +412,7 @@ def main() -> None:
     file_size = args.input.stat().st_size
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    bbox_out = None
-    if args.bbox_out:
-        args.bbox_out.parent.mkdir(parents=True, exist_ok=True)
-        bbox_out = args.bbox_out.open("w", encoding="utf-8")
-
     with args.input.open("rb") as f, args.out.open("w", encoding="utf-8") as out:
-        outs = [out] + ([bbox_out] if bbox_out else [])
         while True:
             header = read_blob_header(f)
             if header is None:
@@ -410,7 +420,7 @@ def main() -> None:
             blob_type, datasize = header
             if blob_type == "OSMData":
                 raw = read_blob(f, datasize)
-                parse_primitive_block(raw, outs, bbox, stats)
+                parse_primitive_block(raw, out, bbox, stats, region_writers)
                 blocks += 1
                 if blocks % 50 == 0:
                     elapsed = time.time() - t0
@@ -422,8 +432,9 @@ def main() -> None:
                         f"  {pct:5.1f}% | {blocks} блоков | "
                         f"{stats['peaks']} пиков, записано {stats['written']}"
                         + (
-                            f" (в bbox: {stats.get('written_bbox', 0)})"
-                            if bbox_out
+                            f" | регионов с пиками: "
+                            f"{sum(1 for k in stats if k.startswith('region:'))}"
+                            if region_writers
                             else ""
                         )
                         + f" | {speed:.1f} МБ/с | прошло {elapsed / 60:.1f} мин, "
@@ -433,20 +444,21 @@ def main() -> None:
             else:  # OSMHeader — пропускаем
                 f.seek(datasize, 1)
 
-    if bbox_out:
-        bbox_out.close()
+    for _, fh in region_writers.values():
+        fh.close()
 
     elapsed = time.time() - t0
     print(
         f"OK: {stats['written']} вершин → {args.out} за {elapsed / 60:.1f} мин\n"
-        f"  найдено natural=peak: {stats['peaks']}, вне bbox: {stats['outside']}, "
+        f"  найдено natural=peak: {stats['peaks']}, "
         f"без имени: {stats['no_name']}, без ele: {stats['no_ele']}"
-        + (
-            f"\n  в bbox записано: {stats.get('written_bbox', 0)} → {args.bbox_out}"
-            if args.bbox_out
-            else ""
-        )
     )
+    if region_writers:
+        print("  По регионам:")
+        for name in sorted(region_writers):
+            n = stats.get(f"region:{name}", 0)
+            if n:
+                print(f"    {name}: {n}")
 
 
 if __name__ == "__main__":
