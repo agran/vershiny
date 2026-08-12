@@ -253,20 +253,76 @@ async function main(): Promise<void> {
   setupSearchButton(origin);
 }
 
-/** Поиск вершины: поле ввода + переход с отступом */
+/** Поиск вершины: поле ввода поверх панорамы + переход с отступом */
 function setupSearchButton(origin: LatLon): void {
   const btn = makeButton('🔍', t('searchPeak'), 'left:16px;bottom:16px');
+  let searchOverlay: HTMLElement | null = null;
+
   btn.onclick = () => {
-    // prompt() может не работать в iframe/некоторых контекстах — fallback на input
-    const query = prompt(t('searchPrompt')) ?? '';
-    if (!query.trim()) return;
-    const peak = findPeakByName(query, currentPeaks);
-    if (!peak) {
-      setStatus(t('peakNotFound'));
-      setTimeout(() => setStatus(''), 3000);
+    if (searchOverlay) {
+      searchOverlay.remove();
+      searchOverlay = null;
       return;
     }
-    jumpToPeak(peak, origin);
+
+    // Поле ввода поверх панорамы (prompt() не работает в PWA/iframe)
+    searchOverlay = document.createElement('div');
+    searchOverlay.style.cssText =
+      'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);' +
+      'background:#1a1a2e;border-radius:12px;padding:16px;z-index:50;' +
+      'display:flex;flex-direction:column;gap:12px;min-width:280px;' +
+      'border:1px solid #415a77';
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = t('searchPrompt');
+    input.style.cssText =
+      'background:#2b2d42;color:#f1faee;border:1px solid #415a77;' +
+      'border-radius:8px;padding:10px 12px;font-size:14px;outline:none';
+
+    const btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex;gap:8px;justify-content:flex-end';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = t('close');
+    cancelBtn.style.cssText =
+      'background:#415a77;color:#f1faee;border:none;border-radius:8px;' +
+      'padding:8px 16px;font-size:14px;cursor:pointer';
+    cancelBtn.onclick = () => {
+      searchOverlay?.remove();
+      searchOverlay = null;
+    };
+
+    const searchBtn = document.createElement('button');
+    searchBtn.textContent = t('searchPeak');
+    searchBtn.style.cssText =
+      'background:#4cc9f0;color:#1a1a2e;border:none;border-radius:8px;' +
+      'padding:8px 16px;font-size:14px;cursor:pointer;font-weight:500';
+    searchBtn.onclick = () => {
+      const query = input.value.trim();
+      if (!query) return;
+      const peak = findPeakByName(query, currentPeaks);
+      searchOverlay?.remove();
+      searchOverlay = null;
+      if (!peak) {
+        setStatus(t('peakNotFound'));
+        setTimeout(() => setStatus(''), 3000);
+        return;
+      }
+      jumpToPeak(peak, origin);
+    };
+
+    input.onkeydown = (ev) => {
+      if (ev.key === 'Enter') searchBtn.click();
+      if (ev.key === 'Escape') cancelBtn.click();
+    };
+
+    btnRow.appendChild(cancelBtn);
+    btnRow.appendChild(searchBtn);
+    searchOverlay.appendChild(input);
+    searchOverlay.appendChild(btnRow);
+    document.body.appendChild(searchOverlay);
+    input.focus();
   };
 }
 
