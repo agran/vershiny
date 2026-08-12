@@ -7,6 +7,7 @@ import { t, getLocale, setLocale, type Locale } from '../core/i18n';
 import { loadRegions, regionLabel, type RegionInfo } from './download';
 import { getDownloadedRegions } from '../core/db';
 import { orientationTracker } from '../core/orientation';
+import type { LatLon } from '../core/geo';
 
 export interface SettingsCallbacks {
   onRegionChange: (region: string) => void;
@@ -17,6 +18,7 @@ export interface SettingsCallbacks {
 /** Открыть панель настроек. Возвращает функцию закрытия. */
 export function openSettings(
   currentRegion: string,
+  origin: LatLon,
   callbacks: SettingsCallbacks,
 ): () => void {
   const overlay = document.createElement('div');
@@ -83,49 +85,114 @@ export function openSettings(
   };
   panel.appendChild(resetBtn);
 
-  // --- Скачанные регионы ---
+  // --- Регионы: выбор + скачивание ---
   const dlTitle = document.createElement('h3');
-  dlTitle.textContent = t('downloadedRegions');
+  dlTitle.textContent = t('regions');
   dlTitle.style.cssText = 'margin:20px 0 8px;font-size:16px;font-weight:600';
   panel.appendChild(dlTitle);
+
   const dlList = document.createElement('div');
-  dlList.style.cssText = 'font-size:13px;color:#a8dadc';
+  dlList.style.cssText = 'display:flex;flex-direction:column;gap:8px';
   panel.appendChild(dlList);
 
-  // Загрузка реестра регионов
-  loadRegions().then((regions) => {
-    // Сортировка: приоритет 1 → 2 → 3 → 4, затем по алфавиту
-    const entries = Object.entries(regions)
-      .filter(([k, v]) => k.startsWith('$') === false && typeof v === 'object')
-      .sort(([, a], [, b]) => {
-        const pa = (a as RegionInfo & { priority?: number }).priority ?? 9;
-        const pb = (b as RegionInfo & { priority?: number }).priority ?? 9;
-        if (pa !== pb) return pa - pb;
-        return regionLabel(a as RegionInfo).localeCompare(
-          regionLabel(b as RegionInfo),
-        );
-      });
+  // Загрузка реестра + скачанных
+  Promise.all([loadRegions(), getDownloadedRegions()]).then(
+    ([regions, downloaded]) => {
+      const downloadedSet = new Set(downloaded);
 
-    for (const [key, info] of entries) {
-      const opt = document.createElement('option');
-      opt.value = key;
-      opt.textContent = regionLabel(info as RegionInfo);
-      if (key === currentRegion) opt.selected = true;
-      regionSelect.appendChild(opt);
-    }
-  });
+      // Сортировка: приоритет 1 → 2 → 3 → 4, затем по алфавиту
+      const entries = Object.entries(regions)
+        .filter(([k, v]) => k.startsWith('$') === false && typeof v === 'object')
+        .sort(([, a], [, b]) => {
+          const pa = (a as RegionInfo & { priority?: number }).priority ?? 9;
+          const pb = (b as RegionInfo & { priority?: number }).priority ?? 9;
+          if (pa !== pb) return pa - pb;
+          return regionLabel(a as RegionInfo).localeCompare(
+            regionLabel(b as RegionInfo),
+          );
+        });
+
+      for (const [key, info] of entries) {
+        const regionInfo = info as RegionInfo;
+        const isCurrent = key === currentRegion;
+        const isDownloaded = downloadedSet.has(key);
+
+        const rowEl = document.createElement('div');
+        rowEl.style.cssText =
+          'display:flex;align-items:center;gap:8px;padding:6px 8px;' +
+          `border-radius:8px;background:${isCurrent ? '#2b4a6f' : '#1f2833'};` +
+          'border:1px solid #415a77';
+
+        // Название
+        const name = document.createElement('span');
+        name.textContent = regionLabel(regionInfo);
+        name.style.cssText = 'flex:1;font-size:13px';
+        rowEl.appendChild(name);
+
+        // Статус / кнопка скачивания
+        const btn = document.createElement('button');
+        btn.style.cssText =
+          'border:none;border-radius:6px;padding:4px 10px;font-size:12px;' +
+          'cursor:pointer;flex-shrink:0';
+        if (isDownloaded) {
+          btn.textContent = '✓';
+          btn.style.background = '#2d6a4f';
+          btn.style.color = '#d8f3dc';
+          btn.disabled = true;
+        } else {
+          btn.textContent = t('download');
+          btn.style.background = '#415a77';
+          btn.style.color = '#f1faee';
+          btn.onclick = async () => {
+            btn.disabled = true;
+            btn.textContent = '…';
+            try {
+              const { downloadRegion } = await import('./download');
+              await downloadRegion(key, origin, (p) => {
+                if (p.phase === 'tiles') {
+                  btn.textContent = `${p.done}/${p.total}`;
+                }
+              });
+              btn.textContent = '✓';
+              btn.style.background = '#2d6a4f';
+            } catch {
+              btn.textContent = '✗';
+              btn.style.background = '#e63946';
+              setTimeout(() => {
+                btn.textContent = t('download');
+                btn.style.background = '#415a77';
+                btn.disabled = false;
+              }, 2000);
+            }
+          };
+        }
+        rowEl.appendChild(btn);
+
+        // Пометка текущего региона
+        if (isCurrent) {
+          const badge = document.createElement('span');
+          badge.textContent = '●';
+          badge.style.cssText = 'color:#4cc9f0;font-size:10px';
+          rowEl.appendChild(badge);
+        }
+
+        dlList.appendChild(rowEl);
+      }
+
+      // Обновление выпадающего списка
+      for (const [key, info] of entries) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = regionLabel(info as RegionInfo);
+        if (key === currentRegion) opt.selected = true;
+        regionSelect.appendChild(opt);
+      }
+    },
+  );
 
   regionSelect.onchange = () => {
     callbacks.onRegionChange(regionSelect.value);
   };
-
-  // Список скачанных
-  getDownloadedRegions().then((downloaded) => {
-    dlList.textContent =
-      downloaded.length > 0
-        ? downloaded.join(', ')
-        : t('noDownloadedRegions');
-  });
 
   // Закрытие по клику на оверлей
   overlay.onclick = (ev) => {

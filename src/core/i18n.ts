@@ -61,6 +61,8 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   resetOffset: { ru: 'Сбросить подстройку', en: 'Reset offset' },
   downloadedRegions: { ru: 'Скачанные регионы', en: 'Downloaded regions' },
   noDownloadedRegions: { ru: 'пока нет', en: 'none yet' },
+  regions: { ru: 'Регионы', en: 'Regions' },
+  download: { ru: 'Скачать', en: 'Download' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },

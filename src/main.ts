@@ -215,7 +215,7 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
       return;
     }
     const { openSettings } = await import('./ui/settings');
-    settingsClose = openSettings(currentRegion, {
+    settingsClose = openSettings(currentRegion, lastOrigin, {
       onRegionChange: (currentRegion) => {
         currentRegion = currentRegion;
         // Перезагружаем панораму с новым регионом
