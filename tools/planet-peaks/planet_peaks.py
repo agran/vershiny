@@ -428,6 +428,10 @@ def main() -> None:
                 parse_primitive_block(raw, out, bbox, stats, region_writers)
                 blocks += 1
                 if blocks % 50 == 0:
+                    # Сброс буферов — виден прогресс в файлах, защита от потери
+                    out.flush()
+                    for _, fh in region_writers.values():
+                        fh.flush()
                     elapsed = time.time() - t0
                     pos = f.tell()
                     pct = 100 * pos / file_size
