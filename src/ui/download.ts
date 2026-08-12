@@ -15,6 +15,8 @@ export interface RegionInfo {
   bbox: [number, number, number, number];
   priority?: number;
   group?: string;
+  core_ru?: string;
+  core_en?: string;
 }
 
 export interface DownloadProgress {
@@ -129,4 +131,11 @@ export function regionLabel(info: RegionInfo): string {
   return getLocale() === 'ru'
     ? (info.title_ru ?? info.title_en ?? '')
     : (info.title_en ?? info.title_ru ?? '');
+}
+
+/** Ключевые вершины региона для UI с учётом локали */
+export function regionCore(info: RegionInfo): string {
+  return getLocale() === 'ru'
+    ? (info.core_ru ?? info.core_en ?? '')
+    : (info.core_en ?? info.core_ru ?? '');
 }

@@ -4,7 +4,7 @@
  */
 
 import { t, getLocale, setLocale, type Locale } from '../core/i18n';
-import { loadRegions, regionLabel, type RegionInfo } from './download';
+import { loadRegions, regionLabel, regionCore, type RegionInfo } from './download';
 import { getDownloadedRegions } from '../core/db';
 import { orientationTracker } from '../core/orientation';
 import type { LatLon } from '../core/geo';
@@ -145,13 +145,20 @@ export function openSettings(
             `border-radius:8px;background:${isCurrent ? '#2b4a6f' : '#1f2833'};` +
             'border:1px solid #415a77;margin-left:8px';
 
-          // Название + размер
+          // Название + ключевые вершины + размер
           const nameWrap = document.createElement('div');
           nameWrap.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:2px';
           const name = document.createElement('span');
           name.textContent = regionLabel(regionInfo);
           name.style.cssText = 'font-size:13px';
           nameWrap.appendChild(name);
+          const core = regionCore(regionInfo);
+          if (core) {
+            const coreEl = document.createElement('span');
+            coreEl.textContent = core;
+            coreEl.style.cssText = 'font-size:11px;color:#8a9ba8;font-style:italic';
+            nameWrap.appendChild(coreEl);
+          }
           const size = estimateRegionSizeMB(regionInfo.bbox);
           const sizeEl = document.createElement('span');
           sizeEl.textContent = `~${size} МБ`;
