@@ -1,12 +1,32 @@
 {
  "region": "middle-east",
- "generated": "2026-08-12T10:55:00+00:00",
+ "generated": "2026-08-13T09:16:24+00:00",
  "peaks": [
   {
    "lat": 38.0475,
    "lon": 57.671422,
    "name": "Üçdepe",
    "ele": 9966
+  },
+  {
+   "lat": 35.954365,
+   "lon": 52.110342,
+   "name": "دماوند",
+   "name_ru": "Демавенд",
+   "name_en": "Damavand",
+   "ele": 5609,
+   "wikidata": "Q40758",
+   "volcano": true
+  },
+  {
+   "lat": 39.701935,
+   "lon": 44.298396,
+   "name": "Ağrı Dağı",
+   "name_ru": "Большой Арарат",
+   "name_en": "Mount Ararat",
+   "ele": 5137,
+   "wikidata": "Q72303",
+   "volcano": true
   },
   {
    "lat": 36.375587,
@@ -16,6 +36,16 @@
    "name_en": "Alam-Kouh",
    "ele": 4826,
    "wikidata": "Q3696208"
+  },
+  {
+   "lat": 38.267158,
+   "lon": 47.836932,
+   "name": "سبلان",
+   "name_ru": "Себелан",
+   "name_en": "Sabalan",
+   "ele": 4811,
+   "wikidata": "Q1364168",
+   "volcano": true
   },
   {
    "lat": 38.268134,
@@ -2020,6 +2050,16 @@
    "ele": 3916
   },
   {
+   "lat": 38.53274,
+   "lon": 35.450225,
+   "name": "Erciyes Dağı",
+   "name_ru": "Эрджияс",
+   "name_en": "Mount Erciyes",
+   "ele": 3916,
+   "wikidata": "Q126804",
+   "volcano": true
+  },
+  {
    "lat": 35.885175,
    "lon": 51.414783,
    "name": "هومند توچال",
@@ -2220,6 +2260,16 @@
    "lon": 51.617268,
    "name": "نسی جر",
    "ele": 3889
+  },
+  {
+   "lat": 39.648205,
+   "lon": 44.413816,
+   "name": "Küçük Ağrı Dağı",
+   "name_ru": "Малый Арарат",
+   "name_en": "Mount Little Ararat",
+   "ele": 3887,
+   "wikidata": "Q4278782",
+   "volcano": true
   },
   {
    "lat": 41.941846,
@@ -3633,6 +3683,15 @@
    "ele": 3705
   },
   {
+   "lat": 37.730005,
+   "lon": 46.499935,
+   "name": "کمال",
+   "name_en": "Kamal",
+   "ele": 3704,
+   "wikidata": "Q1432738",
+   "volcano": true
+  },
+  {
    "lat": 33.358314,
    "lon": 49.258084,
    "name": "کلورید",
@@ -4642,6 +4701,26 @@
    "name": "لزون غربی",
    "name_en": "Lezon",
    "ele": 3585
+  },
+  {
+   "lat": 39.354844,
+   "lon": 43.866994,
+   "name": "Tendürek Dağı",
+   "name_ru": "Тендюрек",
+   "name_en": "Mount Tendurek",
+   "ele": 3584,
+   "wikidata": "Q1125445",
+   "volcano": true
+  },
+  {
+   "lat": 39.676682,
+   "lon": 46.079256,
+   "name": "Gargar Volcan",
+   "name_ru": "Каркар вулкан",
+   "name_en": "Gargar Volcan",
+   "ele": 3584,
+   "wikidata": "Q4175726",
+   "volcano": true
   },
   {
    "lat": 41.315655,
@@ -9233,6 +9312,15 @@
    "ele": 3258
   },
   {
+   "lat": 38.126527,
+   "lon": 34.165113,
+   "name": "Hasan Dağı",
+   "name_ru": "Хасандаг",
+   "ele": 3256,
+   "wikidata": "Q1302768",
+   "volcano": true
+  },
+  {
    "lat": 42.268557,
    "lon": 45.530203,
    "name": "ბულანჩოსწვერი",
@@ -9391,6 +9479,14 @@
    "lon": 47.025003,
    "name": "Хачхач",
    "ele": 3249
+  },
+  {
+   "lat": 42.484142,
+   "lon": 44.339778,
+   "name": "Нарванхох",
+   "name_ru": "Нарванхох",
+   "ele": 3247,
+   "volcano": true
   },
   {
    "lat": 41.27134,
@@ -14929,6 +15025,16 @@
    "lon": 46.65069,
    "name": "اروانه",
    "ele": 2949
+  },
+  {
+   "lat": 38.654696,
+   "lon": 42.25544,
+   "name": "Nemrut Dağı",
+   "name_ru": "Немрут-Даг",
+   "name_en": "Mount Nemrut",
+   "ele": 2948,
+   "wikidata": "Q948747",
+   "volcano": true
   },
   {
    "lat": 40.916807,
@@ -28964,6 +29070,13 @@
    "wikidata": "Q31533648"
   },
   {
+   "lat": 39.198782,
+   "lon": 43.182376,
+   "name": "Girekol Yanardağı",
+   "ele": 2323,
+   "volcano": true
+  },
+  {
    "lat": 38.349911,
    "lon": 36.501388,
    "name": "Kocaçat",
@@ -32961,6 +33074,14 @@
    "ele": 2173
   },
   {
+   "lat": 38.254661,
+   "lon": 34.544603,
+   "name": "Göllü Dağ",
+   "ele": 2172,
+   "wikidata": "Q1559343",
+   "volcano": true
+  },
+  {
    "lat": 38.355083,
    "lon": 43.849056,
    "name": "Plangör Tepesi",
@@ -33552,6 +33673,21 @@
    "lon": 36.36363,
    "name": "Karamanlı Dağı",
    "ele": 2150
+  },
+  {
+   "lat": 29.392694,
+   "lon": 57.563643,
+   "name": "کوه آتشفشانی کله نمکی",
+   "ele": 2150,
+   "volcano": true
+  },
+  {
+   "lat": 38.622504,
+   "lon": 42.246723,
+   "name": "Nemrut Dağı",
+   "ele": 2150,
+   "wikidata": "Q948747",
+   "volcano": true
   },
   {
    "lat": 40.11754,
@@ -39322,6 +39458,14 @@
    "lon": 46.678355,
    "name": "Цоракуль-Эмир",
    "ele": 1958
+  },
+  {
+   "lat": 37.711429,
+   "lon": 39.829046,
+   "name": "Karacadağ",
+   "ele": 1957,
+   "wikidata": "Q187946",
+   "volcano": true
   },
   {
    "lat": 40.980283,
@@ -48982,6 +49126,14 @@
    "ele": 1689
   },
   {
+   "lat": 38.540647,
+   "lon": 34.617276,
+   "name": "Acıgöl-Nevşehir",
+   "ele": 1689,
+   "wikidata": "Q345086",
+   "volcano": true
+  },
+  {
    "lat": 39.48501,
    "lon": 35.705671,
    "name": "Çanlıdede Tepesi",
@@ -53802,6 +53954,14 @@
    "lon": 45.563579,
    "name": "توربین داغی",
    "ele": 1570
+  },
+  {
+   "lat": 27.254035,
+   "lon": 37.240236,
+   "name": "Hala il' badr",
+   "ele": 1570,
+   "wikidata": "Q1126038",
+   "volcano": true
   },
   {
    "lat": 40.397407,
@@ -63204,6 +63364,13 @@
    "ele": 1327
   },
   {
+   "lat": 37.957994,
+   "lon": 34.033876,
+   "name": "Büyükkaraoğlan Tepe",
+   "ele": 1326,
+   "volcano": true
+  },
+  {
    "lat": 39.777941,
    "lon": 35.568001,
    "name": "Gözkaya Tepesi",
@@ -71074,6 +71241,14 @@
    "ele": 945
   },
   {
+   "lat": 33.420573,
+   "lon": 36.93385,
+   "name": "تل الدكوة",
+   "name_en": "Tall ad Dakwah",
+   "ele": 945,
+   "volcano": true
+  },
+  {
    "lat": 38.179437,
    "lon": 39.69538,
    "name": "Berven Dağı",
@@ -72165,6 +72340,14 @@
    "name_en": "Har Berekh",
    "ele": 845,
    "wikidata": "Q7211217"
+  },
+  {
+   "lat": 33.430387,
+   "lon": 36.930009,
+   "name": "Tall Abu-Safa",
+   "name_en": "Tall Abu-Safa",
+   "ele": 845,
+   "volcano": true
   },
   {
    "lat": 41.267079,
@@ -73775,6 +73958,15 @@
    "name_en": "Har Eshkar",
    "ele": 695,
    "wikidata": "Q7211202"
+  },
+  {
+   "lat": 37.328705,
+   "lon": 40.219307,
+   "name": "Söğütözü Krateri",
+   "name_en": "Söğütözü Crater",
+   "ele": 694,
+   "wikidata": "Q31573859",
+   "volcano": true
   },
   {
    "lat": 30.572214,
@@ -76687,6 +76879,13 @@
    "ele": 417
   },
   {
+   "lat": 40.24462,
+   "lon": 49.01424,
+   "name": "Mud volcano",
+   "ele": 417,
+   "volcano": true
+  },
+  {
    "lat": 39.881528,
    "lon": 47.078135,
    "name": "Çeyil",
@@ -76843,12 +77042,28 @@
    "ele": 400
   },
   {
+   "lat": 40.141769,
+   "lon": 49.382164,
+   "name": "Böyük Kənizədağ Palçıq vulkanı",
+   "name_en": "Boyuk Kanizadag mud vulkano",
+   "ele": 398,
+   "volcano": true
+  },
+  {
    "lat": 31.633577,
    "lon": 34.909769,
    "name": "תל גודד",
    "name_en": "Tel Goded",
    "ele": 398,
    "wikidata": "Q7056545"
+  },
+  {
+   "lat": 40.129049,
+   "lon": 49.407835,
+   "name": "Qotur palçıq vulkanı",
+   "name_en": "Qotur mud vulkano",
+   "ele": 398,
+   "volcano": true
   },
   {
    "lat": 32.680745,
@@ -76917,10 +77132,26 @@
    "ele": 392
   },
   {
+   "lat": 40.240225,
+   "lon": 49.507703,
+   "name": "Osman Bozdağ palçıq vulkanı",
+   "name_ru": "Осман-Боздаг грязевой вулкан",
+   "name_en": "Mud Volcano",
+   "ele": 392,
+   "volcano": true
+  },
+  {
    "lat": 41.064088,
    "lon": 40.663136,
    "name": "Cazıdağı Tepesi",
    "ele": 391
+  },
+  {
+   "lat": 40.165422,
+   "lon": 49.298253,
+   "name": "Torağay Dağı Palçıq Vulkanı",
+   "ele": 390,
+   "volcano": true
   },
   {
    "lat": 31.290155,
@@ -77488,6 +77719,14 @@
    "name_en": "Har Shahmon",
    "ele": 325,
    "wikidata": "Q12019198"
+  },
+  {
+   "lat": 35.905918,
+   "lon": 39.360936,
+   "name": "جبل منخار الشرقي",
+   "name_en": "Jabal Minkhar ash Sharqi",
+   "ele": 325,
+   "volcano": true
   },
   {
    "lat": 31.662447,
@@ -78579,6 +78818,14 @@
    "ele": 147
   },
   {
+   "lat": 40.464868,
+   "lon": 49.790729,
+   "name": "Keyrəki palçıq vulkanı",
+   "ele": 146,
+   "wikidata": "Q12840882",
+   "volcano": true
+  },
+  {
    "lat": 32.777823,
    "lon": 35.661528,
    "name": "סוסיתא",
@@ -78870,6 +79117,15 @@
    "lon": 38.41402,
    "name": "Gedikkaya",
    "ele": 100
+  },
+  {
+   "lat": 40.304451,
+   "lon": 49.709007,
+   "name": "Lökbatan palçıq vulkanı",
+   "name_en": "Mud Volcano Lokbatan",
+   "ele": 100,
+   "wikidata": "Q12841468",
+   "volcano": true
   },
   {
    "lat": 32.557586,
@@ -79383,6 +79639,34 @@
    "lon": 45.821994,
    "name": "قوچ گلی داغی",
    "name_en": "Ghoch Goli Daghi"
+  },
+  {
+   "lat": 40.208834,
+   "lon": 48.850822,
+   "name": "Axtarma Paşalı palçıq vulkanı",
+   "volcano": true
+  },
+  {
+   "lat": 39.996467,
+   "lon": 49.402897,
+   "name": "Qobustan Daşgil Palçıq Vulkanı",
+   "name_ru": "Грязевые вулканы Гобустана",
+   "name_en": "Gobustan mud volcanoes",
+   "volcano": true
+  },
+  {
+   "lat": 39.998755,
+   "lon": 49.475048,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano \\ Alat",
+   "volcano": true
+  },
+  {
+   "lat": 39.998044,
+   "lon": 49.455127,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
   },
   {
    "lat": 32.963501,
@@ -80153,10 +80437,50 @@
    "wikidata": "Q26763558"
   },
   {
+   "lat": 38.502421,
+   "lon": 34.57638,
+   "name": "Koru Dağı",
+   "volcano": true
+  },
+  {
+   "lat": 38.558149,
+   "lon": 34.529855,
+   "name": "Acıgöl dağı",
+   "volcano": true
+  },
+  {
    "lat": 40.523232,
    "lon": 44.195092,
    "name": "North false peak",
    "name_ru": "Северная ложная вершина"
+  },
+  {
+   "lat": 33.385875,
+   "lon": 37.149714,
+   "name": "تليطاوات وسطاني",
+   "name_en": "Tlitawat wastali",
+   "volcano": true
+  },
+  {
+   "lat": 33.45207,
+   "lon": 36.931017,
+   "name": "تل العلق",
+   "name_en": "Tall al 'Allaq",
+   "volcano": true
+  },
+  {
+   "lat": 33.468969,
+   "lon": 36.956938,
+   "name": "تل جعفر",
+   "name_en": "Tall Ja`far",
+   "volcano": true
+  },
+  {
+   "lat": 33.310892,
+   "lon": 37.353524,
+   "name": "جبل سيس",
+   "name_en": "Jabal Says",
+   "volcano": true
   },
   {
    "lat": 33.519215,
@@ -83570,6 +83894,13 @@
    "name_en": "Tall al Jihash"
   },
   {
+   "lat": 33.476841,
+   "lon": 37.197302,
+   "name": "تلول أم قضقاض",
+   "name_en": "Tulul Umm Qadqad",
+   "volcano": true
+  },
+  {
    "lat": 34.054735,
    "lon": 37.28426,
    "name": "جبل دلة",
@@ -83586,6 +83917,20 @@
    "lon": 37.321345,
    "name": "جبل عنيبة",
    "name_en": "Jabal `Unaybah"
+  },
+  {
+   "lat": 33.390618,
+   "lon": 36.998308,
+   "name": "تل شيبة",
+   "name_en": "Tall Shaybah",
+   "volcano": true
+  },
+  {
+   "lat": 33.162381,
+   "lon": 37.098077,
+   "name": "مفرد غيل",
+   "name_en": "Mufrad Ghayl",
+   "volcano": true
   },
   {
    "lat": 33.389597,
@@ -83606,10 +83951,38 @@
    "name_en": "Darayir Shamali"
   },
   {
+   "lat": 33.373671,
+   "lon": 37.369719,
+   "name": "تل مكيحلات",
+   "name_en": "Tall Mukayhilat",
+   "volcano": true
+  },
+  {
    "lat": 33.18375,
    "lon": 37.094732,
    "name": "غيلة",
    "name_en": "Ghaylah"
+  },
+  {
+   "lat": 33.390143,
+   "lon": 37.141748,
+   "name": "تليطاوات شمالي",
+   "name_en": "Tlitawat shimali",
+   "volcano": true
+  },
+  {
+   "lat": 33.296534,
+   "lon": 37.156964,
+   "name": "تل الأقعص",
+   "name_en": "Tall al Aq`as",
+   "volcano": true
+  },
+  {
+   "lat": 33.306756,
+   "lon": 36.984858,
+   "name": "تل اللص",
+   "name_en": "Tall al Liss",
+   "volcano": true
   },
   {
    "lat": 33.452788,
@@ -83624,16 +83997,51 @@
    "name_en": "Tall al A`jar"
   },
   {
+   "lat": 33.472259,
+   "lon": 37.155594,
+   "name": "أم عقربة",
+   "name_en": "Umm `Aqrabah",
+   "volcano": true
+  },
+  {
+   "lat": 33.333386,
+   "lon": 37.153297,
+   "name": "الخنيفس",
+   "name_en": "Al Khunayfis",
+   "volcano": true
+  },
+  {
    "lat": 33.362941,
    "lon": 36.988231,
    "name": "تلول ليلى",
    "name_en": "Tulul Layla"
   },
   {
+   "lat": 33.368889,
+   "lon": 37.161667,
+   "name": "تليطاوات قبلي",
+   "name_en": "Tlitawat Qiblī",
+   "volcano": true
+  },
+  {
    "lat": 33.466648,
    "lon": 37.035386,
    "name": "مسراقي",
    "name_en": "Msarraqiye"
+  },
+  {
+   "lat": 33.437373,
+   "lon": 36.945187,
+   "name": "المحفور",
+   "name_en": "Al Mahfur",
+   "volcano": true
+  },
+  {
+   "lat": 33.483999,
+   "lon": 37.139282,
+   "name": "تلول أم رقيبة",
+   "name_en": "Tulul Umm ruqaybah",
+   "volcano": true
   },
   {
    "lat": 33.283333,
@@ -83672,6 +84080,13 @@
    "name_en": "As Sughayyir al Qibli"
   },
   {
+   "lat": 33.344901,
+   "lon": 36.961194,
+   "name": "حوية",
+   "name_en": "Hawiyah",
+   "volcano": true
+  },
+  {
    "lat": 33.22993,
    "lon": 37.142885,
    "name": "أم الجمبريس",
@@ -83682,6 +84097,20 @@
    "lon": 37.660504,
    "name": "رجم الخطيب",
    "name_en": "Rujm al Khatib"
+  },
+  {
+   "lat": 33.407426,
+   "lon": 37.357735,
+   "name": "تل مكحول",
+   "name_en": "Tall Makhul",
+   "volcano": true
+  },
+  {
+   "lat": 33.470761,
+   "lon": 36.999646,
+   "name": "تل دخان",
+   "name_en": "Tall Dukhan",
+   "volcano": true
   },
   {
    "lat": 34.483333,
@@ -87842,6 +88271,20 @@
    "name": "Əsǝd Dağı"
   },
   {
+   "lat": 33.424813,
+   "lon": 37.088756,
+   "name": "أم المعزة",
+   "name_en": "Umm al Ma`zah",
+   "volcano": true
+  },
+  {
+   "lat": 33.464204,
+   "lon": 36.918296,
+   "name": "تل المطلة",
+   "name_en": "Tall al Mutillah",
+   "volcano": true
+  },
+  {
    "lat": 36.097398,
    "lon": 59.533906,
    "name": "بادی",
@@ -88495,6 +88938,12 @@
    "name_en": "Jibal as Sandalah"
   },
   {
+   "lat": 30.686944,
+   "lon": 39.401667,
+   "name": "تل مسحا",
+   "volcano": true
+  },
+  {
    "lat": 29.893377,
    "lon": 39.807285,
    "name": "جبال الحمدي",
@@ -88709,6 +89158,13 @@
    "lon": 37.881389,
    "name": "جبل نعيج",
    "name_en": "Jabal Nuayj"
+  },
+  {
+   "lat": 30.874584,
+   "lon": 39.216051,
+   "name": "جبل طوقة",
+   "name_en": "Jabal Tawqah",
+   "volcano": true
   },
   {
    "lat": 32.2,
@@ -91851,6 +92307,12 @@
    "name_en": "Tell Qleib"
   },
   {
+   "lat": 37.962996,
+   "lon": 34.062166,
+   "name": "Danışık Tepesi",
+   "volcano": true
+  },
+  {
    "lat": 32.498148,
    "lon": 36.743275,
    "name": "تل أبو النوف",
@@ -91921,6 +92383,12 @@
    "name_en": "Kartan"
   },
   {
+   "lat": 39.365079,
+   "lon": 43.921269,
+   "name": "Küçük Tendürek Tepesi",
+   "volcano": true
+  },
+  {
    "lat": 37.618183,
    "lon": 44.595552,
    "name": "Alader Dağı"
@@ -91939,6 +92407,12 @@
    "lat": 33.334043,
    "lon": 37.061091,
    "name": "تل سخانة"
+  },
+  {
+   "lat": 32.715126,
+   "lon": 37.675806,
+   "name": "تل المسمى",
+   "volcano": true
   },
   {
    "lat": 35.505254,
@@ -94981,6 +95455,14 @@
    "name_en": "Chariqli Hill"
   },
   {
+   "lat": 41.245996,
+   "lon": 45.843991,
+   "name": "ტახტითეფას ტალახის ვულკანები",
+   "name_ru": "Грязевые вулканы Тахти-Тефа",
+   "name_en": "Takthi Tepa Mud Volcanoes",
+   "volcano": true
+  },
+  {
    "lat": 36.482599,
    "lon": 38.726841,
    "name": "Tal Abu Serra"
@@ -95511,6 +95993,15 @@
    "name_en": "Yishay"
   },
   {
+   "lat": 41.333983,
+   "lon": 45.769987,
+   "name": "ქილაკუპრას ტალახის ვულკანები",
+   "name_ru": "Грязевые вулканы Килакупра",
+   "name_en": "Kilakupra Mud Volcanoes",
+   "wikidata": "Q130746546",
+   "volcano": true
+  },
+  {
    "lat": 38.01958,
    "lon": 46.371715,
    "name": "تپه پرچم - تپه سلامتی",
@@ -95567,6 +96058,13 @@
    "lat": 38.950545,
    "lon": 47.833663,
    "name": "arallı"
+  },
+  {
+   "lat": 37.294117,
+   "lon": 40.259433,
+   "name": "Kuşçu Krateri",
+   "name_en": "Kuşçu Crater",
+   "volcano": true
   },
   {
    "lat": 36.686702,
@@ -95644,6 +96142,13 @@
    "name": "تپه جمال"
   },
   {
+   "lat": 37.117778,
+   "lon": 54.397669,
+   "name": "گل فشان قارنی یاریق",
+   "name_en": "Qarni Yariq Mud Volcano",
+   "volcano": true
+  },
+  {
    "lat": 36.389918,
    "lon": 37.613666,
    "name": "Maqri Hill"
@@ -95685,6 +96190,13 @@
    "lat": 27.644428,
    "lon": 36.719235,
    "name": "جبل شيبان"
+  },
+  {
+   "lat": 40.257644,
+   "lon": 49.550775,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano Gobustan Guzdak",
+   "volcano": true
   },
   {
    "lat": 36.145395,
@@ -95762,6 +96274,19 @@
    "lat": 29.366842,
    "lon": 55.762993,
    "name": "قلعه سنگ"
+  },
+  {
+   "lat": 40.430327,
+   "lon": 49.700661,
+   "name": "Palçıq Boz vulkanı Hökməli",
+   "name_en": "Mud Volcano Hokmaly",
+   "volcano": true
+  },
+  {
+   "lat": 37.652199,
+   "lon": 40.009563,
+   "name": "Baruttepe",
+   "volcano": true
   },
   {
    "lat": 36.359597,
@@ -95953,6 +96478,39 @@
    "name": "Tell ʿArāda"
   },
   {
+   "lat": 40.381383,
+   "lon": 49.610494,
+   "name": "Bozdağ Palçıq Vulkanı",
+   "volcano": true
+  },
+  {
+   "lat": 40.26236,
+   "lon": 49.314047,
+   "name": "Çeyildağ Palçıq vulkanı",
+   "name_en": "Cheyildagh Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.054376,
+   "lon": 49.265376,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 39.863674,
+   "lon": 49.427029,
+   "name": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.020662,
+   "lon": 49.372564,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano \\ Gobustan",
+   "volcano": true
+  },
+  {
    "lat": 36.667271,
    "lon": 36.629626,
    "name": "915. TEPE"
@@ -96052,6 +96610,13 @@
    "lat": 34.080288,
    "lon": 36.213347,
    "name": "تل مقنة"
+  },
+  {
+   "lat": 39.996213,
+   "lon": 49.405791,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
   },
   {
    "lat": 30.431492,
@@ -96161,6 +96726,30 @@
    "lat": 33.928378,
    "lon": 50.446987,
    "name": "اروج"
+  },
+  {
+   "lat": 35.050472,
+   "lon": 47.989764,
+   "name": "میره تپه",
+   "volcano": true
+  },
+  {
+   "lat": 35.000512,
+   "lon": 47.949205,
+   "name": "تپه رش",
+   "volcano": true
+  },
+  {
+   "lat": 35.020899,
+   "lon": 47.935626,
+   "name": "تپه روسم",
+   "volcano": true
+  },
+  {
+   "lat": 35.033591,
+   "lon": 47.956587,
+   "name": "تپه خیرویس",
+   "volcano": true
   },
   {
    "lat": 28.258946,
@@ -96723,6 +97312,12 @@
    "lat": 29.235378,
    "lon": 55.818894,
    "name": "بی بی دن"
+  },
+  {
+   "lat": 39.861191,
+   "lon": 49.295691,
+   "name": "Palçıq Vulkanı \\ Xıdırlı",
+   "volcano": true
   },
   {
    "lat": 36.598506,
@@ -97348,6 +97943,24 @@
    "lat": 38.29232,
    "lon": 34.985146,
    "name": "Hamit"
+  },
+  {
+   "lat": 31.319321,
+   "lon": 57.525151,
+   "name": "محمودی",
+   "volcano": true
+  },
+  {
+   "lat": 31.312484,
+   "lon": 57.526631,
+   "name": "مستوفی",
+   "volcano": true
+  },
+  {
+   "lat": 31.363846,
+   "lon": 57.511954,
+   "name": "پرفسور کردوانی",
+   "volcano": true
   },
   {
    "lat": 35.086429,
@@ -98168,6 +98781,14 @@
    "wikidata": "Q31520855"
   },
   {
+   "lat": 41.618054,
+   "lon": 43.70831,
+   "name": "შავნაბადას კრატერი",
+   "name_ru": "Кратер Шавнабада",
+   "name_en": "Shavnabada Crater",
+   "volcano": true
+  },
+  {
    "lat": 27.25178,
    "lon": 41.869854,
    "name": "هضاب أم الجباء"
@@ -98717,6 +99338,12 @@
    "name": "غيبان"
   },
   {
+   "lat": 40.185973,
+   "lon": 49.237669,
+   "name": "Palçıq vulkanları",
+   "volcano": true
+  },
+  {
    "lat": 38.783955,
    "lon": 34.773586,
    "name": "Çatalarkaç Tepesi"
@@ -98741,6 +99368,180 @@
    "lat": 28.798952,
    "lon": 54.426731,
    "name": "2000"
+  },
+  {
+   "lat": 37.829514,
+   "lon": 34.134736,
+   "name": "Yürük Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.826294,
+   "lon": 34.155207,
+   "name": "Gaffar Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.804495,
+   "lon": 34.149005,
+   "name": "Karatepe",
+   "volcano": true
+  },
+  {
+   "lat": 37.8009,
+   "lon": 34.133084,
+   "name": "Kırmızı Tepe",
+   "volcano": true
+  },
+  {
+   "lat": 37.807512,
+   "lon": 34.019358,
+   "name": "Kıpığın Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.799001,
+   "lon": 34.011505,
+   "name": "Delimahmut Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.811411,
+   "lon": 34.056501,
+   "name": "Karaman Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.828735,
+   "lon": 34.051867,
+   "name": "Paşa Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.830192,
+   "lon": 34.041867,
+   "name": "Dümbülce Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.840733,
+   "lon": 34.035344,
+   "name": "Küçük Tepe",
+   "volcano": true
+  },
+  {
+   "lat": 37.865605,
+   "lon": 34.024787,
+   "name": "Kanatkayası Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.871296,
+   "lon": 34.028435,
+   "name": "Lal Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.860082,
+   "lon": 34.041352,
+   "name": "Üçtepeler",
+   "volcano": true
+  },
+  {
+   "lat": 37.943893,
+   "lon": 34.104223,
+   "name": "Ayak Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.956109,
+   "lon": 34.110553,
+   "name": "Çifte Tepeler",
+   "volcano": true
+  },
+  {
+   "lat": 37.777431,
+   "lon": 34.078688,
+   "name": "Karaburun Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.794864,
+   "lon": 34.067831,
+   "name": "İlbizli Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.837649,
+   "lon": 34.083023,
+   "name": "Dedeler Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.864182,
+   "lon": 34.098773,
+   "name": "Peynirlik Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.851849,
+   "lon": 34.09122,
+   "name": "İnniol Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.877767,
+   "lon": 34.087787,
+   "name": "Enik Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.870958,
+   "lon": 34.082208,
+   "name": "Karatepe",
+   "volcano": true
+  },
+  {
+   "lat": 37.881086,
+   "lon": 34.058647,
+   "name": "Değirmen Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.887657,
+   "lon": 34.061522,
+   "name": "Eyerci Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.901915,
+   "lon": 34.050193,
+   "name": "Karatepe",
+   "volcano": true
+  },
+  {
+   "lat": 37.897377,
+   "lon": 34.028006,
+   "name": "Burunağıl Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.94237,
+   "lon": 34.084675,
+   "name": "Gamaz Tepesi",
+   "volcano": true
+  },
+  {
+   "lat": 37.984494,
+   "lon": 34.11684,
+   "name": "Baştepe",
+   "volcano": true
+  },
+  {
+   "lat": 37.970827,
+   "lon": 34.112549,
+   "name": "Kızıltepe",
+   "volcano": true
   },
   {
    "lat": 37.247424,
@@ -99005,6 +99806,36 @@
    "name": "Ortadağ Tepesi"
   },
   {
+   "lat": 40.827531,
+   "lon": 48.585652,
+   "name": "Dəmirçi Palçıq Vulkanı",
+   "volcano": true
+  },
+  {
+   "lat": 40.207623,
+   "lon": 48.858047,
+   "name": "Palçıq vulkanı",
+   "volcano": true
+  },
+  {
+   "lat": 40.51375,
+   "lon": 44.188632,
+   "name": "Արագած հրաբուխ",
+   "name_ru": "Вулкан Арагац",
+   "name_en": "Mount Aragats",
+   "wikidata": "Q203568",
+   "volcano": true
+  },
+  {
+   "lat": 40.226806,
+   "lon": 44.947418,
+   "name": "Աժդահակ",
+   "name_ru": "Аждаак",
+   "name_en": "Azhdahak",
+   "wikidata": "Q2150879",
+   "volcano": true
+  },
+  {
    "lat": 27.490047,
    "lon": 41.978245,
    "name": "جبل ياطب"
@@ -99013,6 +99844,15 @@
    "lat": 27.480063,
    "lon": 41.987729,
    "name": "جبل الدنان"
+  },
+  {
+   "lat": 39.797314,
+   "lon": 45.496665,
+   "name": "Վայոցսար",
+   "name_ru": "Вайоц-сар",
+   "name_en": "Vayots Sar",
+   "wikidata": "Q16400352",
+   "volcano": true
   },
   {
    "lat": 35.298274,
@@ -99047,9 +99887,175 @@
    "name_en": "Jabal Sejoud"
   },
   {
+   "lat": 39.998772,
+   "lon": 49.470727,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano \\ Alat",
+   "volcano": true
+  },
+  {
+   "lat": 40.131116,
+   "lon": 49.231431,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.120697,
+   "lon": 49.253297,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.124192,
+   "lon": 49.23598,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.10688,
+   "lon": 49.243331,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.09313,
+   "lon": 49.252455,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.089161,
+   "lon": 49.256333,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.086362,
+   "lon": 49.261622,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.065231,
+   "lon": 49.269712,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 39.98939,
+   "lon": 49.310862,
+   "name": "Ayrantəkan palçıq vulkanı",
+   "name_en": "Ayrantekan mud volcano \\ Qobustan",
+   "volcano": true
+  },
+  {
+   "lat": 39.97296,
+   "lon": 49.359019,
+   "name": "Qoturdağ palçıq vulkanı",
+   "name_en": "Qoturdag mud volcano \\ Qobustan",
+   "volcano": true
+  },
+  {
+   "lat": 40.027877,
+   "lon": 49.282801,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.005602,
+   "lon": 49.37023,
+   "name": "Diləngəz Palçıq Vulkanı",
+   "name_en": "Dilengez Mud volcano \\ Qobustan",
+   "volcano": true
+  },
+  {
+   "lat": 40.027121,
+   "lon": 49.276793,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.034696,
+   "lon": 49.266901,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.036947,
+   "lon": 49.268339,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.042335,
+   "lon": 49.280527,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.050318,
+   "lon": 49.272695,
+   "name": "Palçıq Vulkanı",
+   "name_en": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 40.006991,
+   "lon": 49.37531,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano \\ Gobustan",
+   "volcano": true
+  },
+  {
+   "lat": 40.004661,
+   "lon": 49.369002,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano \\ Gobustan",
+   "volcano": true
+  },
+  {
+   "lat": 40.029179,
+   "lon": 49.274293,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano \\ Gobustan",
+   "volcano": true
+  },
+  {
+   "lat": 40.006317,
+   "lon": 49.367725,
+   "name": "Palçıq vulkanı",
+   "name_en": "Mud volcano \\ Gobustan",
+   "volcano": true
+  },
+  {
    "lat": 27.417786,
    "lon": 38.510361,
    "name": "جندل الفهيقات"
+  },
+  {
+   "lat": 39.921158,
+   "lon": 49.264798,
+   "name": "Palçıq Vulkanı \\ Kürdçü",
+   "volcano": true
+  },
+  {
+   "lat": 39.931605,
+   "lon": 49.25316,
+   "name": "Kiçik Palçıq Vulkanı \\ Kürdçü",
+   "volcano": true
   },
   {
    "lat": 33.372544,
@@ -99109,6 +100115,14 @@
    "lat": 37.894896,
    "lon": 38.864624,
    "name": "Ziyaret Tepesi"
+  },
+  {
+   "lat": 40.21753,
+   "lon": 44.937022,
+   "name": "Կարմիր Կատար",
+   "name_ru": "Кармир",
+   "name_en": "Red Ridge",
+   "volcano": true
   },
   {
    "lat": 31.348498,
@@ -104761,6 +105775,13 @@
    "name": "بازگرد"
   },
   {
+   "lat": 37.207464,
+   "lon": 54.11052,
+   "name": "گلفشان نفتیلجه",
+   "name_en": "Neftiljeh Mud Volcano",
+   "volcano": true
+  },
+  {
    "lat": 27.364698,
    "lon": 56.158422,
    "name": "اشکفت کهور"
@@ -104870,6 +105891,18 @@
    "lat": 32.341971,
    "lon": 35.345565,
    "name": "הר עירית"
+  },
+  {
+   "lat": 27.633885,
+   "lon": 37.215908,
+   "name": "فوهة بركان خامل",
+   "volcano": true
+  },
+  {
+   "lat": 27.43157,
+   "lon": 37.265763,
+   "name": "فوهة بركان خامل",
+   "volcano": true
   },
   {
    "lat": 33.339163,
@@ -105554,6 +106587,12 @@
    "name_en": "Gooreh"
   },
   {
+   "lat": 39.122188,
+   "lon": 54.633406,
+   "name": "Boyadag",
+   "volcano": true
+  },
+  {
    "lat": 38.934982,
    "lon": 55.491343,
    "name": "Garagöz"
@@ -105616,6 +106655,12 @@
    "name": "جبل الزاوية",
    "name_en": "Zawiya Mountain",
    "wikidata": "Q8067497"
+  },
+  {
+   "lat": 40.333487,
+   "lon": 49.58511,
+   "name": "Şarınca Palçıq vulkanı",
+   "volcano": true
   },
   {
    "lat": 29.14965,
@@ -106265,6 +107310,12 @@
    "lat": 36.279791,
    "lon": 37.263111,
    "name": "عرب الوهب"
+  },
+  {
+   "lat": 41.686679,
+   "lon": 45.7777,
+   "name": "ვულკანური ტალახი",
+   "volcano": true
   },
   {
    "lat": 40.989544,

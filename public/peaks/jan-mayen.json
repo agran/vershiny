@@ -1,7 +1,16 @@
 {
  "region": "jan-mayen",
- "generated": "2026-08-12T10:54:58+00:00",
+ "generated": "2026-08-13T09:16:22+00:00",
  "peaks": [
+  {
+   "lat": 71.082203,
+   "lon": -8.177768,
+   "name": "Beerenberg",
+   "name_ru": "Бееренберг",
+   "ele": 2277,
+   "wikidata": "Q814113",
+   "volcano": true
+  },
   {
    "lat": 71.076734,
    "lon": -8.16395,
@@ -136,6 +145,14 @@
    "wikidata": "Q31454521"
   },
   {
+   "lat": 70.938202,
+   "lon": -8.75031,
+   "name": "Lunckekjegla",
+   "ele": 550,
+   "wikidata": "Q31454515",
+   "volcano": true
+  },
+  {
    "lat": 70.907824,
    "lon": -8.823127,
    "name": "Kuppelen",
@@ -147,6 +164,14 @@
    "lon": -8.956426,
    "name": "Skjoldkollen",
    "ele": 540
+  },
+  {
+   "lat": 70.904778,
+   "lon": -8.848072,
+   "name": "Ringkollen",
+   "ele": 534,
+   "wikidata": "Q31550130",
+   "volcano": true
   },
   {
    "lat": 70.916964,
@@ -239,6 +264,38 @@
    "wikidata": "Q140690856"
   },
   {
+   "lat": 70.948402,
+   "lon": -8.702524,
+   "name": "Holtanna",
+   "ele": 413,
+   "wikidata": "Q31454517",
+   "volcano": true
+  },
+  {
+   "lat": 70.926884,
+   "lon": -8.801529,
+   "name": "Kubbestolen",
+   "ele": 407,
+   "wikidata": "Q140690903",
+   "volcano": true
+  },
+  {
+   "lat": 70.951224,
+   "lon": -8.705448,
+   "name": "Stupdalstrekta",
+   "ele": 377,
+   "wikidata": "Q140690503",
+   "volcano": true
+  },
+  {
+   "lat": 70.877268,
+   "lon": -8.960325,
+   "name": "Pöckkrateret",
+   "ele": 374,
+   "wikidata": "Q31454512",
+   "volcano": true
+  },
+  {
    "lat": 70.940562,
    "lon": -8.702155,
    "name": "Parasittane",
@@ -294,11 +351,26 @@
    "wikidata": "Q140690843"
   },
   {
+   "lat": 70.996268,
+   "lon": -8.291246,
+   "name": "Eskkrateret",
+   "ele": 284,
+   "volcano": true
+  },
+  {
    "lat": 70.987765,
    "lon": -8.526099,
    "name": "Danielssenkrateret",
    "ele": 279,
    "wikidata": "Q31454520"
+  },
+  {
+   "lat": 70.844992,
+   "lon": -9.017717,
+   "name": "Vøringen",
+   "ele": 256,
+   "wikidata": "Q31454506",
+   "volcano": true
   },
   {
    "lat": 70.954567,
@@ -364,6 +436,36 @@
    "lon": -8.580997,
    "name": "Kveisa",
    "ele": 117
+  },
+  {
+   "lat": 70.860003,
+   "lon": -9.039725,
+   "name": "Arnethkrateret",
+   "ele": 110,
+   "wikidata": "Q140690834",
+   "volcano": true
+  },
+  {
+   "lat": 70.871811,
+   "lon": -9.03966,
+   "name": "Richterkrateret",
+   "ele": 108,
+   "volcano": true
+  },
+  {
+   "lat": 70.860069,
+   "lon": -9.069003,
+   "name": "Hoyberg",
+   "ele": 68,
+   "wikidata": "Q140690836",
+   "volcano": true
+  },
+  {
+   "lat": 71.071752,
+   "lon": -8.386608,
+   "name": "Scottkrateret",
+   "wikidata": "Q31454508",
+   "volcano": true
   }
  ]
 }

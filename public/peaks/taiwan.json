@@ -1,6 +1,6 @@
 {
  "region": "taiwan",
- "generated": "2026-08-12T10:55:05+00:00",
+ "generated": "2026-08-13T09:16:27+00:00",
  "peaks": [
   {
    "lat": 23.469987,
@@ -32118,6 +32118,14 @@
    "ele": 6
   },
   {
+   "lat": 25.17539,
+   "lon": 121.547611,
+   "name": "小油坑",
+   "name_en": "Small oil pit",
+   "wikidata": "Q10959487",
+   "volcano": true
+  },
+  {
    "lat": 23.405708,
    "lon": 120.451834,
    "name": "將軍山",
@@ -32148,6 +32156,13 @@
    "lon": 121.472058,
    "name": "將軍嶺",
    "name_en": "Jiangjunling"
+  },
+  {
+   "lat": 22.796024,
+   "lon": 120.405919,
+   "name": "烏山頂泥火山",
+   "name_en": "Wu shan mud volcano",
+   "volcano": true
   },
   {
    "lat": 24.927991,
@@ -32273,6 +32288,12 @@
    "name": "劍山",
    "name_en": "Jianshan",
    "wikidata": "Q31605944"
+  },
+  {
+   "lat": 23.186633,
+   "lon": 121.287597,
+   "name": "羅山泥火山",
+   "volcano": true
   },
   {
    "lat": 24.418883,
@@ -32597,6 +32618,78 @@
    "name_en": "Wohushan"
   },
   {
+   "lat": 25.144001,
+   "lon": 121.528681,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.144283,
+   "lon": 121.529224,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.137869,
+   "lon": 121.51176,
+   "name": "地熱谷地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.174876,
+   "lon": 121.547908,
+   "name": "小油坑爆裂口",
+   "volcano": true
+  },
+  {
+   "lat": 25.171229,
+   "lon": 121.548979,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.178206,
+   "lon": 121.562316,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.172037,
+   "lon": 121.580004,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.186159,
+   "lon": 121.61326,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.188113,
+   "lon": 121.614007,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.192283,
+   "lon": 121.588201,
+   "name": "發煙口",
+   "volcano": true
+  },
+  {
+   "lat": 25.165319,
+   "lon": 121.542832,
+   "name": "書屋地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.164542,
+   "lon": 121.545318,
+   "name": "金露地熱口",
+   "volcano": true
+  },
+  {
    "lat": 23.255522,
    "lon": 120.811411,
    "name": "良楠山南峰",
@@ -32621,6 +32714,31 @@
    "name_en": "Sanjiaonanshannanfeng"
   },
   {
+   "lat": 25.172405,
+   "lon": 121.549223,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 25.172142,
+   "lon": 121.549353,
+   "name": "地熱口",
+   "volcano": true
+  },
+  {
+   "lat": 22.558159,
+   "lon": 120.459793,
+   "name": "新園泥火山",
+   "volcano": true
+  },
+  {
+   "lat": 22.560572,
+   "lon": 120.458183,
+   "name": "萬丹泥火山",
+   "name_en": "Wandan Mud Volcano",
+   "volcano": true
+  },
+  {
    "lat": 24.765235,
    "lon": 121.187231,
    "name": "老社寮山",
@@ -32638,6 +32756,13 @@
    "lon": 121.442001,
    "name": "太子嶺",
    "name_en": "Taiziling"
+  },
+  {
+   "lat": 22.883412,
+   "lon": 120.393448,
+   "name": "月世界泥火山",
+   "name_en": "Mud Volcano",
+   "volcano": true
   },
   {
    "lat": 24.409467,
@@ -32687,6 +32812,12 @@
    "lon": 121.725338,
    "name": "鳥嘴尖",
    "name_en": "Niaozuijian"
+  },
+  {
+   "lat": 25.143892,
+   "lon": 121.528161,
+   "name": "地熱口(溫泉露頭)",
+   "volcano": true
   },
   {
    "lat": 25.113143,
@@ -32767,6 +32898,13 @@
    "lon": 121.491428,
    "name": "下盆山",
    "name_en": "Xiapenshan"
+  },
+  {
+   "lat": 22.802647,
+   "lon": 120.409237,
+   "name": "新養女湖",
+   "name_en": "Mud Geyser",
+   "volcano": true
   },
   {
    "lat": 25.009283,
@@ -32900,6 +33038,18 @@
    "name": "盤嶺左"
   },
   {
+   "lat": 22.768319,
+   "lon": 120.2511,
+   "name": "泥火山溢流口",
+   "volcano": true
+  },
+  {
+   "lat": 22.768092,
+   "lon": 120.25086,
+   "name": "泥火山溢流口",
+   "volcano": true
+  },
+  {
    "lat": 22.292184,
    "lon": 120.70937,
    "name": "825岩峰"
@@ -32978,6 +33128,12 @@
    "lat": 23.772848,
    "lon": 121.56319,
    "name": "牛山"
+  },
+  {
+   "lat": 22.87827,
+   "lon": 120.389952,
+   "name": "小滾水泥火山",
+   "volcano": true
   },
   {
    "lat": 25.459976,
@@ -33166,6 +33322,38 @@
    "lat": 24.818851,
    "lon": 121.237756,
    "name": "登山口"
+  },
+  {
+   "lat": 22.795731,
+   "lon": 120.405845,
+   "name": "烏山頂泥火山",
+   "name_en": "Wu shan mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 22.795829,
+   "lon": 120.405859,
+   "name": "烏山頂泥火山",
+   "name_en": "Wu shan mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 22.983381,
+   "lon": 121.209885,
+   "name": "雷公火泥火山",
+   "volcano": true
+  },
+  {
+   "lat": 23.081612,
+   "lon": 120.517058,
+   "name": "南化泥火山",
+   "volcano": true
+  },
+  {
+   "lat": 22.805686,
+   "lon": 120.410621,
+   "name": "舊養女湖",
+   "volcano": true
   },
   {
    "lat": 25.438381,

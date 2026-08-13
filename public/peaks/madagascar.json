@@ -1,6 +1,6 @@
 {
  "region": "madagascar",
- "generated": "2026-08-12T10:55:00+00:00",
+ "generated": "2026-08-13T09:16:24+00:00",
  "peaks": [
   {
    "lat": -14.022581,
@@ -245,6 +245,13 @@
    "lon": 47.072795,
    "name": "Iharanany",
    "ele": 1480
+  },
+  {
+   "lat": -12.596509,
+   "lon": 49.153098,
+   "name": "Ambre-Bobaomby",
+   "ele": 1475,
+   "volcano": true
   },
   {
    "lat": -21.533391,
@@ -1727,6 +1734,13 @@
    "lat": -19.087576,
    "lon": 46.791705,
    "name": "Ambohiniazy"
+  },
+  {
+   "lat": -12.847996,
+   "lon": 45.465473,
+   "name": "Fani Maoré",
+   "wikidata": "Q66811868",
+   "volcano": true
   },
   {
    "lat": -19.258571,

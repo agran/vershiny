@@ -1,6 +1,6 @@
 {
  "region": "new-zealand",
- "generated": "2026-08-12T10:55:01+00:00",
+ "generated": "2026-08-13T09:16:24+00:00",
  "peaks": [
   {
    "lat": -43.595002,
@@ -405,6 +405,15 @@
    "name": "Tahurangi",
    "ele": 2797,
    "wikidata": "Q31453219"
+  },
+  {
+   "lat": -39.281203,
+   "lon": 175.564289,
+   "name": "Mount Ruapehu",
+   "name_en": "Mount Ruapehu",
+   "ele": 2797,
+   "wikidata": "Q207284",
+   "volcano": true
   },
   {
    "lat": -43.523879,
@@ -1273,6 +1282,16 @@
    "name": "Mount Jean",
    "ele": 2519,
    "wikidata": "Q31667715"
+  },
+  {
+   "lat": -39.296084,
+   "lon": 174.063895,
+   "name": "Taranaki Maunga",
+   "name_ru": "Таранаки",
+   "name_en": "Taranaki Maunga",
+   "ele": 2518,
+   "wikidata": "Q850051",
+   "volcano": true
   },
   {
    "lat": -43.702813,
@@ -2995,6 +3014,15 @@
    "name": "Dog Kennel Peak",
    "ele": 2288,
    "wikidata": "Q31673050"
+  },
+  {
+   "lat": -39.156787,
+   "lon": 175.631951,
+   "name": "Mount Ngāuruhoe",
+   "name_en": "Mount Ngāuruhoe",
+   "ele": 2287,
+   "wikidata": "Q83060",
+   "volcano": true
   },
   {
    "lat": -43.457601,
@@ -6403,6 +6431,15 @@
    "name": "Mount Tarleton",
    "ele": 1968,
    "wikidata": "Q31664476"
+  },
+  {
+   "lat": -39.129879,
+   "lon": 175.635373,
+   "name": "Mount Tongariro",
+   "name_en": "Mount Tongariro",
+   "ele": 1967,
+   "wikidata": "Q122795",
+   "volcano": true
   },
   {
    "lat": -42.886578,
@@ -12688,6 +12725,14 @@
    "name": "Tennants Peak",
    "ele": 1502,
    "wikidata": "Q31660119"
+  },
+  {
+   "lat": -39.229488,
+   "lon": 175.594425,
+   "name": "Saddle Cone",
+   "ele": 1501,
+   "wikidata": "Q31453209",
+   "volcano": true
   },
   {
    "lat": -40.720438,
@@ -33511,6 +33556,14 @@
    "ele": 395
   },
   {
+   "lat": -35.739056,
+   "lon": 174.230778,
+   "name": "Maunu",
+   "ele": 395,
+   "wikidata": "Q123512928",
+   "volcano": true
+  },
+  {
    "lat": -39.182526,
    "lon": 174.118153,
    "name": "German Hill",
@@ -34766,6 +34819,14 @@
    "ele": 359
   },
   {
+   "lat": -35.778306,
+   "lon": 174.189167,
+   "name": "Maungatapere",
+   "ele": 359,
+   "wikidata": "Q31457128",
+   "volcano": true
+  },
+  {
    "lat": -40.755081,
    "lon": 173.946295,
    "name": "Pascoe",
@@ -35108,6 +35169,13 @@
    "name": "Koheroa",
    "ele": 351,
    "wikidata": "Q31460518"
+  },
+  {
+   "lat": -35.768153,
+   "lon": 174.152863,
+   "name": "Whatitiri",
+   "ele": 351,
+   "volcano": true
   },
   {
    "lat": -39.07768,
@@ -35738,6 +35806,13 @@
    "wikidata": "Q31454079"
   },
   {
+   "lat": -37.163005,
+   "lon": 175.021167,
+   "name": "Totara",
+   "ele": 335,
+   "volcano": true
+  },
+  {
    "lat": -42.763417,
    "lon": 173.177306,
    "name": "Mount Ward",
@@ -36237,6 +36312,13 @@
    "name": "Otonga",
    "ele": 322,
    "wikidata": "Q31457624"
+  },
+  {
+   "lat": -37.522024,
+   "lon": 177.18549,
+   "name": "Te Puia o Whakaari",
+   "ele": 321,
+   "volcano": true
   },
   {
    "lat": -39.15455,
@@ -37175,6 +37257,13 @@
    "name": "Rehuroa",
    "ele": 292,
    "wikidata": "Q31465305"
+  },
+  {
+   "lat": -35.680233,
+   "lon": 174.269023,
+   "name": "Rawhitiroa",
+   "ele": 292,
+   "volcano": true
   },
   {
    "lat": -35.176701,
@@ -38137,6 +38226,14 @@
    "wikidata": "Q31457869"
   },
   {
+   "lat": -36.786688,
+   "lon": 174.858159,
+   "name": "Rangitoto",
+   "ele": 260,
+   "wikidata": "Q7292866",
+   "volcano": true
+  },
+  {
    "lat": -46.29364,
    "lon": 167.79144,
    "name": "Kā Puketai / Round Hill",
@@ -38436,6 +38533,14 @@
    "name": "Whakaahuru",
    "ele": 251,
    "wikidata": "Q34806054"
+  },
+  {
+   "lat": -37.198459,
+   "lon": 175.04903,
+   "name": "Pinnacle Hill",
+   "ele": 251,
+   "wikidata": "Q31458476",
+   "volcano": true
   },
   {
    "lat": -40.756111,
@@ -39074,6 +39179,15 @@
    "name": "Ōtewao / Forest Hill",
    "ele": 232,
    "wikidata": "Q31655376"
+  },
+  {
+   "lat": -37.63031,
+   "lon": 176.172012,
+   "name": "Mount Maunganui / Mauao",
+   "name_en": "Mount Maunganui",
+   "ele": 232,
+   "wikidata": "Q765857",
+   "volcano": true
   },
   {
    "lat": -45.03488,
@@ -41928,6 +42042,22 @@
    "wikidata": "Q31457455"
   },
   {
+   "lat": -37.191139,
+   "lon": 174.942326,
+   "name": "Pukekohe East",
+   "ele": 147,
+   "volcano": true
+  },
+  {
+   "lat": -36.877172,
+   "lon": 174.764286,
+   "name": "Maungawhau / Mount Eden",
+   "name_en": "Mount Eden",
+   "ele": 146,
+   "wikidata": "Q19875408",
+   "volcano": true
+  },
+  {
    "lat": -36.626032,
    "lon": 174.456346,
    "name": "Poroure",
@@ -42018,11 +42148,27 @@
    "wikidata": "Q31456398"
   },
   {
+   "lat": -37.138163,
+   "lon": 174.986619,
+   "name": "Peach Hill",
+   "ele": 144,
+   "volcano": true
+  },
+  {
    "lat": -37.688993,
    "lon": 178.548188,
    "name": "Otiki",
    "ele": 144,
    "wikidata": "Q137547132"
+  },
+  {
+   "lat": -36.878287,
+   "lon": 174.78745,
+   "name": "Ōhinerau / Mount Hobson",
+   "name_en": "Mount Hobson",
+   "ele": 143,
+   "wikidata": "Q6921208",
+   "volcano": true
   },
   {
    "lat": -36.127976,
@@ -42250,6 +42396,15 @@
    "wikidata": "Q31675358"
   },
   {
+   "lat": -36.892045,
+   "lon": 174.846594,
+   "name": "Maungarei / Mount Wellington",
+   "name_en": "Mount Wellington",
+   "ele": 135,
+   "wikidata": "Q19875407",
+   "volcano": true
+  },
+  {
    "lat": -36.87389,
    "lon": 175.75209,
    "name": "Pumpkin Rock",
@@ -42337,6 +42492,14 @@
    "name": "Red Hill",
    "ele": 134,
    "wikidata": "Q123197193"
+  },
+  {
+   "lat": -36.902981,
+   "lon": 174.754755,
+   "name": "Te Tātua-a-Riukiuta / Big King",
+   "ele": 133,
+   "wikidata": "Q19876651",
+   "volcano": true
   },
   {
    "lat": -36.61949,
@@ -42930,6 +43093,14 @@
    "ele": 111
   },
   {
+   "lat": -36.91264,
+   "lon": 174.737285,
+   "name": "Puketāpapa / Pukewīwī / Mount Roskill",
+   "ele": 110,
+   "wikidata": "Q6923292",
+   "volcano": true
+  },
+  {
    "lat": -41.883524,
    "lon": 174.115917,
    "name": "Tar Barrel",
@@ -43085,6 +43256,14 @@
    "name": "Gill Hill",
    "ele": 106,
    "wikidata": "Q30508994"
+  },
+  {
+   "lat": -36.949573,
+   "lon": 174.782808,
+   "name": "Te Ara Peuru / Māngere Mountain",
+   "name_en": "Māngere Mountain",
+   "ele": 105,
+   "volcano": true
   },
   {
    "lat": -41.047897,
@@ -43512,6 +43691,15 @@
    "ele": 82
   },
   {
+   "lat": -36.826467,
+   "lon": 174.798926,
+   "name": "Takarunga / Mount Victoria",
+   "name_en": "Mount Victoria",
+   "ele": 81,
+   "wikidata": "Q1950774",
+   "volcano": true
+  },
+  {
    "lat": -39.063632,
    "lon": 174.029285,
    "name": "Papawhero / Mount Moturoa",
@@ -43552,6 +43740,15 @@
    "ele": 81
   },
   {
+   "lat": -37.006837,
+   "lon": 174.858642,
+   "name": "Matukutūruru / Wiri Mountain",
+   "name_en": "Wiri Mountain",
+   "ele": 80,
+   "wikidata": "Q6791967",
+   "volcano": true
+  },
+  {
    "lat": -35.311938,
    "lon": 173.504269,
    "name": "Pahangahanga",
@@ -43568,6 +43765,14 @@
    "lon": 174.591272,
    "name": "Mangawhai",
    "ele": 79
+  },
+  {
+   "lat": -36.948438,
+   "lon": 174.841899,
+   "name": "Robertson Hill",
+   "ele": 78,
+   "wikidata": "Q7352105",
+   "volcano": true
   },
   {
    "lat": -36.007416,
@@ -43636,6 +43841,15 @@
    "ele": 76
   },
   {
+   "lat": -36.875451,
+   "lon": 174.809676,
+   "name": "Maungarahiri / Little Rangitoto",
+   "name_en": "Little Rangitoto",
+   "ele": 75,
+   "wikidata": "Q6651458",
+   "volcano": true
+  },
+  {
    "lat": -37.531838,
    "lon": 175.121712,
    "name": "Pukenui",
@@ -43654,6 +43868,15 @@
    "name": "Saint Heliers",
    "ele": 73,
    "wikidata": "Q117846235"
+  },
+  {
+   "lat": -37.013322,
+   "lon": 174.845915,
+   "name": "Matukutūreia / McLaughlins Mountain",
+   "name_en": "McLaughlins Mountain",
+   "ele": 72,
+   "wikidata": "Q8534908",
+   "volcano": true
   },
   {
    "lat": -36.70051,
@@ -43736,6 +43959,15 @@
    "wikidata": "Q31648925"
   },
   {
+   "lat": -36.827709,
+   "lon": 174.812357,
+   "name": "Maungaūika / North Head",
+   "name_en": "North Head",
+   "ele": 65,
+   "wikidata": "Q1544338",
+   "volcano": true
+  },
+  {
    "lat": -34.495221,
    "lon": 172.997283,
    "name": "Ōtū Hill",
@@ -43759,6 +43991,15 @@
    "wikidata": "Q121141201"
   },
   {
+   "lat": -36.939811,
+   "lon": 174.898484,
+   "name": "Green Hill",
+   "name_en": "Green Hill",
+   "ele": 65,
+   "wikidata": "Q14950639",
+   "volcano": true
+  },
+  {
    "lat": -41.864139,
    "lon": 171.50925,
    "name": "Giants Grave",
@@ -43778,6 +44019,15 @@
    "name": "Te Taumata a Rakataura / Pinnacle Hill",
    "name_en": "Pinnacle Hill",
    "ele": 65
+  },
+  {
+   "lat": -36.985853,
+   "lon": 174.75406,
+   "name": "Ōtuataua",
+   "name_en": "Ōtuataua",
+   "ele": 64,
+   "wikidata": "Q7110034",
+   "volcano": true
   },
   {
    "lat": -41.106281,
@@ -43857,11 +44107,29 @@
    "ele": 59
   },
   {
+   "lat": -36.888808,
+   "lon": 174.903523,
+   "name": "Ōhuiarangi / Pigeon Mountain",
+   "name_en": "Pigeon Mountain",
+   "ele": 58,
+   "wikidata": "Q2094631",
+   "volcano": true
+  },
+  {
    "lat": -40.955686,
    "lon": 173.066093,
    "name": "Cairn Hill",
    "ele": 58,
    "wikidata": "Q124313164"
+  },
+  {
+   "lat": -36.864568,
+   "lon": 174.870133,
+   "name": "Taurere / Taylor Hill",
+   "name_en": "Taurere / Taylor Hill",
+   "ele": 57,
+   "wikidata": "Q7690242",
+   "volcano": true
   },
   {
    "lat": -43.036654,
@@ -43921,6 +44189,23 @@
    "name": "Te Ranga",
    "ele": 52,
    "wikidata": "Q31458538"
+  },
+  {
+   "lat": -36.994213,
+   "lon": 174.747373,
+   "name": "Maungataketake",
+   "ele": 51,
+   "wikidata": "Q6792560",
+   "volcano": true
+  },
+  {
+   "lat": -36.932124,
+   "lon": 174.839735,
+   "name": "Ōtāhuhu / Mount Richmond",
+   "name_en": "Mount Richmond",
+   "ele": 50,
+   "wikidata": "Q6923216",
+   "volcano": true
   },
   {
    "lat": -39.061274,
@@ -44029,6 +44314,14 @@
    "ele": 37
   },
   {
+   "lat": -36.951175,
+   "lon": 174.895781,
+   "name": "Puke o Tara",
+   "ele": 35,
+   "wikidata": "Q7108455",
+   "volcano": true
+  },
+  {
    "lat": -37.75486,
    "lon": 174.92843,
    "name": "Puketutu",
@@ -44041,6 +44334,14 @@
    "name": "Sugarloaf",
    "ele": 33,
    "wikidata": "Q31643576"
+  },
+  {
+   "lat": -36.989654,
+   "lon": 174.841173,
+   "name": "Cemetery Crater",
+   "ele": 33,
+   "wikidata": "Q5058694",
+   "volcano": true
   },
   {
    "lat": -36.008517,
@@ -44062,6 +44363,14 @@
    "wikidata": "Q132166089"
   },
   {
+   "lat": -36.983762,
+   "lon": 174.757213,
+   "name": "Pukeiti",
+   "ele": 30,
+   "wikidata": "Q7259106",
+   "volcano": true
+  },
+  {
    "lat": -36.60129,
    "lon": 174.69601,
    "name": "Ōrewa Hill",
@@ -44075,6 +44384,31 @@
    "name": "The Big Rock",
    "ele": 30,
    "wikidata": "Q125703137"
+  },
+  {
+   "lat": -37.002581,
+   "lon": 174.867496,
+   "name": "Ash Hill",
+   "ele": 30,
+   "wikidata": "Q202483",
+   "volcano": true
+  },
+  {
+   "lat": -36.978711,
+   "lon": 174.842842,
+   "name": "Kohuora",
+   "ele": 30,
+   "wikidata": "Q6426163",
+   "volcano": true
+  },
+  {
+   "lat": -36.824611,
+   "lon": 174.801958,
+   "name": "Takaroro / Mount Cambria",
+   "name_en": "Mount Cambria",
+   "ele": 30,
+   "wikidata": "Q6919969",
+   "volcano": true
   },
   {
    "lat": -40.459824,
@@ -44132,6 +44466,14 @@
    "ele": 21
   },
   {
+   "lat": -36.977139,
+   "lon": 174.770085,
+   "name": "Waitomokia",
+   "ele": 20,
+   "wikidata": "Q1322291",
+   "volcano": true
+  },
+  {
    "lat": -37.984254,
    "lon": 174.831511,
    "name": "Rauiri",
@@ -44180,6 +44522,14 @@
    "wikidata": "Q31720887"
   },
   {
+   "lat": -36.955038,
+   "lon": 174.81358,
+   "name": "Boggust Park Crater",
+   "ele": 5,
+   "wikidata": "Q4937603",
+   "volcano": true
+  },
+  {
    "lat": -37.050466,
    "lon": 174.503366,
    "name": "Te Toka-Tapu-a-Kupe / Ninepin Rock",
@@ -44197,10 +44547,31 @@
    "name": "Goldmine Hill"
   },
   {
+   "lat": -36.858075,
+   "lon": 174.77566,
+   "name": "Pukekawa",
+   "wikidata": "Q1752422",
+   "volcano": true
+  },
+  {
    "lat": -36.445165,
    "lon": 174.455621,
    "name": "Atuanui / Mount Auckland",
    "wikidata": "Q31471458"
+  },
+  {
+   "lat": -36.982856,
+   "lon": 174.810274,
+   "name": "Pūkaki Lagoon",
+   "ele": 0,
+   "wikidata": "Q7259078",
+   "volcano": true
+  },
+  {
+   "lat": -36.914878,
+   "lon": 174.764246,
+   "name": "Monte Cecilia",
+   "volcano": true
   },
   {
    "lat": -36.908003,
@@ -44209,10 +44580,33 @@
    "wikidata": "Q118540765"
   },
   {
+   "lat": -36.965041,
+   "lon": 174.747666,
+   "name": "Puketutu",
+   "name_en": "Puketutu",
+   "volcano": true
+  },
+  {
    "lat": -43.678227,
    "lon": 172.771581,
    "name": "The Monument",
    "wikidata": "Q31698929"
+  },
+  {
+   "lat": -36.956766,
+   "lon": 174.777958,
+   "name": "Māngere Lagoon",
+   "ele": 0,
+   "wikidata": "Q6748980",
+   "volcano": true
+  },
+  {
+   "lat": -36.904544,
+   "lon": 174.849897,
+   "name": "Te Kopua Kai-a-Hiku / Panmure Basin",
+   "name_en": "Panmure Basin",
+   "ele": 0,
+   "volcano": true
   },
   {
    "lat": -46.53671,
@@ -44532,6 +44926,14 @@
    "name": "Karanga Tūī"
   },
   {
+   "lat": -38.774574,
+   "lon": 175.903991,
+   "name": "Taupō Volcano",
+   "name_en": "Taupō Volcano",
+   "wikidata": "Q3775494",
+   "volcano": true
+  },
+  {
    "lat": -38.795566,
    "lon": 175.80004,
    "name": "Karangahape",
@@ -44542,6 +44944,12 @@
    "lon": 175.729932,
    "name": "Pukekaikiore",
    "wikidata": "Q31459822"
+  },
+  {
+   "lat": -39.14412,
+   "lon": 175.567702,
+   "name": "Pukeonake",
+   "volcano": true
   },
   {
    "lat": -36.72935,
@@ -44989,6 +45397,13 @@
    "wikidata": "Q31459625"
   },
   {
+   "lat": -36.986069,
+   "lon": 174.826732,
+   "name": "Crater Hill",
+   "wikidata": "Q5182621",
+   "volcano": true
+  },
+  {
    "lat": -36.959709,
    "lon": 174.461162,
    "name": "Nun Rock"
@@ -45058,6 +45473,29 @@
    "name": "The Bluff"
   },
   {
+   "lat": -36.916325,
+   "lon": 174.813273,
+   "name": "Rarotonga / Mount Smart",
+   "name_en": "Mount Smart",
+   "wikidata": "Q1950728",
+   "volcano": true
+  },
+  {
+   "lat": -39.136727,
+   "lon": 175.650908,
+   "name": "Red Crater",
+   "wikidata": "Q31450610",
+   "volcano": true
+  },
+  {
+   "lat": -36.883278,
+   "lon": 174.779611,
+   "name": "Te Kōpuke / Tītīkōpuke / Mount Saint John",
+   "name_en": "Mount Saint John",
+   "wikidata": "Q1950700",
+   "volcano": true
+  },
+  {
    "lat": -43.653042,
    "lon": 170.533803,
    "name": "Sibbald Knobs",
@@ -45100,6 +45538,14 @@
    "lat": -37.551429,
    "lon": 175.749052,
    "name": "Buck Rock"
+  },
+  {
+   "lat": -36.94696,
+   "lon": 174.898503,
+   "name": "Ōtara Hill",
+   "name_en": "Ōtara Hill",
+   "wikidata": "Q7108455",
+   "volcano": true
   },
   {
    "lat": -42.095643,
@@ -45147,6 +45593,14 @@
    "name": "Mount Stewart"
   },
   {
+   "lat": -36.943938,
+   "lon": 174.865362,
+   "name": "Pukewairiki",
+   "ele": 0,
+   "wikidata": "Q7259128",
+   "volcano": true
+  },
+  {
    "lat": -45.616815,
    "lon": 169.399363,
    "name": "Mt Eric"
@@ -45157,9 +45611,25 @@
    "name": "Little Organ"
   },
   {
+   "lat": -36.887222,
+   "lon": 174.8475,
+   "name": "Purchas Hill / Te Tauoma",
+   "name_en": "Purchas Hill",
+   "wikidata": "Q2118760",
+   "volcano": true
+  },
+  {
    "lat": -38.381211,
    "lon": 176.158009,
    "name": "Calvary Hill"
+  },
+  {
+   "lat": -36.80184,
+   "lon": 174.753505,
+   "name": "Te Kopua-o-Matakamokamo / Tank Farm",
+   "name_en": "Tank Farm",
+   "wikidata": "Q7683476",
+   "volcano": true
   },
   {
    "lat": -45.41717,
@@ -45167,11 +45637,70 @@
    "name": "TEMP REF"
   },
   {
+   "lat": -36.936086,
+   "lon": 174.901087,
+   "name": "Styaks Swamp",
+   "wikidata": "Q2359658",
+   "volcano": true
+  },
+  {
    "lat": -38.225171,
    "lon": 176.521248,
    "name": "Te Kanakana Dome",
    "name_en": "Te Kanakana Dome",
    "wikidata": "Q31460165"
+  },
+  {
+   "lat": -36.930551,
+   "lon": 174.783401,
+   "name": "Te Hopua-a-Rangi / Gloucester Park",
+   "name_en": "Gloucester Park",
+   "wikidata": "Q7690817",
+   "volcano": true
+  },
+  {
+   "lat": -36.929456,
+   "lon": 174.846397,
+   "name": "Te Apunga-o-Tainui / McLennan Hills",
+   "name_en": "McLennan Hills",
+   "wikidata": "Q14950640",
+   "volcano": true
+  },
+  {
+   "lat": -36.88269,
+   "lon": 174.766062,
+   "name": "Te Pou Hawaiki",
+   "wikidata": "Q7690913",
+   "volcano": true
+  },
+  {
+   "lat": -36.864533,
+   "lon": 174.770397,
+   "name": "Grafton Volcano",
+   "wikidata": "Q5592578",
+   "volcano": true
+  },
+  {
+   "lat": -36.845912,
+   "lon": 174.867938,
+   "name": "Whakamuhu / Glover Park",
+   "wikidata": "Q137551715",
+   "volcano": true
+  },
+  {
+   "lat": -36.808586,
+   "lon": 174.750072,
+   "name": "Onepoto Basin",
+   "name_en": "Onepoto Basin",
+   "wikidata": "Q7093738",
+   "volcano": true
+  },
+  {
+   "lat": -37.687398,
+   "lon": 177.123152,
+   "name": "Calypso Vents",
+   "wikidata": "Q84741866",
+   "volcano": true
   },
   {
    "lat": -41.190126,
@@ -50188,6 +50717,14 @@
    "wikidata": "Q31460233"
   },
   {
+   "lat": -38.224646,
+   "lon": 176.511588,
+   "name": "Mount Tarawera",
+   "name_en": "Mount Tarawera",
+   "wikidata": "Q1192560",
+   "volcano": true
+  },
+  {
    "lat": -38.293444,
    "lon": 175.237194,
    "name": "Puketawai"
@@ -50527,6 +51064,13 @@
    "name": "The Furies"
   },
   {
+   "lat": -35.309787,
+   "lon": 173.344973,
+   "name": "Runaruna Mud Volcano",
+   "wikidata": "Q104845735",
+   "volcano": true
+  },
+  {
    "lat": -38.394527,
    "lon": 177.91346,
    "name": "Mokaihau",
@@ -50573,6 +51117,22 @@
    "lon": 176.936888,
    "name": "Pahiakai",
    "wikidata": "Q140038187"
+  },
+  {
+   "lat": -36.86653,
+   "lon": 174.813696,
+   "name": "Ōrākei Basin",
+   "name_en": "Ōrākei Basin",
+   "ele": -1,
+   "volcano": true
+  },
+  {
+   "lat": -36.780147,
+   "lon": 174.765544,
+   "name": "Lake Pupuke",
+   "name_en": "Lake Pupuke",
+   "ele": -57,
+   "volcano": true
   }
  ]
 }

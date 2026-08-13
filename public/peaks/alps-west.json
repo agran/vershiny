@@ -1,6 +1,6 @@
 {
  "region": "alps-west",
- "generated": "2026-08-12T10:54:32+00:00",
+ "generated": "2026-08-13T09:16:15+00:00",
  "peaks": [
   {
    "lat": 45.832706,
@@ -56250,6 +56250,14 @@
    "ele": 1753
   },
   {
+   "lat": 44.911037,
+   "lon": 4.190855,
+   "name": "Mont Mézenc",
+   "ele": 1753,
+   "wikidata": "Q1267547",
+   "volcano": true
+  },
+  {
    "lat": 46.573692,
    "lon": 7.897988,
    "name": "Mittelberg",
@@ -57539,6 +57547,13 @@
    "ele": 1699
   },
   {
+   "lat": 44.15134,
+   "lon": 6.780714,
+   "name": "Le Bec de l'Aigle",
+   "ele": 1699,
+   "volcano": true
+  },
+  {
    "lat": 44.378174,
    "lon": 6.564358,
    "name": "l'Aiguille",
@@ -57689,6 +57704,14 @@
    "lon": 6.457922,
    "name": "Montagne de Charvet",
    "ele": 1691
+  },
+  {
+   "lat": 44.917438,
+   "lon": 4.153652,
+   "name": "Mont d'Alambre",
+   "ele": 1691,
+   "wikidata": "Q17173414",
+   "volcano": true
   },
   {
    "lat": 46.138742,
@@ -59242,6 +59265,14 @@
    "lon": 6.698526,
    "name": "Samoëns 1600",
    "ele": 1622
+  },
+  {
+   "lat": 44.892669,
+   "lon": 4.179556,
+   "name": "Chaulet",
+   "ele": 1622,
+   "wikidata": "Q31670662",
+   "volcano": true
   },
   {
    "lat": 44.52697,
@@ -61076,6 +61107,13 @@
    "ele": 1544
   },
   {
+   "lat": 44.924377,
+   "lon": 4.196418,
+   "name": "La Grosse Roche",
+   "ele": 1544,
+   "volcano": true
+  },
+  {
    "lat": 45.593914,
    "lon": 6.114184,
    "name": "Mont Pelat",
@@ -61190,6 +61228,13 @@
    "lon": 7.907426,
    "name": "Rocca Fea",
    "ele": 1539
+  },
+  {
+   "lat": 44.925981,
+   "lon": 4.189919,
+   "name": "La Roche Pointue",
+   "ele": 1539,
+   "volcano": true
   },
   {
    "lat": 45.681902,
@@ -61908,6 +61953,13 @@
    "lon": 8.42727,
    "name": "Punta dal Piciocch",
    "ele": 1505
+  },
+  {
+   "lat": 44.92697,
+   "lon": 4.184959,
+   "name": "Chastelas",
+   "ele": 1505,
+   "volcano": true
   },
   {
    "lat": 45.679281,
@@ -63199,6 +63251,14 @@
    "ele": 1436
   },
   {
+   "lat": 45.054781,
+   "lon": 4.130518,
+   "name": "Le Testavoyre",
+   "ele": 1436,
+   "wikidata": "Q3519093",
+   "volcano": true
+  },
+  {
    "lat": 44.756217,
    "lon": 5.780681,
    "name": "Ratier",
@@ -63548,6 +63608,13 @@
    "ele": 1423
   },
   {
+   "lat": 44.915818,
+   "lon": 4.094124,
+   "name": "Roche du Bachat",
+   "ele": 1423,
+   "volcano": true
+  },
+  {
    "lat": 46.918979,
    "lon": 6.72343,
    "name": "Crêt Teni",
@@ -63873,6 +63940,13 @@
    "lon": 7.709568,
    "name": "Monte Ros",
    "ele": 1408
+  },
+  {
+   "lat": 45.038043,
+   "lon": 4.115612,
+   "name": "Le Mounier",
+   "ele": 1408,
+   "volcano": true
   },
   {
    "lat": 44.125376,
@@ -64347,6 +64421,21 @@
    "ele": 1382
   },
   {
+   "lat": 44.900221,
+   "lon": 4.211263,
+   "name": "Suc de Chabrières",
+   "ele": 1382,
+   "volcano": true
+  },
+  {
+   "lat": 44.891461,
+   "lon": 4.217142,
+   "name": "Suc de Touron",
+   "ele": 1382,
+   "wikidata": "Q31673481",
+   "volcano": true
+  },
+  {
    "lat": 44.238358,
    "lon": 5.36337,
    "name": "Banne",
@@ -64420,6 +64509,13 @@
    "lon": 7.912918,
    "name": "Bric dei Sapetti",
    "ele": 1378
+  },
+  {
+   "lat": 45.038065,
+   "lon": 4.142165,
+   "name": "Les Bastiers",
+   "ele": 1378,
+   "volcano": true
   },
   {
    "lat": 45.82472,
@@ -65517,6 +65613,13 @@
    "ele": 1313
   },
   {
+   "lat": 44.903016,
+   "lon": 4.250166,
+   "name": "Rocher de Pialoux",
+   "ele": 1312,
+   "volcano": true
+  },
+  {
    "lat": 44.24181,
    "lon": 6.033152,
    "name": "Le Lauzas",
@@ -65917,6 +66020,13 @@
    "ele": 1294
   },
   {
+   "lat": 44.893836,
+   "lon": 4.223306,
+   "name": "Gouleyou",
+   "ele": 1293,
+   "volcano": true
+  },
+  {
    "lat": 46.304157,
    "lon": 6.521207,
    "name": "Le Cornillon",
@@ -65998,6 +66108,13 @@
    "name": "Beisse",
    "ele": 1290,
    "wikidata": "Q31677751"
+  },
+  {
+   "lat": 44.901553,
+   "lon": 4.013312,
+   "name": "Le Grand Suc",
+   "ele": 1289,
+   "volcano": true
   },
   {
    "lat": 44.259805,
@@ -66323,6 +66440,13 @@
    "wikidata": "Q23090352"
   },
   {
+   "lat": 44.790501,
+   "lon": 4.355993,
+   "name": "Chapaussel",
+   "ele": 1272,
+   "volcano": true
+  },
+  {
    "lat": 46.27304,
    "lon": 7.437711,
    "name": "Le Châtelard",
@@ -66472,6 +66596,13 @@
    "name": "Cime de Boséglia",
    "ele": 1265,
    "wikidata": "Q31657318"
+  },
+  {
+   "lat": 44.906292,
+   "lon": 4.001299,
+   "name": "Le Petit Suc",
+   "ele": 1265,
+   "volcano": true
   },
   {
    "lat": 46.220369,
@@ -66943,6 +67074,13 @@
    "ele": 1242
   },
   {
+   "lat": 45.096946,
+   "lon": 4.127654,
+   "name": "Suc de Montaigu",
+   "ele": 1241,
+   "volcano": true
+  },
+  {
    "lat": 45.819511,
    "lon": 8.120986,
    "name": "Cma Selvetto",
@@ -67082,6 +67220,13 @@
    "ele": 1236
   },
   {
+   "lat": 44.981324,
+   "lon": 4.169447,
+   "name": "Lac de Saint-Front",
+   "ele": 1236,
+   "volcano": true
+  },
+  {
    "lat": 43.739999,
    "lon": 6.634033,
    "name": "Rocher de Sainte-Magdeleine",
@@ -67166,6 +67311,13 @@
    "lon": 7.681842,
    "name": "Rocca Luchin",
    "ele": 1232
+  },
+  {
+   "lat": 44.890885,
+   "lon": 4.25327,
+   "name": "Le Rastillas",
+   "ele": 1232,
+   "volcano": true
   },
   {
    "lat": 44.080057,
@@ -67755,6 +67907,13 @@
    "wikidata": "Q31656279"
   },
   {
+   "lat": 45.080415,
+   "lon": 4.196643,
+   "name": "Suc du Mounier",
+   "ele": 1208,
+   "volcano": true
+  },
+  {
    "lat": 45.835003,
    "lon": 8.310799,
    "name": "Monte Massucco",
@@ -67878,6 +68037,13 @@
    "lon": 7.81842,
    "name": "Hüenderhubel",
    "ele": 1204
+  },
+  {
+   "lat": 45.07148,
+   "lon": 4.082234,
+   "name": "La Mézère",
+   "ele": 1203,
+   "volcano": true
   },
   {
    "lat": 44.480691,
@@ -68425,6 +68591,13 @@
    "ele": 1174
   },
   {
+   "lat": 45.104074,
+   "lon": 4.148253,
+   "name": "Suc de Bellecombe",
+   "ele": 1174,
+   "volcano": true
+  },
+  {
    "lat": 43.66216,
    "lon": 6.351471,
    "name": "Montagne de Barjaude",
@@ -68474,6 +68647,13 @@
    "lon": 6.882454,
    "name": "Taulane",
    "ele": 1172
+  },
+  {
+   "lat": 44.888133,
+   "lon": 4.008222,
+   "name": "La Rodde",
+   "ele": 1172,
+   "volcano": true
   },
   {
    "lat": 44.185313,
@@ -68664,6 +68844,13 @@
    "ele": 1162
   },
   {
+   "lat": 45.112332,
+   "lon": 4.049057,
+   "name": "Mont Gros",
+   "ele": 1162,
+   "volcano": true
+  },
+  {
    "lat": 46.859785,
    "lon": 7.670113,
    "name": "Chnubel",
@@ -68731,6 +68918,13 @@
    "lon": 8.166324,
    "name": "La Finestra",
    "ele": 1160
+  },
+  {
+   "lat": 45.092885,
+   "lon": 4.169858,
+   "name": "Le Clarel",
+   "ele": 1160,
+   "volcano": true
   },
   {
    "lat": 44.064621,
@@ -69419,6 +69613,13 @@
    "ele": 1125
   },
   {
+   "lat": 45.106696,
+   "lon": 4.127537,
+   "name": "Suc de Beyssac",
+   "ele": 1125,
+   "volcano": true
+  },
+  {
    "lat": 44.233773,
    "lon": 5.379348,
    "name": "Montagne de Serre Gautier",
@@ -69712,6 +69913,13 @@
    "name": "Le Peydès",
    "ele": 1110,
    "wikidata": "Q31657809"
+  },
+  {
+   "lat": 45.080216,
+   "lon": 4.172299,
+   "name": "Suc du Besset",
+   "ele": 1109,
+   "volcano": true
   },
   {
    "lat": 43.91071,
@@ -71214,6 +71422,13 @@
    "ele": 1033
   },
   {
+   "lat": 45.100975,
+   "lon": 4.019836,
+   "name": "Huche Pointue",
+   "ele": 1033,
+   "volcano": true
+  },
+  {
    "lat": 44.423854,
    "lon": 5.104679,
    "name": "Moutas",
@@ -71894,6 +72109,13 @@
    "name": "Mont Monnet",
    "ele": 1000,
    "wikidata": "Q3321955"
+  },
+  {
+   "lat": 44.817996,
+   "lon": 4.070529,
+   "name": "Lac d'Issarlès",
+   "ele": 1000,
+   "volcano": true
   },
   {
    "lat": 44.543337,
@@ -72636,6 +72858,13 @@
    "ele": 961
   },
   {
+   "lat": 45.236265,
+   "lon": 4.050321,
+   "name": "Plateau de la Madeleine",
+   "ele": 960,
+   "volcano": true
+  },
+  {
    "lat": 44.31751,
    "lon": 8.108722,
    "name": "Bric Campazzo",
@@ -72870,6 +73099,13 @@
    "wikidata": "Q806976"
   },
   {
+   "lat": 45.138657,
+   "lon": 4.136664,
+   "name": "Montbarnier",
+   "ele": 947,
+   "volcano": true
+  },
+  {
    "lat": 44.103045,
    "lon": 7.990438,
    "name": "Rocca del Bozzaro",
@@ -72918,6 +73154,13 @@
    "lon": 8.207838,
    "name": "Bric Ciapazzi",
    "ele": 945
+  },
+  {
+   "lat": 45.136108,
+   "lon": 4.01195,
+   "name": "Mont Bayt",
+   "ele": 945,
+   "volcano": true
   },
   {
    "lat": 46.891439,
@@ -73452,6 +73695,13 @@
    "lon": 8.270073,
    "name": "Cima della Bonda",
    "ele": 919
+  },
+  {
+   "lat": 45.142957,
+   "lon": 4.129984,
+   "name": "Saint-Roch",
+   "ele": 918,
+   "volcano": true
   },
   {
    "lat": 44.910888,
@@ -74912,6 +75162,14 @@
    "ele": 849
   },
   {
+   "lat": 44.694581,
+   "lon": 4.218402,
+   "name": "Suc de la Gravenne",
+   "ele": 849,
+   "wikidata": "Q31681107",
+   "volcano": true
+  },
+  {
    "lat": 46.776107,
    "lon": 7.298877,
    "name": "Schürischwand",
@@ -75742,6 +76000,13 @@
    "lon": 8.083602,
    "name": "Bric del Paluco",
    "ele": 815
+  },
+  {
+   "lat": 44.706516,
+   "lon": 4.338159,
+   "name": "Fontalazon",
+   "ele": 814,
+   "volcano": true
   },
   {
    "lat": 45.219395,
@@ -76659,6 +76924,13 @@
    "lon": 7.654154,
    "name": "Poggio del Grillo",
    "ele": 772
+  },
+  {
+   "lat": 45.088772,
+   "lon": 4.004542,
+   "name": "Le Gascou",
+   "ele": 772,
+   "volcano": true
   },
   {
    "lat": 43.859765,
@@ -78219,6 +78491,13 @@
    "ele": 706
   },
   {
+   "lat": 44.697771,
+   "lon": 4.215092,
+   "name": "Cratère de la Crose",
+   "ele": 706,
+   "volcano": true
+  },
+  {
    "lat": 44.45373,
    "lon": 8.493643,
    "name": "Bric Roverina",
@@ -79077,6 +79356,13 @@
    "wikidata": "Q3644555"
   },
   {
+   "lat": 45.65202,
+   "lon": 4.011617,
+   "name": "Pic de Griot",
+   "ele": 669,
+   "volcano": true
+  },
+  {
    "lat": 44.416544,
    "lon": 8.412717,
    "name": "Bric Ciassa",
@@ -79161,6 +79447,13 @@
    "ele": 665
   },
   {
+   "lat": 44.66405,
+   "lon": 4.257749,
+   "name": "Le Souilhol",
+   "ele": 665,
+   "volcano": true
+  },
+  {
    "lat": 46.368532,
    "lon": 5.788218,
    "name": "La pratz",
@@ -79183,6 +79476,13 @@
    "lon": 8.123754,
    "name": "Bric Maioli",
    "ele": 664
+  },
+  {
+   "lat": 45.175009,
+   "lon": 4.618079,
+   "name": "Suc du Besst",
+   "ele": 664,
+   "volcano": true
   },
   {
    "lat": 44.151277,
@@ -79582,6 +79882,13 @@
    "lon": 8.288722,
    "name": "Bricchetto dello Stantino",
    "ele": 642
+  },
+  {
+   "lat": 45.537509,
+   "lon": 4.081051,
+   "name": "Montsupt",
+   "ele": 642,
+   "volcano": true
   },
   {
    "lat": 44.317926,
@@ -80604,6 +80911,13 @@
    "lon": 4.426262,
    "name": "Montagne de Drompvent",
    "ele": 595
+  },
+  {
+   "lat": 45.718304,
+   "lon": 4.002812,
+   "name": "Le volcan de Montaubourg",
+   "ele": 594,
+   "volcano": true
   },
   {
    "lat": 45.078913,
@@ -81917,6 +82231,13 @@
    "ele": 532
   },
   {
+   "lat": 45.69596,
+   "lon": 4.074477,
+   "name": "Mont d'Uzore",
+   "ele": 532,
+   "volcano": true
+  },
+  {
    "lat": 45.659131,
    "lon": 8.262395,
    "name": "Cima Rubattini",
@@ -82289,6 +82610,13 @@
    "lon": 8.336073,
    "name": "Bric Beghina",
    "ele": 515
+  },
+  {
+   "lat": 45.651085,
+   "lon": 4.03924,
+   "name": "Piton basaltique de Purchon",
+   "ele": 515,
+   "volcano": true
   },
   {
    "lat": 43.840855,
@@ -84449,6 +84777,13 @@
    "ele": 416
   },
   {
+   "lat": 45.717808,
+   "lon": 4.066589,
+   "name": "Le Pic",
+   "ele": 415,
+   "volcano": true
+  },
+  {
    "lat": 43.578119,
    "lon": 6.862646,
    "name": "Colle du Mouton",
@@ -84763,6 +85098,14 @@
    "lon": 8.123909,
    "name": "Colle Mea",
    "ele": 398
+  },
+  {
+   "lat": 45.557358,
+   "lon": 4.125868,
+   "name": "Pic de Saint-Romain",
+   "ele": 398,
+   "wikidata": "Q31394590",
+   "volcano": true
   },
   {
    "lat": 45.829573,
@@ -89265,6 +89608,12 @@
    "name": "Colle della Guardia"
   },
   {
+   "lat": 45.490563,
+   "lon": 4.084928,
+   "name": "Coulée basaltique de Chenereilles",
+   "volcano": true
+  },
+  {
    "lat": 46.610594,
    "lon": 4.652672,
    "name": "Mont Saint-Roch"
@@ -92020,6 +92369,12 @@
    "lat": 46.47092,
    "lon": 7.680411,
    "name": "Fisischafberg"
+  },
+  {
+   "lat": 44.817136,
+   "lon": 4.21992,
+   "name": "Les Coux",
+   "volcano": true
   },
   {
    "lat": 44.80844,

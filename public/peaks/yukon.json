@@ -1,6 +1,6 @@
 {
  "region": "yukon",
- "generated": "2026-08-12T10:55:08+00:00",
+ "generated": "2026-08-13T09:16:29+00:00",
  "peaks": [
   {
    "lat": 60.567846,
@@ -944,6 +944,13 @@
    "ele": 2129
   },
   {
+   "lat": 59.274414,
+   "lon": -130.508811,
+   "name": "Ash Mountain",
+   "ele": 2125,
+   "volcano": true
+  },
+  {
    "lat": 59.451662,
    "lon": -135.076907,
    "name": "Hefty Peak",
@@ -1758,6 +1765,13 @@
    "ele": 1927
   },
   {
+   "lat": 59.233059,
+   "lon": -133.046362,
+   "name": "Chikoida Mountain",
+   "ele": 1927,
+   "volcano": true
+  },
+  {
    "lat": 61.078889,
    "lon": -133.835839,
    "name": "Mount McDonald",
@@ -2449,6 +2463,14 @@
    "ele": 1770
   },
   {
+   "lat": 59.236353,
+   "lon": -130.562409,
+   "name": "Caribou Tuya",
+   "ele": 1770,
+   "wikidata": "Q5039522",
+   "volcano": true
+  },
+  {
    "lat": 60.331424,
    "lon": -135.231496,
    "name": "Mineral Hill",
@@ -2930,6 +2952,13 @@
    "ele": 1644
   },
   {
+   "lat": 59.399959,
+   "lon": -130.249895,
+   "name": "Cottonwood Peak",
+   "ele": 1640,
+   "volcano": true
+  },
+  {
    "lat": 60.504955,
    "lon": -136.034592,
    "name": "Mount Coudert (South Summit)",
@@ -3037,6 +3066,13 @@
    "lon": -127.824905,
    "name": "Plains of Abraham",
    "ele": 1604
+  },
+  {
+   "lat": 59.411363,
+   "lon": -130.37871,
+   "name": "Gabrielse Cone",
+   "ele": 1600,
+   "volcano": true
   },
   {
    "lat": 61.730272,
@@ -3669,6 +3705,13 @@
    "lon": -135.665294,
    "name": "Cathedral Peak",
    "ele": 1328
+  },
+  {
+   "lat": 59.699151,
+   "lon": -133.318618,
+   "name": "Cracker Creek Cone",
+   "ele": 1325,
+   "volcano": true
   },
   {
    "lat": 61.400269,

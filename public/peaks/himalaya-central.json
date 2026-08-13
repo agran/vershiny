@@ -1,6 +1,6 @@
 {
  "region": "himalaya-central",
- "generated": "2026-08-12T10:54:56+00:00",
+ "generated": "2026-08-13T09:16:21+00:00",
  "peaks": [
   {
    "lat": 27.988061,
@@ -7844,6 +7844,13 @@
    "lon": 86.615162,
    "name": "岗嘎山",
    "name_en": "Gangga Hill"
+  },
+  {
+   "lat": 28.847462,
+   "lon": 81.665892,
+   "name": "नवस्थान ज्वाला",
+   "name_en": "Dullu Volcano Point",
+   "volcano": true
   },
   {
    "lat": 29.339158,

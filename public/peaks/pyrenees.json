@@ -1,6 +1,6 @@
 {
  "region": "pyrenees",
- "generated": "2026-08-12T10:55:02+00:00",
+ "generated": "2026-08-13T09:16:25+00:00",
  "peaks": [
   {
    "lat": 42.631073,
@@ -65185,6 +65185,14 @@
    "ele": 828
   },
   {
+   "lat": 42.122735,
+   "lon": 2.544925,
+   "name": "Volcà de Can Tià",
+   "ele": 828,
+   "wikidata": "Q11954939",
+   "volcano": true
+  },
+  {
    "lat": 42.131727,
    "lon": 2.473902,
    "name": "el Baladre",
@@ -66775,6 +66783,13 @@
    "ele": 808
   },
   {
+   "lat": 42.103086,
+   "lon": 2.554056,
+   "name": "Volcà de Llacunagra",
+   "ele": 808,
+   "volcano": true
+  },
+  {
    "lat": 41.865997,
    "lon": -1.61988,
    "name": "Puntal del Peñasco",
@@ -66824,6 +66839,13 @@
    "lon": 1.49584,
    "name": "Turó de la Roureda",
    "ele": 807
+  },
+  {
+   "lat": 42.171748,
+   "lon": 2.543141,
+   "name": "Volcà de Gorrojàs",
+   "ele": 807,
+   "volcano": true
   },
   {
    "lat": 41.636342,
@@ -68276,6 +68298,14 @@
    "ele": 789
   },
   {
+   "lat": 42.153998,
+   "lon": 2.536052,
+   "name": "Volcà del Croscat",
+   "ele": 789,
+   "wikidata": "Q1141050",
+   "volcano": true
+  },
+  {
    "lat": 41.629014,
    "lon": 1.962074,
    "name": "Turó de la Mamella",
@@ -69094,6 +69124,14 @@
    "name": "Dorrontsoroko gaina",
    "ele": 779,
    "wikidata": "Q12253853"
+  },
+  {
+   "lat": 42.171623,
+   "lon": 2.534949,
+   "name": "Volcà de Pujalós",
+   "ele": 779,
+   "wikidata": "Q11954938",
+   "volcano": true
   },
   {
    "lat": 42.439011,
@@ -70260,6 +70298,14 @@
    "ele": 766
   },
   {
+   "lat": 42.141419,
+   "lon": 2.543917,
+   "name": "Volcà de Santa Margarida",
+   "ele": 766,
+   "wikidata": "Q1859850",
+   "volcano": true
+  },
+  {
    "lat": 41.744194,
    "lon": 2.083492,
    "name": "Turó del Pei",
@@ -70923,6 +70969,13 @@
    "lon": -1.595229,
    "name": "Santa Cruz de Gazteluzar",
    "ele": 757
+  },
+  {
+   "lat": 42.123549,
+   "lon": 2.540672,
+   "name": "Volcà de la Tuta",
+   "ele": 757,
+   "volcano": true
   },
   {
    "lat": 43.658135,
@@ -71719,6 +71772,13 @@
    "lon": -1.399298,
    "name": "Peñas Altas",
    "ele": 746
+  },
+  {
+   "lat": 42.168002,
+   "lon": 2.541754,
+   "name": "Volcà del Puig de la Garsa",
+   "ele": 746,
+   "volcano": true
   },
   {
    "lat": 43.008213,
@@ -73045,6 +73105,14 @@
    "ele": 727
   },
   {
+   "lat": 42.144168,
+   "lon": 2.527717,
+   "name": "Volcà del Puig de la Costa",
+   "ele": 727,
+   "wikidata": "Q11954949",
+   "volcano": true
+  },
+  {
    "lat": 42.755652,
    "lon": -2.187433,
    "name": "Alto de las Chozas",
@@ -74195,6 +74263,14 @@
    "ele": 712
   },
   {
+   "lat": 42.135062,
+   "lon": 2.535097,
+   "name": "Volcà del Torrent",
+   "ele": 712,
+   "wikidata": "Q24019673",
+   "volcano": true
+  },
+  {
    "lat": 41.772132,
    "lon": 2.049535,
    "name": "Turó del Coll",
@@ -74335,6 +74411,14 @@
    "lon": 1.411866,
    "name": "Serrat del Cupot",
    "ele": 710
+  },
+  {
+   "lat": 42.135208,
+   "lon": 2.557995,
+   "name": "Volcà del Puig Subià",
+   "ele": 710,
+   "wikidata": "Q11954947",
+   "volcano": true
   },
   {
    "lat": 41.939503,
@@ -76817,6 +76901,14 @@
    "ele": 678
   },
   {
+   "lat": 42.108248,
+   "lon": 2.531045,
+   "name": "Volcà del Traiter",
+   "ele": 678,
+   "wikidata": "Q17483745",
+   "volcano": true
+  },
+  {
    "lat": 43.027717,
    "lon": -1.646445,
    "name": "Oianilun",
@@ -77349,6 +77441,14 @@
    "name": "Turó de Solers",
    "ele": 672,
    "wikidata": "Q11953570"
+  },
+  {
+   "lat": 42.149024,
+   "lon": 2.551748,
+   "name": "Volcà del Puig de Mar",
+   "ele": 672,
+   "wikidata": "Q17483127",
+   "volcano": true
   },
   {
    "lat": 42.972077,
@@ -77985,6 +78085,14 @@
    "ele": 664
   },
   {
+   "lat": 42.160777,
+   "lon": 2.544469,
+   "name": "Volcà de Puigsafont",
+   "ele": 664,
+   "wikidata": "Q113487284",
+   "volcano": true
+  },
+  {
    "lat": 43.018865,
    "lon": 1.496886,
    "name": "Le Pouech de Cadarcet",
@@ -78468,6 +78576,14 @@
    "ele": 658
   },
   {
+   "lat": 42.155561,
+   "lon": 2.546386,
+   "name": "Volcà del Puig de Martinyà",
+   "ele": 658,
+   "wikidata": "Q11954950",
+   "volcano": true
+  },
+  {
    "lat": 42.994349,
    "lon": -0.81545,
    "name": "Gaztelugagna",
@@ -78722,6 +78838,14 @@
    "wikidata": "Q119017903"
   },
   {
+   "lat": 42.139984,
+   "lon": 2.555347,
+   "name": "Volcà de Rocanegra",
+   "ele": 654,
+   "wikidata": "Q11954941",
+   "volcano": true
+  },
+  {
    "lat": 41.806668,
    "lon": 1.718024,
    "name": "les Guàrdies",
@@ -78902,6 +79026,14 @@
    "lon": -0.148112,
    "name": "Tozal de Faxa Cotón",
    "ele": 651
+  },
+  {
+   "lat": 42.162258,
+   "lon": 2.526988,
+   "name": "Volcà del Puig Astrol",
+   "ele": 651,
+   "wikidata": "Q11954946",
+   "volcano": true
   },
   {
    "lat": 43.033313,
@@ -82395,6 +82527,14 @@
    "ele": 607
   },
   {
+   "lat": 42.14722,
+   "lon": 2.50836,
+   "name": "Volcà del Puig Jordà",
+   "ele": 607,
+   "wikidata": "Q11954943",
+   "volcano": true
+  },
+  {
    "lat": 42.0999,
    "lon": -0.028622,
    "name": "La Guardia",
@@ -82653,6 +82793,22 @@
    "ele": 604
   },
   {
+   "lat": 42.18731,
+   "lon": 2.535043,
+   "name": "Volcà de Bellaire",
+   "ele": 604,
+   "wikidata": "Q54819693",
+   "volcano": true
+  },
+  {
+   "lat": 42.149035,
+   "lon": 2.472944,
+   "name": "Volcà del Racó",
+   "ele": 604,
+   "wikidata": "Q24019662",
+   "volcano": true
+  },
+  {
    "lat": 41.571201,
    "lon": 1.907406,
    "name": "Creu de Saba",
@@ -82747,6 +82903,13 @@
    "lon": 2.539644,
    "name": "Pech Marty",
    "ele": 602
+  },
+  {
+   "lat": 42.158567,
+   "lon": 2.528745,
+   "name": "Volcà de la Pomereda",
+   "ele": 602,
+   "volcano": true
   },
   {
    "lat": 41.515419,
@@ -83495,6 +83658,14 @@
    "ele": 592
   },
   {
+   "lat": 42.20483,
+   "lon": 2.517595,
+   "name": "Volcà d'Aiguanegra",
+   "ele": 592,
+   "wikidata": "Q5661189",
+   "volcano": true
+  },
+  {
    "lat": 41.817878,
    "lon": 2.602023,
    "name": "Montgròs",
@@ -84176,6 +84347,14 @@
    "name": "Cabanyelles",
    "ele": 583,
    "wikidata": "Q11910443"
+  },
+  {
+   "lat": 42.067418,
+   "lon": 2.513402,
+   "name": "Volcà de Sant Marc",
+   "ele": 583,
+   "wikidata": "Q17483491",
+   "volcano": true
   },
   {
    "lat": 42.778831,
@@ -86137,6 +86316,14 @@
    "wikidata": "Q17482882"
   },
   {
+   "lat": 42.190353,
+   "lon": 2.553504,
+   "name": "Volcà del Puig de l'Ós",
+   "ele": 555,
+   "wikidata": "Q17483122",
+   "volcano": true
+  },
+  {
    "lat": 41.985358,
    "lon": 1.246787,
    "name": "Roca Carbonera",
@@ -86616,6 +86803,13 @@
    "ele": 547
   },
   {
+   "lat": 43.742251,
+   "lon": 3.35731,
+   "name": "Serre Bau",
+   "ele": 547,
+   "volcano": true
+  },
+  {
    "lat": 42.319736,
    "lon": -1.216957,
    "name": "Pui Arraso",
@@ -86644,6 +86838,14 @@
    "lon": 1.425005,
    "name": "Turó de l'Eixuta",
    "ele": 546
+  },
+  {
+   "lat": 42.182044,
+   "lon": 2.504243,
+   "name": "Volcà de les Bisaroques",
+   "ele": 546,
+   "wikidata": "Q11954944",
+   "volcano": true
   },
   {
    "lat": 41.849314,
@@ -86675,6 +86877,13 @@
    "lon": -1.493611,
    "name": "Elordi",
    "ele": 546
+  },
+  {
+   "lat": 42.154506,
+   "lon": 2.496695,
+   "name": "Volcans de Cabrioler",
+   "ele": 546,
+   "volcano": true
   },
   {
    "lat": 43.017087,
@@ -86930,6 +87139,20 @@
    "lon": 1.274763,
    "name": "Castillon",
    "ele": 542
+  },
+  {
+   "lat": 42.190713,
+   "lon": 2.530819,
+   "name": "Volcà de l'Estany",
+   "ele": 542,
+   "volcano": true
+  },
+  {
+   "lat": 42.179018,
+   "lon": 2.478406,
+   "name": "Volcà de Montolivet",
+   "ele": 542,
+   "volcano": true
   },
   {
    "lat": 43.1188,
@@ -87361,6 +87584,14 @@
    "wikidata": "Q11953532"
   },
   {
+   "lat": 42.204634,
+   "lon": 2.526262,
+   "name": "Volcà del Cairat",
+   "ele": 534,
+   "wikidata": "Q11954945",
+   "volcano": true
+  },
+  {
    "lat": 43.294792,
    "lon": -1.775703,
    "name": "Irufagoeta",
@@ -87535,6 +87766,13 @@
    "name": "Roc de les Bruixes",
    "ele": 532,
    "wikidata": "Q11945860"
+  },
+  {
+   "lat": 43.73791,
+   "lon": 3.35289,
+   "name": "Le Brandou",
+   "ele": 532,
+   "volcano": true
   },
   {
    "lat": 41.786479,
@@ -87800,6 +88038,14 @@
    "name": "Puig d'Arques",
    "ele": 528,
    "wikidata": "Q7259025"
+  },
+  {
+   "lat": 42.189079,
+   "lon": 2.528039,
+   "name": "Volcà de Can Gingi",
+   "ele": 528,
+   "wikidata": "Q108655598",
+   "volcano": true
   },
   {
    "lat": 43.011107,
@@ -88548,6 +88794,14 @@
    "name": "Puig de Pallenc",
    "ele": 516,
    "wikidata": "Q17482907"
+  },
+  {
+   "lat": 42.187933,
+   "lon": 2.48865,
+   "name": "Volcà del Montsacopa",
+   "ele": 516,
+   "wikidata": "Q3562719",
+   "volcano": true
   },
   {
    "lat": 43.195304,
@@ -90358,6 +90612,13 @@
    "ele": 486
   },
   {
+   "lat": 43.613034,
+   "lon": 3.207437,
+   "name": "Le Courbezou",
+   "ele": 486,
+   "volcano": true
+  },
+  {
    "lat": 43.383921,
    "lon": 2.729973,
    "name": "Le Pech",
@@ -91021,6 +91282,14 @@
    "ele": 474
   },
   {
+   "lat": 42.191788,
+   "lon": 2.495105,
+   "name": "Volcà de la Garrinada",
+   "ele": 473,
+   "wikidata": "Q3562714",
+   "volcano": true
+  },
+  {
    "lat": 42.142574,
    "lon": 2.662314,
    "name": "Puig de Can Tallant",
@@ -91280,6 +91549,14 @@
    "ele": 470
   },
   {
+   "lat": 42.208622,
+   "lon": 2.526889,
+   "name": "Volcà de Repassot",
+   "ele": 470,
+   "wikidata": "Q17483270",
+   "volcano": true
+  },
+  {
    "lat": 41.903555,
    "lon": 0.326309,
    "name": "Sierra del Castillo",
@@ -91296,6 +91573,14 @@
    "lon": 1.628064,
    "name": "Serres de Pauly",
    "ele": 470
+  },
+  {
+   "lat": 42.208965,
+   "lon": 2.523397,
+   "name": "Volcà de Repàs",
+   "ele": 470,
+   "wikidata": "Q11954942",
+   "volcano": true
   },
   {
    "lat": 43.018484,
@@ -92304,6 +92589,13 @@
    "lon": 0.258562,
    "name": "Tozal Gordo",
    "ele": 452
+  },
+  {
+   "lat": 43.615041,
+   "lon": 3.258777,
+   "name": "Camilongue",
+   "ele": 452,
+   "volcano": true
   },
   {
    "lat": 41.896596,
@@ -93351,6 +93643,14 @@
    "name": "Tossal de l'Abat",
    "ele": 436,
    "wikidata": "Q11952739"
+  },
+  {
+   "lat": 42.201676,
+   "lon": 2.527968,
+   "name": "Volcà de Claperols",
+   "ele": 436,
+   "wikidata": "Q11954937",
+   "volcano": true
   },
   {
    "lat": 42.682513,
@@ -94547,6 +94847,14 @@
    "ele": 412
   },
   {
+   "lat": 42.044182,
+   "lon": 2.738641,
+   "name": "el Puig",
+   "ele": 412,
+   "wikidata": "Q11918481",
+   "volcano": true
+  },
+  {
    "lat": 43.138224,
    "lon": 0.025117,
    "name": "Le Pouy",
@@ -94868,6 +95176,13 @@
    "lon": 2.718827,
    "name": "Roque Miquel",
    "ele": 407
+  },
+  {
+   "lat": 43.665263,
+   "lon": 3.311649,
+   "name": "Carol",
+   "ele": 407,
+   "volcano": true
   },
   {
    "lat": 43.09883,
@@ -96399,6 +96714,13 @@
    "lon": 2.423867,
    "name": "Montahut",
    "ele": 373
+  },
+  {
+   "lat": 43.635745,
+   "lon": 3.266109,
+   "name": "Le Castelas",
+   "ele": 373,
+   "volcano": true
   },
   {
    "lat": 43.295183,
@@ -98777,6 +99099,13 @@
    "wikidata": "Q11952845"
   },
   {
+   "lat": 43.592938,
+   "lon": 3.399608,
+   "name": "Mounio",
+   "ele": 316,
+   "volcano": true
+  },
+  {
    "lat": 41.531479,
    "lon": 2.276501,
    "name": "Turó de la Salve",
@@ -99970,6 +100299,13 @@
    "ele": 285
   },
   {
+   "lat": 43.582158,
+   "lon": 3.40246,
+   "name": "Maluber",
+   "ele": 285,
+   "volcano": true
+  },
+  {
    "lat": 41.805267,
    "lon": 0.885534,
    "name": "la Creueta",
@@ -100018,6 +100354,13 @@
    "lon": 2.719393,
    "name": "Pech des Floretades",
    "ele": 283
+  },
+  {
+   "lat": 43.686269,
+   "lon": 3.405479,
+   "name": "La Roque",
+   "ele": 283,
+   "volcano": true
   },
   {
    "lat": 43.28193,
@@ -100302,6 +100645,13 @@
    "lon": 3.311296,
    "name": "Roc du Mazel",
    "ele": 275
+  },
+  {
+   "lat": 43.68739,
+   "lon": 3.428948,
+   "name": "Gèbre",
+   "ele": 275,
+   "volcano": true
   },
   {
    "lat": 43.135893,
@@ -101563,6 +101913,13 @@
    "wikidata": "Q17483141"
   },
   {
+   "lat": 43.536615,
+   "lon": 3.357214,
+   "name": "Les Baumes",
+   "ele": 239,
+   "volcano": true
+  },
+  {
    "lat": 43.201222,
    "lon": 2.384007,
    "name": "Pech Mary",
@@ -102727,6 +103084,13 @@
    "ele": 207
   },
   {
+   "lat": 43.546153,
+   "lon": 3.393382,
+   "name": "Le Céressou",
+   "ele": 207,
+   "volcano": true
+  },
+  {
    "lat": 42.132833,
    "lon": 2.7496,
    "name": "Turó de Can Morgat",
@@ -103582,6 +103946,14 @@
    "name": "Turó d'en Verdura",
    "ele": 184,
    "wikidata": "Q11953466"
+  },
+  {
+   "lat": 42.025551,
+   "lon": 2.806199,
+   "name": "Turó d'en Guilana",
+   "ele": 184,
+   "wikidata": "Q110390506",
+   "volcano": true
   },
   {
    "lat": 41.96739,
@@ -104501,6 +104873,14 @@
    "lon": 2.962059,
    "name": "les Serres",
    "ele": 156
+  },
+  {
+   "lat": 41.923891,
+   "lon": 2.740517,
+   "name": "Volcà de la Crosa",
+   "ele": 155,
+   "wikidata": "Q2877324",
+   "volcano": true
   },
   {
    "lat": 43.287231,
@@ -106330,6 +106710,13 @@
    "ele": 88
   },
   {
+   "lat": 43.384484,
+   "lon": 3.415752,
+   "name": "Monts Ramus",
+   "ele": 88,
+   "volcano": true
+  },
+  {
    "lat": 43.444366,
    "lon": 3.499706,
    "name": "Pioch de Bridau",
@@ -106659,6 +107046,13 @@
    "lon": 3.445751,
    "name": "Pioch Rond",
    "ele": 68
+  },
+  {
+   "lat": 43.295377,
+   "lon": 3.493086,
+   "name": "Petit Pioch",
+   "ele": 68,
+   "volcano": true
   },
   {
    "lat": 41.657203,
@@ -108060,6 +108454,12 @@
    "name": "Cap d'Arrouye"
   },
   {
+   "lat": 43.651038,
+   "lon": 3.33001,
+   "name": "La Roque",
+   "volcano": true
+  },
+  {
    "lat": 43.174288,
    "lon": 2.870476,
    "name": "Au Mont Cal"
@@ -109110,6 +109510,13 @@
    "name": "Mont Frech"
   },
   {
+   "lat": 42.029778,
+   "lon": 2.686835,
+   "name": "volcà de la Banya del Boc",
+   "wikidata": "Q110453122",
+   "volcano": true
+  },
+  {
    "lat": 43.589922,
    "lon": 3.299144,
    "name": "Le Pioch de Boussagues"
@@ -109588,6 +109995,13 @@
    "name": "Pech de Cazergues"
   },
   {
+   "lat": 41.83492,
+   "lon": 2.796965,
+   "name": "Camp dels Ninots",
+   "wikidata": "Q1030029",
+   "volcano": true
+  },
+  {
    "lat": 42.844369,
    "lon": 1.78104,
    "name": "SN 1834"
@@ -109807,6 +110221,12 @@
    "lat": 42.777233,
    "lon": 1.330944,
    "name": "1198"
+  },
+  {
+   "lat": 43.787017,
+   "lon": 3.245518,
+   "name": "854",
+   "volcano": true
   },
   {
    "lat": 42.827323,
@@ -110264,6 +110684,12 @@
    "name": "Punta Cucutazo"
   },
   {
+   "lat": 43.944369,
+   "lon": 3.279343,
+   "name": "Puech Grand",
+   "volcano": true
+  },
+  {
    "lat": 42.54753,
    "lon": 1.479809,
    "name": "Roc de la Cacarulla",
@@ -110383,6 +110809,12 @@
    "lat": 42.851114,
    "lon": 2.077552,
    "name": "1024"
+  },
+  {
+   "lat": 43.678819,
+   "lon": 3.429101,
+   "name": "Croix de Gibret",
+   "volcano": true
   },
   {
    "lat": 43.275698,

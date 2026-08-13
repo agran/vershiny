@@ -1,6 +1,6 @@
 {
  "region": "alps-east",
- "generated": "2026-08-12T10:54:32+00:00",
+ "generated": "2026-08-13T09:16:15+00:00",
  "peaks": [
   {
    "lat": 46.382428,
@@ -171389,6 +171389,14 @@
    "wikidata": "Q137571082"
   },
   {
+   "lat": 47.878892,
+   "lon": 8.717213,
+   "name": "Neuhewen",
+   "ele": 867,
+   "wikidata": "Q1980659",
+   "volcano": true
+  },
+  {
    "lat": 46.417641,
    "lon": 12.94601,
    "name": "Cuel Covon",
@@ -172873,6 +172881,14 @@
    "ele": 845
   },
   {
+   "lat": 47.836229,
+   "lon": 8.747154,
+   "name": "Hohenhewen",
+   "ele": 845,
+   "wikidata": "Q519850",
+   "volcano": true
+  },
+  {
    "lat": 46.180176,
    "lon": 12.531414,
    "name": "Crep delle Campane",
@@ -172967,6 +172983,14 @@
    "lon": 10.009856,
    "name": "Colle di Barec",
    "ele": 844
+  },
+  {
+   "lat": 47.925649,
+   "lon": 8.617978,
+   "name": "Wartenberg",
+   "ele": 844,
+   "wikidata": "Q2549962",
+   "volcano": true
   },
   {
    "lat": 47.313514,
@@ -173109,6 +173133,14 @@
    "name": "Grillenparz",
    "ele": 842,
    "wikidata": "Q21881767"
+  },
+  {
+   "lat": 47.795319,
+   "lon": 8.750068,
+   "name": "Hohenstoffeln",
+   "ele": 842,
+   "wikidata": "Q520511",
+   "volcano": true
   },
   {
    "lat": 47.74787,
@@ -175897,6 +175929,14 @@
    "lon": 14.233101,
    "name": "Ovčji hrib",
    "ele": 803
+  },
+  {
+   "lat": 47.912431,
+   "lon": 8.738271,
+   "name": "Höwenegg",
+   "ele": 803,
+   "wikidata": "Q827395",
+   "volcano": true
   },
   {
    "lat": 45.641103,
@@ -184633,6 +184673,14 @@
    "ele": 687
   },
   {
+   "lat": 47.764752,
+   "lon": 8.818945,
+   "name": "Hohentwiel",
+   "ele": 686,
+   "wikidata": "Q700092",
+   "volcano": true
+  },
+  {
    "lat": 45.630468,
    "lon": 10.355505,
    "name": "Monte Castel Bertino",
@@ -186453,6 +186501,14 @@
    "ele": 664
   },
   {
+   "lat": 47.80568,
+   "lon": 8.797431,
+   "name": "Mägdeberg",
+   "ele": 664,
+   "wikidata": "Q1243466",
+   "volcano": true
+  },
+  {
    "lat": 47.780708,
    "lon": 11.221296,
    "name": "Kohlleiten",
@@ -188078,6 +188134,14 @@
    "lon": 14.050666,
    "name": "Hrib",
    "ele": 645
+  },
+  {
+   "lat": 47.798742,
+   "lon": 8.820208,
+   "name": "Hohenkrähen",
+   "ele": 644,
+   "wikidata": "Q1623742",
+   "volcano": true
   },
   {
    "lat": 46.419577,
@@ -208145,6 +208209,12 @@
    "name": "Cima di Profa Alta"
   },
   {
+   "lat": 47.805203,
+   "lon": 8.80101,
+   "name": "Schwindel",
+   "volcano": true
+  },
+  {
    "lat": 47.731226,
    "lon": 12.80729,
    "name": "Kienberg",
@@ -210404,6 +210474,12 @@
    "lat": 45.648513,
    "lon": 14.403798,
    "name": "1192"
+  },
+  {
+   "lat": 47.803885,
+   "lon": 8.808943,
+   "name": "Offeren",
+   "volcano": true
   },
   {
    "lat": 45.977947,

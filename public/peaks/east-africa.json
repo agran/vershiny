@@ -1,6 +1,6 @@
 {
  "region": "east-africa",
- "generated": "2026-08-12T10:54:55+00:00",
+ "generated": "2026-08-13T09:16:19+00:00",
  "peaks": [
   {
    "lat": -3.076408,
@@ -11,10 +11,37 @@
    "ele": 5895
   },
   {
+   "lat": -3.064623,
+   "lon": 37.358579,
+   "name": "Kibo",
+   "name_ru": "Кибо",
+   "ele": 5895,
+   "wikidata": "Q1394606",
+   "volcano": true
+  },
+  {
+   "lat": -0.152707,
+   "lon": 37.309214,
+   "name": "Batian",
+   "name_ru": "Кения",
+   "name_en": "Mount Kenya",
+   "ele": 5199,
+   "wikidata": "Q172070",
+   "volcano": true
+  },
+  {
    "lat": -0.153463,
    "lon": 37.309291,
    "name": "Nelion",
    "ele": 5188
+  },
+  {
+   "lat": -3.093346,
+   "lon": 37.456359,
+   "name": "Mawenzi",
+   "ele": 5149,
+   "wikidata": "Q1283494",
+   "volcano": true
   },
   {
    "lat": -0.155156,
@@ -75,6 +102,23 @@
    "ele": 4689
   },
   {
+   "lat": -3.243431,
+   "lon": 36.749788,
+   "name": "Mount Meru",
+   "ele": 4562,
+   "volcano": true
+  },
+  {
+   "lat": 1.118335,
+   "lon": 34.52667,
+   "name": "Mount Elgon",
+   "name_ru": "Элгон",
+   "name_en": "Mount Elgon",
+   "ele": 4321,
+   "wikidata": "Q732838",
+   "volcano": true
+  },
+  {
    "lat": 1.118647,
    "lon": 34.526674,
    "name": "Wagagai",
@@ -116,6 +160,13 @@
    "lon": 36.613406,
    "name": "CK's Rest",
    "ele": 3974
+  },
+  {
+   "lat": -3.033717,
+   "lon": 37.237171,
+   "name": "Shira",
+   "ele": 3962,
+   "volcano": true
   },
   {
    "lat": -0.627992,
@@ -161,6 +212,13 @@
    "ele": 3800
   },
   {
+   "lat": -3.051015,
+   "lon": 35.822072,
+   "name": "Loolmalasin",
+   "ele": 3648,
+   "volcano": true
+  },
+  {
    "lat": -0.66501,
    "lon": 36.715894,
    "name": "\"Meow Meow\" Summit",
@@ -172,6 +230,22 @@
    "name": "Mugi Hill",
    "ele": 3541,
    "wikidata": "Q27194244"
+  },
+  {
+   "lat": -4.433766,
+   "lon": 35.401673,
+   "name": "Mt Hanang",
+   "ele": 3420,
+   "wikidata": "Q8535884",
+   "volcano": true
+  },
+  {
+   "lat": -0.427416,
+   "lon": 36.538231,
+   "name": "Mount Kipipiri",
+   "ele": 3349,
+   "wikidata": "Q6921677",
+   "volcano": true
   },
   {
    "lat": 1.659837,
@@ -201,10 +275,34 @@
    "ele": 3133
   },
   {
+   "lat": 2.525,
+   "lon": 34.7725,
+   "name": "Mount Moroto",
+   "ele": 3083,
+   "wikidata": "Q1422911",
+   "volcano": true
+  },
+  {
+   "lat": 1.7625,
+   "lon": 34.709167,
+   "name": "Mount Kadam",
+   "name_ru": "Кадам",
+   "ele": 3063,
+   "wikidata": "Q3321899",
+   "volcano": true
+  },
+  {
    "lat": -3.315233,
    "lon": 35.4392,
    "name": "Makomba Peak",
    "ele": 2967
+  },
+  {
+   "lat": -2.612382,
+   "lon": 36.104726,
+   "name": "Mount Gelai",
+   "ele": 2930,
+   "volcano": true
   },
   {
    "lat": -3.19505,
@@ -217,6 +315,14 @@
    "lon": 35.914551,
    "name": "Ol Doinyo Lengai (highest point crater rim)",
    "ele": 2878
+  },
+  {
+   "lat": -0.653839,
+   "lon": 36.199465,
+   "name": "Ol Doinyo Eburru",
+   "ele": 2856,
+   "wikidata": "Q4179179",
+   "volcano": true
   },
   {
    "lat": -0.648926,
@@ -285,6 +391,13 @@
    "lon": 36.589439,
    "name": "Kijabe Hills Summit",
    "ele": 2656
+  },
+  {
+   "lat": -3.253487,
+   "lon": 36.474144,
+   "name": "Monduli Mountain",
+   "ele": 2650,
+   "volcano": true
   },
   {
    "lat": -2.688838,
@@ -777,6 +890,14 @@
    "lon": 34.383538,
    "name": "Mogilla",
    "ele": 1698
+  },
+  {
+   "lat": 0.919224,
+   "lon": 36.191184,
+   "name": "Paka",
+   "ele": 1697,
+   "wikidata": "Q3025773",
+   "volcano": true
   },
   {
    "lat": 4.238591,
@@ -1759,6 +1880,15 @@
    "ele": 1036
   },
   {
+   "lat": 2.322757,
+   "lon": 36.586747,
+   "name": "Barrier Volcano",
+   "name_ru": "Барриер",
+   "ele": 1032,
+   "wikidata": "Q808918",
+   "volcano": true
+  },
+  {
    "lat": -3.456674,
    "lon": 38.429771,
    "name": "Majego",
@@ -1843,6 +1973,13 @@
    "name_en": "Jabal Matoko",
    "ele": 923,
    "wikidata": "Q20909540"
+  },
+  {
+   "lat": 5.100776,
+   "lon": 35.884031,
+   "name": "Korath Range",
+   "ele": 912,
+   "volcano": true
   },
   {
    "lat": -3.428828,
@@ -1993,6 +2130,13 @@
    "lon": 36.455305,
    "name": "Mount Loia",
    "ele": 820
+  },
+  {
+   "lat": 4.088977,
+   "lon": 37.407941,
+   "name": "Mega Basalt Field",
+   "ele": 802,
+   "volcano": true
   },
   {
    "lat": 4.136488,
@@ -2342,6 +2486,55 @@
    "wikidata": "Q20909546"
   },
   {
+   "lat": -2.759545,
+   "lon": 35.914089,
+   "name": "Ol Doinyo Lengai",
+   "wikidata": "Q746787",
+   "volcano": true
+  },
+  {
+   "lat": 1.160373,
+   "lon": 36.223481,
+   "name": "Silali",
+   "volcano": true
+  },
+  {
+   "lat": -2.803493,
+   "lon": 35.979146,
+   "name": "Loolmurwak Crater",
+   "volcano": true
+  },
+  {
+   "lat": -2.869673,
+   "lon": 35.948761,
+   "name": "Kerimasi",
+   "volcano": true
+  },
+  {
+   "lat": -2.893675,
+   "lon": 36.211918,
+   "name": "Mt Kitumbeine",
+   "volcano": true
+  },
+  {
+   "lat": 3.934861,
+   "lon": 37.326402,
+   "name": "Garra Gallaan",
+   "volcano": true
+  },
+  {
+   "lat": 3.857106,
+   "lon": 37.345113,
+   "name": "Garra Did Golan Gutha",
+   "volcano": true
+  },
+  {
+   "lat": 3.984181,
+   "lon": 37.344426,
+   "name": "Garra Sorra",
+   "volcano": true
+  },
+  {
    "lat": 0.822885,
    "lon": 37.206845,
    "name": "Nanteddu"
@@ -2350,6 +2543,49 @@
    "lat": -0.859533,
    "lon": 36.362511,
    "name": "Fisher's Tower"
+  },
+  {
+   "lat": -0.914438,
+   "lon": 36.456458,
+   "name": "Longonot",
+   "wikidata": "Q1520750",
+   "volcano": true
+  },
+  {
+   "lat": 3.445838,
+   "lon": 37.639208,
+   "name": "Chisa Ela nadehani",
+   "volcano": true
+  },
+  {
+   "lat": 3.421241,
+   "lon": 37.66995,
+   "name": "Chisa",
+   "volcano": true
+  },
+  {
+   "lat": 3.461166,
+   "lon": 37.565409,
+   "name": "Kalesa mata gongo",
+   "volcano": true
+  },
+  {
+   "lat": 3.470237,
+   "lon": 37.765777,
+   "name": "Gara Nyecha",
+   "volcano": true
+  },
+  {
+   "lat": 3.429295,
+   "lon": 37.758356,
+   "name": "Gara worsesa",
+   "volcano": true
+  },
+  {
+   "lat": 3.430152,
+   "lon": 37.763849,
+   "name": "Gara worsesa",
+   "volcano": true
   },
   {
    "lat": -2.205582,
@@ -2593,6 +2829,20 @@
    "name": "Poror Peak"
   },
   {
+   "lat": -0.202029,
+   "lon": 36.070337,
+   "name": "Menengai Crater",
+   "wikidata": "Q1672337",
+   "volcano": true
+  },
+  {
+   "lat": -0.885987,
+   "lon": 36.269553,
+   "name": "Olkaria",
+   "wikidata": "Q4179169",
+   "volcano": true
+  },
+  {
    "lat": 1.982211,
    "lon": 36.429294,
    "name": "Namarunu",
@@ -2669,6 +2919,12 @@
    "lat": -0.895133,
    "lon": 36.3227,
    "name": "Central Tower"
+  },
+  {
+   "lat": -3.52413,
+   "lon": 36.603868,
+   "name": "Mungu Crater",
+   "volcano": true
   },
   {
    "lat": 0.254752,
@@ -2939,6 +3195,12 @@
    "name": "Sotingiro Rock"
   },
   {
+   "lat": 1.165242,
+   "lon": 36.343799,
+   "name": "Steam Vent Mt. Suswa",
+   "volcano": true
+  },
+  {
    "lat": 0.219012,
    "lon": 32.458917,
    "name": "Lamba hill"
@@ -2957,6 +3219,13 @@
    "lat": 0.182839,
    "lon": 32.457898,
    "name": "Katwe hill"
+  },
+  {
+   "lat": -3.237767,
+   "lon": 36.762464,
+   "name": "Mount Meru Ashcone",
+   "wikidata": "Q309098",
+   "volcano": true
   },
   {
    "lat": -3.46825,
@@ -3316,6 +3585,12 @@
    "ele": 0
   },
   {
+   "lat": -1.136462,
+   "lon": 36.340505,
+   "name": "Mount Suswa",
+   "volcano": true
+  },
+  {
    "lat": -2.727843,
    "lon": 37.535192,
    "name": "Giraffe Hill"
@@ -3390,6 +3665,18 @@
    "lat": 3.800949,
    "lon": 33.872906,
    "name": "2140"
+  },
+  {
+   "lat": 3.520625,
+   "lon": 37.780689,
+   "name": "Burarata",
+   "volcano": true
+  },
+  {
+   "lat": 3.363297,
+   "lon": 37.713404,
+   "name": "Gathaa",
+   "volcano": true
   },
   {
    "lat": 4.137454,
@@ -3471,6 +3758,19 @@
    "lon": 34.540728,
    "name": "Kit-Mikayi",
    "wikidata": "Q1707574"
+  },
+  {
+   "lat": 2.359913,
+   "lon": 36.591339,
+   "name": "Teleki volcano",
+   "wikidata": "Q27191011",
+   "volcano": true
+  },
+  {
+   "lat": 2.315854,
+   "lon": 36.524219,
+   "name": "Kalolenyang",
+   "volcano": true
   },
   {
    "lat": 3.466207,
@@ -3876,6 +4176,13 @@
    "lon": 37.976668,
    "name": "Poachers Lookout",
    "wikidata": "Q27191953"
+  },
+  {
+   "lat": 2.413636,
+   "lon": 36.622353,
+   "name": "Nabiyotum Cone",
+   "wikidata": "Q27192887",
+   "volcano": true
   },
   {
    "lat": -0.315364,

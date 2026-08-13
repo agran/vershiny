@@ -1,7 +1,27 @@
 {
  "region": "caucasus-west",
- "generated": "2026-08-12T10:54:53+00:00",
+ "generated": "2026-08-13T09:16:18+00:00",
  "peaks": [
+  {
+   "lat": 43.35241,
+   "lon": 42.437843,
+   "name": "Эльбрус Западный",
+   "name_ru": "Эльбрус Западный",
+   "name_en": "Mount Elbrus (West Summit)",
+   "ele": 5642,
+   "wikidata": "Q43105",
+   "volcano": true
+  },
+  {
+   "lat": 43.346794,
+   "lon": 42.453904,
+   "name": "Эльбрус Восточный",
+   "name_ru": "Эльбрус Восточный",
+   "name_en": "Mount Elbrus (East Summit)",
+   "ele": 5621,
+   "wikidata": "Q43105",
+   "volcano": true
+  },
   {
    "lat": 43.337321,
    "lon": 42.391624,

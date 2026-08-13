@@ -30,9 +30,14 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
+# Вулканы в OSM — natural=volcano, не peak: без них нет Эльбруса, Казбека,
+# Фудзи, Килиманджаро, Демавенда и целых регионов реестра (Камчатка, Эквадор)
 QUERY_TEMPLATE = """
 [out:json][timeout:120];
-node["natural"="peak"]({min_lat},{min_lon},{max_lat},{max_lon});
+(
+  node["natural"="peak"]({min_lat},{min_lon},{max_lat},{max_lon});
+  node["natural"="volcano"]({min_lat},{min_lon},{max_lat},{max_lon});
+);
 out body;
 """
 
@@ -98,6 +103,8 @@ def convert(elements: list[dict]) -> tuple[list[dict], dict]:
             peak["ele"] = round(ele)
         if tags.get("wikidata"):
             peak["wikidata"] = tags["wikidata"]
+        if tags.get("natural") == "volcano":
+            peak["volcano"] = True
         peaks.append(peak)
     return peaks, stats
 
@@ -126,6 +133,7 @@ def convert_jsonl(path: Path) -> tuple[list[dict], dict]:
                 **({"name_en": p["name_en"]} if p.get("name_en") else {}),
                 **({"ele": p["ele"]} if p.get("ele") is not None else {}),
                 **({"wikidata": p["wikidata"]} if p.get("wikidata") else {}),
+                **({"volcano": True} if p.get("volcano") else {}),
             }
         )
     return peaks, stats

@@ -1,6 +1,6 @@
 {
  "region": "sichuan",
- "generated": "2026-08-12T10:55:03+00:00",
+ "generated": "2026-08-13T09:16:26+00:00",
  "peaks": [
   {
    "lat": 29.595851,
@@ -10623,6 +10623,20 @@
    "lon": 102.45,
    "name": "Phou Nam Khe",
    "name_en": "Phou Nam Khe"
+  },
+  {
+   "lat": 25.221457,
+   "lon": 98.499518,
+   "name": "大空山",
+   "name_en": "Big Empty Mountain",
+   "volcano": true
+  },
+  {
+   "lat": 25.21491,
+   "lon": 98.498161,
+   "name": "小空山",
+   "name_en": "Small Empty Mountain",
+   "volcano": true
   },
   {
    "lat": 23.188575,

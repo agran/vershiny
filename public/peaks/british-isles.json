@@ -1,6 +1,6 @@
 {
  "region": "british-isles",
- "generated": "2026-08-12T10:54:53+00:00",
+ "generated": "2026-08-13T09:16:18+00:00",
  "peaks": [
   {
    "lat": 56.796858,
@@ -129490,6 +129490,12 @@
    "lat": 52.163025,
    "lon": -10.404782,
    "name": "Ballineanig Hill"
+  },
+  {
+   "lat": 56.738912,
+   "lon": -6.135094,
+   "name": "Ardnamurchan",
+   "volcano": true
   },
   {
    "lat": 58.020088,

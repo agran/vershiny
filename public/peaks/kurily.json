@@ -1,7 +1,17 @@
 {
  "region": "kurily",
- "generated": "2026-08-12T10:54:59+00:00",
+ "generated": "2026-08-13T09:16:23+00:00",
  "peaks": [
+  {
+   "lat": 50.857716,
+   "lon": 155.557385,
+   "name": "Алаид",
+   "name_ru": "Алаид",
+   "name_en": "Alaid",
+   "ele": 2339,
+   "wikidata": "Q1866016",
+   "volcano": true
+  },
   {
    "lat": 50.853279,
    "lon": 155.545944,
@@ -9,6 +19,33 @@
    "name_ru": "пик Боковой",
    "name_en": "Bokovoy",
    "ele": 2291
+  },
+  {
+   "lat": 44.353709,
+   "lon": 146.253079,
+   "name": "Тятя",
+   "ele": 1819,
+   "wikidata": "Q547770",
+   "volcano": true
+  },
+  {
+   "lat": 50.321248,
+   "lon": 155.461608,
+   "name": "Чикурачки",
+   "name_ru": "Чикурачки",
+   "name_en": "Chikurachki",
+   "ele": 1816,
+   "volcano": true
+  },
+  {
+   "lat": 50.269786,
+   "lon": 155.248178,
+   "name": "вулкан Фусса",
+   "name_ru": "вулкан Фусса",
+   "name_en": "Fuss Peak",
+   "ele": 1772,
+   "wikidata": "Q385882",
+   "volcano": true
   },
   {
    "lat": 50.252412,
@@ -19,10 +56,49 @@
    "ele": 1681
   },
   {
+   "lat": 44.839535,
+   "lon": 147.349735,
+   "name": "Стокап",
+   "name_ru": "Стокап",
+   "name_en": "Stokap",
+   "ele": 1634,
+   "wikidata": "Q4442785",
+   "volcano": true
+  },
+  {
    "lat": 44.839279,
    "lon": 147.344509,
    "name": "Стокап (вершина)",
    "ele": 1634
+  },
+  {
+   "lat": 45.378068,
+   "lon": 147.913222,
+   "name": "Чирип",
+   "name_ru": "Чирип",
+   "name_en": "Chirip",
+   "ele": 1589,
+   "wikidata": "Q2666739",
+   "volcano": true
+  },
+  {
+   "lat": 45.337381,
+   "lon": 147.920633,
+   "name": "Богдан Хмельницкий",
+   "name_ru": "Богдан Хмельницкий",
+   "name_en": "Bogdan Khmelnitskiy",
+   "ele": 1585,
+   "wikidata": "Q4089188",
+   "volcano": true
+  },
+  {
+   "lat": 46.814571,
+   "lon": 151.785444,
+   "name": "Мильна",
+   "name_ru": "Мильна",
+   "name_en": "Milne",
+   "ele": 1540,
+   "volcano": true
   },
   {
    "lat": 50.294441,
@@ -33,12 +109,31 @@
    "ele": 1486
   },
   {
+   "lat": 44.454385,
+   "lon": 146.139644,
+   "name": "Руруй",
+   "name_en": "Ruruy",
+   "ele": 1485,
+   "wikidata": "Q4400196",
+   "volcano": true
+  },
+  {
    "lat": 50.21427,
    "lon": 155.421103,
    "name": "Архангельского",
    "name_ru": "Архангельского",
    "name_en": "Arkhangel’skogo",
    "ele": 1463
+  },
+  {
+   "lat": 48.09123,
+   "lon": 153.197947,
+   "name": "Сарычева",
+   "name_ru": "Сарычева",
+   "name_en": "Sarycheva Peak",
+   "ele": 1446,
+   "wikidata": "Q288403",
+   "volcano": true
   },
   {
    "lat": 44.876594,
@@ -48,11 +143,30 @@
    "ele": 1424
   },
   {
+   "lat": 50.302833,
+   "lon": 155.45391,
+   "name": "Татаринова",
+   "name_ru": "Татаринова",
+   "name_en": "Tatarinova",
+   "ele": 1414,
+   "volcano": true
+  },
+  {
    "lat": 50.272674,
    "lon": 155.435129,
    "name": "Борисяка",
    "name_en": "Borisyaka",
    "ele": 1390
+  },
+  {
+   "lat": 47.011051,
+   "lon": 152.115211,
+   "name": "Прево",
+   "name_ru": "Прево",
+   "name_en": "Prevo",
+   "ele": 1360,
+   "wikidata": "Q2080294",
+   "volcano": true
   },
   {
    "lat": 45.729846,
@@ -62,11 +176,38 @@
    "ele": 1348
   },
   {
+   "lat": 46.044064,
+   "lon": 150.048229,
+   "name": "Колокол",
+   "name_ru": "Колокол",
+   "name_en": "Kolokol",
+   "ele": 1328,
+   "volcano": true
+  },
+  {
+   "lat": 50.141809,
+   "lon": 155.38471,
+   "name": "Карпинского",
+   "name_ru": "Карпинского",
+   "name_en": "Karpinskogo",
+   "ele": 1326,
+   "volcano": true
+  },
+  {
    "lat": 45.774883,
    "lon": 149.705089,
    "name": "Сивуха",
    "name_en": "Sivukha",
    "ele": 1326
+  },
+  {
+   "lat": 49.352193,
+   "lon": 154.705118,
+   "name": "Креницын",
+   "name_ru": "Креницын",
+   "ele": 1325,
+   "wikidata": "Q1787964",
+   "volcano": true
   },
   {
    "lat": 45.514857,
@@ -114,6 +255,16 @@
    "ele": 1263
   },
   {
+   "lat": 44.470274,
+   "lon": 146.929781,
+   "name": "Берутарубе",
+   "name_ru": "Берутарубе",
+   "name_en": "Berutarube",
+   "ele": 1223,
+   "wikidata": "Q829207",
+   "volcano": true
+  },
+  {
    "lat": 46.055244,
    "lon": 150.09628,
    "name": "Весёлая",
@@ -133,6 +284,16 @@
    "name": "Средняя",
    "name_en": "Srednaya",
    "ele": 1206
+  },
+  {
+   "lat": 44.807704,
+   "lon": 147.127479,
+   "name": "Атсонупури",
+   "name_ru": "Атсонупури",
+   "name_en": "Atsonupuri",
+   "ele": 1205,
+   "wikidata": "Q524216",
+   "volcano": true
   },
   {
    "lat": 45.501396,
@@ -171,6 +332,41 @@
    "ele": 1189
   },
   {
+   "lat": 50.549414,
+   "lon": 155.96331,
+   "name": "Вернадского",
+   "name_ru": "Вернадского",
+   "name_en": "Vernadskogo",
+   "ele": 1184,
+   "volcano": true
+  },
+  {
+   "lat": 47.350744,
+   "lon": 152.447833,
+   "name": "Кетой",
+   "name_ru": "Кетой",
+   "ele": 1172,
+   "volcano": true
+  },
+  {
+   "lat": 47.337326,
+   "lon": 152.435922,
+   "name": "Кетой",
+   "name_ru": "Кетой",
+   "ele": 1172,
+   "volcano": true
+  },
+  {
+   "lat": 48.947714,
+   "lon": 153.940643,
+   "name": "Экарма",
+   "name_ru": "Экарма",
+   "name_en": "Ekarma",
+   "ele": 1170,
+   "wikidata": "Q4530140",
+   "volcano": true
+  },
+  {
    "lat": 49.783114,
    "lon": 154.434305,
    "name": "Маканруши",
@@ -178,10 +374,55 @@
    "ele": 1169
   },
   {
+   "lat": 49.78503,
+   "lon": 154.42821,
+   "name": "Маканруши",
+   "name_en": "Makanrushi",
+   "ele": 1169,
+   "volcano": true
+  },
+  {
+   "lat": 45.011989,
+   "lon": 147.873512,
+   "name": "Иван Грозный",
+   "name_en": "Ivan Groznyi",
+   "ele": 1159,
+   "wikidata": "Q3156114",
+   "volcano": true
+  },
+  {
+   "lat": 50.59961,
+   "lon": 155.998336,
+   "name": "Козыревского",
+   "name_ru": "Козыревского",
+   "name_en": "Kozyrevskogo",
+   "ele": 1153,
+   "volcano": true
+  },
+  {
+   "lat": 49.117304,
+   "lon": 154.520877,
+   "name": "влк.Севергина",
+   "name_ru": "влк.Севергина",
+   "name_en": "Pik Severgin",
+   "ele": 1145,
+   "volcano": true
+  },
+  {
    "lat": 45.103611,
    "lon": 148.010267,
    "name": "Восточная вершина",
    "ele": 1140
+  },
+  {
+   "lat": 45.103186,
+   "lon": 148.016119,
+   "name": "вулкан Баранского",
+   "name_ru": "вулкан Баранского",
+   "name_en": "Baranskogo",
+   "ele": 1134,
+   "wikidata": "Q807265",
+   "volcano": true
   },
   {
    "lat": 45.099814,
@@ -242,6 +483,14 @@
    "ele": 1052
   },
   {
+   "lat": 45.022709,
+   "lon": 147.919464,
+   "name": "вулкан Тебенькова",
+   "name_en": "Teben’kova",
+   "ele": 1030,
+   "volcano": true
+  },
+  {
    "lat": 45.913946,
    "lon": 149.935035,
    "name": "Петра Шмидта",
@@ -257,11 +506,46 @@
    "ele": 1023
   },
   {
+   "lat": 49.564553,
+   "lon": 154.813428,
+   "name": "Немо",
+   "name_ru": "Немо",
+   "name_en": "Nemo",
+   "ele": 1018,
+   "wikidata": "Q1321881",
+   "volcano": true
+  },
+  {
    "lat": 50.183965,
    "lon": 155.440825,
    "name": "Дюрозан",
    "name_en": "Dyurozan",
    "ele": 1005
+  },
+  {
+   "lat": 45.930414,
+   "lon": 149.918842,
+   "name": "Три сестры",
+   "name_en": "Tri Sestry",
+   "ele": 998,
+   "volcano": true
+  },
+  {
+   "lat": 46.066673,
+   "lon": 150.101927,
+   "name": "Трезубец",
+   "name_ru": "Трезубец",
+   "name_en": "Trezubets",
+   "ele": 997,
+   "volcano": true
+  },
+  {
+   "lat": 47.341999,
+   "lon": 152.477893,
+   "name": "Палласа",
+   "name_ru": "Палласа",
+   "ele": 993,
+   "volcano": true
   },
   {
    "lat": 45.955993,
@@ -270,6 +554,16 @@
    "name_ru": "Витковского",
    "name_en": "Vitkovskogo",
    "ele": 991
+  },
+  {
+   "lat": 45.384673,
+   "lon": 148.81649,
+   "name": "Кудрявый вулкан",
+   "name_ru": "Кудрявый вулкан",
+   "name_en": "Kudryavy",
+   "ele": 986,
+   "wikidata": "Q2229474",
+   "volcano": true
   },
   {
    "lat": 45.913925,
@@ -293,6 +587,24 @@
    "ele": 972
   },
   {
+   "lat": 46.060645,
+   "lon": 150.06706,
+   "name": "Берга",
+   "name_ru": "Берга",
+   "name_en": "Berga",
+   "ele": 970,
+   "volcano": true
+  },
+  {
+   "lat": 47.76257,
+   "lon": 153.019871,
+   "name": "Расшуа",
+   "name_ru": "Расшуа",
+   "ele": 956,
+   "wikidata": "Q4390689",
+   "volcano": true
+  },
+  {
    "lat": 44.992867,
    "lon": 147.837494,
    "name": "Мотонопури",
@@ -312,6 +624,15 @@
    "name": "Шляпа",
    "name_en": "Shlyapa",
    "ele": 926
+  },
+  {
+   "lat": 48.872691,
+   "lon": 154.180693,
+   "name": "Синарка",
+   "name_ru": "Синарка",
+   "name_en": "Sinarka",
+   "ele": 925,
+   "volcano": true
   },
   {
    "lat": 44.368172,
@@ -466,6 +787,15 @@
    "ele": 837
   },
   {
+   "lat": 48.755382,
+   "lon": 154.017549,
+   "name": "Кунтоминтар",
+   "name_ru": "Кунтоминтар",
+   "name_en": "Kuntomintar",
+   "ele": 828,
+   "volcano": true
+  },
+  {
    "lat": 50.453172,
    "lon": 155.851792,
    "name": "Скальная",
@@ -597,6 +927,15 @@
    "ele": 766
   },
   {
+   "lat": 50.197245,
+   "lon": 154.978526,
+   "name": "Ширинки",
+   "name_ru": "Ширинки",
+   "name_en": "Shirinki",
+   "ele": 761,
+   "volcano": true
+  },
+  {
    "lat": 45.122307,
    "lon": 148.063406,
    "name": "Илата",
@@ -618,6 +957,15 @@
    "name_en": "Brat Chirpoyev",
    "ele": 742,
    "wikidata": "Q31626840"
+  },
+  {
+   "lat": 48.979769,
+   "lon": 153.479455,
+   "name": "Chirinkotan",
+   "name_ru": "Чиринкотан",
+   "name_en": "Chirinkotan",
+   "ele": 742,
+   "volcano": true
   },
   {
    "lat": 46.182539,
@@ -706,6 +1054,15 @@
    "ele": 699
   },
   {
+   "lat": 46.532289,
+   "lon": 150.872062,
+   "name": "Чирпой",
+   "name_ru": "Чирпой",
+   "name_en": "Chirpoy",
+   "ele": 691,
+   "volcano": true
+  },
+  {
    "lat": 50.207097,
    "lon": 155.505997,
    "name": "Яга",
@@ -720,6 +1077,15 @@
    "name_ru": "Длинная",
    "name_en": "Dlinnaya",
    "ele": 678
+  },
+  {
+   "lat": 47.121045,
+   "lon": 152.248878,
+   "name": "Уратман",
+   "name_ru": "Уратман",
+   "name_en": "Uratman",
+   "ele": 676,
+   "volcano": true
   },
   {
    "lat": 44.384053,
@@ -831,6 +1197,23 @@
    "name_ru": "Кратерная",
    "name_en": "Kraternaya",
    "ele": 634
+  },
+  {
+   "lat": 46.52144,
+   "lon": 150.866445,
+   "name": "Чёрного",
+   "name_ru": "Чёрного",
+   "ele": 625,
+   "wikidata": "Q4128319",
+   "volcano": true
+  },
+  {
+   "lat": 46.910524,
+   "lon": 151.96587,
+   "name": "Вулкан Заварицкого",
+   "name_ru": "Вулкан Заварицкого",
+   "ele": 624,
+   "volcano": true
   },
   {
    "lat": 50.208307,
@@ -986,12 +1369,32 @@
    "ele": 564
   },
   {
+   "lat": 45.382952,
+   "lon": 148.786813,
+   "name": "Меньший Брат",
+   "name_ru": "Меньший Брат",
+   "name_en": "Menshiy Brat",
+   "ele": 562,
+   "wikidata": "Q4290644",
+   "volcano": true
+  },
+  {
    "lat": 50.39258,
    "lon": 155.822018,
    "name": "Левина",
    "name_ru": "Левина",
    "name_en": "Levina",
    "ele": 562
+  },
+  {
+   "lat": 48.29455,
+   "lon": 153.251988,
+   "name": "Райкоке",
+   "name_ru": "Райкоке",
+   "name_en": "Raikoke",
+   "ele": 551,
+   "wikidata": "Q4388970",
+   "volcano": true
   },
   {
    "lat": 49.409839,
@@ -1293,11 +1696,30 @@
    "ele": 406
   },
   {
+   "lat": 47.515047,
+   "lon": 152.802165,
+   "name": "Ушишир",
+   "name_ru": "Ушишир",
+   "name_en": "Ushishir",
+   "ele": 401,
+   "volcano": true
+  },
+  {
    "lat": 45.363066,
    "lon": 148.648588,
    "name": "Шутка",
    "name_en": "Shutka",
    "ele": 397
+  },
+  {
+   "lat": 46.510351,
+   "lon": 150.868186,
+   "name": "Сноу",
+   "name_ru": "Сноу",
+   "name_en": "Snou",
+   "ele": 395,
+   "wikidata": "Q4128316",
+   "volcano": true
   },
   {
    "lat": 45.182529,
@@ -1656,6 +2078,16 @@
    "name_ru": "Зоркая",
    "name_en": "Zorkaya",
    "ele": 128
+  },
+  {
+   "lat": 50.84477,
+   "lon": 155.675763,
+   "name": "Такетоми",
+   "name_ru": "Такетоми",
+   "name_en": "Taketomi",
+   "ele": 127,
+   "wikidata": "Q31449916",
+   "volcano": true
   },
   {
    "lat": 48.064656,

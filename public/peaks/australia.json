@@ -1,6 +1,6 @@
 {
  "region": "australia",
- "generated": "2026-08-12T10:54:52+00:00",
+ "generated": "2026-08-13T09:16:17+00:00",
  "peaks": [
   {
    "lat": -10.034943,
@@ -15820,6 +15820,14 @@
    "ele": 755
   },
   {
+   "lat": -37.655075,
+   "lon": 143.924567,
+   "name": "Mount Buninyong",
+   "ele": 754,
+   "wikidata": "Q1614253",
+   "volcano": true
+  },
+  {
    "lat": -38.999619,
    "lon": 146.378492,
    "name": "Mount Latrobe",
@@ -15992,6 +16000,14 @@
    "lon": 143.221999,
    "name": "Sibbrett Hill",
    "ele": 747
+  },
+  {
+   "lat": -37.576581,
+   "lon": 143.958235,
+   "name": "Mount Warrenheip",
+   "ele": 746,
+   "wikidata": "Q1950787",
+   "volcano": true
   },
   {
    "lat": -32.81224,
@@ -16877,6 +16893,13 @@
    "name": "Hanging Rock",
    "ele": 718,
    "wikidata": "Q1319209"
+  },
+  {
+   "lat": -37.491058,
+   "lon": 143.979766,
+   "name": "Clarkes Hill",
+   "ele": 718,
+   "volcano": true
   },
   {
    "lat": -35.00317,
@@ -18240,6 +18263,13 @@
    "ele": 679
   },
   {
+   "lat": -37.350298,
+   "lon": 144.003967,
+   "name": "Kangaroo Hills",
+   "ele": 678,
+   "volcano": true
+  },
+  {
    "lat": -29.467927,
    "lon": 117.303001,
    "name": "Mount Singleton",
@@ -18316,6 +18346,20 @@
    "lon": 150.312614,
    "name": "Torrani Mountain",
    "ele": 677
+  },
+  {
+   "lat": -37.392548,
+   "lon": 143.963028,
+   "name": "Forest Hill",
+   "ele": 676,
+   "volcano": true
+  },
+  {
+   "lat": -37.414751,
+   "lon": 144.023857,
+   "name": "Bullarook Hill",
+   "ele": 676,
+   "volcano": true
   },
   {
    "lat": -16.228333,
@@ -18527,6 +18571,13 @@
    "lon": 117.850594,
    "name": "Devils Slide",
    "ele": 670
+  },
+  {
+   "lat": -37.296714,
+   "lon": 143.984547,
+   "name": "Mount Kooroocheang",
+   "ele": 669,
+   "volcano": true
   },
   {
    "lat": -43.00452,
@@ -19295,6 +19346,13 @@
    "ele": 645
   },
   {
+   "lat": -37.357645,
+   "lon": 144.012112,
+   "name": "Kangaroo Hills",
+   "ele": 644,
+   "volcano": true
+  },
+  {
    "lat": -33.60431,
    "lon": 148.85398,
    "name": "Malongulli Sugarloaf",
@@ -19621,6 +19679,13 @@
    "name": "Reservoir Hill",
    "ele": 637,
    "wikidata": "Q21962335"
+  },
+  {
+   "lat": -37.349407,
+   "lon": 144.058902,
+   "name": "Eastern Hill",
+   "ele": 637,
+   "volcano": true
   },
   {
    "lat": -37.22809,
@@ -20026,6 +20091,13 @@
    "ele": 628
   },
   {
+   "lat": -37.264004,
+   "lon": 144.150182,
+   "name": "Mount Franklin",
+   "ele": 627,
+   "volcano": true
+  },
+  {
    "lat": -34.79542,
    "lon": 150.53343,
    "name": "Browns Mountain",
@@ -20417,6 +20489,13 @@
    "ele": 612
   },
   {
+   "lat": -37.402612,
+   "lon": 143.634091,
+   "name": "Cardinal Hill",
+   "ele": 612,
+   "volcano": true
+  },
+  {
    "lat": -31.05769,
    "lon": 150.04477,
    "name": "Haystack Mountain",
@@ -20457,6 +20536,13 @@
    "lon": 149.173313,
    "name": "Mahon Hill",
    "ele": 612
+  },
+  {
+   "lat": -37.399615,
+   "lon": 144.047547,
+   "name": "Donnelys Hill",
+   "ele": 611,
+   "volcano": true
   },
   {
    "lat": -37.061068,
@@ -20588,6 +20674,13 @@
    "name": "Green Hill",
    "ele": 609,
    "wikidata": "Q21970095"
+  },
+  {
+   "lat": -37.293315,
+   "lon": 143.939926,
+   "name": "Mount Moorookyle",
+   "ele": 609,
+   "volcano": true
   },
   {
    "lat": -23.870395,
@@ -21647,6 +21740,13 @@
    "ele": 583
   },
   {
+   "lat": -37.43998,
+   "lon": 143.815643,
+   "name": "Mount Hollowback",
+   "ele": 582,
+   "volcano": true
+  },
+  {
    "lat": -38.57061,
    "lon": 146.30771,
    "name": "Mount Fatigue",
@@ -21875,6 +21975,13 @@
    "wikidata": "Q21885203"
   },
   {
+   "lat": -37.368667,
+   "lon": 143.592883,
+   "name": "St Marys Hill",
+   "ele": 577,
+   "volcano": true
+  },
+  {
    "lat": -24.236717,
    "lon": 150.734071,
    "name": "Mount Fane",
@@ -21910,6 +22017,13 @@
    "lon": 150.128834,
    "name": "Stonehag Hill",
    "ele": 577
+  },
+  {
+   "lat": -37.334805,
+   "lon": 143.693488,
+   "name": "Mount Gap",
+   "ele": 576,
+   "volcano": true
   },
   {
    "lat": -23.531118,
@@ -21953,6 +22067,13 @@
    "lon": 119.97366,
    "name": "Mount Anderson",
    "ele": 576
+  },
+  {
+   "lat": -37.371857,
+   "lon": 143.617434,
+   "name": "Ryan Hill",
+   "ele": 575,
+   "volcano": true
   },
   {
    "lat": -34.8951,
@@ -22412,6 +22533,13 @@
    "ele": 567
   },
   {
+   "lat": -37.439419,
+   "lon": 143.671169,
+   "name": "Weatherboard Hill",
+   "ele": 566,
+   "volcano": true
+  },
+  {
    "lat": -35.96611,
    "lon": 148.02644,
    "name": "Pipeclay Hill",
@@ -22673,6 +22801,13 @@
    "ele": 561
   },
   {
+   "lat": -37.347507,
+   "lon": 143.919932,
+   "name": "Birch Hill",
+   "ele": 560,
+   "volcano": true
+  },
+  {
    "lat": -34.870735,
    "lon": 138.804145,
    "name": "Mount Misery",
@@ -22733,6 +22868,14 @@
    "lon": 150.659983,
    "name": "Wildfire",
    "ele": 560
+  },
+  {
+   "lat": -37.463618,
+   "lon": 143.817558,
+   "name": "Mount Pisgah",
+   "ele": 559,
+   "wikidata": "Q6922780",
+   "volcano": true
   },
   {
    "lat": -32.66612,
@@ -23173,6 +23316,13 @@
    "lon": 122.66818,
    "name": "Mount Throssell",
    "ele": 551
+  },
+  {
+   "lat": -37.402014,
+   "lon": 143.932511,
+   "name": "Spring Hill",
+   "ele": 550,
+   "volcano": true
   },
   {
    "lat": -37.76905,
@@ -24964,6 +25114,13 @@
    "ele": 522
   },
   {
+   "lat": -37.280473,
+   "lon": 143.580147,
+   "name": "Mount Mitchell",
+   "ele": 521,
+   "volcano": true
+  },
+  {
    "lat": -26.248611,
    "lon": 151.741667,
    "name": "Mount McEuen",
@@ -25152,6 +25309,14 @@
    "wikidata": "Q21940482"
   },
   {
+   "lat": -37.501622,
+   "lon": 143.839352,
+   "name": "Mount Rowan",
+   "ele": 518,
+   "wikidata": "Q12859119",
+   "volcano": true
+  },
+  {
    "lat": -35.556232,
    "lon": 147.170747,
    "name": "Peddles Hill",
@@ -25257,6 +25422,13 @@
    "lon": 123.67074,
    "name": "Welstead Hill",
    "ele": 516
+  },
+  {
+   "lat": -37.452689,
+   "lon": 143.801184,
+   "name": "Mount Blowhard",
+   "ele": 515,
+   "volcano": true
   },
   {
    "lat": -28.685833,
@@ -26216,6 +26388,13 @@
    "wikidata": "Q21938390"
   },
   {
+   "lat": -37.391944,
+   "lon": 143.697774,
+   "name": "Fraser Hill",
+   "ele": 500,
+   "volcano": true
+  },
+  {
    "lat": -21.45865,
    "lon": 148.824603,
    "name": "Mount Spencer",
@@ -26263,6 +26442,13 @@
    "lon": 142.535951,
    "name": "Peverill Peak",
    "ele": 500
+  },
+  {
+   "lat": -37.288942,
+   "lon": 143.616112,
+   "name": "Maiden Hill",
+   "ele": 499,
+   "volcano": true
   },
   {
    "lat": -32.21918,
@@ -26695,6 +26881,13 @@
    "ele": 493
   },
   {
+   "lat": -37.279314,
+   "lon": 143.638218,
+   "name": "Gordon Hill",
+   "ele": 492,
+   "volcano": true
+  },
+  {
    "lat": -29.98701,
    "lon": 152.87051,
    "name": "Koukandowie Mountain",
@@ -26973,6 +27166,13 @@
    "wikidata": "Q21940538"
   },
   {
+   "lat": -37.410133,
+   "lon": 143.785281,
+   "name": "Mount Cavern",
+   "ele": 489,
+   "volcano": true
+  },
+  {
    "lat": -37.529862,
    "lon": 149.62708,
    "name": "Genoa Peak",
@@ -27195,6 +27395,13 @@
    "lon": 125.23507,
    "name": "Mount Synnot",
    "ele": 487
+  },
+  {
+   "lat": -37.416664,
+   "lon": 143.703487,
+   "name": "Brown Hill",
+   "ele": 486,
+   "volcano": true
   },
   {
    "lat": -13.796389,
@@ -27483,6 +27690,13 @@
    "ele": 482
   },
   {
+   "lat": -37.470705,
+   "lon": 143.616799,
+   "name": "Mount Callender",
+   "ele": 482,
+   "volcano": true
+  },
+  {
    "lat": -43.377575,
    "lon": 146.198288,
    "name": "Mount Fulton",
@@ -27544,6 +27758,13 @@
    "ele": 482
   },
   {
+   "lat": -37.450645,
+   "lon": 143.697898,
+   "name": "Saddleback Hill",
+   "ele": 481,
+   "volcano": true
+  },
+  {
    "lat": -22.320804,
    "lon": 148.13911,
    "name": "Mount Logan",
@@ -27597,6 +27818,13 @@
    "lon": 128.06494,
    "name": "Mount Kinahan",
    "ele": 481
+  },
+  {
+   "lat": -37.250472,
+   "lon": 144.140812,
+   "name": "Mount Stewart",
+   "ele": 480,
+   "volcano": true
   },
   {
    "lat": -41.167203,
@@ -28336,6 +28564,13 @@
    "wikidata": "Q21882367"
   },
   {
+   "lat": -37.322582,
+   "lon": 143.916599,
+   "name": "Woodhouse Hill",
+   "ele": 469,
+   "volcano": true
+  },
+  {
    "lat": -34.404789,
    "lon": 150.833518,
    "name": "Mount Brisbane",
@@ -28867,6 +29102,20 @@
    "ele": 461
   },
   {
+   "lat": -37.41668,
+   "lon": 143.721476,
+   "name": "Selwood Hill",
+   "ele": 460,
+   "volcano": true
+  },
+  {
+   "lat": -37.25833,
+   "lon": 143.930391,
+   "name": "Powlett Hill",
+   "ele": 460,
+   "volcano": true
+  },
+  {
    "lat": -33.76684,
    "lon": 138.5395,
    "name": "Bungaree Hill",
@@ -28926,6 +29175,13 @@
    "lon": 146.090291,
    "name": "Jacobsen",
    "ele": 460
+  },
+  {
+   "lat": -37.421636,
+   "lon": 143.722492,
+   "name": "Bankin Hil",
+   "ele": 460,
+   "volcano": true
   },
   {
    "lat": -20.097827,
@@ -29866,6 +30122,13 @@
    "ele": 443
   },
   {
+   "lat": -37.265702,
+   "lon": 143.847389,
+   "name": "Leishman Hill",
+   "ele": 442,
+   "volcano": true
+  },
+  {
    "lat": -26.81667,
    "lon": 152.3,
    "name": "Mount Spencer",
@@ -29976,6 +30239,14 @@
    "name": "Pillingers Peak",
    "ele": 440,
    "wikidata": "Q21962521"
+  },
+  {
+   "lat": -37.89398,
+   "lon": 142.059062,
+   "name": "Mount Napier",
+   "ele": 440,
+   "wikidata": "Q1345263",
+   "volcano": true
   },
   {
    "lat": -34.323467,
@@ -30331,6 +30602,13 @@
    "lon": 148.586426,
    "name": "Mount Ceres",
    "ele": 436
+  },
+  {
+   "lat": -37.230859,
+   "lon": 144.008095,
+   "name": "Heaghney Hill",
+   "ele": 435,
+   "volcano": true
   },
   {
    "lat": -20.266844,
@@ -31185,6 +31463,13 @@
    "ele": 426
   },
   {
+   "lat": -37.309528,
+   "lon": 143.889019,
+   "name": "Clover Hill",
+   "ele": 425,
+   "volcano": true
+  },
+  {
    "lat": -42.88275,
    "lon": 145.72428,
    "name": "Mount Jean",
@@ -31731,6 +32016,13 @@
    "ele": 417
   },
   {
+   "lat": -37.272985,
+   "lon": 143.838317,
+   "name": "Williams Hill",
+   "ele": 416,
+   "volcano": true
+  },
+  {
    "lat": -31.743257,
    "lon": 141.328074,
    "name": "Mount Franks",
@@ -31823,6 +32115,13 @@
    "wikidata": "Q21940958"
   },
   {
+   "lat": -37.199619,
+   "lon": 143.814344,
+   "name": "Mount Cameron",
+   "ele": 414,
+   "volcano": true
+  },
+  {
    "lat": -37.09522,
    "lon": 144.86942,
    "name": "Pyalong Hill",
@@ -31883,6 +32182,13 @@
    "lon": 152.877208,
    "name": "Camp Mountain",
    "ele": 414
+  },
+  {
+   "lat": -37.22268,
+   "lon": 144.05438,
+   "name": "Yandoit Hill",
+   "ele": 413,
+   "volcano": true
   },
   {
    "lat": -33.903823,
@@ -32187,6 +32493,13 @@
    "ele": 410
   },
   {
+   "lat": -37.260538,
+   "lon": 143.882091,
+   "name": "Kelly Hill",
+   "ele": 410,
+   "volcano": true
+  },
+  {
    "lat": -34.826337,
    "lon": 116.788716,
    "name": "Mount Frankland",
@@ -32301,6 +32614,13 @@
    "lon": 150.893633,
    "name": "Darkey",
    "ele": 410
+  },
+  {
+   "lat": -37.210011,
+   "lon": 143.752094,
+   "name": "Mount Glasgow",
+   "ele": 409,
+   "volcano": true
   },
   {
    "lat": -20.805556,
@@ -33875,6 +34195,13 @@
    "ele": 385
   },
   {
+   "lat": -37.202847,
+   "lon": 143.727487,
+   "name": "Mount Greenock",
+   "ele": 385,
+   "volcano": true
+  },
+  {
    "lat": -20.169779,
    "lon": 148.96671,
    "name": "Whitsunday Cairn",
@@ -34237,6 +34564,14 @@
    "ele": 381
   },
   {
+   "lat": -37.960573,
+   "lon": 143.198457,
+   "name": "Mount Elephant",
+   "ele": 380,
+   "wikidata": "Q1553558",
+   "volcano": true
+  },
+  {
    "lat": -36.565362,
    "lon": 146.736504,
    "name": "Reform Hill",
@@ -34359,6 +34694,13 @@
    "lon": 143.681317,
    "name": "Pound Hill",
    "ele": 379
+  },
+  {
+   "lat": -37.240315,
+   "lon": 143.865611,
+   "name": "McIvor Hill",
+   "ele": 378,
+   "volcano": true
   },
   {
    "lat": -23.600678,
@@ -34661,6 +35003,13 @@
    "lon": 138.579062,
    "name": "Willunga Hill",
    "ele": 375
+  },
+  {
+   "lat": -37.20755,
+   "lon": 143.858202,
+   "name": "Mount Duntulm",
+   "ele": 374,
+   "volcano": true
   },
   {
    "lat": -10.1475,
@@ -36497,6 +36846,13 @@
    "lon": 143.653474,
    "name": "Crows Nest",
    "ele": 345
+  },
+  {
+   "lat": -37.192061,
+   "lon": 143.835828,
+   "name": "Fawcett Hill",
+   "ele": 344,
+   "volcano": true
   },
   {
    "lat": -37.71652,
@@ -38375,6 +38731,13 @@
    "ele": 315
   },
   {
+   "lat": -37.047479,
+   "lon": 143.860495,
+   "name": "Mount Moolort",
+   "ele": 314,
+   "volcano": true
+  },
+  {
    "lat": -21.876667,
    "lon": 140.01,
    "name": "Mount Merlin",
@@ -38656,6 +39019,14 @@
    "lon": 150.904585,
    "name": "Mount Moruben",
    "ele": 311
+  },
+  {
+   "lat": -38.17813,
+   "lon": 142.933394,
+   "name": "Mount Noorat",
+   "ele": 310,
+   "wikidata": "Q255693",
+   "volcano": true
   },
   {
    "lat": -42.01416,
@@ -55254,6 +55625,12 @@
    "name": "Native Dog Hill"
   },
   {
+   "lat": -34.31106,
+   "lon": 149.398455,
+   "name": "Abercrombie Volcano",
+   "volcano": true
+  },
+  {
    "lat": -34.968586,
    "lon": 138.682182,
    "name": "Castle Rock"
@@ -55991,9 +56368,117 @@
    "wikidata": "Q21894698"
   },
   {
+   "lat": -37.406771,
+   "lon": 143.769794,
+   "name": "Coghills Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.424116,
+   "lon": 143.752336,
+   "name": "Morton Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.434279,
+   "lon": 143.750383,
+   "name": "Mclean Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.39087,
+   "lon": 143.733622,
+   "name": "Baird Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.372001,
+   "lon": 143.738891,
+   "name": "Cloverbank Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.3612,
+   "lon": 143.847619,
+   "name": "Cattle Station Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.379423,
+   "lon": 143.717051,
+   "name": "Vaughn Hill",
+   "volcano": true
+  },
+  {
    "lat": -37.402348,
    "lon": 143.616369,
    "name": "Staff Hill"
+  },
+  {
+   "lat": -37.347018,
+   "lon": 143.736998,
+   "name": "Fenton Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.288326,
+   "lon": 143.590619,
+   "name": "Long Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.487447,
+   "lon": 143.963014,
+   "name": "Wombat Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.42865,
+   "lon": 143.975303,
+   "name": "Scrub Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.394813,
+   "lon": 144.022012,
+   "name": "Green Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.268195,
+   "lon": 143.89907,
+   "name": "Stewart Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.253166,
+   "lon": 143.962422,
+   "name": "Stoney Rises",
+   "volcano": true
+  },
+  {
+   "lat": -37.256565,
+   "lon": 143.982333,
+   "name": "Rocky Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.363099,
+   "lon": 143.887779,
+   "name": "Green Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.210689,
+   "lon": 143.811014,
+   "name": "Merin (Middle) Hill",
+   "volcano": true
+  },
+  {
+   "lat": -37.260632,
+   "lon": 143.823197,
+   "name": "McKinnon Hill",
+   "volcano": true
   },
   {
    "lat": -20.336716,
@@ -56559,6 +57044,12 @@
    "lat": -37.711823,
    "lon": 148.599904,
    "name": "Mount Raymond"
+  },
+  {
+   "lat": -18.222258,
+   "lon": 144.667599,
+   "name": "Kalkani Crater",
+   "volcano": true
   },
   {
    "lat": -35.30818,
@@ -86519,6 +87010,12 @@
    "wikidata": "Q48784937"
   },
   {
+   "lat": -38.250011,
+   "lon": 143.505232,
+   "name": "Red Rock Volcano Complex",
+   "volcano": true
+  },
+  {
    "lat": -33.397464,
    "lon": 150.233628,
    "name": "Mount Horne"
@@ -89156,6 +89653,13 @@
    "name": "Karrung Top"
   },
   {
+   "lat": -38.061401,
+   "lon": 141.922553,
+   "name": "Budj Bim",
+   "wikidata": "Q260465",
+   "volcano": true
+  },
+  {
    "lat": -10.609777,
    "lon": 150.549351,
    "name": "Mount Bossim"
@@ -89485,6 +89989,12 @@
    "lat": -33.88037,
    "lon": 150.062589,
    "name": "Mount Whalan"
+  },
+  {
+   "lat": -38.32176,
+   "lon": 142.362374,
+   "name": "Yatt Mirng Crater",
+   "volcano": true
   },
   {
    "lat": -38.388366,

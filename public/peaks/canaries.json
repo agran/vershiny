@@ -1,7 +1,24 @@
 {
  "region": "canaries",
- "generated": "2026-08-12T10:54:53+00:00",
+ "generated": "2026-08-13T09:16:18+00:00",
  "peaks": [
+  {
+   "lat": 28.272693,
+   "lon": -16.642274,
+   "name": "Teide",
+   "ele": 3715,
+   "wikidata": "Q38954",
+   "volcano": true
+  },
+  {
+   "lat": 28.263924,
+   "lon": -16.66468,
+   "name": "Pico Viejo",
+   "name_ru": "Пико-Вьехо",
+   "ele": 3129,
+   "wikidata": "Q2092383",
+   "volcano": true
+  },
   {
    "lat": 28.259014,
    "lon": -16.668736,
@@ -88,6 +105,13 @@
    "wikidata": "Q125456911"
   },
   {
+   "lat": 28.288076,
+   "lon": -16.533328,
+   "name": "Montaña Abreu",
+   "ele": 2406,
+   "volcano": true
+  },
+  {
    "lat": 28.301332,
    "lon": -16.511328,
    "name": "Montaña del Cabezón",
@@ -105,6 +129,13 @@
    "name": "Izaña",
    "ele": 2383,
    "wikidata": "Q23984842"
+  },
+  {
+   "lat": 28.297103,
+   "lon": -16.526548,
+   "name": "Montaña de la Carnicería",
+   "ele": 2381,
+   "volcano": true
   },
   {
    "lat": 28.282031,
@@ -143,16 +174,37 @@
    "ele": 2369
   },
   {
+   "lat": 28.294917,
+   "lon": -16.544402,
+   "name": "Montaña de Maja",
+   "ele": 2365,
+   "volcano": true
+  },
+  {
    "lat": 28.201154,
    "lon": -16.609887,
    "name": "Montaña de las Arenas",
    "ele": 2364
   },
   {
+   "lat": 28.287506,
+   "lon": -16.524455,
+   "name": "Montaña de las Vacas",
+   "ele": 2363,
+   "volcano": true
+  },
+  {
    "lat": 28.28247,
    "lon": -16.548842,
    "name": "Montaña Chiqueros",
    "ele": 2363
+  },
+  {
+   "lat": 28.294967,
+   "lon": -16.531219,
+   "name": "Montaña de Enmedio",
+   "ele": 2362,
+   "volcano": true
   },
   {
    "lat": 28.298841,
@@ -178,6 +230,13 @@
    "lon": -16.552185,
    "name": "Montaña del Cerrillar",
    "ele": 2347
+  },
+  {
+   "lat": 28.253822,
+   "lon": -16.693049,
+   "name": "Montaña de Chío",
+   "ele": 2345,
+   "volcano": true
   },
   {
    "lat": 28.262387,
@@ -211,6 +270,13 @@
    "ele": 2322
   },
   {
+   "lat": 28.305284,
+   "lon": -16.519964,
+   "name": "Montaña de los Mallorquines",
+   "ele": 2316,
+   "volcano": true
+  },
+  {
    "lat": 28.250262,
    "lon": -16.623784,
    "name": "Montaña Majúa",
@@ -234,6 +300,13 @@
    "lon": -16.619152,
    "name": "Montaña de las Lajas",
    "ele": 2296
+  },
+  {
+   "lat": 28.25743,
+   "lon": -16.547949,
+   "name": "Morro las Brujas",
+   "ele": 2289,
+   "volcano": true
   },
   {
    "lat": 28.261152,
@@ -260,10 +333,24 @@
    "ele": 2265
   },
   {
+   "lat": 28.28537,
+   "lon": -16.581411,
+   "name": "Montaña de los Corrales",
+   "ele": 2256,
+   "volcano": true
+  },
+  {
    "lat": 28.302786,
    "lon": -16.492932,
    "name": "Cobre",
    "ele": 2256
+  },
+  {
+   "lat": 28.270699,
+   "lon": -16.52948,
+   "name": "Montaña Negra o del Volcán",
+   "ele": 2251,
+   "volcano": true
   },
   {
    "lat": 28.323759,
@@ -296,6 +383,13 @@
    "ele": 2234
   },
   {
+   "lat": 28.284473,
+   "lon": -16.513188,
+   "name": "Volcanes de Fasnia",
+   "ele": 2232,
+   "volcano": true
+  },
+  {
    "lat": 28.265697,
    "lon": -16.699968,
    "name": "Montaña Reventada",
@@ -307,6 +401,13 @@
    "lon": -16.692082,
    "name": "Roques de Chavao",
    "ele": 2226
+  },
+  {
+   "lat": 28.291,
+   "lon": -16.589267,
+   "name": "Montaña de los Tomillos",
+   "ele": 2222,
+   "volcano": true
   },
   {
    "lat": 28.308311,
@@ -326,6 +427,13 @@
    "lon": -16.516692,
    "name": "Montaña Negra",
    "ele": 2212
+  },
+  {
+   "lat": 28.255899,
+   "lon": -16.703273,
+   "name": "Montaña de La Cruz de Tea",
+   "ele": 2212,
+   "volcano": true
   },
   {
    "lat": 28.270547,
@@ -357,6 +465,13 @@
    "lon": -16.630108,
    "name": "Montaña de Roque",
    "ele": 2191
+  },
+  {
+   "lat": 28.260214,
+   "lon": -16.529714,
+   "name": "Montaña Yeja",
+   "ele": 2184,
+   "volcano": true
   },
   {
    "lat": 28.731271,
@@ -398,6 +513,20 @@
    "ele": 2163
   },
   {
+   "lat": 28.311708,
+   "lon": -16.535262,
+   "name": "Montaña del Caramujo",
+   "ele": 2161,
+   "volcano": true
+  },
+  {
+   "lat": 28.310203,
+   "lon": -16.557595,
+   "name": "Montaña de Guamaso",
+   "ele": 2151,
+   "volcano": true
+  },
+  {
    "lat": 28.185789,
    "lon": -16.667317,
    "name": "Montaña de las Lajas",
@@ -423,6 +552,13 @@
    "ele": 2128
   },
   {
+   "lat": 28.301588,
+   "lon": -16.627431,
+   "name": "Montaña Abejera Grande",
+   "ele": 2127,
+   "volcano": true
+  },
+  {
    "lat": 28.312444,
    "lon": -16.520495,
    "name": "Montaña de los Atajos",
@@ -442,6 +578,13 @@
    "ele": 2122
   },
   {
+   "lat": 28.264771,
+   "lon": -16.71382,
+   "name": "Montaña de la Botija",
+   "ele": 2121,
+   "volcano": true
+  },
+  {
    "lat": 28.21731,
    "lon": -16.688825,
    "name": "Tiro del Guanche",
@@ -452,6 +595,13 @@
    "lon": -17.857074,
    "name": "Roque de la Brevera Macha",
    "ele": 2117
+  },
+  {
+   "lat": 28.306287,
+   "lon": -16.606406,
+   "name": "Montaña Negra",
+   "ele": 2112,
+   "volcano": true
   },
   {
    "lat": 28.223373,
@@ -593,6 +743,21 @@
    "wikidata": "Q1865509"
   },
   {
+   "lat": 27.961915,
+   "lon": -15.571755,
+   "name": "Pico de las Nieves",
+   "ele": 1949,
+   "wikidata": "Q1865509",
+   "volcano": true
+  },
+  {
+   "lat": 28.569538,
+   "lon": -17.837332,
+   "name": "Volcán de la Deseada",
+   "ele": 1947,
+   "volcano": true
+  },
+  {
    "lat": 28.185458,
    "lon": -16.684394,
    "name": "Montaña Colorada",
@@ -604,6 +769,20 @@
    "name": "Pico del Cedro",
    "ele": 1937,
    "wikidata": "Q23986813"
+  },
+  {
+   "lat": 28.56892,
+   "lon": -17.839228,
+   "name": "Deseada",
+   "ele": 1933,
+   "volcano": true
+  },
+  {
+   "lat": 28.270187,
+   "lon": -16.726773,
+   "name": "Montaña de Sámara",
+   "ele": 1932,
+   "volcano": true
   },
   {
    "lat": 28.719672,
@@ -673,6 +852,13 @@
    "ele": 1877
   },
   {
+   "lat": 28.555089,
+   "lon": -17.83375,
+   "name": "Montaña del Cabrito",
+   "ele": 1868,
+   "volcano": true
+  },
+  {
    "lat": 28.559096,
    "lon": -17.837487,
    "name": "Montaña de los Bermejales",
@@ -692,6 +878,13 @@
    "wikidata": "Q5408041"
   },
   {
+   "lat": 28.590997,
+   "lon": -17.837169,
+   "name": "Montaña de los Charcos",
+   "ele": 1851,
+   "volcano": true
+  },
+  {
    "lat": 27.960519,
    "lon": -15.551367,
    "name": "Montaña de Los Bizcochos",
@@ -702,6 +895,13 @@
    "lon": -16.541565,
    "name": "Montaña de Los Alvaderos",
    "ele": 1825
+  },
+  {
+   "lat": 28.574152,
+   "lon": -17.839089,
+   "name": "Volcán El Duraznero",
+   "ele": 1824,
+   "volcano": true
   },
   {
    "lat": 28.594104,
@@ -718,10 +918,34 @@
    "wikidata": "Q1424835"
   },
   {
+   "lat": 28.599767,
+   "lon": -17.839496,
+   "name": "Montaña la Barquita",
+   "ele": 1809,
+   "wikidata": "Q6022255",
+   "volcano": true
+  },
+  {
    "lat": 27.951974,
    "lon": -15.588596,
    "name": "Puntón de la Agujereada",
    "ele": 1809
+  },
+  {
+   "lat": 28.604936,
+   "lon": -17.840905,
+   "name": "Pico Birigoyo",
+   "ele": 1808,
+   "wikidata": "Q2656048",
+   "volcano": true
+  },
+  {
+   "lat": 28.278105,
+   "lon": -16.736478,
+   "name": "Montaña de las Cuevitas",
+   "ele": 1807,
+   "wikidata": "Q23987192",
+   "volcano": true
   },
   {
    "lat": 27.96934,
@@ -746,6 +970,13 @@
    "lon": -16.454428,
    "name": "Morra Itote",
    "ele": 1795
+  },
+  {
+   "lat": 28.177734,
+   "lon": -16.6086,
+   "name": "Montaña Colorada",
+   "ele": 1795,
+   "volcano": true
   },
   {
    "lat": 28.55943,
@@ -779,6 +1010,13 @@
    "ele": 1772
   },
   {
+   "lat": 28.273529,
+   "lon": -16.74688,
+   "name": "Montaña Cascajo",
+   "ele": 1763,
+   "volcano": true
+  },
+  {
    "lat": 27.959046,
    "lon": -15.599964,
    "name": "El Montañón",
@@ -810,10 +1048,31 @@
    "ele": 1748
   },
   {
+   "lat": 28.288039,
+   "lon": -16.743815,
+   "name": "Montaña de Abeque",
+   "ele": 1746,
+   "volcano": true
+  },
+  {
    "lat": 28.317332,
    "lon": -16.475422,
    "name": "Lomo José",
    "ele": 1746
+  },
+  {
+   "lat": 28.581651,
+   "lon": -17.839595,
+   "name": "Cráter del Hoyo Negro",
+   "ele": 1744,
+   "volcano": true
+  },
+  {
+   "lat": 28.557747,
+   "lon": -17.842228,
+   "name": "Volcán El Charco",
+   "ele": 1740,
+   "volcano": true
   },
   {
    "lat": 27.982369,
@@ -959,6 +1218,20 @@
    "ele": 1658
   },
   {
+   "lat": 28.604284,
+   "lon": -17.843211,
+   "name": "Volcán de San Juan",
+   "ele": 1657,
+   "volcano": true
+  },
+  {
+   "lat": 28.286967,
+   "lon": -16.750161,
+   "name": "Montaña la Corredera",
+   "ele": 1655,
+   "volcano": true
+  },
+  {
    "lat": 28.00033,
    "lon": -15.595937,
    "name": "Montaña de la Almagría",
@@ -981,6 +1254,13 @@
    "lon": -16.443426,
    "name": "Montaña Colorada",
    "ele": 1634
+  },
+  {
+   "lat": 28.588767,
+   "lon": -17.826294,
+   "name": "Montaña de la Morcilla",
+   "ele": 1632,
+   "volcano": true
   },
   {
    "lat": 28.599055,
@@ -1049,10 +1329,24 @@
    "ele": 1599
   },
   {
+   "lat": 28.301921,
+   "lon": -16.741908,
+   "name": "Montaña de Liferte",
+   "ele": 1597,
+   "volcano": true
+  },
+  {
    "lat": 28.595073,
    "lon": -17.848158,
    "name": "Montña de Magdalena",
    "ele": 1593
+  },
+  {
+   "lat": 28.537683,
+   "lon": -17.84034,
+   "name": "Volcán de Martín",
+   "ele": 1591,
+   "volcano": true
   },
   {
    "lat": 28.409151,
@@ -1079,6 +1373,20 @@
    "ele": 1585
   },
   {
+   "lat": 28.340214,
+   "lon": -16.462084,
+   "name": "Volcan de Arafo",
+   "ele": 1584,
+   "volcano": true
+  },
+  {
+   "lat": 28.283219,
+   "lon": -16.757362,
+   "name": "Montaña Roca Cangrejo",
+   "ele": 1576,
+   "volcano": true
+  },
+  {
    "lat": 27.949596,
    "lon": -15.692629,
    "name": "Montaña de Sándara",
@@ -1097,6 +1405,13 @@
    "ele": 1573
   },
   {
+   "lat": 28.158252,
+   "lon": -16.645913,
+   "name": "Montaña Ciruelita",
+   "ele": 1572,
+   "volcano": true
+  },
+  {
    "lat": 28.154824,
    "lon": -16.646979,
    "name": "Montaña de los Lirios",
@@ -1107,6 +1422,21 @@
    "lon": -15.533274,
    "name": "Roque Grande",
    "ele": 1554
+  },
+  {
+   "lat": 28.294899,
+   "lon": -16.757086,
+   "name": "Chinyero",
+   "name_ru": "Чиньеро",
+   "ele": 1552,
+   "volcano": true
+  },
+  {
+   "lat": 28.589182,
+   "lon": -17.81989,
+   "name": "Montaña Andrés Martin",
+   "ele": 1544,
+   "volcano": true
   },
   {
    "lat": 27.984113,
@@ -1175,10 +1505,24 @@
    "ele": 1514
   },
   {
+   "lat": 28.612808,
+   "lon": -17.828683,
+   "name": "Montaña de la Venta",
+   "ele": 1513,
+   "volcano": true
+  },
+  {
    "lat": 27.919826,
    "lon": -15.592507,
    "name": "Morros del Pinar",
    "ele": 1512
+  },
+  {
+   "lat": 28.541026,
+   "lon": -17.844773,
+   "name": "el Hoyo de los Faros",
+   "ele": 1504,
+   "volcano": true
   },
   {
    "lat": 28.275623,
@@ -1219,6 +1563,13 @@
    "ele": 1491
   },
   {
+   "lat": 28.538723,
+   "lon": -17.838413,
+   "name": "Volcán de Martín",
+   "ele": 1487,
+   "volcano": true
+  },
+  {
    "lat": 27.965358,
    "lon": -15.636255,
    "name": "Montaña del Humo",
@@ -1241,6 +1592,21 @@
    "lon": -17.863132,
    "name": "Verduras de Alfonso",
    "ele": 1484
+  },
+  {
+   "lat": 28.10974,
+   "lon": -17.24834,
+   "name": "Alto de Garajonay",
+   "ele": 1483,
+   "wikidata": "Q27102537",
+   "volcano": true
+  },
+  {
+   "lat": 28.28722,
+   "lon": -16.767823,
+   "name": "Montaña de los Poleos",
+   "ele": 1480,
+   "volcano": true
   },
   {
    "lat": 28.696734,
@@ -1316,6 +1682,13 @@
    "ele": 1459
   },
   {
+   "lat": 28.316022,
+   "lon": -16.742739,
+   "name": "Montaña de Bencheque",
+   "ele": 1456,
+   "volcano": true
+  },
+  {
    "lat": 28.408399,
    "lon": -16.430113,
    "name": "Montaña la Mesa",
@@ -1333,6 +1706,13 @@
    "lon": -15.682426,
    "name": "Montaña de Solapos de la Carnicería",
    "ele": 1448
+  },
+  {
+   "lat": 28.528784,
+   "lon": -17.842962,
+   "name": "Montaña Pelada",
+   "ele": 1445,
+   "volcano": true
   },
   {
    "lat": 28.049469,
@@ -1453,6 +1833,27 @@
    "ele": 1410
   },
   {
+   "lat": 28.312976,
+   "lon": -16.769215,
+   "name": "Montaña La Atalaya",
+   "ele": 1403,
+   "volcano": true
+  },
+  {
+   "lat": 28.144854,
+   "lon": -16.66897,
+   "name": "Montaña de los Listones",
+   "ele": 1401,
+   "volcano": true
+  },
+  {
+   "lat": 28.316149,
+   "lon": -16.764459,
+   "name": "Montaña Negra",
+   "ele": 1399,
+   "volcano": true
+  },
+  {
    "lat": 28.290607,
    "lon": -16.4518,
    "name": "Montaña Pinocho",
@@ -1477,6 +1878,14 @@
    "ele": 1386
   },
   {
+   "lat": 27.730125,
+   "lon": -18.059327,
+   "name": "Tanganasoga",
+   "ele": 1384,
+   "wikidata": "Q7682801",
+   "volcano": true
+  },
+  {
    "lat": 28.103988,
    "lon": -17.240143,
    "name": "Montaña de las Negrilas",
@@ -1493,6 +1902,13 @@
    "lon": -15.560116,
    "name": "La Montaña",
    "ele": 1378
+  },
+  {
+   "lat": 28.14891,
+   "lon": -16.638898,
+   "name": "Montaña del Coto",
+   "ele": 1377,
+   "volcano": true
   },
   {
    "lat": 28.695408,
@@ -1514,16 +1930,45 @@
    "ele": 1374
   },
   {
+   "lat": 28.293689,
+   "lon": -16.791559,
+   "name": "Montaña Bilma",
+   "ele": 1371,
+   "wikidata": "Q23987881",
+   "volcano": true
+  },
+  {
    "lat": 27.746605,
    "lon": -17.981715,
    "name": "Montaña de los Asomadas",
    "ele": 1371
   },
   {
+   "lat": 28.147332,
+   "lon": -16.656198,
+   "name": "Montaña de Doña Cándida",
+   "ele": 1368,
+   "volcano": true
+  },
+  {
+   "lat": 28.624449,
+   "lon": -17.841905,
+   "name": "Montaña Quemada (Volcán Tacande)",
+   "ele": 1365,
+   "volcano": true
+  },
+  {
    "lat": 28.121879,
    "lon": -17.249406,
    "name": "Alto de Cherelepín",
    "ele": 1365
+  },
+  {
+   "lat": 28.289579,
+   "lon": -16.776818,
+   "name": "Montaña Aguda",
+   "ele": 1364,
+   "volcano": true
   },
   {
    "lat": 27.93574,
@@ -1536,6 +1981,13 @@
    "lon": -17.245752,
    "name": "Paredes",
    "ele": 1359
+  },
+  {
+   "lat": 28.577176,
+   "lon": -17.813739,
+   "name": "Cero del Volcán de la Deseada",
+   "ele": 1358,
+   "volcano": true
   },
   {
    "lat": 28.117369,
@@ -1616,6 +2068,13 @@
    "ele": 1308
   },
   {
+   "lat": 28.138087,
+   "lon": -16.641391,
+   "name": "Montaña del Pozo",
+   "ele": 1305,
+   "volcano": true
+  },
+  {
    "lat": 28.016076,
    "lon": -15.70177,
    "name": "Risco Alto",
@@ -1640,10 +2099,31 @@
    "ele": 1302
   },
   {
+   "lat": 27.981526,
+   "lon": -15.597788,
+   "name": "Salida y llegada de, Senderismo, treeking, Gran Canaria, Tejeda, Canarias",
+   "ele": 1300,
+   "volcano": true
+  },
+  {
    "lat": 27.931895,
    "lon": -15.625962,
    "name": "Morro de Santiago",
    "ele": 1295
+  },
+  {
+   "lat": 28.317823,
+   "lon": -16.780903,
+   "name": "Montaña de la Quebrada",
+   "ele": 1289,
+   "volcano": true
+  },
+  {
+   "lat": 27.731009,
+   "lon": -18.090989,
+   "name": "Tajusara",
+   "ele": 1285,
+   "volcano": true
   },
   {
    "lat": 28.315636,
@@ -1656,6 +2136,13 @@
    "lon": -17.978772,
    "name": "Montaña Masilva",
    "ele": 1278
+  },
+  {
+   "lat": 28.608536,
+   "lon": -17.856847,
+   "name": "Volcán Bernardino",
+   "ele": 1275,
+   "volcano": true
   },
   {
    "lat": 28.59683,
@@ -1682,6 +2169,13 @@
    "ele": 1271
   },
   {
+   "lat": 28.315796,
+   "lon": -16.782886,
+   "name": "Montaña del Banco",
+   "ele": 1266,
+   "volcano": true
+  },
+  {
    "lat": 28.531884,
    "lon": -17.851813,
    "name": "Montaña de los Faros",
@@ -1694,10 +2188,24 @@
    "ele": 1265
   },
   {
+   "lat": 28.628595,
+   "lon": -17.851009,
+   "name": "Montaña de Enrique",
+   "ele": 1259,
+   "volcano": true
+  },
+  {
    "lat": 28.094916,
    "lon": -17.234378,
    "name": "Montaña de Juan Romo",
    "ele": 1258
+  },
+  {
+   "lat": 28.136787,
+   "lon": -16.670687,
+   "name": "Montaña de la Medida",
+   "ele": 1255,
+   "volcano": true
   },
   {
    "lat": 28.135171,
@@ -1716,6 +2224,13 @@
    "lon": -16.481447,
    "name": "Montaña de las Ovejas",
    "ele": 1253
+  },
+  {
+   "lat": 27.714009,
+   "lon": -18.015908,
+   "name": "Mercader",
+   "ele": 1252,
+   "volcano": true
   },
   {
    "lat": 28.032976,
@@ -1750,6 +2265,13 @@
    "ele": 1249
   },
   {
+   "lat": 27.720727,
+   "lon": -18.024107,
+   "name": "Montañita del Guanche de Arriba",
+   "ele": 1247,
+   "volcano": true
+  },
+  {
    "lat": 27.893757,
    "lon": -15.631006,
    "name": "Montaña de las Tórtolas",
@@ -1772,6 +2294,13 @@
    "lon": -15.641589,
    "name": "El Roque",
    "ele": 1239
+  },
+  {
+   "lat": 27.718787,
+   "lon": -18.02222,
+   "name": "Montañita del Guanche de Abajo",
+   "ele": 1235,
+   "volcano": true
   },
   {
    "lat": 28.14532,
@@ -1829,11 +2358,32 @@
    "ele": 1230
   },
   {
+   "lat": 27.720039,
+   "lon": -18.023449,
+   "name": "Montaña Cueva del Guanche",
+   "ele": 1229,
+   "volcano": true
+  },
+  {
+   "lat": 28.371701,
+   "lon": -16.4312,
+   "name": "Media Montaña",
+   "ele": 1225,
+   "volcano": true
+  },
+  {
    "lat": 27.895749,
    "lon": -15.691259,
    "name": "Montaña de Tauro",
    "ele": 1225,
    "wikidata": "Q23978779"
+  },
+  {
+   "lat": 28.31219,
+   "lon": -16.792572,
+   "name": "Montaña de Baso",
+   "ele": 1223,
+   "volcano": true
   },
   {
    "lat": 28.443727,
@@ -1866,6 +2416,13 @@
    "ele": 1209
   },
   {
+   "lat": 28.130689,
+   "lon": -16.671386,
+   "name": "Montaña de Funes",
+   "ele": 1207,
+   "volcano": true
+  },
+  {
    "lat": 28.106072,
    "lon": -17.269525,
    "name": "Golladita del Molino",
@@ -1876,6 +2433,20 @@
    "lon": -17.217746,
    "name": "Degollada del Bailadero",
    "ele": 1196
+  },
+  {
+   "lat": 28.609175,
+   "lon": -17.859084,
+   "name": "Volcán Bernardino",
+   "ele": 1195,
+   "volcano": true
+  },
+  {
+   "lat": 28.581268,
+   "lon": -17.859579,
+   "name": "Volcán Tajuya",
+   "ele": 1189,
+   "volcano": true
   },
   {
    "lat": 27.992594,
@@ -1900,6 +2471,13 @@
    "lon": -15.740762,
    "name": "Roque el Castillete",
    "ele": 1182
+  },
+  {
+   "lat": 27.774321,
+   "lon": -17.952248,
+   "name": "Montaña del Jablito",
+   "ele": 1176,
+   "volcano": true
   },
   {
    "lat": 28.314059,
@@ -1972,6 +2550,13 @@
    "lon": -17.955526,
    "name": "Montaña de los Riveroles",
    "ele": 1164
+  },
+  {
+   "lat": 28.800497,
+   "lon": -17.915371,
+   "name": "Montaña de los Vaqueros",
+   "ele": 1155,
+   "volcano": true
   },
   {
    "lat": 28.129387,
@@ -2081,6 +2666,22 @@
    "lon": -16.829137,
    "name": "Alto del Camello",
    "ele": 1121
+  },
+  {
+   "lat": 27.776333,
+   "lon": -17.950532,
+   "name": "Montaña de las Chamuscadas",
+   "ele": 1120,
+   "volcano": true
+  },
+  {
+   "lat": 28.61325,
+   "lon": -17.86641,
+   "name": "Volcán de Tajogaite",
+   "name_en": "Tajogaite Volcano",
+   "ele": 1120,
+   "wikidata": "Q108601121",
+   "volcano": true
   },
   {
    "lat": 27.965921,
@@ -2616,6 +3217,13 @@
    "ele": 1008
   },
   {
+   "lat": 28.614498,
+   "lon": -17.867512,
+   "name": "Abertura en la parte inferior del cono del volcán",
+   "ele": 1008,
+   "volcano": true
+  },
+  {
    "lat": 27.965327,
    "lon": -15.808961,
    "name": "Montaña del Cedro",
@@ -2651,6 +3259,13 @@
    "lon": -17.899391,
    "name": "Montaña la Barrera",
    "ele": 1005
+  },
+  {
+   "lat": 27.702242,
+   "lon": -18.008282,
+   "name": "La Empalizada",
+   "ele": 1004,
+   "volcano": true
   },
   {
    "lat": 27.928867,
@@ -2728,6 +3343,13 @@
    "wikidata": "Q6075129"
   },
   {
+   "lat": 28.461823,
+   "lon": -16.380573,
+   "name": "Montaña Facundo",
+   "ele": 995,
+   "volcano": true
+  },
+  {
    "lat": 28.079137,
    "lon": -15.633605,
    "name": "Márquez",
@@ -2750,6 +3372,13 @@
    "lon": -17.265673,
    "name": "Cabeza del Gatillo",
    "ele": 992
+  },
+  {
+   "lat": 27.720523,
+   "lon": -18.093622,
+   "name": "Montaña del Tomillar",
+   "ele": 991,
+   "volcano": true
   },
   {
    "lat": 28.532836,
@@ -2910,10 +3539,24 @@
    "ele": 943
   },
   {
+   "lat": 28.439427,
+   "lon": -16.354942,
+   "name": "Birmagen",
+   "ele": 942,
+   "volcano": true
+  },
+  {
    "lat": 28.184194,
    "lon": -16.528942,
    "name": "Esquina de los Cardones",
    "ele": 941
+  },
+  {
+   "lat": 28.455477,
+   "lon": -16.356168,
+   "name": "Montaña de Carboneras",
+   "ele": 939,
+   "volcano": true
   },
   {
    "lat": 27.910299,
@@ -3007,6 +3650,20 @@
    "ele": 914
   },
   {
+   "lat": 27.703951,
+   "lon": -17.983317,
+   "name": "Tanajara",
+   "ele": 911,
+   "volcano": true
+  },
+  {
+   "lat": 28.130193,
+   "lon": -16.590152,
+   "name": "Montaña Cruz de Tea",
+   "ele": 911,
+   "volcano": true
+  },
+  {
    "lat": 27.893883,
    "lon": -15.505292,
    "name": "Morro Teheral",
@@ -3086,6 +3743,20 @@
    "ele": 901
   },
   {
+   "lat": 27.725687,
+   "lon": -18.108252,
+   "name": "Montaña Tembárgena",
+   "ele": 900,
+   "volcano": true
+  },
+  {
+   "lat": 28.437349,
+   "lon": -16.359404,
+   "name": "Montaña del Huerto",
+   "ele": 899,
+   "volcano": true
+  },
+  {
    "lat": 28.087737,
    "lon": -17.197966,
    "name": "La Montañeta",
@@ -3139,6 +3810,13 @@
    "lon": -17.85489,
    "name": "Montaña Colorada",
    "ele": 888
+  },
+  {
+   "lat": 28.133703,
+   "lon": -16.584955,
+   "name": "Montaña Santa",
+   "ele": 888,
+   "volcano": true
   },
   {
    "lat": 27.965622,
@@ -3358,6 +4036,13 @@
    "ele": 844
   },
   {
+   "lat": 28.12259,
+   "lon": -16.588486,
+   "name": "Montaña de las Chozas",
+   "ele": 844,
+   "volcano": true
+  },
+  {
    "lat": 28.62545,
    "lon": -17.802061,
    "name": "Montaña La Quebrada",
@@ -3380,6 +4065,13 @@
    "lon": -16.822222,
    "name": "Roque del Paso",
    "ele": 841
+  },
+  {
+   "lat": 27.797857,
+   "lon": -17.923361,
+   "name": "La Montaña",
+   "ele": 839,
+   "volcano": true
   },
   {
    "lat": 27.925386,
@@ -3551,6 +4243,13 @@
    "lon": -16.229598,
    "name": "Cruz de Taganana",
    "ele": 803
+  },
+  {
+   "lat": 28.126144,
+   "lon": -16.581615,
+   "name": "Montaña del Lugar",
+   "ele": 802,
+   "volcano": true
   },
   {
    "lat": 28.105619,
@@ -3776,6 +4475,13 @@
    "ele": 775
   },
   {
+   "lat": 27.688071,
+   "lon": -17.992151,
+   "name": "Tembárgena",
+   "ele": 774,
+   "volcano": true
+  },
+  {
    "lat": 27.812481,
    "lon": -17.942456,
    "name": "Montaña de la Limera",
@@ -3824,6 +4530,13 @@
    "ele": 764
   },
   {
+   "lat": 28.419783,
+   "lon": -16.356817,
+   "name": "Montaña Toriño",
+   "ele": 763,
+   "volcano": true
+  },
+  {
    "lat": 28.505493,
    "lon": -16.333033,
    "name": "Montaña de la Bandera",
@@ -3842,10 +4555,24 @@
    "ele": 762
   },
   {
+   "lat": 28.466881,
+   "lon": -16.343787,
+   "name": "Montaña del Charcón",
+   "ele": 762,
+   "volcano": true
+  },
+  {
    "lat": 28.550347,
    "lon": -16.198886,
    "name": "Cabezo de Payba",
    "ele": 762
+  },
+  {
+   "lat": 27.731064,
+   "lon": -18.119382,
+   "name": "Montaña de la Virgen",
+   "ele": 761,
+   "volcano": true
   },
   {
    "lat": 27.81539,
@@ -3912,6 +4639,13 @@
    "lon": -15.635031,
    "name": "Montañón del Andén Quemado",
    "ele": 751
+  },
+  {
+   "lat": 27.734954,
+   "lon": -18.12122,
+   "name": "Montaña de las Cuevas",
+   "ele": 750,
+   "volcano": true
   },
   {
    "lat": 28.7663,
@@ -4145,6 +4879,13 @@
    "ele": 717
   },
   {
+   "lat": 27.688364,
+   "lon": -17.986403,
+   "name": "Montaña Cerraja",
+   "ele": 716,
+   "volcano": true
+  },
+  {
    "lat": 28.519485,
    "lon": -16.254481,
    "name": "Roque Marrubial",
@@ -4192,6 +4933,13 @@
    "name": "Pico Hilario",
    "ele": 706,
    "wikidata": "Q23986506"
+  },
+  {
+   "lat": 28.573464,
+   "lon": -17.79234,
+   "name": "Montaña Hoyo Cazuela",
+   "ele": 706,
+   "volcano": true
   },
   {
    "lat": 28.684362,
@@ -4366,6 +5114,14 @@
    "ele": 687
   },
   {
+   "lat": 28.613105,
+   "lon": -17.878688,
+   "name": "Montaña Rajada",
+   "ele": 686,
+   "wikidata": "Q23983099",
+   "volcano": true
+  },
+  {
    "lat": 27.834724,
    "lon": -15.59093,
    "name": "Pico de la Cogolla",
@@ -4383,6 +5139,13 @@
    "lon": -16.878708,
    "name": "Roque de Marrubio",
    "ele": 682
+  },
+  {
+   "lat": 28.107518,
+   "lon": -16.596327,
+   "name": "Montaña Chiñama",
+   "ele": 681,
+   "volcano": true
   },
   {
    "lat": 28.509696,
@@ -4407,6 +5170,13 @@
    "lon": -17.224726,
    "name": "Roque Redondo",
    "ele": 679
+  },
+  {
+   "lat": 28.476561,
+   "lon": -16.356852,
+   "name": "Montaña del Aire o de las Tabaidas",
+   "ele": 679,
+   "volcano": true
   },
   {
    "lat": 28.441166,
@@ -4505,6 +5275,13 @@
    "lon": -15.457908,
    "name": "Montaña de las Triguerillas",
    "ele": 673
+  },
+  {
+   "lat": 28.489175,
+   "lon": -16.391344,
+   "name": "Montaña la Retama",
+   "ele": 672,
+   "volcano": true
   },
   {
    "lat": 28.406709,
@@ -4609,6 +5386,13 @@
    "ele": 664
   },
   {
+   "lat": 28.43342,
+   "lon": -16.33751,
+   "name": "Talavera",
+   "ele": 663,
+   "volcano": true
+  },
+  {
    "lat": 27.872391,
    "lon": -15.746358,
    "name": "Punta de Tabaibales",
@@ -4619,6 +5403,13 @@
    "lon": -14.16044,
    "name": "El Castillo",
    "ele": 663
+  },
+  {
+   "lat": 27.815693,
+   "lon": -17.935439,
+   "name": "Montaña Jamones",
+   "ele": 662,
+   "volcano": true
   },
   {
    "lat": 28.095002,
@@ -4671,6 +5462,14 @@
    "ele": 657
   },
   {
+   "lat": 28.482773,
+   "lon": -17.848392,
+   "name": "Volcán de San Antonio",
+   "ele": 656,
+   "wikidata": "Q955177",
+   "volcano": true
+  },
+  {
    "lat": 28.439853,
    "lon": -14.080051,
    "name": "Morro del Corralete",
@@ -4683,10 +5482,31 @@
    "ele": 656
   },
   {
+   "lat": 28.582978,
+   "lon": -17.881698,
+   "name": "Jedey",
+   "ele": 655,
+   "volcano": true
+  },
+  {
+   "lat": 28.115905,
+   "lon": -16.57519,
+   "name": "Montaña Acojeja",
+   "ele": 654,
+   "volcano": true
+  },
+  {
    "lat": 27.864587,
    "lon": -15.728398,
    "name": "Paso de la Leña Buena",
    "ele": 654
+  },
+  {
+   "lat": 28.338489,
+   "lon": -16.844537,
+   "name": "Montañeta del Palmar",
+   "ele": 653,
+   "volcano": true
   },
   {
    "lat": 28.343711,
@@ -4749,6 +5569,13 @@
    "ele": 648
   },
   {
+   "lat": 27.694504,
+   "lon": -17.971941,
+   "name": "Venticota",
+   "ele": 648,
+   "volcano": true
+  },
+  {
    "lat": 28.504078,
    "lon": -16.382954,
    "name": "Montaña Guerra",
@@ -4766,6 +5593,20 @@
    "lon": -17.871978,
    "name": "Pico del Andén Verde",
    "ele": 647
+  },
+  {
+   "lat": 28.091223,
+   "lon": -16.584177,
+   "name": "Montaña Gorda",
+   "ele": 646,
+   "volcano": true
+  },
+  {
+   "lat": 28.496171,
+   "lon": -16.387906,
+   "name": "Montaña de la Caldera",
+   "ele": 646,
+   "volcano": true
   },
   {
    "lat": 27.83439,
@@ -4805,10 +5646,24 @@
    "ele": 644
   },
   {
+   "lat": 28.573878,
+   "lon": -17.789223,
+   "name": "Montaña Hoyo de Camacho",
+   "ele": 644,
+   "volcano": true
+  },
+  {
    "lat": 28.501402,
    "lon": -16.373115,
    "name": "Montaña Tabares",
    "ele": 643
+  },
+  {
+   "lat": 28.338678,
+   "lon": -16.847996,
+   "name": "Montañeta del Palmar",
+   "ele": 643,
+   "volcano": true
   },
   {
    "lat": 28.092677,
@@ -5051,6 +5906,13 @@
    "ele": 614
   },
   {
+   "lat": 27.723961,
+   "lon": -18.12495,
+   "name": "Montaña del Barco",
+   "ele": 613,
+   "volcano": true
+  },
+  {
    "lat": 27.881782,
    "lon": -15.776313,
    "name": "Montaña de la Viga",
@@ -5061,6 +5923,13 @@
    "lon": -17.242409,
    "name": "Roque de Becerro",
    "ele": 612
+  },
+  {
+   "lat": 28.918875,
+   "lon": -13.783854,
+   "name": "Atalaya de Fémes",
+   "ele": 611,
+   "volcano": true
   },
   {
    "lat": 28.49866,
@@ -5139,6 +6008,21 @@
    "ele": 604
   },
   {
+   "lat": 29.182873,
+   "lon": -13.484706,
+   "name": "Monte Corona",
+   "ele": 603,
+   "wikidata": "Q739109",
+   "volcano": true
+  },
+  {
+   "lat": 28.96264,
+   "lon": -13.706197,
+   "name": "Montaña de Guardilama",
+   "ele": 603,
+   "volcano": true
+  },
+  {
    "lat": 28.45646,
    "lon": -16.324243,
    "name": "Montaña los Giles",
@@ -5168,6 +6052,13 @@
    "lon": -14.055138,
    "name": "Morrito del Rincón",
    "ele": 602
+  },
+  {
+   "lat": 28.499681,
+   "lon": -16.39469,
+   "name": "Montaña de la Atalaya",
+   "ele": 601,
+   "volcano": true
   },
   {
    "lat": 28.545948,
@@ -5333,16 +6224,37 @@
    "ele": 584
   },
   {
+   "lat": 29.170364,
+   "lon": -13.500824,
+   "name": "Los Helechos",
+   "ele": 582,
+   "volcano": true
+  },
+  {
    "lat": 27.918597,
    "lon": -15.827565,
    "name": "Montaña de Tabaibas",
    "ele": 582
   },
   {
+   "lat": 27.727152,
+   "lon": -18.131221,
+   "name": "Montaña del Gamonal",
+   "ele": 581,
+   "volcano": true
+  },
+  {
    "lat": 28.719701,
    "lon": -17.754832,
    "name": "Montaña de Tenagua",
    "ele": 581
+  },
+  {
+   "lat": 28.096068,
+   "lon": -16.667224,
+   "name": "Montaña del Espadal",
+   "ele": 580,
+   "volcano": true
   },
   {
    "lat": 28.558053,
@@ -5374,6 +6286,14 @@
    "lon": -13.521447,
    "name": "Peña de Juan Estévez",
    "ele": 577
+  },
+  {
+   "lat": 28.037514,
+   "lon": -15.45785,
+   "name": "Pico de Bandama",
+   "ele": 575,
+   "wikidata": "Q368857",
+   "volcano": true
   },
   {
    "lat": 28.569944,
@@ -5441,6 +6361,13 @@
    "lon": -17.932157,
    "name": "Montaña Tenesedra",
    "ele": 566
+  },
+  {
+   "lat": 28.965021,
+   "lon": -13.700237,
+   "name": "Caldera de Gaida",
+   "ele": 565,
+   "volcano": true
   },
   {
    "lat": 27.954116,
@@ -5615,6 +6542,14 @@
    "ele": 552
   },
   {
+   "lat": 29.035803,
+   "lon": -13.637345,
+   "name": "Montaña Tamia",
+   "ele": 551,
+   "wikidata": "Q23979455",
+   "volcano": true
+  },
+  {
    "lat": 29.035798,
    "lon": -13.637313,
    "name": "Tamia",
@@ -5674,6 +6609,13 @@
    "lon": -13.971711,
    "name": "Morro de las Tinajas",
    "ele": 547
+  },
+  {
+   "lat": 28.992354,
+   "lon": -13.630836,
+   "name": "Montaña Guatisea",
+   "ele": 546,
+   "volcano": true
   },
   {
    "lat": 27.821826,
@@ -5779,6 +6721,13 @@
    "ele": 538
   },
   {
+   "lat": 28.510016,
+   "lon": -16.347229,
+   "name": "Montaña la Calderita",
+   "ele": 537,
+   "volcano": true
+  },
+  {
    "lat": 27.966453,
    "lon": -15.447411,
    "name": "Montaña Rosiana",
@@ -5845,10 +6794,24 @@
    "ele": 535
   },
   {
+   "lat": 28.620141,
+   "lon": -13.888796,
+   "name": "Montaña de Ecanfraga",
+   "ele": 534,
+   "volcano": true
+  },
+  {
    "lat": 27.831339,
    "lon": -15.671024,
    "name": "El Pilón",
    "ele": 533
+  },
+  {
+   "lat": 27.681219,
+   "lon": -17.978938,
+   "name": "Montaña de la Lajura",
+   "ele": 531,
+   "volcano": true
   },
   {
    "lat": 28.583852,
@@ -5935,10 +6898,31 @@
    "ele": 519
   },
   {
+   "lat": 29.003013,
+   "lon": -13.716348,
+   "name": "Montaña del Señalo",
+   "ele": 517,
+   "volcano": true
+  },
+  {
+   "lat": 28.554412,
+   "lon": -16.317508,
+   "name": "Volcán de las Rosas",
+   "ele": 517,
+   "volcano": true
+  },
+  {
    "lat": 28.514735,
    "lon": -16.212553,
    "name": "Cabezo de los Helechos",
    "ele": 516
+  },
+  {
+   "lat": 28.553272,
+   "lon": -13.963674,
+   "name": "Montaña de la Caldera",
+   "ele": 515,
+   "volcano": true
   },
   {
    "lat": 28.451628,
@@ -5946,6 +6930,14 @@
    "name": "Montaña Brujitos",
    "ele": 514,
    "wikidata": "Q23987986"
+  },
+  {
+   "lat": 28.99484,
+   "lon": -13.679153,
+   "name": "Montaña Negra",
+   "ele": 513,
+   "wikidata": "Q23982136",
+   "volcano": true
   },
   {
    "lat": 28.329445,
@@ -5976,6 +6968,13 @@
    "lon": -16.410338,
    "name": "La Montaña",
    "ele": 512
+  },
+  {
+   "lat": 28.998066,
+   "lon": -13.744941,
+   "name": "Montaña de Timanfaya",
+   "ele": 511,
+   "volcano": true
   },
   {
    "lat": 28.084923,
@@ -6012,6 +7011,20 @@
    "lon": -16.136012,
    "name": "La Partida",
    "ele": 508
+  },
+  {
+   "lat": 28.950176,
+   "lon": -13.717247,
+   "name": "Tinasoria",
+   "ele": 506,
+   "volcano": true
+  },
+  {
+   "lat": 28.976073,
+   "lon": -13.656489,
+   "name": "Montaña Tesa",
+   "ele": 506,
+   "volcano": true
   },
   {
    "lat": 28.555572,
@@ -6057,6 +7070,13 @@
    "wikidata": "Q23984765"
   },
   {
+   "lat": 29.008402,
+   "lon": -13.719259,
+   "name": "Pico Partido",
+   "ele": 504,
+   "volcano": true
+  },
+  {
    "lat": 28.786341,
    "lon": -17.991122,
    "name": "Montaña Matos",
@@ -6085,6 +7105,13 @@
    "lon": -13.971882,
    "name": "Morro de Agua Salada",
    "ele": 502
+  },
+  {
+   "lat": 29.005143,
+   "lon": -13.730145,
+   "name": "Montaña de los Miraderos",
+   "ele": 501,
+   "volcano": true
   },
   {
    "lat": 27.82421,
@@ -6184,6 +7211,13 @@
    "ele": 491
   },
   {
+   "lat": 29.003683,
+   "lon": -13.718077,
+   "name": "Lomo Enchumbade",
+   "ele": 490,
+   "volcano": true
+  },
+  {
    "lat": 29.121235,
    "lon": -13.497645,
    "name": "Cerro Tabayesco",
@@ -6268,10 +7302,24 @@
    "ele": 482
   },
   {
+   "lat": 28.523872,
+   "lon": -13.939845,
+   "name": "San Andres",
+   "ele": 482,
+   "volcano": true
+  },
+  {
    "lat": 28.915108,
    "lon": -13.783091,
    "name": "Castillejo",
    "ele": 482
+  },
+  {
+   "lat": 29.000701,
+   "lon": -13.747326,
+   "name": "Cráter de Timanfaya",
+   "ele": 482,
+   "volcano": true
   },
   {
    "lat": 28.434303,
@@ -6302,6 +7350,13 @@
    "lon": -13.935275,
    "name": "Morro de los Asientos",
    "ele": 481
+  },
+  {
+   "lat": 29.002522,
+   "lon": -13.744677,
+   "name": "Caldera de la Boca del Infierno",
+   "ele": 479,
+   "volcano": true
   },
   {
    "lat": 28.359034,
@@ -6370,6 +7425,14 @@
    "ele": 473
   },
   {
+   "lat": 28.978717,
+   "lon": -13.712349,
+   "name": "Montaña Diama",
+   "ele": 472,
+   "wikidata": "Q23987254",
+   "volcano": true
+  },
+  {
    "lat": 28.918834,
    "lon": -13.761684,
    "name": "Pico de la Oveja",
@@ -6388,10 +7451,24 @@
    "ele": 472
   },
   {
+   "lat": 28.077492,
+   "lon": -16.644319,
+   "name": "Montaña Las Tabaibas",
+   "ele": 471,
+   "volcano": true
+  },
+  {
    "lat": 28.575453,
    "lon": -13.909461,
    "name": "Morro de la Pila",
    "ele": 471
+  },
+  {
+   "lat": 29.005805,
+   "lon": -13.6778,
+   "name": "Montaña Colorada",
+   "ele": 469,
+   "volcano": true
   },
   {
    "lat": 27.809449,
@@ -6411,6 +7488,13 @@
    "name": "Caracol",
    "ele": 468,
    "wikidata": "Q23986646"
+  },
+  {
+   "lat": 27.824228,
+   "lon": -17.908065,
+   "name": "Montaña del Tesoro",
+   "ele": 468,
+   "volcano": true
   },
   {
    "lat": 28.913584,
@@ -6468,6 +7552,13 @@
    "ele": 465
   },
   {
+   "lat": 28.417383,
+   "lon": -16.334404,
+   "name": "Montaña Jagua",
+   "ele": 464,
+   "volcano": true
+  },
+  {
    "lat": 28.537097,
    "lon": -13.969992,
    "name": "Morro de Don Diego",
@@ -6478,6 +7569,13 @@
    "lon": -14.020283,
    "name": "Gairía",
    "ele": 464
+  },
+  {
+   "lat": 28.360177,
+   "lon": -14.018471,
+   "name": "Gairia",
+   "ele": 463,
+   "volcano": true
   },
   {
    "lat": 28.453724,
@@ -6498,10 +7596,31 @@
    "ele": 462
   },
   {
+   "lat": 27.671651,
+   "lon": -17.998874,
+   "name": "Montañas de Julán",
+   "ele": 461,
+   "volcano": true
+  },
+  {
    "lat": 28.084477,
    "lon": -15.687281,
    "name": "Roque Bermejo",
    "ele": 461
+  },
+  {
+   "lat": 28.997839,
+   "lon": -13.72258,
+   "name": "Montaña Rodeos",
+   "ele": 461,
+   "volcano": true
+  },
+  {
+   "lat": 28.967365,
+   "lon": -13.684402,
+   "name": "Cerro Tegoyo",
+   "ele": 460,
+   "volcano": true
   },
   {
    "lat": 29.034409,
@@ -6515,6 +7634,20 @@
    "lon": -15.455935,
    "name": "Montaña de Tafira",
    "ele": 460
+  },
+  {
+   "lat": 29.034425,
+   "lon": -13.731746,
+   "name": "Montaña Blanca",
+   "ele": 460,
+   "volcano": true
+  },
+  {
+   "lat": 27.674827,
+   "lon": -17.997881,
+   "name": "Roque Grande",
+   "ele": 459,
+   "volcano": true
   },
   {
    "lat": 28.558639,
@@ -6541,6 +7674,13 @@
    "ele": 458
   },
   {
+   "lat": 27.670593,
+   "lon": -17.988661,
+   "name": "Montaña de los Muertos",
+   "ele": 457,
+   "volcano": true
+  },
+  {
    "lat": 28.476014,
    "lon": -17.842939,
    "name": "Montaña del Mago",
@@ -6551,6 +7691,20 @@
    "lon": -14.176226,
    "name": "Morro Colorado",
    "ele": 457
+  },
+  {
+   "lat": 29.013295,
+   "lon": -13.695232,
+   "name": "Montaña de la Peña de Santa Catalina",
+   "ele": 456,
+   "volcano": true
+  },
+  {
+   "lat": 28.995857,
+   "lon": -13.744502,
+   "name": "Pico del Fuego",
+   "ele": 456,
+   "volcano": true
   },
   {
    "lat": 28.460771,
@@ -6569,6 +7723,13 @@
    "lon": -13.539381,
    "name": "Pico de Maramajo",
    "ele": 455
+  },
+  {
+   "lat": 28.936819,
+   "lon": -13.748451,
+   "name": "Caldera Riscada",
+   "ele": 454,
+   "volcano": true
   },
   {
    "lat": 28.56252,
@@ -6599,6 +7760,35 @@
    "lon": -14.068002,
    "name": "Morro de la Cuna",
    "ele": 452
+  },
+  {
+   "lat": 29.05143,
+   "lon": -13.673277,
+   "name": "Montaña Tinache",
+   "ele": 451,
+   "wikidata": "Q28032178",
+   "volcano": true
+  },
+  {
+   "lat": 27.679604,
+   "lon": -18.01116,
+   "name": "Montaña Quemada",
+   "ele": 451,
+   "volcano": true
+  },
+  {
+   "lat": 27.815989,
+   "lon": -17.980248,
+   "name": "Montaña de la Viña",
+   "ele": 451,
+   "volcano": true
+  },
+  {
+   "lat": 29.015739,
+   "lon": -13.680687,
+   "name": "Montaña Ortiz",
+   "ele": 451,
+   "volcano": true
   },
   {
    "lat": 27.819191,
@@ -6641,6 +7831,13 @@
    "lon": -16.81618,
    "name": "Roque de las Moradas",
    "ele": 449
+  },
+  {
+   "lat": 29.055798,
+   "lon": -13.548622,
+   "name": "Montaña de Guanapay",
+   "ele": 448,
+   "volcano": true
   },
   {
    "lat": 28.094662,
@@ -6686,10 +7883,32 @@
    "ele": 445
   },
   {
+   "lat": 29.001694,
+   "lon": -13.59459,
+   "name": "Montaña de la Mina",
+   "ele": 444,
+   "volcano": true
+  },
+  {
    "lat": 28.283069,
    "lon": -14.158373,
    "name": "Alto de la Majada de Cha Cabrera",
    "ele": 443
+  },
+  {
+   "lat": 28.480119,
+   "lon": -16.284135,
+   "name": "Montaña Guerra",
+   "ele": 442,
+   "wikidata": "Q23986412",
+   "volcano": true
+  },
+  {
+   "lat": 27.753676,
+   "lon": -18.135114,
+   "name": "Montaña Marcos",
+   "ele": 442,
+   "volcano": true
   },
   {
    "lat": 28.98197,
@@ -6724,10 +7943,24 @@
    "wikidata": "Q115499466"
   },
   {
+   "lat": 28.984338,
+   "lon": -13.672967,
+   "name": "Montaña Testeyna",
+   "ele": 440,
+   "volcano": true
+  },
+  {
    "lat": 28.310982,
    "lon": -13.929757,
    "name": "Atalaya Pozo Negro",
    "ele": 440
+  },
+  {
+   "lat": 28.972503,
+   "lon": -13.662525,
+   "name": "La Montañeta",
+   "ele": 439,
+   "volcano": true
   },
   {
    "lat": 27.854329,
@@ -6766,6 +7999,20 @@
    "ele": 437
   },
   {
+   "lat": 28.2851,
+   "lon": -13.92817,
+   "name": "Caldera de Jacomar",
+   "ele": 437,
+   "volcano": true
+  },
+  {
+   "lat": 28.991766,
+   "lon": -13.749986,
+   "name": "Montaña del Valle de la Tranquilidad",
+   "ele": 436,
+   "volcano": true
+  },
+  {
    "lat": 29.028839,
    "lon": -13.692294,
    "name": "Montaña Coruja",
@@ -6790,10 +8037,25 @@
    "ele": 434
   },
   {
+   "lat": 28.151694,
+   "lon": -15.640678,
+   "name": "Montaña de Ajódar",
+   "ele": 433,
+   "wikidata": "Q23986019",
+   "volcano": true
+  },
+  {
    "lat": 29.004248,
    "lon": -13.653405,
    "name": "Montaña Juan Bello",
    "ele": 433
+  },
+  {
+   "lat": 28.969283,
+   "lon": -13.724056,
+   "name": "Montaña Chupaderos",
+   "ele": 432,
+   "volcano": true
   },
   {
    "lat": 28.122335,
@@ -6839,6 +8101,13 @@
    "ele": 430
   },
   {
+   "lat": 29.018725,
+   "lon": -13.737658,
+   "name": "Montaña de Mazo o Negra",
+   "ele": 429,
+   "volcano": true
+  },
+  {
    "lat": 27.82955,
    "lon": -17.935333,
    "name": "Montaña Carascán",
@@ -6851,11 +8120,40 @@
    "ele": 429
   },
   {
+   "lat": 28.051372,
+   "lon": -16.690768,
+   "name": "Montaña de Guaza",
+   "ele": 428,
+   "volcano": true
+  },
+  {
+   "lat": 28.471796,
+   "lon": -17.851897,
+   "name": "Volcán de Teneguía",
+   "ele": 428,
+   "wikidata": "Q1374413",
+   "volcano": true
+  },
+  {
+   "lat": 28.934748,
+   "lon": -13.757155,
+   "name": "Caldera Gritana",
+   "ele": 427,
+   "volcano": true
+  },
+  {
    "lat": 29.081019,
    "lon": -13.556694,
    "name": "Cerro Terroso",
    "ele": 427,
    "wikidata": "Q23978839"
+  },
+  {
+   "lat": 28.06804,
+   "lon": -16.612879,
+   "name": "Montaña de Chimbesque",
+   "ele": 426,
+   "volcano": true
   },
   {
    "lat": 28.63379,
@@ -6887,6 +8185,13 @@
    "lon": -13.941392,
    "name": "Morros Altos",
    "ele": 424
+  },
+  {
+   "lat": 28.924441,
+   "lon": -13.744124,
+   "name": "Pico Nago",
+   "ele": 423,
+   "volcano": true
   },
   {
    "lat": 28.087625,
@@ -6925,6 +8230,13 @@
    "ele": 421
   },
   {
+   "lat": 28.999794,
+   "lon": -13.731268,
+   "name": "Caldera del Corazoncillo",
+   "ele": 420,
+   "volcano": true
+  },
+  {
    "lat": 28.430868,
    "lon": -14.114273,
    "name": "Aceituno",
@@ -6953,6 +8265,13 @@
    "lon": -14.058511,
    "name": "Morro de las Degolladas",
    "ele": 415
+  },
+  {
+   "lat": 29.004425,
+   "lon": -13.705047,
+   "name": "Caldera de la Rilla",
+   "ele": 414,
+   "volcano": true
   },
   {
    "lat": 28.444957,
@@ -7022,6 +8341,13 @@
    "wikidata": "Q115510203"
   },
   {
+   "lat": 29.0068,
+   "lon": -13.688357,
+   "name": "Montaña de las Nueces",
+   "ele": 407,
+   "volcano": true
+  },
+  {
    "lat": 28.937989,
    "lon": -13.783046,
    "name": "Montaña de Enmedio",
@@ -7056,6 +8382,13 @@
    "lon": -13.945437,
    "name": "Morro de Valle Sise",
    "ele": 406
+  },
+  {
+   "lat": 29.002826,
+   "lon": -13.750673,
+   "name": "Islote de Hilario",
+   "ele": 404,
+   "volcano": true
   },
   {
    "lat": 28.127746,
@@ -7179,6 +8512,13 @@
    "ele": 398
   },
   {
+   "lat": 28.551843,
+   "lon": -17.790265,
+   "name": "La Calderera",
+   "ele": 398,
+   "volcano": true
+  },
+  {
    "lat": 28.278205,
    "lon": -14.149864,
    "name": "Alto de las Brujas",
@@ -7213,6 +8553,13 @@
    "lon": -14.084535,
    "name": "Morro de Tinea",
    "ele": 394
+  },
+  {
+   "lat": 28.509582,
+   "lon": -16.366448,
+   "name": "Montaña Molina",
+   "ele": 394,
+   "volcano": true
   },
   {
    "lat": 28.356534,
@@ -7251,6 +8598,20 @@
    "ele": 392
   },
   {
+   "lat": 28.946578,
+   "lon": -13.727833,
+   "name": "Montaña Mojón",
+   "ele": 391,
+   "volcano": true
+  },
+  {
+   "lat": 29.037793,
+   "lon": -13.739985,
+   "name": "Risco Quebrado",
+   "ele": 391,
+   "volcano": true
+  },
+  {
    "lat": 27.80574,
    "lon": -15.661881,
    "name": "Alto de las Gorras",
@@ -7273,6 +8634,14 @@
    "lon": -16.638975,
    "name": "Montaña Cambada",
    "ele": 391
+  },
+  {
+   "lat": 28.991025,
+   "lon": -13.693892,
+   "name": "Montaña de las Lapas o del Cuervo",
+   "ele": 390,
+   "wikidata": "Q23987170",
+   "volcano": true
   },
   {
    "lat": 28.064283,
@@ -7303,6 +8672,13 @@
    "lon": -16.424896,
    "name": "Montaña Béñamo",
    "ele": 388
+  },
+  {
+   "lat": 28.998246,
+   "lon": -13.753131,
+   "name": "Caldera Quemada de Arriba",
+   "ele": 388,
+   "volcano": true
   },
   {
    "lat": 28.310202,
@@ -7353,6 +8729,13 @@
    "ele": 384
   },
   {
+   "lat": 28.997863,
+   "lon": -13.749949,
+   "name": "Montaña de los Camellos",
+   "ele": 384,
+   "volcano": true
+  },
+  {
    "lat": 28.313099,
    "lon": -14.081568,
    "name": "Pico de la Cencerrita",
@@ -7395,6 +8778,27 @@
    "ele": 382
   },
   {
+   "lat": 28.955528,
+   "lon": -13.700925,
+   "name": "La Montañeta",
+   "ele": 381,
+   "volcano": true
+  },
+  {
+   "lat": 29.034211,
+   "lon": -13.648512,
+   "name": "Montaña de la Meseta",
+   "ele": 380,
+   "volcano": true
+  },
+  {
+   "lat": 28.971571,
+   "lon": -13.675003,
+   "name": "El Morro de Conil",
+   "ele": 380,
+   "volcano": true
+  },
+  {
    "lat": 28.34197,
    "lon": -13.961524,
    "name": "Morro la Pared",
@@ -7405,6 +8809,20 @@
    "lon": -14.130546,
    "name": "Morrete de la Clavellina",
    "ele": 379
+  },
+  {
+   "lat": 27.755746,
+   "lon": -18.002122,
+   "name": "Montaña Joapira",
+   "ele": 377,
+   "volcano": true
+  },
+  {
+   "lat": 28.08019,
+   "lon": -16.574758,
+   "name": "Montaña de las Tabaibas",
+   "ele": 377,
+   "volcano": true
   },
   {
    "lat": 27.802552,
@@ -7419,6 +8837,13 @@
    "ele": 376
   },
   {
+   "lat": 28.981714,
+   "lon": -13.696891,
+   "name": "Peña Palomas",
+   "ele": 376,
+   "volcano": true
+  },
+  {
    "lat": 29.031832,
    "lon": -13.629205,
    "name": "Lomo de Camacho",
@@ -7429,6 +8854,13 @@
    "lon": -14.021624,
    "name": "Alto de Matías",
    "ele": 376
+  },
+  {
+   "lat": 28.994931,
+   "lon": -13.773659,
+   "name": "Montaña Rajada",
+   "ele": 375,
+   "volcano": true
   },
   {
    "lat": 28.994941,
@@ -7511,6 +8943,13 @@
    "wikidata": "Q23987509"
   },
   {
+   "lat": 28.569047,
+   "lon": -13.985122,
+   "name": "Montaña Quemada",
+   "ele": 372,
+   "volcano": true
+  },
+  {
    "lat": 27.806171,
    "lon": -15.649533,
    "name": "Montaña Uva",
@@ -7521,6 +8960,20 @@
    "lon": -13.936571,
    "name": "Morro del Chupadero",
    "ele": 372
+  },
+  {
+   "lat": 29.019983,
+   "lon": -13.720928,
+   "name": "Montaña Tingafa",
+   "ele": 371,
+   "volcano": true
+  },
+  {
+   "lat": 28.391383,
+   "lon": -16.562005,
+   "name": "Montaña los Frailes",
+   "ele": 371,
+   "volcano": true
   },
   {
    "lat": 28.224687,
@@ -7547,10 +9000,24 @@
    "ele": 371
   },
   {
+   "lat": 29.066916,
+   "lon": -13.706698,
+   "name": "Teneza",
+   "ele": 370,
+   "volcano": true
+  },
+  {
    "lat": 28.599685,
    "lon": -13.906909,
    "name": "Morro del Medio",
    "ele": 370
+  },
+  {
+   "lat": 28.944676,
+   "lon": -13.733721,
+   "name": "Montaña Casa",
+   "ele": 369,
+   "volcano": true
   },
   {
    "lat": 28.298788,
@@ -7577,10 +9044,24 @@
    "ele": 367
   },
   {
+   "lat": 28.998617,
+   "lon": -13.758674,
+   "name": "Caldera Quemada del Nido del Guirre",
+   "ele": 366,
+   "volcano": true
+  },
+  {
    "lat": 28.072648,
    "lon": -17.184002,
    "name": "Roque Blanco",
    "ele": 366
+  },
+  {
+   "lat": 28.442,
+   "lon": -16.293109,
+   "name": "Montaña de Taco",
+   "ele": 365,
+   "volcano": true
   },
   {
    "lat": 28.488776,
@@ -7595,6 +9076,20 @@
    "ele": 365
   },
   {
+   "lat": 28.984544,
+   "lon": -13.688964,
+   "name": "Montaña del Cuaco",
+   "ele": 364,
+   "volcano": true
+  },
+  {
+   "lat": 29.006663,
+   "lon": -13.753738,
+   "name": "Montaña del Balcón",
+   "ele": 364,
+   "volcano": true
+  },
+  {
    "lat": 29.031322,
    "lon": -13.684005,
    "name": "Montaña Tinguatón",
@@ -7607,6 +9102,13 @@
    "ele": 364
   },
   {
+   "lat": 29.011044,
+   "lon": -13.727762,
+   "name": "Miraderos bajos",
+   "ele": 363,
+   "volcano": true
+  },
+  {
    "lat": 28.366841,
    "lon": -14.020267,
    "name": "Morro de la Atalayita",
@@ -7617,6 +9119,20 @@
    "lon": -16.135314,
    "name": "Montaña de las Toscas",
    "ele": 362
+  },
+  {
+   "lat": 28.949995,
+   "lon": -13.728091,
+   "name": "Montaña Norte",
+   "ele": 362,
+   "volcano": true
+  },
+  {
+   "lat": 27.837503,
+   "lon": -17.921582,
+   "name": "Montaña de Tanajiscaba",
+   "ele": 361,
+   "volcano": true
   },
   {
    "lat": 28.649207,
@@ -7643,16 +9159,52 @@
    "ele": 361
   },
   {
+   "lat": 28.914433,
+   "lon": -13.792728,
+   "name": "Caldera de Masian",
+   "ele": 360,
+   "wikidata": "Q104430585",
+   "volcano": true
+  },
+  {
    "lat": 27.80883,
    "lon": -15.614306,
    "name": "Roca Negra",
    "ele": 360
   },
   {
+   "lat": 29.010042,
+   "lon": -13.750783,
+   "name": "Montaña del Chinero",
+   "ele": 359,
+   "volcano": true
+  },
+  {
    "lat": 28.369318,
    "lon": -14.025298,
    "name": "Morro del Risco",
    "ele": 359
+  },
+  {
+   "lat": 28.996726,
+   "lon": -13.761424,
+   "name": "Caldera Quemada del Mirador",
+   "ele": 358,
+   "volcano": true
+  },
+  {
+   "lat": 29.06612,
+   "lon": -13.501392,
+   "name": "Montaña de Guenia",
+   "ele": 358,
+   "volcano": true
+  },
+  {
+   "lat": 27.66785,
+   "lon": -17.978206,
+   "name": "Montaña del Jable",
+   "ele": 358,
+   "volcano": true
   },
   {
    "lat": 27.806208,
@@ -7691,6 +9243,13 @@
    "ele": 356
   },
   {
+   "lat": 29.000016,
+   "lon": -13.697619,
+   "name": "Montañeta del Cuaco",
+   "ele": 355,
+   "volcano": true
+  },
+  {
    "lat": 27.897268,
    "lon": -15.437082,
    "name": "Montaña de Agüimes",
@@ -7710,10 +9269,24 @@
    "ele": 354
   },
   {
+   "lat": 29.197181,
+   "lon": -13.468192,
+   "name": "La Quemada de Orzola",
+   "ele": 354,
+   "volcano": true
+  },
+  {
    "lat": 28.292958,
    "lon": -14.123066,
    "name": "Montañeta de las Paredejas",
    "ele": 354
+  },
+  {
+   "lat": 28.625123,
+   "lon": -13.86883,
+   "name": "Montaña de Caima",
+   "ele": 354,
+   "volcano": true
   },
   {
    "lat": 28.452813,
@@ -7782,6 +9355,13 @@
    "ele": 352
   },
   {
+   "lat": 29.017866,
+   "lon": -13.672028,
+   "name": "Montaña Cardona",
+   "ele": 351,
+   "volcano": true
+  },
+  {
    "lat": 28.077603,
    "lon": -17.149626,
    "name": "Roques García",
@@ -7805,6 +9385,13 @@
    "name": "Montaña Todoque",
    "ele": 350,
    "wikidata": "Q108739221"
+  },
+  {
+   "lat": 28.996109,
+   "lon": -13.763533,
+   "name": "Caldera Quemada de Abajo",
+   "ele": 350,
+   "volcano": true
   },
   {
    "lat": 28.214606,
@@ -7855,6 +9442,13 @@
    "ele": 345
   },
   {
+   "lat": 27.827565,
+   "lon": -17.96339,
+   "name": "Montaña Bermeja",
+   "ele": 344,
+   "volcano": true
+  },
+  {
    "lat": 28.570469,
    "lon": -16.307873,
    "name": "Roque Dos Hermanos",
@@ -7885,6 +9479,13 @@
    "ele": 343
   },
   {
+   "lat": 28.631136,
+   "lon": -13.917157,
+   "name": "Montaña de los Saltos",
+   "ele": 342,
+   "volcano": true
+  },
+  {
    "lat": 28.629991,
    "lon": -17.91585,
    "name": "Montaña La Laguna",
@@ -7895,6 +9496,14 @@
    "lon": -16.677707,
    "name": "Morro Negro",
    "ele": 342
+  },
+  {
+   "lat": 29.060214,
+   "lon": -13.64295,
+   "name": "Montaña Timbaiba",
+   "ele": 341,
+   "wikidata": "Q28493656",
+   "volcano": true
   },
   {
    "lat": 28.263377,
@@ -8001,16 +9610,51 @@
    "ele": 335
   },
   {
+   "lat": 28.068495,
+   "lon": -16.643965,
+   "name": "Montaña del Puente",
+   "ele": 333,
+   "volcano": true
+  },
+  {
+   "lat": 29.047265,
+   "lon": -13.686429,
+   "name": "Montaña de Los Dolores",
+   "ele": 332,
+   "volcano": true
+  },
+  {
    "lat": 28.61361,
    "lon": -13.952374,
    "name": "Montaña de la Oliva",
    "ele": 331
   },
   {
+   "lat": 29.001965,
+   "lon": -13.576105,
+   "name": "Montaña de Zonzamas",
+   "ele": 330,
+   "volcano": true
+  },
+  {
+   "lat": 27.756432,
+   "lon": -18.139951,
+   "name": "Montaña de los Guirres",
+   "ele": 330,
+   "volcano": true
+  },
+  {
    "lat": 28.302142,
    "lon": -14.079786,
    "name": "Esquén Blanco",
    "ele": 329
+  },
+  {
+   "lat": 28.983808,
+   "lon": -13.781216,
+   "name": "Montaña Tremesana",
+   "ele": 328,
+   "volcano": true
   },
   {
    "lat": 28.591464,
@@ -8029,6 +9673,20 @@
    "lon": -17.927128,
    "name": "Montaña de Argual",
    "ele": 327
+  },
+  {
+   "lat": 28.641432,
+   "lon": -13.871367,
+   "name": "Montaña Pajarita",
+   "ele": 325,
+   "volcano": true
+  },
+  {
+   "lat": 28.068279,
+   "lon": -16.619589,
+   "name": "Montaña Lucena",
+   "ele": 325,
+   "volcano": true
   },
   {
    "lat": 28.456864,
@@ -8055,6 +9713,13 @@
    "ele": 324
   },
   {
+   "lat": 29.060221,
+   "lon": -13.483942,
+   "name": "La Caldera o Tinamala",
+   "ele": 323,
+   "volcano": true
+  },
+  {
    "lat": 28.040176,
    "lon": -15.733204,
    "name": "Piedra del Milano",
@@ -8071,6 +9736,13 @@
    "lon": -15.779438,
    "name": "Pico Tenorico",
    "ele": 322
+  },
+  {
+   "lat": 28.064376,
+   "lon": -16.62157,
+   "name": "Montaña de la Estrella",
+   "ele": 322,
+   "volcano": true
   },
   {
    "lat": 28.900983,
@@ -8091,6 +9763,13 @@
    "ele": 321
   },
   {
+   "lat": 29.011362,
+   "lon": -13.536347,
+   "name": "Tahíche",
+   "ele": 320,
+   "volcano": true
+  },
+  {
    "lat": 28.21677,
    "lon": -14.134354,
    "name": "Morro de la Cruzada",
@@ -8104,10 +9783,31 @@
    "ele": 320
   },
   {
+   "lat": 28.373132,
+   "lon": -16.836021,
+   "name": "Montaña de Taco",
+   "ele": 319,
+   "volcano": true
+  },
+  {
    "lat": 27.958807,
    "lon": -15.418461,
    "name": "Montaña Bermeja",
    "ele": 319
+  },
+  {
+   "lat": 29.016237,
+   "lon": -13.729484,
+   "name": "Montañeta de los Mudos",
+   "ele": 319,
+   "volcano": true
+  },
+  {
+   "lat": 28.972504,
+   "lon": -13.63129,
+   "name": "Montaña Bermeja",
+   "ele": 319,
+   "volcano": true
   },
   {
    "lat": 28.611158,
@@ -8120,6 +9820,13 @@
    "lon": -14.068745,
    "name": "Morrete de Negrín",
    "ele": 318
+  },
+  {
+   "lat": 28.946926,
+   "lon": -13.754672,
+   "name": "Montaña Miguel Ruiz",
+   "ele": 317,
+   "volcano": true
   },
   {
    "lat": 28.275754,
@@ -8138,6 +9845,14 @@
    "lon": -15.512028,
    "name": "Morro del Coronadero",
    "ele": 316
+  },
+  {
+   "lat": 28.636963,
+   "lon": -13.841704,
+   "name": "Montaña Roja",
+   "ele": 315,
+   "wikidata": "Q23979793",
+   "volcano": true
   },
   {
    "lat": 27.831764,
@@ -8236,6 +9951,13 @@
    "ele": 310
   },
   {
+   "lat": 29.025735,
+   "lon": -13.559939,
+   "name": "Montaña Ubigue",
+   "ele": 309,
+   "volcano": true
+  },
+  {
    "lat": 28.245619,
    "lon": -13.944901,
    "name": "Morro Blanco",
@@ -8266,6 +9988,20 @@
    "ele": 308
   },
   {
+   "lat": 28.995503,
+   "lon": -13.768796,
+   "name": "Montañeta de Montaña Rajada",
+   "ele": 307,
+   "volcano": true
+  },
+  {
+   "lat": 29.035152,
+   "lon": -13.549176,
+   "name": "Montaña Cabrera",
+   "ele": 307,
+   "volcano": true
+  },
+  {
    "lat": 28.423501,
    "lon": -14.125659,
    "name": "Morro de los Sojames",
@@ -8282,6 +10018,13 @@
    "lon": -14.140743,
    "name": "Filo de las Pocetas",
    "ele": 306
+  },
+  {
+   "lat": 27.669797,
+   "lon": -18.013602,
+   "name": "Tacorón",
+   "ele": 305,
+   "volcano": true
   },
   {
    "lat": 27.751977,
@@ -8308,6 +10051,20 @@
    "ele": 305
   },
   {
+   "lat": 27.724034,
+   "lon": -18.146821,
+   "name": "La Montaña de las Calcosas",
+   "ele": 303,
+   "volcano": true
+  },
+  {
+   "lat": 28.091636,
+   "lon": -16.529119,
+   "name": "Montaña de Ifara",
+   "ele": 303,
+   "volcano": true
+  },
+  {
    "lat": 28.848938,
    "lon": -17.913995,
    "name": "Montaña de la Centinela",
@@ -8324,6 +10081,13 @@
    "lon": -14.382072,
    "name": "Morro de Munguía",
    "ele": 302
+  },
+  {
+   "lat": 29.034384,
+   "lon": -13.672544,
+   "name": "Caldera Quemada",
+   "ele": 302,
+   "volcano": true
   },
   {
    "lat": 28.12059,
@@ -8362,6 +10126,13 @@
    "ele": 301
   },
   {
+   "lat": 28.332088,
+   "lon": -13.994164,
+   "name": "Caldera de la Laguna",
+   "ele": 300,
+   "volcano": true
+  },
+  {
    "lat": 28.504994,
    "lon": -16.20212,
    "name": "Roque de San Andrés",
@@ -8398,10 +10169,24 @@
    "ele": 295
   },
   {
+   "lat": 29.106172,
+   "lon": -13.61398,
+   "name": "Caldera Trasera",
+   "ele": 294,
+   "volcano": true
+  },
+  {
    "lat": 28.21394,
    "lon": -14.043061,
    "name": "La Lapa",
    "ele": 294
+  },
+  {
+   "lat": 29.038644,
+   "lon": -13.550632,
+   "name": "Montaña Chica",
+   "ele": 294,
+   "volcano": true
   },
   {
    "lat": 28.366038,
@@ -8428,10 +10213,38 @@
    "ele": 292
   },
   {
+   "lat": 28.639284,
+   "lon": -13.884638,
+   "name": "Montaña Negra",
+   "ele": 291,
+   "volcano": true
+  },
+  {
    "lat": 28.605212,
    "lon": -13.880174,
    "name": "Morro del Puerco",
    "ele": 291
+  },
+  {
+   "lat": 29.005365,
+   "lon": -13.561564,
+   "name": "Montaña de Maneje",
+   "ele": 290,
+   "volcano": true
+  },
+  {
+   "lat": 28.134329,
+   "lon": -15.508651,
+   "name": "Montaña Cardones",
+   "ele": 290,
+   "volcano": true
+  },
+  {
+   "lat": 27.660056,
+   "lon": -17.986059,
+   "name": "Montaña de los Carriles o del Camoino",
+   "ele": 289,
+   "volcano": true
   },
   {
    "lat": 28.874069,
@@ -8444,6 +10257,13 @@
    "lon": -14.063077,
    "name": "Morro de Fuente Laja",
    "ele": 289
+  },
+  {
+   "lat": 28.065791,
+   "lon": -16.703836,
+   "name": "Montaña el Mojón",
+   "ele": 288,
+   "volcano": true
   },
   {
    "lat": 28.24041,
@@ -8537,6 +10357,13 @@
    "ele": 279
   },
   {
+   "lat": 28.080027,
+   "lon": -16.534419,
+   "name": "Montaña de los Riscos",
+   "ele": 278,
+   "volcano": true
+  },
+  {
    "lat": 28.310309,
    "lon": -14.053744,
    "name": "Montañeta de las Casitas",
@@ -8547,6 +10374,13 @@
    "lon": -13.900888,
    "name": "Veredas",
    "ele": 278
+  },
+  {
+   "lat": 28.313582,
+   "lon": -16.377327,
+   "name": "Montaña Grande",
+   "ele": 277,
+   "volcano": true
   },
   {
    "lat": 28.624164,
@@ -8572,6 +10406,13 @@
    "name": "Masaciega",
    "ele": 276,
    "wikidata": "Q56120688"
+  },
+  {
+   "lat": 28.562232,
+   "lon": -17.771539,
+   "name": "Montaña de Azufre",
+   "ele": 275,
+   "volcano": true
   },
   {
    "lat": 28.517233,
@@ -8616,6 +10457,14 @@
    "ele": 274
   },
   {
+   "lat": 28.698576,
+   "lon": -13.920864,
+   "name": "Calderón Hondo",
+   "ele": 273,
+   "wikidata": "Q1026450",
+   "volcano": true
+  },
+  {
    "lat": 28.388432,
    "lon": -14.136271,
    "name": "Montaña Blanca",
@@ -8626,6 +10475,13 @@
    "lon": -14.073324,
    "name": "Alto del Cuchillo",
    "ele": 273
+  },
+  {
+   "lat": 28.715064,
+   "lon": -13.89224,
+   "name": "Bayuyo",
+   "ele": 272,
+   "volcano": true
   },
   {
    "lat": 28.151676,
@@ -8640,16 +10496,37 @@
    "ele": 272
   },
   {
+   "lat": 28.06749,
+   "lon": -16.575822,
+   "name": "Montaña Casablanca",
+   "ele": 271,
+   "volcano": true
+  },
+  {
    "lat": 28.107611,
    "lon": -17.145555,
    "name": "Risco Grande",
    "ele": 271
   },
   {
+   "lat": 28.152809,
+   "lon": -16.45816,
+   "name": "Montaña Centinela",
+   "ele": 271,
+   "volcano": true
+  },
+  {
    "lat": 28.303372,
    "lon": -13.924617,
    "name": "Morro de Valle Siso",
    "ele": 271
+  },
+  {
+   "lat": 28.605415,
+   "lon": -13.903273,
+   "name": "La Calderetilla de Fimapaire",
+   "ele": 271,
+   "volcano": true
   },
   {
    "lat": 28.573104,
@@ -8664,10 +10541,24 @@
    "ele": 269
   },
   {
+   "lat": 29.039866,
+   "lon": -13.717601,
+   "name": "Montaña Caldereta",
+   "ele": 268,
+   "volcano": true
+  },
+  {
    "lat": 29.083989,
    "lon": -13.498273,
    "name": "Montaña Temeje",
    "ele": 268
+  },
+  {
+   "lat": 29.252374,
+   "lon": -13.503409,
+   "name": "Agujas Grandes",
+   "ele": 267,
+   "volcano": true
   },
   {
    "lat": 29.136082,
@@ -8716,6 +10607,13 @@
    "lon": -14.316968,
    "name": "Aguda",
    "ele": 264
+  },
+  {
+   "lat": 27.752245,
+   "lon": -18.048737,
+   "name": "Montaña Tamasina",
+   "ele": 263,
+   "volcano": true
   },
   {
    "lat": 29.067196,
@@ -8773,10 +10671,24 @@
    "ele": 259
   },
   {
+   "lat": 28.695749,
+   "lon": -13.924596,
+   "name": "Montaña Colorada",
+   "ele": 258,
+   "volcano": true
+  },
+  {
    "lat": 28.122537,
    "lon": -15.534132,
    "name": "La Montañeta",
    "ele": 258
+  },
+  {
+   "lat": 29.256943,
+   "lon": -13.500381,
+   "name": "Agujas Chicas",
+   "ele": 257,
+   "volcano": true
   },
   {
    "lat": 27.798817,
@@ -8797,16 +10709,37 @@
    "ele": 257
   },
   {
+   "lat": 28.989629,
+   "lon": -13.806532,
+   "name": "Montaña de Pedro Perico",
+   "ele": 256,
+   "volcano": true
+  },
+  {
    "lat": 28.0682,
    "lon": -17.140248,
    "name": "Risco de la Amargura",
    "ele": 256
   },
   {
+   "lat": 28.967022,
+   "lon": -13.79197,
+   "name": "Montaña de dos Picos",
+   "ele": 256,
+   "volcano": true
+  },
+  {
    "lat": 28.143489,
    "lon": -14.296276,
    "name": "Península de Jandía",
    "ele": 256
+  },
+  {
+   "lat": 29.298838,
+   "lon": -13.534937,
+   "name": "Montaña Clara",
+   "ele": 255,
+   "volcano": true
   },
   {
    "lat": 28.101652,
@@ -8845,10 +10778,24 @@
    "ele": 253
   },
   {
+   "lat": 28.988962,
+   "lon": -13.797541,
+   "name": "Montaña Encantada",
+   "ele": 252,
+   "volcano": true
+  },
+  {
    "lat": 27.792374,
    "lon": -15.574312,
    "name": "Punta del Cerro Apupú",
    "ele": 251
+  },
+  {
+   "lat": 28.70318,
+   "lon": -13.908867,
+   "name": "Caldera Encantada",
+   "ele": 251,
+   "volcano": true
   },
   {
    "lat": 28.55473,
@@ -8867,6 +10814,13 @@
    "lon": -14.071022,
    "name": "Morro Blanco",
    "ele": 250
+  },
+  {
+   "lat": 29.059689,
+   "lon": -13.62336,
+   "name": "Berrugo",
+   "ele": 249,
+   "volcano": true
   },
   {
    "lat": 28.174211,
@@ -8915,6 +10869,20 @@
    "lon": -14.032998,
    "name": "Morro de las Tenerías",
    "ele": 247
+  },
+  {
+   "lat": 28.060126,
+   "lon": -16.622433,
+   "name": "Montaña de la Aldea",
+   "ele": 246,
+   "volcano": true
+  },
+  {
+   "lat": 28.968787,
+   "lon": -13.795965,
+   "name": "Pico Redondo",
+   "ele": 245,
+   "volcano": true
   },
   {
    "lat": 28.298154,
@@ -9002,10 +10970,24 @@
    "ele": 240
   },
   {
+   "lat": 28.401017,
+   "lon": -16.546837,
+   "name": "Las Arenas",
+   "ele": 239,
+   "volcano": true
+  },
+  {
    "lat": 28.171294,
    "lon": -15.426728,
    "name": "Montaña de las Coloradas",
    "ele": 239
+  },
+  {
+   "lat": 27.708725,
+   "lon": -18.143639,
+   "name": "Orchilla",
+   "ele": 238,
+   "volcano": true
   },
   {
    "lat": 28.13744,
@@ -9039,6 +11021,13 @@
    "wikidata": "Q115511414"
   },
   {
+   "lat": 28.965138,
+   "lon": -13.803189,
+   "name": "Montaña de la Vieja Gabriela",
+   "ele": 235,
+   "volcano": true
+  },
+  {
    "lat": 27.794348,
    "lon": -15.580815,
    "name": "Mesa del Corralillo",
@@ -9061,6 +11050,13 @@
    "lon": -14.019928,
    "name": "El Cuchillete",
    "ele": 235
+  },
+  {
+   "lat": 28.983924,
+   "lon": -13.794232,
+   "name": "Montaña Hernández",
+   "ele": 234,
+   "volcano": true
   },
   {
    "lat": 28.484403,
@@ -9117,10 +11113,24 @@
    "ele": 232
   },
   {
+   "lat": 28.581996,
+   "lon": -13.874584,
+   "name": "La Calderetilla",
+   "ele": 232,
+   "volcano": true
+  },
+  {
    "lat": 28.508517,
    "lon": -13.898451,
    "name": "Morro de la Higuera",
    "ele": 232
+  },
+  {
+   "lat": 28.916545,
+   "lon": -13.736161,
+   "name": "Montaña Bermeja",
+   "ele": 231,
+   "volcano": true
   },
   {
    "lat": 27.789087,
@@ -9147,10 +11157,31 @@
    "ele": 231
   },
   {
+   "lat": 28.701766,
+   "lon": -13.911598,
+   "name": "Caldera de Rebanada",
+   "ele": 230,
+   "volcano": true
+  },
+  {
    "lat": 28.639747,
    "lon": -13.990397,
    "name": "Chupadero Viejo",
    "ele": 229
+  },
+  {
+   "lat": 28.35631,
+   "lon": -13.96956,
+   "name": "La Atalayita",
+   "ele": 229,
+   "volcano": true
+  },
+  {
+   "lat": 28.649682,
+   "lon": -13.86386,
+   "name": "Montaña del Mal Nombre",
+   "ele": 229,
+   "volcano": true
   },
   {
    "lat": 28.647548,
@@ -9184,6 +11215,27 @@
    "ele": 227
   },
   {
+   "lat": 28.993707,
+   "lon": -13.784139,
+   "name": "Caldera Rajada",
+   "ele": 226,
+   "volcano": true
+  },
+  {
+   "lat": 28.47397,
+   "lon": -17.830403,
+   "name": "Montaña de Viento",
+   "ele": 226,
+   "volcano": true
+  },
+  {
+   "lat": 29.049239,
+   "lon": -13.68541,
+   "name": "Caldera de Guigua",
+   "ele": 226,
+   "volcano": true
+  },
+  {
    "lat": 28.172351,
    "lon": -17.323433,
    "name": "Montaña de Retamar",
@@ -9194,6 +11246,13 @@
    "lon": -14.003816,
    "name": "Montañeta de Tao",
    "ele": 226
+  },
+  {
+   "lat": 29.392558,
+   "lon": -13.504031,
+   "name": "Montaña Lobos",
+   "ele": 225,
+   "volcano": true
   },
   {
    "lat": 28.096596,
@@ -9214,16 +11273,37 @@
    "ele": 224
   },
   {
+   "lat": 28.161452,
+   "lon": -15.419483,
+   "name": "Montaña del Vigía",
+   "ele": 223,
+   "volcano": true
+  },
+  {
    "lat": 28.19711,
    "lon": -16.445642,
    "name": "Morro de la Faja",
    "ele": 223
   },
   {
+   "lat": 29.028099,
+   "lon": -13.503465,
+   "name": "Montaña Tejia",
+   "ele": 222,
+   "volcano": true
+  },
+  {
    "lat": 28.068468,
    "lon": -16.572728,
    "name": "Montaña Perdices",
    "ele": 222
+  },
+  {
+   "lat": 29.021118,
+   "lon": -13.500798,
+   "name": "Montaña de Tinaguache",
+   "ele": 220,
+   "volcano": true
   },
   {
    "lat": 28.567485,
@@ -9236,6 +11316,13 @@
    "lon": -14.093273,
    "name": "Alto de la Cueva",
    "ele": 219
+  },
+  {
+   "lat": 28.467051,
+   "lon": -17.837442,
+   "name": "Montaña de Lajio",
+   "ele": 218,
+   "volcano": true
   },
   {
    "lat": 28.254926,
@@ -9302,6 +11389,13 @@
    "lon": -13.974617,
    "name": "Montaña Alta",
    "ele": 213
+  },
+  {
+   "lat": 28.289911,
+   "lon": -13.918634,
+   "name": "Volcán de Toneles",
+   "ele": 212,
+   "volcano": true
   },
   {
    "lat": 28.227602,
@@ -9388,6 +11482,13 @@
    "ele": 204
   },
   {
+   "lat": 29.101464,
+   "lon": -13.61801,
+   "name": "Pico Colorado",
+   "ele": 203,
+   "volcano": true
+  },
+  {
    "lat": 27.789453,
    "lon": -15.57728,
    "name": "Mesas del Corralillo",
@@ -9412,10 +11513,25 @@
    "ele": 201
   },
   {
+   "lat": 27.869387,
+   "lon": -15.393708,
+   "name": "Montaña de Arinaga",
+   "ele": 199,
+   "wikidata": "Q23987578",
+   "volcano": true
+  },
+  {
    "lat": 28.632957,
    "lon": -13.983244,
    "name": "Morro Encantado",
    "ele": 199
+  },
+  {
+   "lat": 28.465414,
+   "lon": -17.841234,
+   "name": "Montaña de las Margaritas",
+   "ele": 199,
+   "volcano": true
   },
   {
    "lat": 28.209191,
@@ -9428,6 +11544,28 @@
    "lon": -13.975975,
    "name": "Morro de Diego Armas",
    "ele": 199
+  },
+  {
+   "lat": 28.868708,
+   "lon": -13.857722,
+   "name": "Montaña Roja",
+   "ele": 198,
+   "wikidata": "Q23979795",
+   "volcano": true
+  },
+  {
+   "lat": 29.112118,
+   "lon": -13.607884,
+   "name": "Montaña Juan del Hierro",
+   "ele": 198,
+   "volcano": true
+  },
+  {
+   "lat": 27.646778,
+   "lon": -17.983878,
+   "name": "Restinga",
+   "ele": 198,
+   "volcano": true
   },
   {
    "lat": 28.311802,
@@ -9472,6 +11610,13 @@
    "ele": 195
   },
   {
+   "lat": 28.968112,
+   "lon": -13.785735,
+   "name": "Montaña de la Mancha",
+   "ele": 195,
+   "volcano": true
+  },
+  {
    "lat": 27.886505,
    "lon": -15.454099,
    "name": "Montaña Caraballo",
@@ -9488,6 +11633,13 @@
    "lon": -13.881687,
    "name": "Montaña Blanca de Abajo",
    "ele": 195
+  },
+  {
+   "lat": 28.960079,
+   "lon": -13.773071,
+   "name": "Montaña Almurcia",
+   "ele": 194,
+   "volcano": true
   },
   {
    "lat": 28.152099,
@@ -9550,6 +11702,13 @@
    "ele": 190
   },
   {
+   "lat": 29.243308,
+   "lon": -13.518221,
+   "name": "Montaña del Mojón",
+   "ele": 189,
+   "volcano": true
+  },
+  {
    "lat": 28.684182,
    "lon": -13.969083,
    "name": "Montaña de la Costilla",
@@ -9599,6 +11758,13 @@
    "ele": 186
   },
   {
+   "lat": 28.590437,
+   "lon": -17.761529,
+   "name": "Montaña Cucaracha",
+   "ele": 185,
+   "volcano": true
+  },
+  {
    "lat": 28.087268,
    "lon": -15.423679,
    "name": "Santa Isabel",
@@ -9615,6 +11781,13 @@
    "lon": -15.416591,
    "name": "Montaña de Tabaibas",
    "ele": 183
+  },
+  {
+   "lat": 28.313033,
+   "lon": -16.373484,
+   "name": "Morras del Corcho",
+   "ele": 183,
+   "volcano": true
   },
   {
    "lat": 27.809844,
@@ -9645,6 +11818,13 @@
    "lon": -14.263243,
    "name": "Montaña del Queso",
    "ele": 182
+  },
+  {
+   "lat": 28.705165,
+   "lon": -13.898745,
+   "name": "Morros de Bayuyo",
+   "ele": 182,
+   "volcano": true
   },
   {
    "lat": 28.560068,
@@ -9707,6 +11887,20 @@
    "ele": 179
   },
   {
+   "lat": 28.980095,
+   "lon": -13.809388,
+   "name": "Caldera del Islote de la Vega",
+   "ele": 178,
+   "volcano": true
+  },
+  {
+   "lat": 27.652721,
+   "lon": -17.999948,
+   "name": "Montaña Colorada",
+   "ele": 178,
+   "volcano": true
+  },
+  {
    "lat": 28.24184,
    "lon": -14.084329,
    "name": "Montaña del Moro",
@@ -9737,6 +11931,13 @@
    "ele": 176
   },
   {
+   "lat": 29.086233,
+   "lon": -13.647811,
+   "name": "Pico del Cuchillo",
+   "ele": 176,
+   "volcano": true
+  },
+  {
    "lat": 28.090261,
    "lon": -15.430184,
    "name": "Cerro del Viejo",
@@ -9747,6 +11948,14 @@
    "lon": -13.959732,
    "name": "Montaña de la Cebada",
    "ele": 176
+  },
+  {
+   "lat": 29.222722,
+   "lon": -13.538476,
+   "name": "Montaña Amarilla",
+   "ele": 175,
+   "wikidata": "Q23988931",
+   "volcano": true
   },
   {
    "lat": 28.225556,
@@ -9814,6 +12023,13 @@
    "lon": -16.341869,
    "name": "Montaña Bermeja",
    "ele": 172
+  },
+  {
+   "lat": 29.222776,
+   "lon": -13.538301,
+   "name": "Montaña Amarilla",
+   "ele": 172,
+   "volcano": true
   },
   {
    "lat": 28.385902,
@@ -9888,6 +12104,13 @@
    "ele": 167
   },
   {
+   "lat": 28.385489,
+   "lon": -14.155278,
+   "name": "Morrete Comisianes",
+   "ele": 167,
+   "volcano": true
+  },
+  {
    "lat": 28.372442,
    "lon": -13.965616,
    "name": "Montañeta de los Alares",
@@ -9916,6 +12139,13 @@
    "lon": -13.999026,
    "name": "Montaña de Mazacote",
    "ele": 164
+  },
+  {
+   "lat": 27.844744,
+   "lon": -17.919194,
+   "name": "Montaña de las Salina",
+   "ele": 163,
+   "volcano": true
   },
   {
    "lat": 27.795264,
@@ -9958,6 +12188,14 @@
    "lon": -13.914585,
    "name": "Montañeta Piedra Gorda",
    "ele": 161
+  },
+  {
+   "lat": 29.276811,
+   "lon": -13.510805,
+   "name": "Montaña Bermeja",
+   "ele": 160,
+   "wikidata": "Q23987843",
+   "volcano": true
   },
   {
    "lat": 28.679608,
@@ -10039,6 +12277,13 @@
    "wikidata": "Q115508094"
   },
   {
+   "lat": 28.978464,
+   "lon": -13.824009,
+   "name": "Montaña del Golfo",
+   "ele": 154,
+   "volcano": true
+  },
+  {
    "lat": 28.210926,
    "lon": -14.009982,
    "name": "Piedras Caídas",
@@ -10058,6 +12303,20 @@
    "wikidata": "Q23987518"
   },
   {
+   "lat": 28.012768,
+   "lon": -16.693192,
+   "name": "Montaña Grande",
+   "ele": 153,
+   "volcano": true
+  },
+  {
+   "lat": 28.735681,
+   "lon": -13.903861,
+   "name": "Montaña de la Mancha",
+   "ele": 153,
+   "volcano": true
+  },
+  {
    "lat": 28.215488,
    "lon": -14.025866,
    "name": "Montaña de Gran Tarajal",
@@ -10068,6 +12327,13 @@
    "lon": -17.999186,
    "name": "Montaña Puerto de Naos",
    "ele": 152
+  },
+  {
+   "lat": 27.751339,
+   "lon": -18.096382,
+   "name": "La Caldereta",
+   "ele": 152,
+   "volcano": true
   },
   {
    "lat": 28.234209,
@@ -10106,6 +12372,13 @@
    "ele": 150
   },
   {
+   "lat": 28.988645,
+   "lon": -13.812605,
+   "name": "Montaña Quemada",
+   "ele": 149,
+   "volcano": true
+  },
+  {
    "lat": 28.250028,
    "lon": -14.059881,
    "name": "Montañeta de Mazacote",
@@ -10122,6 +12395,20 @@
    "lon": -16.193476,
    "name": "Montaña Morera",
    "ele": 149
+  },
+  {
+   "lat": 29.042569,
+   "lon": -13.763858,
+   "name": "Montaña Bermeja",
+   "ele": 146,
+   "volcano": true
+  },
+  {
+   "lat": 28.730132,
+   "lon": -13.914083,
+   "name": "Montaña Lomo Blanco",
+   "ele": 145,
+   "volcano": true
   },
   {
    "lat": 28.369345,
@@ -10208,6 +12495,13 @@
    "ele": 135
   },
   {
+   "lat": 28.299069,
+   "lon": -13.989846,
+   "name": "Caldera de los Arrabales",
+   "ele": 134,
+   "volcano": true
+  },
+  {
    "lat": 27.784098,
    "lon": -15.667123,
    "name": "Puntón de San José",
@@ -10220,6 +12514,13 @@
    "ele": 134
   },
   {
+   "lat": 28.307252,
+   "lon": -13.991404,
+   "name": "La Calderita",
+   "ele": 134,
+   "volcano": true
+  },
+  {
    "lat": 28.331606,
    "lon": -14.188625,
    "name": "El Jable de Vigocho",
@@ -10230,6 +12531,13 @@
    "lon": -14.045275,
    "name": "Montaña Gil",
    "ele": 134
+  },
+  {
+   "lat": 29.113341,
+   "lon": -13.606906,
+   "name": "Caldera Juan del Hierro",
+   "ele": 133,
+   "volcano": true
   },
   {
    "lat": 28.167965,
@@ -10298,6 +12606,13 @@
    "ele": 129
   },
   {
+   "lat": 28.01452,
+   "lon": -16.68989,
+   "name": "Montaña Cumplida",
+   "ele": 129,
+   "volcano": true
+  },
+  {
    "lat": 28.269692,
    "lon": -13.977118,
    "name": "Montañeta Blanca",
@@ -10314,6 +12629,27 @@
    "lon": -15.701939,
    "name": "Montaña Morisca",
    "ele": 128
+  },
+  {
+   "lat": 28.655672,
+   "lon": -13.849936,
+   "name": "Montaña de los Apartaderos",
+   "ele": 128,
+   "volcano": true
+  },
+  {
+   "lat": 28.751719,
+   "lon": -13.830332,
+   "name": "Montaña La Caldera",
+   "ele": 127,
+   "volcano": true
+  },
+  {
+   "lat": 28.031798,
+   "lon": -16.630087,
+   "name": "Montaña Negra",
+   "ele": 127,
+   "volcano": true
   },
   {
    "lat": 28.645216,
@@ -10358,6 +12694,27 @@
    "ele": 121
   },
   {
+   "lat": 28.02068,
+   "lon": -16.685424,
+   "name": "Montaña Aguzada",
+   "ele": 119,
+   "volcano": true
+  },
+  {
+   "lat": 28.021453,
+   "lon": -16.635799,
+   "name": "Montaña de Malpasito",
+   "ele": 119,
+   "volcano": true
+  },
+  {
+   "lat": 29.118749,
+   "lon": -13.599957,
+   "name": "Montaña Chica",
+   "ele": 118,
+   "volcano": true
+  },
+  {
    "lat": 28.287959,
    "lon": -14.037009,
    "name": "Morrete Redondo",
@@ -10388,6 +12745,28 @@
    "ele": 116
   },
   {
+   "lat": 28.027943,
+   "lon": -16.632907,
+   "name": "Montaña del Majano",
+   "ele": 115,
+   "volcano": true
+  },
+  {
+   "lat": 28.053917,
+   "lon": -16.72,
+   "name": "Montaña Chayofita",
+   "ele": 114,
+   "wikidata": "Q96253101",
+   "volcano": true
+  },
+  {
+   "lat": 28.020155,
+   "lon": -16.694236,
+   "name": "Montaña de la Caraba",
+   "ele": 112,
+   "volcano": true
+  },
+  {
    "lat": 28.226993,
    "lon": -14.00632,
    "name": "Morro de Piedras Caídas",
@@ -10413,10 +12792,32 @@
    "ele": 109
   },
   {
+   "lat": 29.074104,
+   "lon": -13.473902,
+   "name": "Las Calderetas",
+   "ele": 108,
+   "volcano": true
+  },
+  {
+   "lat": 28.962143,
+   "lon": -13.825419,
+   "name": "Montaña Bermeja",
+   "ele": 108,
+   "wikidata": "Q23987842",
+   "volcano": true
+  },
+  {
    "lat": 28.062165,
    "lon": -16.522761,
    "name": "Montaña Ensanchada",
    "ele": 108
+  },
+  {
+   "lat": 28.034344,
+   "lon": -16.6299,
+   "name": "Montañita del Charco",
+   "ele": 108,
+   "volcano": true
   },
   {
    "lat": 28.377478,
@@ -10429,6 +12830,20 @@
    "lon": -15.796986,
    "name": "Montaña de las Canteras",
    "ele": 107
+  },
+  {
+   "lat": 29.005395,
+   "lon": -13.817259,
+   "name": "Montaña de Halcones",
+   "ele": 106,
+   "volcano": true
+  },
+  {
+   "lat": 29.125229,
+   "lon": -13.590046,
+   "name": "Montaña Cavera",
+   "ele": 106,
+   "volcano": true
   },
   {
    "lat": 28.718887,
@@ -10447,6 +12862,20 @@
    "lon": -14.038942,
    "name": "Morro de Diego Viejo",
    "ele": 104
+  },
+  {
+   "lat": 28.965401,
+   "lon": -13.812654,
+   "name": "Caldera de Chozas",
+   "ele": 102,
+   "volcano": true
+  },
+  {
+   "lat": 29.098534,
+   "lon": -13.679536,
+   "name": "Montaña Bermeja",
+   "ele": 102,
+   "volcano": true
   },
   {
    "lat": 27.997681,
@@ -10473,6 +12902,13 @@
    "ele": 98
   },
   {
+   "lat": 28.023729,
+   "lon": -16.636513,
+   "name": "Morro de los Lirios",
+   "ele": 98,
+   "volcano": true
+  },
+  {
    "lat": 28.278243,
    "lon": -14.028625,
    "name": "Montaña de Soto",
@@ -10483,6 +12919,13 @@
    "lon": -15.404848,
    "name": "Montaña del Diablo",
    "ele": 97
+  },
+  {
+   "lat": 28.705725,
+   "lon": -13.870941,
+   "name": "Montaña del Cuervo",
+   "ele": 96,
+   "volcano": true
   },
   {
    "lat": 28.130235,
@@ -10527,6 +12970,20 @@
    "ele": 86
   },
   {
+   "lat": 29.091931,
+   "lon": -13.632588,
+   "name": "Montaña Mosta",
+   "ele": 86,
+   "volcano": true
+  },
+  {
+   "lat": 28.634524,
+   "lon": -13.835562,
+   "name": "Calderetilla de Roja",
+   "ele": 85,
+   "volcano": true
+  },
+  {
    "lat": 28.147558,
    "lon": -16.79478,
    "name": "Mozos",
@@ -10561,6 +13018,13 @@
    "lon": -16.821508,
    "name": "Alcalá",
    "ele": 83
+  },
+  {
+   "lat": 28.974745,
+   "lon": -13.828328,
+   "name": "Volcán del Guincho",
+   "ele": 80,
+   "volcano": true
   },
   {
    "lat": 28.103248,
@@ -10630,6 +13094,13 @@
    "ele": 72
   },
   {
+   "lat": 29.100327,
+   "lon": -13.679413,
+   "name": "Montaña Bermeja",
+   "ele": 72,
+   "volcano": true
+  },
+  {
    "lat": 28.260041,
    "lon": -14.026251,
    "name": "Cuchillete",
@@ -10646,6 +13117,13 @@
    "lon": -15.412822,
    "name": "Montaña Laguna Chica",
    "ele": 69
+  },
+  {
+   "lat": 28.0102,
+   "lon": -16.635514,
+   "name": "Montaña Amarilla",
+   "ele": 68,
+   "volcano": true
   },
   {
    "lat": 28.995002,
@@ -10700,6 +13178,13 @@
    "lon": -14.211302,
    "name": "Montañeta del Granillo",
    "ele": 55
+  },
+  {
+   "lat": 28.00649,
+   "lon": -16.694059,
+   "name": "Montaña Pardela",
+   "ele": 52,
+   "volcano": true
   },
   {
    "lat": 28.104831,
@@ -10936,9 +13421,155 @@
    "ele": 1
   },
   {
+   "lat": 28.254783,
+   "lon": -16.67679,
+   "name": "Montaña Chahorra",
+   "volcano": true
+  },
+  {
+   "lat": 28.064439,
+   "lon": -16.519945,
+   "name": "Montaña Pelada",
+   "volcano": true
+  },
+  {
+   "lat": 27.652447,
+   "lon": -17.98663,
+   "name": "Montaña de Prim",
+   "volcano": true
+  },
+  {
+   "lat": 27.803324,
+   "lon": -17.907419,
+   "name": "San Juan",
+   "volcano": true
+  },
+  {
+   "lat": 27.714529,
+   "lon": -18.131525,
+   "name": "Montaña Quemada",
+   "volcano": true
+  },
+  {
+   "lat": 27.822582,
+   "lon": -17.93267,
+   "name": "Tenesedra",
+   "volcano": true
+  },
+  {
+   "lat": 28.43989,
+   "lon": -16.451086,
+   "name": "Montañas de San Antonio",
+   "volcano": true
+  },
+  {
+   "lat": 28.440344,
+   "lon": -16.449242,
+   "name": "Montaña de San Antonio",
+   "volcano": true
+  },
+  {
+   "lat": 28.443235,
+   "lon": -16.44704,
+   "name": "Montaña de la Atalaya",
+   "volcano": true
+  },
+  {
+   "lat": 28.445294,
+   "lon": -16.443445,
+   "name": "Montaña de las Calderetas",
+   "volcano": true
+  },
+  {
+   "lat": 28.602253,
+   "lon": -17.854924,
+   "name": "Volcán Llano del Banco",
+   "wikidata": "Q17500415",
+   "volcano": true
+  },
+  {
+   "lat": 29.0066,
+   "lon": -13.749762,
+   "name": "Montaña del Pajerito",
+   "volcano": true
+  },
+  {
+   "lat": 28.0883,
+   "lon": -16.564168,
+   "name": "Montaña Yaco",
+   "volcano": true
+  },
+  {
+   "lat": 28.095441,
+   "lon": -16.61033,
+   "name": "Montaña de Garañaña",
+   "volcano": true
+  },
+  {
+   "lat": 29.041726,
+   "lon": -13.685284,
+   "name": "Las Montañetas",
+   "volcano": true
+  },
+  {
+   "lat": 28.509991,
+   "lon": -14.009382,
+   "name": "Montaña Bermeja",
+   "volcano": true
+  },
+  {
+   "lat": 29.009174,
+   "lon": -13.7071,
+   "name": "Montaña de Santa Catalina",
+   "volcano": true
+  },
+  {
+   "lat": 27.764933,
+   "lon": -18.030269,
+   "name": "Montaña de Tejeguate",
+   "wikidata": "Q23978798",
+   "volcano": true
+  },
+  {
+   "lat": 28.732694,
+   "lon": -13.910355,
+   "name": "Montaña de la Raya",
+   "volcano": true
+  },
+  {
+   "lat": 28.615875,
+   "lon": -17.869584,
+   "name": "Abertura en la parte inferior del cono del volcán",
+   "volcano": true
+  },
+  {
+   "lat": 28.730926,
+   "lon": -17.872095,
+   "name": "Caldera de Taburiente",
+   "volcano": true
+  },
+  {
+   "lat": 28.077075,
+   "lon": -16.645747,
+   "name": "Montaña Las Tabaibas",
+   "volcano": true
+  },
+  {
+   "lat": 28.041859,
+   "lon": -16.62668,
+   "name": "Montaña los Erales",
+   "volcano": true
+  },
+  {
    "lat": 28.533682,
    "lon": -17.880614,
    "name": "Roques Sardas"
+  },
+  {
+   "lat": 29.394731,
+   "lon": -13.524375,
+   "name": "Volcán de la Caldera Blanca",
+   "volcano": true
   }
  ]
 }

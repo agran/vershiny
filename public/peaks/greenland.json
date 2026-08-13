@@ -1,6 +1,6 @@
 {
  "region": "greenland",
- "generated": "2026-08-12T10:54:56+00:00",
+ "generated": "2026-08-13T09:16:20+00:00",
  "peaks": [
   {
    "lat": 68.918162,
@@ -3227,6 +3227,13 @@
    "ele": 1675
   },
   {
+   "lat": 64.772318,
+   "lon": -20.398884,
+   "name": "Eiríksjökull",
+   "ele": 1672,
+   "volcano": true
+  },
+  {
    "lat": 62.791319,
    "lon": -48.848741,
    "name": "J.A.D. Jensen Nunatakker;J.A.D. Jensens Nunatakker",
@@ -4515,6 +4522,13 @@
    "ele": 1228
   },
   {
+   "lat": 64.58648,
+   "lon": -20.66694,
+   "name": "Prestahnúkur",
+   "ele": 1226,
+   "volcano": true
+  },
+  {
    "lat": 64.8022,
    "lon": -23.8099,
    "name": "Sandfell",
@@ -5231,6 +5245,14 @@
    "lon": -37.17148,
    "name": "Naniversarpik",
    "ele": 1010
+  },
+  {
+   "lat": 64.409242,
+   "lon": -20.751818,
+   "name": "Skjaldbreiður",
+   "ele": 1009,
+   "wikidata": "Q1480510",
+   "volcano": true
   },
   {
    "lat": 68.151914,
@@ -6301,6 +6323,15 @@
    "lon": -21.43124,
    "name": "Geldingafell",
    "ele": 806
+  },
+  {
+   "lat": 64.083848,
+   "lon": -21.316163,
+   "name": "Hengill",
+   "name_ru": "Хенгидль",
+   "ele": 805,
+   "wikidata": "Q1413846",
+   "volcano": true
   },
   {
    "lat": 60.010632,
@@ -8374,6 +8405,13 @@
    "ele": 551
   },
   {
+   "lat": 64.072284,
+   "lon": -21.205933,
+   "name": "Hrómundartindur",
+   "ele": 550,
+   "volcano": true
+  },
+  {
    "lat": 66.962496,
    "lon": -53.716119,
    "name": "Palasip Qaqqaa",
@@ -8516,6 +8554,15 @@
    "lon": -37.039908,
    "name": "Qattunaat Qaqqartivaat",
    "ele": 541
+  },
+  {
+   "lat": 63.998444,
+   "lon": -21.698927,
+   "name": "Þríhnúkagígur",
+   "name_en": "Thrihnukagigur",
+   "ele": 540,
+   "wikidata": "Q335699",
+   "volcano": true
   },
   {
    "lat": 70.9257,
@@ -10177,6 +10224,14 @@
    "ele": 380
   },
   {
+   "lat": 63.94122,
+   "lon": -22.17221,
+   "name": "Keilir",
+   "ele": 379,
+   "wikidata": "Q1737932",
+   "volcano": true
+  },
+  {
    "lat": 63.940733,
    "lon": -22.09665,
    "name": "Trölladyngja",
@@ -11496,6 +11551,13 @@
    "wikidata": "Q690908"
   },
   {
+   "lat": 63.923333,
+   "lon": -22.230267,
+   "name": "Þráinsskjöldur",
+   "ele": 238,
+   "volcano": true
+  },
+  {
    "lat": 65.78178,
    "lon": -21.60313,
    "name": "Skarðsfell",
@@ -11591,6 +11653,14 @@
    "ele": 228
   },
   {
+   "lat": 63.42934,
+   "lon": -20.259564,
+   "name": "Helgafell",
+   "ele": 227,
+   "wikidata": "Q1141849",
+   "volcano": true
+  },
+  {
    "lat": 61.160496,
    "lon": -45.40686,
    "name": "Signalbakken",
@@ -11628,6 +11698,13 @@
    "lon": -21.981036,
    "name": "Fjallið eina",
    "ele": 223
+  },
+  {
+   "lat": 64.876122,
+   "lon": -22.343663,
+   "name": "Ytri-Rauðamelskúlur",
+   "ele": 222,
+   "volcano": true
   },
   {
    "lat": 63.88434,
@@ -11717,6 +11794,13 @@
    "ele": 213
   },
   {
+   "lat": 64.957424,
+   "lon": -22.900466,
+   "name": "Gráakúla",
+   "ele": 211,
+   "volcano": true
+  },
+  {
    "lat": 63.8691,
    "lon": -22.22272,
    "name": "Höfði",
@@ -11770,6 +11854,15 @@
    "name": "Festarfjall",
    "ele": 201,
    "wikidata": "Q27015547"
+  },
+  {
+   "lat": 63.432322,
+   "lon": -20.247283,
+   "name": "Eldfell",
+   "name_ru": "Эльдфетль",
+   "ele": 200,
+   "wikidata": "Q217274",
+   "volcano": true
   },
   {
    "lat": 63.88271,
@@ -11895,6 +11988,13 @@
    "ele": 174
   },
   {
+   "lat": 64.77145,
+   "lon": -21.538719,
+   "name": "Stóra Grábrók",
+   "ele": 173,
+   "volcano": true
+  },
+  {
    "lat": 63.85385,
    "lon": -22.37486,
    "name": "Húsafell",
@@ -11936,6 +12036,13 @@
    "lon": -20.233717,
    "name": "Svínafell",
    "ele": 165
+  },
+  {
+   "lat": 64.85025,
+   "lon": -22.228516,
+   "name": "Rauðháls",
+   "ele": 164,
+   "volcano": true
   },
   {
    "lat": 70.682863,
@@ -12018,6 +12125,13 @@
    "ele": 155
   },
   {
+   "lat": 64.871586,
+   "lon": -22.293855,
+   "name": "Syðri-Rauðamelskúlur",
+   "ele": 154,
+   "volcano": true
+  },
+  {
    "lat": 64.090905,
    "lon": -21.820694,
    "name": "Vatnsendahæð",
@@ -12028,6 +12142,13 @@
    "lon": -22.29471,
    "name": "Slaga",
    "ele": 152
+  },
+  {
+   "lat": 63.857853,
+   "lon": -21.998551,
+   "name": "Eldborg",
+   "ele": 150,
+   "volcano": true
   },
   {
    "lat": 65.6694,
@@ -12099,6 +12220,13 @@
    "ele": 136
   },
   {
+   "lat": 63.87172,
+   "lon": -22.563132,
+   "name": "Sandfell",
+   "ele": 135,
+   "volcano": true
+  },
+  {
    "lat": 65.73886,
    "lon": -21.69469,
    "name": "Ósfell",
@@ -12160,6 +12288,13 @@
    "ele": 126
   },
   {
+   "lat": 64.858743,
+   "lon": -23.921769,
+   "name": "Saxhólar",
+   "ele": 125,
+   "volcano": true
+  },
+  {
    "lat": 63.446504,
    "lon": -20.309804,
    "name": "Upsaberg",
@@ -12207,6 +12342,13 @@
    "lon": -51.111505,
    "name": "Parabolfjeldet",
    "ele": 112
+  },
+  {
+   "lat": 64.8444,
+   "lon": -23.9734,
+   "name": "Sauðhóll",
+   "ele": 110,
+   "volcano": true
   },
   {
    "lat": 64.109197,
@@ -12258,6 +12400,14 @@
    "ele": 91
   },
   {
+   "lat": 63.880586,
+   "lon": -22.538691,
+   "name": "Lágafell",
+   "ele": 91,
+   "wikidata": "Q123439094",
+   "volcano": true
+  },
+  {
    "lat": 64.81118,
    "lon": -23.423953,
    "name": "Búðaklettur",
@@ -12269,6 +12419,13 @@
    "name": "Innri-Sandhóll",
    "ele": 88,
    "wikidata": "Q123439426"
+  },
+  {
+   "lat": 63.849483,
+   "lon": -22.55365,
+   "name": "Rauðhóll",
+   "ele": 88,
+   "volcano": true
   },
   {
    "lat": 63.930314,
@@ -12308,6 +12465,14 @@
    "name": "Lágafell",
    "ele": 71,
    "wikidata": "Q123923185"
+  },
+  {
+   "lat": 63.860759,
+   "lon": -22.575473,
+   "name": "Sandfellshæð",
+   "ele": 68,
+   "wikidata": "Q123438964",
+   "volcano": true
   },
   {
    "lat": 60.661353,
@@ -12350,6 +12515,13 @@
    "ele": 47
   },
   {
+   "lat": 64.806987,
+   "lon": -23.791895,
+   "name": "Snæfellsjökull",
+   "name_ru": "Снайфедльсйёкюдль",
+   "volcano": true
+  },
+  {
    "lat": 64.910896,
    "lon": -22.296225,
    "name": "Selfell"
@@ -12383,9 +12555,27 @@
    "name": "Múlafjall"
   },
   {
+   "lat": 64.851727,
+   "lon": -23.926533,
+   "name": "Saxhóll",
+   "volcano": true
+  },
+  {
    "lat": 68.726546,
    "lon": -52.747182,
    "name": "Nuugaarsuk"
+  },
+  {
+   "lat": 64.857602,
+   "lon": -23.994506,
+   "name": "Vatnsborg",
+   "volcano": true
+  },
+  {
+   "lat": 63.95057,
+   "lon": -22.088007,
+   "name": "Eldborg",
+   "volcano": true
   },
   {
    "lat": 63.956229,
@@ -12504,6 +12694,25 @@
    "wikidata": "Q123400108"
   },
   {
+   "lat": 63.845479,
+   "lon": -22.681699,
+   "name": "Stampar Crater",
+   "wikidata": "Q123400086",
+   "volcano": true
+  },
+  {
+   "lat": 64.850263,
+   "lon": -23.996929,
+   "name": "Grashóll",
+   "volcano": true
+  },
+  {
+   "lat": 64.853883,
+   "lon": -24.021724,
+   "name": "Öldungahóll",
+   "volcano": true
+  },
+  {
    "lat": 69.176776,
    "lon": -26.351581,
    "name": "RHARpeak"
@@ -12619,6 +12828,41 @@
    "wikidata": "Q7967175"
   },
   {
+   "lat": 64.027506,
+   "lon": -21.16989,
+   "name": "Grensdalur",
+   "volcano": true
+  },
+  {
+   "lat": 64.036837,
+   "lon": -20.889053,
+   "name": "Grímsnes",
+   "wikidata": "Q1551586",
+   "volcano": true
+  },
+  {
+   "lat": 63.300474,
+   "lon": -20.602576,
+   "name": "Surtsey",
+   "name_ru": "Суртсей",
+   "wikidata": "Q178124",
+   "volcano": true
+  },
+  {
+   "lat": 63.773502,
+   "lon": -22.809021,
+   "name": "Reykjanes/Svartsengi volcanic system",
+   "wikidata": "Q123438836",
+   "volcano": true
+  },
+  {
+   "lat": 64.796362,
+   "lon": -22.321483,
+   "name": "Eldborg",
+   "wikidata": "Q2044399",
+   "volcano": true
+  },
+  {
    "lat": 65.381229,
    "lon": -20.931625,
    "name": "Höfði",
@@ -12658,6 +12902,18 @@
    "lat": 64.1721,
    "lon": -51.474894,
    "name": "Stone bank"
+  },
+  {
+   "lat": 64.86459,
+   "lon": -23.882768,
+   "name": "Rauðhóll",
+   "volcano": true
+  },
+  {
+   "lat": 64.854109,
+   "lon": -23.842215,
+   "name": "Sjónarhóll",
+   "volcano": true
   },
   {
    "lat": 64.847217,
@@ -12730,6 +12986,18 @@
    "lon": -23.561098,
    "name": "Valafell",
    "wikidata": "Q27009766"
+  },
+  {
+   "lat": 64.959096,
+   "lon": -22.964475,
+   "name": "Kothraunskúla",
+   "volcano": true
+  },
+  {
+   "lat": 64.952224,
+   "lon": -22.867824,
+   "name": "Rauðakúla",
+   "volcano": true
   },
   {
    "lat": 64.92877,
@@ -12878,9 +13146,25 @@
    "name": "Vestra-Sandfell"
   },
   {
+   "lat": 64.039814,
+   "lon": -20.884814,
+   "name": "Kerið",
+   "name_ru": "Кериз",
+   "name_en": "Kerið",
+   "wikidata": "Q1435393",
+   "volcano": true
+  },
+  {
    "lat": 64.767819,
    "lon": -22.220865,
    "name": "Barnaborgir"
+  },
+  {
+   "lat": 63.844762,
+   "lon": -22.683449,
+   "name": "Miðahóll",
+   "wikidata": "Q123400040",
+   "volcano": true
   },
   {
    "lat": 69.729142,
@@ -13022,6 +13306,18 @@
    "lat": 61.000765,
    "lon": -47.416667,
    "name": "Saqqarissoq Tueq"
+  },
+  {
+   "lat": 64.773293,
+   "lon": -21.544855,
+   "name": "Grábrókarfell",
+   "volcano": true
+  },
+  {
+   "lat": 64.770627,
+   "lon": -21.534147,
+   "name": "Litla Grábrók",
+   "volcano": true
   },
   {
    "lat": 63.964705,
@@ -13176,6 +13472,13 @@
    "name": "Þrándur"
   },
   {
+   "lat": 63.890416,
+   "lon": -22.271008,
+   "name": "Gígur við Fagradalsfjall",
+   "name_en": "Eruptoin crater by Fagradalsfjall",
+   "volcano": true
+  },
+  {
    "lat": 63.907598,
    "lon": -22.522143,
    "name": "Stapafell",
@@ -13185,6 +13488,12 @@
    "lat": 66.067473,
    "lon": -23.493319,
    "name": "Eyrarfjall"
+  },
+  {
+   "lat": 64.183334,
+   "lon": -20.117529,
+   "name": "Hreppar",
+   "volcano": true
   },
   {
    "lat": 66.964985,
@@ -15766,6 +16075,13 @@
    "name": "Lang Peak 6"
   },
   {
+   "lat": 63.919154,
+   "lon": -22.20501,
+   "name": "Gossprunga við Litla-Hrút 2023",
+   "name_en": "Litli-Hrútur Eruption 2023",
+   "volcano": true
+  },
+  {
    "lat": 64.350732,
    "lon": -41.40409,
    "name": "Qattaq"
@@ -15796,9 +16112,22 @@
    "name": "Efri-Rótólfsstaðahæð"
   },
   {
+   "lat": 63.884289,
+   "lon": -22.378649,
+   "name": "Gos í Sundhnúksgígum 2023",
+   "name_en": "Sundhnúkur eruption 2023",
+   "volcano": true
+  },
+  {
    "lat": 65.833771,
    "lon": -37.611856,
    "name": "Asingalip"
+  },
+  {
+   "lat": 63.851321,
+   "lon": -22.421988,
+   "name": "Gos við Grindavík",
+   "volcano": true
   },
   {
    "lat": 63.447036,
@@ -16499,6 +16828,12 @@
    "lat": 66.064649,
    "lon": -51.918062,
    "name": "Tvillingerne 2"
+  },
+  {
+   "lat": 63.853287,
+   "lon": -21.988082,
+   "name": "Litla Eldborg",
+   "volcano": true
   },
   {
    "lat": 70.500569,

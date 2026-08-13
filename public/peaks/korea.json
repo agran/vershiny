@@ -1,7 +1,17 @@
 {
  "region": "korea",
- "generated": "2026-08-12T10:54:59+00:00",
+ "generated": "2026-08-13T09:16:23+00:00",
  "peaks": [
+  {
+   "lat": 42.007261,
+   "lon": 128.056396,
+   "name": "长白山 백두산",
+   "name_ru": "вулкан Байтоушань (Пэктусан)",
+   "name_en": "Paektu Mountain",
+   "ele": 2750,
+   "wikidata": "Q107635",
+   "volcano": true
+  },
   {
    "lat": 41.993404,
    "lon": 128.078302,

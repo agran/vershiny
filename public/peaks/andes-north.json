@@ -1,7 +1,16 @@
 {
  "region": "andes-north",
- "generated": "2026-08-12T10:54:33+00:00",
+ "generated": "2026-08-13T09:16:15+00:00",
  "peaks": [
+  {
+   "lat": -1.468099,
+   "lon": -78.815559,
+   "name": "Chimborazo",
+   "name_ru": "Чимборасо",
+   "ele": 6268,
+   "wikidata": "Q14081",
+   "volcano": true
+  },
   {
    "lat": -1.467477,
    "lon": -78.822635,
@@ -9,10 +18,36 @@
    "ele": 6228
   },
   {
+   "lat": -0.68056,
+   "lon": -78.437773,
+   "name": "Cotopaxi",
+   "name_ru": "Котопахи",
+   "ele": 5897,
+   "wikidata": "Q181476",
+   "volcano": true
+  },
+  {
    "lat": -1.473387,
    "lon": -78.804569,
    "name": "Cumbre Politécnica",
    "ele": 5820
+  },
+  {
+   "lat": 0.025159,
+   "lon": -77.988956,
+   "name": "Cayambe",
+   "name_ru": "Каямбе",
+   "ele": 5790,
+   "wikidata": "Q754734",
+   "volcano": true
+  },
+  {
+   "lat": -0.484498,
+   "lon": -78.142308,
+   "name": "Antisana",
+   "ele": 5753,
+   "wikidata": "Q14082",
+   "volcano": true
   },
   {
    "lat": 10.838947,
@@ -61,6 +96,15 @@
    "wikidata": "Q2648857"
   },
   {
+   "lat": 2.929206,
+   "lon": -76.028037,
+   "name": "Nevado del Huila",
+   "name_ru": "Невадо-дель-Уила",
+   "ele": 5390,
+   "wikidata": "Q648551",
+   "volcano": true
+  },
+  {
    "lat": 2.923136,
    "lon": -76.027802,
    "name": "Pico Central",
@@ -79,10 +123,27 @@
    "ele": 5340
   },
   {
+   "lat": 4.88194,
+   "lon": -75.317818,
+   "name": "Volcán Nevado del Ruiz",
+   "name_ru": "Невадо-дель-Руис",
+   "ele": 5321,
+   "wikidata": "Q233351",
+   "volcano": true
+  },
+  {
    "lat": -1.684589,
    "lon": -78.422798,
    "name": "Obispo",
    "ele": 5319
+  },
+  {
+   "lat": -1.671958,
+   "lon": -78.410167,
+   "name": "El Altar",
+   "ele": 5319,
+   "wikidata": "Q988603",
+   "volcano": true
   },
   {
    "lat": 10.831965,
@@ -101,6 +162,15 @@
    "lon": -76.027387,
    "name": "Pico La Cresta",
    "ele": 5284
+  },
+  {
+   "lat": -2.004938,
+   "lon": -78.341677,
+   "name": "Sangay",
+   "name_ru": "Сангай",
+   "ele": 5280,
+   "wikidata": "Q14052",
+   "volcano": true
   },
   {
    "lat": -1.658869,
@@ -125,6 +195,22 @@
    "lon": -73.586122,
    "name": "Pico Tulio Ospina",
    "ele": 5250
+  },
+  {
+   "lat": -0.663012,
+   "lon": -78.71585,
+   "name": "Illiniza Sur",
+   "ele": 5248,
+   "wikidata": "Q734280",
+   "volcano": true
+  },
+  {
+   "lat": 4.657884,
+   "lon": -75.328035,
+   "name": "Crater Nevado del Tolima",
+   "ele": 5215,
+   "wikidata": "Q144327",
+   "volcano": true
   },
   {
    "lat": 4.658806,
@@ -181,6 +267,14 @@
    "lon": -73.733109,
    "name": "Ruiz Erazo",
    "ele": 5152
+  },
+  {
+   "lat": -0.64923,
+   "lon": -78.72036,
+   "name": "Illiniza Norte",
+   "ele": 5126,
+   "wikidata": "Q734280",
+   "volcano": true
   },
   {
    "lat": 10.863247,
@@ -273,6 +367,30 @@
    "ele": 5020
   },
   {
+   "lat": -1.40781,
+   "lon": -78.750887,
+   "name": "Carihuairazo",
+   "ele": 5018,
+   "wikidata": "Q1036179",
+   "volcano": true
+  },
+  {
+   "lat": 4.892598,
+   "lon": -75.319412,
+   "name": "Crater Arenas",
+   "ele": 5016,
+   "wikidata": "Q233351",
+   "volcano": true
+  },
+  {
+   "lat": -1.466911,
+   "lon": -78.449212,
+   "name": "Tungurahua",
+   "ele": 5016,
+   "wikidata": "Q207421",
+   "volcano": true
+  },
+  {
    "lat": 6.383188,
    "lon": -72.280618,
    "name": "Toti",
@@ -316,6 +434,14 @@
    "wikidata": "Q213704"
   },
   {
+   "lat": 4.806997,
+   "lon": -75.371384,
+   "name": "Nevado de Santa Isabel",
+   "ele": 4965,
+   "wikidata": "Q2956713",
+   "volcano": true
+  },
+  {
    "lat": 6.359638,
    "lon": -72.302342,
    "name": "Campanilla Blanco",
@@ -332,6 +458,14 @@
    "lon": -73.649758,
    "name": "Pico Tairona",
    "ele": 4945
+  },
+  {
+   "lat": 0.360477,
+   "lon": -78.348725,
+   "name": "Cotacachi",
+   "ele": 4944,
+   "wikidata": "Q1136571",
+   "volcano": true
   },
   {
    "lat": 8.549753,
@@ -408,6 +542,13 @@
    "ele": 4892
   },
   {
+   "lat": -0.538406,
+   "lon": -78.373052,
+   "name": "Sincholahua",
+   "ele": 4887,
+   "volcano": true
+  },
+  {
    "lat": 8.531283,
    "lon": -71.053636,
    "name": "Pico Espejo",
@@ -452,16 +593,70 @@
    "ele": 4810
   },
   {
+   "lat": 4.893661,
+   "lon": -75.355663,
+   "name": "Cráter La Olleta",
+   "ele": 4800,
+   "volcano": true
+  },
+  {
+   "lat": -0.165723,
+   "lon": -78.604343,
+   "name": "Volcán Pichincha",
+   "ele": 4794,
+   "wikidata": "Q742216",
+   "volcano": true
+  },
+  {
+   "lat": -0.53196,
+   "lon": -78.6605,
+   "name": "Corazón",
+   "ele": 4790,
+   "wikidata": "Q869065",
+   "volcano": true
+  },
+  {
+   "lat": -0.780204,
+   "lon": -78.329981,
+   "name": "Quilindaña",
+   "ele": 4788,
+   "volcano": true
+  },
+  {
    "lat": -0.174531,
    "lon": -78.60072,
    "name": "Guagua Pichincha",
    "ele": 4776
   },
   {
+   "lat": 0.955676,
+   "lon": -77.88673,
+   "name": "Volcán Cumbal",
+   "ele": 4764,
+   "wikidata": "Q2019666",
+   "volcano": true
+  },
+  {
    "lat": 10.889059,
    "lon": -73.569477,
    "name": "P.",
    "ele": 4764
+  },
+  {
+   "lat": 4.710737,
+   "lon": -75.392518,
+   "name": "Paramillo del Quindío",
+   "ele": 4760,
+   "wikidata": "Q2648183",
+   "volcano": true
+  },
+  {
+   "lat": 0.816953,
+   "lon": -77.93725,
+   "name": "Volcán Chiles",
+   "ele": 4756,
+   "wikidata": "Q2648864",
+   "volcano": true
   },
   {
    "lat": 6.369091,
@@ -538,6 +733,21 @@
    "ele": 4705
   },
   {
+   "lat": 4.842974,
+   "lon": -75.345562,
+   "name": "Paramillo del Cisne",
+   "ele": 4700,
+   "wikidata": "Q2341569",
+   "volcano": true
+  },
+  {
+   "lat": -0.16271,
+   "lon": -78.566707,
+   "name": "Rucu Pichincha",
+   "ele": 4696,
+   "volcano": true
+  },
+  {
    "lat": 10.822302,
    "lon": -73.768314,
    "name": "P. 4695m",
@@ -581,6 +791,13 @@
    "ele": 4675
   },
   {
+   "lat": 2.270507,
+   "lon": -76.359806,
+   "name": "Pan de Azúcar",
+   "ele": 4670,
+   "volcano": true
+  },
+  {
    "lat": 10.760991,
    "lon": -73.599219,
    "name": "P.",
@@ -597,6 +814,15 @@
    "lon": -78.200483,
    "name": "Chosalongo Grande",
    "ele": 4661
+  },
+  {
+   "lat": 2.313832,
+   "lon": -76.394917,
+   "name": "Volcán Puracé",
+   "name_ru": "Пурасе",
+   "ele": 4650,
+   "wikidata": "Q1330927",
+   "volcano": true
   },
   {
    "lat": -2.238136,
@@ -675,6 +901,14 @@
    "ele": 4595
   },
   {
+   "lat": 4.795711,
+   "lon": -75.462897,
+   "name": "Paramillo Santa Rosa",
+   "ele": 4595,
+   "wikidata": "Q41480961",
+   "volcano": true
+  },
+  {
    "lat": 6.531317,
    "lon": -72.180778,
    "name": "Filo de Siraca",
@@ -691,6 +925,14 @@
    "lon": -78.515694,
    "name": "Cerro de Sasquín",
    "ele": 4580
+  },
+  {
+   "lat": 2.108848,
+   "lon": -76.59155,
+   "name": "Sotará",
+   "ele": 4580,
+   "wikidata": "Q2108921",
+   "volcano": true
   },
   {
    "lat": -0.161101,
@@ -734,6 +976,14 @@
    "lon": -78.845953,
    "name": "Pugyucuchoy",
    "ele": 4560
+  },
+  {
+   "lat": 0.25429,
+   "lon": -78.180391,
+   "name": "Imbabura",
+   "ele": 4557,
+   "wikidata": "Q1659771",
+   "volcano": true
   },
   {
    "lat": 2.96539,
@@ -834,16 +1084,40 @@
    "ele": 4465
   },
   {
+   "lat": 0.824477,
+   "lon": -77.967462,
+   "name": "Volcán Cerro Negro de Mayasquer",
+   "ele": 4462,
+   "wikidata": "Q2946776",
+   "volcano": true
+  },
+  {
    "lat": 6.680871,
    "lon": -72.309791,
    "name": "Sierra de Nievecitas",
    "ele": 4462
   },
   {
+   "lat": -0.21353,
+   "lon": -78.185424,
+   "name": "Chacana",
+   "ele": 4460,
+   "wikidata": "Q2648115",
+   "volcano": true
+  },
+  {
    "lat": -1.736153,
    "lon": -78.403036,
    "name": "Cerro Negro",
    "ele": 4458
+  },
+  {
+   "lat": -0.353515,
+   "lon": -78.621511,
+   "name": "Atacazo",
+   "ele": 4455,
+   "wikidata": "Q753140",
+   "volcano": true
   },
   {
    "lat": 6.626005,
@@ -1002,6 +1276,13 @@
    "lon": -78.809202,
    "name": "Cerro Cisarán",
    "ele": 4400
+  },
+  {
+   "lat": 2.294402,
+   "lon": -76.378771,
+   "name": "Cadena Volcánica de los Coconucos",
+   "ele": 4389,
+   "volcano": true
   },
   {
    "lat": -1.719755,
@@ -1248,6 +1529,23 @@
    "ele": 4282
   },
   {
+   "lat": 0.133467,
+   "lon": -78.293343,
+   "name": "Fuya Fuya",
+   "ele": 4279,
+   "wikidata": "Q23880080",
+   "volcano": true
+  },
+  {
+   "lat": 1.221527,
+   "lon": -77.358964,
+   "name": "Galeras",
+   "name_ru": "Галерас",
+   "ele": 4276,
+   "wikidata": "Q235062",
+   "volcano": true
+  },
+  {
    "lat": 0.485773,
    "lon": -78.346631,
    "name": "Cerro Chimborazo",
@@ -1258,6 +1556,13 @@
    "lon": -75.363078,
    "name": "P.",
    "ele": 4265
+  },
+  {
+   "lat": 0.120717,
+   "lon": -78.259597,
+   "name": "Cerro negro",
+   "ele": 4263,
+   "volcano": true
   },
   {
    "lat": -0.811072,
@@ -1459,6 +1764,14 @@
    "ele": 4201
   },
   {
+   "lat": -0.465637,
+   "lon": -78.480706,
+   "name": "Pasochoa",
+   "ele": 4200,
+   "wikidata": "Q2648452",
+   "volcano": true
+  },
+  {
    "lat": -2.154829,
    "lon": -78.517184,
    "name": "Cerro Yanatorre",
@@ -1597,6 +1910,14 @@
    "ele": 4169
   },
   {
+   "lat": 1.567538,
+   "lon": -76.856692,
+   "name": "Petacas",
+   "ele": 4169,
+   "wikidata": "Q1990152",
+   "volcano": true
+  },
+  {
    "lat": 6.193078,
    "lon": -72.878664,
    "name": "Pico La Laguna",
@@ -1664,10 +1985,25 @@
    "wikidata": "Q23884656"
   },
   {
+   "lat": -1.15503,
+   "lon": -78.669379,
+   "name": "Cerro Saguatoa",
+   "ele": 4154,
+   "volcano": true
+  },
+  {
    "lat": 4.824026,
    "lon": -75.267824,
    "name": "Cuchilla Siete Cabezas",
    "ele": 4152
+  },
+  {
+   "lat": 1.500086,
+   "lon": -76.935853,
+   "name": "Doña Juana",
+   "ele": 4150,
+   "wikidata": "Q26546",
+   "volcano": true
   },
   {
    "lat": 3.266094,
@@ -1783,6 +2119,13 @@
    "lon": -72.453697,
    "name": "Cerro",
    "ele": 4118
+  },
+  {
+   "lat": -1.150381,
+   "lon": -78.725003,
+   "name": "Gallourcu",
+   "ele": 4116,
+   "volcano": true
   },
   {
    "lat": 6.221604,
@@ -1952,6 +2295,22 @@
    "lon": -74.25753,
    "name": "P.",
    "ele": 4074
+  },
+  {
+   "lat": -0.079369,
+   "lon": -78.208894,
+   "name": "Pamba Marca",
+   "ele": 4071,
+   "wikidata": "Q7129059",
+   "volcano": true
+  },
+  {
+   "lat": 1.085538,
+   "lon": -77.718588,
+   "name": "Azufral",
+   "ele": 4070,
+   "wikidata": "Q794264",
+   "volcano": true
   },
   {
    "lat": -0.999432,
@@ -2231,6 +2590,13 @@
    "ele": 4014
   },
   {
+   "lat": 0.160862,
+   "lon": -78.147713,
+   "name": "Cusín",
+   "ele": 4012,
+   "volcano": true
+  },
+  {
    "lat": 3.325091,
    "lon": -75.922986,
    "name": "Cerro Boquerón",
@@ -2285,6 +2651,14 @@
    "ele": 4004
   },
   {
+   "lat": 5.089576,
+   "lon": -75.291225,
+   "name": "Cerro Bravo",
+   "ele": 4000,
+   "wikidata": "Q590920",
+   "volcano": true
+  },
+  {
    "lat": 4.827808,
    "lon": -75.41652,
    "name": "Waldenberg",
@@ -2301,6 +2675,14 @@
    "lon": -75.942108,
    "name": "P.",
    "ele": 3995
+  },
+  {
+   "lat": -0.541317,
+   "lon": -77.627222,
+   "name": "Volcán Sumaco",
+   "ele": 3990,
+   "wikidata": "Q3125067",
+   "volcano": true
   },
   {
    "lat": 3.515957,
@@ -2470,6 +2852,14 @@
    "lon": -72.837362,
    "name": "Alto El Viejo",
    "ele": 3956
+  },
+  {
+   "lat": 0.551243,
+   "lon": -77.582359,
+   "name": "Soche",
+   "ele": 3955,
+   "wikidata": "Q974698",
+   "volcano": true
   },
   {
    "lat": 6.084578,
@@ -2660,6 +3050,14 @@
    "ele": 3912
   },
   {
+   "lat": -0.867198,
+   "lon": -78.915248,
+   "name": "Quilotoa",
+   "ele": 3909,
+   "wikidata": "Q1641276",
+   "volcano": true
+  },
+  {
    "lat": -2.486726,
    "lon": -78.656833,
    "name": "Quinualoma",
@@ -2720,6 +3118,13 @@
    "lon": -72.859784,
    "name": "Cuchilla El Guijarro",
    "ele": 3898
+  },
+  {
+   "lat": 7.322269,
+   "lon": -72.852484,
+   "name": "Volcán de Vetas",
+   "ele": 3896,
+   "volcano": true
   },
   {
    "lat": -2.303011,
@@ -2880,6 +3285,14 @@
    "ele": 3861
   },
   {
+   "lat": 5.205973,
+   "lon": -75.363246,
+   "name": "Romeral",
+   "ele": 3858,
+   "wikidata": "Q2491597",
+   "volcano": true
+  },
+  {
    "lat": 5.112896,
    "lon": -76.058352,
    "name": "Cerro el Churumbelo",
@@ -2938,6 +3351,13 @@
    "lon": -78.448537,
    "name": "Cerro San Borja",
    "ele": 3841
+  },
+  {
+   "lat": 0.230256,
+   "lon": -78.134751,
+   "name": "Cerro Cubilche",
+   "ele": 3841,
+   "volcano": true
   },
   {
    "lat": 3.589059,
@@ -3314,6 +3734,13 @@
    "ele": 3750
   },
   {
+   "lat": 2.565219,
+   "lon": -76.227864,
+   "name": "Farrallones El Quiosco",
+   "ele": 3750,
+   "volcano": true
+  },
+  {
    "lat": 10.639168,
    "lon": -73.654019,
    "name": "Alto Puntagaca",
@@ -3682,6 +4109,13 @@
    "ele": 3670
   },
   {
+   "lat": 2.634841,
+   "lon": -76.226658,
+   "name": "La Campana",
+   "ele": 3670,
+   "volcano": true
+  },
+  {
    "lat": 4.558519,
    "lon": -74.0289,
    "name": "Alto Los Tunjos",
@@ -3698,6 +4132,13 @@
    "lon": -74.523691,
    "name": "Pico sin nombre",
    "ele": 3665
+  },
+  {
+   "lat": 1.209955,
+   "lon": -77.132384,
+   "name": "Volcán Bordoncillo",
+   "ele": 3665,
+   "volcano": true
   },
   {
    "lat": 5.377221,
@@ -3758,6 +4199,20 @@
    "lon": -72.85179,
    "name": "Loma El Chalico",
    "ele": 3650
+  },
+  {
+   "lat": 2.681119,
+   "lon": -76.266812,
+   "name": "Cerro Peñas Blancas",
+   "ele": 3650,
+   "volcano": true
+  },
+  {
+   "lat": 2.578941,
+   "lon": -76.257048,
+   "name": "La Marquesa",
+   "ele": 3650,
+   "volcano": true
   },
   {
    "lat": 6.447746,
@@ -4031,10 +4486,24 @@
    "ele": 3590
   },
   {
+   "lat": 0.932232,
+   "lon": -77.074823,
+   "name": "Cerro Patascoy",
+   "ele": 3590,
+   "volcano": true
+  },
+  {
    "lat": 4.470901,
    "lon": -73.600777,
    "name": "P.Timaná",
    "ele": 3590
+  },
+  {
+   "lat": -0.210466,
+   "lon": -78.285785,
+   "name": "Cotohurco",
+   "ele": 3587,
+   "volcano": true
   },
   {
    "lat": 4.674919,
@@ -4097,6 +4566,13 @@
    "ele": 3570
   },
   {
+   "lat": 2.548487,
+   "lon": -76.281344,
+   "name": "Cerro Pusna",
+   "ele": 3570,
+   "volcano": true
+  },
+  {
    "lat": 5.066108,
    "lon": -75.397668,
    "name": "Alto La Elvira",
@@ -4144,6 +4620,15 @@
    "lon": -79.107004,
    "name": "Cerros Picachos del Cóndor",
    "ele": 3563
+  },
+  {
+   "lat": -0.080713,
+   "lon": -77.658731,
+   "name": "Reventador",
+   "name_ru": "Ревентадор",
+   "ele": 3562,
+   "wikidata": "Q248770",
+   "volcano": true
   },
   {
    "lat": 5.462017,
@@ -4328,6 +4813,13 @@
    "ele": 3501
   },
   {
+   "lat": -0.965429,
+   "lon": -78.561931,
+   "name": "Putzalahua",
+   "ele": 3500,
+   "volcano": true
+  },
+  {
    "lat": 3.404699,
    "lon": -76.688907,
    "name": "Alto del Buey",
@@ -4398,6 +4890,13 @@
    "lon": -73.625742,
    "name": "P.",
    "ele": 3483
+  },
+  {
+   "lat": -0.356914,
+   "lon": -77.636172,
+   "name": "Pan de Azúcar",
+   "ele": 3482,
+   "volcano": true
   },
   {
    "lat": 5.051945,
@@ -4811,6 +5310,13 @@
    "ele": 3340
   },
   {
+   "lat": -1.785942,
+   "lon": -78.614436,
+   "name": "Tulabug",
+   "ele": 3336,
+   "volcano": true
+  },
+  {
    "lat": 10.813058,
    "lon": -73.871061,
    "name": "Cuchilla Cesaguaríngaca",
@@ -4976,6 +5482,13 @@
    "ele": 3270
   },
   {
+   "lat": 1.136606,
+   "lon": -77.109922,
+   "name": "Volcán Campanero",
+   "ele": 3270,
+   "volcano": true
+  },
+  {
    "lat": 4.49834,
    "lon": -73.690674,
    "name": "Cuchilla San Jose",
@@ -5016,6 +5529,13 @@
    "lon": -71.569769,
    "name": "Cerro Molino",
    "ele": 3250
+  },
+  {
+   "lat": -0.308075,
+   "lon": -78.36377,
+   "name": "Chichoca",
+   "ele": 3246,
+   "volcano": true
   },
   {
    "lat": 4.867589,
@@ -5154,6 +5674,13 @@
    "lon": -72.782661,
    "name": "Cuchilla Minas",
    "ele": 3214
+  },
+  {
+   "lat": 1.276592,
+   "lon": -77.222381,
+   "name": "Volcán Morasurco",
+   "ele": 3213,
+   "volcano": true
   },
   {
    "lat": 5.311956,
@@ -5295,6 +5822,14 @@
    "lon": -76.751976,
    "name": "Derrumbo Morado",
    "ele": 3170
+  },
+  {
+   "lat": -0.262805,
+   "lon": -78.419393,
+   "name": "Ilaló",
+   "ele": 3169,
+   "wikidata": "Q5996962",
+   "volcano": true
   },
   {
    "lat": 5.0,
@@ -5503,6 +6038,13 @@
    "ele": 3113
   },
   {
+   "lat": -1.791059,
+   "lon": -78.598638,
+   "name": "Bellavista",
+   "ele": 3113,
+   "volcano": true
+  },
+  {
    "lat": 5.388612,
    "lon": -75.382223,
    "name": "Cuchilla El Retiro",
@@ -5525,6 +6067,13 @@
    "lon": -72.507187,
    "name": "Alto El Oso",
    "ele": 3105
+  },
+  {
+   "lat": 1.0852,
+   "lon": -77.102722,
+   "name": "Volcan Mujundinoy",
+   "ele": 3104,
+   "volcano": true
   },
   {
    "lat": 6.333516,
@@ -5717,6 +6266,13 @@
    "lon": -72.607696,
    "name": "Alto de los Rayos",
    "ele": 3048
+  },
+  {
+   "lat": 7.263287,
+   "lon": -72.706034,
+   "name": "Azul",
+   "ele": 3047,
+   "volcano": true
   },
   {
    "lat": 5.106348,
@@ -5967,6 +6523,13 @@
    "lon": -75.772838,
    "name": "Cerro",
    "ele": 2989
+  },
+  {
+   "lat": 0.046782,
+   "lon": -78.49623,
+   "name": "Cerro Pondoña",
+   "ele": 2984,
+   "volcano": true
   },
   {
    "lat": 5.658622,
@@ -6662,6 +7225,14 @@
    "name": "El Nudillo",
    "ele": 2764,
    "wikidata": "Q23882586"
+  },
+  {
+   "lat": 4.486944,
+   "lon": -75.388889,
+   "name": "Volcán Cerro Machín",
+   "ele": 2764,
+   "wikidata": "Q546823",
+   "volcano": true
   },
   {
    "lat": -0.049269,
@@ -8119,6 +8690,13 @@
    "lon": -70.717235,
    "name": "Cerro Escuque",
    "ele": 2328
+  },
+  {
+   "lat": 1.124141,
+   "lon": -77.013907,
+   "name": "Volcán Sibundoy",
+   "ele": 2326,
+   "volcano": true
   },
   {
    "lat": 6.713811,
@@ -10292,6 +10870,14 @@
    "ele": 1700
   },
   {
+   "lat": 5.514597,
+   "lon": -75.047546,
+   "name": "El Escondido",
+   "ele": 1700,
+   "wikidata": "Q19360318",
+   "volcano": true
+  },
+  {
    "lat": 5.274028,
    "lon": -72.678158,
    "name": "San Benito",
@@ -12149,6 +12735,13 @@
    "ele": 1200
   },
   {
+   "lat": 4.408021,
+   "lon": -75.19571,
+   "name": "Volcán Guacharacos Domo 1",
+   "ele": 1190,
+   "volcano": true
+  },
+  {
    "lat": 6.063009,
    "lon": -66.170483,
    "name": "Cerro Chivapure",
@@ -12173,6 +12766,14 @@
    "ele": 1187
   },
   {
+   "lat": 8.604498,
+   "lon": -80.127604,
+   "name": "El Valle",
+   "ele": 1185,
+   "wikidata": "Q1324715",
+   "volcano": true
+  },
+  {
    "lat": 5.659167,
    "lon": -74.944722,
    "name": "Morro San Diego",
@@ -12183,6 +12784,13 @@
    "lon": -76.25,
    "name": "Cerro Tareno",
    "ele": 1183
+  },
+  {
+   "lat": 4.412621,
+   "lon": -75.198585,
+   "name": "Volcán Guacharacos Domo 3",
+   "ele": 1183,
+   "volcano": true
   },
   {
    "lat": 5.983123,
@@ -12292,6 +12900,13 @@
    "lon": -75.57742,
    "name": "Alto de Daza",
    "ele": 1163
+  },
+  {
+   "lat": 4.407679,
+   "lon": -75.192212,
+   "name": "Volcán Guacharacos Domo 2",
+   "ele": 1160,
+   "volcano": true
   },
   {
    "lat": 3.40469,
@@ -13100,6 +13715,13 @@
    "lon": -72.033333,
    "name": "Cerro Zamaricote",
    "ele": 1024
+  },
+  {
+   "lat": 5.512668,
+   "lon": -74.422747,
+   "name": "Amarillo",
+   "ele": 1024,
+   "volcano": true
   },
   {
    "lat": 4.045964,
@@ -13954,6 +14576,13 @@
    "lon": -67.925591,
    "name": "Cerro El Pozote",
    "ele": 854
+  },
+  {
+   "lat": 5.650299,
+   "lon": -74.959757,
+   "name": "Volcán San Diego",
+   "ele": 850,
+   "volcano": true
   },
   {
    "lat": 6.275735,
@@ -14949,6 +15578,14 @@
    "lon": -79.192936,
    "name": "Bombolí",
    "ele": 680
+  },
+  {
+   "lat": 8.457998,
+   "lon": -80.852167,
+   "name": "La Yeguada",
+   "ele": 680,
+   "wikidata": "Q1799249",
+   "volcano": true
   },
   {
    "lat": 6.161334,
@@ -18023,6 +18660,13 @@
    "wikidata": "Q31588468"
   },
   {
+   "lat": 8.182398,
+   "lon": -76.422458,
+   "name": "Volcán De Lodo Cacaual",
+   "ele": 357,
+   "volcano": true
+  },
+  {
    "lat": 11.171704,
    "lon": -72.423999,
    "name": "Cuchilla Ghononimana",
@@ -18908,6 +19552,13 @@
    "lon": -73.620374,
    "name": "Alto El Viento",
    "ele": 304
+  },
+  {
+   "lat": 8.340818,
+   "lon": -76.457323,
+   "name": "Volcán de lodo Los Aburridos",
+   "ele": 304,
+   "volcano": true
   },
   {
    "lat": 7.208368,
@@ -21201,6 +21852,13 @@
    "ele": 176
   },
   {
+   "lat": 8.550309,
+   "lon": -76.164178,
+   "name": "Volcán De Lodo San José Del Caoba",
+   "ele": 176,
+   "volcano": true
+  },
+  {
    "lat": 8.758084,
    "lon": -66.973836,
    "name": "Loma Santiago",
@@ -21394,6 +22052,13 @@
    "name": "Cerro Curumoto",
    "ele": 163,
    "wikidata": "Q31602911"
+  },
+  {
+   "lat": 8.50094,
+   "lon": -76.612128,
+   "name": "Volcán De Lodo",
+   "ele": 162,
+   "volcano": true
   },
   {
    "lat": 8.747406,
@@ -21595,6 +22260,13 @@
    "ele": 152
   },
   {
+   "lat": 10.331193,
+   "lon": -75.358253,
+   "name": "Volcanes de Turbaco",
+   "ele": 152,
+   "volcano": true
+  },
+  {
    "lat": 7.248952,
    "lon": -66.090188,
    "name": "Cerro Pozo Blanco",
@@ -21707,6 +22379,13 @@
    "lon": -68.410792,
    "name": "Cerro Tirado",
    "ele": 141
+  },
+  {
+   "lat": 8.415708,
+   "lon": -76.667693,
+   "name": "Volcán De Lodo Cenizosa",
+   "ele": 141,
+   "volcano": true
   },
   {
    "lat": 6.171318,
@@ -22225,6 +22904,13 @@
    "lon": -71.6175,
    "name": "Morro de Kepsi",
    "ele": 106
+  },
+  {
+   "lat": 9.014549,
+   "lon": -76.247718,
+   "name": "Volcán De Lodo Puerto Escondido",
+   "ele": 105,
+   "volcano": true
   },
   {
    "lat": 8.71146,
@@ -22782,6 +23468,13 @@
    "ele": 40
   },
   {
+   "lat": 8.43495,
+   "lon": -76.765835,
+   "name": "Volcán De Lodo Virgen Del Cobre",
+   "ele": 40,
+   "volcano": true
+  },
+  {
    "lat": 10.510789,
    "lon": -75.500138,
    "name": "Morro Grande",
@@ -22822,6 +23515,14 @@
    "lon": -75.861181,
    "name": "Loma Del Totúmo",
    "ele": 16
+  },
+  {
+   "lat": 10.744508,
+   "lon": -75.241255,
+   "name": "El Totumo",
+   "ele": 15,
+   "wikidata": "Q2360498",
+   "volcano": true
   },
   {
    "lat": 7.995376,
@@ -23724,6 +24425,13 @@
    "lat": -0.733333,
    "lon": -78.216667,
    "name": "Predicador"
+  },
+  {
+   "lat": -0.58595,
+   "lon": -78.507983,
+   "name": "Rumiñahui",
+   "wikidata": "Q1759338",
+   "volcano": true
   },
   {
    "lat": -4.2,
@@ -37668,6 +38376,12 @@
    "name": "Cerro Pelado"
   },
   {
+   "lat": 8.295807,
+   "lon": -76.19421,
+   "name": "CENIZA",
+   "volcano": true
+  },
+  {
    "lat": 7.452201,
    "lon": -75.923565,
    "name": "Cerro Chinuro"
@@ -45233,6 +45947,12 @@
    "name": "Loma De Chamuscados"
   },
   {
+   "lat": 8.862084,
+   "lon": -76.418114,
+   "name": "Volcán de Lodo",
+   "volcano": true
+  },
+  {
    "lat": 4.541013,
    "lon": -74.307371,
    "name": "Alto de las Rosas"
@@ -47124,6 +47844,12 @@
    "lat": -2.345774,
    "lon": -78.211461,
    "name": "Cerro de los Machos"
+  },
+  {
+   "lat": 9.362924,
+   "lon": -75.779549,
+   "name": "Volcán de Lodo",
+   "volcano": true
   },
   {
    "lat": -2.929432,
@@ -73392,6 +74118,18 @@
    "name": "Guañarita"
   },
   {
+   "lat": 9.364456,
+   "lon": -75.78004,
+   "name": "Volcán De Lodo El Tesoro",
+   "volcano": true
+  },
+  {
+   "lat": 8.563202,
+   "lon": -76.480818,
+   "name": "Volcán De Lodo Santa Fe De Las Platas",
+   "volcano": true
+  },
+  {
    "lat": -4.574329,
    "lon": -79.054484,
    "name": "Cresta de Gallo"
@@ -73555,6 +74293,12 @@
    "lat": 5.751273,
    "lon": -67.300015,
    "name": "Cerro El Espejo"
+  },
+  {
+   "lat": 9.363922,
+   "lon": -75.779443,
+   "name": "Volcán de Lodo",
+   "volcano": true
   },
   {
    "lat": 10.877464,
@@ -74120,6 +74864,18 @@
    "lat": 8.745991,
    "lon": -76.162123,
    "name": "Loma El Cielo"
+  },
+  {
+   "lat": 8.747721,
+   "lon": -76.191824,
+   "name": "Volcán El Palmar",
+   "volcano": true
+  },
+  {
+   "lat": 8.747327,
+   "lon": -76.207902,
+   "name": "Volcán San Diego",
+   "volcano": true
   },
   {
    "lat": 5.870114,

@@ -1,6 +1,6 @@
 {
  "region": "new-guinea",
- "generated": "2026-08-12T10:55:01+00:00",
+ "generated": "2026-08-13T09:16:24+00:00",
  "peaks": [
   {
    "lat": -4.078605,
@@ -98,6 +98,14 @@
    "lon": 139.918349,
    "name": "Saw Mountain",
    "ele": 4380
+  },
+  {
+   "lat": -6.043176,
+   "lon": 143.886151,
+   "name": "Mount Giluwe",
+   "ele": 4368,
+   "wikidata": "Q1813475",
+   "volcano": true
   },
   {
    "lat": -4.006055,
@@ -360,6 +368,13 @@
    "lon": 136.422708,
    "name": "Undundi-Wandandi",
    "ele": 3640
+  },
+  {
+   "lat": -5.723054,
+   "lon": 142.494698,
+   "name": "Mount Karoma",
+   "ele": 3623,
+   "volcano": true
   },
   {
    "lat": -6.404992,
@@ -768,6 +783,14 @@
    "ele": 2394
   },
   {
+   "lat": -5.050959,
+   "lon": 151.331344,
+   "name": "Ulawun",
+   "ele": 2334,
+   "wikidata": "Q74158",
+   "volcano": true
+  },
+  {
    "lat": -6.324699,
    "lon": 146.677489,
    "name": "Nambuk Mountain",
@@ -929,6 +952,15 @@
    "wikidata": "Q31750190"
   },
   {
+   "lat": -9.199976,
+   "lon": 149.071654,
+   "name": "Keraroa",
+   "name_en": "Mount Victory",
+   "ele": 1850,
+   "wikidata": "Q8536078",
+   "volcano": true
+  },
+  {
    "lat": -4.677723,
    "lon": 145.97768,
    "name": "Mount Kunuqui",
@@ -947,6 +979,13 @@
    "name": "Mount Clarence",
    "ele": 1832,
    "wikidata": "Q31749556"
+  },
+  {
+   "lat": -4.07868,
+   "lon": 145.038092,
+   "name": "Manam Volcano",
+   "ele": 1807,
+   "volcano": true
   },
   {
    "lat": -4.04133,
@@ -974,6 +1013,14 @@
    "name": "Mount MacGregor",
    "ele": 1707,
    "wikidata": "Q31747700"
+  },
+  {
+   "lat": -8.932147,
+   "lon": 148.161326,
+   "name": "Mount Lamington",
+   "ele": 1680,
+   "wikidata": "Q1367889",
+   "volcano": true
   },
   {
    "lat": -3.915227,
@@ -1128,6 +1175,13 @@
    "wikidata": "Q31450819"
   },
   {
+   "lat": -4.649668,
+   "lon": 145.97222,
+   "name": "Uluman crater peak",
+   "ele": 1265,
+   "volcano": true
+  },
+  {
    "lat": -3.409682,
    "lon": 142.856705,
    "name": "Mount Daum",
@@ -1237,6 +1291,13 @@
    "wikidata": "Q31747642"
   },
   {
+   "lat": -5.40556,
+   "lon": 148.076471,
+   "name": "Mount Sakar",
+   "ele": 992,
+   "volcano": true
+  },
+  {
    "lat": -0.041871,
    "lon": 130.85195,
    "name": "Samlor",
@@ -1331,6 +1392,15 @@
    "ele": 662
   },
   {
+   "lat": -6.312334,
+   "lon": 130.017029,
+   "name": "Wuarlapna",
+   "name_en": "Mount Wuarlapna",
+   "ele": 641,
+   "wikidata": "Q1083948",
+   "volcano": true
+  },
+  {
    "lat": -4.46123,
    "lon": 142.506254,
    "name": "Pyramid Mountain",
@@ -1353,6 +1423,14 @@
    "lon": 132.528868,
    "name": "Gunung Kabek",
    "ele": 573
+  },
+  {
+   "lat": -5.444286,
+   "lon": 150.027807,
+   "name": "Gabuna Group",
+   "ele": 564,
+   "wikidata": "Q3117425",
+   "volcano": true
   },
   {
    "lat": -10.275767,
@@ -1438,6 +1516,13 @@
    "ele": 406
   },
   {
+   "lat": -3.507662,
+   "lon": 144.609407,
+   "name": "Blup Blup",
+   "ele": 402,
+   "volcano": true
+  },
+  {
    "lat": -7.320733,
    "lon": 143.280022,
    "name": "Mount Biwai",
@@ -1476,6 +1561,13 @@
    "wikidata": "Q21917018"
   },
   {
+   "lat": -3.607189,
+   "lon": 144.588174,
+   "name": "Kadovar",
+   "ele": 365,
+   "volcano": true
+  },
+  {
    "lat": -6.61891,
    "lon": 146.760237,
    "name": "Mount Ngaroneno",
@@ -1498,6 +1590,14 @@
    "lon": 150.694523,
    "name": "Mount Haines",
    "ele": 288
+  },
+  {
+   "lat": -5.545669,
+   "lon": 130.305964,
+   "name": "Gunung Manuk",
+   "name_en": "Mount Manuk",
+   "ele": 282,
+   "volcano": true
   },
   {
    "lat": -10.594266,
@@ -1665,6 +1765,12 @@
    "lat": -6.827758,
    "lon": 143.928981,
    "name": "Mount Agu"
+  },
+  {
+   "lat": -5.574015,
+   "lon": 150.515585,
+   "name": "Mount Pago",
+   "volcano": true
   },
   {
    "lat": -2.316667,
@@ -2385,9 +2491,21 @@
    "name": "Urirai"
   },
   {
+   "lat": -5.53,
+   "lon": 130.292,
+   "name": "Manuk",
+   "volcano": true
+  },
+  {
    "lat": -5.789156,
    "lon": 144.292017,
    "name": "Mt Ambra"
+  },
+  {
+   "lat": -5.198327,
+   "lon": 151.239878,
+   "name": "Mount Bamus",
+   "volcano": true
   },
   {
    "lat": -4.925516,
@@ -2403,6 +2521,18 @@
    "lat": -4.476267,
    "lon": 139.454572,
    "name": "Gunung Erim"
+  },
+  {
+   "lat": -9.610693,
+   "lon": 150.887279,
+   "name": "Lamonai Crater",
+   "volcano": true
+  },
+  {
+   "lat": -9.695499,
+   "lon": 150.859253,
+   "name": "Deidei",
+   "volcano": true
   },
   {
    "lat": -4.513089,
@@ -2428,6 +2558,12 @@
    "lat": -2.155805,
    "lon": 146.664873,
    "name": "Mount Hahie"
+  },
+  {
+   "lat": -5.537365,
+   "lon": 148.392823,
+   "name": "Mount Talawe",
+   "volcano": true
   },
   {
    "lat": -2.161699,

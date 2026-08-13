@@ -1,13 +1,38 @@
 {
  "region": "hawaii",
- "generated": "2026-08-12T10:54:56+00:00",
+ "generated": "2026-08-13T09:16:20+00:00",
  "peaks": [
+  {
+   "lat": 19.820667,
+   "lon": -155.468071,
+   "name": "Mauna Kea",
+   "name_ru": "Мауна-Кеа",
+   "ele": 4205,
+   "wikidata": "Q131230",
+   "volcano": true
+  },
   {
    "lat": 19.82508,
    "lon": -155.468805,
    "name": "Puʻukea",
    "ele": 4173,
    "wikidata": "Q49065236"
+  },
+  {
+   "lat": 19.475528,
+   "lon": -155.605703,
+   "name": "Mauna Loa",
+   "ele": 4169,
+   "wikidata": "Q159762",
+   "volcano": true
+  },
+  {
+   "lat": 19.471735,
+   "lon": -155.592374,
+   "name": "Mauna Loa",
+   "ele": 4169,
+   "wikidata": "Q159762",
+   "volcano": true
   },
   {
    "lat": 19.826038,
@@ -366,6 +391,14 @@
    "wikidata": "Q49065559"
   },
   {
+   "lat": 19.691074,
+   "lon": -155.866647,
+   "name": "Hualālai",
+   "ele": 2523,
+   "wikidata": "Q176762",
+   "volcano": true
+  },
+  {
    "lat": 19.689089,
    "lon": -155.864373,
    "name": "Hualālai",
@@ -481,6 +514,13 @@
    "lon": -155.428581,
    "name": "Loaloa",
    "ele": 2331
+  },
+  {
+   "lat": 19.904418,
+   "lon": -155.490667,
+   "name": "Kaluamakani",
+   "ele": 2310,
+   "volcano": true
   },
   {
    "lat": 19.9029,
@@ -929,6 +969,14 @@
    "wikidata": "Q29045156"
   },
   {
+   "lat": 20.074989,
+   "lon": -155.718691,
+   "name": "Kohala",
+   "ele": 1670,
+   "wikidata": "Q516606",
+   "volcano": true
+  },
+  {
    "lat": 20.086126,
    "lon": -155.712277,
    "name": "Opaeloa",
@@ -1266,6 +1314,14 @@
    "wikidata": "Q49008539"
   },
   {
+   "lat": 19.413865,
+   "lon": -155.275811,
+   "name": "Kīlauea",
+   "ele": 1222,
+   "wikidata": "Q188698",
+   "volcano": true
+  },
+  {
    "lat": 20.050909,
    "lon": -155.635679,
    "name": "Kaʻala",
@@ -1435,6 +1491,14 @@
    "name": "Puʻuʻulaʻula",
    "ele": 1054,
    "wikidata": "Q49065710"
+  },
+  {
+   "lat": 19.367326,
+   "lon": -155.201572,
+   "name": "Mauna Ulu",
+   "ele": 1053,
+   "wikidata": "Q3300188",
+   "volcano": true
   },
   {
    "lat": 20.035528,
@@ -1840,6 +1904,15 @@
    "wikidata": "Q49064692"
   },
   {
+   "lat": 19.38891,
+   "lon": -155.106403,
+   "name": "Puʻu ʻŌʻō",
+   "name_en": "Pu'u 'O'o",
+   "ele": 724,
+   "wikidata": "Q1372968",
+   "volcano": true
+  },
+  {
    "lat": 19.752503,
    "lon": -155.9638,
    "name": "Kileo",
@@ -2161,6 +2234,15 @@
    "name": "Pauoheohe",
    "ele": 443,
    "wikidata": "Q49060250"
+  },
+  {
+   "lat": 19.901782,
+   "lon": -155.777324,
+   "name": "Puʻuhānaʻi",
+   "name_en": "Puu Hinai",
+   "ele": 436,
+   "wikidata": "Q49064643",
+   "volcano": true
   },
   {
    "lat": 19.021305,
@@ -2692,6 +2774,43 @@
    "ele": 1
   },
   {
+   "lat": 19.766665,
+   "lon": -155.634182,
+   "name": "Puʻukapele Crater",
+   "name_en": "Puukapele Crater",
+   "volcano": true
+  },
+  {
+   "lat": 19.374032,
+   "lon": -155.143342,
+   "name": "Nāpau Crater",
+   "volcano": true
+  },
+  {
+   "lat": 19.364607,
+   "lon": -155.169853,
+   "name": "Makaopuhi Crater",
+   "volcano": true
+  },
+  {
+   "lat": 19.366449,
+   "lon": -155.145156,
+   "name": "Puaʻiālua Crater",
+   "volcano": true
+  },
+  {
+   "lat": 19.374394,
+   "lon": -155.230047,
+   "name": "Hiʻiaka Crater",
+   "volcano": true
+  },
+  {
+   "lat": 19.461634,
+   "lon": -154.90887,
+   "name": "Ahuʻailāʻau",
+   "volcano": true
+  },
+  {
    "lat": 19.402017,
    "lon": -155.068084,
    "name": "Kalalua"
@@ -2716,9 +2835,49 @@
    "name_en": "Puukolei"
   },
   {
+   "lat": 19.41374,
+   "lon": -155.246622,
+   "name": "Kīlauea Iki",
+   "volcano": true
+  },
+  {
+   "lat": 19.76009,
+   "lon": -155.623316,
+   "name": "Puʻukea Crater",
+   "name_en": "Puukea Crater",
+   "volcano": true
+  },
+  {
    "lat": 19.72716,
    "lon": -155.449462,
    "name": "Hoʻokomo"
+  },
+  {
+   "lat": 19.400084,
+   "lon": -155.264003,
+   "name": "Keanakākoʻi Crater",
+   "volcano": true
+  },
+  {
+   "lat": 19.398531,
+   "lon": -155.253773,
+   "name": "Luamanu Crater",
+   "volcano": true
+  },
+  {
+   "lat": 19.392818,
+   "lon": -155.249004,
+   "name": "Puhimau Crater",
+   "volcano": true
+  },
+  {
+   "lat": 18.92,
+   "lon": -155.27,
+   "name": "Kama‘ehuakanaloa Seamount",
+   "name_en": "Kamaehuakanaloa Seamount",
+   "ele": -975,
+   "wikidata": "Q1133111",
+   "volcano": true
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "region": "rockies-south",
- "generated": "2026-08-12T10:55:02+00:00",
+ "generated": "2026-08-13T09:16:26+00:00",
  "peaks": [
   {
    "lat": 39.117752,
@@ -4890,6 +4890,14 @@
    "name": "Mount Mellenthin",
    "ele": 3852,
    "wikidata": "Q49053615"
+  },
+  {
+   "lat": 35.346381,
+   "lon": -111.677963,
+   "name": "Humphreys Peak",
+   "ele": 3851,
+   "wikidata": "Q1239004",
+   "volcano": true
   },
   {
    "lat": 36.534129,
@@ -10970,6 +10978,14 @@
    "wikidata": "Q5286497"
   },
   {
+   "lat": 35.238657,
+   "lon": -107.608402,
+   "name": "Mount Taylor",
+   "ele": 3449,
+   "wikidata": "Q497912",
+   "volcano": true
+  },
+  {
    "lat": 39.032756,
    "lon": -107.189148,
    "name": "Marble Point",
@@ -15800,6 +15816,14 @@
    "lon": -105.564166,
    "name": "Michigan Hill",
    "ele": 3175
+  },
+  {
+   "lat": 35.408075,
+   "lon": -111.850929,
+   "name": "Kendrick Peak",
+   "ele": 3175,
+   "wikidata": "Q6389037",
+   "volcano": true
   },
   {
    "lat": 36.019742,
@@ -23035,6 +23059,13 @@
    "ele": 2834
   },
   {
+   "lat": 35.241096,
+   "lon": -111.597365,
+   "name": "Elden Mountain",
+   "ele": 2834,
+   "volcano": true
+  },
+  {
    "lat": 42.493299,
    "lon": -105.844448,
    "name": "Roaring Mountain",
@@ -23167,6 +23198,14 @@
    "lon": -105.408883,
    "name": "Panorama Peak",
    "ele": 2829
+  },
+  {
+   "lat": 35.36304,
+   "lon": -111.614637,
+   "name": "Sugarloaf Peak",
+   "ele": 2829,
+   "wikidata": "Q25240816",
+   "volcano": true
   },
   {
    "lat": 40.924411,
@@ -24844,6 +24883,13 @@
    "wikidata": "Q49067818"
   },
   {
+   "lat": 35.389452,
+   "lon": -111.704327,
+   "name": "White Horse Hills",
+   "ele": 2760,
+   "volcano": true
+  },
+  {
    "lat": 41.251906,
    "lon": -107.182833,
    "name": "Dexter Peak",
@@ -25075,6 +25121,13 @@
    "name": "Kid Mountain",
    "ele": 2749,
    "wikidata": "Q49041482"
+  },
+  {
+   "lat": 35.269455,
+   "lon": -111.597661,
+   "name": "Little Elden Mountain",
+   "ele": 2749,
+   "volcano": true
   },
   {
    "lat": 41.23299,
@@ -25721,6 +25774,14 @@
    "ele": 2718
   },
   {
+   "lat": 35.401534,
+   "lon": -111.526364,
+   "name": "O'Leary Peak",
+   "ele": 2718,
+   "wikidata": "Q7071858",
+   "volcano": true
+  },
+  {
    "lat": 40.937833,
    "lon": -106.306852,
    "name": "Camp Benchmark",
@@ -25970,6 +26031,13 @@
    "lon": -105.501385,
    "name": "Gregory Hill",
    "ele": 2707
+  },
+  {
+   "lat": 35.437709,
+   "lon": -111.733681,
+   "name": "Saddle Mountain",
+   "ele": 2707,
+   "volcano": true
   },
   {
    "lat": 38.388224,
@@ -26265,6 +26333,13 @@
    "lon": -105.501107,
    "name": "Delilah Peak",
    "ele": 2695
+  },
+  {
+   "lat": 35.266121,
+   "lon": -111.637106,
+   "name": "Dry Lake Hills",
+   "ele": 2695,
+   "volcano": true
   },
   {
    "lat": 35.273259,
@@ -28315,6 +28390,14 @@
    "ele": 2613
   },
   {
+   "lat": 35.271479,
+   "lon": -111.785665,
+   "name": "Wing Mountain",
+   "ele": 2613,
+   "wikidata": "Q43400726",
+   "volcano": true
+  },
+  {
    "lat": 35.267813,
    "lon": -107.72339,
    "name": "Cerro Colorado",
@@ -28773,6 +28856,13 @@
    "ele": 2594
   },
   {
+   "lat": 35.396157,
+   "lon": -111.734401,
+   "name": "Walker Lake Peak",
+   "ele": 2594,
+   "volcano": true
+  },
+  {
    "lat": 44.313265,
    "lon": -110.847435,
    "name": "Douglas Knob",
@@ -28950,6 +29040,13 @@
    "lon": -105.789174,
    "name": "Rattlesnake Mountain",
    "ele": 2588
+  },
+  {
+   "lat": 35.395007,
+   "lon": -111.875995,
+   "name": "Newman Hill",
+   "ele": 2588,
+   "volcano": true
   },
   {
    "lat": 44.423005,
@@ -29591,6 +29688,13 @@
    "lon": -105.453608,
    "name": "Bald Mountain",
    "ele": 2562
+  },
+  {
+   "lat": 35.394174,
+   "lon": -111.519601,
+   "name": "Darton Dome",
+   "ele": 2562,
+   "volcano": true
   },
   {
    "lat": 43.609095,
@@ -30306,6 +30410,13 @@
    "ele": 2530
   },
   {
+   "lat": 35.235065,
+   "lon": -111.734557,
+   "name": "A 1 Mountain",
+   "ele": 2530,
+   "volcano": true
+  },
+  {
    "lat": 40.73023,
    "lon": -105.508425,
    "name": "Rainbow Rock",
@@ -30626,6 +30737,13 @@
    "lon": -106.948937,
    "name": "Devils Grave Mesa",
    "ele": 2520
+  },
+  {
+   "lat": 35.426951,
+   "lon": -111.793771,
+   "name": "Horseshoe Hill",
+   "ele": 2520,
+   "volcano": true
   },
   {
    "lat": 41.200154,
@@ -31576,6 +31694,13 @@
    "lon": -105.441112,
    "name": "Silver Cliff Plateau",
    "ele": 2489
+  },
+  {
+   "lat": 35.437229,
+   "lon": -111.77516,
+   "name": "Cabin Flat Hill",
+   "ele": 2489,
+   "volcano": true
   },
   {
    "lat": 42.101636,
@@ -33046,6 +33171,13 @@
    "wikidata": "Q49015258"
   },
   {
+   "lat": 35.342944,
+   "lon": -111.448106,
+   "name": "Double Crater",
+   "ele": 2440,
+   "volcano": true
+  },
+  {
    "lat": 39.327587,
    "lon": -105.29216,
    "name": "8005",
@@ -33391,6 +33523,13 @@
    "lon": -105.305271,
    "name": "Dawson Mountain",
    "ele": 2428
+  },
+  {
+   "lat": 35.523167,
+   "lon": -111.875171,
+   "name": "Red Mountain",
+   "ele": 2428,
+   "volcano": true
   },
   {
    "lat": 41.554962,
@@ -34340,6 +34479,13 @@
    "ele": 2395
   },
   {
+   "lat": 35.479546,
+   "lon": -111.6732,
+   "name": "Chop",
+   "ele": 2395,
+   "volcano": true
+  },
+  {
    "lat": 42.251635,
    "lon": -105.570272,
    "name": "Poor Mans Peak",
@@ -34653,6 +34799,13 @@
    "lon": -106.255865,
    "name": "Peñascito",
    "ele": 2381
+  },
+  {
+   "lat": 35.301676,
+   "lon": -111.899052,
+   "name": "Klostermeyer Hill",
+   "ele": 2381,
+   "volcano": true
   },
   {
    "lat": 42.414674,
@@ -35481,6 +35634,13 @@
    "ele": 2350
   },
   {
+   "lat": 35.36414,
+   "lon": -111.502899,
+   "name": "Sunset Crater",
+   "ele": 2350,
+   "volcano": true
+  },
+  {
    "lat": 42.076913,
    "lon": -105.511936,
    "name": "Brandel Mountain",
@@ -35724,6 +35884,13 @@
    "lon": -105.442772,
    "name": "Little Crampton Mountain",
    "ele": 2344
+  },
+  {
+   "lat": 35.28112,
+   "lon": -111.847386,
+   "name": "Walker Hill",
+   "ele": 2344,
+   "volcano": true
   },
   {
    "lat": 35.438696,
@@ -36424,6 +36591,13 @@
    "ele": 2321
   },
   {
+   "lat": 35.393284,
+   "lon": -111.551692,
+   "name": "Robinson Crater",
+   "ele": 2321,
+   "volcano": true
+  },
+  {
    "lat": 40.715537,
    "lon": -105.292485,
    "name": "Greyrock Mountain",
@@ -36909,6 +37083,13 @@
    "lon": -110.594304,
    "name": "Tall Mountain",
    "ele": 2302
+  },
+  {
+   "lat": 35.403341,
+   "lon": -111.475155,
+   "name": "Black Mountain",
+   "ele": 2302,
+   "volcano": true
   },
   {
    "lat": 37.846066,
@@ -38034,6 +38215,13 @@
    "wikidata": "Q49037093"
   },
   {
+   "lat": 35.523617,
+   "lon": -111.712379,
+   "name": "Missouri Bill Hill",
+   "ele": 2265,
+   "volcano": true
+  },
+  {
    "lat": 41.23856,
    "lon": -110.507108,
    "name": "Haystack Butte",
@@ -38805,6 +38993,13 @@
    "ele": 2246
   },
   {
+   "lat": 35.543873,
+   "lon": -111.637165,
+   "name": "Colton Crater",
+   "ele": 2246,
+   "volcano": true
+  },
+  {
    "lat": 46.858051,
    "lon": -111.755579,
    "name": "Sheep Mountain",
@@ -39054,6 +39249,13 @@
    "wikidata": "Q49012859"
   },
   {
+   "lat": 35.330069,
+   "lon": -111.48109,
+   "name": "Pinnacle Crater",
+   "ele": 2236,
+   "volcano": true
+  },
+  {
    "lat": 41.372186,
    "lon": -109.223462,
    "name": "Earnest Butte",
@@ -39071,6 +39273,13 @@
    "lon": -111.970995,
    "name": "Conners Hump",
    "ele": 2234
+  },
+  {
+   "lat": 35.370563,
+   "lon": -111.431265,
+   "name": "Haywire Crater",
+   "ele": 2234,
+   "volcano": true
   },
   {
    "lat": 43.474401,
@@ -40142,6 +40351,13 @@
    "ele": 2200
   },
   {
+   "lat": 35.539809,
+   "lon": -111.608284,
+   "name": "Red Hill",
+   "ele": 2200,
+   "volcano": true
+  },
+  {
    "lat": 42.545717,
    "lon": -107.865933,
    "name": "McIntosh Benchmark",
@@ -40537,6 +40753,13 @@
    "wikidata": "Q49030604"
   },
   {
+   "lat": 35.361119,
+   "lon": -111.40432,
+   "name": "Stewart Crater",
+   "ele": 2188,
+   "volcano": true
+  },
+  {
    "lat": 41.874961,
    "lon": -108.793725,
    "name": "Black Rock",
@@ -40614,6 +40837,13 @@
    "lon": -111.971272,
    "name": "Butcherknife Hill",
    "ele": 2186
+  },
+  {
+   "lat": 35.280218,
+   "lon": -111.527546,
+   "name": "Old Caves Crater",
+   "ele": 2186,
+   "volcano": true
   },
   {
    "lat": 37.833862,
@@ -41146,6 +41376,13 @@
    "wikidata": "Q49090243"
   },
   {
+   "lat": 35.89865,
+   "lon": -104.889721,
+   "name": "Maxson Crater",
+   "ele": 2170,
+   "volcano": true
+  },
+  {
    "lat": 37.980524,
    "lon": -110.880127,
    "name": "Frog Point",
@@ -41265,6 +41502,13 @@
    "lon": -110.926532,
    "name": "Square Butte",
    "ele": 2166
+  },
+  {
+   "lat": 35.360396,
+   "lon": -111.529837,
+   "name": "Lenox Crater",
+   "ele": 2166,
+   "volcano": true
   },
   {
    "lat": 38.001025,
@@ -42213,6 +42457,14 @@
    "ele": 2140
   },
   {
+   "lat": 35.582352,
+   "lon": -111.63186,
+   "name": "S P Crater",
+   "ele": 2140,
+   "wikidata": "Q7395365",
+   "volcano": true
+  },
+  {
    "lat": 37.86788,
    "lon": -111.125271,
    "name": "Studhorse Peaks",
@@ -42393,6 +42645,13 @@
    "lon": -107.229775,
    "name": "Red Hill",
    "ele": 2136
+  },
+  {
+   "lat": 35.54939,
+   "lon": -111.68495,
+   "name": "Antelope Hill",
+   "ele": 2136,
+   "volcano": true
   },
   {
    "lat": 35.22279,
@@ -42885,6 +43144,13 @@
    "name": "Mesa de las Casas",
    "ele": 2120,
    "wikidata": "Q49049392"
+  },
+  {
+   "lat": 35.283343,
+   "lon": -111.378487,
+   "name": "Cochrane Hill",
+   "ele": 2120,
+   "volcano": true
   },
   {
    "lat": 41.4444,
@@ -43929,6 +44195,14 @@
    "wikidata": "Q49077294"
   },
   {
+   "lat": 39.660979,
+   "lon": -107.035224,
+   "name": "Dotsero Crater",
+   "ele": 2086,
+   "wikidata": "Q5299483",
+   "volcano": true
+  },
+  {
    "lat": 43.53829,
    "lon": -108.285656,
    "name": "Nostrum Mountain",
@@ -44191,6 +44465,13 @@
    "lon": -108.894826,
    "name": "Grassy Mountain",
    "ele": 2077
+  },
+  {
+   "lat": 35.336396,
+   "lon": -111.289038,
+   "name": "Merriam Crater",
+   "ele": 2077,
+   "volcano": true
   },
   {
    "lat": 38.0494,
@@ -45474,6 +45755,13 @@
    "lon": -110.491244,
    "name": "Round Top",
    "ele": 2034
+  },
+  {
+   "lat": 35.255011,
+   "lon": -111.46238,
+   "name": "O'Neill Crater",
+   "ele": 2034,
+   "volcano": true
   },
   {
    "lat": 44.34245,
@@ -46876,6 +47164,13 @@
    "ele": 1989
   },
   {
+   "lat": 35.44396,
+   "lon": -111.469881,
+   "name": "Strawberry Crater",
+   "ele": 1989,
+   "volcano": true
+  },
+  {
    "lat": 39.638016,
    "lon": -111.605475,
    "name": "Pollys Peak",
@@ -47206,6 +47501,13 @@
    "ele": 1978
   },
   {
+   "lat": 35.34223,
+   "lon": -111.383486,
+   "name": "Moon Crater",
+   "ele": 1978,
+   "volcano": true
+  },
+  {
    "lat": 40.069972,
    "lon": -108.013967,
    "name": "Buckskin Mesa",
@@ -47323,6 +47625,13 @@
    "lon": -111.037923,
    "name": "Wildcat Peak",
    "ele": 1974
+  },
+  {
+   "lat": 35.300338,
+   "lon": -111.256258,
+   "name": "South Sheba Crater",
+   "ele": 1974,
+   "volcano": true
   },
   {
    "lat": 43.58329,
@@ -47964,6 +48273,13 @@
    "wikidata": "Q49030589"
   },
   {
+   "lat": 35.306195,
+   "lon": -111.358611,
+   "name": "Maroon Crater",
+   "ele": 1955,
+   "volcano": true
+  },
+  {
    "lat": 38.17806,
    "lon": -109.306449,
    "name": "Casa Colorado Rock",
@@ -48031,6 +48347,13 @@
    "lon": -110.063733,
    "name": "Deshgish Butte",
    "ele": 1953
+  },
+  {
+   "lat": 35.310902,
+   "lon": -111.275182,
+   "name": "North Sheba Crater",
+   "ele": 1953,
+   "volcano": true
   },
   {
    "lat": 41.690793,
@@ -48111,6 +48434,13 @@
    "name": "Buckskin Mountain",
    "ele": 1950,
    "wikidata": "Q49016360"
+  },
+  {
+   "lat": 35.274779,
+   "lon": -111.321463,
+   "name": "Francis Crater",
+   "ele": 1950,
+   "volcano": true
   },
   {
    "lat": 43.783858,
@@ -48708,6 +49038,13 @@
    "ele": 1930
   },
   {
+   "lat": 35.399713,
+   "lon": -111.393457,
+   "name": "Black Bottom Crater",
+   "ele": 1930,
+   "volcano": true
+  },
+  {
    "lat": 44.030814,
    "lon": -104.191051,
    "name": "Sweetwater Mountain",
@@ -48926,6 +49263,13 @@
    "lon": -110.30374,
    "name": "Star Mountain",
    "ele": 1924
+  },
+  {
+   "lat": 35.292049,
+   "lon": -111.334727,
+   "name": "Junction Crater",
+   "ele": 1924,
+   "volcano": true
   },
   {
    "lat": 41.865232,
@@ -49351,6 +49695,13 @@
    "ele": 1911
   },
   {
+   "lat": 35.266377,
+   "lon": -111.312405,
+   "name": "Campbell Crater",
+   "ele": 1911,
+   "volcano": true
+  },
+  {
    "lat": 41.188037,
    "lon": -104.848024,
    "name": "Augur Hill",
@@ -49633,6 +49984,13 @@
    "lon": -110.831255,
    "name": "Hard Rock Mesa",
    "ele": 1900
+  },
+  {
+   "lat": 35.286833,
+   "lon": -111.294668,
+   "name": "Saddle Crater",
+   "ele": 1900,
+   "volcano": true
   },
   {
    "lat": 35.155838,
@@ -51143,6 +51501,14 @@
    "ele": 1838
   },
   {
+   "lat": 35.141433,
+   "lon": -106.771695,
+   "name": "Vulcan Volcano",
+   "ele": 1838,
+   "wikidata": "Q7943471",
+   "volcano": true
+  },
+  {
    "lat": 47.143586,
    "lon": -109.297954,
    "name": "Pyramid Peak",
@@ -51444,6 +51810,13 @@
    "ele": 1827
   },
   {
+   "lat": 35.225566,
+   "lon": -111.333485,
+   "name": "Rattlesnake Crater",
+   "ele": 1827,
+   "volcano": true
+  },
+  {
    "lat": 37.436966,
    "lon": -110.402139,
    "name": "Moki Point",
@@ -51657,6 +52030,14 @@
    "name": "South Mesa",
    "ele": 1819,
    "wikidata": "Q49075901"
+  },
+  {
+   "lat": 35.132595,
+   "lon": -106.772504,
+   "name": "Black Volcano",
+   "ele": 1819,
+   "wikidata": "Q4922110",
+   "volcano": true
   },
   {
    "lat": 39.578036,
@@ -52256,6 +52637,14 @@
    "ele": 1795
   },
   {
+   "lat": 35.1275,
+   "lon": -106.772222,
+   "name": "J A Volcano",
+   "ele": 1795,
+   "wikidata": "Q6107757",
+   "volcano": true
+  },
+  {
    "lat": 47.495049,
    "lon": -110.565207,
    "name": "Windy Mountain",
@@ -52341,6 +52730,13 @@
    "ele": 1792
   },
   {
+   "lat": 35.158377,
+   "lon": -106.772529,
+   "name": "Bond Volcano",
+   "ele": 1792,
+   "volcano": true
+  },
+  {
    "lat": 38.435159,
    "lon": -109.591813,
    "name": "Flat Iron Point",
@@ -52403,6 +52799,13 @@
    "name": "Deer Mountain",
    "ele": 1789,
    "wikidata": "Q49024107"
+  },
+  {
+   "lat": 35.165437,
+   "lon": -106.772041,
+   "name": "Butte Volcano",
+   "ele": 1789,
+   "volcano": true
   },
   {
    "lat": 42.614134,
@@ -52856,6 +53259,13 @@
    "name": "Sundance Mountain",
    "ele": 1771,
    "wikidata": "Q49080056"
+  },
+  {
+   "lat": 35.336674,
+   "lon": -111.308761,
+   "name": "The Sproul",
+   "ele": 1771,
+   "volcano": true
   },
   {
    "lat": 38.392976,
@@ -55536,6 +55946,13 @@
    "ele": 1633
   },
   {
+   "lat": 35.425875,
+   "lon": -111.258837,
+   "name": "Roden Crater",
+   "ele": 1633,
+   "volcano": true
+  },
+  {
    "lat": 42.547746,
    "lon": -104.78802,
    "name": "Pin Top",
@@ -56266,6 +56683,13 @@
    "lon": -111.88799,
    "name": "Iron Hill",
    "ele": 1594
+  },
+  {
+   "lat": 43.789947,
+   "lon": -111.970397,
+   "name": "North Menan Butte",
+   "ele": 1594,
+   "volcano": true
   },
   {
    "lat": 37.256944,
@@ -63829,6 +64253,20 @@
    "name": "Rock Pointing West"
   },
   {
+   "lat": 44.367064,
+   "lon": -110.843297,
+   "name": "Yellowstone Caldera",
+   "name_ru": "Йеллоустонская кальдера",
+   "wikidata": "Q650836",
+   "volcano": true
+  },
+  {
+   "lat": 35.859842,
+   "lon": -106.473274,
+   "name": "Valles Caldera supervolcano",
+   "volcano": true
+  },
+  {
    "lat": 35.196365,
    "lon": -106.443545,
    "name": "Dragons Tooth"
@@ -64249,6 +64687,12 @@
    "lon": -104.392496,
    "name": "Little Horse Mesa",
    "wikidata": "Q49692585"
+  },
+  {
+   "lat": 43.762694,
+   "lon": -111.962756,
+   "name": "South Menan Butte",
+   "volcano": true
   },
   {
    "lat": 43.209941,
@@ -64707,6 +65151,13 @@
    "name": "Norm's Mountain"
   },
   {
+   "lat": 35.341831,
+   "lon": -111.654057,
+   "name": "San Francisco Mountain",
+   "wikidata": "Q1974825",
+   "volcano": true
+  },
+  {
    "lat": 38.579603,
    "lon": -109.530761,
    "name": "Lion's Back"
@@ -64745,6 +65196,18 @@
    "lat": 36.102273,
    "lon": -110.319389,
    "name": "Mose Family Hill"
+  },
+  {
+   "lat": 35.343978,
+   "lon": -111.875391,
+   "name": "Government Knolls",
+   "volcano": true
+  },
+  {
+   "lat": 35.325368,
+   "lon": -111.902667,
+   "name": "Government Knolls",
+   "volcano": true
   },
   {
    "lat": 35.969497,

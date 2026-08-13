@@ -1,6 +1,6 @@
 {
  "region": "scottish-highlands",
- "generated": "2026-08-12T10:55:03+00:00",
+ "generated": "2026-08-13T09:16:26+00:00",
  "peaks": [
   {
    "lat": 56.796858,
@@ -33505,6 +33505,12 @@
    "lat": 58.0357,
    "lon": -6.364213,
    "name": "Druim Mòr a' Chladaich"
+  },
+  {
+   "lat": 56.738912,
+   "lon": -6.135094,
+   "name": "Ardnamurchan",
+   "volcano": true
   },
   {
    "lat": 58.020088,

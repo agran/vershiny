@@ -1,6 +1,6 @@
 {
  "region": "ladakh",
- "generated": "2026-08-12T10:55:00+00:00",
+ "generated": "2026-08-13T09:16:23+00:00",
  "peaks": [
   {
    "lat": 35.399561,
@@ -4068,6 +4068,18 @@
    "lat": 32.680778,
    "lon": 76.831384,
    "name": "Sheling"
+  },
+  {
+   "lat": 33.223978,
+   "lon": 78.338956,
+   "name": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 33.222551,
+   "lon": 78.331651,
+   "name": "Mud volcano area",
+   "volcano": true
   },
   {
    "lat": 35.472027,

@@ -1,7 +1,26 @@
 {
  "region": "patagonia-argentina",
- "generated": "2026-08-12T10:55:01+00:00",
+ "generated": "2026-08-13T09:16:25+00:00",
  "peaks": [
+  {
+   "lat": -39.637216,
+   "lon": -71.503057,
+   "name": "Volcán Lanín",
+   "name_ru": "Ланин",
+   "name_en": "Lanín",
+   "ele": 3776,
+   "wikidata": "Q389121",
+   "volcano": true
+  },
+  {
+   "lat": -41.160891,
+   "lon": -71.888163,
+   "name": "Cerro Tronador",
+   "name_en": "Tronador",
+   "ele": 3478,
+   "wikidata": "Q422835",
+   "volcano": true
+  },
   {
    "lat": -41.154376,
    "lon": -71.89686,
@@ -15,11 +34,28 @@
    "ele": 3220
   },
   {
+   "lat": -41.104494,
+   "lon": -72.495874,
+   "name": "Volcán Osorno",
+   "name_en": "Osorno Volcano",
+   "ele": 2652,
+   "wikidata": "Q858808",
+   "volcano": true
+  },
+  {
    "lat": -42.439776,
    "lon": -71.927337,
    "name": "Cerro Dos Picos",
    "ele": 2515,
    "wikidata": "Q16490747"
+  },
+  {
+   "lat": -40.974044,
+   "lon": -72.266216,
+   "name": "Volcán Puntiagudo",
+   "ele": 2498,
+   "wikidata": "Q1139840",
+   "volcano": true
   },
   {
    "lat": -42.359301,
@@ -34,6 +70,22 @@
    "name": "Cerro Azul",
    "ele": 2467,
    "wikidata": "Q21846021"
+  },
+  {
+   "lat": -39.928853,
+   "lon": -72.028678,
+   "name": "Volcán Mocho",
+   "ele": 2422,
+   "wikidata": "Q3132346",
+   "volcano": true
+  },
+  {
+   "lat": -39.913859,
+   "lon": -72.040104,
+   "name": "Volcán Choshuenco",
+   "ele": 2415,
+   "wikidata": "Q3132346",
+   "volcano": true
   },
   {
    "lat": -41.179567,
@@ -171,6 +223,14 @@
    "wikidata": "Q577700"
   },
   {
+   "lat": -40.583466,
+   "lon": -72.112372,
+   "name": "Volcán Puyehue",
+   "ele": 2240,
+   "wikidata": "Q577700",
+   "volcano": true
+  },
+  {
    "lat": -40.252834,
    "lon": -71.175262,
    "name": "Cerro Puntudo Grande",
@@ -236,10 +296,26 @@
    "ele": 2193
   },
   {
+   "lat": -39.88622,
+   "lon": -71.580605,
+   "name": "Cerro Huanquihue",
+   "ele": 2189,
+   "wikidata": "Q3645899",
+   "volcano": true
+  },
+  {
    "lat": -41.729313,
    "lon": -71.241681,
    "name": "Cerro Troncoso",
    "ele": 2189
+  },
+  {
+   "lat": -41.758934,
+   "lon": -72.398987,
+   "name": "Volcán Yates",
+   "ele": 2187,
+   "wikidata": "Q1586649",
+   "volcano": true
   },
   {
    "lat": -42.357377,
@@ -560,6 +636,14 @@
    "wikidata": "Q21846355"
   },
   {
+   "lat": -39.50444,
+   "lon": -71.591723,
+   "name": "Volcán Quinquilil",
+   "ele": 2052,
+   "wikidata": "Q22467724",
+   "volcano": true
+  },
+  {
    "lat": -41.112525,
    "lon": -71.565257,
    "name": "Torre Finó",
@@ -640,6 +724,14 @@
    "lon": -71.412916,
    "name": "Cerro Alfredo",
    "ele": 2030
+  },
+  {
+   "lat": -40.768152,
+   "lon": -71.943125,
+   "name": "Cerro Pantojo",
+   "ele": 2024,
+   "wikidata": "Q2946775",
+   "volcano": true
   },
   {
    "lat": -41.699931,
@@ -756,6 +848,14 @@
    "lon": -71.480488,
    "name": "Pico Bara",
    "ele": 1991
+  },
+  {
+   "lat": -40.77496,
+   "lon": -72.156418,
+   "name": "Volcán Casablanca",
+   "ele": 1990,
+   "wikidata": "Q5047973",
+   "volcano": true
   },
   {
    "lat": -40.551275,
@@ -1506,6 +1606,20 @@
    "name": "Cerro Frías",
    "ele": 1800,
    "wikidata": "Q21839747"
+  },
+  {
+   "lat": -40.459487,
+   "lon": -72.256651,
+   "name": "Cordillera Nevada",
+   "ele": 1799,
+   "volcano": true
+  },
+  {
+   "lat": -40.522869,
+   "lon": -72.203887,
+   "name": "Cordón Caulle",
+   "ele": 1793,
+   "volcano": true
   },
   {
    "lat": -42.44777,
@@ -2313,6 +2427,14 @@
    "name": "Cerro Mallín Grande",
    "ele": 1572,
    "wikidata": "Q21839411"
+  },
+  {
+   "lat": -41.879116,
+   "lon": -72.43357,
+   "name": "Volcán Hornopirén",
+   "ele": 1572,
+   "wikidata": "Q1628555",
+   "volcano": true
   },
   {
    "lat": -41.221733,
@@ -4006,6 +4128,13 @@
    "wikidata": "Q21838499"
   },
   {
+   "lat": -40.361191,
+   "lon": -72.058987,
+   "name": "Volcán Mirador",
+   "ele": 690,
+   "volcano": true
+  },
+  {
    "lat": -40.150259,
    "lon": -72.314501,
    "name": "Cerro Trafa",
@@ -4035,6 +4164,14 @@
    "lon": -71.648129,
    "name": "Cerro Bajo",
    "ele": 510
+  },
+  {
+   "lat": -41.24722,
+   "lon": -72.2815,
+   "name": "Cayutué-La Viguería",
+   "ele": 506,
+   "wikidata": "Q2943430",
+   "volcano": true
   },
   {
    "lat": -39.5681,
@@ -4086,6 +4223,12 @@
    "lat": -41.133218,
    "lon": -71.521174,
    "name": "Juan Pablo"
+  },
+  {
+   "lat": -40.36607,
+   "lon": -72.072053,
+   "name": "Volcán Carrán",
+   "volcano": true
   },
   {
    "lat": -40.281383,
@@ -4195,6 +4338,12 @@
    "lat": -41.422616,
    "lon": -72.094336,
    "name": "Cerro Elefante"
+  },
+  {
+   "lat": -39.863883,
+   "lon": -71.564696,
+   "name": "Achen Niyeu",
+   "volcano": true
   },
   {
    "lat": -40.958354,
@@ -4457,6 +4606,19 @@
    "wikidata": "Q21842651"
   },
   {
+   "lat": -40.373349,
+   "lon": -72.085854,
+   "name": "Volcán Riñinahue",
+   "volcano": true
+  },
+  {
+   "lat": -40.314242,
+   "lon": -72.070543,
+   "name": "Carrán-Los Venados",
+   "wikidata": "Q2940365",
+   "volcano": true
+  },
+  {
    "lat": -40.157764,
    "lon": -71.340734,
    "name": "Cerro Comandante Díaz"
@@ -4538,6 +4700,18 @@
    "wikidata": "Q23647593"
   },
   {
+   "lat": -40.779437,
+   "lon": -72.185841,
+   "name": "Cráter Raihuén",
+   "volcano": true
+  },
+  {
+   "lat": -40.763418,
+   "lon": -72.21329,
+   "name": "Cráter La Taza",
+   "volcano": true
+  },
+  {
    "lat": -39.638193,
    "lon": -71.092124,
    "name": "Cerro \"Hotel\""
@@ -4576,6 +4750,12 @@
    "lat": -41.203563,
    "lon": -71.498364,
    "name": "La vieja"
+  },
+  {
+   "lat": -40.399452,
+   "lon": -72.152435,
+   "name": "Volcán Los Venados",
+   "volcano": true
   },
   {
    "lat": -41.000781,

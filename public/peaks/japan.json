@@ -1,7 +1,17 @@
 {
  "region": "japan",
- "generated": "2026-08-12T10:54:58+00:00",
+ "generated": "2026-08-13T09:16:22+00:00",
  "peaks": [
+  {
+   "lat": 35.362838,
+   "lon": 138.730768,
+   "name": "富士山",
+   "name_ru": "вулкан Фудзияма",
+   "name_en": "Mount Fuji",
+   "ele": 3776,
+   "wikidata": "Q39231",
+   "volcano": true
+  },
   {
    "lat": 35.360681,
    "lon": 138.727351,
@@ -259,6 +269,16 @@
    "name": "剣ヶ峰",
    "name_en": "Mt. Kengamine",
    "ele": 3026
+  },
+  {
+   "lat": 36.106765,
+   "lon": 137.549686,
+   "name": "乗鞍岳",
+   "name_ru": "Норикура",
+   "name_en": "Mt. Norikura",
+   "ele": 3026,
+   "wikidata": "Q3133588",
+   "volcano": true
   },
   {
    "lat": 35.62118,
@@ -1034,6 +1054,16 @@
    "name": "三国境",
    "name_en": "Mt. Mikunisakai",
    "ele": 2751
+  },
+  {
+   "lat": 42.007261,
+   "lon": 128.056396,
+   "name": "长白山 백두산",
+   "name_ru": "вулкан Байтоушань (Пэктусан)",
+   "name_en": "Paektu Mountain",
+   "ele": 2750,
+   "wikidata": "Q107635",
+   "volcano": true
   },
   {
    "lat": 35.710413,
@@ -2273,6 +2303,15 @@
    "wikidata": "Q11481090"
   },
   {
+   "lat": 36.22889,
+   "lon": 137.588236,
+   "name": "焼岳",
+   "name_en": "Mount Yake",
+   "ele": 2455,
+   "wikidata": "Q3276924",
+   "volcano": true
+  },
+  {
    "lat": 36.891304,
    "lon": 138.113476,
    "name": "妙高山",
@@ -2697,6 +2736,15 @@
    "ele": 2356
   },
   {
+   "lat": 36.952958,
+   "lon": 139.28726,
+   "name": "燧ヶ岳",
+   "name_en": "Mt. Hiuchigatake",
+   "ele": 2356,
+   "wikidata": "Q3695505",
+   "volcano": true
+  },
+  {
    "lat": 36.54166,
    "lon": 138.412795,
    "name": "四阿山",
@@ -2947,6 +2995,15 @@
    "ele": 2292
   },
   {
+   "lat": 43.663586,
+   "lon": 142.854105,
+   "name": "旭岳",
+   "name_en": "Mount Asahi-dake",
+   "ele": 2291,
+   "wikidata": "Q2271725",
+   "volcano": true
+  },
+  {
    "lat": 35.647663,
    "lon": 137.809773,
    "name": "念丈岳",
@@ -3148,6 +3205,16 @@
    "name": "白剥山",
    "name_en": "Mount Shirahagi",
    "ele": 2238
+  },
+  {
+   "lat": 39.099249,
+   "lon": 140.05035,
+   "name": "鳥海山",
+   "name_ru": "Тёкай",
+   "name_en": "Mount Chōkai",
+   "ele": 2236,
+   "wikidata": "Q713826",
+   "volcano": true
   },
   {
    "lat": 35.832328,
@@ -4221,6 +4288,13 @@
    "ele": 2077
   },
   {
+   "lat": 36.622207,
+   "lon": 138.533851,
+   "name": "中央火口",
+   "ele": 2076,
+   "volcano": true
+  },
+  {
    "lat": 36.676565,
    "lon": 138.48154,
    "name": "笠ヶ岳",
@@ -4653,6 +4727,15 @@
    "wikidata": "Q11675055"
   },
   {
+   "lat": 39.850153,
+   "lon": 141.002092,
+   "name": "岩手山",
+   "name_en": "Mt. Iwate",
+   "ele": 2038,
+   "wikidata": "Q713836",
+   "volcano": true
+  },
+  {
    "lat": 43.671278,
    "lon": 142.912785,
    "name": "五色岳",
@@ -4722,6 +4805,15 @@
    "name": "西吾妻山",
    "name_en": "Mt. Nishi-Azuma",
    "ele": 2035
+  },
+  {
+   "lat": 37.726545,
+   "lon": 140.247899,
+   "name": "吾妻山",
+   "name_en": "Mt. Azuma",
+   "ele": 2035,
+   "wikidata": "Q2669374",
+   "volcano": true
   },
   {
    "lat": 36.907654,
@@ -6190,6 +6282,15 @@
    "wikidata": "Q31454618"
   },
   {
+   "lat": 42.826957,
+   "lon": 140.80674,
+   "name": "羊蹄山",
+   "name_en": "Mount Yotei",
+   "ele": 1898,
+   "wikidata": "Q713619",
+   "volcano": true
+  },
+  {
    "lat": 35.266448,
    "lon": 138.197435,
    "name": "鋸歯",
@@ -6899,6 +7000,15 @@
    "wikidata": "Q6922490"
   },
   {
+   "lat": 38.136446,
+   "lon": 140.44947,
+   "name": "蔵王山",
+   "name_en": "Mt. Zaō",
+   "ele": 1841,
+   "wikidata": "Q167951",
+   "volcano": true
+  },
+  {
    "lat": 36.940423,
    "lon": 138.007606,
    "name": "昼闇山",
@@ -7193,6 +7303,15 @@
    "ele": 1817
   },
   {
+   "lat": 37.60098,
+   "lon": 140.072245,
+   "name": "磐梯山",
+   "name_en": "Mt. Bandai",
+   "ele": 1816,
+   "wikidata": "Q714605",
+   "volcano": true
+  },
+  {
    "lat": 36.198154,
    "lon": 136.960185,
    "name": "御前岳",
@@ -7436,6 +7555,15 @@
    "wikidata": "Q31690309"
   },
   {
+   "lat": 36.898344,
+   "lon": 139.773881,
+   "name": "高原山",
+   "name_en": "Mt. Takahara",
+   "ele": 1795,
+   "wikidata": "Q11668908",
+   "volcano": true
+  },
+  {
    "lat": 42.548784,
    "lon": 142.8282,
    "name": "ヤオロマップ岳",
@@ -7541,6 +7669,16 @@
    "lon": 138.15712,
    "name": "高座岩",
    "ele": 1787
+  },
+  {
+   "lat": 33.082203,
+   "lon": 131.240892,
+   "name": "久住山",
+   "name_ru": "вулкан Кудзю",
+   "name_en": "Mt. Kuju",
+   "ele": 1786,
+   "wikidata": "Q8540007",
+   "volcano": true
   },
   {
    "lat": 33.095047,
@@ -8420,6 +8558,16 @@
    "ele": 1722
   },
   {
+   "lat": 45.180432,
+   "lon": 141.241376,
+   "name": "利尻山",
+   "name_ru": "Рисири",
+   "name_en": "Mt. Rishiri",
+   "ele": 1721,
+   "wikidata": "Q2154758",
+   "volcano": true
+  },
+  {
    "lat": 42.570935,
    "lon": 142.824852,
    "name": "コイカクシュサツナイ岳",
@@ -8770,6 +8918,15 @@
    "name_en": "Mt. Karakuni",
    "ele": 1700,
    "wikidata": "Q3321904"
+  },
+  {
+   "lat": 31.938053,
+   "lon": 130.861514,
+   "name": "霧島山",
+   "name_en": "Mt. Kirishima",
+   "ele": 1700,
+   "wikidata": "Q1319361",
+   "volcano": true
   },
   {
    "lat": 35.409917,
@@ -9451,6 +9608,16 @@
    "name": "五勇山",
    "name_en": "Mt. Goyuzan",
    "ele": 1662
+  },
+  {
+   "lat": 44.075922,
+   "lon": 145.122229,
+   "name": "羅臼岳",
+   "name_ru": "Раусу",
+   "name_en": "Rausu Dake",
+   "ele": 1661,
+   "wikidata": "Q714555",
+   "volcano": true
   },
   {
    "lat": 36.184258,
@@ -10213,6 +10380,16 @@
    "wikidata": "Q31696834"
   },
   {
+   "lat": 40.655909,
+   "lon": 140.303068,
+   "name": "岩木山",
+   "name_ru": "Иваки",
+   "name_en": "Mt. Iwaki",
+   "ele": 1625,
+   "wikidata": "Q713857",
+   "volcano": true
+  },
+  {
    "lat": 43.381845,
    "lon": 142.605843,
    "name": "前富良野岳",
@@ -10783,6 +10960,16 @@
    "ele": 1593
   },
   {
+   "lat": 32.882702,
+   "lon": 131.09474,
+   "name": "阿蘇山",
+   "name_ru": "вулкан Асо",
+   "name_en": "Mount Aso",
+   "ele": 1592,
+   "wikidata": "Q733710",
+   "volcano": true
+  },
+  {
    "lat": 32.884365,
    "lon": 131.10391,
    "name": "高岳",
@@ -10977,6 +11164,15 @@
    "lon": 137.982238,
    "name": "白倉峰",
    "ele": 1585
+  },
+  {
+   "lat": 40.658887,
+   "lon": 140.877338,
+   "name": "大岳",
+   "name_en": "Mt. Ōda",
+   "ele": 1584,
+   "wikidata": "Q31481271",
+   "volcano": true
   },
   {
    "lat": 34.215685,
@@ -11414,6 +11610,14 @@
    "ele": 1562
   },
   {
+   "lat": 44.133287,
+   "lon": 145.161292,
+   "name": "硫黄山",
+   "ele": 1562,
+   "wikidata": "Q4202646",
+   "volcano": true
+  },
+  {
    "lat": 35.137412,
    "lon": 138.05718,
    "name": "八丁段",
@@ -11717,6 +11921,15 @@
    "name": "篭山",
    "name_en": "Mt. Kago",
    "ele": 1548
+  },
+  {
+   "lat": 43.765728,
+   "lon": 144.717671,
+   "name": "斜里岳",
+   "name_en": "Shari Dake",
+   "ele": 1547,
+   "wikidata": "Q714564",
+   "volcano": true
   },
   {
    "lat": 39.163702,
@@ -12734,6 +12947,15 @@
    "ele": 1500
   },
   {
+   "lat": 43.386319,
+   "lon": 144.008792,
+   "name": "雌阿寒岳",
+   "name_en": "Mt. Me-Akan",
+   "ele": 1499,
+   "wikidata": "Q472705",
+   "volcano": true
+  },
+  {
    "lat": 42.657868,
    "lon": 142.862498,
    "name": "岩内岳",
@@ -13184,6 +13406,14 @@
    "name_en": "Mt. Genjiro",
    "ele": 1477,
    "wikidata": "Q11564130"
+  },
+  {
+   "lat": 43.374089,
+   "lon": 144.006473,
+   "name": "阿寒富士",
+   "ele": 1476,
+   "wikidata": "Q11657379",
+   "volcano": true
   },
   {
    "lat": 42.800859,
@@ -15448,6 +15678,15 @@
    "ele": 1392
   },
   {
+   "lat": 36.476932,
+   "lon": 138.878237,
+   "name": "榛名山",
+   "name_en": "Mt. Haruna",
+   "ele": 1391,
+   "wikidata": "Q1191690",
+   "volcano": true
+  },
+  {
    "lat": 35.672007,
    "lon": 137.462454,
    "name": "雨乞棚山",
@@ -16017,6 +16256,15 @@
    "lon": 140.201389,
    "name": "大滝山",
    "ele": 1370
+  },
+  {
+   "lat": 43.454064,
+   "lon": 144.164599,
+   "name": "雄阿寒岳",
+   "name_en": "Mt. O-Akan",
+   "ele": 1370,
+   "wikidata": "Q8528084",
+   "volcano": true
   },
   {
    "lat": 36.169494,
@@ -17961,10 +18209,28 @@
    "wikidata": "Q11647795"
   },
   {
+   "lat": 44.022286,
+   "lon": 145.051192,
+   "name": "知西別岳",
+   "name_en": "Mt. Chinishibetsu",
+   "ele": 1317,
+   "wikidata": "Q6920130",
+   "volcano": true
+  },
+  {
    "lat": 35.275776,
    "lon": 137.936932,
    "name": "水梨山",
    "ele": 1317
+  },
+  {
+   "lat": 31.947078,
+   "lon": 130.85406,
+   "name": "硫黄山",
+   "name_en": "Mt. Io",
+   "ele": 1317,
+   "wikidata": "Q21652398",
+   "volcano": true
   },
   {
    "lat": 39.835366,
@@ -20161,6 +20427,15 @@
    "ele": 1255
   },
   {
+   "lat": 44.235729,
+   "lon": 145.273941,
+   "name": "知床岳",
+   "name_en": "Mt. Shiretoko",
+   "ele": 1254,
+   "wikidata": "Q8528441",
+   "volcano": true
+  },
+  {
    "lat": 36.572781,
    "lon": 138.306687,
    "name": "熊窪山",
@@ -22235,6 +22510,24 @@
    "ele": 1202
   },
   {
+   "lat": 35.325013,
+   "lon": 133.663645,
+   "name": "蒜山",
+   "name_en": "Mt. Hiruzen",
+   "ele": 1202,
+   "wikidata": "Q8536691",
+   "volcano": true
+  },
+  {
+   "lat": 35.326688,
+   "lon": 133.662385,
+   "name": "上蒜山",
+   "name_en": "Mt. Kami-Hiruzen",
+   "ele": 1202,
+   "wikidata": "Q31700774",
+   "volcano": true
+  },
+  {
    "lat": 35.487301,
    "lon": 138.683038,
    "name": "紅葉台",
@@ -22363,6 +22656,14 @@
    "name_en": "Mt. Ofuyu",
    "ele": 1198,
    "wikidata": "Q31481248"
+  },
+  {
+   "lat": 34.878876,
+   "lon": 139.032458,
+   "name": "遠笠山",
+   "name_en": "Mt.Togasa",
+   "ele": 1197,
+   "volcano": true
   },
   {
    "lat": 35.925009,
@@ -25113,6 +25414,16 @@
    "ele": 1132
   },
   {
+   "lat": 42.063271,
+   "lon": 140.677241,
+   "name": "駒ヶ岳",
+   "name_ru": "Комагатаке",
+   "name_en": "Mt. Komagatake",
+   "ele": 1131,
+   "wikidata": "Q715491",
+   "volcano": true
+  },
+  {
    "lat": 33.512257,
    "lon": 131.001749,
    "name": "犬ヶ岳",
@@ -25365,6 +25676,15 @@
    "ele": 1126
   },
   {
+   "lat": 35.134656,
+   "lon": 132.625497,
+   "name": "三瓶山",
+   "name_en": "Mt. Sanbe",
+   "ele": 1126,
+   "wikidata": "Q4179256",
+   "volcano": true
+  },
+  {
    "lat": 32.275069,
    "lon": 131.226583,
    "name": "烏帽子岳",
@@ -25495,6 +25815,15 @@
    "name_en": "neunggyeongbong",
    "ele": 1123,
    "wikidata": "Q27272962"
+  },
+  {
+   "lat": 35.319893,
+   "lon": 133.675569,
+   "name": "中蒜山",
+   "name_en": "Mt. Naka-Hiruzen",
+   "ele": 1123,
+   "wikidata": "Q31694344",
+   "volcano": true
   },
   {
    "lat": 35.247091,
@@ -25778,6 +26107,16 @@
    "ele": 1118
   },
   {
+   "lat": 31.580574,
+   "lon": 130.657984,
+   "name": "桜島",
+   "name_ru": "Сакурадзима",
+   "name_en": "Sakurajima",
+   "ele": 1117,
+   "wikidata": "Q128841",
+   "volcano": true
+  },
+  {
    "lat": 31.592596,
    "lon": 130.656566,
    "name": "御岳",
@@ -25802,6 +26141,14 @@
    "lon": 138.164399,
    "name": "猿見石山（大沢山）",
    "ele": 1116
+  },
+  {
+   "lat": 42.885324,
+   "lon": 140.640488,
+   "name": "イワオヌプリ",
+   "ele": 1116,
+   "wikidata": "Q11287261",
+   "volcano": true
   },
   {
    "lat": 33.721047,
@@ -26021,6 +26368,13 @@
    "name": "綿向山",
    "ele": 1110,
    "wikidata": "Q11607423"
+  },
+  {
+   "lat": 35.340905,
+   "lon": 133.594599,
+   "name": "擬宝珠山",
+   "ele": 1110,
+   "volcano": true
   },
   {
    "lat": 37.33706,
@@ -26554,6 +26908,15 @@
    "name_en": "Mount Pinneshiri",
    "ele": 1100,
    "wikidata": "Q7196351"
+  },
+  {
+   "lat": 35.325133,
+   "lon": 133.700692,
+   "name": "下蒜山",
+   "name_en": "Mt. Shimo-Hiruzen",
+   "ele": 1100,
+   "wikidata": "Q31690003",
+   "volcano": true
   },
   {
    "lat": 36.568978,
@@ -27314,6 +27677,13 @@
    "lon": 138.147904,
    "name": "無双連山",
    "ele": 1083
+  },
+  {
+   "lat": 35.329363,
+   "lon": 133.620244,
+   "name": "二俣山",
+   "ele": 1083,
+   "volcano": true
   },
   {
    "lat": 35.715597,
@@ -29337,6 +29707,14 @@
    "wikidata": "Q3299347"
   },
   {
+   "lat": 44.044448,
+   "lon": 145.085801,
+   "name": "天頂山",
+   "ele": 1046,
+   "wikidata": "Q11443769",
+   "volcano": true
+  },
+  {
    "lat": 36.990524,
    "lon": 128.920813,
    "name": "왕두산",
@@ -29517,6 +29895,15 @@
    "lon": 134.296317,
    "name": "г. Лобная",
    "ele": 1042
+  },
+  {
+   "lat": 42.690548,
+   "lon": 141.376636,
+   "name": "樽前山",
+   "name_en": "Mt. Tarumae",
+   "ele": 1041,
+   "wikidata": "Q1057979",
+   "volcano": true
   },
   {
    "lat": 33.940249,
@@ -35427,6 +35814,14 @@
    "wikidata": "Q31511854"
   },
   {
+   "lat": 34.855126,
+   "lon": 138.938631,
+   "name": "丸山",
+   "name_en": "Mt.Maruyama",
+   "ele": 938,
+   "volcano": true
+  },
+  {
    "lat": 38.848141,
    "lon": 140.67664,
    "name": "山王森",
@@ -38643,6 +39038,15 @@
    "ele": 889
   },
   {
+   "lat": 43.979354,
+   "lon": 145.732678,
+   "name": "Менделеева",
+   "name_en": "Mendeleyeva",
+   "ele": 888,
+   "wikidata": "Q2651559",
+   "volcano": true
+  },
+  {
    "lat": 34.999119,
    "lon": 136.448793,
    "name": "雲母峰",
@@ -40588,6 +40992,15 @@
    "lon": 139.891056,
    "name": "千沢岳",
    "ele": 857
+  },
+  {
+   "lat": 43.572288,
+   "lon": 144.560911,
+   "name": "カムイヌプリ",
+   "name_en": "Mt. Kamuinupuri",
+   "ele": 857,
+   "wikidata": "Q4392285",
+   "volcano": true
   },
   {
    "lat": 40.410229,
@@ -43275,6 +43688,14 @@
    "lon": 139.558023,
    "name": "惣山",
    "ele": 816
+  },
+  {
+   "lat": 34.894851,
+   "lon": 139.057323,
+   "name": "矢筈山",
+   "name_en": "Mt.Yahazu",
+   "ele": 816,
+   "volcano": true
   },
   {
    "lat": 35.455268,
@@ -46129,6 +46550,16 @@
    "lon": 133.319021,
    "name": "г. Поперечная",
    "ele": 776
+  },
+  {
+   "lat": 34.088433,
+   "lon": 139.528013,
+   "name": "雄山",
+   "name_ru": "Миякедзима",
+   "name_en": "Mt. Oyama",
+   "ele": 775,
+   "wikidata": "Q19945735",
+   "volcano": true
   },
   {
    "lat": 34.990953,
@@ -49083,6 +49514,15 @@
    "ele": 733
   },
   {
+   "lat": 42.542766,
+   "lon": 140.834346,
+   "name": "有珠山",
+   "name_en": "Mount Usu",
+   "ele": 733,
+   "wikidata": "Q589825",
+   "volcano": true
+  },
+  {
    "lat": 35.707403,
    "lon": 136.926568,
    "name": "藤巻山",
@@ -51890,6 +52330,14 @@
    "ele": 697
   },
   {
+   "lat": 34.911068,
+   "lon": 139.022585,
+   "name": "丸野山",
+   "name_en": "Mt.Maruno",
+   "ele": 697,
+   "volcano": true
+  },
+  {
    "lat": 35.341855,
    "lon": 134.314645,
    "name": "伊呂宇山",
@@ -53724,6 +54172,14 @@
    "lon": 134.222407,
    "name": "東女体山",
    "ele": 674
+  },
+  {
+   "lat": 34.862941,
+   "lon": 138.928944,
+   "name": "鉢窪山",
+   "name_en": "Mt. Hachikubo",
+   "ele": 674,
+   "volcano": true
   },
   {
    "lat": 40.512837,
@@ -58416,6 +58872,14 @@
    "ele": 619
   },
   {
+   "lat": 34.792594,
+   "lon": 138.970322,
+   "name": "鉢ノ山",
+   "name_en": "Mt. Hachi-no-yama",
+   "ele": 619,
+   "volcano": true
+  },
+  {
    "lat": 34.303426,
    "lon": 135.749307,
    "name": "竜王山",
@@ -59898,6 +60362,14 @@
    "lon": 140.377982,
    "name": "中作山",
    "ele": 603
+  },
+  {
+   "lat": 34.912931,
+   "lon": 139.03904,
+   "name": "岩山",
+   "name_en": "Mt.Iwayama",
+   "ele": 602,
+   "volcano": true
   },
   {
    "lat": 40.961315,
@@ -61742,6 +62214,15 @@
    "lon": 139.394078,
    "name": "南荒倉山",
    "ele": 582
+  },
+  {
+   "lat": 35.005183,
+   "lon": 139.037281,
+   "name": "巣雲山",
+   "name_en": "Mt.Sukumo",
+   "ele": 581,
+   "wikidata": "Q11479422",
+   "volcano": true
   },
   {
    "lat": 34.947281,
@@ -65406,6 +65887,15 @@
    "lon": 129.217436,
    "name": "남암산",
    "ele": 544
+  },
+  {
+   "lat": 43.848396,
+   "lon": 145.495785,
+   "name": "вулкан Головнина",
+   "name_ru": "вулкан Головнина",
+   "ele": 543,
+   "wikidata": "Q2664586",
+   "volcano": true
   },
   {
    "lat": 38.575866,
@@ -70203,6 +70693,15 @@
    "ele": 497
   },
   {
+   "lat": 34.726945,
+   "lon": 139.394543,
+   "name": "Михара",
+   "name_ru": "Михара",
+   "ele": 497,
+   "wikidata": "Q1138683",
+   "volcano": true
+  },
+  {
    "lat": 34.22734,
    "lon": 132.576301,
    "name": "休山",
@@ -72886,6 +73385,15 @@
    "ele": 470
   },
   {
+   "lat": 38.733586,
+   "lon": 140.724542,
+   "name": "鳴子火山群",
+   "name_en": "Naruko",
+   "ele": 470,
+   "wikidata": "Q904235",
+   "volcano": true
+  },
+  {
    "lat": 44.311731,
    "lon": 141.973477,
    "name": "幌別山",
@@ -73846,6 +74354,14 @@
    "name": "菊水山",
    "ele": 459,
    "wikidata": "Q84029108"
+  },
+  {
+   "lat": 34.871644,
+   "lon": 139.079567,
+   "name": "伊雄山",
+   "name_en": "Mt.Io",
+   "ele": 459,
+   "volcano": true
   },
   {
    "lat": 34.802029,
@@ -79484,6 +80000,14 @@
    "ele": 409
   },
   {
+   "lat": 35.505673,
+   "lon": 134.674528,
+   "name": "神鍋山噴火口",
+   "name_en": "Mt. Kannabe Crater",
+   "ele": 409,
+   "volcano": true
+  },
+  {
    "lat": 34.191535,
    "lon": 131.675123,
    "name": "要害岳",
@@ -80809,6 +81333,15 @@
    "name": "滝谷山",
    "name_en": "Takidaniyama",
    "ele": 398
+  },
+  {
+   "lat": 42.542554,
+   "lon": 140.864352,
+   "name": "昭和新山",
+   "name_en": "Showa-shinzan",
+   "ele": 398,
+   "wikidata": "Q1138090",
+   "volcano": true
   },
   {
    "lat": 35.073497,
@@ -91840,6 +92373,14 @@
    "name": "二十六夜山",
    "name_en": "Mt. Nijurokuya",
    "ele": 310
+  },
+  {
+   "lat": 34.91684,
+   "lon": 139.115043,
+   "name": "高室山",
+   "name_en": "Mt. Takamuro",
+   "ele": 310,
+   "volcano": true
   },
   {
    "lat": 34.24711,
@@ -123201,10 +123742,25 @@
    "ele": 1
   },
   {
+   "lat": 42.074533,
+   "lon": 140.688549,
+   "name": "砂原岳",
+   "name_en": "Mt. Sawaratake",
+   "volcano": true
+  },
+  {
    "lat": 41.981664,
    "lon": 140.643685,
    "name": "日暮山",
    "name_en": "Mt. Higure"
+  },
+  {
+   "lat": 37.722008,
+   "lon": 140.260852,
+   "name": "吾妻小富士",
+   "name_en": "Azuma-Kofuji",
+   "wikidata": "Q718441",
+   "volcano": true
   },
   {
    "lat": 35.616115,
@@ -123306,6 +123862,14 @@
    "lat": 33.725429,
    "lon": 130.820819,
    "name": "赤牟田の辻"
+  },
+  {
+   "lat": 31.651471,
+   "lon": 130.699351,
+   "name": "姶良カルデラ",
+   "name_en": "Aira Caldera",
+   "wikidata": "Q1198576",
+   "volcano": true
   },
   {
    "lat": 34.95494,
@@ -123687,6 +124251,18 @@
    "name": "鬼越山"
   },
   {
+   "lat": 34.729566,
+   "lon": 139.399217,
+   "name": "B1",
+   "volcano": true
+  },
+  {
+   "lat": 34.730284,
+   "lon": 139.398389,
+   "name": "B2",
+   "volcano": true
+  },
+  {
    "lat": 44.826742,
    "lon": 130.958398,
    "name": "神洞山"
@@ -123806,6 +124382,24 @@
    "name": "荒木山"
   },
   {
+   "lat": 43.600909,
+   "lon": 144.406625,
+   "name": "ボッケ",
+   "volcano": true
+  },
+  {
+   "lat": 43.600974,
+   "lon": 144.406466,
+   "name": "ボッケ",
+   "volcano": true
+  },
+  {
+   "lat": 43.601163,
+   "lon": 144.407843,
+   "name": "第２硫黄山",
+   "volcano": true
+  },
+  {
    "lat": 37.503585,
    "lon": 139.955933,
    "name": "飯盛山",
@@ -123817,6 +124411,15 @@
    "lon": 139.008481,
    "name": "大久保山",
    "name_en": "Mount Okuboyama"
+  },
+  {
+   "lat": 36.555237,
+   "lon": 139.178229,
+   "name": "赤城山",
+   "name_ru": "Акаги",
+   "name_en": "Mt. Akagi",
+   "wikidata": "Q415251",
+   "volcano": true
   },
   {
    "lat": 33.156526,
@@ -123934,6 +124537,21 @@
    "lat": 33.190087,
    "lon": 131.794613,
    "name": "藤ノ尾山"
+  },
+  {
+   "lat": 42.557492,
+   "lon": 140.81203,
+   "name": "有くん火口",
+   "name_en": "Yuu crater",
+   "volcano": true
+  },
+  {
+   "lat": 35.89462,
+   "lon": 137.478801,
+   "name": "御嶽山",
+   "name_ru": "Онтаке",
+   "name_en": "Mt. Ontake",
+   "volcano": true
   },
   {
    "lat": 35.707538,
@@ -124085,6 +124703,40 @@
    "name": "楽山"
   },
   {
+   "lat": 39.753066,
+   "lon": 140.795682,
+   "name": "秋田駒ヶ岳",
+   "name_en": "Mt. Akita-Komagatake",
+   "wikidata": "Q419247",
+   "volcano": true
+  },
+  {
+   "lat": 32.761896,
+   "lon": 130.291646,
+   "name": "雲仙岳",
+   "name_ru": "Ундзен",
+   "name_en": "Mt. Unzen",
+   "wikidata": "Q620860",
+   "volcano": true
+  },
+  {
+   "lat": 37.125515,
+   "lon": 139.96368,
+   "name": "那須岳",
+   "name_ru": "Насу",
+   "name_en": "Nasu",
+   "wikidata": "Q3695587",
+   "volcano": true
+  },
+  {
+   "lat": 41.316949,
+   "lon": 141.087676,
+   "name": "恐山",
+   "name_en": "Mt. Osore",
+   "wikidata": "Q1377333",
+   "volcano": true
+  },
+  {
    "lat": 36.547489,
    "lon": 136.538828,
    "name": "えびす山"
@@ -124098,6 +124750,13 @@
    "lat": 34.710136,
    "lon": 132.52286,
    "name": "権現山"
+  },
+  {
+   "lat": 31.579051,
+   "lon": 130.664422,
+   "name": "Shōwa",
+   "name_en": "Shōwa",
+   "volcano": true
   },
   {
    "lat": 31.989356,
@@ -124115,6 +124774,14 @@
    "lat": 35.774111,
    "lon": 139.220907,
    "name": "愛宕山 ・山桜"
+  },
+  {
+   "lat": 30.445811,
+   "lon": 130.215189,
+   "name": "新岳",
+   "name_en": "Shindake",
+   "wikidata": "Q20010113",
+   "volcano": true
   },
   {
    "lat": 39.099412,
@@ -124361,6 +125028,12 @@
    "lat": 33.973273,
    "lon": 131.902596,
    "name": "門蔵山"
+  },
+  {
+   "lat": 43.610968,
+   "lon": 144.440875,
+   "name": "熊落とし",
+   "volcano": true
   },
   {
    "lat": 35.512494,
@@ -124709,6 +125382,20 @@
    "name": "北山"
   },
   {
+   "lat": 35.023721,
+   "lon": 138.783559,
+   "name": "大瀬崎南火道",
+   "name_en": "Osezaki-Minami Fire Vent",
+   "volcano": true
+  },
+  {
+   "lat": 34.861306,
+   "lon": 138.982904,
+   "name": "皮子平",
+   "name_en": "Kawago Plain",
+   "volcano": true
+  },
+  {
    "lat": 35.681604,
    "lon": 137.507218,
    "name": "奥三界岳",
@@ -124800,6 +125487,13 @@
    "wikidata": "Q31506803"
   },
   {
+   "lat": 35.226967,
+   "lon": 138.803206,
+   "name": "愛鷹山",
+   "name_en": "Mt. Ashitaka",
+   "volcano": true
+  },
+  {
    "lat": 34.991125,
    "lon": 138.02867,
    "name": "夕日峠"
@@ -124856,6 +125550,18 @@
    "lon": 133.819772,
    "name": "双子山",
    "name_en": "Futagoyama"
+  },
+  {
+   "lat": 34.90217,
+   "lon": 139.081546,
+   "name": "台ノ山",
+   "volcano": true
+  },
+  {
+   "lat": 42.554598,
+   "lon": 140.802241,
+   "name": "西山山麓火口",
+   "volcano": true
   },
   {
    "lat": 33.04083,
@@ -125614,6 +126320,188 @@
    "name_en": "Mt. Kanayamasawa"
   },
   {
+   "lat": 35.01628,
+   "lon": 138.980601,
+   "name": "高塚山",
+   "name_en": "Mt. Takatsuka",
+   "volcano": true
+  },
+  {
+   "lat": 34.921189,
+   "lon": 138.895579,
+   "name": "舩原",
+   "name_en": "Funabara",
+   "volcano": true
+  },
+  {
+   "lat": 34.810457,
+   "lon": 138.941481,
+   "name": "登り尾南",
+   "volcano": true
+  },
+  {
+   "lat": 34.784611,
+   "lon": 138.994568,
+   "name": "大池",
+   "name_en": "Volnano Oike",
+   "volcano": true
+  },
+  {
+   "lat": 34.789424,
+   "lon": 138.98933,
+   "name": "小池",
+   "name_en": "Volcano Koike",
+   "volcano": true
+  },
+  {
+   "lat": 34.786425,
+   "lon": 139.043045,
+   "name": "稲取",
+   "name_en": "Inatori",
+   "volcano": true
+  },
+  {
+   "lat": 34.963681,
+   "lon": 139.074159,
+   "name": "鉢ヶ窪",
+   "name_en": "Hachi-ga-kubo Volcano",
+   "volcano": true
+  },
+  {
+   "lat": 34.956778,
+   "lon": 139.064471,
+   "name": "馬場平",
+   "name_en": "Banba Plain",
+   "volcano": true
+  },
+  {
+   "lat": 34.899862,
+   "lon": 139.05385,
+   "name": "孔ノ山",
+   "name_en": "Ananoyama Volcano",
+   "volcano": true
+  },
+  {
+   "lat": 34.887422,
+   "lon": 139.001386,
+   "name": "地蔵堂",
+   "name_en": "Jizudo",
+   "volcano": true
+  },
+  {
+   "lat": 34.796906,
+   "lon": 138.914145,
+   "name": "沼ノ川南",
+   "volcano": true
+  },
+  {
+   "lat": 34.809818,
+   "lon": 138.904085,
+   "name": "沼ノ川北",
+   "volcano": true
+  },
+  {
+   "lat": 34.827977,
+   "lon": 138.906223,
+   "name": "二本杉林道",
+   "volcano": true
+  },
+  {
+   "lat": 34.785179,
+   "lon": 138.984693,
+   "name": "天子平",
+   "name_en": "Amago Plain",
+   "volcano": true
+  },
+  {
+   "lat": 34.774082,
+   "lon": 138.976995,
+   "name": "河津筏場",
+   "volcano": true
+  },
+  {
+   "lat": 34.808861,
+   "lon": 139.034108,
+   "name": "堰口",
+   "name_en": "Volcano Sekiguchi",
+   "volcano": true
+  },
+  {
+   "lat": 34.835801,
+   "lon": 139.013116,
+   "name": "川久保川火山",
+   "name_en": "Volcano Kakubogawa",
+   "volcano": true
+  },
+  {
+   "lat": 34.862816,
+   "lon": 139.065244,
+   "name": "赤窪",
+   "name_en": "Mt. Akakubo",
+   "volcano": true
+  },
+  {
+   "lat": 34.952206,
+   "lon": 139.113192,
+   "name": "城星",
+   "name_en": "Josei School",
+   "volcano": true
+  },
+  {
+   "lat": 34.939496,
+   "lon": 139.131224,
+   "name": "小室山",
+   "name_en": "Mt.Komuro",
+   "volcano": true
+  },
+  {
+   "lat": 34.962008,
+   "lon": 139.107211,
+   "name": "内野",
+   "name_en": "Volcano Uchino",
+   "volcano": true
+  },
+  {
+   "lat": 34.924302,
+   "lon": 139.124031,
+   "name": "地久保",
+   "volcano": true
+  },
+  {
+   "lat": 34.921488,
+   "lon": 139.126681,
+   "name": "梅木平",
+   "name_en": "Umeki Plain",
+   "volcano": true
+  },
+  {
+   "lat": 34.867973,
+   "lon": 138.947124,
+   "name": "与一坂",
+   "name_en": "Yoichi Slope",
+   "volcano": true
+  },
+  {
+   "lat": 34.843631,
+   "lon": 138.914808,
+   "name": "滑沢",
+   "name_en": "Volcan Namesawa",
+   "volcano": true
+  },
+  {
+   "lat": 34.848678,
+   "lon": 138.928523,
+   "name": "エサシノ峰",
+   "volcano": true
+  },
+  {
+   "lat": 35.009799,
+   "lon": 139.025354,
+   "name": "長者原",
+   "name_en": "Chojya Field",
+   "volcano": true
+  },
+  {
    "lat": 36.300084,
    "lon": 137.721953,
    "name": "蝶槍",
@@ -125828,6 +126716,14 @@
    "lon": 135.224844,
    "name": "妙見山",
    "name_en": "Mt. Myoken"
+  },
+  {
+   "lat": 31.885452,
+   "lon": 130.909808,
+   "name": "御鉢",
+   "name_en": "Ohachi",
+   "wikidata": "Q11489346",
+   "volcano": true
   },
   {
    "lat": 34.978941,
@@ -126455,9 +127351,22 @@
    "name": "天狗山"
   },
   {
+   "lat": 39.115839,
+   "lon": 139.962872,
+   "name": "猿穴噴火口",
+   "volcano": true
+  },
+  {
    "lat": 39.116278,
    "lon": 139.962486,
    "name": "763.1"
+  },
+  {
+   "lat": 42.559592,
+   "lon": 140.810463,
+   "name": "珠ちゃん火口",
+   "name_en": "Tama crater",
+   "volcano": true
   },
   {
    "lat": 33.228919,
@@ -127010,6 +127919,12 @@
    "name_en": "Mt. Sawarazawa"
   },
   {
+   "lat": 34.449707,
+   "lon": 131.401982,
+   "name": "笠山",
+   "volcano": true
+  },
+  {
    "lat": 35.027245,
    "lon": 135.805076,
    "name": "中尾城址",
@@ -127517,6 +128432,13 @@
    "lat": 34.343357,
    "lon": 131.032998,
    "name": "大藤山"
+  },
+  {
+   "lat": 40.465975,
+   "lon": 140.883452,
+   "name": "十和田火山",
+   "wikidata": "Q1168847",
+   "volcano": true
   },
   {
    "lat": 32.624421,
@@ -128270,6 +129192,12 @@
    "name": "丁子山"
   },
   {
+   "lat": 34.075066,
+   "lon": 139.48684,
+   "name": "コシキの穴",
+   "volcano": true
+  },
+  {
    "lat": 34.671441,
    "lon": 138.039516,
    "name": "惣兵衛山"
@@ -128293,6 +129221,12 @@
    "lat": 33.167816,
    "lon": 129.696986,
    "name": "95"
+  },
+  {
+   "lat": 32.453233,
+   "lon": 139.768077,
+   "name": "丸山",
+   "volcano": true
   },
   {
    "lat": 35.300238,
@@ -129250,6 +130184,12 @@
    "name": "亮帽顶子"
   },
   {
+   "lat": 32.738733,
+   "lon": 130.264293,
+   "name": "泥火山",
+   "volcano": true
+  },
+  {
    "lat": 36.283682,
    "lon": 137.661328,
    "name": "Ⅳ"
@@ -129268,6 +130208,41 @@
    "lat": 35.865646,
    "lon": 128.40601,
    "name": "양지편산"
+  },
+  {
+   "lat": 34.098281,
+   "lon": 139.530553,
+   "name": "1874年噴火口",
+   "name_en": "Crater emerged in 1874",
+   "volcano": true
+  },
+  {
+   "lat": 34.095651,
+   "lon": 139.531641,
+   "name": "ミソド穴",
+   "name_en": "Misodo Crater",
+   "volcano": true
+  },
+  {
+   "lat": 34.09722,
+   "lon": 139.531405,
+   "name": "コシキ穴",
+   "name_en": "Koshiki Crater",
+   "volcano": true
+  },
+  {
+   "lat": 34.099428,
+   "lon": 139.531633,
+   "name": "大穴",
+   "name_en": "Oh Crater",
+   "volcano": true
+  },
+  {
+   "lat": 34.093931,
+   "lon": 139.530748,
+   "name": "スオウ穴",
+   "name_en": "Suou Crater",
+   "volcano": true
   },
   {
    "lat": 34.812106,
@@ -129678,6 +130653,14 @@
    "name": "581.7"
   },
   {
+   "lat": 42.374522,
+   "lon": 142.310266,
+   "name": "新冠泥火山",
+   "name_en": "Niikappu Mud volcano",
+   "wikidata": "Q11501419",
+   "volcano": true
+  },
+  {
    "lat": 35.314723,
    "lon": 139.311773,
    "name": "坂田山"
@@ -129783,6 +130766,14 @@
    "name": "大潟富士",
    "ele": -4,
    "wikidata": "Q10936618"
+  },
+  {
+   "lat": 34.546706,
+   "lon": 139.441169,
+   "name": "大室海穴",
+   "ele": -100,
+   "wikidata": "Q11434362",
+   "volcano": true
   }
  ]
 }

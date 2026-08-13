@@ -1,6 +1,6 @@
 {
  "region": "himalaya-west",
- "generated": "2026-08-12T10:54:56+00:00",
+ "generated": "2026-08-13T09:16:21+00:00",
  "peaks": [
   {
    "lat": 35.881653,
@@ -5862,6 +5862,15 @@
    "ele": 4876
   },
   {
+   "lat": 35.698645,
+   "lon": 81.57861,
+   "name": "阿什库勒一号火山",
+   "name_en": "Ashi",
+   "ele": 4868,
+   "wikidata": "Q725295",
+   "volcano": true
+  },
+  {
    "lat": 30.746703,
    "lon": 79.098321,
    "name": "Swet Parvat",
@@ -7172,6 +7181,32 @@
    "name": "Shukule"
   },
   {
+   "lat": 35.700768,
+   "lon": 81.650535,
+   "name": "Pulu",
+   "wikidata": "Q1436026",
+   "volcano": true
+  },
+  {
+   "lat": 35.772519,
+   "lon": 81.619224,
+   "name": "大黑山火山",
+   "name_en": "Ashi volcano",
+   "volcano": true
+  },
+  {
+   "lat": 35.791244,
+   "lon": 81.761088,
+   "name": "马蹄山火山",
+   "volcano": true
+  },
+  {
+   "lat": 35.699883,
+   "lon": 81.661393,
+   "name": "阿什库勒三号火山",
+   "volcano": true
+  },
+  {
    "lat": 35.240031,
    "lon": 74.460328,
    "name": "Baleshārone"
@@ -8131,6 +8166,30 @@
    "lat": 34.581854,
    "lon": 79.380725,
    "name": "金鱼山"
+  },
+  {
+   "lat": 35.900949,
+   "lon": 81.415803,
+   "name": "苏贝希1号火山",
+   "volcano": true
+  },
+  {
+   "lat": 35.88439,
+   "lon": 81.433513,
+   "name": "苏贝希2号火山",
+   "volcano": true
+  },
+  {
+   "lat": 35.873495,
+   "lon": 81.438615,
+   "name": "托甫热火山",
+   "volcano": true
+  },
+  {
+   "lat": 35.795232,
+   "lon": 82.893194,
+   "name": "独尖山",
+   "volcano": true
   },
   {
    "lat": 34.086699,
@@ -12474,6 +12533,18 @@
    "lon": 79.298011,
    "name": "Bailong Mountains",
    "name_en": "Bailong Mountains"
+  },
+  {
+   "lat": 33.223978,
+   "lon": 78.338956,
+   "name": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 33.222551,
+   "lon": 78.331651,
+   "name": "Mud volcano area",
+   "volcano": true
   },
   {
    "lat": 32.113428,

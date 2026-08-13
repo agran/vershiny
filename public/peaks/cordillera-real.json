@@ -1,6 +1,6 @@
 {
  "region": "cordillera-real",
- "generated": "2026-08-12T10:54:54+00:00",
+ "generated": "2026-08-13T09:16:19+00:00",
  "peaks": [
   {
    "lat": -16.654999,
@@ -3389,6 +3389,13 @@
    "lon": -68.935062,
    "name": "Kunturini",
    "wikidata": "Q21044257"
+  },
+  {
+   "lat": -17.342579,
+   "lon": -69.362816,
+   "name": "Sirk'i",
+   "wikidata": "Q7530452",
+   "volcano": true
   },
   {
    "lat": -16.633352,

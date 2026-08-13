@@ -1,6 +1,6 @@
 {
  "region": "atlas",
- "generated": "2026-08-12T10:54:51+00:00",
+ "generated": "2026-08-13T09:16:17+00:00",
  "peaks": [
   {
    "lat": 31.059832,
@@ -851,6 +851,14 @@
    "name": "Jbel Hebri",
    "ele": 2104,
    "wikidata": "Q19286542"
+  },
+  {
+   "lat": 33.359377,
+   "lon": -5.140612,
+   "name": "Jbel Hebri",
+   "ele": 2104,
+   "wikidata": "Q19286542",
+   "volcano": true
   },
   {
    "lat": 31.011414,
@@ -2639,6 +2647,42 @@
    "lat": 33.084732,
    "lon": -4.996013,
    "name": "Volcan Aguelmame Sidi Ali"
+  },
+  {
+   "lat": 33.37513,
+   "lon": -5.12391,
+   "name": "Lachmin IGETAAN",
+   "volcano": true
+  },
+  {
+   "lat": 33.358853,
+   "lon": -5.140324,
+   "name": "Volcan Jbel Hebri",
+   "volcano": true
+  },
+  {
+   "lat": 33.392186,
+   "lon": -5.159085,
+   "name": "Volcan Hibri",
+   "volcano": true
+  },
+  {
+   "lat": 33.382891,
+   "lon": -5.156713,
+   "name": "Volcan Hibri 2",
+   "volcano": true
+  },
+  {
+   "lat": 33.220002,
+   "lon": -5.205531,
+   "name": "Maar Ain el KAHLA",
+   "volcano": true
+  },
+  {
+   "lat": 33.181137,
+   "lon": -5.252142,
+   "name": "Volcan Sidi MGUIL",
+   "volcano": true
   },
   {
    "lat": 33.837656,

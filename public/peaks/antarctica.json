@@ -1,6 +1,6 @@
 {
  "region": "antarctica",
- "generated": "2026-08-12T10:54:50+00:00",
+ "generated": "2026-08-13T09:16:16+00:00",
  "peaks": [
   {
    "lat": -78.525398,
@@ -50,6 +50,14 @@
    "name": "Mount Markham",
    "ele": 4350,
    "wikidata": "Q1412427"
+  },
+  {
+   "lat": -77.041068,
+   "lon": -126.09035,
+   "name": "Mount Sidley",
+   "ele": 4285,
+   "wikidata": "Q924312",
+   "volcano": true
   },
   {
    "lat": -84.552252,
@@ -137,6 +145,16 @@
    "ele": 3810
   },
   {
+   "lat": -77.529413,
+   "lon": 167.149359,
+   "name": "Mount Erebus",
+   "name_ru": "вулкан Эребус",
+   "name_en": "Mount Erebus",
+   "ele": 3794,
+   "wikidata": "Q188982",
+   "volcano": true
+  },
+  {
    "lat": -78.28511,
    "lon": 162.485485,
    "name": "Mount Huggins",
@@ -179,6 +197,14 @@
    "wikidata": "Q6923948"
   },
   {
+   "lat": -76.801909,
+   "lon": -117.753238,
+   "name": "Mount Frakes",
+   "ele": 3654,
+   "wikidata": "Q1422562",
+   "volcano": true
+  },
+  {
    "lat": -78.173048,
    "lon": 162.613032,
    "name": "Rester Peak",
@@ -191,6 +217,21 @@
    "name": "Waiparahoaka Mountain",
    "ele": 3608,
    "wikidata": "Q7960270"
+  },
+  {
+   "lat": -75.797563,
+   "lon": -115.811461,
+   "name": "Richmond Peak",
+   "ele": 3595,
+   "volcano": true
+  },
+  {
+   "lat": -76.727037,
+   "lon": -117.74532,
+   "name": "Mount Steere",
+   "ele": 3558,
+   "wikidata": "Q264074",
+   "volcano": true
   },
   {
    "lat": -73.462525,
@@ -241,6 +282,15 @@
    "wikidata": "Q7259099"
   },
   {
+   "lat": -76.283066,
+   "lon": -112.083817,
+   "name": "Mount Takahe",
+   "name_en": "Mount Takahe",
+   "ele": 3460,
+   "wikidata": "Q358755",
+   "volcano": true
+  },
+  {
    "lat": -78.152435,
    "lon": 162.717217,
    "name": "O'Regan Peak",
@@ -289,6 +339,24 @@
    "wikidata": "Q21471406"
   },
   {
+   "lat": -76.498716,
+   "lon": -125.781441,
+   "name": "Mount Hampton",
+   "name_en": "Mount Hampton",
+   "ele": 3323,
+   "wikidata": "Q1422565",
+   "volcano": true
+  },
+  {
+   "lat": -77.170682,
+   "lon": -126.873508,
+   "name": "Mount Waesche",
+   "name_en": "Mount Waesche",
+   "ele": 3292,
+   "wikidata": "Q1950791",
+   "volcano": true
+  },
+  {
    "lat": -78.135108,
    "lon": 162.457012,
    "name": "Engebretson Peak",
@@ -313,6 +381,15 @@
    "name": "Mount Hope",
    "ele": 3239,
    "wikidata": "Q6921286"
+  },
+  {
+   "lat": -77.516667,
+   "lon": 168.533333,
+   "name": "Mount Terror",
+   "name_en": "Mount Terror",
+   "ele": 3230,
+   "wikidata": "Q1056741",
+   "volcano": true
   },
   {
    "lat": -77.980786,
@@ -341,6 +418,15 @@
    "name": "The Fang",
    "ele": 3153,
    "wikidata": "Q7733372"
+  },
+  {
+   "lat": -73.427081,
+   "lon": -126.786258,
+   "name": "Mount Siple",
+   "name_en": "Mount Siple",
+   "ele": 3110,
+   "wikidata": "Q678102",
+   "volcano": true
   },
   {
    "lat": -84.819764,
@@ -383,6 +469,15 @@
    "name": "Mount Stephenson",
    "ele": 2987,
    "wikidata": "Q6923858"
+  },
+  {
+   "lat": -75.809274,
+   "lon": -132.354012,
+   "name": "Mount Andrus",
+   "name_en": "Mount Andrus",
+   "ele": 2978,
+   "wikidata": "Q1758184",
+   "volcano": true
   },
   {
    "lat": -78.349125,
@@ -475,6 +570,14 @@
    "wikidata": "Q7489250"
   },
   {
+   "lat": -74.35,
+   "lon": 164.7,
+   "name": "Mount Melbourne",
+   "ele": 2733,
+   "wikidata": "Q739945",
+   "volcano": true
+  },
+  {
    "lat": -83.29135,
    "lon": 157.36578,
    "name": "Martin Dome",
@@ -502,6 +605,14 @@
    "ele": 2724
   },
   {
+   "lat": -78.542508,
+   "lon": 163.510979,
+   "name": "Mount Morning",
+   "ele": 2723,
+   "wikidata": "Q380308",
+   "volcano": true
+  },
+  {
    "lat": -76.669219,
    "lon": -118.051081,
    "name": "Tasch Peak",
@@ -519,6 +630,14 @@
    "lon": -62.364089,
    "name": "Brabant Island",
    "ele": 2688
+  },
+  {
+   "lat": -78.374762,
+   "lon": 165.019005,
+   "name": "Mount Discovery",
+   "ele": 2681,
+   "wikidata": "Q1422550",
+   "volcano": true
   },
   {
    "lat": -84.283616,
@@ -1426,6 +1545,14 @@
    "wikidata": "Q6318805"
   },
   {
+   "lat": -73.532948,
+   "lon": 169.699348,
+   "name": "Hawkes Heights",
+   "ele": 2000,
+   "wikidata": "Q8333629",
+   "volcano": true
+  },
+  {
    "lat": -77.499997,
    "lon": 160.899882,
    "name": "Mount Electra",
@@ -1772,6 +1899,14 @@
    "name": "Clissold Nunatak",
    "ele": 1654,
    "wikidata": "Q34201316"
+  },
+  {
+   "lat": -68.825625,
+   "lon": -90.650015,
+   "name": "Lars Christensentoppen",
+   "ele": 1640,
+   "wikidata": "Q951735",
+   "volcano": true
   },
   {
    "lat": -77.269556,
@@ -3204,6 +3339,15 @@
    "wikidata": "Q283552"
   },
   {
+   "lat": -66.803542,
+   "lon": 89.190273,
+   "name": "Gaussberg",
+   "name_en": "Mount Gauss",
+   "ele": 371,
+   "wikidata": "Q283552",
+   "volcano": true
+  },
+  {
    "lat": -62.215839,
    "lon": -58.477783,
    "name": "Wieża",
@@ -3268,6 +3412,13 @@
    "ele": 338
   },
   {
+   "lat": -62.911211,
+   "lon": -60.598963,
+   "name": "Goddard Hill",
+   "ele": 332,
+   "volcano": true
+  },
+  {
    "lat": -62.57611,
    "lon": -60.718346,
    "name": "Casanovas Peak",
@@ -3312,6 +3463,14 @@
    "name": "Castro Peak",
    "ele": 306,
    "wikidata": "Q5050788"
+  },
+  {
+   "lat": -77.838982,
+   "lon": 166.724911,
+   "name": "Crater Hill",
+   "ele": 301,
+   "wikidata": "Q21476926",
+   "volcano": true
   },
   {
    "lat": -62.057988,
@@ -3527,6 +3686,14 @@
    "name": "Alcorta Rocks",
    "ele": 214,
    "wikidata": "Q4713367"
+  },
+  {
+   "lat": -77.84051,
+   "lon": 166.68641,
+   "name": "Twin Crater",
+   "ele": 213,
+   "wikidata": "Q7775197",
+   "volcano": true
   },
   {
    "lat": -62.169029,
@@ -4212,6 +4379,13 @@
    "ele": 44
   },
   {
+   "lat": -66.000793,
+   "lon": -123.441638,
+   "name": "Oiski Poiski",
+   "ele": 42,
+   "volcano": true
+  },
+  {
    "lat": -69.006209,
    "lon": 39.605223,
    "name": "見晴らし岩",
@@ -4444,6 +4618,14 @@
    "lon": 140.00632,
    "name": "Mont Caroline",
    "wikidata": "Q21477306"
+  },
+  {
+   "lat": -62.102774,
+   "lon": -57.928482,
+   "name": "Deacon Peak",
+   "name_en": "Deacon Peak",
+   "wikidata": "Q595659",
+   "volcano": true
   },
   {
    "lat": -69.408,
@@ -11335,6 +11517,13 @@
    "wikidata": "Q6919975"
   },
   {
+   "lat": -64.216385,
+   "lon": -57.621575,
+   "name": "Mount Haddington",
+   "wikidata": "Q3302073",
+   "volcano": true
+  },
+  {
    "lat": -64.282397,
    "lon": -58.886335,
    "name": "Downham Peak",
@@ -11497,16 +11686,65 @@
    "name": "Shopify Mountain"
   },
   {
+   "lat": -75.952777,
+   "lon": 165.352785,
+   "name": "Iulia Mud Volcano",
+   "wikidata": "Q100415792",
+   "volcano": true
+  },
+  {
+   "lat": -75.947221,
+   "lon": 165.416109,
+   "name": "Tergeste Mud Volcano",
+   "wikidata": "Q85288719",
+   "volcano": true
+  },
+  {
    "lat": -79.75,
    "lon": 159.56667,
    "name": "Goorkha Craters",
    "wikidata": "Q5584012"
   },
   {
+   "lat": -77.798453,
+   "lon": 166.734448,
+   "name": "Third Crater",
+   "wikidata": "Q21473704",
+   "volcano": true
+  },
+  {
+   "lat": -77.821609,
+   "lon": 166.68572,
+   "name": "Second Crater",
+   "wikidata": "Q7443235",
+   "volcano": true
+  },
+  {
+   "lat": -77.833063,
+   "lon": 166.654714,
+   "name": "First Crater",
+   "wikidata": "Q5452885",
+   "volcano": true
+  },
+  {
    "lat": -77.508139,
    "lon": 169.231468,
    "name": "Kyle Cone",
    "wikidata": "Q6451102"
+  },
+  {
+   "lat": -77.80519,
+   "lon": 166.8417,
+   "name": "Sheppard Crater",
+   "wikidata": "Q7494531",
+   "volcano": true
+  },
+  {
+   "lat": -77.807082,
+   "lon": 166.749342,
+   "name": "Half Moon Crater",
+   "wikidata": "Q15222603",
+   "volcano": true
   },
   {
    "lat": -77.475964,
@@ -14467,6 +14705,12 @@
    "lon": 167.479177,
    "name": "Coleman Peak",
    "wikidata": "Q5143026"
+  },
+  {
+   "lat": -77.519343,
+   "lon": 167.224772,
+   "name": "Eastern Cone",
+   "volcano": true
   },
   {
    "lat": -77.525707,
@@ -18365,6 +18609,13 @@
    "lon": 162.425,
    "name": "Freeman Peak",
    "wikidata": "Q21485300"
+  },
+  {
+   "lat": -73.448478,
+   "lon": 165.493776,
+   "name": "Mount Rittmann",
+   "wikidata": "Q3322058",
+   "volcano": true
   },
   {
    "lat": -68.634313,

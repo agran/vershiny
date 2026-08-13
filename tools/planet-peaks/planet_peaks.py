@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-planet-peaks: потоковый фильтр planet.osm.pbf → вершины (natural=peak).
+planet-peaks: потоковый фильтр planet.osm.pbf → вершины
+(natural=peak и natural=volcano).
 
 Читает формат OSM PBF напрямую (zlib-блоки), без внешних зависимостей:
 только protobuf-парсер собственной реализации (~100 строк) — ради разового
 прогона не тянем osmium/protobuf.
 
 Выход: JSONL (одна вершина на строку), поля:
-  lat, lon, name (name:ru → name → name:en), ele (float|None), wikidata
+  lat, lon, name (name:ru → name → name:en), ele (float|None), wikidata,
+  volcano (True для natural=volcano)
 
 Опционально фильтрует по bbox, чтобы не писать миллионы строк:
   python planet_peaks.py planet-260803.osm.pbf -o peaks-planet.jsonl
@@ -30,6 +32,12 @@ from pathlib import Path
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+#: Теги вершин. Вулканы в OSM — отдельный тег: без него нет ни Эльбруса,
+#: ни Казбека, ни Фудзи, ни Килиманджаро, ни Камчатки с Эквадором.
+SUMMIT_TAGS = ("peak", "volcano")
+#: Теги, которые вытаскиваем из узла
+WANTED_KEYS = ("natural", "name", "name:ru", "name:en", "ele", "wikidata")
 
 # ---------------------------------------------------------------------------
 # Мини-парсер protobuf (только нужные wire types: varint, fixed64, LEN)
@@ -193,6 +201,9 @@ def emit_peak(
         stats["no_ele"] += 1
     if tags.get("wikidata"):
         peak["wikidata"] = tags["wikidata"]
+    if tags.get("natural") == "volcano":
+        peak["volcano"] = True
+        stats["volcanoes"] += 1
     line = json.dumps(peak, ensure_ascii=False) + "\n"
 
     out.write(line)
@@ -274,12 +285,12 @@ def parse_dense_nodes(
         while kv_pos < len(kvs) and kvs[kv_pos] != 0:
             k = strings[kvs[kv_pos]].decode("utf-8", "replace")
             v = strings[kvs[kv_pos + 1]].decode("utf-8", "replace")
-            if k in ("natural", "name", "name:ru", "name:en", "ele", "wikidata"):
+            if k in WANTED_KEYS:
                 tags[k] = v
             kv_pos += 2
         kv_pos += 1  # разделитель 0
 
-        if tags.get("natural") == "peak":
+        if tags.get("natural") in SUMMIT_TAGS:
             emit_peak(out, lat, lon, tags, bbox, stats, region_writers)
 
 
@@ -312,10 +323,9 @@ def parse_node(
     tags = {
         strings[k].decode("utf-8", "replace"): strings[v].decode("utf-8", "replace")
         for k, v in zip(keys, vals)
-        if strings[k].decode("utf-8", "replace")
-        in ("natural", "name", "name:ru", "name:en", "ele", "wikidata")
+        if strings[k].decode("utf-8", "replace") in WANTED_KEYS
     }
-    if tags.get("natural") == "peak":
+    if tags.get("natural") in SUMMIT_TAGS:
         emit_peak(
             out,
             (lat_offset + granularity * lat) / 1e9,
@@ -377,7 +387,7 @@ def parse_primitive_block(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="planet.osm.pbf → JSONL вершин (natural=peak)"
+        description="planet.osm.pbf → JSONL вершин (natural=peak и natural=volcano)"
     )
     parser.add_argument("input", type=Path, help="planet-*.osm.pbf")
     parser.add_argument("-o", "--out", type=Path, required=True, help="JSONL на выход")
@@ -411,7 +421,14 @@ def main() -> None:
             region_writers[name] = (tuple(entry["bbox"]), fh)
         print(f"Регионов открыто: {len(region_writers)} → {args.regions_dir}")
 
-    stats = {"peaks": 0, "outside": 0, "no_name": 0, "no_ele": 0, "written": 0}
+    stats = {
+        "peaks": 0,
+        "volcanoes": 0,
+        "outside": 0,
+        "no_name": 0,
+        "no_ele": 0,
+        "written": 0,
+    }
     t0 = time.time()
     blocks = 0
     file_size = args.input.stat().st_size
@@ -459,7 +476,7 @@ def main() -> None:
     elapsed = time.time() - t0
     print(
         f"OK: {stats['written']} вершин → {args.out} за {elapsed / 60:.1f} мин\n"
-        f"  найдено natural=peak: {stats['peaks']}, "
+        f"  найдено peak/volcano: {stats['peaks']} (вулканов: {stats['volcanoes']}), "
         f"без имени: {stats['no_name']}, без ele: {stats['no_ele']}"
     )
     if region_writers:

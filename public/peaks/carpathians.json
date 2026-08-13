@@ -1,6 +1,6 @@
 {
  "region": "carpathians",
- "generated": "2026-08-12T10:54:53+00:00",
+ "generated": "2026-08-13T09:16:18+00:00",
  "peaks": [
   {
    "lat": 48.782792,
@@ -13583,6 +13583,13 @@
    "name": "Krížava",
    "ele": 1457,
    "wikidata": "Q8042902"
+  },
+  {
+   "lat": 48.655749,
+   "lon": 19.436553,
+   "name": "Poľana",
+   "ele": 1457,
+   "volcano": true
   },
   {
    "lat": 45.497407,
@@ -67480,6 +67487,13 @@
    "wikidata": "Q9397562"
   },
   {
+   "lat": 49.891304,
+   "lon": 17.523138,
+   "name": "Velký Roudný",
+   "ele": 780,
+   "volcano": true
+  },
+  {
    "lat": 48.948849,
    "lon": 18.406634,
    "name": "Vápenica",
@@ -68810,6 +68824,13 @@
    "lon": 19.769179,
    "name": "Słowacka",
    "ele": 771
+  },
+  {
+   "lat": 49.880481,
+   "lon": 17.507299,
+   "name": "Malý Roudný",
+   "ele": 771,
+   "volcano": true
   },
   {
    "lat": 44.016633,
@@ -71985,6 +72006,14 @@
    "lon": 22.703642,
    "name": "Înalt",
    "ele": 749
+  },
+  {
+   "lat": 49.776616,
+   "lon": 17.541175,
+   "name": "Červená hora",
+   "ele": 749,
+   "wikidata": "Q11175988",
+   "volcano": true
   },
   {
    "lat": 48.551746,
@@ -83612,6 +83641,14 @@
    "ele": 672
   },
   {
+   "lat": 49.972795,
+   "lon": 17.43953,
+   "name": "Uhlířský vrch",
+   "ele": 672,
+   "wikidata": "Q11877692",
+   "volcano": true
+  },
+  {
    "lat": 49.151669,
    "lon": 22.755941,
    "name": "Syhła",
@@ -86470,6 +86507,14 @@
    "lon": 23.500304,
    "name": "Coasta Dumbrăvilor",
    "ele": 654
+  },
+  {
+   "lat": 49.950793,
+   "lon": 17.477763,
+   "name": "Venušina sopka",
+   "ele": 654,
+   "wikidata": "Q11879335",
+   "volcano": true
   },
   {
    "lat": 46.113311,
@@ -93359,6 +93404,14 @@
    "ele": 613
   },
   {
+   "lat": 46.03147,
+   "lon": 25.4189,
+   "name": "Vulcanul de la Racoș",
+   "name_en": "Racos Volcano",
+   "ele": 612,
+   "volcano": true
+  },
+  {
    "lat": 49.6115,
    "lon": 18.28723,
    "name": "Kozlovická hora",
@@ -95814,6 +95867,14 @@
    "lon": 17.194296,
    "name": "Korenný vrch",
    "ele": 599
+  },
+  {
+   "lat": 47.04595,
+   "lon": 17.656893,
+   "name": "Kab-hegy",
+   "ele": 599,
+   "wikidata": "Q14619722",
+   "volcano": true
   },
   {
    "lat": 48.844609,
@@ -110152,6 +110213,14 @@
    "ele": 513
   },
   {
+   "lat": 48.120228,
+   "lon": 21.381781,
+   "name": "Kopasz-hegy",
+   "ele": 513,
+   "wikidata": "Q1118658",
+   "volcano": true
+  },
+  {
    "lat": 49.346455,
    "lon": 18.005364,
    "name": "Vršky-Díly",
@@ -110341,6 +110410,13 @@
    "name_en": "Avala",
    "ele": 511,
    "wikidata": "Q790075"
+  },
+  {
+   "lat": 46.963747,
+   "lon": 17.502059,
+   "name": "Agár-tető",
+   "ele": 511,
+   "volcano": true
   },
   {
    "lat": 48.635251,
@@ -116257,6 +116333,14 @@
    "ele": 477
   },
   {
+   "lat": 48.377814,
+   "lon": 18.640057,
+   "name": "Putikov vŕšok",
+   "ele": 477,
+   "wikidata": "Q12774899",
+   "volcano": true
+  },
+  {
    "lat": 44.620945,
    "lon": 17.891021,
    "name": "Debelo brdo",
@@ -121283,6 +121367,13 @@
    "ele": 448
   },
   {
+   "lat": 46.914862,
+   "lon": 17.57705,
+   "name": "Boncsos-tető",
+   "ele": 448,
+   "volcano": true
+  },
+  {
    "lat": 44.572848,
    "lon": 18.667482,
    "name": "Karaula",
@@ -122817,6 +122908,14 @@
    "ele": 438
   },
   {
+   "lat": 46.803292,
+   "lon": 17.496175,
+   "name": "Badacsony",
+   "ele": 437,
+   "wikidata": "Q642172",
+   "volcano": true
+  },
+  {
    "lat": 49.05244,
    "lon": 18.367071,
    "name": "Kamenica",
@@ -123972,6 +124071,13 @@
    "name": "Зубова Гора",
    "name_en": "Zubova Hora",
    "ele": 431
+  },
+  {
+   "lat": 47.146564,
+   "lon": 17.371769,
+   "name": "Somló",
+   "ele": 431,
+   "volcano": true
   },
   {
    "lat": 48.355838,
@@ -126806,6 +126912,15 @@
    "lon": 19.728462,
    "name": "Главица",
    "ele": 416
+  },
+  {
+   "lat": 46.84154,
+   "lon": 17.448361,
+   "name": "Szent György-hegy",
+   "name_en": "Saint George's Hill",
+   "ele": 415,
+   "wikidata": "Q1296341",
+   "volcano": true
   },
   {
    "lat": 48.876544,
@@ -130023,6 +130138,14 @@
    "ele": 399
   },
   {
+   "lat": 46.933926,
+   "lon": 17.707802,
+   "name": "Halom-hegy",
+   "ele": 399,
+   "wikidata": "Q26233054",
+   "volcano": true
+  },
+  {
    "lat": 48.741553,
    "lon": 17.501929,
    "name": "Hrebeň",
@@ -130976,6 +131099,15 @@
    "name": "Dúbrava",
    "ele": 393,
    "wikidata": "Q31555806"
+  },
+  {
+   "lat": 46.829456,
+   "lon": 17.500988,
+   "name": "Gulács",
+   "name_en": "Goulash",
+   "ele": 393,
+   "wikidata": "Q1028698",
+   "volcano": true
   },
   {
    "lat": 47.610028,
@@ -133590,6 +133722,13 @@
    "ele": 380
   },
   {
+   "lat": 46.956431,
+   "lon": 17.574094,
+   "name": "Bondoro",
+   "ele": 380,
+   "volcano": true
+  },
+  {
    "lat": 50.086556,
    "lon": 19.425059,
    "name": "Grodzisko Wielkie",
@@ -134038,6 +134177,14 @@
    "lon": 18.347838,
    "name": "Rašov",
    "ele": 378
+  },
+  {
+   "lat": 46.871396,
+   "lon": 17.504514,
+   "name": "Csobánc",
+   "ele": 378,
+   "wikidata": "Q5191583",
+   "volcano": true
   },
   {
    "lat": 50.100766,
@@ -137972,6 +138119,13 @@
    "ele": 358
   },
   {
+   "lat": 46.925534,
+   "lon": 17.457894,
+   "name": "Haláp",
+   "ele": 358,
+   "volcano": true
+  },
+  {
    "lat": 49.91148,
    "lon": 20.659151,
    "name": "Biesiadki",
@@ -138572,6 +138726,13 @@
    "lon": 20.511077,
    "name": "Lipconka",
    "ele": 355
+  },
+  {
+   "lat": 46.90453,
+   "lon": 17.547566,
+   "name": "Sátorma-hegy",
+   "ele": 355,
+   "volcano": true
   },
   {
    "lat": 44.787636,
@@ -140056,6 +140217,14 @@
    "ele": 348
   },
   {
+   "lat": 46.836531,
+   "lon": 17.521223,
+   "name": "Tóti-hegy",
+   "ele": 347,
+   "wikidata": "Q1327506",
+   "volcano": true
+  },
+  {
    "lat": 47.645243,
    "lon": 18.617974,
    "name": "Őr-hegy",
@@ -140674,6 +140843,13 @@
    "lon": 17.625687,
    "name": "Šternberk",
    "ele": 344
+  },
+  {
+   "lat": 46.88053,
+   "lon": 17.52506,
+   "name": "Láz-tető",
+   "ele": 344,
+   "volcano": true
   },
   {
    "lat": 48.115556,
@@ -141918,6 +142094,14 @@
    "lon": 18.957532,
    "name": "Eszperantó-hegy",
    "ele": 336
+  },
+  {
+   "lat": 46.889372,
+   "lon": 17.648045,
+   "name": "Hegyestű",
+   "ele": 336,
+   "wikidata": "Q14126231",
+   "volcano": true
   },
   {
    "lat": 48.530108,
@@ -147476,6 +147660,13 @@
    "ele": 304
   },
   {
+   "lat": 46.906392,
+   "lon": 17.562232,
+   "name": "Kopácsi-hegy",
+   "ele": 304,
+   "volcano": true
+  },
+  {
    "lat": 47.133667,
    "lon": 22.161223,
    "name": "Izvor Demeni",
@@ -147808,6 +147999,13 @@
    "lon": 20.086449,
    "name": "Góra Zamkowa",
    "ele": 302
+  },
+  {
+   "lat": 46.872712,
+   "lon": 17.542695,
+   "name": "Kopasz-hegy",
+   "ele": 302,
+   "volcano": true
   },
   {
    "lat": 49.729298,
@@ -150830,6 +151028,13 @@
    "ele": 282
   },
   {
+   "lat": 46.914085,
+   "lon": 17.511369,
+   "name": "Hegyesd",
+   "ele": 281,
+   "volcano": true
+  },
+  {
    "lat": 47.544597,
    "lon": 18.956718,
    "name": "Fazekas-hegy",
@@ -151120,6 +151325,15 @@
    "lon": 23.4621,
    "name": "Kościowa Góra",
    "ele": 279
+  },
+  {
+   "lat": 47.23044,
+   "lon": 17.115809,
+   "name": "Ság",
+   "name_en": "Ság Mountain",
+   "ele": 279,
+   "wikidata": "Q1314392",
+   "volcano": true
   },
   {
    "lat": 46.985983,
@@ -156306,6 +156520,13 @@
    "ele": 243
   },
   {
+   "lat": 46.795536,
+   "lon": 17.441177,
+   "name": "Hálás-tető",
+   "ele": 242,
+   "volcano": true
+  },
+  {
    "lat": 47.463497,
    "lon": 18.84819,
    "name": "Közép-hegy",
@@ -156875,6 +157096,13 @@
    "lon": 18.78618,
    "name": "Veľká Morda",
    "ele": 238
+  },
+  {
+   "lat": 46.861553,
+   "lon": 17.621177,
+   "name": "Kis-Hegyestű",
+   "ele": 238,
+   "volcano": true
   },
   {
    "lat": 46.972173,
@@ -157467,6 +157695,13 @@
    "ele": 234
   },
   {
+   "lat": 46.7384,
+   "lon": 17.542883,
+   "name": "Vár-hegy",
+   "ele": 233,
+   "volcano": true
+  },
+  {
    "lat": 47.750254,
    "lon": 18.742476,
    "name": "Kis-Strázsa-hegy",
@@ -157950,6 +158185,13 @@
    "ele": 229
   },
   {
+   "lat": 46.804092,
+   "lon": 17.436359,
+   "name": "Szigligeti várhegy",
+   "ele": 229,
+   "volcano": true
+  },
+  {
    "lat": 50.018508,
    "lon": 19.829169,
    "name": "Biedzina",
@@ -157979,6 +158221,13 @@
    "lon": 17.205882,
    "name": "Mala Bukovica",
    "ele": 229
+  },
+  {
+   "lat": 46.804762,
+   "lon": 17.448459,
+   "name": "Antal-hegy",
+   "ele": 228,
+   "volcano": true
   },
   {
    "lat": 46.997171,
@@ -158783,6 +159032,14 @@
    "lon": 17.18323,
    "name": "Velika kosa",
    "ele": 221
+  },
+  {
+   "lat": 47.151536,
+   "lon": 17.099086,
+   "name": "Kis-Somlyó",
+   "ele": 220,
+   "wikidata": "Q26231944",
+   "volcano": true
   },
   {
    "lat": 47.672337,
@@ -159945,6 +160202,13 @@
    "ele": 208
   },
   {
+   "lat": 46.744142,
+   "lon": 17.550516,
+   "name": "Sipos-hegy",
+   "ele": 207,
+   "volcano": true
+  },
+  {
    "lat": 48.815251,
    "lon": 17.172973,
    "name": "Šibenica",
@@ -160154,6 +160418,14 @@
    "lon": 18.317033,
    "name": "Somlyó",
    "ele": 205
+  },
+  {
+   "lat": 45.384645,
+   "lon": 21.413018,
+   "name": "Șumigu",
+   "ele": 205,
+   "wikidata": "Q12744363",
+   "volcano": true
   },
   {
    "lat": 47.156128,
@@ -161377,6 +161649,13 @@
    "lon": 17.87023,
    "name": "Hosszú-hegy",
    "ele": 183
+  },
+  {
+   "lat": 47.224144,
+   "lon": 17.036383,
+   "name": "Pet-hegy",
+   "ele": 183,
+   "volcano": true
   },
   {
    "lat": 50.262619,
@@ -165958,6 +166237,12 @@
    "lon": 20.001473,
    "name": "Pavelková",
    "wikidata": "Q121260139"
+  },
+  {
+   "lat": 48.688559,
+   "lon": 24.487484,
+   "name": "Грязьовий вулкан \"Старуня\"",
+   "volcano": true
   },
   {
    "lat": 48.812955,
@@ -189342,6 +189627,14 @@
    "name": "Pipas"
   },
   {
+   "lat": 48.686956,
+   "lon": 24.489922,
+   "name": "Старуня",
+   "name_en": "Starunia",
+   "wikidata": "Q12157481",
+   "volcano": true
+  },
+  {
    "lat": 47.469385,
    "lon": 24.682138,
    "name": "Muntele Cucului"
@@ -189746,6 +190039,12 @@
    "lat": 48.678147,
    "lon": 20.824684,
    "name": "Malý Jelení vrch"
+  },
+  {
+   "lat": 46.952763,
+   "lon": 17.577687,
+   "name": "Vulkán kráter",
+   "volcano": true
   },
   {
    "lat": 44.432269,
@@ -190732,6 +191031,13 @@
    "name": "Panski Kopec"
   },
   {
+   "lat": 46.126,
+   "lon": 25.887037,
+   "name": "Ciomadul",
+   "wikidata": "Q874092",
+   "volcano": true
+  },
+  {
    "lat": 46.761719,
    "lon": 23.780289,
    "name": "Dealul Buduștău"
@@ -190920,6 +191226,12 @@
    "lat": 48.722014,
    "lon": 19.86797,
    "name": "Nemcová"
+  },
+  {
+   "lat": 48.326511,
+   "lon": 18.558961,
+   "name": "Monogénny vulkán",
+   "volcano": true
   },
   {
    "lat": 46.194037,
@@ -191788,6 +192100,214 @@
    "name": "Bărcului"
   },
   {
+   "lat": 45.357498,
+   "lon": 26.713343,
+   "name": "Vulcanii Noroioși de la Pâclele Mari",
+   "name_en": "Pâclele Mari Mud Volcanoes",
+   "wikidata": "Q1540631",
+   "volcano": true
+  },
+  {
+   "lat": 45.358212,
+   "lon": 26.71225,
+   "name": "Vulcanii Noroioși de la Pâclele Mari",
+   "name_en": "Pâclele Mari Mud Volcanoes",
+   "wikidata": "Q1540631",
+   "volcano": true
+  },
+  {
+   "lat": 45.358101,
+   "lon": 26.712384,
+   "name": "Vulcanii Noroioși de la Pâclele Mari",
+   "name_en": "Pâclele Mari Mud Volcanoes",
+   "wikidata": "Q1540631",
+   "volcano": true
+  },
+  {
+   "lat": 45.384622,
+   "lon": 26.716631,
+   "name": "Salțele de la Arbănași",
+   "name_en": "Arbănași Mud Volcanoes",
+   "wikidata": "Q18549280",
+   "volcano": true
+  },
+  {
+   "lat": 45.339281,
+   "lon": 26.708413,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339507,
+   "lon": 26.707297,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.338044,
+   "lon": 26.70668,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.337245,
+   "lon": 26.708456,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.338433,
+   "lon": 26.710698,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339781,
+   "lon": 26.706347,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339189,
+   "lon": 26.707616,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339394,
+   "lon": 26.70768,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339802,
+   "lon": 26.707833,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.33904,
+   "lon": 26.707115,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339353,
+   "lon": 26.709184,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339802,
+   "lon": 26.707316,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339389,
+   "lon": 26.707136,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339626,
+   "lon": 26.70693,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339455,
+   "lon": 26.708423,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.339507,
+   "lon": 26.708493,
+   "name": "Vulcanii Noroioși de la Pâclele Mici",
+   "name_en": "Pâclele Mici Mud Volcanoes",
+   "wikidata": "Q18549837",
+   "volcano": true
+  },
+  {
+   "lat": 45.358554,
+   "lon": 26.71128,
+   "name": "Vulcanii Noroioși de la Pâclele Mari",
+   "name_en": "Pâclele Mari Mud Volcanoes",
+   "wikidata": "Q1540631",
+   "volcano": true
+  },
+  {
+   "lat": 45.385188,
+   "lon": 26.716175,
+   "name": "Salțele de la Arbănași",
+   "name_en": "Arbănași Mud Volcanoes",
+   "wikidata": "Q18549280",
+   "volcano": true
+  },
+  {
+   "lat": 45.385321,
+   "lon": 26.716363,
+   "name": "Salțele de la Arbănași",
+   "name_en": "Arbănași Mud Volcanoes",
+   "wikidata": "Q18549280",
+   "volcano": true
+  },
+  {
+   "lat": 45.385249,
+   "lon": 26.716293,
+   "name": "Salțele de la Arbănași",
+   "name_en": "Arbănași Mud Volcanoes",
+   "wikidata": "Q18549280",
+   "volcano": true
+  },
+  {
+   "lat": 45.358033,
+   "lon": 26.712479,
+   "name": "Vulcanii Noroioși de la Pâclele Mari",
+   "name_en": "Pâclele Mari Mud Volcanoes",
+   "wikidata": "Q1540631",
+   "volcano": true
+  },
+  {
+   "lat": 45.385027,
+   "lon": 26.716325,
+   "name": "Salțele de la Arbănași",
+   "name_en": "Arbănași Mud Volcanoes",
+   "wikidata": "Q18549280",
+   "volcano": true
+  },
+  {
    "lat": 46.843449,
    "lon": 23.159775,
    "name": "Citara Mică"
@@ -192611,6 +193131,30 @@
    "lat": 45.527181,
    "lon": 23.60221,
    "name": "Smida Mica"
+  },
+  {
+   "lat": 45.16796,
+   "lon": 25.919601,
+   "name": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 45.167781,
+   "lon": 25.919244,
+   "name": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 45.16773,
+   "lon": 25.919557,
+   "name": "Mud volcano",
+   "volcano": true
+  },
+  {
+   "lat": 45.167978,
+   "lon": 25.919368,
+   "name": "Mud volcano",
+   "volcano": true
   },
   {
    "lat": 45.412932,

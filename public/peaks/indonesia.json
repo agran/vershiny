@@ -1,6 +1,6 @@
 {
  "region": "indonesia",
- "generated": "2026-08-12T10:54:57+00:00",
+ "generated": "2026-08-13T09:16:22+00:00",
  "peaks": [
   {
    "lat": -4.078605,
@@ -187,6 +187,15 @@
    "ele": 3856
   },
   {
+   "lat": -1.697181,
+   "lon": 101.264654,
+   "name": "Gunung Kerinci",
+   "name_en": "Mount Kerinci",
+   "ele": 3805,
+   "wikidata": "Q827728",
+   "volcano": true
+  },
+  {
    "lat": -3.543412,
    "lon": 137.82935,
    "name": "Dugudok",
@@ -225,6 +234,23 @@
    "lon": 139.463008,
    "name": "Wachter",
    "ele": 3730
+  },
+  {
+   "lat": -8.411727,
+   "lon": 116.458106,
+   "name": "Rinjani",
+   "ele": 3726,
+   "wikidata": "Q847323",
+   "volcano": true
+  },
+  {
+   "lat": -8.107843,
+   "lon": 112.92248,
+   "name": "Gunung Semeru",
+   "name_en": "Mount Semeru",
+   "ele": 3676,
+   "wikidata": "Q270158",
+   "volcano": true
   },
   {
    "lat": -3.506695,
@@ -271,6 +297,15 @@
    "ele": 3430
   },
   {
+   "lat": -7.241469,
+   "lon": 109.21497,
+   "name": "Gunung Slamet",
+   "name_en": "Slamet",
+   "ele": 3428,
+   "wikidata": "Q580131",
+   "volcano": true
+  },
+  {
    "lat": -4.318434,
    "lon": 139.17785,
    "name": "Gunung Mu",
@@ -283,10 +318,50 @@
    "ele": 3340
   },
   {
+   "lat": -7.734262,
+   "lon": 112.574994,
+   "name": "Arjuno-Welirang",
+   "ele": 3339,
+   "wikidata": "Q665399",
+   "volcano": true
+  },
+  {
+   "lat": -7.765444,
+   "lon": 112.590647,
+   "name": "Gunung Arjuno",
+   "ele": 3339,
+   "volcano": true
+  },
+  {
    "lat": -7.765419,
    "lon": 112.591016,
    "name": "Puncak Sejati Gunung Arjuno",
    "ele": 3339
+  },
+  {
+   "lat": -8.119636,
+   "lon": 114.055025,
+   "name": "Gunung Raung",
+   "ele": 3332,
+   "wikidata": "Q2033748",
+   "volcano": true
+  },
+  {
+   "lat": -8.125567,
+   "lon": 114.046665,
+   "name": "Raung",
+   "name_en": "Mount Raung",
+   "ele": 3332,
+   "volcano": true
+  },
+  {
+   "lat": -7.381893,
+   "lon": 110.075818,
+   "name": "Gunung Sumbing",
+   "name_en": "Mount Sumbing",
+   "ele": 3320,
+   "wikidata": "Q1677690",
+   "volcano": true
   },
   {
    "lat": -4.700256,
@@ -302,10 +377,25 @@
    "ele": 3285
   },
   {
+   "lat": -7.627382,
+   "lon": 111.194316,
+   "name": "Gunung Lawu",
+   "ele": 3265,
+   "wikidata": "Q3219949",
+   "volcano": true
+  },
+  {
    "lat": -4.1,
    "lon": 135.733333,
    "name": "Yaramaniapuka",
    "ele": 3250
+  },
+  {
+   "lat": -7.7326,
+   "lon": 112.5747,
+   "name": "Gunung Welirang",
+   "ele": 3245,
+   "volcano": true
   },
   {
    "lat": 3.773868,
@@ -334,10 +424,28 @@
    "ele": 3190
   },
   {
+   "lat": -4.015506,
+   "lon": 103.127987,
+   "name": "Gunung Dempo",
+   "name_en": "Mount Dempo",
+   "ele": 3173,
+   "wikidata": "Q1186618",
+   "volcano": true
+  },
+  {
    "lat": -3.802831,
    "lon": 138.825638,
    "name": "Jimliek",
    "ele": 3150
+  },
+  {
+   "lat": -7.452438,
+   "lon": 110.44082,
+   "name": "Gunung Merbabu",
+   "name_en": "Mount Merbabu",
+   "ele": 3145,
+   "wikidata": "Q598893",
+   "volcano": true
   },
   {
    "lat": -7.453758,
@@ -352,11 +460,36 @@
    "ele": 3137
   },
   {
+   "lat": -7.301139,
+   "lon": 109.996699,
+   "name": "Gunung Sindoro",
+   "name_en": "Mount Sindoro",
+   "ele": 3136,
+   "wikidata": "Q2038462",
+   "volcano": true
+  },
+  {
    "lat": -3.753842,
    "lon": 138.657632,
    "name": "Gunung Taria",
    "name_en": "Taria Mountain",
    "ele": 3100
+  },
+  {
+   "lat": -7.964402,
+   "lon": 113.566332,
+   "name": "Gunung Argopuro",
+   "ele": 3088,
+   "wikidata": "Q2549314",
+   "volcano": true
+  },
+  {
+   "lat": -6.892876,
+   "lon": 108.406823,
+   "name": "Gunung Cereme",
+   "ele": 3078,
+   "wikidata": "Q507179",
+   "volcano": true
   },
   {
    "lat": -2.742,
@@ -401,6 +534,25 @@
    "wikidata": "Q863497"
   },
   {
+   "lat": -6.769814,
+   "lon": 106.964029,
+   "name": "Gunung Pangrango",
+   "name_en": "Pangrango",
+   "ele": 3019,
+   "wikidata": "Q11222863",
+   "volcano": true
+  },
+  {
+   "lat": -8.342892,
+   "lon": 115.507208,
+   "name": "Gunung Agung",
+   "name_ru": "Вулкан Агунг",
+   "name_en": "Mount Agung",
+   "ele": 3014,
+   "wikidata": "Q158470",
+   "volcano": true
+  },
+  {
    "lat": 3.749,
    "lon": 97.7818,
    "name": "Gunung Bandahara",
@@ -423,6 +575,15 @@
    "wikidata": "Q1539961"
   },
   {
+   "lat": -6.787841,
+   "lon": 106.981717,
+   "name": "Gunung Gede",
+   "name_en": "Mount Gede",
+   "ele": 2958,
+   "wikidata": "Q1145123",
+   "volcano": true
+  },
+  {
    "lat": -1.156944,
    "lon": 133.978871,
    "name": "Arfak",
@@ -443,6 +604,22 @@
    "wikidata": "Q12484774"
   },
   {
+   "lat": -7.541289,
+   "lon": 110.446201,
+   "name": "Gunung Merapi",
+   "ele": 2930,
+   "wikidata": "Q134108",
+   "volcano": true
+  },
+  {
+   "lat": 0.079198,
+   "lon": 99.983248,
+   "name": "Gunung Ophir",
+   "name_en": "Mount Talakmau",
+   "ele": 2919,
+   "volcano": true
+  },
+  {
    "lat": -8.3799,
    "lon": 116.416,
    "name": "Gunung Sengkereang",
@@ -461,10 +638,36 @@
    "ele": 2900
   },
   {
+   "lat": -0.391113,
+   "lon": 100.457143,
+   "name": "Gunung Marapi",
+   "name_en": "Mount Marapi",
+   "ele": 2891,
+   "wikidata": "Q1960702",
+   "volcano": true
+  },
+  {
    "lat": -4.332436,
    "lon": 139.201076,
    "name": "Gunung Wasikpo",
    "ele": 2890
+  },
+  {
+   "lat": -0.393693,
+   "lon": 100.333115,
+   "name": "Gunung Singgalang",
+   "name_en": "Mount Singgalang",
+   "ele": 2877,
+   "wikidata": "Q2188825",
+   "volcano": true
+  },
+  {
+   "lat": -5.346826,
+   "lon": 119.931786,
+   "name": "Moncong Lompobattang",
+   "ele": 2874,
+   "wikidata": "Q6898536",
+   "volcano": true
   },
   {
    "lat": -7.955393,
@@ -491,10 +694,26 @@
    "ele": 2853
   },
   {
+   "lat": -4.257273,
+   "lon": 103.305885,
+   "name": "Gunung Patah",
+   "ele": 2852,
+   "volcano": true
+  },
+  {
    "lat": -7.442254,
    "lon": 110.436829,
    "name": "Puncak Pemancar 2847mdpl",
    "ele": 2847
+  },
+  {
+   "lat": -7.322513,
+   "lon": 107.859865,
+   "name": "Gunung Cikuray",
+   "name_en": "Mount Cikuray",
+   "ele": 2821,
+   "wikidata": "Q7343871",
+   "volcano": true
   },
   {
    "lat": -8.06265,
@@ -509,11 +728,30 @@
    "ele": 2803
   },
   {
+   "lat": 4.909395,
+   "lon": 96.325183,
+   "name": "Gunung Puet Sague",
+   "name_en": "Peuet Sague",
+   "ele": 2801,
+   "wikidata": "Q3958173",
+   "volcano": true
+  },
+  {
    "lat": -7.903725,
    "lon": 112.952136,
    "name": "Gunung Penanjakan",
    "name_en": "Penanjakan",
    "ele": 2782
+  },
+  {
+   "lat": -8.057933,
+   "lon": 114.243098,
+   "name": "Gunung Ijen",
+   "name_ru": "Иджен",
+   "name_en": "Ijen",
+   "ele": 2769,
+   "wikidata": "Q548489",
+   "volcano": true
   },
   {
    "lat": -1.695286,
@@ -629,6 +867,14 @@
    "ele": 2627
   },
   {
+   "lat": -7.325304,
+   "lon": 107.736412,
+   "name": "Papandayan",
+   "ele": 2623,
+   "wikidata": "Q1073134",
+   "volcano": true
+  },
+  {
    "lat": -8.372625,
    "lon": 116.422186,
    "name": "Gunung Waja",
@@ -662,6 +908,14 @@
    "wikidata": "Q675072"
   },
   {
+   "lat": -7.23,
+   "lon": 107.72,
+   "name": "Kendang",
+   "ele": 2608,
+   "wikidata": "Q675072",
+   "volcano": true
+  },
+  {
    "lat": -1.677433,
    "lon": 101.427863,
    "name": "Gunung Tujuh",
@@ -673,6 +927,15 @@
    "lon": 109.932231,
    "name": "Gunung Prau",
    "ele": 2600
+  },
+  {
+   "lat": -0.979024,
+   "lon": 100.679955,
+   "name": "Gunung Talang",
+   "name_en": "Mount Talang",
+   "ele": 2597,
+   "wikidata": "Q2155367",
+   "volcano": true
   },
   {
    "lat": -1.686164,
@@ -717,6 +980,22 @@
    "name": "Gunung Rasam",
    "ele": 2565,
    "wikidata": "Q24847821"
+  },
+  {
+   "lat": -7.820585,
+   "lon": 111.757163,
+   "name": "Gunung Wilis",
+   "name_en": "Mount Wilis",
+   "ele": 2563,
+   "wikidata": "Q956331",
+   "volcano": true
+  },
+  {
+   "lat": -7.824312,
+   "lon": 111.751492,
+   "name": "Liman",
+   "ele": 2563,
+   "volcano": true
   },
   {
    "lat": -1.252031,
@@ -790,6 +1069,14 @@
    "ele": 2480
   },
   {
+   "lat": -7.934768,
+   "lon": 112.947289,
+   "name": "Gunung Batok",
+   "name_en": "Mount Batok",
+   "ele": 2470,
+   "volcano": true
+  },
+  {
    "lat": -2.425301,
    "lon": 101.781807,
    "name": "Gunung Hulu Nilo",
@@ -802,6 +1089,14 @@
    "name": "Bukit Daun",
    "ele": 2467,
    "wikidata": "Q4180299"
+  },
+  {
+   "lat": 3.170953,
+   "lon": 98.392048,
+   "name": "Gunung Sinabung",
+   "ele": 2460,
+   "wikidata": "Q207678",
+   "volcano": true
   },
   {
    "lat": -1.679931,
@@ -829,12 +1124,30 @@
    "ele": 2440
   },
   {
+   "lat": -0.431172,
+   "lon": 100.319422,
+   "name": "Gunung Tandikat",
+   "name_en": "Mount Tandikat",
+   "ele": 2438,
+   "wikidata": "Q40692",
+   "volcano": true
+  },
+  {
    "lat": -7.162503,
    "lon": 107.4,
    "name": "Puncak Gunung Patuha",
    "name_en": "Peak of Mount Patuha",
    "ele": 2434,
    "wikidata": "Q1373835"
+  },
+  {
+   "lat": -7.161022,
+   "lon": 107.400021,
+   "name": "Gunung Patuha",
+   "name_en": "Mount Patuha",
+   "ele": 2434,
+   "wikidata": "Q1373835",
+   "volcano": true
   },
   {
    "lat": 2.917721,
@@ -904,10 +1217,25 @@
    "wikidata": "Q1386730"
   },
   {
+   "lat": -8.651709,
+   "lon": 120.448002,
+   "name": "Poco Ngandonalu",
+   "ele": 2367,
+   "volcano": true
+  },
+  {
    "lat": -7.239174,
    "lon": 109.888826,
    "name": "Gunung Bisma",
    "ele": 2365
+  },
+  {
+   "lat": -7.13379,
+   "lon": 107.638267,
+   "name": "Malabar",
+   "ele": 2343,
+   "wikidata": "Q670643",
+   "volcano": true
   },
   {
    "lat": -7.151429,
@@ -927,6 +1255,15 @@
    "lon": 101.183603,
    "name": "Gunung Malenggok",
    "ele": 2330
+  },
+  {
+   "lat": -7.942069,
+   "lon": 112.952977,
+   "name": "Gunung Bromo",
+   "name_en": "Mount Bromo",
+   "ele": 2329,
+   "wikidata": "Q679590",
+   "volcano": true
   },
   {
    "lat": -7.130231,
@@ -996,6 +1333,14 @@
    "wikidata": "Q24850107"
   },
   {
+   "lat": -8.411405,
+   "lon": 116.422517,
+   "name": "Gunung Barujari",
+   "name_en": "Mount Barujari",
+   "ele": 2292,
+   "volcano": true
+  },
+  {
    "lat": -8.636639,
    "lon": 120.530951,
    "name": "Poco Ranaka",
@@ -1013,6 +1358,13 @@
    "lon": 101.373999,
    "name": "Gunung Silasi",
    "ele": 2281
+  },
+  {
+   "lat": -8.334887,
+   "lon": 115.088284,
+   "name": "Gunung Batukaru",
+   "ele": 2276,
+   "volcano": true
   },
   {
    "lat": -1.715076,
@@ -1050,6 +1402,22 @@
    "lon": 107.841241,
    "name": "Gunung Masigit",
    "ele": 2249
+  },
+  {
+   "lat": -8.633809,
+   "lon": 120.532386,
+   "name": "Anak Ranakah",
+   "ele": 2247,
+   "volcano": true
+  },
+  {
+   "lat": 3.854025,
+   "lon": 97.66385,
+   "name": "Kembar",
+   "name_en": "Mount Kembar",
+   "ele": 2245,
+   "wikidata": "Q537391",
+   "volcano": true
   },
   {
    "lat": -8.878031,
@@ -1115,6 +1483,25 @@
    "ele": 2213
   },
   {
+   "lat": 3.239352,
+   "lon": 98.504758,
+   "name": "Gunung Sibayak",
+   "name_ru": "Сибаяк",
+   "name_en": "Mount Sibayak",
+   "ele": 2212,
+   "wikidata": "Q2302908",
+   "volcano": true
+  },
+  {
+   "lat": -6.713607,
+   "lon": 106.73854,
+   "name": "Gunung Salak",
+   "name_en": "Mount Salak",
+   "ele": 2211,
+   "wikidata": "Q669559",
+   "volcano": true
+  },
+  {
    "lat": -6.716036,
    "lon": 106.733578,
    "name": "Gunung Salak Satu",
@@ -1138,6 +1525,23 @@
    "lon": 107.4344,
    "name": "Gunung Urug",
    "ele": 2205
+  },
+  {
+   "lat": -7.21081,
+   "lon": 108.064936,
+   "name": "Gunung Telagabodas",
+   "name_en": "Telagabodas",
+   "ele": 2201,
+   "wikidata": "Q126717",
+   "volcano": true
+  },
+  {
+   "lat": -7.211278,
+   "lon": 107.639817,
+   "name": "Wayang-Windu",
+   "ele": 2198,
+   "wikidata": "Q2854575",
+   "volcano": true
   },
   {
    "lat": -8.4133,
@@ -1234,6 +1638,15 @@
    "wikidata": "Q26756624"
   },
   {
+   "lat": -7.256152,
+   "lon": 108.076093,
+   "name": "Gunung Galunggung",
+   "name_en": "Mount Galunggung",
+   "ele": 2168,
+   "wikidata": "Q911748",
+   "volcano": true
+  },
+  {
    "lat": -2.741604,
    "lon": 101.847681,
    "name": "Gunung Pandan",
@@ -1276,10 +1689,27 @@
    "wikidata": "Q25017813"
   },
   {
+   "lat": -2.275919,
+   "lon": 101.489555,
+   "name": "Gunung Kunyit",
+   "ele": 2151,
+   "wikidata": "Q2580533",
+   "volcano": true
+  },
+  {
    "lat": -7.223889,
    "lon": 107.630556,
    "name": "Gunung Windu",
    "ele": 2147
+  },
+  {
+   "lat": 0.683253,
+   "lon": 99.541036,
+   "name": "Gunugn Sorikmarapi",
+   "name_en": "Sorikmarapi",
+   "ele": 2145,
+   "wikidata": "Q29559",
+   "volcano": true
   },
   {
    "lat": 0.683633,
@@ -1347,6 +1777,14 @@
    "ele": 2125
   },
   {
+   "lat": -8.815484,
+   "lon": 121.191373,
+   "name": "Ebulobo",
+   "ele": 2124,
+   "wikidata": "Q2382787",
+   "volcano": true
+  },
+  {
    "lat": -7.973029,
    "lon": 112.950194,
    "name": "Gunung Probcia",
@@ -1366,11 +1804,25 @@
    "wikidata": "Q12687338"
   },
   {
+   "lat": -0.737025,
+   "lon": 127.524363,
+   "name": "Buku Sibela",
+   "ele": 2111,
+   "volcano": true
+  },
+  {
    "lat": 4.528976,
    "lon": 101.365175,
    "name": "Gunung Irau",
    "ele": 2110,
    "wikidata": "Q6921428"
+  },
+  {
+   "lat": -8.00053,
+   "lon": 114.237873,
+   "name": "Gunung Kukusan",
+   "ele": 2107,
+   "volcano": true
   },
   {
    "lat": 3.823178,
@@ -1584,6 +2036,13 @@
    "lon": 110.344824,
    "name": "Puncak Botak",
    "ele": 2050
+  },
+  {
+   "lat": -7.185619,
+   "lon": 110.34709,
+   "name": "Gunung Ungaran",
+   "ele": 2050,
+   "volcano": true
   },
   {
    "lat": 3.86927,
@@ -1845,6 +2304,14 @@
    "ele": 1950
   },
   {
+   "lat": -8.195864,
+   "lon": 119.069789,
+   "name": "Sangeang",
+   "ele": 1949,
+   "wikidata": "Q2573663",
+   "volcano": true
+  },
+  {
    "lat": 5.276298,
    "lon": 101.585078,
    "name": "Gunung Shoid",
@@ -1883,6 +2350,14 @@
    "name": "Gunung Kambut",
    "ele": 1939,
    "wikidata": "Q25300719"
+  },
+  {
+   "lat": -3.512257,
+   "lon": 102.623225,
+   "name": "Bukit Kaba",
+   "name_en": "Mount Kaba",
+   "ele": 1938,
+   "volcano": true
   },
   {
    "lat": -2.006092,
@@ -2078,6 +2553,15 @@
    "ele": 1894
   },
   {
+   "lat": -7.361109,
+   "lon": 110.399958,
+   "name": "Gunung Telomoyo",
+   "name_en": "Mount Telomoyo",
+   "ele": 1894,
+   "wikidata": "Q123157",
+   "volcano": true
+  },
+  {
    "lat": 5.397634,
    "lon": 101.738909,
    "name": "Gunung Anak Noring",
@@ -2091,6 +2575,15 @@
    "name": "Gunung Solajuang",
    "name_en": "Solajuang Peak",
    "ele": 1889
+  },
+  {
+   "lat": 1.477956,
+   "lon": 99.209931,
+   "name": "Gunung Lubuk Raya",
+   "name_en": "Mount Lubukraya",
+   "ele": 1886,
+   "wikidata": "Q1087336",
+   "volcano": true
   },
   {
    "lat": -2.692688,
@@ -2329,6 +2822,13 @@
    "ele": 1840
   },
   {
+   "lat": -8.580304,
+   "lon": 117.122409,
+   "name": "Olet Sangenges",
+   "ele": 1840,
+   "volcano": true
+  },
+  {
    "lat": 4.609517,
    "lon": 101.384372,
    "name": "Gunung 6040",
@@ -2389,6 +2889,14 @@
    "ele": 1829
   },
   {
+   "lat": 2.777526,
+   "lon": 125.406063,
+   "name": "Gunung Karangetang",
+   "name_en": "Karangetang Volcano",
+   "ele": 1827,
+   "volcano": true
+  },
+  {
    "lat": -8.3184,
    "lon": 115.1399,
    "name": "Gunung Adeng",
@@ -2420,6 +2928,14 @@
    "lon": 101.537356,
    "name": "Bukit Kelau",
    "ele": 1821
+  },
+  {
+   "lat": 1.550343,
+   "lon": 99.259012,
+   "name": "Dolok Sibualbuali",
+   "name_en": "Sibualbuali",
+   "ele": 1819,
+   "volcano": true
   },
   {
    "lat": -1.897491,
@@ -2458,6 +2974,14 @@
    "lon": 107.573333,
    "name": "Gunung Lumengan",
    "ele": 1813
+  },
+  {
+   "lat": 5.4475,
+   "lon": 95.6554,
+   "name": "Cot Seulawah Agam",
+   "ele": 1810,
+   "wikidata": "Q29595",
+   "volcano": true
   },
   {
    "lat": -6.8025,
@@ -2549,6 +3073,15 @@
    "ele": 1796
   },
   {
+   "lat": 0.755617,
+   "lon": 124.41308,
+   "name": "Gunung Ambang",
+   "name_en": "Ambang",
+   "ele": 1795,
+   "wikidata": "Q456619",
+   "volcano": true
+  },
+  {
    "lat": -2.187025,
    "lon": 101.361784,
    "name": "Bukit Pandan",
@@ -2581,6 +3114,15 @@
    "name_en": "Mount Karang",
    "ele": 1778,
    "wikidata": "Q2344869"
+  },
+  {
+   "lat": -6.273199,
+   "lon": 106.046807,
+   "name": "Gunung Karang",
+   "name_en": "Mount Karang",
+   "ele": 1778,
+   "wikidata": "Q2344869",
+   "volcano": true
   },
   {
    "lat": -7.075127,
@@ -2665,6 +3207,14 @@
    "lon": 107.273551,
    "name": "Gunung Wayang",
    "ele": 1751
+  },
+  {
+   "lat": 0.66206,
+   "lon": 127.402411,
+   "name": "Gunung Kiematabu",
+   "name_en": "Mount Kiematubu",
+   "ele": 1750,
+   "volcano": true
   },
   {
    "lat": -3.514091,
@@ -2773,10 +3323,36 @@
    "wikidata": "Q24847584"
   },
   {
+   "lat": -7.125,
+   "lon": 107.8,
+   "name": "Kamojang, Kawah",
+   "ele": 1730,
+   "wikidata": "Q2181214",
+   "volcano": true
+  },
+  {
    "lat": -2.626154,
    "lon": 101.94642,
    "name": "Bukit Luncung",
    "ele": 1720
+  },
+  {
+   "lat": -5.094266,
+   "lon": 104.319223,
+   "name": "Sekincau Belirang",
+   "ele": 1719,
+   "wikidata": "Q4180786",
+   "volcano": true
+  },
+  {
+   "lat": -8.239415,
+   "lon": 115.37796,
+   "name": "Gunung Batur",
+   "name_ru": "вулкан Батур",
+   "name_en": "Mount Batur",
+   "ele": 1717,
+   "wikidata": "Q43876",
+   "volcano": true
   },
   {
    "lat": -2.118387,
@@ -2784,6 +3360,15 @@
    "name": "Bukit Kemanten Betung",
    "ele": 1717,
    "wikidata": "Q26756652"
+  },
+  {
+   "lat": 0.809879,
+   "lon": 127.332342,
+   "name": "Gunung Gamalama",
+   "name_en": "Mount Gamalama",
+   "ele": 1715,
+   "wikidata": "Q1467910",
+   "volcano": true
   },
   {
    "lat": -1.947466,
@@ -2838,6 +3423,22 @@
    "wikidata": "Q31769154"
   },
   {
+   "lat": -8.678095,
+   "lon": 122.454126,
+   "name": "Gunung Egon",
+   "name_en": "Mount Egon",
+   "ele": 1703,
+   "wikidata": "Q385596",
+   "volcano": true
+  },
+  {
+   "lat": -8.551693,
+   "lon": 122.780647,
+   "name": "Ili Lewotobi Perempuan",
+   "ele": 1703,
+   "volcano": true
+  },
+  {
    "lat": -8.554582,
    "lon": 122.781892,
    "name": "Ile Lewotobi Perempuan",
@@ -2873,6 +3474,15 @@
    "lon": 112.506942,
    "name": "Bukit Jabal",
    "ele": 1700
+  },
+  {
+   "lat": -6.743044,
+   "lon": 106.697548,
+   "name": "Gunung Perbakti",
+   "name_en": "Mount Perbakti",
+   "ele": 1699,
+   "wikidata": "Q1087270",
+   "volcano": true
   },
   {
    "lat": -2.042312,
@@ -2939,11 +3549,27 @@
    "ele": 1684
   },
   {
+   "lat": -6.76446,
+   "lon": 107.960407,
+   "name": "Tampomas",
+   "ele": 1684,
+   "wikidata": "Q2020545",
+   "volcano": true
+  },
+  {
    "lat": 3.549634,
    "lon": 101.805803,
    "name": "Gunung Rajah",
    "name_en": "Mount Rajah",
    "ele": 1683
+  },
+  {
+   "lat": -5.513292,
+   "lon": 105.095123,
+   "name": "Gunung Ratai",
+   "ele": 1682,
+   "wikidata": "Q12484818",
+   "volcano": true
   },
   {
    "lat": -3.861405,
@@ -2972,6 +3598,22 @@
    "ele": 1677
   },
   {
+   "lat": -8.669479,
+   "lon": 120.459057,
+   "name": "Gunung Poco Leok",
+   "name_en": "Poco Leok",
+   "ele": 1675,
+   "volcano": true
+  },
+  {
+   "lat": -8.68,
+   "lon": 120.48,
+   "name": "Poco Leok",
+   "ele": 1675,
+   "wikidata": "Q2328794",
+   "volcano": true
+  },
+  {
    "lat": -1.841288,
    "lon": 101.20127,
    "name": "Bukit Barunglolo",
@@ -2989,6 +3631,14 @@
    "lon": 107.447099,
    "name": "Gunung Tugu",
    "ele": 1670
+  },
+  {
+   "lat": -7.980627,
+   "lon": 113.341702,
+   "name": "Gunung Lemongan Tarub",
+   "name_en": "Mount Lemongan",
+   "ele": 1667,
+   "volcano": true
   },
   {
    "lat": -6.814219,
@@ -3048,11 +3698,28 @@
    "ele": 1659
   },
   {
+   "lat": -8.343062,
+   "lon": 123.25294,
+   "name": "Ili Boleng",
+   "ele": 1658,
+   "wikidata": "Q2364075",
+   "volcano": true
+  },
+  {
    "lat": -8.345589,
    "lon": 123.256347,
    "name": "Ili Boleng",
    "ele": 1658,
    "wikidata": "Q2364075"
+  },
+  {
+   "lat": -7.61566,
+   "lon": 112.620057,
+   "name": "Gunung Penanggungan",
+   "name_en": "Mount Penanggungan",
+   "ele": 1653,
+   "wikidata": "Q2171115",
+   "volcano": true
   },
   {
    "lat": -3.277232,
@@ -3081,6 +3748,15 @@
    "wikidata": "Q26756654"
   },
   {
+   "lat": -8.76517,
+   "lon": 121.813343,
+   "name": "Gunung Kelimutu",
+   "name_en": "Kelimutu",
+   "ele": 1639,
+   "wikidata": "Q1738211",
+   "volcano": true
+  },
+  {
    "lat": -1.841877,
    "lon": 101.563067,
    "name": "Gunung Malintang",
@@ -3092,6 +3768,22 @@
    "lon": 107.524167,
    "name": "Gunung Puncakcacing",
    "ele": 1625
+  },
+  {
+   "lat": -6.616247,
+   "lon": 110.890301,
+   "name": "Gunung Muria",
+   "name_en": "Mount Muria",
+   "ele": 1625,
+   "wikidata": "Q3217435",
+   "volcano": true
+  },
+  {
+   "lat": -8.546775,
+   "lon": 123.383605,
+   "name": "Ililabalekan",
+   "ele": 1621,
+   "volcano": true
   },
   {
    "lat": 4.15468,
@@ -3404,6 +4096,15 @@
    "ele": 1572
   },
   {
+   "lat": 1.379072,
+   "lon": 127.532281,
+   "name": "Gunung Gamkonora",
+   "name_en": "Mount Gamkonora",
+   "ele": 1571,
+   "wikidata": "Q1493157",
+   "volcano": true
+  },
+  {
    "lat": 4.45238,
    "lon": 101.347122,
    "name": "Gunung Dungun",
@@ -3467,6 +4168,14 @@
    "wikidata": "Q17310555"
   },
   {
+   "lat": -8.722329,
+   "lon": 120.975662,
+   "name": "Wolo Inelika",
+   "ele": 1559,
+   "wikidata": "Q2352524",
+   "volcano": true
+  },
+  {
    "lat": -6.858542,
    "lon": 107.741814,
    "name": "Pasir Patokbeusi",
@@ -3491,6 +4200,15 @@
    "name": "Gunung Ayam",
    "ele": 1550,
    "wikidata": "Q12687184"
+  },
+  {
+   "lat": 1.135947,
+   "lon": 124.751697,
+   "name": "Gunung Sempu",
+   "name_en": "Mount Sempu",
+   "ele": 1549,
+   "wikidata": "Q2162588",
+   "volcano": true
   },
   {
    "lat": 5.217143,
@@ -3680,6 +4398,14 @@
    "wikidata": "Q31771614"
   },
   {
+   "lat": -8.213558,
+   "lon": 123.775708,
+   "name": "Ili Ujolewung",
+   "ele": 1523,
+   "wikidata": "Q56391543",
+   "volcano": true
+  },
+  {
    "lat": -7.059585,
    "lon": 107.314698,
    "name": "Gunung Rametuk",
@@ -3754,6 +4480,15 @@
    "ele": 1514
   },
   {
+   "lat": -6.729319,
+   "lon": 106.65049,
+   "name": "Gunung Kiaraberes-Gagak",
+   "name_en": "Mount Kiaraberes-Gagak",
+   "ele": 1511,
+   "wikidata": "Q4271911",
+   "volcano": true
+  },
+  {
    "lat": 4.012632,
    "lon": 102.910105,
    "name": "Gunung Tapis",
@@ -3802,6 +4537,14 @@
    "name": "Gunung Langlang",
    "ele": 1501,
    "wikidata": "Q25287572"
+  },
+  {
+   "lat": -8.792,
+   "lon": 121.77,
+   "name": "Sukaria Caldera",
+   "ele": 1500,
+   "wikidata": "Q2105492",
+   "volcano": true
   },
   {
    "lat": -6.835455,
@@ -4163,6 +4906,14 @@
    "wikidata": "Q20464225"
   },
   {
+   "lat": -8.571,
+   "lon": 122.6549,
+   "name": "Ile Wukoh",
+   "ele": 1431,
+   "wikidata": "Q56391586",
+   "volcano": true
+  },
+  {
    "lat": 3.374138,
    "lon": 101.739681,
    "name": "Gunung Bunga Buah",
@@ -4211,6 +4962,15 @@
    "name": "Bukit Keruk",
    "name_en": "Keruk Hill",
    "ele": 1425
+  },
+  {
+   "lat": -8.272765,
+   "lon": 123.506738,
+   "name": "Ili Lewotolok",
+   "name_en": "Lewotolok",
+   "ele": 1423,
+   "wikidata": "Q1911044",
+   "volcano": true
   },
   {
    "lat": 5.336259,
@@ -4432,6 +5192,15 @@
    "ele": 1377
   },
   {
+   "lat": 1.490744,
+   "lon": 127.63054,
+   "name": "Ibu",
+   "name_en": "Mount Ibu",
+   "ele": 1377,
+   "wikidata": "Q2573469",
+   "volcano": true
+  },
+  {
    "lat": 3.602985,
    "lon": 101.815952,
    "name": "Bukit Hulu Telang",
@@ -4504,6 +5273,14 @@
    "ele": 1359
   },
   {
+   "lat": 0.331737,
+   "lon": 127.391931,
+   "name": "Gunung Kiebesi",
+   "name_en": "Mount Kiebesi",
+   "ele": 1357,
+   "volcano": true
+  },
+  {
    "lat": 0.318871,
    "lon": 127.391086,
    "name": "Kie Besi",
@@ -4564,6 +5341,14 @@
    "wikidata": "Q26756655"
   },
   {
+   "lat": -6.341659,
+   "lon": 105.978337,
+   "name": "Gunung Pulosari",
+   "ele": 1346,
+   "wikidata": "Q42118",
+   "volcano": true
+  },
+  {
    "lat": 5.335837,
    "lon": 101.932177,
    "name": "Gunung Nyalit",
@@ -4602,6 +5387,14 @@
    "ele": 1341
   },
   {
+   "lat": 1.374544,
+   "lon": 124.803237,
+   "name": "Gunung Empung",
+   "name_en": "Mount Empung",
+   "ele": 1340,
+   "volcano": true
+  },
+  {
    "lat": -7.054,
    "lon": 107.4646,
    "name": "Pasir Seuti",
@@ -4620,6 +5413,15 @@
    "name": "Bukit Senjort",
    "ele": 1336,
    "wikidata": "Q31765987"
+  },
+  {
+   "lat": 1.698949,
+   "lon": 127.879124,
+   "name": "Gunung Dukono",
+   "name_en": "Dukono",
+   "ele": 1335,
+   "wikidata": "Q2340739",
+   "volcano": true
   },
   {
    "lat": -8.314191,
@@ -4698,6 +5500,14 @@
    "lon": 107.229702,
    "name": "Pasir Citomas",
    "ele": 1332
+  },
+  {
+   "lat": 1.353165,
+   "lon": 124.862891,
+   "name": "Gunung Mahawu",
+   "name_en": "Mount Mahawu",
+   "ele": 1331,
+   "volcano": true
   },
   {
    "lat": 1.355407,
@@ -5029,6 +5839,14 @@
    "ele": 1281
   },
   {
+   "lat": -5.780602,
+   "lon": 105.631293,
+   "name": "Rajabasa",
+   "ele": 1281,
+   "wikidata": "Q42174",
+   "volcano": true
+  },
+  {
    "lat": 3.711677,
    "lon": 101.710397,
    "name": "Gunung Akar",
@@ -5307,6 +6125,14 @@
    "lon": 113.846559,
    "name": "Gunung Ringgit",
    "ele": 1249
+  },
+  {
+   "lat": -7.836195,
+   "lon": 114.37794,
+   "name": "Baluran",
+   "ele": 1247,
+   "wikidata": "Q571805",
+   "volcano": true
   },
   {
    "lat": -7.097871,
@@ -5656,6 +6482,14 @@
    "wikidata": "Q31769981"
   },
   {
+   "lat": 1.23,
+   "lon": 124.83,
+   "name": "Tondano Caldera",
+   "ele": 1202,
+   "wikidata": "Q2933735",
+   "volcano": true
+  },
+  {
    "lat": 4.469779,
    "lon": 117.939477,
    "name": "Gunung Lucia",
@@ -5945,6 +6779,15 @@
    "ele": 1150
   },
   {
+   "lat": 1.512312,
+   "lon": 125.195243,
+   "name": "Gunung Tangkoko",
+   "name_en": "Mount Tangkoko",
+   "ele": 1149,
+   "wikidata": "Q3120328",
+   "volcano": true
+  },
+  {
    "lat": 3.158155,
    "lon": 101.955676,
    "name": "Bukit Resam Ambat",
@@ -6072,6 +6915,15 @@
    "ele": 1131
   },
   {
+   "lat": 1.07943,
+   "lon": 127.438497,
+   "name": "Gunung Jailolo",
+   "name_en": "Jailolo",
+   "ele": 1130,
+   "wikidata": "Q4180889",
+   "volcano": true
+  },
+  {
    "lat": 3.219594,
    "lon": 102.04733,
    "name": "Bukit Peninkin",
@@ -6116,6 +6968,15 @@
    "ele": 1119
   },
   {
+   "lat": -8.351376,
+   "lon": 122.85024,
+   "name": "Gunung Leroboleng",
+   "name_en": "Leroboleng",
+   "ele": 1117,
+   "wikidata": "Q2396057",
+   "volcano": true
+  },
+  {
    "lat": -8.1875,
    "lon": 115.2115,
    "name": "Gunung Tengayang",
@@ -6141,6 +7002,15 @@
    "name": "Keli Lelembo",
    "ele": 1112,
    "wikidata": "Q26726853"
+  },
+  {
+   "lat": 1.364198,
+   "lon": 124.799227,
+   "name": "Gunung Lokon",
+   "name_en": "Mount Lokon",
+   "ele": 1109,
+   "wikidata": "Q265585",
+   "volcano": true
   },
   {
    "lat": 1.518371,
@@ -6206,6 +7076,13 @@
    "lon": 107.129243,
    "name": "Pasir Cimente",
    "ele": 1101
+  },
+  {
+   "lat": -8.495148,
+   "lon": 122.683531,
+   "name": "Ilimuda",
+   "ele": 1100,
+   "volcano": true
   },
   {
    "lat": -8.1846,
@@ -6677,6 +7554,15 @@
    "ele": 1036
   },
   {
+   "lat": 1.634169,
+   "lon": 127.670716,
+   "name": "Gunung Tobaru",
+   "name_en": "Mount Tobaru",
+   "ele": 1035,
+   "wikidata": "Q7811550",
+   "volcano": true
+  },
+  {
    "lat": -1.362958,
    "lon": 122.962297,
    "name": "Gunung Satu Nappas",
@@ -6718,6 +7604,14 @@
    "name": "Ile Tuadoro",
    "ele": 1031,
    "wikidata": "Q26753540"
+  },
+  {
+   "lat": -0.524766,
+   "lon": 127.502575,
+   "name": "Bukit Amasing",
+   "name_en": "Amasing Hill",
+   "ele": 1030,
+   "volcano": true
   },
   {
    "lat": -8.519871,
@@ -6825,6 +7719,14 @@
    "lon": 125.584781,
    "name": "Mount Bontod Bato",
    "ele": 1018
+  },
+  {
+   "lat": -8.53205,
+   "lon": 123.573458,
+   "name": "Ili Werung",
+   "ele": 1018,
+   "wikidata": "Q2483640",
+   "volcano": true
   },
   {
    "lat": -8.532316,
@@ -7134,6 +8036,15 @@
    "wikidata": "Q31765535"
   },
   {
+   "lat": 1.224085,
+   "lon": 127.456439,
+   "name": "Gunung Todoko-Ranu",
+   "name_en": "Todoko-Ranu",
+   "ele": 979,
+   "wikidata": "Q4180752",
+   "volcano": true
+  },
+  {
    "lat": -1.995128,
    "lon": 101.865373,
    "name": "Bukit Hulu Sengajo",
@@ -7434,6 +8345,13 @@
    "ele": 951
   },
   {
+   "lat": 0.458583,
+   "lon": 127.408068,
+   "name": "Gunung Moti",
+   "ele": 950,
+   "volcano": true
+  },
+  {
    "lat": 3.110096,
    "lon": 102.027527,
    "name": "Bukit Ulu Kongkoi",
@@ -7705,6 +8623,15 @@
    "wikidata": "Q31770153"
   },
   {
+   "lat": 3.681306,
+   "lon": 125.45348,
+   "name": "Gunung Awu Crater",
+   "name_en": "Mount Awu Crater",
+   "ele": 920,
+   "wikidata": "Q791817",
+   "volcano": true
+  },
+  {
    "lat": -7.63197,
    "lon": 110.126054,
    "name": "Gunung Kunir",
@@ -7891,6 +8818,15 @@
    "name": "Gunung Walang",
    "ele": 905,
    "wikidata": "Q26737583"
+  },
+  {
+   "lat": -8.739555,
+   "lon": 120.017683,
+   "name": "Gunung Wai Sano",
+   "name_en": "Wai Sano",
+   "ele": 903,
+   "wikidata": "Q2433163",
+   "volcano": true
   },
   {
    "lat": 2.650448,
@@ -8147,6 +9083,14 @@
    "wikidata": "Q31765459"
   },
   {
+   "lat": -8.333862,
+   "lon": 121.710371,
+   "name": "Gunung Rokatenda",
+   "name_en": "Rokatenda",
+   "ele": 875,
+   "volcano": true
+  },
+  {
    "lat": -8.328993,
    "lon": 121.710096,
    "name": "Rokatenda",
@@ -8157,6 +9101,14 @@
    "lon": 107.851944,
    "name": "Gunung Bentang",
    "ele": 874
+  },
+  {
+   "lat": -8.301722,
+   "lon": 122.905841,
+   "name": "Ilikedeka",
+   "ele": 871,
+   "wikidata": "Q2381562",
+   "volcano": true
   },
   {
    "lat": -8.30839,
@@ -8178,6 +9130,14 @@
    "name": "Ile Lamakeba",
    "ele": 871,
    "wikidata": "Q26753344"
+  },
+  {
+   "lat": -7.12187,
+   "lon": 128.673519,
+   "name": "Gunung Wurlali",
+   "name_en": "Mount Wurlali",
+   "ele": 868,
+   "volcano": true
   },
   {
    "lat": 4.411815,
@@ -8247,6 +9207,15 @@
    "name": "Ile Napo",
    "ele": 863,
    "wikidata": "Q26754308"
+  },
+  {
+   "lat": -8.499553,
+   "lon": 124.127978,
+   "name": "Gunung Sirung",
+   "name_en": "Mount Sirung",
+   "ele": 862,
+   "wikidata": "Q1322666",
+   "volcano": true
   },
   {
    "lat": 2.897202,
@@ -8419,6 +9388,15 @@
    "wikidata": "Q26753762"
   },
   {
+   "lat": -5.954302,
+   "lon": 105.482782,
+   "name": "Gunung Sebesi",
+   "name_en": "Mount Sebesi",
+   "ele": 844,
+   "wikidata": "Q24842119",
+   "volcano": true
+  },
+  {
    "lat": -8.222846,
    "lon": 124.727538,
    "name": "Dola Moimang",
@@ -8477,6 +9455,14 @@
    "name": "Ile Niu",
    "ele": 841,
    "wikidata": "Q24825763"
+  },
+  {
+   "lat": 5.398152,
+   "lon": 125.376284,
+   "name": "Mount Balut",
+   "ele": 840,
+   "wikidata": "Q26857904",
+   "volcano": true
   },
   {
    "lat": -1.321827,
@@ -8942,6 +9928,14 @@
    "wikidata": "Q24992731"
   },
   {
+   "lat": 5.997262,
+   "lon": 120.962269,
+   "name": "Bud Tumantangis",
+   "ele": 790,
+   "wikidata": "Q31470344",
+   "volcano": true
+  },
+  {
    "lat": -1.277136,
    "lon": 100.647429,
    "name": "Bukit Gunung Sugirik",
@@ -9029,6 +10023,15 @@
    "name": "Bukit Masok",
    "name_en": "Masok Hill",
    "ele": 782
+  },
+  {
+   "lat": -6.740889,
+   "lon": 129.513647,
+   "name": "Laworkawra",
+   "name_en": "Mount Laworkawra",
+   "ele": 781,
+   "wikidata": "Q2432393",
+   "volcano": true
   },
   {
    "lat": -6.577048,
@@ -9366,6 +10369,14 @@
    "ele": 751
   },
   {
+   "lat": 1.783848,
+   "lon": 127.920349,
+   "name": "Gunung Mamuya",
+   "name_en": "Mount Mamuya",
+   "ele": 750,
+   "volcano": true
+  },
+  {
    "lat": -8.5983,
    "lon": 122.5525,
    "name": "Ilin Bulukopor",
@@ -9378,6 +10389,15 @@
    "name": "Gunung Meru",
    "ele": 749,
    "wikidata": "Q30633785"
+  },
+  {
+   "lat": -7.790646,
+   "lon": 123.586581,
+   "name": "Gunung Batu Tara",
+   "name_en": "Batu Tara",
+   "ele": 748,
+   "wikidata": "Q811048",
+   "volcano": true
   },
   {
    "lat": -8.41576,
@@ -9472,6 +10492,13 @@
    "ele": 735
   },
   {
+   "lat": -8.76508,
+   "lon": 119.681577,
+   "name": "Doro Ora",
+   "ele": 735,
+   "volcano": true
+  },
+  {
    "lat": 2.503277,
    "lon": 102.214942,
    "name": "Gunung Tampin Selatan",
@@ -9538,6 +10565,15 @@
    "lon": 125.553405,
    "name": "Mount Lantalon",
    "ele": 725
+  },
+  {
+   "lat": 2.304852,
+   "lon": 125.366548,
+   "name": "Gunung Ruang",
+   "name_en": "Mount Ruang",
+   "ele": 725,
+   "wikidata": "Q2094734",
+   "volcano": true
   },
   {
    "lat": -2.224516,
@@ -9988,6 +11024,14 @@
    "ele": 680
   },
   {
+   "lat": -8.02,
+   "lon": 112.68,
+   "name": "Malang Plain",
+   "ele": 680,
+   "wikidata": "Q2786660",
+   "volcano": true
+  },
+  {
    "lat": 4.789607,
    "lon": 101.020258,
    "name": "Gunung Hulu Lawit",
@@ -10063,6 +11107,13 @@
    "name": "Dola Maipakitau",
    "ele": 671,
    "wikidata": "Q26751578"
+  },
+  {
+   "lat": 5.386354,
+   "lon": 125.369469,
+   "name": "Mount Langab",
+   "ele": 670,
+   "volcano": true
   },
   {
    "lat": -3.812014,
@@ -10173,6 +11224,15 @@
    "name": "Gunung Bongsu",
    "ele": 659,
    "wikidata": "Q31771555"
+  },
+  {
+   "lat": -6.970021,
+   "lon": 129.145035,
+   "name": "Gunung Teon",
+   "name_en": "Mount Teon",
+   "ele": 655,
+   "wikidata": "Q2190351",
+   "volcano": true
   },
   {
    "lat": -6.976287,
@@ -10354,11 +11414,28 @@
    "wikidata": "Q26754343"
   },
   {
+   "lat": -6.312334,
+   "lon": 130.017029,
+   "name": "Wuarlapna",
+   "name_en": "Mount Wuarlapna",
+   "ele": 641,
+   "wikidata": "Q1083948",
+   "volcano": true
+  },
+  {
    "lat": 3.375713,
    "lon": 102.858592,
    "name": "Bukit Chini",
    "ele": 641,
    "wikidata": "Q12684401"
+  },
+  {
+   "lat": -4.522592,
+   "lon": 129.879849,
+   "name": "Gunung Api (Banda)",
+   "ele": 640,
+   "wikidata": "Q806237",
+   "volcano": true
   },
   {
    "lat": 2.939626,
@@ -10385,6 +11462,15 @@
    "lon": 102.036341,
    "name": "Puncak 2094",
    "ele": 638
+  },
+  {
+   "lat": -8.891813,
+   "lon": 121.641097,
+   "name": "Iya",
+   "name_en": "Iya",
+   "ele": 637,
+   "wikidata": "Q2236900",
+   "volcano": true
   },
   {
    "lat": -2.172487,
@@ -10483,6 +11569,15 @@
    "wikidata": "Q26753346"
   },
   {
+   "lat": 0.897923,
+   "lon": 127.318469,
+   "name": "Gunung Hiri",
+   "name_en": "Mount Hiri",
+   "ele": 630,
+   "wikidata": "Q4175400",
+   "volcano": true
+  },
+  {
    "lat": -8.641444,
    "lon": 119.423618,
    "name": "Mount Komodo",
@@ -10552,6 +11647,13 @@
    "name": "Bukit Kaput",
    "ele": 618,
    "wikidata": "Q26757542"
+  },
+  {
+   "lat": 5.821062,
+   "lon": 95.293304,
+   "name": "Pulau Weh",
+   "ele": 617,
+   "volcano": true
   },
   {
    "lat": 3.607106,
@@ -10902,6 +12004,14 @@
    "name": "Ile Tanawute",
    "ele": 583,
    "wikidata": "Q26753380"
+  },
+  {
+   "lat": 5.933028,
+   "lon": 120.954127,
+   "name": "Bud Tukay",
+   "ele": 580,
+   "wikidata": "Q31470427",
+   "volcano": true
   },
   {
    "lat": -1.850424,
@@ -11598,6 +12708,15 @@
    "name": "Bungkuko Saguadi",
    "ele": 532,
    "wikidata": "Q25279613"
+  },
+  {
+   "lat": 4.385417,
+   "lon": 117.880524,
+   "name": "Bukit Bombalai",
+   "name_en": "Mount Bombalai",
+   "ele": 531,
+   "wikidata": "Q2349332",
+   "volcano": true
   },
   {
    "lat": 2.740708,
@@ -12385,6 +13504,13 @@
    "ele": 475
   },
   {
+   "lat": 5.729277,
+   "lon": 120.905729,
+   "name": "Tapul",
+   "ele": 474,
+   "volcano": true
+  },
+  {
    "lat": 5.731657,
    "lon": 120.906038,
    "name": "Mount Dakut",
@@ -12774,6 +13900,14 @@
    "wikidata": "Q26754098"
   },
   {
+   "lat": -0.162385,
+   "lon": 121.60108,
+   "name": "Gunung Colo",
+   "name_en": "Mount Colo",
+   "ele": 445,
+   "volcano": true
+  },
+  {
    "lat": 4.315009,
    "lon": 101.165722,
    "name": "Bukit Memban Di Awan",
@@ -13023,6 +14157,13 @@
    "ele": 431
   },
   {
+   "lat": 5.983333,
+   "lon": 121.258333,
+   "name": "Urot",
+   "ele": 430,
+   "volcano": true
+  },
+  {
    "lat": 5.9839,
    "lon": 121.2584,
    "name": "Mount Urot",
@@ -13161,6 +14302,15 @@
    "ele": 422
   },
   {
+   "lat": 0.069306,
+   "lon": 127.424606,
+   "name": "Gunung Api Tigalalu",
+   "name_en": "Volcano Tigalalu",
+   "ele": 422,
+   "wikidata": "Q4178015",
+   "volcano": true
+  },
+  {
    "lat": 2.706687,
    "lon": 102.209149,
    "name": "Bukit Bertam",
@@ -13200,6 +14350,14 @@
    "name": "Bukit Belakang Padang",
    "ele": 421,
    "wikidata": "Q30702803"
+  },
+  {
+   "lat": 5.938274,
+   "lon": 120.979155,
+   "name": "Mount Makam",
+   "ele": 420,
+   "wikidata": "Q31486544",
+   "volcano": true
   },
   {
    "lat": 5.999094,
@@ -13569,6 +14727,13 @@
    "ele": 400
   },
   {
+   "lat": 5.981111,
+   "lon": 121.180833,
+   "name": "Mount Dakula",
+   "ele": 399,
+   "volcano": true
+  },
+  {
    "lat": 5.07749,
    "lon": 102.613179,
    "name": "Bukit Gua",
@@ -13652,6 +14817,13 @@
    "wikidata": "Q26754040"
   },
   {
+   "lat": 5.816667,
+   "lon": 121.158333,
+   "name": "Pata",
+   "ele": 394,
+   "volcano": true
+  },
+  {
    "lat": 1.137946,
    "lon": 110.257686,
    "name": "Gunung Merobung",
@@ -13700,10 +14872,24 @@
    "wikidata": "Q30665452"
   },
   {
+   "lat": 5.908333,
+   "lon": 121.3,
+   "name": "Sandahan",
+   "ele": 392,
+   "volcano": true
+  },
+  {
    "lat": 5.9082,
    "lon": 121.3008,
    "name": "Mount Sandahan",
    "ele": 392
+  },
+  {
+   "lat": 5.944003,
+   "lon": 121.07515,
+   "name": "Mount Talipau",
+   "ele": 391,
+   "volcano": true
   },
   {
    "lat": 4.714269,
@@ -14366,6 +15552,14 @@
    "wikidata": "Q30688212"
   },
   {
+   "lat": 5.986253,
+   "lon": 120.93354,
+   "name": "Bud Taran",
+   "ele": 350,
+   "wikidata": "Q31472010",
+   "volcano": true
+  },
+  {
    "lat": -1.458795,
    "lon": 101.632557,
    "name": "Bukit Ujan",
@@ -14837,6 +16031,14 @@
    "ele": 320
   },
   {
+   "lat": 1.830169,
+   "lon": 127.827764,
+   "name": "Gunung Tarakan Lamo",
+   "ele": 318,
+   "wikidata": "Q6924047",
+   "volcano": true
+  },
+  {
    "lat": -2.343061,
    "lon": 101.236363,
    "name": "Bukit Saung Macan",
@@ -15087,6 +16289,13 @@
    "ele": 308
   },
   {
+   "lat": 0.575321,
+   "lon": 127.397768,
+   "name": "Gunung Mare",
+   "ele": 308,
+   "volcano": true
+  },
+  {
    "lat": -8.2267,
    "lon": 114.5037,
    "name": "Gunung Ambyarsari",
@@ -15246,6 +16455,13 @@
    "wikidata": "Q26754095"
   },
   {
+   "lat": 5.916667,
+   "lon": 121.275,
+   "name": "Ukan",
+   "ele": 299,
+   "volcano": true
+  },
+  {
    "lat": 5.9159,
    "lon": 121.2812,
    "name": "Lumping Hill",
@@ -15282,6 +16498,13 @@
    "lon": 111.984133,
    "name": "Gunung Goa Peteng",
    "ele": 298
+  },
+  {
+   "lat": 5.683333,
+   "lon": 120.833333,
+   "name": "Lugus",
+   "ele": 297,
+   "volcano": true
   },
   {
    "lat": 5.2085,
@@ -15486,6 +16709,13 @@
    "ele": 288
   },
   {
+   "lat": 5.933333,
+   "lon": 121.116667,
+   "name": "Mount Mahata",
+   "ele": 287,
+   "volcano": true
+  },
+  {
    "lat": 4.214627,
    "lon": 102.050713,
    "name": "Bukit Pinang",
@@ -15572,11 +16802,35 @@
    "ele": 284
   },
   {
+   "lat": 5.561291,
+   "lon": 120.789575,
+   "name": "Mount Sigangang",
+   "ele": 283,
+   "wikidata": "Q30466942",
+   "volcano": true
+  },
+  {
    "lat": 5.297937,
    "lon": 100.212084,
    "name": "Bukit Kimpul",
    "ele": 283,
    "wikidata": "Q116869294"
+  },
+  {
+   "lat": -6.635563,
+   "lon": 126.660343,
+   "name": "Gunungapi Wetar",
+   "ele": 282,
+   "wikidata": "Q1899342",
+   "volcano": true
+  },
+  {
+   "lat": -5.545669,
+   "lon": 130.305964,
+   "name": "Gunung Manuk",
+   "name_en": "Mount Manuk",
+   "ele": 282,
+   "volcano": true
   },
   {
    "lat": -3.484468,
@@ -16818,6 +18072,13 @@
    "ele": 217
   },
   {
+   "lat": 5.972502,
+   "lon": 121.175004,
+   "name": "Mount Panamao",
+   "ele": 216,
+   "volcano": true
+  },
+  {
    "lat": 4.169018,
    "lon": 102.16548,
    "name": "Bukit Jermudi",
@@ -17168,6 +18429,13 @@
    "wikidata": "Q30653227"
   },
   {
+   "lat": 1.845792,
+   "lon": 127.819211,
+   "name": "Gunung Tarakan Itji",
+   "ele": 205,
+   "volcano": true
+  },
+  {
    "lat": -8.771832,
    "lon": 122.031269,
    "name": "Keli Niranibe",
@@ -17252,6 +18520,13 @@
    "lon": 108.752203,
    "name": "Pasir Cimedang",
    "ele": 201
+  },
+  {
+   "lat": 5.925,
+   "lon": 121.366667,
+   "name": "Kausakar",
+   "ele": 200,
+   "volcano": true
   },
   {
    "lat": 5.983408,
@@ -18069,6 +19344,13 @@
    "lon": 102.739884,
    "name": "Bukit Batu",
    "ele": 165
+  },
+  {
+   "lat": 5.263333,
+   "lon": 121.615,
+   "name": "Bolod",
+   "ele": 164,
+   "volcano": true
   },
   {
    "lat": 5.819722,
@@ -18953,6 +20235,13 @@
    "ele": 124
   },
   {
+   "lat": 5.850151,
+   "lon": 121.079825,
+   "name": "Patian",
+   "ele": 123,
+   "volcano": true
+  },
+  {
    "lat": 5.851667,
    "lon": 121.090556,
    "name": "Mount Patian",
@@ -19180,6 +20469,15 @@
    "lon": 112.027265,
    "name": "Watu Lawang",
    "ele": 111
+  },
+  {
+   "lat": -6.10295,
+   "lon": 105.422176,
+   "name": "Anak Krakatau",
+   "name_en": "Krakatoa",
+   "ele": 110,
+   "wikidata": "Q82613",
+   "volcano": true
   },
   {
    "lat": -8.6197,
@@ -19548,6 +20846,13 @@
    "lon": 102.066973,
    "name": "Bukit Penchuri",
    "ele": 97
+  },
+  {
+   "lat": 5.691667,
+   "lon": 120.883333,
+   "name": "Alu",
+   "ele": 95,
+   "volcano": true
   },
   {
    "lat": 5.688446,
@@ -19950,6 +21255,13 @@
    "name": "Wolo Panteoa",
    "ele": 72,
    "wikidata": "Q26727811"
+  },
+  {
+   "lat": 5.811667,
+   "lon": 121.216667,
+   "name": "Kamawi",
+   "ele": 71,
+   "volcano": true
   },
   {
    "lat": 5.033245,
@@ -20509,6 +21821,20 @@
    "ele": 10
   },
   {
+   "lat": 5.033333,
+   "lon": 120.266667,
+   "name": "Mantabuan",
+   "ele": 0,
+   "volcano": true
+  },
+  {
+   "lat": 5.133333,
+   "lon": 120.333333,
+   "name": "Tandubas",
+   "ele": 0,
+   "volcano": true
+  },
+  {
    "lat": 5.996111,
    "lon": 121.3925,
    "name": "Mount Baybay"
@@ -20684,6 +22010,40 @@
    "name": "Mount Pohukan"
   },
   {
+   "lat": -7.938922,
+   "lon": 112.305249,
+   "name": "Gunung Kelud",
+   "name_en": "Mount Kelud",
+   "wikidata": "Q513216",
+   "volcano": true
+  },
+  {
+   "lat": 1.632908,
+   "lon": 124.69698,
+   "name": "Gunung Manado Tua",
+   "volcano": true
+  },
+  {
+   "lat": -7.159755,
+   "lon": 107.418059,
+   "name": "Gunung Patuha II",
+   "name_en": "Mount Patuha II",
+   "volcano": true
+  },
+  {
+   "lat": -8.878215,
+   "lon": 120.955775,
+   "name": "Inerie",
+   "name_en": "Inerie",
+   "volcano": true
+  },
+  {
+   "lat": 0.476755,
+   "lon": 99.650736,
+   "name": "Gunung Malintang",
+   "volcano": true
+  },
+  {
    "lat": -6.61979,
    "lon": 107.061965,
    "name": "Gunung Batu"
@@ -20717,6 +22077,12 @@
    "lat": 3.1699,
    "lon": 125.5229,
    "name": "Pulau Kahakitang"
+  },
+  {
+   "lat": -8.537453,
+   "lon": 122.767579,
+   "name": "Lewotobi laki laki",
+   "volcano": true
   },
   {
    "lat": -6.453056,
@@ -58005,6 +59371,12 @@
    "name": "Pasir Kasur"
   },
   {
+   "lat": -8.064901,
+   "lon": 114.16159,
+   "name": "Gunung Genteng",
+   "volcano": true
+  },
+  {
    "lat": 3.075556,
    "lon": 97.386944,
    "name": "Leumbang",
@@ -90775,6 +92147,12 @@
    "name": "Ilin Kogungblatat"
   },
   {
+   "lat": -7.229087,
+   "lon": 109.922515,
+   "name": "Gunung Pakuwaja",
+   "volcano": true
+  },
+  {
    "lat": 1.606667,
    "lon": 124.916667,
    "name": "Bongkone Loobu"
@@ -116693,6 +118071,13 @@
    "name": "Gangsa Hill"
   },
   {
+   "lat": 5.728305,
+   "lon": 115.653988,
+   "name": "Mud Volcano",
+   "name_en": "Mud Volcano",
+   "volcano": true
+  },
+  {
    "lat": -10.064938,
    "lon": 124.218959,
    "name": "Bukit Kobe"
@@ -116869,6 +118254,13 @@
    "name": "Gunung Batuangusbaru"
   },
   {
+   "lat": 1.50823,
+   "lon": 125.219309,
+   "name": "Gunung Batuangus",
+   "name_en": "Batu Angus",
+   "volcano": true
+  },
+  {
    "lat": -1.779128,
    "lon": 119.53618,
    "name": "Lesang Mamuju"
@@ -116957,6 +118349,13 @@
    "lat": -8.511922,
    "lon": 116.097763,
    "name": "Gunung Lembahsari"
+  },
+  {
+   "lat": 1.039352,
+   "lon": 127.421269,
+   "name": "Kailupa Cone",
+   "name_en": "Cone of Jailolo",
+   "volcano": true
   },
   {
    "lat": 1.197912,
@@ -117679,6 +119078,12 @@
    "name": "Gunung"
   },
   {
+   "lat": -8.490113,
+   "lon": 118.793981,
+   "name": "Doro Mboha di",
+   "volcano": true
+  },
+  {
    "lat": -10.017341,
    "lon": 120.287606,
    "name": "Gunung Ngadu Langgi"
@@ -117791,6 +119196,12 @@
    "name": "Canada Hill"
   },
   {
+   "lat": -7.526921,
+   "lon": 112.711466,
+   "name": "Lapindo",
+   "volcano": true
+  },
+  {
    "lat": 3.54316,
    "lon": 101.719911,
    "name": "Bukit Kutu",
@@ -117822,6 +119233,12 @@
    "lat": -7.972138,
    "lon": 113.503092,
    "name": "Gunung Kendeng"
+  },
+  {
+   "lat": -7.188865,
+   "lon": 109.853493,
+   "name": "Kawah Candradimuka",
+   "volcano": true
   },
   {
    "lat": -7.321817,
@@ -118159,6 +119576,185 @@
    "name_en": "False Peak"
   },
   {
+   "lat": -0.53,
+   "lon": 127.48,
+   "name": "Amasing",
+   "volcano": true
+  },
+  {
+   "lat": 0.75,
+   "lon": 124.42,
+   "name": "Ambang",
+   "volcano": true
+  },
+  {
+   "lat": -4.43,
+   "lon": 103.67,
+   "name": "Besar",
+   "volcano": true
+  },
+  {
+   "lat": -0.77,
+   "lon": 127.72,
+   "name": "Bibinoi",
+   "volcano": true
+  },
+  {
+   "lat": 4.768998,
+   "lon": 96.820992,
+   "name": "Burni Telong",
+   "volcano": true
+  },
+  {
+   "lat": 4.813,
+   "lon": 96.82,
+   "name": "Geureudong",
+   "wikidata": "Q40981",
+   "volcano": true
+  },
+  {
+   "lat": -7.155016,
+   "lon": 107.851243,
+   "name": "Guntur",
+   "wikidata": "Q2735753",
+   "volcano": true
+  },
+  {
+   "lat": -5.35,
+   "lon": 104.6,
+   "name": "Hulubelu",
+   "wikidata": "Q8523823",
+   "volcano": true
+  },
+  {
+   "lat": -8.478,
+   "lon": 122.671,
+   "name": "Ilimuda",
+   "volcano": true
+  },
+  {
+   "lat": 2.158,
+   "lon": 98.93,
+   "name": "Imun",
+   "wikidata": "Q8523728",
+   "volcano": true
+  },
+  {
+   "lat": 5.803789,
+   "lon": 95.323848,
+   "name": "Jaboi",
+   "volcano": true
+  },
+  {
+   "lat": 1.454054,
+   "lon": 125.030704,
+   "name": "Klabat",
+   "volcano": true
+  },
+  {
+   "lat": 1.369653,
+   "lon": 124.801089,
+   "name": "Lokon-Empung",
+   "wikidata": "Q6668748",
+   "volcano": true
+  },
+  {
+   "lat": -4.22,
+   "lon": 103.62,
+   "name": "Lumut Balai, Bukit",
+   "volcano": true
+  },
+  {
+   "lat": -7.73,
+   "lon": 113.58,
+   "name": "Lurus",
+   "wikidata": "Q383862",
+   "volcano": true
+  },
+  {
+   "lat": 0.32,
+   "lon": 127.4,
+   "name": "Makian",
+   "volcano": true
+  },
+  {
+   "lat": 0.47,
+   "lon": 99.67,
+   "name": "Malintang",
+   "wikidata": "Q23925862",
+   "volcano": true
+  },
+  {
+   "lat": -5.53,
+   "lon": 130.292,
+   "name": "Manuk",
+   "volcano": true
+  },
+  {
+   "lat": 0.57,
+   "lon": 127.4,
+   "name": "Mare",
+   "volcano": true
+  },
+  {
+   "lat": 0.45,
+   "lon": 127.4,
+   "name": "Moti",
+   "volcano": true
+  },
+  {
+   "lat": -8.32,
+   "lon": 121.708,
+   "name": "Paluweh",
+   "volcano": true
+  },
+  {
+   "lat": -4.83,
+   "lon": 103.92,
+   "name": "Ranau",
+   "volcano": true
+  },
+  {
+   "lat": 0.08,
+   "lon": 100.2,
+   "name": "Sarik-Gajah",
+   "wikidata": "Q7424073",
+   "volcano": true
+  },
+  {
+   "lat": 1.556,
+   "lon": 99.255,
+   "name": "Sibualbuali",
+   "wikidata": "Q1087355",
+   "volcano": true
+  },
+  {
+   "lat": 1.115211,
+   "lon": 124.737266,
+   "name": "Gunung Soputan",
+   "wikidata": "Q781529",
+   "volcano": true
+  },
+  {
+   "lat": -8.24794,
+   "lon": 117.995129,
+   "name": "Tambora",
+   "wikidata": "Q168714",
+   "volcano": true
+  },
+  {
+   "lat": 2.58,
+   "lon": 98.83,
+   "name": "Toba Supervolcano",
+   "volcano": true
+  },
+  {
+   "lat": 0.723522,
+   "lon": 127.425085,
+   "name": "Sabale",
+   "volcano": true
+  },
+  {
    "lat": -6.557804,
    "lon": 107.2603,
    "name": "Gunung Dindingari"
@@ -118189,6 +119785,12 @@
    "name": "Gunung Watu Pecah"
   },
   {
+   "lat": -9.362147,
+   "lon": 124.377115,
+   "name": "Mud Volcanoes",
+   "volcano": true
+  },
+  {
    "lat": 3.796758,
    "lon": 113.767539,
    "name": "Bukit Kasut"
@@ -118214,6 +119816,12 @@
    "lat": 3.103257,
    "lon": 101.505744,
    "name": "Puncak Seni"
+  },
+  {
+   "lat": -8.31275,
+   "lon": 122.96758,
+   "name": "Ili Mandiri",
+   "volcano": true
   },
   {
    "lat": -3.216442,
@@ -118250,6 +119858,12 @@
    "lat": 4.830036,
    "lon": 114.786778,
    "name": "Bukit Meraburong"
+  },
+  {
+   "lat": 4.082031,
+   "lon": 113.975423,
+   "name": "Bekenu Mud Volcano",
+   "volcano": true
   },
   {
    "lat": 1.028497,
@@ -118401,9 +120015,27 @@
    "name": "Gunung Lari Tembakau"
   },
   {
+   "lat": -8.740709,
+   "lon": 120.976681,
+   "name": "Wawomudha",
+   "volcano": true
+  },
+  {
+   "lat": -8.749052,
+   "lon": 121.830131,
+   "name": "Kawah Panas",
+   "volcano": true
+  },
+  {
    "lat": -7.207922,
    "lon": 109.872035,
    "name": "Gunung Nagasari"
+  },
+  {
+   "lat": -7.19758,
+   "lon": 109.840961,
+   "name": "Kawah Timbang",
+   "volcano": true
   },
   {
    "lat": 3.102894,
@@ -118784,6 +120416,12 @@
    "lon": 102.480953,
    "name": "Bukit Terum",
    "wikidata": "Q31762433"
+  },
+  {
+   "lat": -5.751998,
+   "lon": 105.634404,
+   "name": "Way Belerang Simpur",
+   "volcano": true
   },
   {
    "lat": 5.764022,
@@ -123993,6 +125631,12 @@
    "name": "Bukit Tobat"
   },
   {
+   "lat": -7.63776,
+   "lon": 111.190182,
+   "name": "Kawah Candradimuka Gunung Lawu",
+   "volcano": true
+  },
+  {
    "lat": -0.274363,
    "lon": 111.400401,
    "name": "Bukit Benoa"
@@ -124022,6 +125666,12 @@
    "lat": -0.915007,
    "lon": 113.957453,
    "name": "Bukit Sinyal"
+  },
+  {
+   "lat": -8.862408,
+   "lon": 121.655806,
+   "name": "Kezi Pui",
+   "volcano": true
   },
   {
    "lat": -8.159916,
@@ -124125,6 +125775,12 @@
    "lon": 101.925157,
    "name": "Bukit Sam",
    "name_en": "Sam Hill"
+  },
+  {
+   "lat": 1.254643,
+   "lon": 127.482347,
+   "name": "Rano",
+   "volcano": true
   },
   {
    "lat": 5.371733,
@@ -124721,6 +126377,12 @@
    "lat": -6.88211,
    "lon": 107.748599,
    "name": "Puncak bayangan Manglayang"
+  },
+  {
+   "lat": -7.144268,
+   "lon": 107.840153,
+   "name": "Kawah Masigit",
+   "volcano": true
   },
   {
    "lat": 5.642529,
@@ -126056,9 +127718,69 @@
    "wikidata": "Q31766914"
   },
   {
+   "lat": 5.209663,
+   "lon": 118.507987,
+   "name": "Lipad Mud Volcano",
+   "volcano": true
+  },
+  {
    "lat": 2.310656,
    "lon": 102.315877,
    "name": "Bukit UTeM"
+  },
+  {
+   "lat": 4.118914,
+   "lon": 114.226203,
+   "name": "Bakong Mud Volcano",
+   "volcano": true
+  },
+  {
+   "lat": -7.337209,
+   "lon": 112.782394,
+   "name": "Lumpur Gunung Anyar",
+   "volcano": true
+  },
+  {
+   "lat": -7.098439,
+   "lon": 111.147139,
+   "name": "Bledug Kramesan",
+   "volcano": true
+  },
+  {
+   "lat": -7.11892,
+   "lon": 111.109707,
+   "name": "Bledug Cangkring",
+   "volcano": true
+  },
+  {
+   "lat": -7.117882,
+   "lon": 111.120567,
+   "name": "Bledug Kuwu",
+   "volcano": true
+  },
+  {
+   "lat": -7.117559,
+   "lon": 111.12341,
+   "name": "Bledug Kuwu",
+   "volcano": true
+  },
+  {
+   "lat": -7.117703,
+   "lon": 111.121683,
+   "name": "Bledug Kuwu",
+   "volcano": true
+  },
+  {
+   "lat": -7.155229,
+   "lon": 111.254232,
+   "name": "Bledug Kesongo",
+   "volcano": true
+  },
+  {
+   "lat": -8.944433,
+   "lon": 126.395624,
+   "name": "Raitahu Mud Volcano",
+   "volcano": true
   },
   {
    "lat": -6.503531,
@@ -127023,10 +128745,50 @@
    "name": "Bukit Kolecer"
   },
   {
+   "lat": -5.239689,
+   "lon": 104.262807,
+   "name": "Kawah Kopi Susu",
+   "name_ru": "Кратер Копи Сусу",
+   "name_en": "Kopi Susu Crater",
+   "volcano": true
+  },
+  {
    "lat": -5.3296,
    "lon": 119.8368,
    "name": "BATU MACCINRI",
    "ele": -1
+  },
+  {
+   "lat": 3.145518,
+   "lon": 125.442543,
+   "name": "Banua Wuhu",
+   "ele": -5,
+   "wikidata": "Q807010",
+   "volcano": true
+  },
+  {
+   "lat": -6.611238,
+   "lon": 124.660492,
+   "name": "Nieuwerkerk",
+   "ele": -2285,
+   "wikidata": "Q2237908",
+   "volcano": true
+  },
+  {
+   "lat": -6.616268,
+   "lon": 124.218764,
+   "name": "Emperor of China",
+   "ele": -2850,
+   "wikidata": "Q4175840",
+   "volcano": true
+  },
+  {
+   "lat": -7.529659,
+   "lon": 123.951144,
+   "name": "Yersey",
+   "ele": -3800,
+   "wikidata": "Q2470142",
+   "volcano": true
   }
  ]
 }

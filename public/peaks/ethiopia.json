@@ -1,6 +1,6 @@
 {
  "region": "ethiopia",
- "generated": "2026-08-12T10:54:55+00:00",
+ "generated": "2026-08-13T09:16:20+00:00",
  "peaks": [
   {
    "lat": 13.236426,
@@ -49,6 +49,13 @@
    "wikidata": "Q867835"
   },
   {
+   "lat": 7.364226,
+   "lon": 39.158022,
+   "name": "K'Ech'A Terara",
+   "ele": 4180,
+   "volcano": true
+  },
+  {
    "lat": 13.353817,
    "lon": 38.532003,
    "name": "Hay",
@@ -66,6 +73,20 @@
    "lon": 38.215619,
    "name": "Bauhit",
    "ele": 4142
+  },
+  {
+   "lat": 11.711621,
+   "lon": 38.238869,
+   "name": "Guna Terara",
+   "ele": 4110,
+   "volcano": true
+  },
+  {
+   "lat": 10.711789,
+   "lon": 37.843503,
+   "name": "Mount Choke",
+   "ele": 4080,
+   "volcano": true
   },
   {
    "lat": 13.286646,
@@ -256,6 +277,13 @@
    "ele": 3107
   },
   {
+   "lat": 8.901397,
+   "lon": 38.960431,
+   "name": "Mount Yerer",
+   "ele": 3099,
+   "volcano": true
+  },
+  {
    "lat": 12.937178,
    "lon": 39.609012,
    "name": "Toselli",
@@ -311,6 +339,15 @@
    "lon": 39.539151,
    "name": "May Falso Yeterara Senselet",
    "ele": 2993
+  },
+  {
+   "lat": 8.539656,
+   "lon": 38.853955,
+   "name": "Mount Zuqualla",
+   "name_en": "Mount Zuqualla",
+   "ele": 2989,
+   "wikidata": "Q230269",
+   "volcano": true
   },
   {
    "lat": 13.516751,
@@ -499,6 +536,14 @@
    "name": "غوال سايم",
    "name_en": "Gwal Saim",
    "ele": 2737
+  },
+  {
+   "lat": 7.423828,
+   "lon": 35.429979,
+   "name": "Teppi",
+   "ele": 2728,
+   "wikidata": "Q12777380",
+   "volcano": true
   },
   {
    "lat": 7.423177,
@@ -772,6 +817,14 @@
    "ele": 2456
   },
   {
+   "lat": 8.57476,
+   "lon": 39.455361,
+   "name": "Boset-Bericha",
+   "ele": 2447,
+   "wikidata": "Q2911466",
+   "volcano": true
+  },
+  {
    "lat": 14.253619,
    "lon": 39.041346,
    "name": "Histi",
@@ -854,6 +907,13 @@
    "ele": 2378
   },
   {
+   "lat": 8.880253,
+   "lon": 38.90125,
+   "name": "Insilale Terara",
+   "ele": 2375,
+   "volcano": true
+  },
+  {
    "lat": 14.458626,
    "lon": 39.347354,
    "name": "Kudo Korebta",
@@ -879,11 +939,27 @@
    "ele": 2367
   },
   {
+   "lat": 8.163659,
+   "lon": 39.128012,
+   "name": "Tullu Moje",
+   "ele": 2349,
+   "wikidata": "Q3541980",
+   "volcano": true
+  },
+  {
    "lat": 8.848295,
    "lon": 38.846266,
    "name": "ቡሹ ኮረብታ / Bushu Terara",
    "name_en": "Bushu Terara",
    "ele": 2346
+  },
+  {
+   "lat": 7.763568,
+   "lon": 38.763576,
+   "name": "Alutu",
+   "ele": 2335,
+   "wikidata": "Q125156",
+   "volcano": true
   },
   {
    "lat": 14.412281,
@@ -911,6 +987,14 @@
    "lon": 33.835157,
    "name": "Komoju",
    "ele": 2330
+  },
+  {
+   "lat": 7.187068,
+   "lon": 38.427712,
+   "name": "Corbetti Caldera",
+   "ele": 2320,
+   "wikidata": "Q2997061",
+   "volcano": true
   },
   {
    "lat": 3.747216,
@@ -941,6 +1025,29 @@
    "lon": 39.581237,
    "name": "Grarat Mount",
    "ele": 2295
+  },
+  {
+   "lat": 8.274713,
+   "lon": 39.034206,
+   "name": "Bora-Bericcio",
+   "ele": 2285,
+   "wikidata": "Q2910587",
+   "volcano": true
+  },
+  {
+   "lat": 8.064353,
+   "lon": 39.071285,
+   "name": "Bora-Bericcio",
+   "ele": 2285,
+   "volcano": true
+  },
+  {
+   "lat": 8.043351,
+   "lon": 38.35153,
+   "name": "Butajiri-Silti Field",
+   "ele": 2281,
+   "wikidata": "Q2928813",
+   "volcano": true
   },
   {
    "lat": 14.417335,
@@ -1042,6 +1149,14 @@
    "name": "Mount Lotholia",
    "ele": 2149,
    "wikidata": "Q6924814"
+  },
+  {
+   "lat": 10.084227,
+   "lon": 40.70289,
+   "name": "Ayalu",
+   "ele": 2145,
+   "wikidata": "Q792922",
+   "volcano": true
   },
   {
    "lat": 13.143418,
@@ -1192,6 +1307,14 @@
    "wikidata": "Q31580458"
   },
   {
+   "lat": 8.987565,
+   "lon": 39.901925,
+   "name": "Mount Fentale",
+   "ele": 2007,
+   "wikidata": "Q2336503",
+   "volcano": true
+  },
+  {
    "lat": 4.252345,
    "lon": 33.528884,
    "name": "BUTHI",
@@ -1326,6 +1449,13 @@
    "ele": 1890
   },
   {
+   "lat": 7.912904,
+   "lon": 38.911243,
+   "name": "East Zway",
+   "ele": 1889,
+   "volcano": true
+  },
+  {
    "lat": 12.889898,
    "lon": 37.474352,
    "name": "Campau",
@@ -1343,6 +1473,13 @@
    "name": "جبل مطحن",
    "name_en": "Jabal Mat'han",
    "ele": 1876
+  },
+  {
+   "lat": 13.28102,
+   "lon": 41.659153,
+   "name": "Mallahle",
+   "ele": 1875,
+   "volcano": true
   },
   {
    "lat": 3.6492,
@@ -1430,6 +1567,14 @@
    "ele": 1821
   },
   {
+   "lat": 13.019213,
+   "lon": 40.202162,
+   "name": "Ma Alalta",
+   "ele": 1815,
+   "wikidata": "Q3273421",
+   "volcano": true
+  },
+  {
    "lat": 14.748016,
    "lon": 45.517867,
    "name": "جبل حقيل",
@@ -1501,10 +1646,24 @@
    "ele": 1772
   },
   {
+   "lat": 8.435349,
+   "lon": 39.358296,
+   "name": "Sodore",
+   "ele": 1765,
+   "volcano": true
+  },
+  {
    "lat": 4.149745,
    "lon": 33.715843,
    "name": "LOTIATHE",
    "ele": 1760
+  },
+  {
+   "lat": 7.572447,
+   "lon": 38.568227,
+   "name": "Lencha",
+   "ele": 1750,
+   "volcano": true
   },
   {
    "lat": 3.615,
@@ -1512,6 +1671,14 @@
    "name": "Lalak",
    "ele": 1735,
    "wikidata": "Q31528201"
+  },
+  {
+   "lat": 10.060839,
+   "lon": 40.833357,
+   "name": "Adwa",
+   "ele": 1733,
+   "wikidata": "Q380084",
+   "volcano": true
   },
   {
    "lat": 9.882597,
@@ -1649,6 +1816,22 @@
    "ele": 1655
   },
   {
+   "lat": 6.717912,
+   "lon": 38.090651,
+   "name": "Chiracha",
+   "ele": 1650,
+   "wikidata": "Q2963895",
+   "volcano": true
+  },
+  {
+   "lat": 5.937319,
+   "lon": 37.556473,
+   "name": "Tosa Sucha",
+   "ele": 1650,
+   "wikidata": "Q12777638",
+   "volcano": true
+  },
+  {
    "lat": 5.988449,
    "lon": 37.606467,
    "name": "Tosa Sucha",
@@ -1695,6 +1878,14 @@
    "wikidata": "Q29874261"
   },
   {
+   "lat": 13.579444,
+   "lon": 41.808831,
+   "name": "Dubbi",
+   "ele": 1625,
+   "wikidata": "Q1262978",
+   "volcano": true
+  },
+  {
    "lat": 3.5417,
    "lon": 33.4058,
    "name": "Kiteny",
@@ -1713,6 +1904,21 @@
    "lon": 33.758164,
    "name": "BOHORORA EAST",
    "ele": 1620
+  },
+  {
+   "lat": 8.843365,
+   "lon": 39.698213,
+   "name": "Kone ?",
+   "ele": 1619,
+   "volcano": true
+  },
+  {
+   "lat": 13.185437,
+   "lon": 41.723695,
+   "name": "Sork Ale",
+   "ele": 1611,
+   "wikidata": "Q2408098",
+   "volcano": true
   },
   {
    "lat": 9.785115,
@@ -1956,6 +2162,14 @@
    "ele": 1503
   },
   {
+   "lat": 12.88861,
+   "lon": 40.57083,
+   "name": "Urikomam Terara",
+   "name_en": "Alayta",
+   "ele": 1501,
+   "volcano": true
+  },
+  {
    "lat": 13.405921,
    "lon": 37.942192,
    "name": "Secuar",
@@ -2046,6 +2260,14 @@
    "ele": 1460
   },
   {
+   "lat": 11.084428,
+   "lon": 41.261296,
+   "name": "Gabillema",
+   "ele": 1459,
+   "wikidata": "Q3093519",
+   "volcano": true
+  },
+  {
    "lat": 5.9424,
    "lon": 34.9649,
    "name": "Logoda",
@@ -2068,6 +2290,14 @@
    "lon": 37.73194,
    "name": "Obasa Gudda",
    "ele": 1450
+  },
+  {
+   "lat": 12.599276,
+   "lon": 40.471318,
+   "name": "Dabbahu",
+   "ele": 1442,
+   "wikidata": "Q1156519",
+   "volcano": true
   },
   {
    "lat": 13.572698,
@@ -2185,6 +2415,13 @@
    "wikidata": "Q23723275"
   },
   {
+   "lat": 10.586889,
+   "lon": 41.034877,
+   "name": "Mount Yangudi",
+   "ele": 1383,
+   "volcano": true
+  },
+  {
    "lat": 9.904524,
    "lon": 46.36059,
    "name": "Tukeraq",
@@ -2297,6 +2534,14 @@
    "wikidata": "Q31585793"
   },
   {
+   "lat": 12.378436,
+   "lon": 40.064236,
+   "name": "Dabbayra",
+   "ele": 1302,
+   "wikidata": "Q3011584",
+   "volcano": true
+  },
+  {
    "lat": 14.559137,
    "lon": 37.789429,
    "name": "ገምሃሎ",
@@ -2308,6 +2553,14 @@
    "lon": 35.041092,
    "name": "Mosab Gara",
    "ele": 1300
+  },
+  {
+   "lat": 13.088216,
+   "lon": 40.853253,
+   "name": "Afdera",
+   "ele": 1295,
+   "wikidata": "Q382139",
+   "volcano": true
   },
   {
    "lat": 9.722591,
@@ -2400,6 +2653,14 @@
    "ele": 1205
   },
   {
+   "lat": 13.10018,
+   "lon": 41.597699,
+   "name": "Asavyo",
+   "ele": 1200,
+   "wikidata": "Q507979",
+   "volcano": true
+  },
+  {
    "lat": 10.093228,
    "lon": 47.024866,
    "name": "Agluub",
@@ -2423,6 +2684,14 @@
    "lon": 33.090155,
    "name": "Towelo",
    "ele": 1163
+  },
+  {
+   "lat": 9.348527,
+   "lon": 40.132143,
+   "name": "Dofen",
+   "ele": 1151,
+   "wikidata": "Q3033707",
+   "volcano": true
   },
   {
    "lat": 4.222179,
@@ -2496,6 +2765,14 @@
    "name": "Mur Guraale",
    "ele": 1104,
    "wikidata": "Q31575794"
+  },
+  {
+   "lat": 8.945962,
+   "lon": 39.750408,
+   "name": "Beru",
+   "ele": 1100,
+   "wikidata": "Q828701",
+   "volcano": true
   },
   {
    "lat": 11.998611,
@@ -2685,6 +2962,14 @@
    "ele": 1038
   },
   {
+   "lat": 13.507698,
+   "lon": 40.632862,
+   "name": "Ale Bagu",
+   "ele": 1031,
+   "wikidata": "Q1189160",
+   "volcano": true
+  },
+  {
    "lat": 9.875722,
    "lon": 47.186157,
    "name": "Barde Subagle",
@@ -2786,6 +3071,14 @@
    "ele": 931
   },
   {
+   "lat": 11.71717,
+   "lon": 40.233593,
+   "name": "Groppo",
+   "ele": 930,
+   "wikidata": "Q3116948",
+   "volcano": true
+  },
+  {
    "lat": 8.339379,
    "lon": 47.51971,
    "name": "Qotan",
@@ -2805,6 +3098,13 @@
    "lon": 46.201321,
    "name": "Horkac",
    "ele": 922
+  },
+  {
+   "lat": 5.100776,
+   "lon": 35.884031,
+   "name": "Korath Range",
+   "ele": 912,
+   "volcano": true
   },
   {
    "lat": 8.319549,
@@ -2875,6 +3175,13 @@
    "lon": 32.812113,
    "name": "Igurre Mountain",
    "ele": 880
+  },
+  {
+   "lat": 9.562967,
+   "lon": 40.260388,
+   "name": "Liado Hayk",
+   "ele": 878,
+   "volcano": true
   },
   {
    "lat": 12.257306,
@@ -2951,6 +3258,21 @@
    "lon": 46.356944,
    "name": "Qaydar Urkurus",
    "ele": 814
+  },
+  {
+   "lat": 13.304061,
+   "lon": 40.990128,
+   "name": "Borawli",
+   "ele": 812,
+   "wikidata": "Q893330",
+   "volcano": true
+  },
+  {
+   "lat": 4.088977,
+   "lon": 37.407941,
+   "name": "Mega Basalt Field",
+   "ele": 802,
+   "volcano": true
   },
   {
    "lat": 4.136488,
@@ -3071,6 +3393,14 @@
    "ele": 720
   },
   {
+   "lat": 13.285132,
+   "lon": 41.063383,
+   "name": "Tat Ali",
+   "ele": 700,
+   "wikidata": "Q2331557",
+   "volcano": true
+  },
+  {
    "lat": 4.119678,
    "lon": 35.251071,
    "name": "Kokolonyoi",
@@ -3082,6 +3412,23 @@
    "lon": 41.077579,
    "name": "Datale",
    "ele": 670
+  },
+  {
+   "lat": 13.724258,
+   "lon": 40.596468,
+   "name": "Borale Ale",
+   "name_ru": "Борале-Али",
+   "ele": 668,
+   "wikidata": "Q2332099",
+   "volcano": true
+  },
+  {
+   "lat": 11.286717,
+   "lon": 41.637656,
+   "name": "Dama Ali Crater",
+   "ele": 660,
+   "wikidata": "Q375900",
+   "volcano": true
   },
   {
    "lat": 4.874857,
@@ -3109,6 +3456,14 @@
    "ele": 635
   },
   {
+   "lat": 11.883788,
+   "lon": 41.208584,
+   "name": "Kurub",
+   "ele": 625,
+   "wikidata": "Q3200621",
+   "volcano": true
+  },
+  {
    "lat": 4.240229,
    "lon": 35.137097,
    "name": "Kokusem",
@@ -3116,10 +3471,48 @@
    "wikidata": "Q27196701"
   },
   {
+   "lat": 13.603032,
+   "lon": 40.663409,
+   "name": "Erta Ale",
+   "ele": 613,
+   "wikidata": "Q903",
+   "volcano": true
+  },
+  {
+   "lat": 13.792461,
+   "lon": 40.55342,
+   "name": "Dalaffilla",
+   "ele": 613,
+   "wikidata": "Q1607790",
+   "volcano": true
+  },
+  {
    "lat": 3.557762,
    "lon": 41.953734,
    "name": "Hool",
    "ele": 613
+  },
+  {
+   "lat": 12.364446,
+   "lon": 42.490097,
+   "name": "Ancien volcan بركان قديم",
+   "ele": 605,
+   "volcano": true
+  },
+  {
+   "lat": 12.170874,
+   "lon": 40.813751,
+   "name": "Manda Hararo",
+   "ele": 600,
+   "wikidata": "Q3285396",
+   "volcano": true
+  },
+  {
+   "lat": 12.392856,
+   "lon": 42.204407,
+   "name": "Manda-Inakir",
+   "ele": 600,
+   "volcano": true
   },
   {
    "lat": 4.965761,
@@ -3185,10 +3578,26 @@
    "wikidata": "Q31574384"
   },
   {
+   "lat": 13.101304,
+   "lon": 41.146313,
+   "name": "Mata Ala",
+   "ele": 523,
+   "wikidata": "Q3298140",
+   "volcano": true
+  },
+  {
    "lat": 13.276605,
    "lon": 41.091162,
    "name": "Dalahati",
    "ele": 522
+  },
+  {
+   "lat": 13.510978,
+   "lon": 40.716262,
+   "name": "Hayli Gubbi",
+   "ele": 521,
+   "wikidata": "Q1058401",
+   "volcano": true
   },
   {
    "lat": 3.157978,
@@ -3230,6 +3639,14 @@
    "wikidata": "Q29873975"
   },
   {
+   "lat": 13.809581,
+   "lon": 40.529187,
+   "name": "Alu",
+   "ele": 429,
+   "wikidata": "Q447277",
+   "volcano": true
+  },
+  {
    "lat": 13.722478,
    "lon": 42.731338,
    "name": "Great Hanish Peak",
@@ -3248,16 +3665,63 @@
    "ele": 302
   },
   {
+   "lat": 11.601644,
+   "lon": 42.484523,
+   "name": "Ardoukoba أردوكوبا",
+   "ele": 298,
+   "wikidata": "Q639993",
+   "volcano": true
+  },
+  {
    "lat": 3.369856,
    "lon": 42.165531,
    "name": "Shabaax",
    "ele": 294
   },
   {
+   "lat": 13.975863,
+   "lon": 40.410402,
+   "name": "Gada Ale",
+   "ele": 287,
+   "wikidata": "Q1490805",
+   "volcano": true
+  },
+  {
    "lat": 3.02187,
    "lon": 42.250526,
    "name": "Jeexdin",
    "ele": 283
+  },
+  {
+   "lat": 13.003696,
+   "lon": 42.699438,
+   "name": "جبل سيلا",
+   "ele": 270,
+   "wikidata": "Q23940058",
+   "volcano": true
+  },
+  {
+   "lat": 14.909195,
+   "lon": 39.900105,
+   "name": "Fafah Le",
+   "ele": 227,
+   "wikidata": "Q23944150",
+   "volcano": true
+  },
+  {
+   "lat": 14.93331,
+   "lon": 39.824827,
+   "name": "Mount Darkōt / ዳረኮተ",
+   "ele": 151,
+   "volcano": true
+  },
+  {
+   "lat": 14.992617,
+   "lon": 39.827683,
+   "name": "Fafah Le",
+   "ele": 110,
+   "wikidata": "Q23944166",
+   "volcano": true
   },
   {
    "lat": 13.184951,
@@ -3280,6 +3744,139 @@
    "wikidata": "Q20909546"
   },
   {
+   "lat": 8.970946,
+   "lon": 39.93609,
+   "name": "Sabober ?",
+   "volcano": true
+  },
+  {
+   "lat": 11.244962,
+   "lon": 41.544448,
+   "name": "Asmara",
+   "volcano": true
+  },
+  {
+   "lat": 9.773381,
+   "lon": 40.338884,
+   "name": "Hertali",
+   "volcano": true
+  },
+  {
+   "lat": 7.063424,
+   "lon": 38.095949,
+   "name": "T'ido Hayk",
+   "volcano": true
+  },
+  {
+   "lat": 7.094764,
+   "lon": 38.090974,
+   "name": "Budamado Hayk",
+   "volcano": true
+  },
+  {
+   "lat": 7.040761,
+   "lon": 38.086683,
+   "name": "Bode Ameda Hayk",
+   "volcano": true
+  },
+  {
+   "lat": 8.761914,
+   "lon": 38.992445,
+   "name": "Debre Zeyit Volcanic Field",
+   "volcano": true
+  },
+  {
+   "lat": 8.673735,
+   "lon": 38.948006,
+   "name": "Gauaba",
+   "volcano": true
+  },
+  {
+   "lat": 8.801442,
+   "lon": 39.105399,
+   "name": "Haro Maya",
+   "volcano": true
+  },
+  {
+   "lat": 8.160031,
+   "lon": 39.137031,
+   "name": "Tulu Moye",
+   "volcano": true
+  },
+  {
+   "lat": 8.355396,
+   "lon": 39.18097,
+   "name": "Ittisa",
+   "volcano": true
+  },
+  {
+   "lat": 3.934861,
+   "lon": 37.326402,
+   "name": "Garra Gallaan",
+   "volcano": true
+  },
+  {
+   "lat": 3.857106,
+   "lon": 37.345113,
+   "name": "Garra Did Golan Gutha",
+   "volcano": true
+  },
+  {
+   "lat": 3.984181,
+   "lon": 37.344426,
+   "name": "Garra Sorra",
+   "volcano": true
+  },
+  {
+   "lat": 7.560036,
+   "lon": 38.500431,
+   "name": "Fike",
+   "name_en": "Fike",
+   "volcano": true
+  },
+  {
+   "lat": 7.711777,
+   "lon": 40.51253,
+   "name": "Mount Abul Casim",
+   "volcano": true
+  },
+  {
+   "lat": 3.445838,
+   "lon": 37.639208,
+   "name": "Chisa Ela nadehani",
+   "volcano": true
+  },
+  {
+   "lat": 3.421241,
+   "lon": 37.66995,
+   "name": "Chisa",
+   "volcano": true
+  },
+  {
+   "lat": 3.461166,
+   "lon": 37.565409,
+   "name": "Kalesa mata gongo",
+   "volcano": true
+  },
+  {
+   "lat": 3.470237,
+   "lon": 37.765777,
+   "name": "Gara Nyecha",
+   "volcano": true
+  },
+  {
+   "lat": 3.429295,
+   "lon": 37.758356,
+   "name": "Gara worsesa",
+   "volcano": true
+  },
+  {
+   "lat": 3.430152,
+   "lon": 37.763849,
+   "name": "Gara worsesa",
+   "volcano": true
+  },
+  {
    "lat": 12.45,
    "lon": 35.76667,
    "name": "Kir",
@@ -3291,9 +3888,21 @@
    "name": "Amba Dagua Tafa"
   },
   {
+   "lat": 11.349211,
+   "lon": 41.579945,
+   "name": "Haytankoma Terara",
+   "volcano": true
+  },
+  {
    "lat": 10.948378,
    "lon": 37.288308,
    "name": "Lich'ma"
+  },
+  {
+   "lat": 13.60672,
+   "lon": 40.66153,
+   "name": "Irta'Ale Isate Gomera",
+   "volcano": true
   },
   {
    "lat": 10.492327,
@@ -3589,9 +4198,21 @@
    "name": "Guciar"
   },
   {
+   "lat": 12.338445,
+   "lon": 40.595215,
+   "name": "Sibaba",
+   "volcano": true
+  },
+  {
    "lat": 12.953095,
    "lon": 39.131757,
    "name": "Amba Abba Gubba"
+  },
+  {
+   "lat": 13.287619,
+   "lon": 41.433473,
+   "name": "Afdera",
+   "volcano": true
   },
   {
    "lat": 10.151225,
@@ -10097,6 +10718,14 @@
    "wikidata": "Q29872240"
   },
   {
+   "lat": 14.442804,
+   "lon": 44.913612,
+   "name": "جبل نشوة",
+   "name_en": "Jabal Nashwah",
+   "wikidata": "Q29872264",
+   "volcano": true
+  },
+  {
    "lat": 14.464685,
    "lon": 44.894815,
    "name": "جبل الفساوين",
@@ -14841,6 +15470,28 @@
    "name": "JURI"
   },
   {
+   "lat": 11.53623,
+   "lon": 42.539791,
+   "name": "Ginni Kôma جني كوما",
+   "name_en": "Ginni Kôma",
+   "volcano": true
+  },
+  {
+   "lat": 12.392299,
+   "lon": 42.438499,
+   "name": "Fafahto فافاهتو",
+   "name_en": "Fafahto",
+   "volcano": true
+  },
+  {
+   "lat": 11.542327,
+   "lon": 42.533989,
+   "name": "Ounda Ginni Kôma بركان الجن",
+   "name_en": "Ounda Ginni Kôma",
+   "wikidata": "Q23731888",
+   "volcano": true
+  },
+  {
    "lat": 10.5,
    "lon": 34.516667,
    "name": "Gebel Gule"
@@ -14945,9 +15596,22 @@
    "name": "Small hill"
   },
   {
+   "lat": 13.374682,
+   "lon": 41.699315,
+   "name": "Nabro",
+   "wikidata": "Q596806",
+   "volcano": true
+  },
+  {
    "lat": 3.624584,
    "lon": 33.74931,
    "name": "Kikis-Loitanit hill"
+  },
+  {
+   "lat": 12.287677,
+   "lon": 42.376439,
+   "name": "Aouadda",
+   "volcano": true
   },
   {
    "lat": 5.641953,
@@ -15045,6 +15709,12 @@
    "name": "Qatenaruba"
   },
   {
+   "lat": 10.04688,
+   "lon": 40.771937,
+   "name": "God Fulkano",
+   "volcano": true
+  },
+  {
    "lat": 13.714553,
    "lon": 39.149265,
    "name": "Itai Sara"
@@ -15121,6 +15791,18 @@
    "lon": 44.155247,
    "name": "جبل الشارح",
    "name_en": "Jabal ash Sharih"
+  },
+  {
+   "lat": 3.520625,
+   "lon": 37.780689,
+   "name": "Burarata",
+   "volcano": true
+  },
+  {
+   "lat": 3.363297,
+   "lon": 37.713404,
+   "name": "Gathaa",
+   "volcano": true
   },
   {
    "lat": 4.137454,
@@ -15202,6 +15884,12 @@
    "name": "8"
   },
   {
+   "lat": 7.543058,
+   "lon": 38.545912,
+   "name": "Tulu Bila",
+   "volcano": true
+  },
+  {
    "lat": 12.148243,
    "lon": 37.766434,
    "name": "Finger of God"
@@ -15210,6 +15898,13 @@
    "lat": 13.862648,
    "lon": 39.425237,
    "name": "Debre Maar"
+  },
+  {
+   "lat": 14.091164,
+   "lon": 44.672658,
+   "name": "حراضة دمت",
+   "name_en": "Haradhat Damt",
+   "volcano": true
   },
   {
    "lat": 14.54541,
@@ -23747,6 +24442,12 @@
    "name": "دار اشمان"
   },
   {
+   "lat": 14.110292,
+   "lon": 45.461433,
+   "name": "سد الرباط",
+   "volcano": true
+  },
+  {
    "lat": 14.333683,
    "lon": 44.546387,
    "name": "جبل الحريم",
@@ -23757,6 +24458,14 @@
    "lon": 44.559738,
    "name": "جبل اهل عامر",
    "name_en": "Jabal Ahl Amer"
+  },
+  {
+   "lat": 14.242473,
+   "lon": 40.299692,
+   "name": "Dallol",
+   "ele": -46,
+   "wikidata": "Q590742",
+   "volcano": true
   },
   {
    "lat": 13.954606,

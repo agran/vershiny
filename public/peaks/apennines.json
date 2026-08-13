@@ -1,6 +1,6 @@
 {
  "region": "apennines",
- "generated": "2026-08-12T10:54:51+00:00",
+ "generated": "2026-08-13T09:16:16+00:00",
  "peaks": [
   {
    "lat": 41.717921,
@@ -13,6 +13,58 @@
    "lon": 12.833794,
    "name": "Poggio di Valle Fura",
    "ele": 9311
+  },
+  {
+   "lat": 37.751025,
+   "lon": 14.994032,
+   "name": "Etna",
+   "name_ru": "Этна",
+   "name_en": "Etna",
+   "ele": 3403,
+   "wikidata": "Q16990",
+   "volcano": true
+  },
+  {
+   "lat": 37.751786,
+   "lon": 14.994699,
+   "name": "La Voragine",
+   "name_en": "The Chasm",
+   "ele": 3403,
+   "volcano": true
+  },
+  {
+   "lat": 37.750037,
+   "lon": 14.992918,
+   "name": "Bocca Nuova",
+   "ele": 3380,
+   "volcano": true
+  },
+  {
+   "lat": 37.754431,
+   "lon": 14.996168,
+   "name": "Cratere di Nord-Est",
+   "name_ru": "Северо-восточный кратер",
+   "name_en": "North East Crater",
+   "ele": 3327,
+   "volcano": true
+  },
+  {
+   "lat": 37.747764,
+   "lon": 14.998515,
+   "name": "Cratere di Sud-Est",
+   "name_ru": "Юго-восточный кратер",
+   "name_en": "South East Crater",
+   "ele": 3294,
+   "volcano": true
+  },
+  {
+   "lat": 37.745985,
+   "lon": 15.001519,
+   "name": "Nuovo Cratere di Sud-Est",
+   "name_ru": "Новый юго-восточный кратер",
+   "name_en": "New South East Crater",
+   "ele": 3290,
+   "volcano": true
   },
   {
    "lat": 37.764782,
@@ -46,6 +98,13 @@
    "lon": 13.568971,
    "name": "Torrione Cambi",
    "ele": 2875
+  },
+  {
+   "lat": 37.732808,
+   "lon": 14.994803,
+   "name": "Monte Frumento Supino",
+   "ele": 2845,
+   "volcano": true
   },
   {
    "lat": 37.764906,
@@ -113,6 +172,13 @@
    "ele": 2673
   },
   {
+   "lat": 37.72253,
+   "lon": 15.004666,
+   "name": "Cratere Piano del Lago o Escrivà",
+   "ele": 2672,
+   "volcano": true
+  },
+  {
    "lat": 42.093389,
    "lon": 14.110449,
    "name": "Monte Sant'Angelo",
@@ -149,6 +215,13 @@
    "name": "Pointe Marguareis / Cima Marguarèis",
    "ele": 2651,
    "wikidata": "Q1767616"
+  },
+  {
+   "lat": 37.717666,
+   "lon": 15.00511,
+   "name": "Montagnola",
+   "ele": 2648,
+   "volcano": true
   },
   {
    "lat": 42.104863,
@@ -303,6 +376,13 @@
    "name": "Monte Camicia",
    "ele": 2564,
    "wikidata": "Q929442"
+  },
+  {
+   "lat": 37.725719,
+   "lon": 15.008374,
+   "name": "Cisternazza",
+   "ele": 2564,
+   "volcano": true
   },
   {
    "lat": 42.402841,
@@ -713,6 +793,13 @@
    "name": "Cima di Gaina / Cime de la Galine",
    "ele": 2400,
    "wikidata": "Q44957084"
+  },
+  {
+   "lat": 37.787145,
+   "lon": 15.011705,
+   "name": "Bocche del 1809",
+   "ele": 2400,
+   "volcano": true
   },
   {
    "lat": 43.225588,
@@ -2092,6 +2179,13 @@
    "ele": 2163
   },
   {
+   "lat": 37.786326,
+   "lon": 15.020984,
+   "name": "Monte Nero delle Concazze",
+   "ele": 2162,
+   "volcano": true
+  },
+  {
    "lat": 43.248814,
    "lon": 18.749333,
    "name": "Kom",
@@ -2983,6 +3077,13 @@
    "lon": 14.026364,
    "name": "Balcone delle Gravare",
    "ele": 2087
+  },
+  {
+   "lat": 37.751444,
+   "lon": 15.037039,
+   "name": "Monte Simone",
+   "ele": 2086,
+   "volcano": true
   },
   {
    "lat": 41.890919,
@@ -4042,6 +4143,13 @@
    "lon": 13.408379,
    "name": "Colle Senarica",
    "ele": 2002
+  },
+  {
+   "lat": 37.701291,
+   "lon": 15.004753,
+   "name": "Crateri Silvestri superiori",
+   "ele": 2001,
+   "volcano": true
   },
   {
    "lat": 42.105511,
@@ -6275,6 +6383,13 @@
    "ele": 1887
   },
   {
+   "lat": 37.697634,
+   "lon": 15.005032,
+   "name": "Crateri Silvestri inferiori",
+   "ele": 1886,
+   "volcano": true
+  },
+  {
    "lat": 43.574903,
    "lon": 17.96395,
    "name": "Borašnica",
@@ -7401,6 +7516,13 @@
    "name": "Monte Matto",
    "ele": 1838,
    "wikidata": "Q3861733"
+  },
+  {
+   "lat": 37.734045,
+   "lon": 15.034623,
+   "name": "Monte Centenari",
+   "ele": 1838,
+   "volcano": true
   },
   {
    "lat": 43.202344,
@@ -29017,6 +29139,14 @@
    "ele": 1326
   },
   {
+   "lat": 40.950728,
+   "lon": 15.63628,
+   "name": "Monte Vulture",
+   "ele": 1326,
+   "wikidata": "Q509433",
+   "volcano": true
+  },
+  {
    "lat": 44.151728,
    "lon": 16.945965,
    "name": "Samar",
@@ -29442,6 +29572,13 @@
    "lon": 16.095323,
    "name": "Monte dell'Impiso",
    "ele": 1319
+  },
+  {
+   "lat": 37.67118,
+   "lon": 15.005961,
+   "name": "Cratere Monte Grosso",
+   "ele": 1319,
+   "volcano": true
   },
   {
    "lat": 41.589421,
@@ -32181,6 +32318,16 @@
    "lon": 13.245477,
    "name": "Monte Soffiavento",
    "ele": 1281
+  },
+  {
+   "lat": 40.821396,
+   "lon": 14.426197,
+   "name": "Vesuvio",
+   "name_ru": "Везувий",
+   "name_en": "Mount Vesuvius",
+   "ele": 1281,
+   "wikidata": "Q524",
+   "volcano": true
   },
   {
    "lat": 44.146868,
@@ -52879,6 +53026,13 @@
    "ele": 1066
   },
   {
+   "lat": 41.296522,
+   "lon": 13.970901,
+   "name": "Roccamonfina",
+   "ele": 1066,
+   "volcano": true
+  },
+  {
    "lat": 43.983643,
    "lon": 16.908237,
    "name": "Debelo brdo",
@@ -62007,6 +62161,14 @@
    "ele": 986
   },
   {
+   "lat": 37.116999,
+   "lon": 14.8197,
+   "name": "Monti Iblei",
+   "name_en": "Hyblaean Mountains",
+   "ele": 986,
+   "volcano": true
+  },
+  {
    "lat": 39.955044,
    "lon": 16.435044,
    "name": "Timpone del Cerro",
@@ -68897,6 +69059,14 @@
    "lon": 14.312337,
    "name": "Colle Castiglione",
    "ele": 927
+  },
+  {
+   "lat": 38.793027,
+   "lon": 15.210851,
+   "name": "Stromboli",
+   "ele": 926,
+   "wikidata": "Q131148",
+   "volcano": true
   },
   {
    "lat": 41.009921,
@@ -79479,6 +79649,13 @@
    "lon": 12.070328,
    "name": "Montalto",
    "ele": 840
+  },
+  {
+   "lat": 42.342048,
+   "lon": 12.181229,
+   "name": "Pozzo del Diavolo",
+   "ele": 840,
+   "volcano": true
   },
   {
    "lat": 44.334325,
@@ -95912,6 +96089,14 @@
    "ele": 710
   },
   {
+   "lat": 36.776175,
+   "lon": 12.01194,
+   "name": "Monte Gibéle",
+   "ele": 710,
+   "wikidata": "Q31639874",
+   "volcano": true
+  },
+  {
    "lat": 43.854587,
    "lon": 7.520219,
    "name": "Monte Grosso",
@@ -106712,6 +106897,14 @@
    "ele": 630
   },
   {
+   "lat": 37.909221,
+   "lon": 15.048695,
+   "name": "Monte Mojo",
+   "ele": 629,
+   "wikidata": "Q3861751",
+   "volcano": true
+  },
+  {
    "lat": 38.025484,
    "lon": 12.867203,
    "name": "Pizzo Dottore",
@@ -111820,6 +112013,14 @@
    "name": "Monte Sant'Angelo",
    "ele": 592,
    "wikidata": "Q31662513"
+  },
+  {
+   "lat": 36.788812,
+   "lon": 11.99392,
+   "name": "Kúddia Mída",
+   "ele": 592,
+   "wikidata": "Q123411979",
+   "volcano": true
   },
   {
    "lat": 43.268265,
@@ -124584,6 +124785,13 @@
    "ele": 498
   },
   {
+   "lat": 38.382974,
+   "lon": 14.990851,
+   "name": "Monte Aria",
+   "ele": 498,
+   "volcano": true
+  },
+  {
    "lat": 42.125564,
    "lon": 11.913551,
    "name": "Poggio Felcioso",
@@ -127704,6 +127912,13 @@
    "name": "Poggio di Resteto",
    "ele": 474,
    "wikidata": "Q106927902"
+  },
+  {
+   "lat": 36.765271,
+   "lon": 11.997562,
+   "name": "Fossa del Russo",
+   "ele": 474,
+   "volcano": true
   },
   {
    "lat": 43.007362,
@@ -131878,6 +132093,13 @@
    "ele": 442
   },
   {
+   "lat": 36.79462,
+   "lon": 12.012006,
+   "name": "Kúddia del Moro",
+   "ele": 442,
+   "volcano": true
+  },
+  {
    "lat": 37.967706,
    "lon": 13.404168,
    "name": "Cozzo Serena",
@@ -133732,6 +133954,13 @@
    "ele": 429
   },
   {
+   "lat": 36.758806,
+   "lon": 12.018606,
+   "name": "Kúddie Patíte",
+   "ele": 429,
+   "volcano": true
+  },
+  {
    "lat": 42.523926,
    "lon": 11.570642,
    "name": "Poggio Canaletti",
@@ -134494,6 +134723,13 @@
    "lon": 8.459547,
    "name": "Monte Schina Servidda",
    "ele": 423
+  },
+  {
+   "lat": 36.797783,
+   "lon": 12.004525,
+   "name": "Kúddia del Gallo",
+   "ele": 423,
+   "volcano": true
   },
   {
    "lat": 43.367684,
@@ -135496,6 +135732,13 @@
    "lon": 15.57487,
    "name": "Dokozin umac",
    "ele": 415
+  },
+  {
+   "lat": 36.800342,
+   "lon": 12.006811,
+   "name": "Kúddia Randázzo",
+   "ele": 415,
+   "volcano": true
   },
   {
    "lat": 43.361663,
@@ -143962,6 +144205,13 @@
    "ele": 344
   },
   {
+   "lat": 36.790345,
+   "lon": 12.02712,
+   "name": "Kúddia di Muéggen",
+   "ele": 344,
+   "volcano": true
+  },
+  {
    "lat": 43.364638,
    "lon": 17.43533,
    "name": "Mandina gomila",
@@ -145436,6 +145686,14 @@
    "lon": 12.135991,
    "name": "Monte della Fornace",
    "ele": 331
+  },
+  {
+   "lat": 40.844719,
+   "lon": 14.10963,
+   "name": "Monte Gauro",
+   "ele": 331,
+   "wikidata": "Q3321680",
+   "volcano": true
   },
   {
    "lat": 39.406458,
@@ -150556,6 +150814,14 @@
    "ele": 285
   },
   {
+   "lat": 40.90065,
+   "lon": 12.950507,
+   "name": "Isole Ponziane",
+   "name_en": "Pontine islands",
+   "ele": 285,
+   "volcano": true
+  },
+  {
    "lat": 43.812481,
    "lon": 11.280938,
    "name": "Monte Rinaldi",
@@ -153731,6 +153997,13 @@
    "lon": 15.064268,
    "name": "Punta del Tribunale",
    "ele": 257
+  },
+  {
+   "lat": 40.742249,
+   "lon": 13.922465,
+   "name": "Monte Rotaro",
+   "ele": 257,
+   "volcano": true
   },
   {
    "lat": 41.240936,
@@ -159051,6 +159324,14 @@
    "ele": 213
   },
   {
+   "lat": 38.404421,
+   "lon": 14.961801,
+   "name": "Vulcano",
+   "ele": 212,
+   "wikidata": "Q1648022",
+   "volcano": true
+  },
+  {
    "lat": 41.213787,
    "lon": 9.473644,
    "name": "Tejalone",
@@ -159759,6 +160040,13 @@
    "lon": 15.091329,
    "name": "Ražaško",
    "ele": 208
+  },
+  {
+   "lat": 36.80357,
+   "lon": 12.031416,
+   "name": "Kúddia di Hámma",
+   "ele": 208,
+   "volcano": true
   },
   {
    "lat": 43.206881,
@@ -162129,6 +162417,13 @@
    "ele": 188
   },
   {
+   "lat": 38.405861,
+   "lon": 14.981739,
+   "name": "Monte Luccia",
+   "ele": 188,
+   "volcano": true
+  },
+  {
    "lat": 37.209829,
    "lon": 13.692128,
    "name": "Rocca Corvo",
@@ -164369,6 +164664,13 @@
    "ele": 170
   },
   {
+   "lat": 39.855727,
+   "lon": 9.653125,
+   "name": "Volcanic Vent Altopiano di Teccu",
+   "ele": 170,
+   "volcano": true
+  },
+  {
    "lat": 40.670584,
    "lon": 9.634006,
    "name": "Monte Mannu",
@@ -165962,6 +166264,13 @@
    "lon": 11.118258,
    "name": "Poggio al Prete",
    "ele": 155
+  },
+  {
+   "lat": 36.813257,
+   "lon": 12.018805,
+   "name": "Kúddia del Gadír",
+   "ele": 155,
+   "volcano": true
   },
   {
    "lat": 42.90571,
@@ -167803,6 +168112,13 @@
    "ele": 139
   },
   {
+   "lat": 40.798897,
+   "lon": 13.422425,
+   "name": "Ventotene",
+   "ele": 139,
+   "volcano": true
+  },
+  {
    "lat": 42.737057,
    "lon": 16.894537,
    "name": "Debeli brijeg",
@@ -169485,6 +169801,14 @@
    "lon": 15.494353,
    "name": "Monte San Paolo",
    "ele": 120
+  },
+  {
+   "lat": 38.426756,
+   "lon": 14.964207,
+   "name": "Vulcanello",
+   "ele": 120,
+   "wikidata": "Q1321161",
+   "volcano": true
   },
   {
    "lat": 43.311793,
@@ -177041,6 +177365,14 @@
    "ele": 14
   },
   {
+   "lat": 40.835034,
+   "lon": 14.087588,
+   "name": "Monte Nuovo",
+   "ele": 14,
+   "wikidata": "Q1084616",
+   "volcano": true
+  },
+  {
    "lat": 36.817372,
    "lon": 15.106485,
    "name": "Cozzo Balsamo",
@@ -178610,6 +178942,33 @@
    "name": "Monte Serraredine"
   },
   {
+   "lat": 39.261917,
+   "lon": 15.4465,
+   "name": "Alcione",
+   "volcano": true
+  },
+  {
+   "lat": 39.499142,
+   "lon": 15.178151,
+   "name": "Glabro",
+   "wikidata": "Q17562196",
+   "volcano": true
+  },
+  {
+   "lat": 39.481299,
+   "lon": 14.822866,
+   "name": "Palinuro",
+   "wikidata": "Q12647181",
+   "volcano": true
+  },
+  {
+   "lat": 39.861753,
+   "lon": 12.59891,
+   "name": "Vavilov",
+   "wikidata": "Q1361788",
+   "volcano": true
+  },
+  {
    "lat": 41.402522,
    "lon": 15.20218,
    "name": "Monte San Marco"
@@ -178832,6 +179191,24 @@
    "name": "Monte Genn'e Rei"
   },
   {
+   "lat": 37.775488,
+   "lon": 15.10238,
+   "name": "Bocche del 1928 di Fosse Santoro 1",
+   "volcano": true
+  },
+  {
+   "lat": 37.775525,
+   "lon": 15.101686,
+   "name": "Bocche del 1928 di Fosse Santoro 2",
+   "volcano": true
+  },
+  {
+   "lat": 37.775358,
+   "lon": 15.101078,
+   "name": "Bocche del 1928 di Fosse Santoro 3",
+   "volcano": true
+  },
+  {
    "lat": 44.221169,
    "lon": 11.401231,
    "name": "Sasso delle Macine",
@@ -179029,6 +179406,13 @@
    "name": "Monti Cultu"
   },
   {
+   "lat": 40.845891,
+   "lon": 14.149009,
+   "name": "Astroni",
+   "wikidata": "Q123668088",
+   "volcano": true
+  },
+  {
    "lat": 40.927417,
    "lon": 9.04503,
    "name": "Monti di Mezu"
@@ -179199,6 +179583,12 @@
    "name": "Monte Monaco"
   },
   {
+   "lat": 37.704898,
+   "lon": 15.003917,
+   "name": "Cono eruzione 2001",
+   "volcano": true
+  },
+  {
    "lat": 42.473613,
    "lon": 18.537706,
    "name": "Šilobod"
@@ -179249,6 +179639,36 @@
    "name": "Cozzo Dimoniello"
   },
   {
+   "lat": 44.465879,
+   "lon": 10.862681,
+   "name": "Salsa",
+   "volcano": true
+  },
+  {
+   "lat": 44.465911,
+   "lon": 10.862565,
+   "name": "Salsa",
+   "volcano": true
+  },
+  {
+   "lat": 44.46595,
+   "lon": 10.862364,
+   "name": "Salsa",
+   "volcano": true
+  },
+  {
+   "lat": 44.466064,
+   "lon": 10.862575,
+   "name": "Salsa",
+   "volcano": true
+  },
+  {
+   "lat": 44.466208,
+   "lon": 10.862659,
+   "name": "Salsa",
+   "volcano": true
+  },
+  {
    "lat": 43.268104,
    "lon": 10.921678,
    "name": "Poggio a Secchenna"
@@ -179257,6 +179677,12 @@
    "lat": 44.276713,
    "lon": 10.819606,
    "name": "Ofiolite Val di Sasso"
+  },
+  {
+   "lat": 44.469363,
+   "lon": 10.794805,
+   "name": "Salsa della Centora",
+   "volcano": true
   },
   {
    "lat": 37.709445,
@@ -179894,6 +180320,12 @@
    "name": "Poggio del Colle"
   },
   {
+   "lat": 37.744423,
+   "lon": 14.995503,
+   "name": "Coni 1971",
+   "volcano": true
+  },
+  {
    "lat": 37.766641,
    "lon": 14.991464,
    "name": "Monte Cumìn"
@@ -180063,6 +180495,14 @@
    "lat": 39.815696,
    "lon": 9.37028,
    "name": "Monte Arcuerì"
+  },
+  {
+   "lat": 40.827458,
+   "lon": 14.14023,
+   "name": "Campi Flegrei",
+   "name_en": "Phlegraean Fields",
+   "wikidata": "Q755123",
+   "volcano": true
   },
   {
    "lat": 44.06571,
@@ -180263,6 +180703,13 @@
    "lat": 39.347845,
    "lon": 9.379258,
    "name": "CUC.ru Is Campanas m. 554"
+  },
+  {
+   "lat": 40.82732,
+   "lon": 14.140393,
+   "name": "Solfatara",
+   "wikidata": "Q943209",
+   "volcano": true
   },
   {
    "lat": 37.944891,
@@ -181204,6 +181651,102 @@
    "lat": 39.325584,
    "lon": 9.34737,
    "name": "Bruncu Su Stampu 597"
+  },
+  {
+   "lat": 36.806978,
+   "lon": 11.94894,
+   "name": "Gelhamár",
+   "volcano": true
+  },
+  {
+   "lat": 36.795082,
+   "lon": 11.979588,
+   "name": "Gelfisér",
+   "volcano": true
+  },
+  {
+   "lat": 36.755492,
+   "lon": 11.990179,
+   "name": "Kúddie di Bellizzi",
+   "volcano": true
+  },
+  {
+   "lat": 36.758683,
+   "lon": 11.980986,
+   "name": "Kúddia di Scauri",
+   "volcano": true
+  },
+  {
+   "lat": 36.787464,
+   "lon": 11.974378,
+   "name": "Kúddia di Sciuvéki",
+   "volcano": true
+  },
+  {
+   "lat": 36.802455,
+   "lon": 11.983567,
+   "name": "Kúddia Bianca",
+   "volcano": true
+  },
+  {
+   "lat": 36.799911,
+   "lon": 11.989922,
+   "name": "Kúddia Vallétta",
+   "volcano": true
+  },
+  {
+   "lat": 36.805385,
+   "lon": 12.017063,
+   "name": "Kúddia Maccótta",
+   "volcano": true
+  },
+  {
+   "lat": 36.800247,
+   "lon": 11.991759,
+   "name": "Kúddia di Sciuvéki",
+   "volcano": true
+  },
+  {
+   "lat": 36.815259,
+   "lon": 12.000907,
+   "name": "Kúddia Bianca",
+   "volcano": true
+  },
+  {
+   "lat": 36.812707,
+   "lon": 12.007259,
+   "name": "Kúddia Vallétta",
+   "volcano": true
+  },
+  {
+   "lat": 36.802718,
+   "lon": 11.958201,
+   "name": "Kúddia Bonsurtón",
+   "volcano": true
+  },
+  {
+   "lat": 36.809674,
+   "lon": 11.955872,
+   "name": "Kúddia Glíndo",
+   "volcano": true
+  },
+  {
+   "lat": 36.817627,
+   "lon": 11.928501,
+   "name": "Kúddie Rosse",
+   "volcano": true
+  },
+  {
+   "lat": 36.826262,
+   "lon": 11.957683,
+   "name": "Kúddia Bruçiáta",
+   "volcano": true
+  },
+  {
+   "lat": 36.827029,
+   "lon": 11.939279,
+   "name": "Kúddia del Monte",
+   "volcano": true
   },
   {
    "lat": 42.393861,
@@ -182247,6 +182790,13 @@
    "name": "Punta Cerbicale"
   },
   {
+   "lat": 37.375871,
+   "lon": 13.59996,
+   "name": "Maccalube",
+   "wikidata": "Q21235771",
+   "volcano": true
+  },
+  {
    "lat": 39.013077,
    "lon": 8.447116,
    "name": "Punta de sa Scruidda"
@@ -182811,6 +183361,12 @@
    "name": "Capo Grisgio"
   },
   {
+   "lat": 40.98,
+   "lon": 13.66,
+   "name": "Gaeta",
+   "volcano": true
+  },
+  {
    "lat": 37.921105,
    "lon": 14.395281,
    "name": "Munti Chiano"
@@ -183004,6 +183560,12 @@
    "lat": 43.579034,
    "lon": 18.327489,
    "name": "Jagina glava"
+  },
+  {
+   "lat": 44.336064,
+   "lon": 11.454679,
+   "name": "Dragone di Sassuno",
+   "volcano": true
   },
   {
    "lat": 43.772945,
@@ -183391,6 +183953,12 @@
    "name": "Colle Finocchio"
   },
   {
+   "lat": 39.153813,
+   "lon": 8.258391,
+   "name": "Cratere del Vulcano quiescente San Giacomo",
+   "volcano": true
+  },
+  {
    "lat": 40.866236,
    "lon": 9.198706,
    "name": "Torre Littaghjesu"
@@ -183519,6 +184087,12 @@
    "lat": 39.305324,
    "lon": 9.341074,
    "name": "Bruncu Is Fòllas"
+  },
+  {
+   "lat": 40.702911,
+   "lon": 16.428868,
+   "name": "Vulcano di Argilla",
+   "volcano": true
   },
   {
    "lat": 38.38146,
@@ -184590,6 +185164,30 @@
    "lat": 39.369487,
    "lon": 8.526493,
    "name": "Punta S'Arringiu"
+  },
+  {
+   "lat": 37.166381,
+   "lon": 12.716601,
+   "name": "Banco Graham - ex Isola Ferdinandea",
+   "name_en": "Graham Island",
+   "ele": -7,
+   "wikidata": "Q833975",
+   "volcano": true
+  },
+  {
+   "lat": 37.166242,
+   "lon": 12.716715,
+   "name": "Empedokles",
+   "ele": -8,
+   "volcano": true
+  },
+  {
+   "lat": 39.261221,
+   "lon": 14.396262,
+   "name": "Marsili",
+   "ele": -450,
+   "wikidata": "Q1572574",
+   "volcano": true
   }
  ]
 }

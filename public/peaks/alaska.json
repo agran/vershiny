@@ -1,6 +1,6 @@
 {
  "region": "alaska",
- "generated": "2026-08-12T10:54:32+00:00",
+ "generated": "2026-08-13T09:16:15+00:00",
  "peaks": [
   {
    "lat": 63.069115,
@@ -66,11 +66,35 @@
    "wikidata": "Q2725470"
   },
   {
+   "lat": 61.385718,
+   "lon": -141.749932,
+   "name": "Mount Bona",
+   "ele": 5045,
+   "wikidata": "Q48691",
+   "volcano": true
+  },
+  {
+   "lat": 61.731667,
+   "lon": -143.433056,
+   "name": "Mount Blackburn",
+   "ele": 4996,
+   "wikidata": "Q1520855",
+   "volcano": true
+  },
+  {
    "lat": 61.725144,
    "lon": -143.388751,
    "name": "Mount Blackburn East Summit",
    "ele": 4964,
    "wikidata": "Q1520855"
+  },
+  {
+   "lat": 62.213889,
+   "lon": -144.128889,
+   "name": "Mount Sanford",
+   "ele": 4949,
+   "wikidata": "Q1638692",
+   "volcano": true
   },
   {
    "lat": 61.232997,
@@ -85,6 +109,13 @@
    "name": "Mount Vancouver",
    "ele": 4812,
    "wikidata": "Q302483"
+  },
+  {
+   "lat": 61.418914,
+   "lon": -141.71535,
+   "name": "Mount Churchill",
+   "ele": 4767,
+   "volcano": true
   },
   {
    "lat": 61.172609,
@@ -163,6 +194,14 @@
    "wikidata": "Q1405167"
   },
   {
+   "lat": 62.005833,
+   "lon": -144.019444,
+   "name": "Mount Wrangell",
+   "ele": 4317,
+   "wikidata": "Q185847",
+   "volcano": true
+  },
+  {
    "lat": 60.340883,
    "lon": -138.969019,
    "name": "Mount Kennedy",
@@ -197,10 +236,25 @@
    "ele": 4233
   },
   {
+   "lat": 61.749572,
+   "lon": -143.22995,
+   "name": "Atna Peaks",
+   "ele": 4225,
+   "wikidata": "Q757531",
+   "volcano": true
+  },
+  {
    "lat": 61.240031,
    "lon": -140.759417,
    "name": "Avalanche Peak",
    "ele": 4221
+  },
+  {
+   "lat": 61.743842,
+   "lon": -142.868197,
+   "name": "Regal Mountain",
+   "ele": 4220,
+   "volcano": true
   },
   {
    "lat": 63.620167,
@@ -434,6 +488,14 @@
    "lon": -147.080302,
    "name": "Mount Valhalla",
    "ele": 3668
+  },
+  {
+   "lat": 62.116177,
+   "lon": -144.636827,
+   "name": "Mount Drum",
+   "ele": 3661,
+   "wikidata": "Q3467623",
+   "volcano": true
   },
   {
    "lat": 61.155294,
@@ -841,6 +903,14 @@
    "ele": 3127
   },
   {
+   "lat": 60.485704,
+   "lon": -152.745093,
+   "name": "Mount Redoubt",
+   "ele": 3108,
+   "wikidata": "Q840735",
+   "volcano": true
+  },
+  {
    "lat": 58.686607,
    "lon": -137.027352,
    "name": "Mount Bertha",
@@ -902,6 +972,14 @@
    "name": "Kates Needle",
    "ele": 3053,
    "wikidata": "Q6376005"
+  },
+  {
+   "lat": 60.032176,
+   "lon": -153.091521,
+   "name": "Mount Iliamna",
+   "ele": 3053,
+   "wikidata": "Q1950549",
+   "volcano": true
   },
   {
    "lat": 61.404937,
@@ -1135,6 +1213,14 @@
    "ele": 2865
   },
   {
+   "lat": 54.756338,
+   "lon": -163.969756,
+   "name": "Shishaldin Volcano",
+   "ele": 2857,
+   "wikidata": "Q682455",
+   "volcano": true
+  },
+  {
    "lat": 62.301997,
    "lon": -143.507635,
    "name": "Tanada Peak",
@@ -1206,6 +1292,13 @@
    "lon": -153.857088,
    "name": "Mount Mausolus",
    "ele": 2795
+  },
+  {
+   "lat": 57.71558,
+   "lon": -130.635427,
+   "name": "Mount Edziza",
+   "ele": 2793,
+   "volcano": true
   },
   {
    "lat": 61.431571,
@@ -1684,6 +1777,15 @@
    "wikidata": "Q1950531"
   },
   {
+   "lat": 55.416954,
+   "lon": -161.89324,
+   "name": "Pavlof Volcano",
+   "name_en": "Pavlof Volcano",
+   "ele": 2518,
+   "wikidata": "Q687491",
+   "volcano": true
+  },
+  {
    "lat": 69.285289,
    "lon": -143.853744,
    "name": "Mount McCall",
@@ -1700,6 +1802,14 @@
    "lon": -146.458051,
    "name": "Mount Cashman",
    "ele": 2509
+  },
+  {
+   "lat": 56.21903,
+   "lon": -159.297328,
+   "name": "Mount Veniaminof HP",
+   "ele": 2507,
+   "wikidata": "Q1139596",
+   "volcano": true
   },
   {
    "lat": 59.101761,
@@ -1742,6 +1852,13 @@
    "lon": -152.686658,
    "name": "Gurney Peak",
    "ele": 2479
+  },
+  {
+   "lat": 54.767828,
+   "lon": -163.7284,
+   "name": "Ragged Jack",
+   "ele": 2470,
+   "volcano": true
   },
   {
    "lat": 56.49092,
@@ -2055,10 +2172,26 @@
    "ele": 2321
   },
   {
+   "lat": 58.417394,
+   "lon": -154.450719,
+   "name": "Mount Denison",
+   "ele": 2318,
+   "wikidata": "Q3467797",
+   "volcano": true
+  },
+  {
    "lat": 61.107136,
    "lon": -148.381588,
    "name": "Mount Muir",
    "ele": 2318
+  },
+  {
+   "lat": 58.356752,
+   "lon": -155.102878,
+   "name": "Mount Griggs",
+   "ele": 2317,
+   "wikidata": "Q826942",
+   "volcano": true
   },
   {
    "lat": 61.159934,
@@ -2077,6 +2210,13 @@
    "lon": -149.109459,
    "name": "Wellsung Mountain",
    "ele": 2310
+  },
+  {
+   "lat": 61.268289,
+   "lon": -152.240412,
+   "name": "Crater Peak",
+   "ele": 2309,
+   "volcano": true
   },
   {
    "lat": 59.041559,
@@ -2213,6 +2353,14 @@
    "lon": -144.113957,
    "name": "Capital Mountain",
    "ele": 2274
+  },
+  {
+   "lat": 58.42995,
+   "lon": -154.390031,
+   "name": "Mount Steller",
+   "ele": 2272,
+   "wikidata": "Q3467894",
+   "volcano": true
   },
   {
    "lat": 61.725367,
@@ -2530,6 +2678,14 @@
    "ele": 2203
   },
   {
+   "lat": 61.6,
+   "lon": -152.455,
+   "name": "Hayes Volcano",
+   "ele": 2203,
+   "wikidata": "Q3467801",
+   "volcano": true
+  },
+  {
    "lat": 61.091535,
    "lon": -137.506811,
    "name": "Mount Bark",
@@ -2702,6 +2858,14 @@
    "ele": 2167
   },
   {
+   "lat": 58.194655,
+   "lon": -155.253349,
+   "name": "Mount Mageik",
+   "ele": 2165,
+   "wikidata": "Q576906",
+   "volcano": true
+  },
+  {
    "lat": 60.580372,
    "lon": -137.378871,
    "name": "Mount Worthington",
@@ -2739,10 +2903,26 @@
    "ele": 2163
   },
   {
+   "lat": 58.333408,
+   "lon": -154.685424,
+   "name": "Snowy Mountain",
+   "ele": 2162,
+   "wikidata": "Q7548743",
+   "volcano": true
+  },
+  {
    "lat": 57.695973,
    "lon": -132.751058,
    "name": "Unmarked Boundary Point 76",
    "ele": 2156
+  },
+  {
+   "lat": 56.195776,
+   "lon": -159.39026,
+   "name": "Cinder Cone",
+   "ele": 2156,
+   "wikidata": "Q1139596",
+   "volcano": true
   },
   {
    "lat": 64.405372,
@@ -2848,10 +3028,26 @@
    "ele": 2143
   },
   {
+   "lat": 55.457176,
+   "lon": -161.854014,
+   "name": "Pavlof Sister",
+   "ele": 2142,
+   "wikidata": "Q7155958",
+   "volcano": true
+  },
+  {
    "lat": 64.459919,
    "lon": -138.6554,
    "name": "Horn Mountain",
    "ele": 2142
+  },
+  {
+   "lat": 58.86012,
+   "lon": -153.53554,
+   "name": "Mount Douglas",
+   "ele": 2140,
+   "wikidata": "Q3467925",
+   "volcano": true
   },
   {
    "lat": 58.628181,
@@ -2933,6 +3129,20 @@
    "ele": 2127
   },
   {
+   "lat": 59.274414,
+   "lon": -130.508811,
+   "name": "Ash Mountain",
+   "ele": 2125,
+   "volcano": true
+  },
+  {
+   "lat": 57.657238,
+   "lon": -130.704474,
+   "name": "Cocoa Crater",
+   "ele": 2123,
+   "volcano": true
+  },
+  {
    "lat": 61.466345,
    "lon": -143.146988,
    "name": "Fireweed",
@@ -2967,6 +3177,13 @@
    "lon": -137.255543,
    "name": "Mount Creeden",
    "ele": 2113
+  },
+  {
+   "lat": 57.133878,
+   "lon": -156.986665,
+   "name": "Mount Chiginagak",
+   "ele": 2111,
+   "volcano": true
   },
   {
    "lat": 61.269304,
@@ -3029,6 +3246,14 @@
    "lon": -137.978472,
    "name": "Mount Hough",
    "ele": 2105
+  },
+  {
+   "lat": 58.776061,
+   "lon": -153.638429,
+   "name": "Fourpeaked Mountain",
+   "ele": 2104,
+   "wikidata": "Q1058950",
+   "volcano": true
   },
   {
    "lat": 56.134172,
@@ -3491,6 +3716,14 @@
    "ele": 2049
   },
   {
+   "lat": 58.278889,
+   "lon": -154.953333,
+   "name": "Mount Katmai",
+   "ele": 2047,
+   "wikidata": "Q1053435",
+   "volcano": true
+  },
+  {
    "lat": 59.928673,
    "lon": -135.146775,
    "name": "Tom Thumb Mountain",
@@ -3507,6 +3740,14 @@
    "lon": -134.678867,
    "name": "Mount Pullen",
    "ele": 2044
+  },
+  {
+   "lat": 58.452366,
+   "lon": -154.357324,
+   "name": "Mount Kukak",
+   "ele": 2043,
+   "wikidata": "Q3467803",
+   "volcano": true
   },
   {
    "lat": 63.309477,
@@ -3838,6 +4079,13 @@
    "ele": 2006
   },
   {
+   "lat": 57.635432,
+   "lon": -130.667781,
+   "name": "Coffee Crater",
+   "ele": 2003,
+   "volcano": true
+  },
+  {
    "lat": 59.805632,
    "lon": -134.425123,
    "name": "Mount Brown",
@@ -3848,6 +4096,13 @@
    "lon": -138.23057,
    "name": "Hoodoo Mountain",
    "ele": 2001
+  },
+  {
+   "lat": 54.569686,
+   "lon": -164.691496,
+   "name": "Pogromni Volcano",
+   "ele": 2001,
+   "volcano": true
   },
   {
    "lat": 60.979206,
@@ -4076,6 +4331,14 @@
    "lon": -136.192837,
    "name": "Mount Ashmun",
    "ele": 1981
+  },
+  {
+   "lat": 57.607164,
+   "lon": -130.685806,
+   "name": "Keda Cone",
+   "name_en": "Kena Cone",
+   "ele": 1980,
+   "volcano": true
   },
   {
    "lat": 64.650091,
@@ -4623,6 +4886,13 @@
    "ele": 1930
   },
   {
+   "lat": 57.769345,
+   "lon": -130.699281,
+   "name": "Tsekone Ridge",
+   "ele": 1929,
+   "volcano": true
+  },
+  {
    "lat": 59.017089,
    "lon": -135.129389,
    "name": "Selby",
@@ -4645,6 +4915,13 @@
    "lon": -133.839537,
    "name": "Mount Mervyn",
    "ele": 1927
+  },
+  {
+   "lat": 59.233059,
+   "lon": -133.046362,
+   "name": "Chikoida Mountain",
+   "ele": 1927,
+   "volcano": true
   },
   {
    "lat": 56.013347,
@@ -4723,6 +5000,13 @@
    "lon": -133.4373,
    "name": "Sentinel Mountain",
    "ele": 1921
+  },
+  {
+   "lat": 55.068494,
+   "lon": -162.831781,
+   "name": "Frosty Peak",
+   "ele": 1920,
+   "volcano": true
   },
   {
    "lat": 61.469408,
@@ -5212,6 +5496,13 @@
    "ele": 1872
   },
   {
+   "lat": 54.799505,
+   "lon": -163.591071,
+   "name": "Roundtop Mountain",
+   "ele": 1871,
+   "volcano": true
+  },
+  {
    "lat": 64.307628,
    "lon": -138.577423,
    "name": "Mount Maclennan",
@@ -5254,6 +5545,14 @@
    "ele": 1864
   },
   {
+   "lat": 58.2343,
+   "lon": -155.1026,
+   "name": "Trident Volcano",
+   "ele": 1864,
+   "wikidata": "Q3467815",
+   "volcano": true
+  },
+  {
    "lat": 64.373041,
    "lon": -138.218651,
    "name": "Mount Chisholm",
@@ -5264,6 +5563,21 @@
    "lon": -131.486009,
    "name": "Brewery Mountain",
    "ele": 1864
+  },
+  {
+   "lat": 58.168781,
+   "lon": -155.356454,
+   "name": "Mount Martin",
+   "ele": 1863,
+   "wikidata": "Q1574045",
+   "volcano": true
+  },
+  {
+   "lat": 57.839983,
+   "lon": -130.208263,
+   "name": "Castle Rock",
+   "ele": 1862,
+   "volcano": true
   },
   {
    "lat": 61.600556,
@@ -5306,6 +5620,13 @@
    "lon": -134.661105,
    "name": "Sugarloaf Hill",
    "ele": 1861
+  },
+  {
+   "lat": 55.392253,
+   "lon": -161.94585,
+   "name": "Little Pavlof",
+   "ele": 1861,
+   "volcano": true
   },
   {
    "lat": 62.320797,
@@ -6227,6 +6548,14 @@
    "ele": 1770
   },
   {
+   "lat": 59.236353,
+   "lon": -130.562409,
+   "name": "Caribou Tuya",
+   "ele": 1770,
+   "wikidata": "Q5039522",
+   "volcano": true
+  },
+  {
    "lat": 60.331424,
    "lon": -135.231496,
    "name": "Mineral Hill",
@@ -6465,6 +6794,14 @@
    "lon": -134.115039,
    "name": "Alfred Butte",
    "ele": 1745
+  },
+  {
+   "lat": 57.813081,
+   "lon": -130.675249,
+   "name": "Eve Cone",
+   "ele": 1745,
+   "wikidata": "Q5416152",
+   "volcano": true
   },
   {
    "lat": 56.922352,
@@ -7399,6 +7736,13 @@
    "ele": 1660
   },
   {
+   "lat": 54.526588,
+   "lon": -164.685111,
+   "name": "Faris Peak",
+   "ele": 1660,
+   "volcano": true
+  },
+  {
    "lat": 61.103455,
    "lon": -149.515217,
    "name": "Mount Williwaw",
@@ -7567,6 +7911,13 @@
    "name": "Temptation Peak",
    "ele": 1641,
    "wikidata": "Q49081859"
+  },
+  {
+   "lat": 59.399959,
+   "lon": -130.249895,
+   "name": "Cottonwood Peak",
+   "ele": 1640,
+   "volcano": true
   },
   {
    "lat": 61.210059,
@@ -7841,6 +8192,13 @@
    "lon": -145.691529,
    "name": "Devils Thumb",
    "ele": 1600
+  },
+  {
+   "lat": 59.411363,
+   "lon": -130.37871,
+   "name": "Gabrielse Cone",
+   "ele": 1600,
+   "volcano": true
   },
   {
    "lat": 58.571712,
@@ -8194,6 +8552,13 @@
    "ele": 1560
   },
   {
+   "lat": 54.515823,
+   "lon": -164.650607,
+   "name": "Westdahl Peak",
+   "ele": 1560,
+   "volcano": true
+  },
+  {
    "lat": 59.858429,
    "lon": -133.445191,
    "name": "Mount Ewing (Southwest Summit)",
@@ -8331,6 +8696,13 @@
    "name": "North Yuyanq’ Ch’ex",
    "ele": 1544,
    "wikidata": "Q7056894"
+  },
+  {
+   "lat": 57.859412,
+   "lon": -130.628299,
+   "name": "Sidas Cone",
+   "ele": 1543,
+   "volcano": true
   },
   {
    "lat": 65.068756,
@@ -8969,6 +9341,21 @@
    "ele": 1475
   },
   {
+   "lat": 57.750556,
+   "lon": -156.36983,
+   "name": "Mount Peulik",
+   "ele": 1474,
+   "volcano": true
+  },
+  {
+   "lat": 55.186052,
+   "lon": -162.28336,
+   "name": "Mount Dutton",
+   "ele": 1473,
+   "wikidata": "Q280645",
+   "volcano": true
+  },
+  {
    "lat": 62.098465,
    "lon": -140.967364,
    "name": "Mount Baultoff",
@@ -9053,6 +9440,13 @@
    "ele": 1465
   },
   {
+   "lat": 55.341694,
+   "lon": -162.074077,
+   "name": "Mount Emmons",
+   "ele": 1465,
+   "volcano": true
+  },
+  {
    "lat": 67.950488,
    "lon": -152.528852,
    "name": "Ursus Peak",
@@ -9063,6 +9457,13 @@
    "lon": -152.772381,
    "name": "Puntilla Mountain",
    "ele": 1463
+  },
+  {
+   "lat": 55.374257,
+   "lon": -161.980296,
+   "name": "Double Crater",
+   "ele": 1463,
+   "volcano": true
   },
   {
    "lat": 60.073705,
@@ -9997,6 +10398,13 @@
    "ele": 1356
   },
   {
+   "lat": 56.859282,
+   "lon": -158.127806,
+   "name": "Aniakchak Peak",
+   "ele": 1356,
+   "volcano": true
+  },
+  {
    "lat": 60.600366,
    "lon": -149.755008,
    "name": "Devils Peak",
@@ -10025,6 +10433,14 @@
    "lon": -156.533588,
    "name": "Kivliktort Mountain",
    "ele": 1355
+  },
+  {
+   "lat": 55.632984,
+   "lon": -161.211092,
+   "name": "Mount Dana",
+   "ele": 1354,
+   "wikidata": "Q6920354",
+   "volcano": true
   },
   {
    "lat": 67.679346,
@@ -10123,6 +10539,13 @@
    "ele": 1341
   },
   {
+   "lat": 55.371441,
+   "lon": -161.999841,
+   "name": "Mount Hague",
+   "ele": 1341,
+   "volcano": true
+  },
+  {
    "lat": 64.234933,
    "lon": -138.600083,
    "name": "Signal Hill",
@@ -10145,6 +10568,13 @@
    "lon": -137.281934,
    "name": "Pirate Mountain (Southwest Summit)",
    "ele": 1337
+  },
+  {
+   "lat": 57.017617,
+   "lon": -157.186019,
+   "name": "Yantarni Volcano",
+   "ele": 1337,
+   "volcano": true
   },
   {
    "lat": 68.572252,
@@ -10213,6 +10643,13 @@
    "name": "Portage Peak",
    "ele": 1325,
    "wikidata": "Q96399812"
+  },
+  {
+   "lat": 59.699151,
+   "lon": -133.318618,
+   "name": "Cracker Creek Cone",
+   "ele": 1325,
+   "volcano": true
   },
   {
    "lat": 57.207523,
@@ -10416,6 +10853,14 @@
    "ele": 1304
   },
   {
+   "lat": 54.133502,
+   "lon": -165.98733,
+   "name": "Mount Akutan",
+   "ele": 1303,
+   "wikidata": "Q1950362",
+   "volcano": true
+  },
+  {
    "lat": 61.749864,
    "lon": -140.742226,
    "name": "Slaggard Ridge",
@@ -10517,6 +10962,14 @@
    "lon": -134.302528,
    "name": "Sheep Mountain",
    "ele": 1291
+  },
+  {
+   "lat": 56.902769,
+   "lon": -158.147593,
+   "name": "Mount Aniakchak",
+   "ele": 1290,
+   "wikidata": "Q531642",
+   "volcano": true
   },
   {
    "lat": 57.249348,
@@ -10724,6 +11177,14 @@
    "ele": 1260
   },
   {
+   "lat": 59.361967,
+   "lon": -153.429779,
+   "name": "Augustine Volcano",
+   "ele": 1260,
+   "wikidata": "Q1193964",
+   "volcano": true
+  },
+  {
    "lat": 63.805368,
    "lon": -149.028477,
    "name": "Black Diamond Peak",
@@ -10870,6 +11331,13 @@
    "lon": -132.507327,
    "name": "Dawson Peaks",
    "ele": 1245
+  },
+  {
+   "lat": 63.715419,
+   "lon": -141.634115,
+   "name": "Prindle Volcano",
+   "ele": 1245,
+   "volcano": true
   },
   {
    "lat": 59.571064,
@@ -12750,6 +13218,13 @@
    "ele": 1025
   },
   {
+   "lat": 56.885109,
+   "lon": -158.151392,
+   "name": "Vent Mountain",
+   "ele": 1022,
+   "volcano": true
+  },
+  {
    "lat": 61.699449,
    "lon": -140.675955,
    "name": "Slaggard Ridge",
@@ -13285,6 +13760,14 @@
    "lon": -136.256875,
    "name": "Crag Mountain",
    "ele": 977
+  },
+  {
+   "lat": 57.051424,
+   "lon": -135.760571,
+   "name": "Mount Edgecumbe",
+   "ele": 976,
+   "wikidata": "Q288383",
+   "volcano": true
   },
   {
    "lat": 62.929241,
@@ -13925,6 +14408,14 @@
    "ele": 902
   },
   {
+   "lat": 58.6113,
+   "lon": -154.0245,
+   "name": "Mount Kaguyak",
+   "ele": 901,
+   "wikidata": "Q3467808",
+   "volcano": true
+  },
+  {
    "lat": 63.518391,
    "lon": -137.496468,
    "name": "Ice Chest Mountain (Peak II)",
@@ -13983,6 +14474,20 @@
    "lon": -159.101191,
    "name": "Knife Peak",
    "ele": 894
+  },
+  {
+   "lat": 54.980064,
+   "lon": -162.853054,
+   "name": "North Walrus Peak",
+   "ele": 893,
+   "volcano": true
+  },
+  {
+   "lat": 54.977047,
+   "lon": -162.84688,
+   "name": "South Walrus Peak",
+   "ele": 892,
+   "volcano": true
   },
   {
    "lat": 58.079191,
@@ -14453,6 +14958,14 @@
    "ele": 842
   },
   {
+   "lat": 58.2654,
+   "lon": -155.159002,
+   "name": "Novarupta",
+   "ele": 841,
+   "wikidata": "Q692922",
+   "volcano": true
+  },
+  {
    "lat": 66.936655,
    "lon": -156.631207,
    "name": "Ferguson Peak",
@@ -14590,6 +15103,13 @@
    "lon": -154.421262,
    "name": "Lone Indian Mountain",
    "ele": 823
+  },
+  {
+   "lat": 55.011282,
+   "lon": -162.829168,
+   "name": "Morzhovoi Volcano",
+   "ele": 822,
+   "volcano": true
   },
   {
    "lat": 57.671932,
@@ -14966,6 +15486,13 @@
    "name": "Hiilaang Ts'uujuus Mountain",
    "ele": 785,
    "wikidata": "Q49077252"
+  },
+  {
+   "lat": 55.556776,
+   "lon": -161.924717,
+   "name": "Trader Mountain Volcano",
+   "ele": 785,
+   "volcano": true
   },
   {
    "lat": 61.619625,
@@ -17130,6 +17657,14 @@
    "ele": 514
   },
   {
+   "lat": 55.418913,
+   "lon": -163.1473,
+   "name": "Amak Volcano",
+   "ele": 513,
+   "wikidata": "Q1808306",
+   "volcano": true
+  },
+  {
    "lat": 62.706437,
    "lon": -155.697408,
    "name": "Vinasale Mountain",
@@ -17390,6 +17925,13 @@
    "ele": 480
   },
   {
+   "lat": 65.473444,
+   "lon": -163.246622,
+   "name": "Gosling Cone",
+   "ele": 478,
+   "volcano": true
+  },
+  {
    "lat": 65.977971,
    "lon": -161.39926,
    "name": "Clem Mountain",
@@ -17472,6 +18014,13 @@
    "lon": -160.038617,
    "name": "Mount Davidson",
    "ele": 469
+  },
+  {
+   "lat": 65.487313,
+   "lon": -163.297591,
+   "name": "Lost Jim Cone",
+   "ele": 468,
+   "volcano": true
   },
   {
    "lat": 61.659552,
@@ -17702,16 +18251,37 @@
    "ele": 426
   },
   {
+   "lat": 65.451201,
+   "lon": -163.147917,
+   "name": "Grus Cone",
+   "ele": 425,
+   "volcano": true
+  },
+  {
    "lat": 59.087796,
    "lon": -161.351298,
    "name": "Tgolik Mountain",
    "ele": 424
   },
   {
+   "lat": 65.451594,
+   "lon": -163.188172,
+   "name": "Cygnus Cone",
+   "ele": 423,
+   "volcano": true
+  },
+  {
    "lat": 64.592253,
    "lon": -165.753893,
    "name": "Cone Mountain",
    "ele": 422
+  },
+  {
+   "lat": 65.533952,
+   "lon": -163.388866,
+   "name": "Camille Cone",
+   "ele": 418,
+   "volcano": true
   },
   {
    "lat": 59.770255,
@@ -17797,6 +18367,13 @@
    "lon": -161.574727,
    "name": "Nagotligageivik Mountain",
    "ele": 401
+  },
+  {
+   "lat": 54.668156,
+   "lon": -164.364952,
+   "name": "Nick's Cone Fisher's Caldera",
+   "ele": 400,
+   "volcano": true
   },
   {
    "lat": 60.217669,
@@ -17936,6 +18513,13 @@
    "lon": -160.614294,
    "name": "Red Mountain",
    "ele": 376
+  },
+  {
+   "lat": 65.539169,
+   "lon": -163.146973,
+   "name": "Rhododendron Cone",
+   "ele": 376,
+   "volcano": true
   },
   {
    "lat": 60.636607,
@@ -18131,6 +18715,13 @@
    "ele": 346
   },
   {
+   "lat": 65.578553,
+   "lon": -163.512955,
+   "name": "Andromeda Cone",
+   "ele": 346,
+   "volcano": true
+  },
+  {
    "lat": 57.02926,
    "lon": -135.79888,
    "name": "Montana de San Jacinto",
@@ -18207,6 +18798,14 @@
    "lon": -154.876585,
    "name": "Negro",
    "ele": 335
+  },
+  {
+   "lat": 54.700029,
+   "lon": -130.231088,
+   "name": "Crow Lagoon",
+   "ele": 335,
+   "wikidata": "Q5189097",
+   "volcano": true
   },
   {
    "lat": 58.627591,
@@ -18317,6 +18916,13 @@
    "ele": 310
   },
   {
+   "lat": 65.564124,
+   "lon": -163.444483,
+   "name": "Cassiope Cone",
+   "ele": 307,
+   "volcano": true
+  },
+  {
    "lat": 59.132835,
    "lon": -161.735698,
    "name": "Peak T",
@@ -18357,6 +18963,13 @@
    "lon": -163.420039,
    "name": "Milokrawlok Mountain",
    "ele": 301
+  },
+  {
+   "lat": 56.569942,
+   "lon": -130.609935,
+   "name": "Cinder Mountain",
+   "ele": 300,
+   "volcano": true
   },
   {
    "lat": 60.054615,
@@ -18641,6 +19254,13 @@
    "ele": 234
   },
   {
+   "lat": 65.582145,
+   "lon": -163.654639,
+   "name": "Dryas Cone",
+   "ele": 232,
+   "volcano": true
+  },
+  {
    "lat": 54.046301,
    "lon": -130.483113,
    "name": "Spruce Hill",
@@ -18876,6 +19496,13 @@
    "ele": 181
   },
   {
+   "lat": 54.698947,
+   "lon": -164.377457,
+   "name": "Fisher Caldera (Lakes)",
+   "ele": 180,
+   "volcano": true
+  },
+  {
    "lat": 68.05658,
    "lon": -165.43578,
    "name": "Kisimilok Mountain",
@@ -19082,6 +19709,13 @@
    "ele": 126
   },
   {
+   "lat": 54.073905,
+   "lon": -131.797931,
+   "name": "Taaw Tldáaw",
+   "ele": 125,
+   "volcano": true
+  },
+  {
    "lat": 64.544705,
    "lon": -165.253272,
    "name": "Native Hill",
@@ -19170,6 +19804,13 @@
    "lon": -163.034907,
    "name": "Kenmore Head",
    "ele": 91
+  },
+  {
+   "lat": 57.8339,
+   "lon": -156.513827,
+   "name": "Ukinrek Maars",
+   "ele": 91,
+   "volcano": true
   },
   {
    "lat": 60.100479,
@@ -19319,6 +19960,12 @@
    "name": "Heitman Mountain"
   },
   {
+   "lat": 58.15724,
+   "lon": -155.395312,
+   "name": "Alagogshak Volcano",
+   "volcano": true
+  },
+  {
    "lat": 58.254697,
    "lon": -155.171988,
    "name": "Falling Mountain"
@@ -19342,6 +19989,13 @@
    "lat": 57.680578,
    "lon": -156.246995,
    "name": "Mount Burls"
+  },
+  {
+   "lat": 58.475289,
+   "lon": -154.3001,
+   "name": "Devils Desk",
+   "wikidata": "Q5267395",
+   "volcano": true
   },
   {
    "lat": 55.933182,
@@ -20744,6 +21398,18 @@
    "name": "Green Dome"
   },
   {
+   "lat": 56.904729,
+   "lon": -158.211383,
+   "name": "1931 Eruption Crater",
+   "volcano": true
+  },
+  {
+   "lat": 56.920147,
+   "lon": -158.190373,
+   "name": "Half Cone",
+   "volcano": true
+  },
+  {
    "lat": 56.211861,
    "lon": -159.350077,
    "name": "Old Cinder Cone"
@@ -20787,6 +21453,13 @@
    "lat": 62.887786,
    "lon": -151.07538,
    "name": "Thunder Mountain"
+  },
+  {
+   "lat": 56.195751,
+   "lon": -159.390528,
+   "name": "Mount Veniaminof",
+   "wikidata": "Q1139596",
+   "volcano": true
   },
   {
    "lat": 59.657919,
@@ -20837,6 +21510,12 @@
    "lat": 64.169378,
    "lon": -152.328014,
    "name": "Haystack Mountain"
+  },
+  {
+   "lat": 58.5745,
+   "lon": -154.5435,
+   "name": "Cone 3110",
+   "volcano": true
   },
   {
    "lat": 60.545754,
@@ -20913,6 +21592,25 @@
    "lon": -135.704498,
    "name": "Crater Ridge",
    "name_en": "Crater Ridge"
+  },
+  {
+   "lat": 57.531747,
+   "lon": -130.670443,
+   "name": "Cache Hill",
+   "wikidata": "Q5015954",
+   "volcano": true
+  },
+  {
+   "lat": 57.582479,
+   "lon": -130.757688,
+   "name": "Camp Hill",
+   "volcano": true
+  },
+  {
+   "lat": 57.580016,
+   "lon": -130.749927,
+   "name": "Walkout Creek Cone",
+   "volcano": true
   },
   {
    "lat": 55.244708,
@@ -21110,6 +21808,13 @@
    "lat": 61.213634,
    "lon": -149.334765,
    "name": "Eagle River Overlook"
+  },
+  {
+   "lat": 56.771882,
+   "lon": -131.287865,
+   "name": "Hoodoo Mountain",
+   "wikidata": "Q4354732",
+   "volcano": true
   },
   {
    "lat": 61.06084,
@@ -21327,6 +22032,12 @@
    "lat": 60.220999,
    "lon": -144.622124,
    "name": "Mount Lazier"
+  },
+  {
+   "lat": 65.460418,
+   "lon": -162.999988,
+   "name": "Blueberry Dome",
+   "volcano": true
   },
   {
    "lat": 65.941679,
