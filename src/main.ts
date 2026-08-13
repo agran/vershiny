@@ -34,10 +34,16 @@ const canvas = document.createElement('canvas');
 appEl.appendChild(canvas);
 const ctx = canvas.getContext('2d')!;
 
+/** Готовая панорама: null, пока worker не прислал первый результат */
+let panorama: PanoramaState | null = null;
+
 function resize(): void {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio);
   canvas.height = Math.round(canvas.clientHeight * devicePixelRatio);
   syncVerticalFov();
+  // Смена размера очищает холст: без перерисовки панорама пропадала до
+  // следующего пересчёта (поворот телефона — пустой экран)
+  draw();
 }
 new ResizeObserver(resize).observe(canvas);
 
@@ -60,8 +66,6 @@ resize();
 
 /** Предел наклона камеры, рад */
 const MAX_TILT = toRad(45);
-
-let panorama: PanoramaState | null = null;
 
 function draw(): void {
   if (!panorama) return;
