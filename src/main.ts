@@ -349,6 +349,7 @@ window.addEventListener('keydown', (ev) => {
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
 import { orientationTracker } from './core/orientation';
 import { getCalibration, setCalibration, DEFAULT_CAMERA_FOV_DEG } from './core/calibration';
+import { rememberArMode, shouldAutoStartAr } from './core/ar-mode';
 import { destination } from './core/geo';
 
 /**
@@ -1255,20 +1256,30 @@ function setupActionButtons(): void {
     });
   };
 
-  // AR-режим
+  // AR-режим — основной: камера включается сама, см. maybeAutoStartAr()
   const arBtn = makeButton(ICON_AR, t('arMode'), `right:${edgeRight()};bottom:${edgeBottom()}`);
   let arVideo: HTMLVideoElement | null = null;
-  arBtn.onclick = async () => {
-    if (arSession) {
-      arSession.stop();
-      arSession = null;
-      arVideo?.remove(); // иначе десять входов в AR — десять <video> под холстом
-      arVideo = null;
-      arBtn.style.background = '#415a77';
-      calibrateBtn.style.display = 'none';
-      return;
-    }
-    if (!panorama) return;
+
+  function exitAr(): void {
+    arSession?.stop();
+    arSession = null;
+    arVideo?.remove(); // иначе десять входов в AR — десять <video> под холстом
+    arVideo = null;
+    arBtn.style.background = '#415a77';
+    calibrateBtn.style.display = 'none';
+    draw(); // под видео холст не перерисовывался — вернём панораму
+  }
+
+  /**
+   * Вход в режим камеры.
+   *
+   * @param auto запуск при загрузке, а не по нажатию: об отказе в доступе
+   *   человека извещать нечем — он его сам и дал, а красная плашка поверх
+   *   панорамы выглядела бы поломкой
+   * @returns удалось ли включить камеру
+   */
+  async function enterAr(auto = false): Promise<boolean> {
+    if (!panorama || arSession) return false;
     const video = document.createElement('video');
     try {
       const { startAr } = await import('./ui/ar');
@@ -1283,14 +1294,38 @@ function setupActionButtons(): void {
       if (getCalibration().autoCalibrate) {
         setTimeout(() => void runAutoCalibration(true), 1200);
       }
+      return true;
     } catch (err) {
       // Отказ в доступе к камере: элемент вставлен до вызова startAr,
       // и без уборки он остался бы в DOM насовсем
       video.remove();
       arVideo = null;
-      setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
+      if (auto) console.info('Камера при запуске не открылась:', err);
+      else setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
+      return false;
     }
+  }
+
+  arBtn.onclick = async () => {
+    if (arSession) {
+      exitAr();
+      rememberArMode(false);
+      return;
+    }
+    // Запоминаем результат, а не намерение: отказ в доступе — это «нет»
+    rememberArMode(await enterAr());
   };
+
+  /**
+   * Камера при запуске: главный режим приложения не должен требовать
+   * нажатия. Ждём первого расчёта — оверлей без панорамы рисовать нечем.
+   */
+  async function maybeAutoStartAr(): Promise<void> {
+    if (!shouldAutoStartAr()) return;
+    const started = await enterAr(true);
+    // Отказ запоминаем: иначе диалог о камере всплывал бы при каждой загрузке
+    if (!started) rememberArMode(false);
+  }
 
   // Автокалибровка: видна только в AR — сопоставлять нечего, пока нет кадра
   const calibrateBtn = makeButton(
@@ -1325,6 +1360,10 @@ function setupActionButtons(): void {
     setStatus(t('photoSaved'));
     setTimeout(() => setStatus(''), 3000);
   };
+
+  // Камера — последним шагом: к этому моменту вся раскладка на месте, и
+  // человек видит панораму, даже если разрешение он даст не сразу
+  void maybeAutoStartAr();
 }
 
 /**
