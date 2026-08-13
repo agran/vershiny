@@ -85,3 +85,10 @@ export const ICON_DOWN = svg('<path d="M12 5v14"/><path d="m6 13 6 6 6-6"/>', 20
 
 /** Закрыть */
 export const ICON_CLOSE = svg('<path d="M6 6l12 12M18 6 6 18"/>');
+
+/** Автокалибровка: гребень в перекрестии — «совместить контур с кадром» */
+export const ICON_CALIBRATE = svg(
+  '<circle cx="12" cy="12" r="7.5"/>' +
+    '<path d="M12 2v2.5M12 19.5V22M22 12h-2.5M4.5 12H2"/>' +
+    '<path d="m8 14 2.5-3 2 2.4L15 10"/>',
+);

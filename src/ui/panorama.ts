@@ -65,6 +65,13 @@ export const MAX_RIDGE_SLOPE = 15;
  */
 const HIDDEN_LABEL_BUDGET = 6;
 
+/**
+ * Доля высоты кадра, на которой проходит линия горизонта — чуть ниже центра,
+ * чтобы небо не занимало полкадра. Экспортируется: автокалибровка (skyline.ts)
+ * переводит пиксели кадра в углы по этой же величине, и разойтись они не должны.
+ */
+export const HORIZON_FRAC = 0.62;
+
 /** Рендер одного кадра панорамы: небо + оверлей */
 export function renderPanorama(
   ctx: CanvasRenderingContext2D,
@@ -72,7 +79,7 @@ export function renderPanorama(
   view: ViewState,
 ): void {
   const { width, height } = ctx.canvas;
-  const horizonY = height * 0.62; // линия горизонта чуть ниже центра
+  const horizonY = height * HORIZON_FRAC; // линия горизонта чуть ниже центра
 
   // Фон — единый градиент на весь кадр (без горизонтальной «ступеньки»)
   const sky = ctx.createLinearGradient(0, 0, 0, height);
@@ -96,7 +103,7 @@ export function drawOverlay(
   view: ViewState,
 ): void {
   const { width, height } = ctx.canvas;
-  const horizonY = height * 0.62;
+  const horizonY = height * HORIZON_FRAC;
 
   const azToX = (az: number): number =>
     (wrapAngle(az - view.centerAzRad) / view.fovRad) * width + width / 2;

@@ -63,6 +63,33 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   compassAccuracy: { ru: 'Точность компаса', en: 'Compass accuracy' },
   compassUnknown: { ru: 'нет данных', en: 'no data' },
   resetOffset: { ru: 'Сбросить подстройку', en: 'Reset offset' },
+  calibration: { ru: 'Калибровка', en: 'Calibration' },
+  calibrationHint: {
+    ru:
+      'Если контуры не совпадают с камерой: поле зрения растягивает картинку ' +
+      '(контуры сходятся в центре, но разъезжаются к краям), азимут двигает ' +
+      'её вбок, наклон — вверх и вниз. То же можно делать свайпом по кадру.',
+    en:
+      'If the outlines miss the camera view: field of view stretches the ' +
+      'picture (outlines match in the centre but drift at the edges), azimuth ' +
+      'shifts it sideways, tilt moves it up and down. Swiping over the frame ' +
+      'does the same.',
+  },
+  calibrationFov: { ru: 'Поле зрения камеры', en: 'Camera field of view' },
+  calibrationAzimuth: { ru: 'Поправка азимута', en: 'Azimuth offset' },
+  calibrationTilt: { ru: 'Поправка наклона', en: 'Tilt offset' },
+  autoCalibrate: { ru: 'Совместить с камерой', en: 'Match to camera' },
+  autoCalibrateOnStart: {
+    ru: 'Совмещать автоматически в AR',
+    en: 'Match automatically in AR',
+  },
+  calibrating: { ru: 'Сопоставление с камерой…', en: 'Matching the camera view…' },
+  calibrateDone: { ru: 'Совмещено, поправка', en: 'Matched, offset' },
+  calibrateFailed: {
+    ru: 'Не удалось совместить: наведите на горизонт с горами',
+    en: 'No match: point the camera at a skyline with mountains',
+  },
+  calibrateNoFrame: { ru: 'Камера ещё не готова', en: 'Camera is not ready yet' },
   downloadedRegions: { ru: 'Скачанные регионы', en: 'Downloaded regions' },
   noDownloadedRegions: { ru: 'пока нет', en: 'none yet' },
   regions: { ru: 'Регионы', en: 'Regions' },

@@ -3,7 +3,7 @@
  * рендер панорамы; поворот пальцем (fallback без сенсоров, ROADMAP 2.2).
  */
 
-import { renderPanorama, type PanoramaState, type ViewState } from './ui/panorama';
+import { renderPanorama, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
 import { toRad, type LatLon } from './core/geo';
 import { t } from './core/i18n';
@@ -12,6 +12,7 @@ import type { ResultMessage, WorkerOutMessage, ViewpointResult } from './workers
 import type { SearchHit } from './core/search';
 import {
   ICON_AR,
+  ICON_CALIBRATE,
   ICON_DOWNLOAD,
   ICON_DOWNLOADED,
   ICON_DOWN,
@@ -85,9 +86,6 @@ const view: ViewState = {
   fovVRad: toRad(45),
 };
 
-/** Угол обзора вдоль длинной стороны экрана — примерно как у камеры телефона */
-const BASE_FOV = toRad(70);
-
 /**
  * Углы обзора под текущую форму экрана.
  *
@@ -99,16 +97,24 @@ const BASE_FOV = toRad(70);
  * Второй угол выводится через тангенс, а не пропорцией: только так пиксель
  * стоит одинаково по обеим осям и картинка не сплющена — это же требование
  * приходит от AR, где панорама совмещается с кадром камеры.
+ *
+ * Если поле зрения задано в калибровке, берётся оно: у каждого телефона свой
+ * объектив, и при расхождении углов контуры совпадают в центре кадра, но
+ * разъезжаются к краям — азимутом это не лечится. Панорама и AR рисуют одни и
+ * те же контуры, поэтому угол у них общий: подстроив его по кадру камеры,
+ * пользователь сразу видит результат и без AR.
  */
 function syncFov(): void {
   const { width, height } = canvas;
   if (!width || !height) return;
-  const half = Math.tan(BASE_FOV / 2);
+  const baseDeg = getCalibration().cameraFovDeg ?? DEFAULT_CAMERA_FOV_DEG;
+  const baseRad = toRad(baseDeg);
+  const half = Math.tan(baseRad / 2);
   if (width >= height) {
-    view.fovRad = BASE_FOV;
+    view.fovRad = baseRad;
     view.fovVRad = 2 * Math.atan(half * (height / width));
   } else {
-    view.fovVRad = BASE_FOV;
+    view.fovVRad = baseRad;
     view.fovRad = 2 * Math.atan(half * (width / height));
   }
 }
@@ -257,21 +263,29 @@ window.addEventListener('keydown', (ev) => {
 
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
 import { orientationTracker } from './core/orientation';
+import { getCalibration, setCalibration, DEFAULT_CAMERA_FOV_DEG } from './core/calibration';
 import { destination } from './core/geo';
 
 orientationTracker.start((state) => {
   if (state.source === 'sensor') {
+    const tiltOffset = (getCalibration().tiltDeg * Math.PI) / 180;
     view.centerAzRad = state.azimuthRad;
-    view.tiltRad = Math.max(-MAX_TILT, Math.min(MAX_TILT, state.tiltRad));
+    view.tiltRad = Math.max(-MAX_TILT, Math.min(MAX_TILT, state.tiltRad + tiltOffset));
     draw();
   }
 });
 
-// При ручном свайпе — добавляем оффсет к сенсорному азимуту
+// При ручном свайпе — подстраиваем контуры под кадр: по горизонтали азимут,
+// по вертикали наклон. Обе поправки запоминаются (core/calibration.ts)
 canvas.addEventListener('pointermove', (ev) => {
   if (!dragging || orientationTracker.current.source !== 'sensor') return;
   const dx = ev.clientX - lastX;
+  const dy = ev.clientY - lastY;
   orientationTracker.addManualOffset(-(dx / canvas.clientWidth) * view.fovRad);
+  if (dy) {
+    const deltaDeg = ((dy / canvas.clientHeight) * view.fovVRad * 180) / Math.PI;
+    setCalibration({ tiltDeg: getCalibration().tiltDeg + deltaDeg });
+  }
 });
 
 // --- Worker горизонта ---
@@ -442,7 +456,7 @@ async function main(): Promise<void> {
  * «переместиться в другое место», незачем занимать два угла экрана.
  */
 function setupMapButton(origin: LatLon): void {
-  const btn = makeButton(ICON_MAP, t('map'), 'left:16px;bottom:16px');
+  const btn = makeButton(ICON_MAP, t('map'), `left:${edgeLeft()};bottom:${edgeBottom()}`);
   mapButton = btn;
   layoutControls();
   let closeMap: (() => void) | null = null;
@@ -619,7 +633,11 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
  * обновляются, а тайлы, что уже лежат, повторно не тянутся.
  */
 function setupDownloadButton(): void {
-  const btn = makeButton(ICON_DOWNLOAD, t('downloadRegion'), 'right:16px;bottom:16px');
+  const btn = makeButton(
+    ICON_DOWNLOAD,
+    t('downloadRegion'),
+    `right:${edgeRight()};top:${edgeTop()}`,
+  );
   downloadButton = btn;
   void refreshDownloadState();
 
@@ -678,6 +696,18 @@ function applyDownloadState(): void {
 }
 
 /**
+ * Отступы от краёв с учётом «безопасной зоны» — вырез камеры и полоса жестов
+ * на телефоне съедают углы, а именно в углах у нас всё и лежит.
+ */
+const EDGE = 16;
+const edgeTop = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-top))`;
+const edgeBottom = (offset = 0): string =>
+  `calc(${EDGE + offset}px + env(safe-area-inset-bottom))`;
+const edgeLeft = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-left))`;
+const edgeRight = (offset = 0): string =>
+  `calc(${EDGE + offset}px + env(safe-area-inset-right))`;
+
+/**
  * Фабрика круглых кнопок действий.
  * icon — инлайновый SVG (см. ui/icons.ts) или текст; SVG рисуется одинаково
  * на всех платформах, в отличие от эмодзи.
@@ -711,7 +741,7 @@ function makeButton(icon: string, title: string, pos: string): HTMLButtonElement
 function setupNavPad(): void {
   const pad = document.createElement('div');
   pad.style.cssText =
-    'position:fixed;left:16px;z-index:10;display:grid;gap:4px;' +
+    'position:fixed;z-index:10;display:grid;gap:4px;' +
     (touchOnly
       ? 'grid-template-columns:1fr;grid-template-rows:1fr'
       : 'grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)');
@@ -790,36 +820,94 @@ function setupNavPad(): void {
 }
 
 /**
- * Раскладка нижних кнопок под форму экрана.
+ * Раскладка левого нижнего угла — там собрано всё про «где я и куда иду»:
+ * карта, возврат к своему положению (на десктопе — крест перемещения) и высота.
+ * Настройки живут в левом верхнем углу, офлайн-данные — в правом верхнем,
+ * камера — в правом нижнем: каждый угол об одном.
  *
- * В портрете колонка высоты стоит над навипадом. Повёрнутый телефон даёт
- * 320–390 px высоты, и та же стопка (кнопка карты, крест, высота — до 330 px)
- * упиралась в верх экрана; в ландшафте кнопки выстраиваются в ряд вдоль
- * нижнего края, где места как раз много.
- *
- * На сенсорном экране вместо креста одна кнопка GPS, поэтому и полосу под
- * него держим узкой.
+ * Кнопки идут рядом вдоль нижнего края, а не стопкой вверх: стопка из карты,
+ * креста и высоты вытягивалась на 300 px — треть экрана телефона и больше, чем
+ * его высота в ландшафте. В ряд то же самое занимает 256 px по горизонтали,
+ * что влезает даже в самый узкий телефон.
  */
 function layoutControls(): void {
-  const compact = window.innerHeight < 420;
-  const padSize = touchOnly ? 48 : compact ? 108 : 132;
+  const padSize = touchOnly ? 48 : window.innerHeight < 420 ? 108 : 132;
+  const mapWidth = 48 + 8;
   if (navPad) {
     navPad.style.width = `${padSize}px`;
     navPad.style.height = `${padSize}px`;
-    navPad.style.bottom = touchOnly || compact ? '16px' : '76px';
+    navPad.style.left = edgeLeft(mapWidth);
+    navPad.style.bottom = edgeBottom();
   }
-  const row = touchOnly || compact;
   if (heightPadEl) {
-    heightPadEl.style.left = row ? `${16 + padSize + 8}px` : '16px';
-    heightPadEl.style.bottom = row ? '16px' : `${76 + padSize + 8}px`;
+    heightPadEl.style.left = edgeLeft(mapWidth + padSize + 8);
+    heightPadEl.style.bottom = edgeBottom();
   }
   if (mapButton) {
-    mapButton.style.left = row ? `${16 + padSize + 8 + 44 + 8}px` : '16px';
+    mapButton.style.left = edgeLeft();
+    mapButton.style.bottom = edgeBottom();
   }
 }
 
 /** Текущая высота наблюдателя (из DEM) */
 let lastObserverH = 0;
+
+/** Сессия AR: нужна автокалибровке, чтобы взять кадр камеры */
+let arSession: import('./ui/ar').ArSession | null = null;
+
+/**
+ * Автокалибровка по кадру: линия «небо / земля» из камеры совмещается с
+ * горизонтом по рельефу (core/skyline.ts).
+ *
+ * Результат применяется только при достаточном доверии. Молчаливо увести
+ * панораму на 20° в сторону хуже, чем ничего не сделать: человек поверит
+ * подписям и уйдёт не на ту гору. Поэтому при неудаче — честное сообщение,
+ * а ручные ползунки остаются на месте.
+ *
+ * @param silent автозапуск при входе в AR: о неудаче не сообщаем, пользователь
+ *   её не заказывал и разбираться не просил
+ */
+async function runAutoCalibration(silent: boolean): Promise<void> {
+  if (!arSession || !panorama) return;
+  const frame = arSession.grabFrame();
+  if (!frame) {
+    if (!silent) setStatus(t('calibrateNoFrame'));
+    return;
+  }
+
+  if (!silent) setStatus(t('calibrating'));
+  const { extractSkyline, matchSkyline, MIN_CONFIDENCE } = await import('./core/skyline');
+  const profile = extractSkyline(frame.rgba, frame.width, frame.height);
+  const match = matchSkyline(profile, {
+    centerAzRad: view.centerAzRad,
+    tiltRad: view.tiltRad,
+    fovRad: view.fovRad,
+    fovVRad: view.fovVRad,
+    horizonFrac: HORIZON_FRAC,
+    horizon: panorama.horizon,
+    stepRad: panorama.stepRad,
+  });
+
+  if (match.confidence < MIN_CONFIDENCE) {
+    setStatus(silent ? '' : t('calibrateFailed'));
+    if (!silent) setTimeout(() => setStatus(''), 4000);
+    return;
+  }
+
+  const cal = getCalibration();
+  setCalibration({
+    azimuthDeg: cal.azimuthDeg + (match.azimuthRad * 180) / Math.PI,
+    tiltDeg: cal.tiltDeg + (match.tiltRad * 180) / Math.PI,
+  });
+  orientationTracker.applyCalibration();
+  view.centerAzRad += match.azimuthRad;
+  view.tiltRad += match.tiltRad;
+  draw();
+
+  const azDeg = (match.azimuthRad * 180) / Math.PI;
+  setStatus(`${t('calibrateDone')} ${azDeg > 0 ? '+' : ''}${azDeg.toFixed(1)}°`);
+  setTimeout(() => setStatus(''), 3000);
+}
 
 /** Пересчёт панорамы: единственная точка отправки задания воркеру */
 function requestCompute(origin: LatLon): void {
@@ -847,7 +935,11 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
   if (actionButtonsReady) return;
   actionButtonsReady = true;
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
-  const settingsBtn = makeButton(ICON_SETTINGS, t('settings'), 'left:16px;top:16px');
+  const settingsBtn = makeButton(
+    ICON_SETTINGS,
+    t('settings'),
+    `left:${edgeLeft()};top:${edgeTop()}`,
+  );
   let settingsClose: (() => void) | null = null;
   settingsBtn.onclick = async () => {
     if (settingsClose) {
@@ -867,6 +959,10 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
         // Перерисовываем интерфейс
         draw();
       },
+      onCalibrationChange: () => {
+        syncFov(); // поле зрения могли подстроить ползунком
+        draw();
+      },
       onClose: () => {
         settingsClose = null;
         // В настройках можно было скачать регион — сверяем состояние кнопки
@@ -876,13 +972,13 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
   };
 
   // AR-режим
-  let arStop: (() => void) | null = null;
-  const arBtn = makeButton(ICON_AR, t('arMode'), 'right:16px;bottom:76px');
+  const arBtn = makeButton(ICON_AR, t('arMode'), `right:${edgeRight()};bottom:${edgeBottom()}`);
   arBtn.onclick = async () => {
-    if (arStop) {
-      arStop();
-      arStop = null;
+    if (arSession) {
+      arSession.stop();
+      arSession = null;
       arBtn.style.background = '#415a77';
+      calibrateBtn.style.display = 'none';
       return;
     }
     if (!panorama) return;
@@ -891,15 +987,34 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
       const video = document.createElement('video');
       video.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1';
       document.body.prepend(video);
-      arStop = await startAr(video, canvas, panorama, view);
+      arSession = await startAr(video, canvas, panorama, view);
       arBtn.style.background = '#e63946';
+      calibrateBtn.style.display = 'flex';
+      // Автоматическая попытка при входе в AR (включена по умолчанию):
+      // камере нужно пару кадров на экспозицию, иначе анализируем черноту
+      if (getCalibration().autoCalibrate) {
+        setTimeout(() => void runAutoCalibration(true), 1200);
+      }
     } catch (err) {
       setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
     }
   };
 
+  // Автокалибровка: видна только в AR — сопоставлять нечего, пока нет кадра
+  const calibrateBtn = makeButton(
+    ICON_CALIBRATE,
+    t('autoCalibrate'),
+    `right:${edgeRight()};bottom:${edgeBottom(120)}`,
+  );
+  calibrateBtn.style.display = 'none';
+  calibrateBtn.onclick = () => void runAutoCalibration(false);
+
   // Фото с подписями
-  const photoBtn = makeButton(ICON_PHOTO, t('photo'), 'right:16px;bottom:136px');
+  const photoBtn = makeButton(
+    ICON_PHOTO,
+    t('photo'),
+    `right:${edgeRight()};bottom:${edgeBottom(60)}`,
+  );
   photoBtn.onclick = async () => {
     if (!panorama) return;
     const { capturePhoto, sharePhoto } = await import('./ui/photo');

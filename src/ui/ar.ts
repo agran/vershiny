@@ -11,6 +11,16 @@ export interface ArOptions {
   opacity?: number;
 }
 
+export interface ArSession {
+  /** Остановить камеру и вернуть панораму */
+  stop: () => void;
+  /**
+   * Кадр камеры как пиксели — для автокалибровки (core/skyline.ts).
+   * null, пока камера не отдала первый кадр.
+   */
+  grabFrame: () => { rgba: Uint8ClampedArray; width: number; height: number } | null;
+}
+
 /** Запуск камеры и привязка к canvas */
 export async function startAr(
   videoEl: HTMLVideoElement,
@@ -18,7 +28,7 @@ export async function startAr(
   state: PanoramaState,
   view: ViewState,
   options: ArOptions = {},
-): Promise<() => void> {
+): Promise<ArSession> {
   const stream = await navigator.mediaDevices.getUserMedia({
     video: {
       facingMode: 'environment', // задняя камера
@@ -42,11 +52,29 @@ export async function startAr(
   }
   raf = requestAnimationFrame(frame);
 
-  // Остановка: остановка треков + отмена анимации
-  return () => {
-    cancelAnimationFrame(raf);
-    stream.getTracks().forEach((t) => t.stop());
-    videoEl.srcObject = null;
+  // Отдельный маленький холст для анализа: снимать пиксели с экранного
+  // дорого и бессмысленно — на нём поверх кадра уже нарисованы наши контуры
+  const probe = document.createElement('canvas');
+  const probeCtx = probe.getContext('2d', { willReadFrequently: true });
+
+  return {
+    stop: () => {
+      cancelAnimationFrame(raf);
+      stream.getTracks().forEach((t) => t.stop());
+      videoEl.srcObject = null;
+    },
+    grabFrame: () => {
+      if (!probeCtx || videoEl.readyState < 2) return null;
+      const width = 320;
+      const height = Math.max(
+        1,
+        Math.round((width * videoEl.videoHeight) / videoEl.videoWidth),
+      );
+      probe.width = width;
+      probe.height = height;
+      probeCtx.drawImage(videoEl, 0, 0, width, height);
+      return { rgba: probeCtx.getImageData(0, 0, width, height).data, width, height };
+    },
   };
 }
 

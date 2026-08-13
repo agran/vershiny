@@ -5,8 +5,10 @@
  * Стратегия:
  *   - iOS 13+: DeviceOrientationEvent.requestPermission() по user gesture
  *   - Android: deviceorientationabsolute (истинный север) или deviceorientation
- *   - Fallback: ручной свайп (уже есть) + оффсет на сессию
+ *   - Fallback: ручной свайп + поправка из калибровки (core/calibration.ts)
  */
+
+import { getCalibration, setCalibration } from './calibration';
 
 export interface OrientationState {
   /** Азимут (истинный север), рад [0, 2π) */
@@ -81,7 +83,11 @@ class OrientationTracker {
   private lastTimestamp = 0;
   private gyroSamples: number[] = [];
   private listening = false;
-  private manualOffsetRad = 0; // ручная подстройка (свайп)
+
+  /** Ручная подстройка (свайп по кадру); хранится в калибровке, рад */
+  private get manualOffsetRad(): number {
+    return (getCalibration().azimuthDeg * Math.PI) / 180;
+  }
 
   start(callback: OrientationCallback): void {
     this.callback = callback;
@@ -180,16 +186,20 @@ class OrientationTracker {
 
   /** Ручная подстройка (свайп): добавляет оффсет к сенсорному азимуту */
   addManualOffset(deltaRad: number): void {
-    this.manualOffsetRad = normalizeAngle(this.manualOffsetRad + deltaRad);
-    this.state.azimuthRad = normalizeAngle(
-      this.state.azimuthRad + deltaRad,
-    );
+    const deltaDeg = (deltaRad * 180) / Math.PI;
+    setCalibration({ azimuthDeg: getCalibration().azimuthDeg + deltaDeg });
+    this.state.azimuthRad = normalizeAngle(this.state.azimuthRad + deltaRad);
     this.callback?.(this.state);
   }
 
-  /** Сброс оффсета (после калибровки по солнцу) */
+  /** Сброс оффсета (после калибровки по солнцу или из настроек) */
   resetOffset(): void {
-    this.manualOffsetRad = 0;
+    setCalibration({ azimuthDeg: 0 });
+  }
+
+  /** Пересобрать состояние после правки калибровки в настройках */
+  applyCalibration(): void {
+    this.callback?.(this.state);
   }
 
   get current(): OrientationState {

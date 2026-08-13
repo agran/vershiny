@@ -5,6 +5,13 @@
 
 import { t, getLocale, setLocale, type Locale } from '../core/i18n';
 import {
+  getCalibration,
+  setCalibration,
+  resetCalibration,
+  CALIBRATION_LIMITS,
+  DEFAULT_CAMERA_FOV_DEG,
+} from '../core/calibration';
+import {
   loadRegions,
   regionLabel,
   regionCore,
@@ -19,6 +26,8 @@ export interface SettingsCallbacks {
   onRegionChange: (region: string) => void;
   onLocaleChange: () => void;
   onClose: () => void;
+  /** Поправки изменены — панораму надо перерисовать */
+  onCalibrationChange: () => void;
 }
 
 /** Открыть панель настроек. Возвращает функцию закрытия. */
@@ -81,16 +90,7 @@ export function openSettings(
   accRow.appendChild(accValue);
   panel.appendChild(accRow);
 
-  // --- Сброс оффсета ---
-  const resetBtn = document.createElement('button');
-  resetBtn.textContent = t('resetOffset');
-  resetBtn.style.cssText = btnStyle();
-  resetBtn.onclick = () => {
-    orientationTracker.resetOffset();
-    resetBtn.textContent = '✓';
-    setTimeout(() => (resetBtn.textContent = t('resetOffset')), 1500);
-  };
-  panel.appendChild(resetBtn);
+  panel.appendChild(buildCalibration(callbacks.onCalibrationChange));
 
   // --- Регионы: выбор + скачивание (сгруппированные) ---
   const dlTitle = document.createElement('h3');
@@ -281,6 +281,142 @@ function row(label: string): HTMLElement {
   span.style.cssText = 'color:#a8dadc;flex-shrink:0';
   div.appendChild(span);
   return div;
+}
+
+/**
+ * Калибровка: три поправки, совмещающие нарисованный горизонт с кадром камеры.
+ *
+ * Поле зрения стоит первым не случайно — это самая частая причина
+ * расхождения, о которой не думают: объектив у каждого телефона свой, и если
+ * угол не тот, контуры сойдутся в центре кадра и разъедутся к краям, сколько
+ * ни крути азимут. Азимут и наклон подстраиваются прямо свайпом по кадру,
+ * здесь они показаны числом — чтобы видеть, что накрутилось, и обнулить.
+ */
+function buildCalibration(onChange: () => void): HTMLElement {
+  const box = document.createElement('div');
+
+  const title = document.createElement('h3');
+  title.textContent = t('calibration');
+  title.style.cssText = 'margin:20px 0 4px;font-size:16px;font-weight:600';
+  box.appendChild(title);
+
+  const hint = document.createElement('div');
+  hint.textContent = t('calibrationHint');
+  hint.style.cssText = 'color:#8a9ba8;font-size:12px;line-height:1.4;margin-bottom:12px';
+  box.appendChild(hint);
+
+  // Автосовмещение по кадру камеры — включено по умолчанию: ручная подгонка
+  // ползунками нужна только там, где машине не за что зацепиться
+  const autoRow = row(t('autoCalibrateOnStart'));
+  const autoInput = document.createElement('input');
+  autoInput.type = 'checkbox';
+  autoInput.checked = getCalibration().autoCalibrate;
+  autoInput.style.cssText = 'width:20px;height:20px;accent-color:#4cc9f0;cursor:pointer';
+  autoInput.onchange = () => {
+    setCalibration({ autoCalibrate: autoInput.checked });
+  };
+  autoRow.appendChild(autoInput);
+  box.appendChild(autoRow);
+
+  const slider = (
+    label: string,
+    min: number,
+    max: number,
+    step: number,
+    value: number,
+    format: (v: number) => string,
+    onInput: (v: number) => void,
+  ): void => {
+    const line = row(label);
+    const valueEl = document.createElement('span');
+    valueEl.textContent = format(value);
+    valueEl.style.cssText = 'font-variant-numeric:tabular-nums;min-width:56px;text-align:right';
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = String(min);
+    input.max = String(max);
+    input.step = String(step);
+    input.value = String(value);
+    input.style.cssText = 'flex:1;min-width:0;accent-color:#4cc9f0';
+    input.oninput = () => {
+      const v = Number(input.value);
+      valueEl.textContent = format(v);
+      onInput(v);
+    };
+    line.append(input, valueEl);
+    box.appendChild(line);
+    sliders.push({ input, valueEl, format });
+  };
+
+  const sliders: {
+    input: HTMLInputElement;
+    valueEl: HTMLElement;
+    format: (v: number) => string;
+  }[] = [];
+
+  const cal = getCalibration();
+  const defaultFov = DEFAULT_CAMERA_FOV_DEG;
+  const signed = (v: number) => `${v > 0 ? '+' : ''}${v.toFixed(1)}°`;
+
+  slider(
+    t('calibrationFov'),
+    CALIBRATION_LIMITS.fovMinDeg,
+    CALIBRATION_LIMITS.fovMaxDeg,
+    0.5,
+    cal.cameraFovDeg ?? defaultFov,
+    (v) => `${v.toFixed(1)}°`,
+    (v) => {
+      setCalibration({ cameraFovDeg: v });
+      orientationTracker.applyCalibration();
+      onChange();
+    },
+  );
+  slider(
+    t('calibrationAzimuth'),
+    -180,
+    180,
+    0.5,
+    cal.azimuthDeg,
+    signed,
+    (v) => {
+      setCalibration({ azimuthDeg: v });
+      orientationTracker.applyCalibration();
+      onChange();
+    },
+  );
+  slider(
+    t('calibrationTilt'),
+    -CALIBRATION_LIMITS.tiltDeg,
+    CALIBRATION_LIMITS.tiltDeg,
+    0.5,
+    cal.tiltDeg,
+    signed,
+    (v) => {
+      setCalibration({ tiltDeg: v });
+      orientationTracker.applyCalibration();
+      onChange();
+    },
+  );
+
+  const resetBtn = document.createElement('button');
+  resetBtn.textContent = t('resetOffset');
+  resetBtn.style.cssText = btnStyle();
+  resetBtn.onclick = () => {
+    resetCalibration();
+    const fresh = getCalibration();
+    const values = [defaultFov, fresh.azimuthDeg, fresh.tiltDeg];
+    sliders.forEach((s, i) => {
+      s.input.value = String(values[i]);
+      s.valueEl.textContent = s.format(values[i]);
+    });
+    orientationTracker.applyCalibration();
+    onChange();
+    resetBtn.textContent = '✓';
+    setTimeout(() => (resetBtn.textContent = t('resetOffset')), 1500);
+  };
+  box.appendChild(resetBtn);
+
+  return box;
 }
 
 function selectStyle(): string {
