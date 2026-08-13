@@ -49,8 +49,15 @@ export interface MapOptions {
   onPick: (pos: LatLon) => void;
   /** Поиск вершины по названию (по всей планете) */
   search: (query: string) => Promise<SearchHit[]>;
-  /** Перелёт к найденной вершине */
-  onPickPeak: (hit: SearchHit) => void;
+  /**
+   * Перелёт к найденной вершине.
+   *
+   * Возвращает подобранную точку обзора — карта остаётся открытой и
+   * показывает её вместе с самой вершиной: положение и направление можно
+   * поправить и только потом уходить к контурам. `null` — точку подобрать
+   * не удалось (нет данных, обрыв сети).
+   */
+  onPickPeak: (hit: SearchHit) => Promise<{ origin: LatLon; headingRad: number } | null>;
   /** Название региона для строки результата */
   regionTitle: (region: string) => string;
   /**
@@ -135,12 +142,44 @@ export function openMap(options: MapOptions): () => void {
     }
 
     // Маркер «я»: за границей кадра его просто не видно — слой обрезан
-    const me = project(options.origin, zoom);
+    const me = project(observer, zoom);
     marker.style.left = `${me.x - left}px`;
     marker.style.top = `${me.y - top}px`;
 
+    // Вершина, к которой подбиралась точка обзора: с ней понятно, что
+    // именно правишь, когда двигаешь наблюдателя или крутишь сектор
+    if (target) {
+      const at = project(target.pos, zoom);
+      targetEl.style.display = 'flex';
+      targetEl.style.left = `${at.x - left}px`;
+      targetEl.style.top = `${at.y - top}px`;
+    } else {
+      targetEl.style.display = 'none';
+    }
+
     coords.textContent = `${center.lat.toFixed(4)}, ${center.lon.toFixed(4)}`;
   };
+
+  /** Где стоит наблюдатель: сдвигается при выборе вершины в поиске */
+  let observer: LatLon = { ...options.origin };
+  /** Вершина, ради которой подбиралась точка обзора */
+  let target: { pos: LatLon; name: string } | null = null;
+
+  // Метка вершины: треугольник с подписью. Появляется после выбора в поиске
+  const targetEl = document.createElement('div');
+  targetEl.style.cssText =
+    'position:absolute;display:none;align-items:center;gap:6px;z-index:1;' +
+    'pointer-events:none;transform:translate(-7px,-7px)';
+  const targetDot = document.createElement('div');
+  targetDot.style.cssText =
+    'width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;' +
+    'border-bottom:12px solid #e63946;filter:drop-shadow(0 0 2px rgba(0,0,0,.8));flex:none';
+  const targetName = document.createElement('span');
+  targetName.style.cssText =
+    'background:rgba(26,26,46,.85);border-radius:6px;padding:2px 6px;white-space:nowrap;' +
+    'font:12px system-ui,sans-serif;color:#f1faee';
+  targetEl.append(targetDot, targetName);
+  layer.appendChild(targetEl);
 
   // Маркер: точка + сектор направления взгляда. z-index обязателен: тайлы
   // добавляются в слой позже и без него перекрыли бы маркер
@@ -331,7 +370,9 @@ export function openMap(options: MapOptions): () => void {
     setZoom(zoom - 1),
   );
   button(ICON_LOCATE, 'left:16px;top:68px;width:44px;height:44px', () => {
-    center = { ...options.origin };
+    // К наблюдателю, а не к точке открытия: после выбора вершины он уже
+    // стоит в подобранной точке обзора
+    center = { ...observer };
     render();
   }).title = t('mapMyPosition');
 
@@ -369,16 +410,32 @@ export function openMap(options: MapOptions): () => void {
   root.appendChild(attribution);
 
   const hint = document.createElement('div');
-  hint.textContent =
-    getLocale() === 'ru'
-      ? 'Ведите карту — центр станет новой точкой. Кружок на луче поворачивает взгляд'
-      : 'Pan the map — the centre becomes your new spot. Drag the knob to aim the view';
   hint.style.cssText =
     'position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:2;' +
     'background:rgba(26,26,46,.85);border-radius:8px;padding:6px 12px;' +
     'font:13px system-ui,sans-serif;color:#cfd8dc;max-width:calc(100vw - 160px);text-align:center';
-  root.appendChild(hint);
-  setTimeout(() => hint.remove(), 4000);
+
+  /**
+   * Подсказка вверху карты.
+   *
+   * @param holdMs сколько держать; 0 — до следующего сообщения. Стартовое
+   *   «ведите карту» само уходит через несколько секунд, а «точка обзора
+   *   подобрана» должна висеть, пока человек её правит
+   */
+  let hintTimer: ReturnType<typeof setTimeout> | undefined;
+  const setHint = (text: string, holdMs = 0): void => {
+    clearTimeout(hintTimer);
+    hint.textContent = text;
+    root.appendChild(hint);
+    if (holdMs) hintTimer = setTimeout(() => hint.remove(), holdMs);
+  };
+
+  setHint(
+    getLocale() === 'ru'
+      ? 'Ведите карту — центр станет новой точкой. Кружок на луче поворачивает взгляд'
+      : 'Pan the map — the centre becomes your new spot. Drag the knob to aim the view',
+    4000,
+  );
 
   // --- Поиск вершины (живёт в карте, а не отдельной кнопкой на панораме) ---
   const panel = document.createElement('div');
@@ -458,13 +515,51 @@ export function openMap(options: MapOptions): () => void {
       sub.style.cssText = 'opacity:.7;font-size:12px';
 
       row.append(title, sub);
-      row.onclick = () => {
-        options.onPickPeak(hit);
-        close();
-      };
+      row.onclick = () => void pickPeak(hit);
       results.appendChild(row);
     }
   };
+
+  /**
+   * Выбор вершины из поиска: показываем подобранную точку обзора прямо на
+   * карте, а не уходим к панораме сразу.
+   *
+   * Точку обзора подбирает рельеф, и она не всегда там, куда человек
+   * собирался: то за перегибом, то на другом берегу реки. Раньше карта
+   * закрывалась мгновенно, и поправить это можно было только вернувшись в
+   * неё заново — уже без вершины перед глазами.
+   */
+  async function pickPeak(hit: SearchHit): Promise<void> {
+    toggleSearch(); // список свою работу сделал
+    const name = peakName(hit.peak);
+    setHint(getLocale() === 'ru' ? `Подбираю точку обзора: ${name}…` : `Finding a viewpoint: ${name}…`);
+
+    const spot = await options.onPickPeak(hit);
+    if (!spot) {
+      setHint(
+        getLocale() === 'ru'
+          ? `Не удалось подобрать точку обзора: ${name}`
+          : `No viewpoint found: ${name}`,
+        5000,
+      );
+      return;
+    }
+
+    observer = spot.origin;
+    heading = spot.headingRad;
+    target = { pos: { lat: hit.peak.lat, lon: hit.peak.lon }, name };
+    targetName.textContent = name;
+    // Центр — ровно на наблюдателе: «Перенестись сюда» берёт именно центр,
+    // и середина между точкой и вершиной увела бы человека в чистое поле
+    center = { ...spot.origin };
+    applyHeading();
+    render();
+    setHint(
+      getLocale() === 'ru'
+        ? 'Точка обзора подобрана. Поправьте её и нажмите «Перенестись сюда»'
+        : 'Viewpoint ready. Adjust it and press “Go here”',
+    );
+  }
 
   input.onkeydown = (ev) => {
     if (ev.key === 'Enter') void runSearch();

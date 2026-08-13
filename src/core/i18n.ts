@@ -114,6 +114,15 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   mapGoHere: { ru: 'Перенестись сюда', en: 'Go here' },
   mapMyPosition: { ru: 'Моё положение', en: 'My position' },
   mapHeading: { ru: 'Куда смотрим — потяните', en: 'Drag to aim the view' },
+  about: { ru: 'О проекте', en: 'About' },
+  aboutSource: {
+    ru: 'Открытый исходный код, лицензия MIT',
+    en: 'Open source, MIT licence',
+  },
+  aboutData: {
+    ru: 'Рельеф — Copernicus DEM GLO-90 (© DLR/ESA) и AWS Terrain Tiles, вершины — © участники OpenStreetMap (ODbL)',
+    en: 'Terrain — Copernicus DEM GLO-90 (© DLR/ESA) and AWS Terrain Tiles, peaks — © OpenStreetMap contributors (ODbL)',
+  },
   navForward: { ru: 'Вперёд', en: 'Forward' },
   navBack: { ru: 'Назад', en: 'Back' },
   navLeft: { ru: 'Влево', en: 'Left' },

@@ -292,6 +292,8 @@ export function openSettings(
     dlList.appendChild(note);
   });
 
+  panel.appendChild(buildAbout());
+
   // Кнопка закрытия (✕) — явная, в углу
   const closeBtn = document.createElement('button');
   closeBtn.textContent = '✕';
@@ -308,7 +310,6 @@ export function openSettings(
     if (ev.target === overlay) close();
   };
   document.body.appendChild(overlay);
-
   function close(): void {
     overlay.remove();
     callbacks.onClose();
@@ -316,8 +317,44 @@ export function openSettings(
   return close;
 }
 
-function row(label: string): HTMLElement {
-  const div = document.createElement('div');
+/**
+ * «О проекте»: авторство и происхождение данных.
+ *
+ * Внизу настроек, а не отдельным экраном: заглядывают сюда редко, но
+ * заглядывают — понять, чьё это и откуда рельеф с вершинами. Лицензии данных
+ * указывать обязательно (ODbL у OpenStreetMap, атрибуция у Copernicus).
+ */
+function buildAbout(): HTMLElement {
+  const box = document.createElement('div');
+  box.style.cssText = 'margin-top:24px;border-top:1px solid #2b3a4d;padding-top:12px';
+
+  const title = document.createElement('h3');
+  title.textContent = t('about');
+  title.style.cssText = 'margin:0 0 8px;font-size:16px;font-weight:600';
+  box.appendChild(title);
+
+  const link = document.createElement('a');
+  link.href = 'https://github.com/agran/vershiny';
+  link.target = '_blank';
+  link.rel = 'noreferrer';
+  link.textContent = 'github.com/agran/vershiny';
+  link.style.cssText = 'color:#4cc9f0;font-size:13px;text-decoration:none;font-weight:500';
+  box.appendChild(link);
+
+  const source = document.createElement('div');
+  source.textContent = t('aboutSource');
+  source.style.cssText = 'color:#8a9ba8;font-size:12px;margin-top:4px';
+  box.appendChild(source);
+
+  const data = document.createElement('div');
+  data.textContent = t('aboutData');
+  data.style.cssText = 'color:#8a9ba8;font-size:12px;margin-top:6px;line-height:1.5';
+  box.appendChild(data);
+
+  return box;
+}
+
+function row(label: string): HTMLElement {  const div = document.createElement('div');
   div.style.cssText =
     'display:flex;justify-content:space-between;align-items:center;' +
     'margin-bottom:12px;gap:12px';

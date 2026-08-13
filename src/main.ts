@@ -565,7 +565,7 @@ async function main(): Promise<void> {
   if (!navUiReady) {
     navUiReady = true;
     setupDownloadButton();
-    setupMapButton(origin);
+    setupMapButton();
     setupNavPad();
   } else {
     // Регион мог смениться по GPS — состояние кнопки перечитываем
@@ -578,7 +578,7 @@ async function main(): Promise<void> {
  * Поиск живёт здесь, а не отдельной кнопкой на панораме: и то и другое —
  * «переместиться в другое место», незачем занимать два угла экрана.
  */
-function setupMapButton(origin: LatLon): void {
+function setupMapButton(): void {
   const btn = makeButton(ICON_MAP, t('map'), `left:${edgeLeft()};bottom:${edgeBottom()}`);
   mapButton = btn;
   layoutControls();
@@ -602,10 +602,9 @@ function setupMapButton(origin: LatLon): void {
         void goToLocation(pos);
       },
       search: findPeaks,
-      onPickPeak: (hit) => {
-        closeMap = null;
-        void goToHit(hit, origin);
-      },
+      // Карта остаётся открытой: она покажет подобранную точку обзора и
+      // саму вершину, а уходить к контурам — по «Перенестись сюда»
+      onPickPeak: (hit) => goToHit(hit),
       // Направление, выставленное на карте, — это и есть направление взгляда.
       // Применяем сразу: карту закрывают по-разному, и собирать выбор в
       // каждом из выходов — верный способ его где-нибудь потерять
@@ -639,10 +638,12 @@ let navUiReady = false;
 /**
  * Переход к найденной вершине: при необходимости меняем регион и подтягиваем
  * его вершины (сеть → офлайн-кеш), затем сам перелёт.
+ *
+ * Возвращает точку обзора, чтобы карта могла показать её и дать поправить.
  */
-async function goToHit(hit: SearchHit, origin: LatLon): Promise<void> {
+async function goToHit(hit: SearchHit): Promise<{ origin: LatLon; headingRad: number } | null> {
   await switchRegion(hit.region);
-  jumpToPeak(hit.peak, origin);
+  return jumpToPeak(hit.peak);
 }
 
 /**
@@ -725,9 +726,13 @@ async function goToLocation(pos: LatLon): Promise<void> {
   requestCompute(pos);
 }
 
-/** Переход к вершине: точка, откуда она видна, и взгляд на неё */
-async function jumpToPeak(peak: Peak, from: LatLon): Promise<void> {
-  void from;
+/**
+ * Переход к вершине: точка, откуда она видна, и взгляд на неё.
+ *
+ * @returns подобранная точка обзора (её показывает карта) или `null`, если
+ *   подобрать не удалось
+ */
+async function jumpToPeak(peak: Peak): Promise<{ origin: LatLon; headingRad: number } | null> {
   setStatus(t('computing'));
   // Точку обзора подбирает worker: у него DEM, а «просто отойти на 5 км
   // назад по азимуту» приводит в цирк под соседней стеной
@@ -742,13 +747,14 @@ async function jumpToPeak(peak: Peak, from: LatLon): Promise<void> {
         ? `${t('error')}: ${err instanceof Error ? err.message : String(err)}`
         : t('errorOffline'),
     );
-    return;
+    return null;
   }
   heightOverride = null; // «телепорт» на землю: набранная высота не имеет смысла
   autoTiltPending = true; // наводимся на рельеф в новой точке
   view.centerAzRad = normalizeAz(spot.azimuthRad);
   requestCompute(spot.origin);
   draw();
+  return { origin: spot.origin, headingRad: view.centerAzRad };
 }
 
 /**

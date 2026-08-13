@@ -142,6 +142,58 @@ describe('кнопки карты', () => {
   });
 });
 
+describe('выбор вершины из поиска', () => {
+  const HIT = {
+    peak: { name: 'Ушба Южная', lat: 43.1, lon: 42.6, ele: 4710 },
+    region: 'elbrus',
+    exact: true,
+    typos: 0,
+  };
+
+  /** Открыть поиск, найти и выбрать первый результат */
+  async function pickFirst(onPickPeak: MapOptions['onPickPeak']): Promise<void> {
+    open({ search: async () => [HIT], onPickPeak });
+    tap(byTitle('searchPeak')!);
+    const input = document.querySelector('input') as HTMLInputElement;
+    input.value = 'Ушба';
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await new Promise((r) => setTimeout(r, 0));
+    const row = Array.from(document.querySelectorAll('button')).find((b) =>
+      /Ушба/.test(b.textContent ?? ''),
+    )!;
+    row.click();
+    await new Promise((r) => setTimeout(r, 0));
+  }
+
+  it('карта не закрывается: точку обзора можно поправить', async () => {
+    // Раньше карта захлопывалась мгновенно, и поправить подобранную точку
+    // можно было только вернувшись в неё заново — уже без вершины на виду
+    await pickFirst(async () => ({ origin: { lat: 43.05, lon: 42.55 }, headingRad: 1 }));
+
+    expect(byTitle('close')).not.toBeNull();
+    expect(document.body.textContent).toContain('Точка обзора подобрана');
+    // Сама вершина подписана на карте: понятно, что именно правишь
+    expect(document.body.textContent).toContain('Ушба Южная');
+  });
+
+  it('направление и точка приходят из подобранного вида', async () => {
+    await pickFirst(async () => ({ origin: { lat: 43.05, lon: 42.55 }, headingRad: Math.PI / 2 }));
+
+    const cone = document.querySelector('[data-role="heading"]')!.parentElement!
+      .firstElementChild as HTMLElement;
+    expect(cone.style.transform).toBe('rotate(90deg)');
+    // Карта переехала на точку обзора: «Перенестись сюда» берёт центр
+    expect(document.body.textContent).toContain('43.0500, 42.5500');
+  });
+
+  it('не подобралась — карта остаётся с объяснением', async () => {
+    await pickFirst(async () => null);
+
+    expect(byTitle('close')).not.toBeNull();
+    expect(document.body.textContent).toContain('Не удалось подобрать точку обзора');
+  });
+});
+
 describe('направление взгляда на карте', () => {
   it('поворот ручки задаёт азимут: вправо от точки — восток', () => {
     // Экранные оси: x вправо, y вниз, север на карте вверху. jsdom не считает
