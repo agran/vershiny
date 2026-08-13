@@ -24,6 +24,52 @@ type OrientationCallback = (state: OrientationState) => void;
 /** Сглаживание сырых данных компаса */
 const GYRO_SMOOTH_WINDOW = 5;
 
+/**
+ * Куда смотрит человек сквозь экран: азимут и угол над горизонтом.
+ *
+ * Считается по полной матрице поворота (W3C: R = Rz(α)·Rx(β)·Ry(γ)), а не по
+ * одному α. Разница видна ровно тогда, когда телефон переворачивают в
+ * горизонтальное положение: у поднятого вертикально телефона β ≈ 90°, и в
+ * этой точке α с γ вырождаются — поворот вокруг оси взгляда меняет α на те же
+ * 90°, хотя смотрит человек в ту же сторону. Панорама уезжала на четверть
+ * горизонта. По той же причине наклон нельзя брать из β: в ландшафте за него
+ * отвечает уже γ.
+ *
+ * Направление взгляда — ось −Z устройства (сквозь экран от лица). Угол
+ * поворота экрана (screen.orientation.angle) на него не влияет: вращение
+ * вокруг оси взгляда меняет только крен кадра, а горизонт мы всегда держим
+ * ровным.
+ */
+export function lookFromDeviceOrientation(
+  alphaDeg: number,
+  betaDeg: number,
+  gammaDeg: number,
+): { azimuthRad: number; elevationRad: number } {
+  const a = (alphaDeg * Math.PI) / 180;
+  const b = (betaDeg * Math.PI) / 180;
+  const g = (gammaDeg * Math.PI) / 180;
+  const [sa, ca] = [Math.sin(a), Math.cos(a)];
+  const [sb, cb] = [Math.sin(b), Math.cos(b)];
+  const [sg, cg] = [Math.sin(g), Math.cos(g)];
+
+  // Третий столбец R = Rz(α)·Rx(β)·Ry(γ) — куда в системе Земли смотрит
+  // ось +Z устройства (из экрана к лицу); взгляд — противоположная сторона.
+  // Оси Земли по спецификации: X — восток, Y — север, Z — вверх.
+  const zx = ca * sg + sa * sb * cg;
+  const zy = sa * sg - ca * sb * cg;
+  const zz = cb * cg;
+
+  const lookX = -zx;
+  const lookY = -zy;
+  const lookZ = -zz;
+  const horizontal = Math.hypot(lookX, lookY);
+
+  return {
+    azimuthRad: normalizeAngle(Math.atan2(lookX, lookY)),
+    elevationRad: Math.atan2(lookZ, horizontal),
+  };
+}
+
 class OrientationTracker {
   private state: OrientationState = {
     azimuthRad: 0,
@@ -89,27 +135,24 @@ class OrientationTracker {
     const now = performance.now();
     this.lastTimestamp = now;
 
-    // iOS: webkitCompassHeading (0–360, магнитный север)
-    // Android absolute: alpha (0–360, истинный север, но 0 = север по оси Y)
-    let rawAzimuth: number;
-    let accuracy = -1;
-
+    // iOS: webkitCompassHeading (0–360, от севера по часовой) — единственный
+    // абсолютный источник, у самой alpha там произвольный ноль. Переводим его
+    // обратно в alpha-подобный угол, чтобы матрица считалась одинаково.
     const webkit = ev as DeviceOrientationEvent & {
       webkitCompassHeading?: number;
       webkitCompassAccuracy?: number;
     };
-    if (webkit.webkitCompassHeading !== undefined) {
-      rawAzimuth = webkit.webkitCompassHeading;
-      accuracy = webkit.webkitCompassAccuracy ?? -1;
-    } else {
-      // Android: alpha — против часовой от севера; переводим в азимут по часовой
-      rawAzimuth = 360 - (ev.alpha ?? 0);
-    }
+    const accuracy =
+      webkit.webkitCompassHeading !== undefined ? (webkit.webkitCompassAccuracy ?? -1) : -1;
+    const alphaDeg =
+      webkit.webkitCompassHeading !== undefined
+        ? 360 - webkit.webkitCompassHeading
+        : (ev.alpha ?? 0);
 
-    const azRad = (rawAzimuth * Math.PI) / 180;
+    const look = lookFromDeviceOrientation(alphaDeg, ev.beta ?? 0, ev.gamma ?? 0);
 
     // Комплементарный фильтр: сглаживаем скачки компаса
-    this.gyroSamples.push(azRad);
+    this.gyroSamples.push(look.azimuthRad);
     if (this.gyroSamples.length > GYRO_SMOOTH_WINDOW) {
       this.gyroSamples.shift();
     }
@@ -123,7 +166,7 @@ class OrientationTracker {
     const prev = this.state;
     this.state = {
       azimuthRad: finalAz,
-      tiltRad: ((ev.beta ?? 0) * Math.PI) / 180,
+      tiltRad: look.elevationRad,
       accuracyDeg: accuracy,
       source: 'sensor',
     };

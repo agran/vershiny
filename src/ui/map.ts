@@ -341,7 +341,9 @@ export function openMap(options: MapOptions): () => void {
       title.style.fontWeight = '500';
 
       const sub = document.createElement('span');
-      sub.textContent = options.regionTitle(hit.region);
+      sub.textContent = hit.typos
+        ? `${options.regionTitle(hit.region)} · ${t('searchCorrected')}`
+        : options.regionTitle(hit.region);
       sub.style.cssText = 'opacity:.7;font-size:12px';
 
       row.append(title, sub);

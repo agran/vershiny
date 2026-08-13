@@ -8,6 +8,9 @@ import {
   normalizeName,
   searchPeaks,
   searchIndex,
+  searchFuzzy,
+  editDistance,
+  typoBudget,
   mergeHits,
   loadSearchIndex,
   type IndexEntry,
@@ -101,5 +104,52 @@ describe('поиск вершин', () => {
       throw new Error('offline');
     }) as unknown as typeof fetch;
     await expect(loadSearchIndex('/vershiny/', failing)).resolves.toEqual([]);
+  });
+});
+
+describe('поиск с опечатками', () => {
+  it('считает перестановку соседних букв одной правкой', () => {
+    // Самая частая опечатка — «Эльбурс» вместо «Эльбруса»
+    expect(editDistance('elburs', 'elbrus', 2)).toBe(1);
+    expect(editDistance('elbrus', 'elbrus', 2)).toBe(0);
+    expect(editDistance('kazbek', 'kazbec', 2)).toBe(1);
+  });
+
+  it('обрывается на пороге, а не считает до конца', () => {
+    expect(editDistance('elbrus', 'everest', 1)).toBeGreaterThan(1);
+    expect(editDistance('abc', 'abcdefgh', 2)).toBeGreaterThan(2);
+  });
+
+  it('на коротких запросах опечатки не прощает', () => {
+    // «Ушба» и «Ушма» — разные горы, одна правка их не различает
+    expect(typoBudget(4)).toBe(0);
+    expect(searchFuzzy('Ушма', REGION_PEAKS, 'elbrus')).toHaveLength(0);
+    expect(typoBudget(6)).toBe(1);
+    expect(typoBudget(12)).toBe(2);
+  });
+
+  it('находит вершину, набранную с опечаткой', () => {
+    const hits = searchFuzzy('Эльбурс', REGION_PEAKS, 'elbrus');
+    expect(hits.map((h) => h.peak.name)).toContain('Эльбрус Западный');
+    expect(hits[0].typos).toBe(1);
+  });
+
+  it('ищет опечатку в самом названии, а не в приставке', () => {
+    const hits = searchFuzzy('Донгузарун', REGION_PEAKS, 'elbrus');
+    expect(hits.map((h) => h.peak.name)).toContain('Донгузорун');
+  });
+
+  it('работает и по записям глобального индекса', () => {
+    const hits = searchFuzzy('Казбег', INDEX, null);
+    expect(hits[0].peak.name).toBe('Казбек');
+    expect(hits[0].region).toBe('caucasus-east');
+  });
+
+  it('исправленные варианты ранжируются ниже точных', () => {
+    const exact = searchPeaks('Донгузорун', REGION_PEAKS, 'elbrus');
+    const fuzzy = searchFuzzy('Эльбурс', REGION_PEAKS, 'elbrus');
+    const hits = mergeHits([exact, fuzzy]);
+    expect(hits[0].peak.name).toBe('Донгузорун'); // 4454 м точно
+    expect(hits[1].typos).toBe(1); // Эльбрус 5642 м, но с правкой
   });
 });

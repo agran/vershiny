@@ -54,15 +54,28 @@ const ctx = canvas.getContext('2d')!;
 /** Готовая панорама: null, пока worker не прислал первый результат */
 let panorama: PanoramaState | null = null;
 
+/** Нижние кнопки: их положение зависит от формы экрана (см. layoutControls) */
+let navPad: HTMLElement | null = null;
+let heightPadEl: HTMLElement | null = null;
+let mapButton: HTMLElement | null = null;
+
+/** Сенсорный экран без мыши: раскладка кнопок там другая */
+const touchOnly =
+  typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+
 function resize(): void {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio);
   canvas.height = Math.round(canvas.clientHeight * devicePixelRatio);
-  syncVerticalFov();
+  syncFov();
+  layoutControls();
   // Смена размера очищает холст: без перерисовки панорама пропадала до
   // следующего пересчёта (поворот телефона — пустой экран)
   draw();
 }
 new ResizeObserver(resize).observe(canvas);
+// Поворот телефона: ResizeObserver срабатывает не всегда до перерисовки,
+// а на iOS размеры на момент события ещё старые — отсюда отдельный слушатель
+screen.orientation?.addEventListener('change', () => setTimeout(resize, 50));
 
 const view: ViewState = {
   centerAzRad: 0,
@@ -71,14 +84,34 @@ const view: ViewState = {
   fovVRad: toRad(45),
 };
 
+/** Угол обзора вдоль длинной стороны экрана — примерно как у камеры телефона */
+const BASE_FOV = toRad(70);
+
 /**
- * Вертикальный FOV выводим из горизонтального и пропорций холста —
- * иначе картинка растянута/сжата по вертикали и не совместится с кадром камеры.
+ * Углы обзора под текущую форму экрана.
+ *
+ * Длинная сторона всегда получает BASE_FOV, короткая — производный угол, как
+ * у объектива камеры. Иначе поворот телефона менял бы масштаб: при постоянных
+ * 60° по горизонтали портретный экран растягивал вертикаль до сотни градусов,
+ * и те же горы становились вдвое мельче, чем в ландшафте.
+ *
+ * Второй угол выводится через тангенс, а не пропорцией: только так пиксель
+ * стоит одинаково по обеим осям и картинка не сплющена — это же требование
+ * приходит от AR, где панорама совмещается с кадром камеры.
  */
-function syncVerticalFov(): void {
-  if (!canvas.width || !canvas.height) return;
-  view.fovVRad = 2 * Math.atan(Math.tan(view.fovRad / 2) * (canvas.height / canvas.width));
+function syncFov(): void {
+  const { width, height } = canvas;
+  if (!width || !height) return;
+  const half = Math.tan(BASE_FOV / 2);
+  if (width >= height) {
+    view.fovRad = BASE_FOV;
+    view.fovVRad = 2 * Math.atan(half * (height / width));
+  } else {
+    view.fovVRad = BASE_FOV;
+    view.fovRad = 2 * Math.atan(half * (width / height));
+  }
 }
+syncFov();
 resize();
 
 /** Предел наклона камеры, рад */
@@ -406,6 +439,8 @@ async function main(): Promise<void> {
  */
 function setupMapButton(origin: LatLon): void {
   const btn = makeButton(ICON_MAP, t('map'), 'left:16px;bottom:16px');
+  mapButton = btn;
+  layoutControls();
   let closeMap: (() => void) | null = null;
   btn.onclick = async () => {
     if (closeMap) {
@@ -527,32 +562,58 @@ function requestViewpoint(peak: Peak): Promise<ViewpointResult> {
 
 /**
  * Поиск вершины: текущий регион → скачанные регионы → глобальный индекс.
- * Индекс (peaks/_index.json) покрывает всю планету, поэтому Казбек или
- * Эверест находятся, даже если их регион никогда не открывали.
+ *
+ * Скачанный регион ищется по полному списку (тысячи вершин), а не по индексу:
+ * в индекс попадает по 400 значимых вершин на регион, и «Каменный замок»
+ * или «Динозавр» там не появятся никогда — а на устройстве они уже лежат.
+ * Индекс (peaks/_index.json) идёт последним и покрывает всю планету, поэтому
+ * Казбек или Эверест находятся, даже если их регион никогда не открывали.
  */
 async function findPeaks(query: string): Promise<SearchHit[]> {
-  const { searchPeaks, searchIndex, mergeHits, loadSearchIndex } = await import('./core/search');
+  const { searchPeaks, searchIndex, searchFuzzy, mergeHits, loadSearchIndex } = await import(
+    './core/search'
+  );
   const groups: SearchHit[][] = [searchPeaks(query, currentPeaks, currentRegion)];
 
-  // Скачанные регионы — работают офлайн
+  // Скачанные регионы — работают офлайн; читаются параллельно
   const { getDownloadedRegions, getPeaks } = await import('./core/db');
-  const downloaded = await getDownloadedRegions();
-  for (const region of downloaded) {
-    if (region === currentRegion) continue;
-    const peaks = (await getPeaks(region)) as PeaksFile['peaks'] | undefined;
-    if (peaks) groups.push(searchPeaks(query, peaks, region));
-  }
+  const downloaded = (await getDownloadedRegions()).filter((r) => r !== currentRegion);
+  const offline = await Promise.all(
+    downloaded.map(async (region) => {
+      const peaks = (await getPeaks(region)) as PeaksFile['peaks'] | undefined;
+      return peaks ? searchPeaks(query, peaks, region) : [];
+    }),
+  );
+  groups.push(...offline);
 
   // Глобальный индекс — последним: свои данные полнее и приоритетнее
   const index = await loadSearchIndex(import.meta.env.BASE_URL);
   if (index.length) groups.push(searchIndex(query, index));
 
-  return mergeHits(groups, lastOrigin);
+  const hits = mergeHits(groups, lastOrigin);
+  // Опечатки разбираем, только если по точному написанию ничего нет:
+  // «Эльбрус» не должен тонуть среди «Эльбурс», «Эльбруз» и прочих соседей
+  if (hits.length) return hits;
+
+  const fuzzy: SearchHit[][] = [searchFuzzy(query, currentPeaks, currentRegion)];
+  for (let i = 0; i < downloaded.length; i++) {
+    const peaks = (await getPeaks(downloaded[i])) as PeaksFile['peaks'] | undefined;
+    if (peaks) fuzzy.push(searchFuzzy(query, peaks, downloaded[i]));
+  }
+  if (index.length) fuzzy.push(searchFuzzy(query, index, null));
+  return mergeHits(fuzzy, lastOrigin);
 }
 
 /** Кнопка «Скачать для офлайна» в углу экрана */
 function setupDownloadButton(origin: LatLon): void {
   const btn = makeButton(ICON_DOWNLOAD, t('downloadRegion'), 'right:16px;bottom:16px');
+  const restore = () => {
+    btn.innerHTML = ICON_DOWNLOAD;
+  };
+  const flash = (mark: string) => {
+    btn.textContent = mark;
+    setTimeout(restore, 3000);
+  };
   let busy = false;
   btn.onclick = async () => {
     if (busy) return;
@@ -566,14 +627,12 @@ function setupDownloadButton(origin: LatLon): void {
           setStatus(`${t('downloadTiles')}: ${p.done}/${p.total}`);
         } else if (p.phase === 'done') {
           setStatus('');
-          btn.textContent = '✓';
-          setTimeout(() => (btn.textContent = '⬇'), 3000);
+          flash('✓');
         }
       });
     } catch (err) {
       setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
-      btn.textContent = '✗';
-      setTimeout(() => (btn.textContent = '⬇'), 3000);
+      flash('✗');
     } finally {
       busy = false;
       btn.disabled = false;
@@ -607,23 +666,30 @@ function makeButton(icon: string, title: string, pos: string): HTMLButtonElement
  * Крест без диагоналей: диагональ — это два нажатия соседних стрелок, а
  * восемь кнопок в углу экрана занимали место и путали. Стрелки показывают
  * направление относительно взгляда и поворачиваются вместе с камерой.
+ *
+ * На сенсорном экране стрелок нет вовсе: там перемещение делается двойным
+ * тапом по нужному месту склона, а место на экране телефона дороже. Остаётся
+ * одна кнопка — возврат к своему положению.
  */
 function setupNavPad(): void {
-  const padSize = 132;
   const pad = document.createElement('div');
   pad.style.cssText =
-    `position:fixed;left:16px;bottom:76px;width:${padSize}px;height:${padSize}px;` +
-    'z-index:10;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);' +
-    'gap:4px';
+    'position:fixed;left:16px;z-index:10;display:grid;gap:4px;' +
+    (touchOnly
+      ? 'grid-template-columns:1fr;grid-template-rows:1fr'
+      : 'grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)');
   document.body.appendChild(pad);
+  navPad = pad;
 
-  const dirs: { cell: string; az?: number; label: string; gps?: boolean }[] = [
+  const arrows: { cell: string; az?: number; label: string; gps?: boolean }[] = [
     { cell: '1 / 2', az: 0, label: t('navForward') },
     { cell: '2 / 1', az: -Math.PI / 2, label: t('navLeft') },
-    { cell: '2 / 2', label: t('navGps'), gps: true },
     { cell: '2 / 3', az: Math.PI / 2, label: t('navRight') },
     { cell: '3 / 2', az: Math.PI, label: t('navBack') },
   ];
+  const dirs = touchOnly
+    ? [{ cell: '1 / 1', label: t('navGps'), gps: true }]
+    : [...arrows, { cell: '2 / 2', label: t('navGps'), gps: true }];
 
   for (const d of dirs) {
     const btn = document.createElement('button');
@@ -633,7 +699,7 @@ function setupNavPad(): void {
     const [row, col] = d.cell.split(' / ');
     btn.style.cssText =
       `grid-row:${row};grid-column:${col};` +
-      'border:none;border-radius:10px;background:#415a77;color:#f1faee;' +
+      `border:none;border-radius:${touchOnly ? '50%' : '10px'};background:#415a77;color:#f1faee;` +
       'cursor:pointer;min-width:0;min-height:0;display:flex;' +
       'align-items:center;justify-content:center';
     if (d.gps) {
@@ -656,8 +722,10 @@ function setupNavPad(): void {
   // Высота: вверх/вниз + индикатор
   const heightPad = document.createElement('div');
   heightPad.style.cssText =
-    'position:fixed;left:16px;bottom:216px;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center';
+    'position:fixed;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center';
   document.body.appendChild(heightPad);
+  heightPadEl = heightPad;
+  layoutControls();
 
   const heightBtn = (icon: string, title: string, delta: number): HTMLButtonElement => {
     const b = document.createElement('button');
@@ -682,6 +750,35 @@ function setupNavPad(): void {
   heightPad.appendChild(heightLabel);
 
   heightBtn(ICON_DOWN, t('heightDown'), -100);
+}
+
+/**
+ * Раскладка нижних кнопок под форму экрана.
+ *
+ * В портрете колонка высоты стоит над навипадом. Повёрнутый телефон даёт
+ * 320–390 px высоты, и та же стопка (кнопка карты, крест, высота — до 330 px)
+ * упиралась в верх экрана; в ландшафте кнопки выстраиваются в ряд вдоль
+ * нижнего края, где места как раз много.
+ *
+ * На сенсорном экране вместо креста одна кнопка GPS, поэтому и полосу под
+ * него держим узкой.
+ */
+function layoutControls(): void {
+  const compact = window.innerHeight < 420;
+  const padSize = touchOnly ? 48 : compact ? 108 : 132;
+  if (navPad) {
+    navPad.style.width = `${padSize}px`;
+    navPad.style.height = `${padSize}px`;
+    navPad.style.bottom = touchOnly || compact ? '16px' : '76px';
+  }
+  const row = touchOnly || compact;
+  if (heightPadEl) {
+    heightPadEl.style.left = row ? `${16 + padSize + 8}px` : '16px';
+    heightPadEl.style.bottom = row ? '16px' : `${76 + padSize + 8}px`;
+  }
+  if (mapButton) {
+    mapButton.style.left = row ? `${16 + padSize + 8 + 44 + 8}px` : '16px';
+  }
 }
 
 /** Текущая высота наблюдателя (из DEM) */
