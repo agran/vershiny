@@ -29,8 +29,13 @@ beforeEach(() => {
   );
 });
 
-function open(extra: Partial<MapOptions> = {}): { close: () => void; onClose: () => void } {
+function open(extra: Partial<MapOptions> = {}): {
+  close: () => void;
+  onClose: () => void;
+  onHeading: ReturnType<typeof vi.fn>;
+} {
   const onClose = vi.fn();
+  const onHeading = vi.fn();
   const close = openMap({
     origin: { lat: 43.3, lon: 42.4 },
     headingRad: 0,
@@ -39,9 +44,20 @@ function open(extra: Partial<MapOptions> = {}): { close: () => void; onClose: ()
     onPickPeak: vi.fn(),
     regionTitle: (r) => r,
     onClose,
+    onHeading,
     ...extra,
   });
-  return { close, onClose };
+  return { close, onClose, onHeading };
+}
+
+/** Перетаскивание ручки направления: нажали и повели в точку экрана */
+function dragHeading(x: number, y: number): void {
+  const handle = document.querySelector('[data-role="heading"]') as HTMLElement;
+  handle.dispatchEvent(
+    new MouseEvent('pointerdown', { bubbles: true, clientX: 0, clientY: -78 }),
+  );
+  handle.dispatchEvent(new MouseEvent('pointermove', { bubbles: true, clientX: x, clientY: y }));
+  handle.dispatchEvent(new MouseEvent('pointerup', { bubbles: true }));
 }
 
 /** Нажатие пальцем: как в браузере — pointerdown по иконке, затем click */
@@ -123,5 +139,49 @@ describe('кнопки карты', () => {
     open();
     tap(byTitle('close')!);
     expect(disconnect).toHaveBeenCalled();
+  });
+});
+
+describe('направление взгляда на карте', () => {
+  it('поворот ручки задаёт азимут: вправо от точки — восток', () => {
+    // Экранные оси: x вправо, y вниз, север на карте вверху. jsdom не считает
+    // раскладку, поэтому маркер стоит в начале координат
+    const { onHeading } = open();
+    dragHeading(100, 0);
+
+    expect(onHeading).toHaveBeenCalled();
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo(Math.PI / 2, 3);
+  });
+
+  it('вверх — север, вниз — юг', () => {
+    const { onHeading } = open();
+    dragHeading(0, -100);
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo(0, 3);
+
+    dragHeading(0, 100);
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo(Math.PI, 3);
+  });
+
+  it('азимут отдаётся в [0, 2π): запад — это 3π/2, а не −π/2', () => {
+    // Отрицательный азимут на панораме считался бы не тем сектором
+    const { onHeading } = open();
+    dragHeading(-100, 0);
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo((3 * Math.PI) / 2, 3);
+  });
+
+  it('у самой точки наблюдателя направление не дёргается', () => {
+    // Проход пальца через центр иначе крутил бы сектор на 180° рывком
+    const { onHeading } = open();
+    dragHeading(2, -3);
+    expect(onHeading).not.toHaveBeenCalled();
+  });
+
+  it('поворот ручки не двигает карту', () => {
+    // Ручка лежит на слое тайлов, и событие всплывает до корня карты: без
+    // остановки та приняла бы нажатие за начало перетаскивания и уехала
+    // вбок вместе с точкой наблюдателя
+    open();
+    dragHeading(100, 0);
+    expect(document.body.textContent ?? '').toContain('43.3000, 42.4000');
   });
 });

@@ -113,6 +113,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   map: { ru: 'Карта', en: 'Map' },
   mapGoHere: { ru: 'Перенестись сюда', en: 'Go here' },
   mapMyPosition: { ru: 'Моё положение', en: 'My position' },
+  mapHeading: { ru: 'Куда смотрим — потяните', en: 'Drag to aim the view' },
   navForward: { ru: 'Вперёд', en: 'Forward' },
   navBack: { ru: 'Назад', en: 'Back' },
   navLeft: { ru: 'Влево', en: 'Left' },

@@ -418,20 +418,24 @@ let autoTiltPending = true;
  * умолчанию показывает ±17°). Наводим камеру на медиану силуэта в том
  * секторе, куда смотрим: медиана по всем 360° бесполезна — за спиной может
  * быть равнина, а перед лицом стена.
+ *
+ * Считается по уже посчитанному горизонту, поэтому годится и без нового
+ * расчёта — например, когда направление взгляда сменили на карте.
  */
-function applyAutoTilt(r: ResultMessage): void {
-  const rays = r.stepRad > 0 ? Math.round((2 * Math.PI) / r.stepRad) : 0;
-  if (!rays) return;
+function applyAutoTilt(state: { stepRad: number; layers?: Float32Array[] }): void {
+  const layers = state.layers;
+  const rays = state.stepRad > 0 ? Math.round((2 * Math.PI) / state.stepRad) : 0;
+  if (!rays || !layers?.length) return;
   const half = view.fovRad / 2;
   const angles: number[] = [];
 
   for (let i = 0; i < rays; i++) {
-    const az = i * r.stepRad;
+    const az = i * state.stepRad;
     const delta = Math.abs(wrapAngle(az - view.centerAzRad));
     if (delta > half) continue;
     // Силуэт — максимум по слоям дистанций на этом азимуте
     let top = -Infinity;
-    for (const layer of r.layers) {
+    for (const layer of layers) {
       const value = layer[i];
       if (Number.isFinite(value) && value > top) top = value;
     }
@@ -601,6 +605,20 @@ function setupMapButton(origin: LatLon): void {
       onPickPeak: (hit) => {
         closeMap = null;
         void goToHit(hit, origin);
+      },
+      // Направление, выставленное на карте, — это и есть направление взгляда.
+      // Применяем сразу: карту закрывают по-разному, и собирать выбор в
+      // каждом из выходов — верный способ его где-нибудь потерять
+      onHeading: (rad) => {
+        view.centerAzRad = rad;
+        // Заодно наводим кадр по вертикали: в новом секторе рельеф стоит на
+        // другой высоте, и без этого поворот на юг с Приюта 11 показывал
+        // пустое небо — склон уходил вниз за нижний край кадра.
+        // Компас на телефоне вернёт своё на следующем же событии: там куда
+        // смотрит человек, туда и панорама. Карта задаёт взгляд там, где
+        // датчиков нет или в них отказано
+        if (panorama) applyAutoTilt(panorama);
+        draw();
       },
       // Карта закрылась сама (крестик, Escape): без этого кнопка думала, что
       // карта ещё открыта, и следующее нажатие уходило на её «закрытие»

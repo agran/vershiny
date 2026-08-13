@@ -10,9 +10,10 @@
  */
 
 import type { LatLon } from '../core/geo';
+import { normalizeAz } from '../core/geo';
 import type { SearchHit } from '../core/search';
 import { t, getLocale, peakName } from '../core/i18n';
-import { ICON_CLOSE, ICON_LOCATE, ICON_SEARCH } from './icons';
+import { ICON_CLOSE, ICON_HEADING, ICON_LOCATE, ICON_SEARCH } from './icons';
 
 const TILE_PX = 256;
 const MIN_ZOOM = 2;
@@ -52,6 +53,14 @@ export interface MapOptions {
   onPickPeak: (hit: SearchHit) => void;
   /** Название региона для строки результата */
   regionTitle: (region: string) => string;
+  /**
+   * Направление взгляда изменили ручкой на маркере.
+   *
+   * Вызывается по ходу поворота, а не при закрытии: карту закрывают
+   * по-разному (крестик, Escape, «Перенестись сюда»), и собирать выбор в
+   * каждом из выходов — верный способ его где-нибудь потерять.
+   */
+  onHeading?: (rad: number) => void;
   /** Карта закрылась сама (крестик, Escape) — владелец кнопки должен знать */
   onClose?: () => void;
 }
@@ -146,13 +155,44 @@ export function openMap(options: MapOptions): () => void {
     'clip-path:polygon(50% 100%, 4% 0%, 96% 0%);' +
     'background:linear-gradient(to top, rgba(76,201,240,.85), rgba(76,201,240,.15));' +
     'filter:drop-shadow(0 0 2px rgba(0,0,0,.6));' +
-    `transform-origin:50% 100%;transform:rotate(${(options.headingRad * 180) / Math.PI}deg)`;
+    'transform-origin:50% 100%';
   const dot = document.createElement('div');
   dot.style.cssText =
     'position:absolute;left:-7px;top:-7px;width:14px;height:14px;border-radius:50%;' +
     'background:#4cc9f0;border:2px solid #0d1b2a;box-shadow:0 0 0 1px #4cc9f0';
-  marker.append(cone, dot);
+
+  /**
+   * Ручка направления — кружок на конце сектора.
+   *
+   * Тянуть сам сектор было бы естественнее, но он узкий у вершины и
+   * полупрозрачный: пальцем в него не попасть, а промах уводит карту вбок.
+   * Отдельный кружок в 32 px попадается сразу и не мешает панорамированию.
+   */
+  const handle = document.createElement('div');
+  handle.dataset.role = 'heading';
+  handle.title = t('mapHeading');
+  handle.style.cssText =
+    'position:absolute;left:-16px;top:-16px;width:32px;height:32px;border-radius:50%;' +
+    'pointer-events:auto;cursor:grab;touch-action:none;z-index:2;' +
+    'background:#4cc9f0;border:2px solid #0d1b2a;box-shadow:0 2px 6px rgba(0,0,0,.5);' +
+    'display:flex;align-items:center;justify-content:center;color:#0d1b2a';
+  handle.innerHTML = ICON_HEADING;
+
+  marker.append(cone, handle, dot);
   layer.appendChild(marker);
+
+  /** Направление взгляда, рад: 0 — север, по часовой (как на панораме) */
+  let heading = options.headingRad;
+
+  const applyHeading = (): void => {
+    const deg = (heading * 180) / Math.PI;
+    cone.style.transform = `rotate(${deg}deg)`;
+    // Кружок уезжает на конец сектора вместе со стрелкой: стрелка смотрит
+    // туда же, куда взгляд, — иначе она указывала бы на север при любом
+    // повороте и спорила бы с самим сектором
+    handle.style.transform = `rotate(${deg}deg) translateY(-78px)`;
+  };
+  applyHeading();
 
   // Перекрестие центра — точка, куда перенесёмся
   const cross = document.createElement('div');
@@ -166,12 +206,52 @@ export function openMap(options: MapOptions): () => void {
   let dragging = false;
   let lastX = 0;
   let lastY = 0;
+
+  /**
+   * Поворот сектора: тянем ручку вокруг точки наблюдателя.
+   *
+   * Азимут считается от центра маркера к пальцу: экранные оси — x вправо,
+   * y вниз, север на карте вверху, поэтому вперёд — это −y.
+   */
+  let rotating = false;
+  handle.addEventListener('pointerdown', (ev) => {
+    // Иначе карта примет нажатие за начало перетаскивания и уедет вбок
+    ev.stopPropagation();
+    rotating = true;
+    handle.style.cursor = 'grabbing';
+    try {
+      handle.setPointerCapture(ev.pointerId);
+    } catch {
+      // Синтетические события без pointerId (тесты) — работаем без захвата
+    }
+  });
+  handle.addEventListener('pointermove', (ev) => {
+    if (!rotating) return;
+    ev.stopPropagation();
+    // Маркер — точка нулевого размера, его прямоугольник и есть наблюдатель
+    const at = marker.getBoundingClientRect();
+    const dx = ev.clientX - at.left;
+    const dy = ev.clientY - at.top;
+    // У самого центра направление не определено: рывок на 180° при
+    // проходе через точку выглядел бы поломкой
+    if (Math.hypot(dx, dy) < 12) return;
+    heading = normalizeAz(Math.atan2(dx, -dy));
+    applyHeading();
+    options.onHeading?.(heading);
+  });
+  const endRotate = (): void => {
+    rotating = false;
+    handle.style.cursor = 'grab';
+  };
+  handle.addEventListener('pointerup', endRotate);
+  handle.addEventListener('pointercancel', endRotate);
+
   root.addEventListener('pointerdown', (ev) => {
     // Проверять tagName самой цели нельзя: у кнопки с иконкой цель — <path>
     // внутри <svg>, а не <button>. Промах здесь стоил кнопки «Закрыть»: карта
     // захватывала указатель (setPointerCapture), и click уходил ей, а не
     // кнопке. Текстовые «＋» и «−» при этом работали — оттого и «часто».
-    if ((ev.target as HTMLElement).closest('button, input, a')) return;
+    if ((ev.target as HTMLElement).closest('button, input, a, [data-role="heading"]')) return;
     dragging = true;
     lastX = ev.clientX;
     lastY = ev.clientY;
@@ -291,8 +371,8 @@ export function openMap(options: MapOptions): () => void {
   const hint = document.createElement('div');
   hint.textContent =
     getLocale() === 'ru'
-      ? 'Ведите карту — центр станет новой точкой'
-      : 'Pan the map — the centre becomes your new spot';
+      ? 'Ведите карту — центр станет новой точкой. Кружок на луче поворачивает взгляд'
+      : 'Pan the map — the centre becomes your new spot. Drag the knob to aim the view';
   hint.style.cssText =
     'position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:2;' +
     'background:rgba(26,26,46,.85);border-radius:8px;padding:6px 12px;' +
