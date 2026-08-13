@@ -65,6 +65,51 @@ describe('ray-marching горизонта', () => {
     expect(visible!.distanceM).toBeCloseTo(80_000, -3);
   });
 
+  it('пик, которому чуть не хватило до гребня, подписывается как hidden', () => {
+    // Хребет 4000 м на 30 км; за ним, на 35 км, вершина
+    const ridge = conicSampler(ORIGIN, Math.PI / 2, 30_000, 4000);
+    const pos = destination(ORIGIN, Math.PI / 2, 35_000);
+
+    // 4350 м — не дотягивает до линии гребня меньше 150 м: «немного не видно»
+    const barely = checkPeakVisibility(
+      ORIGIN,
+      1000,
+      { ...pos, name: 'Почти видна', ele: 4350 },
+      ridge,
+      30_000,
+    );
+    expect(barely).not.toBeNull();
+    expect(barely!.visibility).toBe('hidden');
+    // Недобор до гребня измерен и доступен раскладке подписей
+    expect(barely!.hiddenDeficitM).toBeGreaterThan(0);
+    expect(barely!.hiddenDeficitM).toBeLessThan(400);
+
+    // 4000 м — не хватает уже больше 400 м: не подписываем
+    const buried = checkPeakVisibility(
+      ORIGIN,
+      1000,
+      { ...pos, name: 'Погребённая', ele: 4000 },
+      ridge,
+      30_000,
+    );
+    expect(buried).toBeNull();
+
+    // 3000 м — погребена под хребтом на полтора километра
+    expect(
+      checkPeakVisibility(ORIGIN, 1000, { ...pos, name: 'Глубоко', ele: 3000 }, ridge, 30_000),
+    ).toBeNull();
+
+    // 4600 м — выше гребня, обычная видимая вершина с маркером
+    const above = checkPeakVisibility(
+      ORIGIN,
+      1000,
+      { ...pos, name: 'Над гребнем', ele: 4600 },
+      ridge,
+      30_000,
+    );
+    expect(above!.visibility).toBe('visible');
+  });
+
   it('пик вне 200 км отбрасывается', () => {
     const flat: SampleFn = () => 0;
     const farPos = destination(ORIGIN, 0, 250_000);

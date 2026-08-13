@@ -52,6 +52,18 @@ const INK_LIGHT = 'rgba(255,255,255,0.98)';
 const INK_LIGHT_DIM = 'rgba(255,255,255,0.55)';
 /** Наклон подписей вершин: все под одним углом, вправо-вверх от вершины */
 const LABEL_ANGLE_DEG = 60;
+/**
+ * Предельная «крутизна» силуэта: рад подъёма на рад азимута. Всё, что круче,
+ * считается обрывом гребня, а не склоном — полилиния там рвётся. При шаге
+ * 0.1° это 1.5° на луч: настоящий склон так не скачет, а вот край гребня,
+ * за которым начинается другая поверхность, — сколько угодно.
+ */
+export const MAX_RIDGE_SLOPE = 15;
+/**
+ * Сколько подписей в кадре «стоят» скрытой вершины. Бюджет тратится сначала
+ * на видимые: пустой кадр отдаёт скрытым все 6 мест, плотный — ни одного.
+ */
+const HIDDEN_LABEL_BUDGET = 6;
 
 /** Рендер одного кадра панорамы: небо + оверлей */
 export function renderPanorama(
@@ -164,9 +176,9 @@ export function drawOverlay(
 /**
  * Разбивает профиль на непрерывные видимые сегменты.
  * Точка входит в сегмент, если: есть данные, она выше окклюдера (runningMax),
- * попадает на экран и не образует разрыв по x.
+ * попадает на экран и не образует разрыв — ни по x, ни по углу возвышения.
  */
-function buildRidgeSegments(
+export function buildRidgeSegments(
   prof: Float32Array,
   runningMax: Float32Array,
   eps: number,
@@ -179,12 +191,18 @@ function buildRidgeSegments(
   const segments: { x: number; y: number }[][] = [];
   let current: { x: number; y: number }[] = [];
   let prevX = NaN;
+  let prevV = NaN;
   const maxGap = width * 0.25; // разрыв при заходе за край панорамы
+  // Скачок угла между соседними лучами круче 30:1 — это не склон, а обрыв
+  // силуэта: за краем гребня начинается совсем другая поверхность. Соединять
+  // их линией нельзя, иначе через кадр протягивается ложная «вертикаль».
+  const maxStepRad = MAX_RIDGE_SLOPE * stepRad;
 
   const flush = (): void => {
     if (current.length > 1) segments.push(current);
     current = [];
     prevX = NaN;
+    prevV = NaN;
   };
 
   for (let i = 0; i < prof.length; i++) {
@@ -204,8 +222,10 @@ function buildRidgeSegments(
       continue;
     }
     if (!Number.isNaN(prevX) && Math.abs(x - prevX) > maxGap) flush();
+    if (!Number.isNaN(prevV) && Math.abs(v - prevV) > maxStepRad) flush();
     current.push({ x, y });
     prevX = x;
+    prevV = v;
   }
   flush();
   return segments;
@@ -262,9 +282,11 @@ function drawLabels(
   state: PanoramaState,
   uiScale: number,
 ): void {
-  void view;
   const { width, height } = ctx.canvas;
   ctx.font = `${13 * uiScale}px system-ui, sans-serif`;
+  // Обратная проекция экрана в азимут — для обрыва выносок о силуэт
+  const xToAz = (x: number): number =>
+    view.centerAzRad + ((x - width / 2) / width) * view.fovRad;
 
   // Все подписи под одним углом: так они не пересекают друг друга,
   // их помещается больше, а выноска не режет соседние надписи.
@@ -282,19 +304,56 @@ function drawLabels(
   // при нехватке места остаётся более высокая (и более близкая) вершина.
   const placed: PlacedLabel[] = [];
 
-  for (const peak of peaks) {
-    const marker = findPeakMarkerPosition(peak, state, azToX, elevToY);
-    if (!marker) continue;
-    const { x: mx, y: my } = marker;
-    if (mx < 0 || mx > width || my < 0 || my > height) continue;
+  /**
+   * Отступ от точки скрытой вершины до первой буквы: поднимаемся вдоль строки,
+   * пока вся подпись не выйдет из-за загораживающего склона. Её место — сразу
+   * над силуэтом: текст поверх склона читался бы как «вершина вот здесь».
+   */
+  const liftAboveSilhouette = (mx: number, my: number, w: number): number => {
+    const STEP = 5 * uiScale;
+    const CLEAR = 5 * uiScale; // запас над линией силуэта
+    const MAX_LEAD = 260 * uiScale;
+    for (let lead = LEAD; lead <= MAX_LEAD; lead += STEP) {
+      const ax = mx + ux * lead;
+      const ay = my + uy * lead;
+      if (ay < LINE_H) break;
+      // Проверяем всю строку: склон правее может подниматься круче текста
+      let clear = true;
+      for (let s = 0; s <= 1; s += 0.25) {
+        const x = ax + ux * w * s;
+        const y = ay + uy * w * s;
+        if (x < 0 || x > width) continue;
+        if (y > horizonAtAzimuth(state, xToAz(x), elevToY) - CLEAR) {
+          clear = false;
+          break;
+        }
+      }
+      if (clear) return lead;
+    }
+    return MAX_LEAD;
+  };
 
-    // Якорь первой буквы — над вершиной по направлению текста
-    const ax = mx + ux * LEAD;
-    const ay = my + uy * LEAD;
-    if (ay < LINE_H) continue; // подпись ушла бы за верх кадра
+  /** Попытка занять место под подпись. false — не поместилась */
+  const tryPlace = (peak: VisiblePeak): boolean => {
+    const marker = findPeakMarkerPosition(peak, state, azToX, elevToY);
+    if (!marker) return false;
+    const { x: mx, y: my } = marker;
+    const hidden = peak.visibility === 'hidden';
+    // Точка скрытой вершины лежит ниже силуэта — она и должна уходить
+    // за нижний край, важно лишь чтобы сама подпись попала в кадр
+    if (mx < 0 || mx > width || my < 0 || (!hidden && my > height)) return false;
 
     const text = labelText(peak);
     const w = ctx.measureText(text).width;
+
+    // Якорь первой буквы. Обычно — сразу над вершиной по направлению текста;
+    // для скрытой вершины поднимаемся вдоль строки, пока подпись целиком
+    // не выйдет из-за загораживающего склона (её место — над силуэтом).
+    const lead = hidden ? liftAboveSilhouette(mx, my, w) : LEAD;
+    const ax = mx + ux * lead;
+    const ay = my + uy * lead;
+    if (ay < LINE_H) return false; // подпись ушла бы за верх кадра
+
     const u0 = ax * ux + ay * uy;
     const v = ax * vx + ay * vy;
     const u1 = u0 + w;
@@ -305,17 +364,40 @@ function drawLabels(
       (p) => Math.abs(p.v - v) < LINE_H && u0 < p.u1 + PAD_U && u1 > p.u0 - PAD_U,
     );
     if (conflict) {
-      conflict.extra++; // соседа не подписываем — считаем его в «+N»
-      continue;
+      // «+N» считает только реально видимые вершины: скрытая за гребнем
+      // не должна раздувать счётчик — её там всё равно не разглядеть
+      if (peak.visibility !== 'hidden') conflict.extra++;
+      return false;
     }
 
     placed.push({ peak, mx, my, ax, ay, u0, u1, v, extra: 0 });
+    return true;
+  };
+
+  // Проход 1: видимые вершины разбирают места первыми — подпись того, что
+  // реально видно, всегда важнее подписи того, что за склоном
+  for (const peak of peaks) {
+    if (peak.visibility !== 'hidden') tryPlace(peak);
+  }
+
+  // Проход 2: скрытые добираются по остаточному бюджету. Чем пустее кадр, тем
+  // их больше: на голом склоне подпись «за этим гребнем Эльбрус» — единственная
+  // полезная информация, а в плотной панораме она только мешала бы.
+  let budget = Math.max(0, HIDDEN_LABEL_BUDGET - placed.length);
+  for (const peak of peaks) {
+    if (budget <= 0) break;
+    if (peak.visibility === 'hidden' && tryPlace(peak)) budget--;
   }
 
   // Рендер: подпись приоритетной вершины, вытесненные соседи — как «+N»
   for (const p of placed) {
     const text = labelText(p.peak) + (p.extra > 0 ? `  +${p.extra}` : '');
-    drawPeakAnchor(ctx, p.mx, p.my, p.ax, p.ay, p.peak.visibility, uiScale);
+    // Скрытая вершина: выноска обрывается о склон, маркера вершины нет
+    const end =
+      p.peak.visibility === 'hidden'
+        ? clipToSilhouette(p.ax, p.ay, p.mx, p.my, state, xToAz, elevToY)
+        : { x: p.mx, y: p.my };
+    drawPeakAnchor(ctx, end.x, end.y, p.ax, p.ay, p.peak.visibility, uiScale);
     drawRotatedLabel(ctx, p.ax, p.ay, theta, text, p.peak.visibility, uiScale);
   }
 }
@@ -400,13 +482,42 @@ function horizonAtAzimuth(
   elevToY: (elev: number) => number,
 ): number {
   const { horizon, stepRad } = state;
+  // Азимут приходит и отрицательным (обратная проекция экрана) — нормализуем,
+  // иначе индекс уходит в минус и высота силуэта становится NaN
   const idx = azRad / stepRad;
-  const i0 = Math.floor(idx) % horizon.length;
+  const i0 = ((Math.floor(idx) % horizon.length) + horizon.length) % horizon.length;
   const i1 = (i0 + 1) % horizon.length;
   const frac = idx - Math.floor(idx);
   const a0 = horizon[i0] === -Infinity ? 0 : horizon[i0];
   const a1 = horizon[i1] === -Infinity ? 0 : horizon[i1];
   return elevToY(a0 + (a1 - a0) * frac);
+}
+
+/**
+ * Обрыв выноски о силуэт: идём от подписи к вершине и останавливаемся там,
+ * где линия уходит за гребень. Так подпись «привязана» к месту за склоном,
+ * а линия не рисует несуществующую вершину поверх рельефа.
+ */
+function clipToSilhouette(
+  ax: number,
+  ay: number,
+  mx: number,
+  my: number,
+  state: PanoramaState,
+  xToAz: (x: number) => number,
+  elevToY: (elev: number) => number,
+): { x: number; y: number } {
+  const STEPS = 24;
+  let last = { x: ax, y: ay };
+  for (let i = 1; i <= STEPS; i++) {
+    const t = i / STEPS;
+    const x = ax + (mx - ax) * t;
+    const y = ay + (my - ay) * t;
+    // y растёт вниз: точка ниже линии силуэта — уже за склоном
+    if (y > horizonAtAzimuth(state, xToAz(x), elevToY)) break;
+    last = { x, y };
+  }
+  return last;
 }
 
 /**
@@ -419,6 +530,13 @@ function findPeakMarkerPosition(
   azToX: (az: number) => number,
   elevToY: (elev: number) => number,
 ): { x: number; y: number } | null {
+  // Скрытая вершина: ставим точку в её истинное положение — оно ниже силуэта,
+  // а выноска обрежется о склон (clipToSilhouette). Матчинг по фронтам тут
+  // не годится: фронта на этой дистанции нет, он и перекрыл вершину.
+  if (peak.visibility === 'hidden') {
+    return { x: azToX(peak.azimuthRad), y: elevToY(peak.elevationRad) };
+  }
+
   if (!state.layers || !state.fronts) {
     // Fallback: силуэт на азимуте
     return { x: azToX(peak.azimuthRad), y: horizonAtAzimuth(state, peak.azimuthRad, elevToY) };

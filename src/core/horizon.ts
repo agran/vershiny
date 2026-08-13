@@ -43,6 +43,22 @@ export const CREST_COUNT = CREST_BOUNDS.length - 1;
 /** Насколько угол должен упасть после максимума, чтобы это считалось гребнем, рад (~0.09°) */
 const CREST_DROP_RAD = 0.0015;
 
+/**
+ * Порог «чуть-чуть не видно» для подписи скрытой вершины.
+ *
+ * Считаем в метрах недобора до гребня, а не в углах: угловой порог на разных
+ * дальностях означает совершенно разное. 1° на 5 км — это вершина, которой не
+ * хватило полусотни метров; 1° на 100 км — гора, погребённая под километром
+ * рельефа (так в кадр лезло «Сашевардно · 1558 м · 105 км»).
+ *
+ * Порог щедрый: сколько таких подписей реально показать, решает уже раскладка
+ * по бюджету кадра (drawLabels) — в пустом кадре их нужно больше, в плотном
+ * не нужно вовсе. Угловой предел (~3°) не даёт подписи уползти глубоко
+ * в область рельефа, где она выглядела бы висящей на склоне.
+ */
+export const HIDDEN_LABEL_DEFICIT_M = 400;
+export const HIDDEN_LABEL_DEPTH_RAD = 0.052; // ~3°
+
 /** Видимый фронт: участок рельефа, пробивающийся над ближним */
 export interface VisibleFront {
   /** Дистанция начала фронта, м */
@@ -77,6 +93,8 @@ export interface VisiblePeak extends Peak {
   distanceM: number;
   /** Видимость: выше горизонта / на склоне / скрыт хребтом */
   visibility: 'visible' | 'onSlope' | 'hidden';
+  /** Для скрытых: сколько метров не хватило до линии гребня */
+  hiddenDeficitM?: number;
 }
 
 const TWO_PI = 2 * Math.PI;
@@ -317,7 +335,8 @@ function smoothLayers(
 
 /**
  * Видимость пика: точный луч в его азимуте (ALGORITHMS.md §2).
- * Классификация: visible (выше горизонта) / onSlope (на видимом склоне) / hidden (за хребтом).
+ * Классификация: visible (выше горизонта) / onSlope (на видимом склоне) /
+ * hidden (чуть за гребнем — подписываем, но без маркера вершины).
  */
 export function checkPeakVisibility(
   origin: LatLon,
@@ -359,7 +378,22 @@ export function checkPeakVisibility(
         visibility: 'onSlope',
       };
     }
-    return null; // скрыт хребтом — не показываем
+    // За хребтом. Подписываем «чуть-чуть» скрытые: вершине не хватило десятков
+    // метров до гребня — это полезно («она вон там, за склоном»). Сколько таких
+    // подписей показать, решает раскладка по бюджету кадра.
+    const depthRad = maxAngle - peakAngle;
+    const deficitM = (Math.tan(maxAngle) - Math.tan(peakAngle)) * dist;
+    if (depthRad <= HIDDEN_LABEL_DEPTH_RAD && deficitM <= HIDDEN_LABEL_DEFICIT_M) {
+      return {
+        ...peak,
+        azimuthRad: az,
+        elevationRad: peakAngle,
+        distanceM: dist,
+        visibility: 'hidden',
+        hiddenDeficitM: deficitM,
+      };
+    }
+    return null;
   }
 
   return {
