@@ -5,17 +5,20 @@
  * Протокол сообщений:
  *   → { type: 'init', patchBaseUrl? }
  *   → { type: 'compute', origin, peaks }
+ *   → { type: 'viewpoint', peak }   — подобрать точку, откуда вершина видна
  *   ← { type: 'result', horizon, stepRad, peaks, observerH, computeMs }
+ *   ← { type: 'viewpoint', origin, azimuthRad }
  *   ← { type: 'error', message }
  */
 
 import { DemSource } from '../core/dem-source';
 import {
+  checkPeakVisibility,
   computeLayeredHorizon,
   filterVisiblePeaks,
   type VisiblePeak,
 } from '../core/horizon';
-import { destination, type LatLon } from '../core/geo';
+import { azimuthRad, destination, type LatLon } from '../core/geo';
 import type { Peak } from '../core/peaks';
 
 export interface InitMessage {
@@ -30,6 +33,21 @@ export interface ComputeMessage {
   peaks: Peak[];
   /** Переопределение высоты наблюдателя (для навигации вверх/вниз) */
   observerHeightOverride?: number;
+}
+
+/** Подобрать точку, с которой вершина действительно видна */
+export interface ViewpointMessage {
+  type: 'viewpoint';
+  peak: Peak;
+  /** Желаемое удаление от вершины, м */
+  distM?: number;
+}
+
+export interface ViewpointResult {
+  type: 'viewpoint';
+  origin: LatLon;
+  /** Азимут с точки на вершину, рад */
+  azimuthRad: number;
 }
 
 export interface ResultMessage {
@@ -58,8 +76,8 @@ export interface ErrorMessage {
   message: string;
 }
 
-export type WorkerInMessage = InitMessage | ComputeMessage;
-export type WorkerOutMessage = ResultMessage | ErrorMessage;
+export type WorkerInMessage = InitMessage | ComputeMessage | ViewpointMessage;
+export type WorkerOutMessage = ResultMessage | ErrorMessage | ViewpointResult;
 
 let dem: DemSource | null = null;
 
@@ -101,12 +119,60 @@ async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): 
   };
 }
 
+/**
+ * Выбор точки обзора для «перелёта» к вершине.
+ *
+ * Раньше точка ставилась просто по обратному азимуту от прежнего места — при
+ * прыжке через полпланеты направление случайное, и наблюдатель оказывался в
+ * цирке под соседней стеной: искали Белуху, а видели Корону Алтая в километре.
+ *
+ * Пробуем 12 азимутов вокруг вершины и берём тот, откуда она действительно
+ * видна, а из таких — самый низкий (открытая долина, гора возвышается целиком).
+ */
+async function pickViewpoint(peak: Peak, distM: number): Promise<ViewpointResult> {
+  if (!dem) throw new Error('Worker не инициализирован (init)');
+  const summit: LatLon = { lat: peak.lat, lon: peak.lon };
+  const candidates: { origin: LatLon; observerH: number; visible: boolean }[] = [];
+
+  for (let i = 0; i < 12; i++) {
+    const az = (i * 2 * Math.PI) / 12;
+    const origin = destination(summit, az, distM);
+    const toPeak = azimuthRad(origin, summit);
+    try {
+      await dem.prefetchAlongRay(origin, toPeak, distM * 1.2, 200, destination);
+      const observerH = await dem.observerHeightSafe(origin);
+      const sample = (pos: LatLon, d: number): number => dem!.sample(pos, d);
+      const check = checkPeakVisibility(origin, observerH, peak, sample, Infinity);
+      candidates.push({ origin, observerH, visible: check?.visibility === 'visible' });
+    } catch {
+      /* нет данных в этой точке — пропускаем */
+    }
+  }
+
+  const visible = candidates.filter((c) => c.visible);
+  const pool = visible.length ? visible : candidates;
+  if (!pool.length) {
+    return { type: 'viewpoint', origin: summit, azimuthRad: 0 };
+  }
+  // Из точек с видимой вершиной — самая низкая: оттуда гора видна целиком
+  const best = pool.reduce((a, b) => (b.observerH < a.observerH ? b : a));
+  return {
+    type: 'viewpoint',
+    origin: best.origin,
+    azimuthRad: azimuthRad(best.origin, summit),
+  };
+}
+
 self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
   try {
     const msg = ev.data;
     if (msg.type === 'init') {
       dem = new DemSource({ patchBaseUrl: msg.patchBaseUrl });
       await dem.init();
+      return;
+    }
+    if (msg.type === 'viewpoint') {
+      self.postMessage(await pickViewpoint(msg.peak, msg.distM ?? 6_000));
       return;
     }
     if (msg.type === 'compute') {

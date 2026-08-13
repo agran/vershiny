@@ -6,9 +6,10 @@
 import { renderPanorama, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
 import { toRad, type LatLon } from './core/geo';
-import { t } from './core/i18n';
+import { t, peakName, getLocale } from './core/i18n';
 import { downloadRegion, type DownloadProgress } from './ui/download';
-import type { ResultMessage, WorkerOutMessage } from './workers/horizon.worker';
+import type { ResultMessage, WorkerOutMessage, ViewpointResult } from './workers/horizon.worker';
+import type { SearchHit } from './core/search';
 
 let currentRegion = 'elbrus';
 let manualRegion = false; // true = пользователь выбрал вручную в настройках
@@ -230,6 +231,46 @@ let heightOverride: number | null = null;
 /** Кнопки ⚙/📷/📸 уже созданы (иначе плодятся на каждый пересчёт) */
 let actionButtonsReady = false;
 
+/**
+ * Навести камеру по вертикали на рельеф при следующем результате.
+ * Ставится при старте и при «телепорте» (поиск вершины), но не при шаге
+ * навипадом — иначе сбрасывался бы наклон, выставленный пользователем.
+ */
+let autoTiltPending = true;
+
+/**
+ * Автонаклон: в долине рельеф стоит стеной выше кадра, и панорама выглядит
+ * пустой (Аккемская долина под Белухой — гребни на 21–29°, а кадр по
+ * умолчанию показывает ±17°). Наводим камеру на медиану силуэта в том
+ * секторе, куда смотрим: медиана по всем 360° бесполезна — за спиной может
+ * быть равнина, а перед лицом стена.
+ */
+function applyAutoTilt(r: ResultMessage): void {
+  const rays = r.stepRad > 0 ? Math.round((2 * Math.PI) / r.stepRad) : 0;
+  if (!rays) return;
+  const half = view.fovRad / 2;
+  const angles: number[] = [];
+
+  for (let i = 0; i < rays; i++) {
+    const az = i * r.stepRad;
+    const delta = Math.abs(((az - view.centerAzRad + Math.PI) % (2 * Math.PI)) - Math.PI);
+    if (delta > half) continue;
+    // Силуэт — максимум по слоям дистанций на этом азимуте
+    let top = -Infinity;
+    for (const layer of r.layers) {
+      const value = layer[i];
+      if (Number.isFinite(value) && value > top) top = value;
+    }
+    if (Number.isFinite(top)) angles.push(top);
+  }
+
+  if (angles.length < 10) return; // силуэта в секторе почти нет
+  angles.sort((a, b) => a - b);
+  const median = angles[Math.floor(angles.length / 2)];
+  // Ниже линии горизонта не опускаемся: там и так всё видно
+  view.tiltRad = Math.max(0, Math.min(MAX_TILT, median));
+}
+
 const worker = new Worker(new URL('./workers/horizon.worker.ts', import.meta.url), {
   type: 'module',
 });
@@ -240,6 +281,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     setStatus(`${t('error')}: ${msg.message}`);
     return;
   }
+  if (msg.type === 'viewpoint') return; // ждёт свой одноразовый обработчик
   const r = msg as ResultMessage;
   panorama = {
     horizon: r.horizon,
@@ -254,12 +296,16 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   // Обновляем индикатор высоты
   const heightEl = document.getElementById('height-indicator');
   if (heightEl) heightEl.textContent = `${Math.round(r.observerH)} м`;
+  if (autoTiltPending) {
+    autoTiltPending = false;
+    applyAutoTilt(r);
+  }
   setStatus('');
   draw();
   // Кнопки AR/фото — после первого результата
   setupActionButtons(lastOrigin, r.observerH);
   console.info(
-    `Горизонт: ${r.horizon.length} лучей, ${r.peaks.length} пиков, ` +
+    `Горизонт: ${r.horizon.length} лучей, ${r.peaks.length} из ${currentPeaks.length} пиков, ` +
       `наблюдатель ${r.observerH.toFixed(0)} м, ${r.computeMs.toFixed(0)} мс`,
   );
 };
@@ -296,6 +342,14 @@ async function main(): Promise<void> {
     const { getPeaks } = await import('./core/db');
     peaks = ((await getPeaks(currentRegion)) ?? []) as PeaksFile['peaks'];
   }
+  // Изоляция вершин (расстояние до ближайшей более высокой) — основа
+  // приоритета подписей. Считается один раз на регион, не на кадр.
+  const { annotateIsolation } = await import('./core/peaks');
+  const isoT0 = performance.now();
+  annotateIsolation(peaks);
+  console.info(
+    `Изоляция: ${peaks.length} вершин за ${(performance.now() - isoT0).toFixed(0)} мс`,
+  );
   currentPeaks = peaks; // сохраняем для навигации
 
   // DEM: детальный патч региона → локальная пирамида → внешняя пирамида
@@ -361,36 +415,51 @@ function setupSearchButton(origin: LatLon): void {
     cancelBtn.style.cssText =
       'background:#415a77;color:#f1faee;border:none;border-radius:8px;' +
       'padding:8px 16px;font-size:14px;cursor:pointer';
-    cancelBtn.onclick = () => {
+    const closeSearch = (): void => {
       searchOverlay?.remove();
       searchOverlay = null;
     };
+    cancelBtn.onclick = closeSearch;
 
     const searchBtn = document.createElement('button');
     searchBtn.textContent = t('searchPeak');
     searchBtn.style.cssText =
       'background:#4cc9f0;color:#1a1a2e;border:none;border-radius:8px;' +
       'padding:8px 16px;font-size:14px;cursor:pointer;font-weight:500';
-    searchBtn.onclick = async () => {
+
+    // Список вариантов: одноимённых вершин много, выбор — за человеком
+    const results = document.createElement('div');
+    results.style.cssText =
+      'display:none;flex-direction:column;gap:4px;max-height:min(50vh,320px);' +
+      'overflow-y:auto;margin-top:4px';
+
+    const runSearch = async (): Promise<void> => {
       const query = input.value.trim();
       if (!query) return;
-      const found = await findPeakInAllRegions(query);
-      searchOverlay?.remove();
-      searchOverlay = null;
-      if (!found) {
+      searchBtn.disabled = true;
+      searchBtn.textContent = '…';
+      const hits = await findPeaks(query);
+      searchBtn.disabled = false;
+      searchBtn.textContent = t('searchPeak');
+
+      if (!hits.length) {
+        results.style.display = 'none';
         setStatus(t('peakNotFound'));
         setTimeout(() => setStatus(''), 3000);
         return;
       }
-      // Если вершина в другом регионе — переключаемся
-      if (found.region !== currentRegion) {
-        currentRegion = found.region;
-        manualRegion = true;
-        const { getPeaks } = await import('./core/db');
-        currentPeaks = ((await getPeaks(found.region)) ?? []) as PeaksFile['peaks'];
+      if (hits.length === 1) {
+        closeSearch();
+        void goToHit(hits[0], origin);
+        return;
       }
-      jumpToPeak(found.peak, origin);
+      await renderResults(results, hits, (hit) => {
+        closeSearch();
+        void goToHit(hit, origin);
+      });
     };
+
+    searchBtn.onclick = () => void runSearch();
 
     input.onkeydown = (ev) => {
       if (ev.key === 'Enter') searchBtn.click();
@@ -401,69 +470,134 @@ function setupSearchButton(origin: LatLon): void {
     btnRow.appendChild(searchBtn);
     searchOverlay.appendChild(input);
     searchOverlay.appendChild(btnRow);
+    searchOverlay.appendChild(results);
     document.body.appendChild(searchOverlay);
     input.focus();
   };
 }
 
-/** Переход к вершине: точка в 5 км, взгляд на неё */
+/**
+ * Список найденных вершин: название, высота и регион — без региона одинаковые
+ * имена («Ostspitze», «Северная») ничем не различить.
+ */
+async function renderResults(
+  container: HTMLElement,
+  hits: SearchHit[],
+  onPick: (hit: SearchHit) => void,
+): Promise<void> {
+  const { loadRegions, regionLabel } = await import('./ui/download');
+  const regions = await loadRegions();
+  container.textContent = '';
+  container.style.display = 'flex';
+
+  for (const hit of hits) {
+    const row = document.createElement('button');
+    row.style.cssText =
+      'display:flex;flex-direction:column;align-items:flex-start;gap:2px;' +
+      'background:#2b2d42;color:#f1faee;border:1px solid #415a77;border-radius:8px;' +
+      'padding:8px 10px;font-size:13px;cursor:pointer;text-align:left;width:100%';
+    row.onmouseenter = () => (row.style.background = '#3a3d5c');
+    row.onmouseleave = () => (row.style.background = '#2b2d42');
+
+    const title = document.createElement('span');
+    const ele =
+      hit.peak.ele !== undefined
+        ? ` · ${Math.round(hit.peak.ele)} ${getLocale() === 'ru' ? 'м' : 'm'}`
+        : '';
+    title.textContent = `${peakName(hit.peak)}${ele}`;
+    title.style.cssText = 'font-weight:500';
+
+    const sub = document.createElement('span');
+    const info = regions[hit.region];
+    sub.textContent = info ? regionLabel(info) : hit.region;
+    sub.style.cssText = 'opacity:0.7;font-size:12px';
+
+    row.appendChild(title);
+    row.appendChild(sub);
+    row.onclick = () => onPick(hit);
+    container.appendChild(row);
+  }
+}
+
+/**
+ * Переход к найденной вершине: при необходимости меняем регион и подтягиваем
+ * его вершины (сеть → офлайн-кеш), затем сам перелёт.
+ */
+async function goToHit(hit: SearchHit, origin: LatLon): Promise<void> {
+  if (hit.region !== currentRegion) {
+    currentRegion = hit.region;
+    manualRegion = true;
+    setStatus(t('loadingRegion'));
+    const base = import.meta.env.BASE_URL;
+    let peaks: PeaksFile['peaks'] | null = null;
+    const res = await fetch(`${base}peaks/${hit.region}.json`).catch(() => null);
+    if (res && isJson(res)) {
+      peaks = ((await res.json()) as PeaksFile).peaks;
+    } else {
+      const { getPeaks } = await import('./core/db');
+      peaks = ((await getPeaks(hit.region)) ?? null) as PeaksFile['peaks'] | null;
+    }
+    if (peaks) {
+      const { annotateIsolation } = await import('./core/peaks');
+      annotateIsolation(peaks);
+      currentPeaks = peaks;
+    }
+    // Вершины региона могли не загрузиться (офлайн) — перелёт всё равно делаем:
+    // координаты у нас есть, панорама построится по DEM
+  }
+  jumpToPeak(hit.peak, origin);
+}
+
+/** Переход к вершине: точка, откуда она видна, и взгляд на неё */
 async function jumpToPeak(peak: Peak, from: LatLon): Promise<void> {
-  const distToPeak = 5000; // 5 км
-  const azToPeak = Math.atan2(peak.lon - from.lon, peak.lat - from.lat);
-  const backAz = azToPeak + Math.PI;
-  const { destination } = await import('./core/geo');
-  const viewPos = destination({ lat: peak.lat, lon: peak.lon }, backAz, distToPeak);
-  // Переход к вершине — «телепорт» на землю: набранная высота не имеет смысла
-  heightOverride = null;
-  requestCompute(viewPos);
-  view.centerAzRad = azToPeak;
+  void from;
+  setStatus(t('computing'));
+  // Точку обзора подбирает worker: у него DEM, а «просто отойти на 5 км
+  // назад по азимуту» приводит в цирк под соседней стеной
+  const spot = await requestViewpoint(peak);
+  heightOverride = null; // «телепорт» на землю: набранная высота не имеет смысла
+  autoTiltPending = true; // наводимся на рельеф в новой точке
+  view.centerAzRad = spot.azimuthRad;
+  requestCompute(spot.origin);
   draw();
 }
 
-/** Поиск вершины по имени (частичное совпадение, без учёта регистра) */
-function findPeakByName(query: string, peaks: PeaksFile['peaks']): Peak | null {
-  const q = query.toLowerCase().trim();
-  if (!q) return null;
-  // Точное совпадение по name/name_ru/name_en
-  for (const p of peaks) {
-    if (
-      p.name.toLowerCase() === q ||
-      p.name_ru?.toLowerCase() === q ||
-      p.name_en?.toLowerCase() === q
-    ) {
-      return p;
-    }
-  }
-  // Частичное совпадение
-  for (const p of peaks) {
-    if (
-      p.name.toLowerCase().includes(q) ||
-      p.name_ru?.toLowerCase().includes(q) ||
-      p.name_en?.toLowerCase().includes(q)
-    ) {
-      return p;
-    }
-  }
-  return null;
+/** Запрос точки обзора у worker'а (одноразовый обработчик) */
+function requestViewpoint(peak: Peak): Promise<ViewpointResult> {
+  return new Promise((resolve) => {
+    const onMessage = (ev: MessageEvent<WorkerOutMessage>): void => {
+      if (ev.data.type !== 'viewpoint') return;
+      worker.removeEventListener('message', onMessage);
+      resolve(ev.data);
+    };
+    worker.addEventListener('message', onMessage);
+    worker.postMessage({ type: 'viewpoint', peak });
+  });
 }
 
-/** Поиск по всем скачанным регионам, если не нашли в текущем */
-async function findPeakInAllRegions(query: string): Promise<{ peak: Peak; region: string } | null> {
-  // 1. Текущий регион
-  const peak = findPeakByName(query, currentPeaks);
-  if (peak) return { peak, region: currentRegion };
+/**
+ * Поиск вершины: текущий регион → скачанные регионы → глобальный индекс.
+ * Индекс (peaks/_index.json) покрывает всю планету, поэтому Казбек или
+ * Эверест находятся, даже если их регион никогда не открывали.
+ */
+async function findPeaks(query: string): Promise<SearchHit[]> {
+  const { searchPeaks, searchIndex, mergeHits, loadSearchIndex } = await import('./core/search');
+  const groups: SearchHit[][] = [searchPeaks(query, currentPeaks, currentRegion)];
 
-  // 2. Другие скачанные регионы
+  // Скачанные регионы — работают офлайн
   const { getDownloadedRegions, getPeaks } = await import('./core/db');
   const downloaded = await getDownloadedRegions();
   for (const region of downloaded) {
     if (region === currentRegion) continue;
     const peaks = (await getPeaks(region)) as PeaksFile['peaks'] | undefined;
-    if (!peaks) continue;
-    const found = findPeakByName(query, peaks);
-    if (found) return { peak: found, region };
+    if (peaks) groups.push(searchPeaks(query, peaks, region));
   }
-  return null;
+
+  // Глобальный индекс — последним: свои данные полнее и приоритетнее
+  const index = await loadSearchIndex(import.meta.env.BASE_URL);
+  if (index.length) groups.push(searchIndex(query, index));
+
+  return mergeHits(groups, lastOrigin);
 }
 
 /** Кнопка «Скачать для офлайна» в углу экрана */

@@ -117,18 +117,26 @@ export class DemSource {
     }
   }
 
-  /** Высота с защитой от занижения (max 3×3 + 2 м) — для ray-marching */
+  /**
+   * Высота наблюдателя для ray-marching.
+   *
+   * Источник должен совпадать с тем, по которому считаются лучи, иначе
+   * наблюдатель проваливается под собственный рельеф. В ближней зоне лучи
+   * идут по Terrarium (90 м), поэтому и высоту берём оттуда; защита max 3×3
+   * применяется только к своим детальным патчам — на пирамиде с ячейкой
+   * 217 м окрестность 3×3 охватывает 650 м и в узкой долине завышает высоту
+   * на сотни метров (Алтай: 2976 м вместо 2660 м).
+   */
   async observerHeightSafe(pos: LatLon): Promise<number> {
     const patchAvailable = this.patch !== null && this.inPatch(pos);
     if (patchAvailable && !this.patchIsCoarse) {
       return this.patch!.observerHeightSafe(pos);
     }
     try {
-      // Terrarium: упрощённо — обычная высота (там нет такой проблемы)
-      return await this.terrarium.heightAt(pos);
+      return (await this.terrarium.heightAt(pos)) + 2; // +2 м рост глаз
     } catch (err) {
       if (!patchAvailable) throw err;
-      return this.patch!.observerHeightSafe(pos);
+      return this.patch!.observerHeightSafe(pos); // офлайн: только пирамида
     }
   }
 }

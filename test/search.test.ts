@@ -1,0 +1,105 @@
+/**
+ * Поиск вершин: транслитерация запроса, несколько вариантов с регионами,
+ * глобальный индекс для регионов, которые пользователь не открывал.
+ */
+
+import { describe, it, expect } from 'vitest';
+import {
+  normalizeName,
+  searchPeaks,
+  searchIndex,
+  mergeHits,
+  loadSearchIndex,
+  type IndexEntry,
+} from '../src/core/search';
+import type { Peak } from '../src/core/peaks';
+
+const REGION_PEAKS: Peak[] = [
+  { name: 'Ушба Южная', lat: 43.1, lon: 42.6, ele: 4710 },
+  { name: 'Ушба Северная', lat: 43.11, lon: 42.61, ele: 4697 },
+  { name: 'Эльбрус Западный', lat: 43.35, lon: 42.44, ele: 5642, name_en: 'Mount Elbrus' },
+  { name: 'Донгузорун', lat: 43.2, lon: 42.5, ele: 4454 },
+];
+
+const INDEX: IndexEntry[] = [
+  ['Казбек', 42.7, 44.52, 5054, 'caucasus-east', 'Mount Kazbek'],
+  ['Ушба Южная', 43.1, 42.6, 4710, 'caucasus-central'],
+  ['Белуха', 49.8, 86.59, 4509, 'altai'],
+  ['Uhuru Peak', -3.07, 37.35, 5895, 'east-africa'],
+];
+
+describe('поиск вершин', () => {
+  it('нормализует имена через латиницу', () => {
+    expect(normalizeName('Ушба Южная')).toBe(normalizeName('Ushba Yuzhnaya'));
+    expect(normalizeName('Эльбрус')).toBe('elbrus');
+    expect(normalizeName('  Mont-Blanc!  ')).toBe('montblanc');
+  });
+
+  it('находит по кириллице латинское имя и наоборот', () => {
+    // Запрос латиницей → вершина названа кириллицей
+    const byLatin = searchPeaks('Elbrus', REGION_PEAKS, 'elbrus');
+    expect(byLatin.map((h) => h.peak.name)).toContain('Эльбрус Западный');
+
+    // Запрос кириллицей → английское написание в name_en
+    const byCyrillic = searchPeaks('Казбек', INDEX.map((e) => ({ name: e[0], lat: e[1], lon: e[2] })), 'x');
+    expect(byCyrillic).toHaveLength(1);
+  });
+
+  it('возвращает все совпадения, а не первое', () => {
+    const hits = searchPeaks('Ушба', REGION_PEAKS, 'elbrus');
+    expect(hits).toHaveLength(2);
+    expect(hits.every((h) => !h.exact)).toBe(true);
+  });
+
+  it('точное совпадение весит больше, но высота решает', () => {
+    const hits = mergeHits([searchPeaks('Ушба Южная', REGION_PEAKS, 'elbrus')]);
+    expect(hits[0].peak.name).toBe('Ушба Южная');
+    expect(hits[0].exact).toBe(true);
+
+    const partial = mergeHits([searchPeaks('Ушба', REGION_PEAKS, 'elbrus')]);
+    expect(partial[0].peak.ele).toBe(4710); // из двух «Ушб» — высокая
+
+    // Одноимённая сопка 1060 м совпадает точно, настоящий Казбек (5054 м)
+    // назван «მყინვარწვერი - Казбек» — первым всё равно должен быть он
+    const kazbek = mergeHits([
+      searchIndex('Казбек', [
+        ['Казбек', 61.0, 152.0, 1060, 'magadan'],
+        ['მყინვარწვერი - Казбек', 42.7, 44.52, 5054, 'caucasus-east'],
+      ]),
+    ]);
+    expect(kazbek[0].peak.ele).toBe(5054);
+    expect(kazbek[0].region).toBe('caucasus-east');
+  });
+
+  it('при равной высоте ближняя вершина выше в списке', () => {
+    const far: IndexEntry = ['Пик', 60.0, 100.0, 4000, 'siberia'];
+    const near: IndexEntry = ['Пик', 43.3, 42.5, 4000, 'elbrus'];
+    const hits = mergeHits([searchIndex('Пик', [far, near])], { lat: 43.318, lon: 42.458 });
+    expect(hits[0].region).toBe('elbrus');
+  });
+
+  it('индекс покрывает регионы, которых нет у пользователя', () => {
+    const hits = searchIndex('Казбек', INDEX);
+    expect(hits).toHaveLength(1);
+    expect(hits[0].region).toBe('caucasus-east');
+    expect(hits[0].peak.ele).toBe(5054);
+    expect(hits[0].peak.name_en).toBe('Mount Kazbek');
+  });
+
+  it('дубли из перекрывающихся регионов схлопываются, свой источник в приоритете', () => {
+    const hits = mergeHits([
+      searchPeaks('Ушба Южная', REGION_PEAKS, 'elbrus'),
+      searchIndex('Ушба Южная', INDEX),
+    ]);
+    // Одна вершина, регион — свой (пришёл первым), а не из индекса
+    expect(hits).toHaveLength(1);
+    expect(hits[0].region).toBe('elbrus');
+  });
+
+  it('офлайн без индекса не ломает поиск', async () => {
+    const failing = (async () => {
+      throw new Error('offline');
+    }) as unknown as typeof fetch;
+    await expect(loadSearchIndex('/vershiny/', failing)).resolves.toEqual([]);
+  });
+});
