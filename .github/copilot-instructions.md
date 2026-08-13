@@ -54,6 +54,9 @@ npm run build        # прод-сборка
 # Пики региона из planet.jsonl
 python tools\peaks-to-json\peaks_to_json.py --region elbrus --from-file data\peaks-by-region\elbrus.jsonl -o public\peaks\elbrus.json
 
+# Индекс поиска по всем регионам (после регенерации peaks/*)
+python tools\peaks-index\build_index.py --quiet
+
 # GLO-90 → глобальная пирамида тайлов (scan кешируется, build возобновляемый)
 python tools\glo90-to-tiles\glo90_to_tiles.py scan
 python tools\glo90-to-tiles\glo90_to_tiles.py build --dry-run
@@ -74,3 +77,5 @@ python tools\dem-to-tiles\dem_to_tiles.py input.tif -o public\tiles\elbrus
 - Windows-консоль (cp1251) не выводит Unicode — в Python-скриптах: `sys.stdout.reconfigure(encoding="utf-8", errors="replace")`
 - Terrarium z15: пиксель 4.8 м на экваторе, но данные ~90 м — зумы выше z12 впустую качают пиксели
 - planet.osm.pbf: DenseNodes поля могут повторяться (packed) — накапливать, не перезаписывать
+- **OSM: вулканы — это `natural=volcano`, а не `peak`.** Только по `peak` теряются
+  Эльбрус, Казбек, Фудзи, Килиманджаро и вся Камчатка (`SUMMIT_TAGS` в planet_peaks.py)
