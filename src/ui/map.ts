@@ -52,6 +52,8 @@ export interface MapOptions {
   onPickPeak: (hit: SearchHit) => void;
   /** Название региона для строки результата */
   regionTitle: (region: string) => string;
+  /** Карта закрылась сама (крестик, Escape) — владелец кнопки должен знать */
+  onClose?: () => void;
 }
 
 /** Открывает карту поверх панорамы. Возвращает функцию закрытия. */
@@ -160,7 +162,11 @@ export function openMap(options: MapOptions): () => void {
   let lastX = 0;
   let lastY = 0;
   root.addEventListener('pointerdown', (ev) => {
-    if ((ev.target as HTMLElement).tagName === 'BUTTON') return;
+    // Проверять tagName самой цели нельзя: у кнопки с иконкой цель — <path>
+    // внутри <svg>, а не <button>. Промах здесь стоил кнопки «Закрыть»: карта
+    // захватывала указатель (setPointerCapture), и click уходил ей, а не
+    // кнопке. Текстовые «＋» и «−» при этом работали — оттого и «часто».
+    if ((ev.target as HTMLElement).closest('button, input, a')) return;
     dragging = true;
     lastX = ev.clientX;
     lastY = ev.clientY;
@@ -215,7 +221,15 @@ export function openMap(options: MapOptions): () => void {
 
   const close = (): void => {
     root.remove();
+    document.removeEventListener('keydown', onKey);
+    options.onClose?.();
   };
+
+  // Escape закрывает карту: привычно и спасает, если кнопка ушла под вырез
+  const onKey = (ev: KeyboardEvent): void => {
+    if (ev.key === 'Escape' && panel.style.display === 'none') close();
+  };
+  document.addEventListener('keydown', onKey);
 
   button(ICON_CLOSE, 'left:16px;top:16px;width:44px;height:44px', close).title = t('close');
   button('＋', 'right:16px;top:16px;width:44px;height:44px;font-size:20px', () =>

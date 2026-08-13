@@ -483,6 +483,11 @@ function setupMapButton(origin: LatLon): void {
         closeMap = null;
         void goToHit(hit, origin);
       },
+      // Карта закрылась сама (крестик, Escape): без этого кнопка думала, что
+      // карта ещё открыта, и следующее нажатие уходило на её «закрытие»
+      onClose: () => {
+        closeMap = null;
+      },
       regionTitle: (region) => {
         const info = regions[region];
         return info ? regionLabel(info) : region;

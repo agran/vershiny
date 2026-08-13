@@ -7,12 +7,20 @@
  * тонкие светлые линии.
  */
 
-/** Обёртка: квадратный SVG со штриховыми контурами по currentColor */
+/**
+ * Обёртка: квадратный SVG со штриховыми контурами по currentColor.
+ *
+ * `pointer-events:none` обязателен: без него целью клика становится <path>
+ * внутри иконки, а не сама кнопка. Обработчики, которые смотрят на
+ * `event.target`, из-за этого промахиваются — так «Закрыть» на карте
+ * переставала работать, потому что карта принимала нажатие за перетаскивание.
+ */
 function svg(paths: string, size = 24): string {
   return (
     `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" ` +
     'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" ' +
-    `stroke-linejoin="round" aria-hidden="true">${paths}</svg>`
+    'stroke-linejoin="round" aria-hidden="true" style="pointer-events:none" ' +
+    `>${paths}</svg>`
   );
 }
 
@@ -74,7 +82,7 @@ export function iconArrow(rotateDeg: number): string {
   return (
     `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" ` +
     `stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ` +
-    `style="transform:rotate(${rotateDeg}deg)">` +
+    `style="pointer-events:none;transform:rotate(${rotateDeg}deg)">` +
     '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>'
   );
 }
