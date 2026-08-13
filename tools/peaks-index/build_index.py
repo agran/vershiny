@@ -7,11 +7,20 @@ peaks-index: public/peaks/*.json → компактный индекс поис�
 все 115 регионов (58 МБ) нельзя, поэтому кладём рядом один небольшой файл
 с самыми значимыми вершинами каждого региона.
 
-Отбор — той же эвристикой, что и приоритет подписей (docs/ALGORITHMS.md §5):
-    score = ele × вес(изоляция)
+Отбор — эвристикой приоритета подписей (docs/ALGORITHMS.md §5) с поправкой
+на известность:
+    score = ele × вес(изоляция) × (1.35, если есть wikidata/wikipedia)
 Изоляция (расстояние до ближайшей более высокой вершины) поднимает одиноко
 стоящие горы и топит побочные пики: без неё в индекс из Альп попадали бы
 двести жандармов одного массива вместо двухсот разных гор.
+
+Но для поиска изоляции мало: ищут по имени, а имя знают у известных гор.
+Оштен (2804 м) стоит в 3 км от Фишта (2854 м), проигрывает ему по изоляции
+и в индекс не попадал — при том что это одна из самых хоженых вершин Кавказа.
+Ссылка на Википедию — единственный признак известности, какой есть в OSM;
+там, где он проставлен всем подряд (Аппалачи — 17 тыс. вершин из импорта
+GNIS), общий множитель ничего не меняет, а там, где он редок, — вытаскивает
+именно те горы, которые будут искать.
 
 Формат (компактный, поля позиционные):
     {"generated": "...", "peaks": [[name, lat, lon, ele, region, name_en?, name_ru?], ...]}
@@ -43,6 +52,8 @@ ISO_LIMIT_M = 36_000
 ISO_DOMINANT_M = 30_000
 ISO_SUBORDINATE_M = 300
 ISO_MIN_WEIGHT = 0.55
+#: Надбавка за ссылку на Википедию — признак того, что гору знают по имени
+WIKI_BONUS = 1.35
 
 
 def isolation(peaks: list[dict]) -> list[float]:
@@ -90,13 +101,21 @@ def isolation_weight(iso_m: float) -> float:
     return ISO_MIN_WEIGHT + (1 - ISO_MIN_WEIGHT) * t
 
 
+def search_score(peak: dict, iso_m: float) -> float:
+    """Пригодность вершины для индекса поиска: высота, самостоятельность, слава."""
+    score = (peak.get("ele") or 0) * isolation_weight(iso_m)
+    if peak.get("wikidata") or peak.get("wikipedia"):
+        score *= WIKI_BONUS
+    return score
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Индекс поиска вершин по всем регионам")
     parser.add_argument(
         "--peaks-dir", type=Path, default=Path("public/peaks"), help="Каталог peaks/*.json"
     )
     parser.add_argument(
-        "--per-region", type=int, default=250, help="Сколько вершин брать из региона"
+        "--per-region", type=int, default=400, help="Сколько вершин брать из региона"
     )
     parser.add_argument(
         "-o", "--out", type=Path, help="Файл индекса (по умолчанию peaks/_index.json)"
@@ -120,7 +139,7 @@ def main() -> None:
         iso = isolation(peaks)
         ranked = sorted(
             range(len(peaks)),
-            key=lambda i: -((peaks[i].get("ele") or 0) * isolation_weight(iso[i])),
+            key=lambda i: -search_score(peaks[i], iso[i]),
         )
         taken = 0
         for i in ranked[: args.per_region]:
