@@ -42,7 +42,39 @@ out body;
 """
 
 
+def split_bbox(
+    bbox: tuple[float, float, float, float],
+) -> list[tuple[float, float, float, float]]:
+    """bbox через антимеридиан → два обычных bbox.
+
+    У Врангеля границы 177.5…−177.5: для Overpass (и для любого сравнения
+    min <= lon <= max) такой диапазон пуст, и регион приезжал без единой
+    вершины. Режем его по 180° меридиану на две части.
+    """
+    min_lon, min_lat, max_lon, max_lat = bbox
+    if min_lon <= max_lon:
+        return [bbox]
+    return [
+        (min_lon, min_lat, 180.0, max_lat),
+        (-180.0, min_lat, max_lon, max_lat),
+    ]
+
+
+def in_bbox(lat: float, lon: float, bbox: tuple[float, float, float, float]) -> bool:
+    """Точка внутри bbox, с учётом перехода через антимеридиан."""
+    min_lon, min_lat, max_lon, max_lat = bbox
+    lon_ok = min_lon <= lon <= max_lon if min_lon <= max_lon else (lon >= min_lon or lon <= max_lon)
+    return lon_ok and min_lat <= lat <= max_lat
+
+
 def fetch_peaks(bbox: tuple[float, float, float, float], retries: int = 3) -> list[dict]:
+    elements: list[dict] = []
+    for part in split_bbox(bbox):
+        elements.extend(fetch_peaks_part(part, retries))
+    return elements
+
+
+def fetch_peaks_part(bbox: tuple[float, float, float, float], retries: int = 3) -> list[dict]:
     min_lon, min_lat, max_lon, max_lat = bbox
     query = QUERY_TEMPLATE.format(
         min_lat=min_lat, min_lon=min_lon, max_lat=max_lat, max_lon=max_lon
@@ -179,12 +211,7 @@ def main() -> None:
         # JSONL уже может быть отфильтрован; режем по bbox, если он известен
         peaks, stats = convert_jsonl(args.from_file)
         if bbox:
-            min_lon, min_lat, max_lon, max_lat = bbox
-            peaks = [
-                p
-                for p in peaks
-                if min_lon <= p["lon"] <= max_lon and min_lat <= p["lat"] <= max_lat
-            ]
+            peaks = [p for p in peaks if in_bbox(p["lat"], p["lon"], bbox)]
     else:
         if not bbox:
             sys.exit(

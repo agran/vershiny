@@ -232,4 +232,52 @@ describe('DemSampler: отказ сети', () => {
     offline = false;
     expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
   });
+
+  it('обрыв соединения не залипает в pending навсегда', async () => {
+    // Обрыв приходит исключением, а не статусом: раньше отклонённый промис
+    // оставался в карте параллельных запросов, и каждый следующий расчёт
+    // панорамы падал на нём же — до перезагрузки страницы, даже с сетью
+    let broken = true;
+    const body = await encodeTile(slopeTile(), 2);
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith('index.json')) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      if (broken) throw new TypeError('Failed to fetch');
+      return new Response(body as unknown as BodyInit);
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    await sampler.loadIndex();
+
+    await expect(sampler.loadTile(0, 444, 92)).resolves.toBeNull();
+    broken = false;
+    expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
+  });
+
+  it('битый тайл не роняет расчёт и не запоминается дырой', async () => {
+    let corrupt = true;
+    const body = await encodeTile(slopeTile(), 2);
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith('index.json')) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      // Заголовок gzip есть, а тело — мусор: DecompressionStream бросит
+      if (corrupt) {
+        return new Response(
+          new Uint8Array([0x1f, 0x8b, 8, 0, 0, 0, 0, 0, 0, 3, 9, 9, 9, 9]) as unknown as BodyInit,
+        );
+      }
+      return new Response(body as unknown as BodyInit);
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    await sampler.loadIndex();
+
+    await expect(sampler.loadTile(0, 444, 92)).resolves.toBeNull();
+    corrupt = false;
+    expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
+  });
 });

@@ -52,6 +52,12 @@ export const ICON_DOWNLOADED = svg(
     '<path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16"/>',
 );
 
+/** Компас: стрелка в круге — кнопка «Включить компас» (iOS) */
+export const ICON_COMPASS = svg(
+  '<circle cx="12" cy="12" r="8.5"/>' +
+    '<path d="m15.5 8.5-8 3 3 8z"/><path d="m10.5 11.5 8-3-3 8z"/>',
+);
+
 /** Карта со сложенными листами */
 export const ICON_MAP = svg(
   '<path d="m9 5-5.2 2.1a1 1 0 0 0-.8 1V19a.5.5 0 0 0 .7.5L9 17"/>' +

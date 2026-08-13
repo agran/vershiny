@@ -114,4 +114,16 @@ describe('слежение за компасом', () => {
     const d = deg(next);
     expect(d > 350 || d < 20).toBe(true);
   });
+
+  it('NaN от датчика не липнет к азимуту', () => {
+    // Часть WebView и Firefox for Android кладут NaN в webkitCompassHeading,
+    // когда абсолютного азимута нет. Раньше один такой отсчёт превращал
+    // азимут в NaN навсегда: diff от NaN — тоже NaN, и рисовать было нечего
+    const kept = followAzimuth(deg2rad(100), NaN);
+    expect(Number.isFinite(kept)).toBe(true);
+    expect(deg(kept)).toBeCloseTo(100, 6);
+
+    // И обратно: испорченное состояние чинится первым же годным показанием
+    expect(deg(followAzimuth(NaN, deg2rad(42)))).toBeCloseTo(42, 6);
+  });
 });

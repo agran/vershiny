@@ -16,10 +16,12 @@ import {
 } from './ui/download';
 import type { ResultMessage, WorkerOutMessage, ViewpointResult } from './workers/horizon.worker';
 import type { SearchHit } from './core/search';
+import { isTypingTarget } from './ui/keys';
 import {
   ICON_AR,
   ICON_CALIBRATE,
   ICON_CLOSE,
+  ICON_COMPASS,
   ICON_DOWNLOAD,
   ICON_DOWNLOADED,
   ICON_DOWN,
@@ -166,6 +168,22 @@ resize();
 /** Предел наклона камеры, рад */
 const MAX_TILT = toRad(45);
 
+/**
+ * Отступы от краёв с учётом «безопасной зоны» — вырез камеры и полоса жестов
+ * на телефоне съедают углы, а именно в углах у нас всё и лежит.
+ *
+ * Стоят в начале файла: кнопки создаются в том числе при инициализации модуля
+ * (например, «Включить компас» на iOS), а обращение к ещё не вычисленной
+ * константе ниже по файлу уронило бы запуск целиком.
+ */
+const EDGE = 16;
+const edgeTop = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-top))`;
+const edgeBottom = (offset = 0): string =>
+  `calc(${EDGE + offset}px + env(safe-area-inset-bottom))`;
+const edgeLeft = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-left))`;
+const edgeRight = (offset = 0): string =>
+  `calc(${EDGE + offset}px + env(safe-area-inset-right))`;
+
 function draw(): void {
   if (!panorama) return;
   renderPanorama(ctx, panorama, view);
@@ -216,15 +234,31 @@ canvas.addEventListener('pointermove', (ev) => {
       const newPos = destination(lastOrigin, az, dist);
       requestCompute(newPos);
     }
-  } else {
-    // Поворот камеры
-    view.centerAzRad -= (dx / canvas.clientWidth) * view.fovRad;
-    view.tiltRad = Math.max(
-      -MAX_TILT,
-      Math.min(MAX_TILT, view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad),
-    );
-    draw();
+    return;
   }
+
+  // С датчиками свайп не крутит камеру (её всё равно вернёт следующее событие
+  // компаса), а подстраивает контуры под кадр: по горизонтали азимут, по
+  // вертикали наклон. Обе поправки запоминаются (core/calibration.ts).
+  // Раньше это делал второй слушатель на том же холсте — он получал dx = dy = 0,
+  // потому что lastX/lastY были уже обновлены здесь, и подстройка не работала
+  if (orientationTracker.current.source === 'sensor') {
+    if (dy) {
+      const deltaDeg = ((dy / canvas.clientHeight) * view.fovVRad * 180) / Math.PI;
+      setCalibration({ tiltDeg: getCalibration().tiltDeg + deltaDeg });
+    }
+    // Пересобирает состояние и дёргает обработчик — он и перерисует кадр
+    orientationTracker.addManualOffset(-(dx / canvas.clientWidth) * view.fovRad);
+    return;
+  }
+
+  // Поворот камеры (без датчиков: десктоп, отказ в доступе к компасу)
+  view.centerAzRad -= (dx / canvas.clientWidth) * view.fovRad;
+  view.tiltRad = Math.max(
+    -MAX_TILT,
+    Math.min(MAX_TILT, view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad),
+  );
+  draw();
 });
 
 canvas.addEventListener('pointerup', () => (dragging = false));
@@ -243,6 +277,10 @@ const HEIGHT_STEP_M = 100; // шаг по высоте
 
 window.addEventListener('keydown', (ev) => {
   if (!panorama) return;
+  // Набор текста — не навигация: в поиске по карте «Washington» и «Ushba»
+  // теряли буквы w/a/s/d, а стрелки вместо курсора двигали наблюдателя.
+  // Ползунки настроек (input[type=range]) подстраиваются теми же стрелками
+  if (isTypingTarget(ev.target) || isTypingTarget(document.activeElement)) return;
   const az = view.centerAzRad;
   let dAz = 0;
   let dDist = 0;
@@ -308,6 +346,36 @@ import { orientationTracker } from './core/orientation';
 import { getCalibration, setCalibration, DEFAULT_CAMERA_FOV_DEG } from './core/calibration';
 import { destination } from './core/geo';
 
+/**
+ * Кнопка «Включить компас» — только для iOS.
+ *
+ * Там доступ к датчикам даётся исключительно из обработчика жеста
+ * пользователя: запрос при загрузке страницы Safari отклоняет молча, и
+ * компас не включается уже никогда. Поэтому запрашиваем по нажатию, а сама
+ * кнопка живёт ровно столько, сколько разрешения нет.
+ *
+ * Объявление стоит до `start()`: на iOS обработчик вызывается синхронно из
+ * него же, и обращение к ещё не инициализированной переменной уронило бы
+ * запуск целиком.
+ */
+let compassBtn: HTMLButtonElement | null = null;
+function updateCompassButton(): void {
+  if (!orientationTracker.needsPermission) {
+    compassBtn?.remove();
+    compassBtn = null;
+    return;
+  }
+  if (compassBtn) return;
+  compassBtn = makeButton(
+    ICON_COMPASS,
+    t('enableCompass'),
+    `right:${edgeRight()};top:${edgeTop(60)}`,
+  );
+  compassBtn.onclick = () => {
+    void orientationTracker.requestPermission().then(() => updateCompassButton());
+  };
+}
+
 orientationTracker.start((state) => {
   if (state.source === 'sensor') {
     const tiltOffset = (getCalibration().tiltDeg * Math.PI) / 180;
@@ -315,20 +383,9 @@ orientationTracker.start((state) => {
     view.tiltRad = Math.max(-MAX_TILT, Math.min(MAX_TILT, state.tiltRad + tiltOffset));
     draw();
   }
+  updateCompassButton();
 });
-
-// При ручном свайпе — подстраиваем контуры под кадр: по горизонтали азимут,
-// по вертикали наклон. Обе поправки запоминаются (core/calibration.ts)
-canvas.addEventListener('pointermove', (ev) => {
-  if (!dragging || orientationTracker.current.source !== 'sensor') return;
-  const dx = ev.clientX - lastX;
-  const dy = ev.clientY - lastY;
-  orientationTracker.addManualOffset(-(dx / canvas.clientWidth) * view.fovRad);
-  if (dy) {
-    const deltaDeg = ((dy / canvas.clientHeight) * view.fovVRad * 180) / Math.PI;
-    setCalibration({ tiltDeg: getCalibration().tiltDeg + deltaDeg });
-  }
-});
+updateCompassButton();
 
 // --- Worker горизонта ---
 
@@ -756,18 +813,6 @@ function applyDownloadState(): void {
 }
 
 /**
- * Отступы от краёв с учётом «безопасной зоны» — вырез камеры и полоса жестов
- * на телефоне съедают углы, а именно в углах у нас всё и лежит.
- */
-const EDGE = 16;
-const edgeTop = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-top))`;
-const edgeBottom = (offset = 0): string =>
-  `calc(${EDGE + offset}px + env(safe-area-inset-bottom))`;
-const edgeLeft = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-left))`;
-const edgeRight = (offset = 0): string =>
-  `calc(${EDGE + offset}px + env(safe-area-inset-right))`;
-
-/**
  * Фабрика круглых кнопок действий.
  * icon — инлайновый SVG (см. ui/icons.ts) или текст; SVG рисуется одинаково
  * на всех платформах, в отличие от эмодзи.
@@ -936,7 +981,9 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   }
 
   if (!silent) setStatus(t('calibrating'));
-  const { extractSkyline, matchSkyline, MIN_CONFIDENCE } = await import('./core/skyline');
+  const { extractSkyline, matchSkyline, horizonEnvelope, MIN_CONFIDENCE } = await import(
+    './core/skyline'
+  );
   const profile = extractSkyline(frame.rgba, frame.width, frame.height);
   const match = matchSkyline(profile, {
     centerAzRad: view.centerAzRad,
@@ -944,7 +991,13 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
     fovRad: view.fovRad,
     fovVRad: view.fovVRad,
     horizonFrac: HORIZON_FRAC,
-    horizon: panorama.horizon,
+    // Совмещаем кадр с силуэтом, а не с ближней корзиной 0–5 км: за неё в
+    // горах отвечает трава под ногами, а видно человеку дальний хребет
+    horizon: horizonEnvelope([
+      ...(panorama.crests ?? []),
+      ...(panorama.layers ?? []),
+      panorama.horizon,
+    ]),
     stepRad: panorama.stepRad,
   });
 

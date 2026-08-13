@@ -52,4 +52,21 @@ describe('terrarium', () => {
 
     await expect(sampler.loadTile(12, 100, 100)).resolves.toBeNull();
   });
+
+  it('обрыв соединения не залипает в pending навсегда', async () => {
+    // Отклонённый промис оставался в карте параллельных запросов, и каждый
+    // следующий расчёт панорамы падал на нём же — даже когда сеть вернулась
+    let calls = 0;
+    const fetchFn = (async () => {
+      calls++;
+      if (calls === 1) throw new TypeError('Failed to fetch');
+      return new Response('nope', { status: 404 });
+    }) as unknown as typeof fetch;
+    const sampler = new TerrariumSampler({ fetchFn });
+
+    await expect(sampler.loadTile(12, 100, 100)).resolves.toBeNull();
+    // Второй запрос уходит в сеть заново, а не получает старый отказ
+    await expect(sampler.loadTile(12, 100, 100)).resolves.toBeNull();
+    expect(calls).toBe(2);
+  });
 });

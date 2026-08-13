@@ -201,16 +201,38 @@ export function matchSkyline(
     const f = idx - i0;
     const a = horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
     const b = horizon[((i0 + 1) % horizon.length + horizon.length) % horizon.length];
+    // Луч без рельефа помечен −Infinity, и интерполяция по нему даёт NaN даже
+    // при f = 0 (−Inf + Inf·0). Такое значение надо возвращать явно, чтобы
+    // вызывающий его отбросил, а не подмешал в статистику
+    if (!Number.isFinite(a) || !Number.isFinite(b)) return NaN;
     return a + (b - a) * f;
   };
 
-  /** Медиана модулей расхождения при заданных поправках */
+  /**
+   * Сколько колонок должно совпасть с рельефом, чтобы ответу можно было верить.
+   *
+   * Без нижней границы выигрывает сдвиг, при котором в горизонт попали
+   * две-три колонки: медиана по ним всегда мала, и мимо-ответ получает лучшую
+   * невязку, чем правильный.
+   */
+  const minValid = Math.max(8, Math.round(cols.length * 0.5));
+
+  /**
+   * Медиана модулей расхождения при заданных поправках.
+   *
+   * Колонки, где рельефа нет (дыра в горизонте), выбрасываются: NaN ломает и
+   * сравнение (`sort` с NaN оставляет массив в произвольном порядке), и саму
+   * медиану, и baseline для доверия — так неверная поправка получала
+   * confidence под единицу и молча уводила панораму.
+   */
   const residual = (dAz: number, dTilt: number): number => {
     const errors: number[] = [];
     for (let k = 0; k < cols.length; k++) {
       const dem = demAt(centerAzRad + dAz + cols[k]);
+      if (!Number.isFinite(dem)) continue;
       errors.push(Math.abs(frameElev[k] + dTilt - dem));
     }
+    if (errors.length < minValid) return Infinity;
     errors.sort((a, b) => a - b);
     return errors[errors.length >> 1];
   };
@@ -245,6 +267,10 @@ export function matchSkyline(
   // Доверие: насколько найденный минимум лучше «типичного» сдвига. Совпадение
   // само по себе ничего не значит — ровный горизонт над морем совпадёт при
   // любом азимуте, и такой ответ надо отбросить
+  if (!Number.isFinite(best.err)) {
+    // Рельефа в кадре почти нет ни при каком сдвиге: сравнивать нечего
+    return { azimuthRad: 0, tiltRad: 0, confidence: 0, columns: cols.length };
+  }
   const baseline = medianResidualAcrossShifts(residual, maxAzRad, best.tilt);
   const confidence = baseline > 0 ? Math.max(0, 1 - best.err / baseline) : 0;
 
@@ -265,8 +291,35 @@ function medianResidualAcrossShifts(
   const step = (3 * Math.PI) / 180;
   const values: number[] = [];
   for (let az = -maxAzRad; az <= maxAzRad + 1e-9; az += step) {
-    values.push(residual(az, tilt));
+    const err = residual(az, tilt);
+    // Сдвиги, где рельефа под кадром почти нет, не характеризуют «типичную»
+    // ошибку: с Infinity в выборке медиана перестаёт быть числом
+    if (Number.isFinite(err)) values.push(err);
   }
+  if (!values.length) return 0;
   values.sort((a, b) => a - b);
   return values[values.length >> 1];
+}
+
+/**
+ * Огибающая силуэта по корзинам дистанций: для каждого луча — самая высокая
+ * линия рельефа из всех слоёв.
+ *
+ * Автокалибровке нельзя подавать ближний слой (0–5 км): в горах смотрят на
+ * хребет за десятки километров, и ближний слой почти целиком −Infinity —
+ * сравнивать кадр не с чем. Человек в кадре видит именно верхнюю линию, её и
+ * надо совмещать.
+ */
+export function horizonEnvelope(profiles: (Float32Array | undefined)[]): Float32Array {
+  let length = 0;
+  for (const p of profiles) if (p && p.length > length) length = p.length;
+  const out = new Float32Array(length).fill(-Infinity);
+  for (const p of profiles) {
+    if (!p || p.length !== length) continue;
+    for (let i = 0; i < length; i++) {
+      const v = p[i];
+      if (Number.isFinite(v) && v > out[i]) out[i] = v;
+    }
+  }
+  return out;
 }

@@ -9,6 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   extractSkyline,
+  horizonEnvelope,
   matchSkyline,
   MIN_CONFIDENCE,
   type SkylineMatchOptions,
@@ -166,5 +167,88 @@ describe('совмещение кадра с рельефом', () => {
 
     // Медианная ошибка не даёт испорченной половине увести результат
     expect((match.azimuthRad * 180) / Math.PI).toBeCloseTo(6, 0);
+  });
+
+  it('дыры в горизонте не портят ни поправку, ни доверие', () => {
+    // Лучи без рельефа помечены −Infinity. Интерполяция по ним давала NaN,
+    // а NaN ломал сортировку: «медианой» становилось случайное число, и
+    // неверная поправка (ошибка 6°) получала confidence 0.99997
+    const azTrue = deg(60);
+    const compassError = deg(6);
+    const frame = renderFrame(azTrue, 0);
+    const profile = extractSkyline(frame, 320, 240);
+
+    for (const holeDeg of [6, 12, 24]) {
+      const holed = Float32Array.from(HORIZON);
+      const from = Math.round((deg(60 - holeDeg / 2) / (2 * Math.PI)) * HORIZON.length);
+      const to = Math.round((deg(60 + holeDeg / 2) / (2 * Math.PI)) * HORIZON.length);
+      for (let i = from; i < to; i++) holed[i] = -Infinity;
+
+      const match = matchSkyline(profile, {
+        ...VIEW,
+        horizon: holed,
+        centerAzRad: azTrue - compassError,
+        tiltRad: 0,
+      });
+
+      expect(match.confidence).toBeGreaterThan(MIN_CONFIDENCE);
+      expect((match.azimuthRad * 180) / Math.PI).toBeCloseTo(6, 0);
+    }
+  });
+
+  it('рельефа под кадром почти нет — доверия нет тоже', () => {
+    // Дыра в 40° при кадре в 70°: совмещать не с чем, и ответ (какой бы он
+    // ни был) не должен пройти порог применения
+    const azTrue = deg(60);
+    const holed = Float32Array.from(HORIZON);
+    const from = Math.round((deg(40) / (2 * Math.PI)) * HORIZON.length);
+    const to = Math.round((deg(80) / (2 * Math.PI)) * HORIZON.length);
+    for (let i = from; i < to; i++) holed[i] = -Infinity;
+
+    const profile = extractSkyline(renderFrame(azTrue, 0), 320, 240);
+    const match = matchSkyline(profile, {
+      ...VIEW,
+      horizon: holed,
+      centerAzRad: azTrue - deg(6),
+      tiltRad: 0,
+    });
+
+    expect(match.confidence).toBeLessThan(MIN_CONFIDENCE);
+  });
+
+  it('сплошная дыра в горизонте — честный отказ, а не уверенный мусор', () => {
+    const empty = new Float32Array(HORIZON.length).fill(-Infinity);
+    const frame = renderFrame(deg(60), 0);
+    const profile = extractSkyline(frame, 320, 240);
+
+    const match = matchSkyline(profile, {
+      ...VIEW,
+      horizon: empty,
+      centerAzRad: deg(60),
+      tiltRad: 0,
+    });
+
+    expect(match.confidence).toBe(0);
+    expect(match.azimuthRad).toBe(0);
+  });
+});
+
+describe('огибающая силуэта', () => {
+  it('берёт по каждому лучу самый высокий слой', () => {
+    const near = Float32Array.from([-Infinity, 0.1, -Infinity]);
+    const far = Float32Array.from([0.3, 0.05, -Infinity]);
+    const env = horizonEnvelope([near, far]);
+
+    expect(env[0]).toBeCloseTo(0.3);
+    expect(env[1]).toBeCloseTo(0.1);
+    // Луч, где рельефа нет ни в одном слое, так и остаётся дырой
+    expect(env[2]).toBe(-Infinity);
+  });
+
+  it('не спотыкается о пустые и разной длины профили', () => {
+    const env = horizonEnvelope([undefined, new Float32Array(0), Float32Array.from([0.2, 0.4])]);
+    expect(env.length).toBe(2);
+    expect(env[0]).toBeCloseTo(0.2);
+    expect(env[1]).toBeCloseTo(0.4);
   });
 });

@@ -68,6 +68,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   language: { ru: 'Язык', en: 'Language' },
   compassAccuracy: { ru: 'Точность компаса', en: 'Compass accuracy' },
   compassUnknown: { ru: 'нет данных', en: 'no data' },
+  enableCompass: { ru: 'Включить компас', en: 'Enable compass' },
   resetOffset: { ru: 'Сбросить подстройку', en: 'Reset offset' },
   calibration: { ru: 'Калибровка', en: 'Calibration' },
   calibrationHint: {

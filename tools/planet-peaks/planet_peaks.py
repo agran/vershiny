@@ -170,6 +170,19 @@ def parse_ele(raw: str | None) -> float | None:
         return None
 
 
+def in_bbox(lat: float, lon: float, bbox: tuple[float, float, float, float]) -> bool:
+    """Точка внутри bbox, с учётом перехода через антимеридиан.
+
+    У Врангеля границы 177.5…−177.5, и прямое сравнение `min <= lon <= max`
+    ложно для любой точки: региональная выжимка приезжала пустой.
+    """
+    min_lon, min_lat, max_lon, max_lat = bbox
+    lon_ok = (
+        min_lon <= lon <= max_lon if min_lon <= max_lon else (lon >= min_lon or lon <= max_lon)
+    )
+    return lon_ok and min_lat <= lat <= max_lat
+
+
 def emit_peak(
     out,
     lat: float,
@@ -180,10 +193,11 @@ def emit_peak(
     region_writers: dict | None = None,
 ) -> None:
     stats["peaks"] += 1
-    if bbox:
-        min_lon, min_lat, max_lon, max_lat = bbox
-        if not (min_lon <= lon <= max_lon and min_lat <= lat <= max_lat):
-            stats["outside"] += 1
+    # Фильтр по bbox: раньше счётчик «вне bbox» увеличивался, но точка всё
+    # равно писалась в выход — --bbox не сокращал файл, как обещает описание
+    if bbox and not in_bbox(lat, lon, bbox):
+        stats["outside"] += 1
+        return
 
     name = pick_name(tags)
     if not name:
@@ -212,8 +226,7 @@ def emit_peak(
     # Региональные выжимки (все регионы из regions.json за один проход)
     if region_writers:
         for region_name, (rbbox, fh) in region_writers.items():
-            rmin_lon, rmin_lat, rmax_lon, rmax_lat = rbbox
-            if rmin_lon <= lon <= rmax_lon and rmin_lat <= lat <= rmax_lat:
+            if in_bbox(lat, lon, rbbox):
                 fh.write(line)
                 stats[f"region:{region_name}"] = stats.get(f"region:{region_name}", 0) + 1
 
@@ -393,7 +406,7 @@ def main() -> None:
     parser.add_argument("-o", "--out", type=Path, required=True, help="JSONL на выход")
     parser.add_argument(
         "--bbox",
-        help="minLon,minLat,maxLon,maxLat — статистика «вне bbox» (необязательно)",
+        help="minLon,minLat,maxLon,maxLat — писать только вершины внутри (необязательно)",
     )
     parser.add_argument(
         "--regions-dir",

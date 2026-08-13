@@ -240,40 +240,48 @@ export class DemSampler {
 
     const ext = this.index?.tileExt ?? '.bin';
     const promise = (async () => {
-      // Офлайн-хранилище: тайлы не меняются, поэтому кеш безусловно свежий
-      const db = await this.db();
-      if (db) {
-        const stored = await db.getDemTile(key);
-        if (stored) {
-          const tile = await this.decodeTile(
-            stored.buffer.slice(
-              stored.byteOffset,
-              stored.byteOffset + stored.byteLength,
-            ) as ArrayBuffer,
-            lodIndex,
-          );
-          this.tiles.set(key, tile);
-          this.pending.delete(key);
-          return tile;
+      // Любой отказ (обрыв сети, CORS, запрет IndexedDB, битый тайл) — это
+      // «сейчас нет», а не «пусто здесь»: возвращаем null, дыру не запоминаем
+      // и обязательно убираем запись из pending. Иначе отклонённый промис
+      // оставался в карте навсегда и ронял каждый следующий расчёт панорамы
+      // до перезагрузки страницы — даже когда сеть уже вернулась
+      try {
+        // Офлайн-хранилище: тайлы не меняются, поэтому кеш безусловно свежий
+        const db = await this.db().catch(() => null);
+        if (db) {
+          const stored = await db.getDemTile(key).catch(() => undefined);
+          if (stored) {
+            const tile = await this.decodeTile(
+              stored.buffer.slice(
+                stored.byteOffset,
+                stored.byteOffset + stored.byteLength,
+              ) as ArrayBuffer,
+              lodIndex,
+            );
+            this.tiles.set(key, tile);
+            return tile;
+          }
         }
-      }
 
-      const res = await this.fetchFn(`${this.baseUrl}/${lodIndex}/${tx}/${ty}${ext}`);
-      let tile: Int16Array | null = null;
-      if (res.ok) {
-        tile = await this.decodeTile(await res.arrayBuffer(), lodIndex);
-      } else if (res.status === 404) {
-        tile = null; // вне покрытия (море, край региона, не попал в бюджет)
-      } else {
-        // Временный отказ: офлайн Service Worker отдаёт 503 на всё, чего нет
-        // в кеше. Это не повод ронять весь расчёт — рисуем по тому, что есть,
-        // и не запоминаем «дыру»: с возвратом сети тайл догрузится
-        this.pending.delete(key);
+        const res = await this.fetchFn(`${this.baseUrl}/${lodIndex}/${tx}/${ty}${ext}`);
+        let tile: Int16Array | null = null;
+        if (res.ok) {
+          tile = await this.decodeTile(await res.arrayBuffer(), lodIndex);
+        } else if (res.status === 404) {
+          tile = null; // вне покрытия (море, край региона, не попал в бюджет)
+        } else {
+          // Временный отказ: офлайн Service Worker отдаёт 503 на всё, чего нет
+          // в кеше. Это не повод ронять весь расчёт — рисуем по тому, что есть,
+          // и не запоминаем «дыру»: с возвратом сети тайл догрузится
+          return null;
+        }
+        this.tiles.set(key, tile);
+        return tile;
+      } catch {
         return null;
+      } finally {
+        this.pending.delete(key);
       }
-      this.tiles.set(key, tile);
-      this.pending.delete(key);
-      return tile;
     })();
 
     this.pending.set(key, promise);

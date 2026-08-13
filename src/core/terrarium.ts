@@ -126,40 +126,46 @@ export class TerrariumSampler {
     if (inflight) return inflight;
 
     const promise = (async () => {
-      const db = await this.db();
+      // Любой отказ — «сейчас нет», а не «пусто здесь»: возвращаем null, дыру
+      // не запоминаем, запись из pending снимаем в finally. Отклонённый промис,
+      // залипший в pending, ронял бы каждый следующий расчёт до перезагрузки
+      try {
+        const db = await this.db().catch(() => null);
 
-      // 1. Офлайн-кеш (IndexedDB) — работает без сети
-      if (db) {
-        // Запрет хранилища (приватный режим) не должен ронять расчёт
-        const offline = await db.getTerrariumTile(key).catch(() => undefined);
-        if (offline) {
-          const tile = await this.decodePng(offline);
-          this.tiles.set(key, tile);
-          this.pending.delete(key);
-          return tile;
+        // 1. Офлайн-кеш (IndexedDB) — работает без сети
+        if (db) {
+          // Запрет хранилища (приватный режим) не должен ронять расчёт
+          const offline = await db.getTerrariumTile(key).catch(() => undefined);
+          if (offline) {
+            const tile = await this.decodePng(offline);
+            this.tiles.set(key, tile);
+            return tile;
+          }
         }
-      }
 
-      // 2. Сеть (через SW cache-first, если он зарегистрирован)
-      const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
-      let tile: Float32Array | null = null;
-      if (res.ok) {
-        const raw = new Uint8Array(await res.arrayBuffer());
-        tile = await this.decodePng(raw);
-        // Сохраняем в офлайн-кеш для следующего запуска
-        if (db) db.saveTerrariumTile(key, raw).catch(() => {});
-      } else if (res.status === 404) {
-        tile = null; // вне покрытия (океан южнее/севернее 85°)
-      } else {
-        // Офлайн Service Worker отвечает 503 на всё, чего нет в кеше. Раньше
-        // это летело исключением через весь worker, и вместо панорамы человек
-        // видел «Ошибка: HTTP 503» — при том что рельеф лежал в хранилище
-        this.pending.delete(key);
+        // 2. Сеть (через SW cache-first, если он зарегистрирован)
+        const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
+        let tile: Float32Array | null = null;
+        if (res.ok) {
+          const raw = new Uint8Array(await res.arrayBuffer());
+          tile = await this.decodePng(raw);
+          // Сохраняем в офлайн-кеш для следующего запуска
+          if (db) db.saveTerrariumTile(key, raw).catch(() => {});
+        } else if (res.status === 404) {
+          tile = null; // вне покрытия (океан южнее/севернее 85°)
+        } else {
+          // Офлайн Service Worker отвечает 503 на всё, чего нет в кеше. Раньше
+          // это летело исключением через весь worker, и вместо панорамы человек
+          // видел «Ошибка: HTTP 503» — при том что рельеф лежал в хранилище
+          return null;
+        }
+        this.tiles.set(key, tile);
+        return tile;
+      } catch {
         return null;
+      } finally {
+        this.pending.delete(key);
       }
-      this.tiles.set(key, tile);
-      this.pending.delete(key);
-      return tile;
     })();
 
     this.pending.set(key, promise);

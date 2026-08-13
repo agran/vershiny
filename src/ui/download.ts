@@ -57,11 +57,17 @@ export function inBBox(pos: LatLon, bbox: [number, number, number, number]): boo
   return lonOk && pos.lat >= minLat && pos.lat <= maxLat;
 }
 
-/** Центр bbox — корректно и для перехода через антимеридиан */
-function bboxCenter(bbox: [number, number, number, number]): LatLon {
+/**
+ * Центр bbox — корректно и для перехода через антимеридиан.
+ *
+ * Наивная формула для Врангеля (177.5…−177.5) давала долготу 0: детальную
+ * зону качали вокруг нулевого меридиана, то есть в Гвинейском заливе, а не у
+ * острова. Считаем по развёрнутому диапазону и заворачиваем результат обратно.
+ */
+export function bboxCenter(bbox: [number, number, number, number]): LatLon {
   const [minLon, minLat, maxLon, maxLat] = bbox;
-  const lon =
-    minLon <= maxLon ? (minLon + maxLon) / 2 : (minLon + maxLon + 360) / 2 - 180;
+  const east = maxLon < minLon ? maxLon + 360 : maxLon;
+  const lon = (((minLon + east) / 2 + 540) % 360) - 180;
   return { lat: (minLat + maxLat) / 2, lon };
 }
 

@@ -12,6 +12,8 @@ import {
   findRegionForPosition,
   loadRegions,
   resetRegionsCache,
+  bboxCenter,
+  inBBox,
   type RegionInfo,
   type RegionsStore,
 } from '../src/ui/download';
@@ -64,6 +66,28 @@ describe('предложение сменить регион', () => {
   it('переживает регион, которого нет в реестре', () => {
     // Ключ мог остаться от старой версии реестра в сохранённых настройках
     expect(suggestRegionForPosition(FISHT, 'нет-такого', REGIONS)).toBe('caucasus-west');
+  });
+});
+
+describe('центр региона', () => {
+  it('обычный bbox — середина по обеим осям', () => {
+    expect(bboxCenter([41, 42, 44.5, 44.3])).toEqual({ lat: 43.15, lon: 42.75 });
+  });
+
+  it('bbox через антимеридиан не уезжает на нулевой меридиан', () => {
+    // Для Врангеля (177.5…−177.5) наивная формула давала долготу 0: детальные
+    // тайлы качались вокруг Гвинейского залива вместо острова
+    const center = bboxCenter([177.5, 70.5, -177.5, 72]);
+    expect(Math.abs(center.lon)).toBeCloseTo(180, 6);
+    expect(center.lat).toBeCloseTo(71.25, 6);
+    expect(inBBox(center, [177.5, 70.5, -177.5, 72])).toBe(true);
+  });
+
+  it('несимметричный переход тоже попадает внутрь', () => {
+    const bbox: [number, number, number, number] = [170, 50, -170, 60];
+    const center = bboxCenter(bbox);
+    expect(Math.abs(center.lon)).toBeCloseTo(180, 6);
+    expect(inBBox(center, bbox)).toBe(true);
   });
 });
 

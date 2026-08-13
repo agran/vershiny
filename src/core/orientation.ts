@@ -65,6 +65,11 @@ export function isAbsoluteReading(
  * настоящий поворот отрабатываем целиком.
  */
 export function followAzimuth(prevRad: number, targetRad: number): number {
+  // Один NaN от датчика (Firefox for Android и часть WebView кладут его в
+  // webkitCompassHeading, когда абсолютного азимута нет) иначе прилипал
+  // навсегда: diff от NaN — NaN, и вся отрисовка получала NaN-координаты
+  if (!Number.isFinite(targetRad)) return Number.isFinite(prevRad) ? normalizeAngle(prevRad) : 0;
+  if (!Number.isFinite(prevRad)) return normalizeAngle(targetRad);
   const diff = shortestAngle(targetRad - prevRad);
   const k = Math.min(1, Math.max(MIN_FOLLOW, Math.abs(diff) / MOTION_RAD));
   return normalizeAngle(prevRad + diff * k);
@@ -127,6 +132,10 @@ class OrientationTracker {
   private lastEmitted = 0;
   private gyroSamples: number[] = [];
   private listening = false;
+  /** Ждём жеста пользователя для запроса доступа к датчикам (iOS 13+) */
+  private permissionPending = false;
+  /** Слушатели событий ориентации: нужны, чтобы stop() их действительно снял */
+  private handler: ((ev: Event) => void) | null = null;
   /** Пришло ли хоть одно абсолютное показание (север, а не произвольный ноль) */
   private seenAbsolute = false;
   /** Сглаженный азимут без ручной поправки, рад */
@@ -137,47 +146,68 @@ class OrientationTracker {
     return (getCalibration().azimuthDeg * Math.PI) / 180;
   }
 
+  /**
+   * Нужен ли жест пользователя, чтобы включить компас.
+   *
+   * Интерфейс по этому флагу показывает кнопку «Включить компас»: на iOS
+   * `requestPermission()` работает только из обработчика жеста, а вызов при
+   * загрузке страницы Safari отклоняет молча — компас не включался никогда,
+   * и на iPhone оставался только ручной свайп.
+   */
+  get needsPermission(): boolean {
+    return this.permissionPending && !this.listening;
+  }
+
   start(callback: OrientationCallback): void {
     this.callback = callback;
     if (this.listening) return;
 
-    // iOS 13+: запрос разрешения
-    if (
-      typeof DeviceOrientationEvent !== 'undefined' &&
-      'requestPermission' in DeviceOrientationEvent
-    ) {
-      // Нужен user gesture — показываем кнопку «Включить компас»
-      this.requestPermissionIOS();
+    // iOS 13+: доступ к датчикам даётся только из обработчика жеста
+    if (needsUserGesture()) {
+      this.permissionPending = true;
+      this.state.source = 'manual';
+      this.callback(this.state);
       return;
     }
 
     this.listen();
   }
 
-  private async requestPermissionIOS(): Promise<void> {
+  /**
+   * Запрос доступа к датчикам. Вызывать только из обработчика жеста
+   * пользователя (нажатие кнопки), иначе iOS откажет.
+   *
+   * @returns удалось ли включить компас
+   */
+  async requestPermission(): Promise<boolean> {
+    if (this.listening) return true;
     try {
       const DOE = DeviceOrientationEvent as unknown as {
         requestPermission?: () => Promise<string>;
       };
       const result = await DOE.requestPermission?.();
       if (result === 'granted') {
+        this.permissionPending = false;
         this.listen();
-      } else {
-        this.state.source = 'manual';
-        this.callback?.(this.state);
+        return true;
       }
     } catch {
-      this.state.source = 'manual';
-      this.callback?.(this.state);
+      // Отказ или вызов вне жеста — остаёмся на ручной подстройке
     }
+    this.state.source = 'manual';
+    this.callback?.(this.state);
+    return false;
   }
 
   private listen(): void {
+    if (this.listening) return;
     this.listening = true;
+    this.permissionPending = false;
 
     // Оба события ведут в один обработчик, но относительное (произвольный
     // ноль) используется только пока нет абсолютного — см. isAbsoluteReading
     const handler = (ev: Event) => this.onOrientation(ev as DeviceOrientationEvent, ev.type);
+    this.handler = handler;
     if ('ondeviceorientationabsolute' in window) {
       window.addEventListener('deviceorientationabsolute', handler, true);
     }
@@ -194,19 +224,35 @@ class OrientationTracker {
       webkitCompassHeading?: number;
       webkitCompassAccuracy?: number;
     };
-    const hasCompass = webkit.webkitCompassHeading !== undefined;
+    // Проверка именно на конечность, а не на undefined: часть WebView и
+    // Firefox for Android кладут в это поле NaN, когда абсолютного азимута
+    // нет. Раньше такое показание считалось абсолютным, NaN расползался по
+    // всему состоянию и рисовать становилось нечего — до перезагрузки
+    const heading = webkit.webkitCompassHeading;
+    const hasCompass = Number.isFinite(heading);
     if (!isAbsoluteReading(eventType, hasCompass, ev.absolute === true, this.seenAbsolute)) {
       return;
     }
+
+    const alphaDeg = hasCompass ? 360 - (heading as number) : (ev.alpha ?? 0);
+    const betaDeg = ev.beta ?? 0;
+    const gammaDeg = ev.gamma ?? 0;
+    if (!Number.isFinite(alphaDeg) || !Number.isFinite(betaDeg) || !Number.isFinite(gammaDeg)) {
+      return;
+    }
+
+    const look = lookFromDeviceOrientation(alphaDeg, betaDeg, gammaDeg);
+    if (!Number.isFinite(look.azimuthRad) || !Number.isFinite(look.elevationRad)) return;
+
+    // Флаг «абсолютное показание уже видели» ставим только по годным данным:
+    // иначе одно битое событие закрывало дорогу относительным показаниям,
+    // которые в этот момент — единственный рабочий источник
     if (eventType === 'deviceorientationabsolute' || hasCompass || ev.absolute) {
       this.seenAbsolute = true;
     }
 
     const now = performance.now();
     const accuracy = hasCompass ? (webkit.webkitCompassAccuracy ?? -1) : -1;
-    const alphaDeg = hasCompass ? 360 - webkit.webkitCompassHeading! : (ev.alpha ?? 0);
-
-    const look = lookFromDeviceOrientation(alphaDeg, ev.beta ?? 0, ev.gamma ?? 0);
 
     // Комплементарный фильтр: сглаживаем скачки компаса
     this.gyroSamples.push(look.azimuthRad);
@@ -263,9 +309,27 @@ class OrientationTracker {
   }
 
   stop(): void {
+    // Слушатели снимаем вместе с флагом: иначе повторный start() навешивал бы
+    // второй комплект обработчиков поверх живого первого
+    if (this.handler) {
+      window.removeEventListener('deviceorientationabsolute', this.handler, true);
+      window.removeEventListener('deviceorientation', this.handler, true);
+      this.handler = null;
+    }
     this.listening = false;
     this.callback = null;
   }
+}
+
+/**
+ * Требует ли платформа жеста пользователя для доступа к датчикам (iOS 13+).
+ */
+export function needsUserGesture(): boolean {
+  return (
+    typeof DeviceOrientationEvent !== 'undefined' &&
+    typeof (DeviceOrientationEvent as unknown as { requestPermission?: unknown })
+      .requestPermission === 'function'
+  );
 }
 
 /** Круговое среднее углов (рад) */
