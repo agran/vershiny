@@ -32,13 +32,13 @@ jobs:
 
       - run: npm ci
 
-      - name: Типы и тесты
-        run: |
-          npx tsc
-          npm test
-
-      - name: Сборка
+      - name: Сборка (приложение + Service Worker)
         run: npm run build
+
+      # После сборки: тест sw.test.ts проверяет, что dist/sw.js на месте —
+      # без него офлайн-режим молча не работает
+      - name: Типы и тесты
+        run: npm test
 
       - uses: actions/configure-pages@v5
 
