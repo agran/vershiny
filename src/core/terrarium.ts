@@ -126,14 +126,16 @@ export class TerrariumSampler {
     if (inflight) return inflight;
 
     const promise = (async () => {
-      // 1. Офлайн-кеш (IndexedDB) — работает без сети
       const db = await this.db();
+
+      // 1. Офлайн-кеш (IndexedDB) — работает без сети
       if (db) {
         const offline = await db.getTerrariumTile(key);
         if (offline) {
-          this.tiles.set(key, offline);
+          const tile = await this.decodePng(offline);
+          this.tiles.set(key, tile);
           this.pending.delete(key);
-          return offline;
+          return tile;
         }
       }
 
@@ -141,18 +143,10 @@ export class TerrariumSampler {
       const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
       let tile: Float32Array | null = null;
       if (res.ok) {
-        const blob = await res.blob();
-        const bitmap = await createImageBitmap(blob);
-        const ctx = this.ensureCanvas();
-        ctx.drawImage(bitmap, 0, 0);
-        bitmap.close();
-        const img = ctx.getImageData(0, 0, TILE_PX, TILE_PX).data;
-        tile = new Float32Array(TILE_PX * TILE_PX);
-        for (let i = 0; i < tile.length; i++) {
-          tile[i] = decodeTerrarium(img[i * 4], img[i * 4 + 1], img[i * 4 + 2]);
-        }
+        const raw = new Uint8Array(await res.arrayBuffer());
+        tile = await this.decodePng(raw);
         // Сохраняем в офлайн-кеш для следующего запуска
-        if (db) db.saveTerrariumTile(key, tile).catch(() => {});
+        if (db) db.saveTerrariumTile(key, raw).catch(() => {});
       } else if (res.status === 404) {
         tile = null; // вне покрытия (океан южнее/севернее 85°)
       } else {
@@ -165,6 +159,21 @@ export class TerrariumSampler {
 
     this.pending.set(key, promise);
     return promise;
+  }
+
+  /** PNG-байты → сетка высот 256×256 */
+  private async decodePng(bytes: Uint8Array): Promise<Float32Array> {
+    const blob = new Blob([bytes as BlobPart], { type: 'image/png' });
+    const bitmap = await createImageBitmap(blob);
+    const ctx = this.ensureCanvas();
+    ctx.drawImage(bitmap, 0, 0);
+    bitmap.close();
+    const img = ctx.getImageData(0, 0, TILE_PX, TILE_PX).data;
+    const tile = new Float32Array(TILE_PX * TILE_PX);
+    for (let i = 0; i < tile.length; i++) {
+      tile[i] = decodeTerrarium(img[i * 4], img[i * 4 + 1], img[i * 4 + 2]);
+    }
+    return tile;
   }
 
   /**

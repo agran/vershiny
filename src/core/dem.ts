@@ -36,6 +36,8 @@ export interface DemLod {
   quantM?: number;
   /** base64-битсет существующих тайлов (ty·tilesX + tx); без него — пробуем все */
   coverage?: string;
+  /** Средний вес тайла в байтах — для честной оценки офлайн-загрузки */
+  avgTileBytes?: number;
 }
 
 export interface DemIndex {
@@ -75,7 +77,7 @@ export interface DemSamplerOptions {
 
 /**
  * Сэмплер рельефа региона. Тайлы подгружаются лениво и кешируются в памяти;
- * постоянное хранение (IndexedDB) — слой поверх, через fetchFn.
+ * постоянное хранение — IndexedDB (см. `db.ts`): сжатые байты как есть.
  */
 export class DemSampler {
   private index: DemIndex | null = null;
@@ -86,6 +88,8 @@ export class DemSampler {
   private coverage: (Uint8Array | null)[] = [];
   private readonly baseUrl: string;
   private readonly fetchFn: typeof fetch;
+  /** Офлайн-хранилище (IndexedDB); null — недоступно (тесты, приватный режим) */
+  private dbCache: typeof import('./db') | null | undefined;
 
   /** Порог переключения LOD, метры (DATA-PIPELINE: 30 км) */
   lodSwitchM = 30_000;
@@ -95,11 +99,33 @@ export class DemSampler {
     this.fetchFn = options.fetchFn ?? fetch.bind(globalThis);
   }
 
+  /** Ленивая загрузка db.ts (в тестах IndexedDB может не быть) */
+  private async db() {
+    if (this.dbCache === undefined) {
+      try {
+        this.dbCache = globalThis.indexedDB ? await import('./db') : null;
+      } catch {
+        this.dbCache = null;
+      }
+    }
+    return this.dbCache;
+  }
+
   async loadIndex(): Promise<DemIndex> {
     if (this.index) return this.index;
-    const res = await this.fetchFn(`${this.baseUrl}/index.json`);
-    if (!res.ok) throw new Error(`index.json: HTTP ${res.status}`);
-    this.index = (await res.json()) as DemIndex;
+    const db = await this.db();
+    try {
+      const res = await this.fetchFn(`${this.baseUrl}/index.json`);
+      if (!res.ok) throw new Error(`index.json: HTTP ${res.status}`);
+      this.index = (await res.json()) as DemIndex;
+      if (db) void db.saveDemIndex(this.baseUrl, this.index).catch(() => {});
+    } catch (err) {
+      // Офлайн: индекс из прошлой загрузки — без него не стартует даже то,
+      // что уже лежит в хранилище
+      const cached = db ? await db.getDemIndex(this.baseUrl) : undefined;
+      if (!cached) throw err;
+      this.index = cached as DemIndex;
+    }
     this.coverage = this.index.lods.map((lod) =>
       lod.coverage ? base64ToBytes(lod.coverage) : null,
     );
@@ -214,6 +240,24 @@ export class DemSampler {
 
     const ext = this.index?.tileExt ?? '.bin';
     const promise = (async () => {
+      // Офлайн-хранилище: тайлы не меняются, поэтому кеш безусловно свежий
+      const db = await this.db();
+      if (db) {
+        const stored = await db.getDemTile(key);
+        if (stored) {
+          const tile = await this.decodeTile(
+            stored.buffer.slice(
+              stored.byteOffset,
+              stored.byteOffset + stored.byteLength,
+            ) as ArrayBuffer,
+            lodIndex,
+          );
+          this.tiles.set(key, tile);
+          this.pending.delete(key);
+          return tile;
+        }
+      }
+
       const res = await this.fetchFn(`${this.baseUrl}/${lodIndex}/${tx}/${ty}${ext}`);
       let tile: Int16Array | null = null;
       if (res.ok) {
@@ -230,6 +274,81 @@ export class DemSampler {
 
     this.pending.set(key, promise);
     return promise;
+  }
+
+  /** Ключи всех существующих тайлов, попадающих в bbox (все LOD) */
+  tileKeysInBBox(bbox: [number, number, number, number]): string[] {
+    if (!this.index) throw new Error('loadIndex() не вызван');
+    const [minLon, minLat, maxLon, maxLat] = bbox;
+    const keys: string[] = [];
+    for (let lodIndex = 0; lodIndex < this.index.lods.length; lodIndex++) {
+      const lod = this.index.lods[lodIndex];
+      const tileDeg = lod.cellDeg * TILE_SIZE;
+      // bbox через антимеридиан (Врангель: 177.5…−177.5) — два диапазона
+      const lonRanges: [number, number][] =
+        minLon <= maxLon
+          ? [[minLon, maxLon]]
+          : [
+              [minLon, 180],
+              [-180, maxLon],
+            ];
+      const y0 = Math.floor((this.index.bbox[3] - Math.min(maxLat, 90)) / tileDeg);
+      const y1 = Math.ceil((this.index.bbox[3] - Math.max(minLat, -90)) / tileDeg);
+      for (const [lon0, lon1] of lonRanges) {
+        const x0 = Math.floor((lon0 - this.index.bbox[0]) / tileDeg);
+        const x1 = Math.ceil((lon1 - this.index.bbox[0]) / tileDeg);
+        for (let tx = x0; tx < x1; tx++) {
+          for (let ty = y0; ty < y1; ty++) {
+            if (this.hasTile(lodIndex, tx, ty)) keys.push(`${lodIndex}/${tx}/${ty}`);
+          }
+        }
+      }
+    }
+    return keys;
+  }
+
+  /** Оценка веса тайлов bbox в байтах (по среднему весу тайла из индекса) */
+  bboxDownloadBytes(bbox: [number, number, number, number]): number {
+    if (!this.index) throw new Error('loadIndex() не вызван');
+    let bytes = 0;
+    for (const key of this.tileKeysInBBox(bbox)) {
+      const lodIndex = Number(key.split('/')[0]);
+      bytes += this.index.lods[lodIndex].avgTileBytes ?? 40_000;
+    }
+    return bytes;
+  }
+
+  /**
+   * Скачать тайлы в офлайн-хранилище (кнопка «Скачать регион»).
+   * Сохраняем сжатые байты: распаковка при чтении дешевле, чем вчетверо
+   * больший объём на устройстве.
+   */
+  async downloadTiles(
+    keys: string[],
+    onTile: (done: number) => void,
+    concurrency = 6,
+  ): Promise<number> {
+    const db = await this.db();
+    const ext = this.index?.tileExt ?? '.bin';
+    let done = 0;
+    let bytes = 0;
+    for (let i = 0; i < keys.length; i += concurrency) {
+      await Promise.all(
+        keys.slice(i, i + concurrency).map(async (key) => {
+          try {
+            if (db && (await db.getDemTile(key))) return; // уже скачан
+            const res = await this.fetchFn(`${this.baseUrl}/${key}${ext}`);
+            if (!res.ok) return;
+            const raw = new Uint8Array(await res.arrayBuffer());
+            bytes += raw.byteLength;
+            if (db) await db.saveDemTile(key, raw);
+          } finally {
+            onTile(++done);
+          }
+        }),
+      );
+    }
+    return bytes;
   }
 
   /** Распаковка тайла: gzip → дельта по строкам → квант высоты */

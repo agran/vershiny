@@ -58,7 +58,16 @@ const INDEX: DemIndex = {
       gridHeight: 180 * 512,
       tilesX: 720,
       tilesY: 360,
-      coverage: coverage([[444, 92]], 720, 360),
+      // 444/92 — Приэльбрусье; 716/38 и 2/38 — по обе стороны антимеридиана
+      coverage: coverage(
+        [
+          [444, 92],
+          [716, 38],
+          [2, 38],
+        ],
+        720,
+        360,
+      ),
     },
     {
       cellDeg: 1 / 64,
@@ -150,5 +159,39 @@ describe('DemSampler: формат глобальной пирамиды', () =>
     expect(sampler.lodForDistance(100_000)).toBe(1); // дальше хватает 1.7 км
     expect(sampler.lodForDistance(200_000)).toBe(1);
     expect(sampler.finestResM()).toBeCloseTo(217, 0);
+  });
+});
+
+describe('DemSampler: тайлы для офлайн-загрузки', () => {
+  it('собирает существующие тайлы bbox по всем LOD', async () => {
+    const sampler = samplerWith({});
+    await sampler.loadIndex();
+
+    // bbox вокруг Приэльбрусья: покрыты тайлы 0/444/92 и 1/55/11
+    const keys = sampler.tileKeysInBBox([42, 42.5, 43, 44]);
+    expect(keys).toContain('0/444/92');
+    expect(keys).toContain('1/55/11');
+    // Пустые тайлы в bbox не запрашиваются — иначе счёт размера был бы враньём
+    expect(keys).toHaveLength(2);
+  });
+
+  it('не теряет тайлы у bbox через антимеридиан', async () => {
+    const sampler = samplerWith({});
+    await sampler.loadIndex();
+
+    // Врангель: 177.5°в.д. … −177.5°з.д. Наивное сравнение min<max даёт
+    // пустой диапазон, и регион молча скачивался без единого тайла
+    const keys = sampler.tileKeysInBBox([177.5, 70.5, -177.5, 72]);
+    expect(keys).toContain('0/716/38'); // восточнее антимеридиана
+    expect(keys).toContain('0/2/38'); // западнее
+  });
+
+  it('считает вес bbox по среднему весу тайла из индекса', async () => {
+    const sampler = samplerWith({});
+    const index = await sampler.loadIndex();
+    index.lods[0].avgTileBytes = 40_000;
+    index.lods[1].avgTileBytes = 18_000;
+
+    expect(sampler.bboxDownloadBytes([42, 42.5, 43, 44])).toBe(58_000);
   });
 });

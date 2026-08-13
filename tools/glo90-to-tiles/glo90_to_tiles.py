@@ -485,9 +485,15 @@ def estimate_level(
     return (fit, int(round(tiles[:fit].sum())), total)
 
 
-def coverage_bitset(out_dir: Path, lod: int, tiles_x: int, tiles_y: int) -> str:
-    """Битовая карта существующих тайлов (ty*tilesX+tx) → base64 для index.json."""
+def coverage_bitset(out_dir: Path, lod: int, tiles_x: int, tiles_y: int) -> tuple[str, int]:
+    """Битовая карта существующих тайлов (ty*tilesX+tx) → base64 + средний вес байт.
+
+    Средний вес нужен клиенту: по нему панель настроек честно показывает,
+    сколько весит офлайн-загрузка региона (число тайлов в bbox × средний вес).
+    """
     bits = bytearray((tiles_x * tiles_y + 7) // 8)
+    total_bytes = 0
+    count = 0
     lod_dir = out_dir / str(lod)
     if lod_dir.exists():
         for x_dir in lod_dir.iterdir():
@@ -498,7 +504,10 @@ def coverage_bitset(out_dir: Path, lod: int, tiles_x: int, tiles_y: int) -> str:
                 ty = int(tile.name.split(".")[0])
                 index = ty * tiles_x + tx
                 bits[index >> 3] |= 1 << (index & 7)
-    return base64.b64encode(bytes(bits)).decode("ascii")
+                total_bytes += tile.stat().st_size
+                count += 1
+    avg = round(total_bytes / count) if count else 0
+    return base64.b64encode(bytes(bits)).decode("ascii"), avg
 
 
 def write_index(out_dir: Path, levels: tuple[Level, ...]) -> dict:
@@ -508,6 +517,7 @@ def write_index(out_dir: Path, levels: tuple[Level, ...]) -> dict:
         n = level.cells_per_deg
         grid_width, grid_height = 360 * n, 180 * n
         tiles_x, tiles_y = grid_width // TILE_SIZE, grid_height // TILE_SIZE
+        coverage, avg_bytes = coverage_bitset(out_dir, lod, tiles_x, tiles_y)
         lods.append(
             {
                 "cellDeg": level.cell_deg,
@@ -516,7 +526,8 @@ def write_index(out_dir: Path, levels: tuple[Level, ...]) -> dict:
                 "gridHeight": grid_height,
                 "tilesX": tiles_x,
                 "tilesY": tiles_y,
-                "coverage": coverage_bitset(out_dir, lod, tiles_x, tiles_y),
+                "avgTileBytes": avg_bytes,
+                "coverage": coverage,
             }
         )
     index = {
@@ -565,6 +576,12 @@ def cmd_scan(args: argparse.Namespace) -> None:
 
 def cmd_build(args: argparse.Namespace) -> None:
     levels = parse_levels(args.levels)
+    if args.index_only:
+        index = write_index(args.out, levels)
+        print(f"index.json пересобран по файлам на диске → {args.out}")
+        for lod, lod_info in enumerate(index["lods"]):
+            print(f"  LOD {lod}: средний тайл {lod_info['avgTileBytes'] / 1024:.1f} КБ")
+        return
     if args.clean and args.out.exists() and not args.dry_run:
         shutil.rmtree(args.out)
         print(f"Каталог очищен: {args.out}")
@@ -707,6 +724,11 @@ def main() -> None:
         "--clean", action="store_true", help="Удалить каталог тайлов перед сборкой"
     )
     p_build.add_argument("--dry-run", action="store_true", help="Только план, без записи")
+    p_build.add_argument(
+        "--index-only",
+        action="store_true",
+        help="Пересобрать index.json по уже лежащим на диске тайлам, без сборки",
+    )
     p_build.set_defaults(func=cmd_build)
 
     args = parser.parse_args()

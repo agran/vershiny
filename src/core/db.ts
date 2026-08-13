@@ -4,7 +4,7 @@
  */
 
 const DB_NAME = 'vershiny';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 const STORE_TILES = 'dem-tiles';
 const STORE_PEAKS = 'peaks';
 const STORE_TERRARIUM = 'terrarium';
@@ -13,8 +13,14 @@ const STORE_META = 'meta';
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = () => {
+    req.onupgradeneeded = (ev) => {
       const db = req.result;
+      // v4: Terrarium-тайлы хранились распакованными во Float32 (256 КБ на
+      // тайл) — вчетверо больше исходного PNG. Формат сменился на Int16,
+      // старые записи несовместимы, поэтому хранилище пересоздаётся.
+      if (ev.oldVersion < 4 && db.objectStoreNames.contains(STORE_TERRARIUM)) {
+        db.deleteObjectStore(STORE_TERRARIUM);
+      }
       if (!db.objectStoreNames.contains(STORE_TILES)) {
         db.createObjectStore(STORE_TILES);
       }
@@ -72,14 +78,18 @@ export interface RegionData {
   peakCount: number;
 }
 
-/** Сохранить тайл региона (ключ: region/lod/x/y) */
-export async function saveTile(key: string, data: Int16Array): Promise<void> {
+/**
+ * Сохранить тайл пирамиды как есть — сжатыми байтами (ключ: lod/x/y).
+ * Хранить распакованным было бы вчетверо дороже: 128 КБ Int16 против
+ * ~34 КБ gzip, а распаковка одного тайла занимает доли миллисекунды.
+ */
+export async function saveDemTile(key: string, data: Uint8Array): Promise<void> {
   await set(STORE_TILES, key, data);
 }
 
-/** Получить тайл из кеша */
-export async function getTile(key: string): Promise<Int16Array | undefined> {
-  return get<Int16Array>(STORE_TILES, key);
+/** Получить сжатый тайл пирамиды из офлайн-хранилища */
+export async function getDemTile(key: string): Promise<Uint8Array | undefined> {
+  return get<Uint8Array>(STORE_TILES, key);
 }
 
 /** Сохранить пики региона */
@@ -119,26 +129,49 @@ export async function estimateStorage(): Promise<{ usedMB: number; quotaMB: numb
   };
 }
 
-// --- Terrarium (декодированные тайлы, офлайн-кеш глобального слоя) ---
+// --- Terrarium (офлайн-кеш глобального слоя) ---
 
-/** Сохранить декодированный Terrarium-тайл (ключ: z/x/y) */
-export async function saveTerrariumTile(key: string, data: Float32Array): Promise<void> {
+/**
+ * Сохранить Terrarium-тайл как есть — байтами PNG (ключ: z/x/y).
+ * Распакованная сетка заняла бы 131 КБ (Int16) или 262 КБ (Float32) против
+ * ~60 КБ PNG, а декодирование всё равно происходит при каждом сетевом чтении.
+ */
+export async function saveTerrariumTile(key: string, data: Uint8Array): Promise<void> {
   await set(STORE_TERRARIUM, key, data);
 }
 
-/** Получить Terrarium-тайл из офлайн-кеша */
-export async function getTerrariumTile(key: string): Promise<Float32Array | undefined> {
-  return get<Float32Array>(STORE_TERRARIUM, key);
+/** Получить PNG-байты Terrarium-тайла из офлайн-кеша */
+export async function getTerrariumTile(key: string): Promise<Uint8Array | undefined> {
+  return get<Uint8Array>(STORE_TERRARIUM, key);
 }
 
-/** Удалить регион целиком (патч-тайлы + пики) */
+/** Ключи Terrarium-тайлов, уже лежащих офлайн (для прогресса загрузки) */
+export async function getTerrariumKeys(): Promise<Set<string>> {
+  return new Set(await keys(STORE_TERRARIUM));
+}
+
+/** Ключи тайлов пирамиды, уже лежащих офлайн */
+export async function getDemTileKeys(): Promise<Set<string>> {
+  return new Set(await keys(STORE_TILES));
+}
+
+/** Кеш index.json пирамиды: без него офлайн-старт невозможен */
+export async function saveDemIndex(baseUrl: string, index: unknown): Promise<void> {
+  await set(STORE_META, `dem-index:${baseUrl}`, index);
+}
+
+export async function getDemIndex(baseUrl: string): Promise<unknown | undefined> {
+  return get(STORE_META, `dem-index:${baseUrl}`);
+}
+
+/** Удалить регион: пики и отметку о загрузке.
+ *  Тайлы пирамиды общие для всех регионов и остаются в кеше. */
 export async function deleteRegion(region: string): Promise<void> {
   const db = await openDb();
-  const tileKeys = (await keys(STORE_TILES)).filter((k) => k.startsWith(region + '/'));
   await new Promise<void>((resolve, reject) => {
-    const tx = db.transaction([STORE_TILES, STORE_PEAKS], 'readwrite');
-    for (const key of tileKeys) tx.objectStore(STORE_TILES).delete(key);
+    const tx = db.transaction([STORE_PEAKS, STORE_META], 'readwrite');
     tx.objectStore(STORE_PEAKS).delete(region);
+    tx.objectStore(STORE_META).delete(`region:${region}`);
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });

@@ -1,13 +1,30 @@
 /**
  * Предзагрузка региона для офлайна (ROADMAP 4.2, MVP-ACCEPTANCE).
- * Одна кнопка: пики + Terrarium-тайлы веером лучей вокруг текущей позиции
- * (тайлы патч-формата появятся позже из tools/dem-to-tiles).
+ *
+ * Качаются два слоя, каждый под свою задачу:
+ *   - вся площадь региона из глобальной пирамиды (217 м) — далёкие хребты,
+ *     ~1–3 МБ сжатыми байтами;
+ *   - круг DETAIL_RADIUS_M вокруг точки из Terrarium (90 м) — ближняя зона,
+ *     где разница в разрешении видна на панораме.
+ *
+ * Раньше качался Terrarium z9–z12 по всему bbox и хранился распакованным:
+ * медианный регион — 8.6 тыс. тайлов ≈ 2.2 ГБ в IndexedDB, Гренландия ≈ 160 ГБ.
+ * Такая загрузка не могла завершиться в принципе — упиралась в квоту браузера.
  */
 
 import { TerrariumSampler } from '../core/terrarium';
-import type { LatLon } from '../core/geo';
+import { DemSampler } from '../core/dem';
+import { GLOBAL_DEM_URL } from '../core/dem-config';
+import { destination, type LatLon } from '../core/geo';
 import { savePeaks, markRegionDownloaded } from '../core/db';
 import { getLocale } from '../core/i18n';
+
+/** Радиус детальной зоны (Terrarium 90 м) вокруг точки наблюдения */
+export const DETAIL_RADIUS_M = 30_000;
+/** Зумы детальной зоны: 12 ≈ 38 м/пиксель на экваторе, 11 — запас на фолбэк */
+const DETAIL_ZOOMS = [12, 11];
+/** Средний вес Terrarium-PNG (замер по выборке тайлов разных зумов) */
+const TERRARIUM_TILE_BYTES = 60_000;
 
 export interface RegionInfo {
   title_ru?: string;
@@ -30,25 +47,90 @@ export interface DownloadProgress {
   error?: string;
 }
 
-export interface RegionInfo {
-  title_ru?: string;
-  title_en?: string;
-  bbox: [number, number, number, number];
+/** Точка внутри bbox (с учётом перехода через антимеридиан) */
+function inBBox(pos: LatLon, bbox: [number, number, number, number]): boolean {
+  const [minLon, minLat, maxLon, maxLat] = bbox;
+  const lonOk =
+    minLon <= maxLon
+      ? pos.lon >= minLon && pos.lon <= maxLon
+      : pos.lon >= minLon || pos.lon <= maxLon;
+  return lonOk && pos.lat >= minLat && pos.lat <= maxLat;
+}
+
+/** Центр bbox — корректно и для перехода через антимеридиан */
+function bboxCenter(bbox: [number, number, number, number]): LatLon {
+  const [minLon, minLat, maxLon, maxLat] = bbox;
+  const lon =
+    minLon <= maxLon ? (minLon + maxLon) / 2 : (minLon + maxLon + 360) / 2 - 180;
+  return { lat: (minLat + maxLat) / 2, lon };
+}
+
+/** Тайлы Terrarium, попадающие в круг радиуса radiusM вокруг центра */
+function detailTileKeys(center: LatLon, radiusM: number): string[] {
+  const keys: string[] = [];
+  const north = destination(center, 0, radiusM).lat;
+  const south = destination(center, Math.PI, radiusM).lat;
+  const east = destination(center, Math.PI / 2, radiusM).lon;
+  const west = destination(center, -Math.PI / 2, radiusM).lon;
+  for (const zoom of DETAIL_ZOOMS) {
+    const n = 2 ** zoom;
+    const clamp = (lat: number) => Math.max(-85.05, Math.min(85.05, lat));
+    const tileY = (lat: number) => {
+      const rad = (clamp(lat) * Math.PI) / 180;
+      return ((1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2) * n;
+    };
+    const y0 = Math.floor(tileY(north));
+    const y1 = Math.ceil(tileY(south));
+    const x0 = Math.floor(((west + 180) / 360) * n);
+    const x1 = Math.ceil(((east + 180) / 360) * n);
+    for (let x = x0; x < x1; x++) {
+      for (let y = y0; y < y1; y++) {
+        // Тайлы за границей мира по долготе заворачиваются, по широте — нет
+        if (y < 0 || y >= n) continue;
+        keys.push(`${zoom}/${((x % n) + n) % n}/${y}`);
+      }
+    }
+  }
+  return keys;
 }
 
 /**
- * Загрузка региона для офлайна:
- * 1. peaks/{region}.json → IndexedDB
- * 2. Terrarium-тайлы по всему bbox региона (не веер от точки) → IndexedDB
- *
- * Возвращает итоговое число загруженных тайлов.
+ * Оценка объёма загрузки региона в байтах: пирамида по bbox + детальная зона.
+ * Считается по реальному числу тайлов, а не по площади: разреженная пирамида
+ * не хранит море и равнины, и разница доходит до порядка.
+ */
+export async function estimateRegionBytes(
+  info: RegionInfo,
+  origin: LatLon,
+  sampler?: DemSampler,
+): Promise<number> {
+  const dem = sampler ?? (await sharedPyramid());
+  const center = inBBox(origin, info.bbox) ? origin : bboxCenter(info.bbox);
+  return (
+    dem.bboxDownloadBytes(info.bbox) +
+    detailTileKeys(center, DETAIL_RADIUS_M).length * TERRARIUM_TILE_BYTES
+  );
+}
+
+/** Общий сэмплер пирамиды: index.json (54 КБ) грузится один раз на страницу */
+let pyramid: Promise<DemSampler> | null = null;
+function sharedPyramid(): Promise<DemSampler> {
+  pyramid ??= (async () => {
+    const dem = new DemSampler({ baseUrl: GLOBAL_DEM_URL });
+    await dem.loadIndex();
+    return dem;
+  })();
+  return pyramid;
+}
+
+/**
+ * Загрузка региона для офлайна. Возвращает число скачанных тайлов.
  */
 export async function downloadRegion(
   region: string,
   origin: LatLon,
   onProgress: (p: DownloadProgress) => void,
 ): Promise<number> {
-  void origin; // больше не используем — скачиваем весь bbox
   const base = import.meta.env.BASE_URL;
 
   // 1. Пики
@@ -62,58 +144,49 @@ export async function downloadRegion(
     await savePeaks(region, data.peaks ?? []);
   }
 
-  // 2. Terrarium-тайлы по bbox региона (все зумы для покрытия)
   const regions = await loadRegions();
   const info = regions[region];
   if (!info?.bbox) {
     throw new Error(`Регион ${region} не найден в реестре`);
   }
 
-  const [minLon, minLat, maxLon, maxLat] = info.bbox;
-  const sampler = new TerrariumSampler();
-  const tileKeys = new Set<string>();
+  // 2. Пирамида по всему bbox + Terrarium вокруг точки наблюдения.
+  // Если пользователь сейчас в другом регионе, детализируем центр bbox —
+  // приедет он всё-таки туда.
+  const dem = await sharedPyramid();
+  const pyramidKeys = dem.tileKeysInBBox(info.bbox);
+  const center = inBBox(origin, info.bbox) ? origin : bboxCenter(info.bbox);
+  const detailKeys = detailTileKeys(center, DETAIL_RADIUS_M);
+  const total = pyramidKeys.length + detailKeys.length;
 
-  // Для каждого зума: сетка тайлов, покрывающая bbox
-  // z12 для деталей, z9 для покрытия (компромисс размер/скорость)
-  for (const zoom of [12, 11, 10, 9]) {
-    const n = 2 ** zoom;
-    const x0 = Math.floor(((minLon + 180) / 360) * n);
-    const x1 = Math.ceil(((maxLon + 180) / 360) * n);
-    const y0 = Math.floor(
-      ((1 - Math.log(Math.tan((maxLat * Math.PI) / 180) + 1 / Math.cos((maxLat * Math.PI) / 180)) / Math.PI) / 2) * n,
-    );
-    const y1 = Math.ceil(
-      ((1 - Math.log(Math.tan((minLat * Math.PI) / 180) + 1 / Math.cos((minLat * Math.PI) / 180)) / Math.PI) / 2) * n,
-    );
-    for (let x = x0; x < x1; x++) {
-      for (let y = y0; y < y1; y++) {
-        tileKeys.add(`${zoom}/${x}/${y}`);
-      }
-    }
-  }
-
-  const keys = [...tileKeys];
   let done = 0;
-  onProgress({ done, total: keys.length, phase: 'tiles' });
+  onProgress({ done, total, phase: 'tiles' });
+  await dem.downloadTiles(pyramidKeys, (n) => {
+    done = n;
+    onProgress({ done, total, phase: 'tiles' });
+  });
 
-  // Параллельность: по 6 запросов (вежливо к S3)
+  const sampler = new TerrariumSampler();
   const CONCURRENCY = 6;
-  for (let i = 0; i < keys.length; i += CONCURRENCY) {
-    const batch = keys.slice(i, i + CONCURRENCY);
+  for (let i = 0; i < detailKeys.length; i += CONCURRENCY) {
+    const batch = detailKeys.slice(i, i + CONCURRENCY);
     await Promise.all(
-      batch.map((key) => {
+      batch.map(async (key) => {
         const [z, x, y] = key.split('/').map(Number);
-        return sampler.loadTile(z, x, y);
+        try {
+          await sampler.loadTile(z, x, y);
+        } catch {
+          // Дыра в покрытии Terrarium не должна ронять всю загрузку
+        }
       }),
     );
     done += batch.length;
-    onProgress({ done, total: keys.length, phase: 'tiles' });
+    onProgress({ done, total, phase: 'tiles' });
   }
 
-  onProgress({ done: keys.length, total: keys.length, phase: 'done' });
-  // Отмечаем регион как скачанный (для списка в настройках)
+  onProgress({ done: total, total, phase: 'done' });
   await markRegionDownloaded(region);
-  return keys.length;
+  return total;
 }
 
 /** Чтение реестра регионов (public/regions.json, копия tools/regions.json) */
@@ -134,8 +207,7 @@ export function findRegionForPosition(
   let bestPriority = Infinity;
   for (const [key, info] of Object.entries(regions)) {
     if (key.startsWith('$') || typeof info !== 'object' || !info.bbox) continue;
-    const [minLon, minLat, maxLon, maxLat] = info.bbox;
-    if (pos.lon >= minLon && pos.lon <= maxLon && pos.lat >= minLat && pos.lat <= maxLat) {
+    if (inBBox(pos, info.bbox)) {
       const priority = (info as RegionInfo & { priority?: number }).priority ?? 9;
       if (priority < bestPriority) {
         best = key;

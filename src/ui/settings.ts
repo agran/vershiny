@@ -4,7 +4,13 @@
  */
 
 import { t, getLocale, setLocale, type Locale } from '../core/i18n';
-import { loadRegions, regionLabel, regionCore, type RegionInfo } from './download';
+import {
+  loadRegions,
+  regionLabel,
+  regionCore,
+  estimateRegionBytes,
+  type RegionInfo,
+} from './download';
 import { getDownloadedRegions } from '../core/db';
 import { orientationTracker } from '../core/orientation';
 import type { LatLon } from '../core/geo';
@@ -170,6 +176,13 @@ export function openSettings(
           sizeEl.textContent = `~${size} МБ`;
           sizeEl.style.cssText = 'font-size:11px;color:#a8dadc';
           nameWrap.appendChild(sizeEl);
+          // Точный размер требует index.json пирамиды — пока он едет,
+          // показываем оценку по площади, чтобы строка не прыгала пустой
+          void estimateRegionBytes(regionInfo, origin)
+            .then((bytes) => {
+              sizeEl.textContent = formatMB(bytes);
+            })
+            .catch(() => {});
           rowEl.appendChild(nameWrap);
 
           // Статус / кнопка скачивания
@@ -284,17 +297,20 @@ function btnStyle(): string {
   );
 }
 
-/** Оценка размера региона для скачивания (пики + DEM-патч).
- *  По DATA-PIPELINE: регион ~400×400 км ≈ 5–15 МБ int16 + brotli.
- *  Считаем по площади bbox с поправкой на широту (меридианы сходятся). */
+/** Грубая оценка по площади bbox — заглушка на те доли секунды, пока не
+ *  приедет index.json пирамиды и не посчитается точный размер. */
 function estimateRegionSizeMB(bbox: [number, number, number, number]): number {
   const [minLon, minLat, maxLon, maxLat] = bbox;
   const latMid = (minLat + maxLat) / 2;
   const lonSpanKm = (maxLon - minLon) * 111.32 * Math.cos((latMid * Math.PI) / 180);
   const latSpanKm = (maxLat - minLat) * 111.32;
-  const areaKm2 = lonSpanKm * latSpanKm;
-  // База: 400×400 км = 160 000 км² ≈ 10 МБ → 0.0625 МБ на 1000 км²
-  const demMB = Math.max(3, Math.round((areaKm2 / 1000) * 0.0625));
-  const peaksMB = 0.3; // peaks/{region}.json ≈ 200–500 КБ
-  return Math.round((demMB + peaksMB) * 10) / 10;
+  const areaKm2 = Math.abs(lonSpanKm * latSpanKm);
+  return Math.max(3, Math.round((areaKm2 / 1000) * 0.0625));
+}
+
+/** Байты → «12 МБ» / «0.8 МБ» с учётом локали */
+function formatMB(bytes: number): string {
+  const mb = bytes / 1e6;
+  const unit = getLocale() === 'ru' ? 'МБ' : 'MB';
+  return `${mb < 10 ? mb.toFixed(1) : Math.round(mb)} ${unit}`;
 }
