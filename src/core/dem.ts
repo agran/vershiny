@@ -1,12 +1,16 @@
 /**
  * DEM-сэмплер: чтение прекомпилированных int16-тайлов 256×256.
  * Формат — см. docs/DATA-PIPELINE.md:
- *   /tiles/{region}/{lod}/{x}/{y}.bin  — int16 LE, без заголовка
- *   /tiles/{region}/index.json         — bbox, размеры ячеек, список LOD
+ *   /tiles/{region}/{lod}/{x}/{y}.bin     — int16 LE, без заголовка
+ *   /tiles/global/{lod}/{x}/{y}.bin.gz    — то же + дельта по строкам и gzip
+ *   .../index.json                        — bbox, размеры ячеек, список LOD
  *
- * LOD-выборка по расстоянию от наблюдателя:
- *   d < 30 км  — самый детальный слой (90 м)
- *   дальше     — самый грубый (250–500 м)
+ * Глобальная пирамида (tools/glo90-to-tiles) разреженная: тайла может не быть
+ * (море, равнина, не попал в бюджет) — тогда берём следующий, более грубый LOD,
+ * а если и там пусто, вызывающий уходит на Terrarium (dem-source.ts).
+ *
+ * LOD-выборка по расстоянию от наблюдателя: чем дальше луч, тем грубее ячейка
+ * (детальнее ≠ лучше — угловой размер дальних хребтов мал, а трафик реален).
  */
 
 import type { LatLon } from './geo';
@@ -15,6 +19,8 @@ import { distanceM } from './geo';
 export const TILE_SIZE = 256;
 /** Метры в одном градусе широты (для перевода размера ячейки в метры) */
 const METERS_PER_DEG_LAT = 111_320;
+/** Ячейка не должна быть мельче, чем ~1/150 дальности луча (ALGORITHMS.md) */
+const RES_PER_DIST = 1 / 150;
 
 export interface DemLod {
   /** Размер ячейки в градусах */
@@ -26,12 +32,38 @@ export interface DemLod {
   tilesX: number;
   /** Высота региона в тайлах */
   tilesY: number;
+  /** Шаг квантования высоты в метрах (значения в файле умножаются на него) */
+  quantM?: number;
+  /** base64-битсет существующих тайлов (ty·tilesX + tx); без него — пробуем все */
+  coverage?: string;
 }
 
 export interface DemIndex {
   /** Границы региона: [minLon, minLat, maxLon, maxLat] */
   bbox: [number, number, number, number];
   lods: DemLod[];
+  /** Сжатие тайлов: 'gzip' — распаковываем через DecompressionStream */
+  encoding?: 'gzip';
+  /** Фильтр перед сжатием: 'delta-x' — дельта вдоль строк */
+  filter?: 'delta-x';
+  /** Расширение файла тайла (по умолчанию '.bin') */
+  tileExt?: string;
+}
+
+/** base64 → байты (atob есть в окне, воркере и Node 18+) */
+function base64ToBytes(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+/** Распаковка gzip потоковым API платформы (без зависимостей) */
+async function gunzip(bytes: Uint8Array): Promise<Uint8Array> {
+  const stream = new Blob([bytes as BlobPart]).stream().pipeThrough(
+    new DecompressionStream('gzip'),
+  );
+  return new Uint8Array(await new Response(stream).arrayBuffer());
 }
 
 export interface DemSamplerOptions {
@@ -50,6 +82,8 @@ export class DemSampler {
   /** Кеш тайлов: 'lod/x/y' → Int16Array (null = тайл отсутствует/море) */
   private tiles = new Map<string, Int16Array | null>();
   private pending = new Map<string, Promise<Int16Array | null>>();
+  /** Битсеты покрытия по LOD (если index их содержит) */
+  private coverage: (Uint8Array | null)[] = [];
   private readonly baseUrl: string;
   private readonly fetchFn: typeof fetch;
 
@@ -66,11 +100,14 @@ export class DemSampler {
     const res = await this.fetchFn(`${this.baseUrl}/index.json`);
     if (!res.ok) throw new Error(`index.json: HTTP ${res.status}`);
     this.index = (await res.json()) as DemIndex;
+    this.coverage = this.index.lods.map((lod) =>
+      lod.coverage ? base64ToBytes(lod.coverage) : null,
+    );
     return this.index;
   }
 
   /** Приблизительное разрешение LOD в метрах на широте наблюдателя */
-  lodResolutionM(lodIndex: number, atLat: number): number {
+  lodResolutionM(lodIndex: number, atLat?: number): number {
     if (!this.index) throw new Error('loadIndex() не вызван');
     const lod = this.index.lods[lodIndex];
     // Ячейка квадратная в градусах; по широте метры постоянны,
@@ -79,24 +116,59 @@ export class DemSampler {
     return lod.cellDeg * METERS_PER_DEG_LAT;
   }
 
-  /** Номер LOD для луча на дистанции distM: 0 — самый детальный */
+  /**
+   * Номер LOD для луча на дистанции distM: 0 — самый детальный.
+   * Нужная детализация ≈ дальность/150 (дальний хребет и так мелок на экране);
+   * берём LOD, ближайший к ней по логарифму — так правило не зависит от того,
+   * какая лестница уровней в index.json.
+   */
   lodForDistance(distM: number): number {
     if (!this.index) throw new Error('loadIndex() не вызван');
-    return distM < this.lodSwitchM ? 0 : this.index.lods.length - 1;
+    const targetM = Math.max(90, distM * RES_PER_DIST);
+    let best = 0;
+    let bestDiff = Infinity;
+    for (let i = 0; i < this.index.lods.length; i++) {
+      const diff = Math.abs(Math.log(this.lodResolutionM(i) / targetM));
+      if (diff < bestDiff) {
+        bestDiff = diff;
+        best = i;
+      }
+    }
+    return best;
+  }
+
+  /** Есть ли тайл по карте покрытия (нет карты — считаем, что может быть) */
+  hasTile(lodIndex: number, tx: number, ty: number): boolean {
+    const lod = this.index?.lods[lodIndex];
+    if (!lod) return false;
+    if (tx < 0 || ty < 0 || tx >= lod.tilesX || ty >= lod.tilesY) return false;
+    const bits = this.coverage[lodIndex];
+    if (!bits) return true;
+    const bit = ty * lod.tilesX + tx;
+    return (bits[bit >> 3] & (1 << (bit & 7))) !== 0;
   }
 
   /**
    * Высота точки (метры) с билинейной интерполяцией.
-   * NaN — вне покрытия региона. Требует, чтобы тайлы были предзагружены
+   * NaN — вне покрытия. Требует, чтобы тайлы были предзагружены
    * (prefetchAlongRay / prefetchPoint); синхронная — для использования в worker.
+   * Если на запрошенном LOD данных нет (разреженная пирамида) — пробуем грубее.
    */
   sample(pos: LatLon, lodIndex: number): number {
     if (!this.index) throw new Error('loadIndex() не вызван');
-    const lod = this.index.lods[lodIndex];
-    const minLon = this.index.bbox[0];
+    for (let lod = lodIndex; lod < this.index.lods.length; lod++) {
+      const h = this.sampleLod(pos, lod);
+      if (!Number.isNaN(h)) return h;
+    }
+    return NaN;
+  }
+
+  private sampleLod(pos: LatLon, lodIndex: number): number {
+    const lod = this.index!.lods[lodIndex];
+    const minLon = this.index!.bbox[0];
 
     const gx = (pos.lon - minLon) / lod.cellDeg;
-    const gy = (this.index.bbox[3] - pos.lat) / lod.cellDeg; // сетка с севера на юг
+    const gy = (this.index!.bbox[3] - pos.lat) / lod.cellDeg; // сетка с севера на юг
     if (gx < 0 || gy < 0 || gx >= lod.gridWidth - 1 || gy >= lod.gridHeight - 1) {
       return NaN;
     }
@@ -134,15 +206,20 @@ export class DemSampler {
     if (cached !== undefined) return cached;
     const inflight = this.pending.get(key);
     if (inflight) return inflight;
+    // Карта покрытия известна — не тратим запрос на заведомо пустой тайл
+    if (this.index && !this.hasTile(lodIndex, tx, ty)) {
+      this.tiles.set(key, null);
+      return null;
+    }
 
+    const ext = this.index?.tileExt ?? '.bin';
     const promise = (async () => {
-      const res = await this.fetchFn(`${this.baseUrl}/${lodIndex}/${tx}/${ty}.bin`);
+      const res = await this.fetchFn(`${this.baseUrl}/${lodIndex}/${tx}/${ty}${ext}`);
       let tile: Int16Array | null = null;
       if (res.ok) {
-        const buf = await res.arrayBuffer();
-        tile = new Int16Array(buf);
+        tile = await this.decodeTile(await res.arrayBuffer(), lodIndex);
       } else if (res.status === 404) {
-        tile = null; // вне покрытия (море, край региона)
+        tile = null; // вне покрытия (море, край региона, не попал в бюджет)
       } else {
         throw new Error(`tile ${key}: HTTP ${res.status}`);
       }
@@ -155,9 +232,44 @@ export class DemSampler {
     return promise;
   }
 
+  /** Распаковка тайла: gzip → дельта по строкам → квант высоты */
+  private async decodeTile(buffer: ArrayBuffer, lodIndex: number): Promise<Int16Array> {
+    let bytes = new Uint8Array(buffer);
+    // Сигнатура gzip: сервер (или SW) мог распаковать ответ за нас
+    if (this.index?.encoding === 'gzip' && bytes[0] === 0x1f && bytes[1] === 0x8b) {
+      bytes = await gunzip(bytes);
+    }
+    // Int16Array требует чётного смещения — при нужде копируем
+    const aligned = bytes.byteOffset % 2 === 0 ? bytes : new Uint8Array(bytes);
+    const values = new Int16Array(
+      aligned.buffer,
+      aligned.byteOffset,
+      aligned.byteLength >> 1,
+    );
+
+    if (this.index?.filter === 'delta-x') {
+      for (let y = 0; y < TILE_SIZE; y++) {
+        const row = y * TILE_SIZE;
+        let acc = 0;
+        for (let x = 0; x < TILE_SIZE; x++) {
+          // Накопление с переполнением int16 — так же, как кодировал Python
+          acc = ((acc + values[row + x]) << 16) >> 16;
+          values[row + x] = acc;
+        }
+      }
+    }
+
+    const quant = this.index?.lods[lodIndex]?.quantM ?? 1;
+    if (quant !== 1) {
+      for (let i = 0; i < values.length; i++) values[i] *= quant;
+    }
+    return values;
+  }
+
   /**
    * Предзагрузка тайлов вдоль луча: из origin по азимуту azRad до maxDistM.
-   * Вызывается worker'ом перед ray-marching'ом луча.
+   * Вызывается worker'ом перед ray-marching'ом луча. Грузим выбранный LOD
+   * и все более грубые — на них уходит фолбэк, если детального тайла нет.
    */
   async prefetchAlongRay(
     origin: LatLon,
@@ -167,18 +279,17 @@ export class DemSampler {
     destinationFn: (o: LatLon, az: number, d: number) => LatLon,
   ): Promise<void> {
     if (!this.index) await this.loadIndex();
-    const lod = this.lodForDistance(maxDistM / 2);
     const keys = new Set<string>();
     for (let d = 0; d <= maxDistM; d += stepM) {
       const p = destinationFn(origin, azRad, d);
-      const lodIdx = this.lodForDistance(d);
-      const l = this.index!.lods[lodIdx];
-      const gx = Math.floor((p.lon - this.index!.bbox[0]) / l.cellDeg / TILE_SIZE);
-      const gy = Math.floor((this.index!.bbox[3] - p.lat) / l.cellDeg / TILE_SIZE);
-      if (gx >= 0 && gy >= 0 && gx < l.tilesX && gy < l.tilesY) {
-        keys.add(`${lodIdx}/${gx}/${gy}`);
+      for (let lodIdx = this.lodForDistance(d); lodIdx < this.index!.lods.length; lodIdx++) {
+        const l = this.index!.lods[lodIdx];
+        const gx = Math.floor((p.lon - this.index!.bbox[0]) / l.cellDeg / TILE_SIZE);
+        const gy = Math.floor((this.index!.bbox[3] - p.lat) / l.cellDeg / TILE_SIZE);
+        if (this.hasTile(lodIdx, gx, gy)) {
+          keys.add(`${lodIdx}/${gx}/${gy}`);
+        }
       }
-      void lod;
     }
     await Promise.all(
       [...keys].map((key) => {
@@ -188,22 +299,33 @@ export class DemSampler {
     );
   }
 
-  /** Высота наблюдателя по координате (из самого детального LOD) */
-  async observerHeight(pos: LatLon): Promise<number> {
-    await this.loadIndex();
-    const lod = this.index!.lods[0];
+  /** Разрешение самого детального LOD в метрах (для выбора источника высот) */
+  finestResM(): number {
+    return this.index ? this.lodResolutionM(0) : Infinity;
+  }
+
+  /** Тайлы 2×2 вокруг точки на указанном LOD (для интерполяции у границы) */
+  private async loadAround(pos: LatLon, lodIndex: number): Promise<void> {
+    const lod = this.index!.lods[lodIndex];
     const tx = Math.floor((pos.lon - this.index!.bbox[0]) / lod.cellDeg / TILE_SIZE);
     const ty = Math.floor((this.index!.bbox[3] - pos.lat) / lod.cellDeg / TILE_SIZE);
-    await this.loadTile(0, tx, ty);
-    // Соседние тайлы для интерполяции на границе
     await Promise.all([
-      this.loadTile(0, tx + 1, ty),
-      this.loadTile(0, tx, ty + 1),
-      this.loadTile(0, tx + 1, ty + 1),
+      this.loadTile(lodIndex, tx, ty),
+      this.loadTile(lodIndex, tx + 1, ty),
+      this.loadTile(lodIndex, tx, ty + 1),
+      this.loadTile(lodIndex, tx + 1, ty + 1),
     ]);
-    const h = this.sample(pos, 0);
-    if (Number.isNaN(h)) throw new Error('Точка вне покрытия DEM');
-    return h;
+  }
+
+  /** Высота наблюдателя (детальный LOD, при его отсутствии — более грубые) */
+  async observerHeight(pos: LatLon): Promise<number> {
+    await this.loadIndex();
+    for (let lodIndex = 0; lodIndex < this.index!.lods.length; lodIndex++) {
+      await this.loadAround(pos, lodIndex);
+      const h = this.sample(pos, lodIndex);
+      if (!Number.isNaN(h)) return h;
+    }
+    throw new Error('Точка вне покрытия DEM');
   }
 
   /**
@@ -213,15 +335,22 @@ export class DemSampler {
    */
   async observerHeightSafe(pos: LatLon): Promise<number> {
     await this.loadIndex();
-    const lod = this.index!.lods[0];
+    for (let lodIndex = 0; lodIndex < this.index!.lods.length; lodIndex++) {
+      const maxH = await this.maxAroundAtLod(pos, lodIndex);
+      if (maxH !== null) return maxH + 2; // +2 м рост глаз
+    }
+    throw new Error('Точка вне покрытия DEM');
+  }
+
+  /** max по окрестности 3×3 на одном LOD; null — тайлов нет */
+  private async maxAroundAtLod(pos: LatLon, lodIndex: number): Promise<number | null> {
+    const lod = this.index!.lods[lodIndex];
     const cellDeg = lod.cellDeg;
     const [minLon, , , maxLat] = this.index!.bbox;
 
     // Окрестность 3×3 ячейки вокруг точки
-    const gx = (pos.lon - minLon) / cellDeg;
-    const gy = (maxLat - pos.lat) / cellDeg;
-    const cx = Math.floor(gx);
-    const cy = Math.floor(gy);
+    const cx = Math.floor((pos.lon - minLon) / cellDeg);
+    const cy = Math.floor((maxLat - pos.lat) / cellDeg);
 
     // Загружаем тайлы для окрестности
     const tx0 = Math.floor((cx - 1) / TILE_SIZE);
@@ -231,23 +360,19 @@ export class DemSampler {
     const tiles: Promise<unknown>[] = [];
     for (let ty = ty0; ty <= ty1; ty++) {
       for (let tx = tx0; tx <= tx1; tx++) {
-        tiles.push(this.loadTile(0, tx, ty));
+        tiles.push(this.loadTile(lodIndex, tx, ty));
       }
     }
     await Promise.all(tiles);
 
-    // Max по 3×3
     let maxH = -Infinity;
     for (let dy = -1; dy <= 1; dy++) {
       for (let dx = -1; dx <= 1; dx++) {
-        const cellX = cx + dx;
-        const cellY = cy + dy;
-        const h = this.cell(0, cellX, cellY);
+        const h = this.cell(lodIndex, cx + dx, cy + dy);
         if (h !== null && h > maxH) maxH = h;
       }
     }
-    if (maxH === -Infinity) throw new Error('Точка вне покрытия DEM');
-    return maxH + 2; // +2 м рост глаз
+    return maxH === -Infinity ? null : maxH;
   }
 
   /** Высота над уровнем моря с учётом высоты наблюдателя над землёй */

@@ -110,9 +110,7 @@ canvas.addEventListener('pointermove', (ev) => {
     if (dist > 5) {
       const az = view.centerAzRad + Math.atan2(dy, dx); // направление движения
       const newPos = destination(lastOrigin, az, dist);
-      lastOrigin = newPos;
-      worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
-      setStatus(t('computing'));
+      requestCompute(newPos);
     }
   } else {
     // Поворот камеры
@@ -132,9 +130,7 @@ canvas.addEventListener('contextmenu', (ev) => ev.preventDefault()); // прав
 function moveForward(): void {
   if (!panorama) return;
   const newPos = destination(lastOrigin, view.centerAzRad, MOVE_STEP_M);
-  lastOrigin = newPos;
-  worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
-  setStatus(t('computing'));
+  requestCompute(newPos);
 }
 
 // --- Навигация: WASD/стрелки + PageUp/PageDown ---
@@ -200,9 +196,7 @@ window.addEventListener('keydown', (ev) => {
     newPos.lat = backPos.lat;
     newPos.lon = backPos.lon;
   }
-  lastOrigin = newPos;
-  setStatus(t('computing'));
-  worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
+  requestCompute(newPos);
 });
 
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
@@ -225,6 +219,17 @@ canvas.addEventListener('pointermove', (ev) => {
 });
 
 // --- Worker горизонта ---
+
+/**
+ * Заданная вручную высота (кнопки ⬆⬇), метры над уровнем моря.
+ * null — идём по рельефу. Сохраняется при перемещении: набрав высоту,
+ * пользователь «летит» над местностью, пока не нажмёт 📍 (возврат на землю).
+ */
+let heightOverride: number | null = null;
+
+/** Кнопки ⚙/📷/📸 уже созданы (иначе плодятся на каждый пересчёт) */
+let actionButtonsReady = false;
+
 const worker = new Worker(new URL('./workers/horizon.worker.ts', import.meta.url), {
   type: 'module',
 });
@@ -293,23 +298,34 @@ async function main(): Promise<void> {
   }
   currentPeaks = peaks; // сохраняем для навигации
 
-  // Локальный DEM-патч — если сгенерирован; иначе глобальный Terrarium
-  // (docs/new-geo-data.md, слой 1). Офлайн: Terrarium из IndexedDB.
+  // DEM: детальный патч региона → локальная пирамида → внешняя пирамида
+  // (agran/vershiny-dem). Промах всех — только Terrarium; офлайн — кеш.
+  const { demCandidates } = await import('./core/dem-config');
   let patchBaseUrl: string | undefined;
-  const patchProbe = await fetch(`${base}tiles/${currentRegion}/index.json`).catch(() => null);
-  if (patchProbe && isJson(patchProbe)) patchBaseUrl = `${base}tiles/${currentRegion}`;
+  for (const candidate of demCandidates(base, currentRegion)) {
+    const probe = await fetch(`${candidate}/index.json`).catch(() => null);
+    if (probe && isJson(probe)) {
+      patchBaseUrl = candidate;
+      break;
+    }
+  }
 
   worker.postMessage({ type: 'init', patchBaseUrl });
 
   setStatus(t('computing'));
   worker.postMessage({ type: 'compute', origin, peaks });
 
-  // Кнопки действий (появляются после первого расчёта)
-  setupDownloadButton(origin);
-  setupSearchButton(origin);
-  setupNavPad();
+  // Кнопки действий; main() повторяется при смене региона — создаём один раз
+  if (!navUiReady) {
+    navUiReady = true;
+    setupDownloadButton(origin);
+    setupSearchButton(origin);
+    setupNavPad();
+  }
 }
 
+/** Кнопки навигации/поиска/скачивания уже созданы */
+let navUiReady = false;
 /** Поиск вершины: поле ввода поверх панорамы + переход с отступом */
 function setupSearchButton(origin: LatLon): void {
   const btn = makeButton('🔍', t('searchPeak'), 'left:16px;bottom:16px');
@@ -397,9 +413,9 @@ async function jumpToPeak(peak: Peak, from: LatLon): Promise<void> {
   const backAz = azToPeak + Math.PI;
   const { destination } = await import('./core/geo');
   const viewPos = destination({ lat: peak.lat, lon: peak.lon }, backAz, distToPeak);
-  lastOrigin = viewPos;
-  setStatus(t('computing'));
-  worker.postMessage({ type: 'compute', origin: viewPos, peaks: currentPeaks });
+  // Переход к вершине — «телепорт» на землю: набранная высота не имеет смысла
+  heightOverride = null;
+  requestCompute(viewPos);
   view.centerAzRad = azToPeak;
   draw();
 }
@@ -510,7 +526,7 @@ function setupNavPad(): void {
     { icon: '↑', az: 0, label: 'Вперёд' },
     { icon: '↗', az: Math.PI * 0.75, label: 'Вправо-вперёд' },
     { icon: '←', az: -Math.PI / 2, label: 'Влево' },
-    { icon: '📍', az: 0, label: 'К GPS', action: 'gps' },
+    { icon: '📍', az: 0, label: 'К GPS (и на землю)', action: 'gps' },
     { icon: '→', az: Math.PI / 2, label: 'Вправо' },
     { icon: '↙', az: -Math.PI * 1.25, label: 'Влево-назад' },
     { icon: '↓', az: Math.PI, label: 'Назад' },
@@ -527,18 +543,14 @@ function setupNavPad(): void {
     if (d.action === 'gps') {
       btn.onclick = () => {
         getPosition().then((pos) => {
-          lastOrigin = pos;
-          worker.postMessage({ type: 'compute', origin: pos, peaks: currentPeaks });
-          setStatus(t('computing'));
+          heightOverride = null; // возврат на землю в точке GPS
+          requestCompute(pos);
         });
       };
     } else {
       btn.onclick = () => {
         const az = view.centerAzRad + d.az;
-        const newPos = destination(lastOrigin, az, MOVE_STEP_M);
-        lastOrigin = newPos;
-        worker.postMessage({ type: 'compute', origin: newPos, peaks: currentPeaks });
-        setStatus(t('computing'));
+        requestCompute(destination(lastOrigin, az, MOVE_STEP_M));
       };
     }
     pad.appendChild(btn);
@@ -577,18 +589,31 @@ function setupNavPad(): void {
 /** Текущая высота наблюдателя (из DEM) */
 let lastObserverH = 0;
 
+/** Пересчёт панорамы: единственная точка отправки задания воркеру */
+function requestCompute(origin: LatLon): void {
+  lastOrigin = origin;
+  worker.postMessage({
+    type: 'compute',
+    origin,
+    peaks: currentPeaks,
+    observerHeightOverride: heightOverride ?? undefined,
+  });
+  setStatus(t('computing'));
+}
+
 /** Изменение высоты наблюдателя (пересчёт панорамы) */
 function adjustHeight(deltaM: number): void {
-  lastObserverH += deltaM;
+  heightOverride = (heightOverride ?? lastObserverH) + deltaM;
   const el = document.getElementById('height-indicator');
-  if (el) el.textContent = `${Math.round(lastObserverH)} м`;
-  // Пересчёт с новой высотой
-  worker.postMessage({ type: 'compute', origin: lastOrigin, peaks: currentPeaks, observerHeightOverride: lastObserverH });
-  setStatus(t('computing'));
+  if (el) el.textContent = `${Math.round(heightOverride)} м`;
+  requestCompute(lastOrigin);
 }
 
 /** Кнопки AR и фото (появляются после первого расчёта панорамы) */
 function setupActionButtons(origin: LatLon, observerH: number): void {
+  // Вызывается на каждый результат воркера — но кнопки нужны одни
+  if (actionButtonsReady) return;
+  actionButtonsReady = true;
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
   const settingsBtn = makeButton('⚙', t('settings'), 'left:16px;top:16px');
   let settingsClose: (() => void) | null = null;

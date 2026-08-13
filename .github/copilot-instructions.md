@@ -29,9 +29,13 @@
 
 ## Данные
 - Глобальный DEM: AWS Terrarium (онлайн, весь мир) — `src/core/terrarium.ts`
-- Офлайн-патчи: int16-тайлы 256×256 — `tools/dem-to-tiles/`
+- Офлайн-DEM планеты: глобальная пирамида GLO-90 в отдельном репозитории
+  **agran/vershiny-dem** (850 МБ, раздаётся его Pages; адрес —
+  `src/core/dem-config.ts`), генератор — `tools/glo90-to-tiles/glo90_to_tiles.py`
+- Детальные патчи регионов: int16-тайлы 256×256 — `tools/dem-to-tiles/`
 - Вершины: planet.osm.pbf → `tools/planet-peaks/planet_peaks.py --regions-dir` → `tools/peaks-to-json/peaks_to_json.py --region X --from-file`
 - Реестр регионов: `tools/regions.json` (115 регионов, двуязычие)
+- ⚠️ Не класть тайлы в `public/`: 26 тыс. файлов замедляют старт Vite в 18 раз
 
 ## Конвенции
 - **Двуязычие обязательно**: UI (i18n.ts), вершины (`name_ru`/`name_en`), регионы (`title_ru`/`title_en`, `core_ru`/`core_en`)
@@ -50,7 +54,13 @@ npm run build        # прод-сборка
 # Пики региона из planet.jsonl
 python tools\peaks-to-json\peaks_to_json.py --region elbrus --from-file data\peaks-by-region\elbrus.jsonl -o public\peaks\elbrus.json
 
-# DEM-патч региона (после gdalwarp в EPSG:4326)
+# GLO-90 → глобальная пирамида тайлов (scan кешируется, build возобновляемый)
+python tools\glo90-to-tiles\glo90_to_tiles.py scan
+python tools\glo90-to-tiles\glo90_to_tiles.py build --dry-run
+python tools\glo90-to-tiles\glo90_to_tiles.py build --budget-mb 900 `
+  --levels "512:2:400:0.55,256:4:150:0.35,64:8:0:-" -o ..\vershiny-dem\tiles\global
+
+# DEM-патч отдельного региона в 90 м (после gdalwarp в EPSG:4326)
 python tools\dem-to-tiles\dem_to_tiles.py input.tif -o public\tiles\elbrus
 ```
 

@@ -2,7 +2,7 @@
  * Service Worker: офлайн-first для тайлов и данных (ROADMAP 4.2, DATA-PIPELINE).
  *
  * Стратегии:
- *   - Тайлы (.bin, Terrarium .png) → cache-first (не меняются никогда)
+ *   - Тайлы (.bin, .bin.gz, Terrarium .png) → cache-first (не меняются никогда)
  *   - index.json, peaks/*.json, regions.json → network-first (могут обновиться)
  *   - Остальное (бандл, шрифты) → stale-while-revalidate
  */
@@ -14,7 +14,7 @@ const DATA_CACHE = 'vershiny-data-v1';
 const APP_CACHE = 'vershiny-app-v1';
 
 const TILE_PATTERNS = [
-  /\/tiles\/.*\.bin$/,
+  /\/tiles\/.*\.bin(\.gz)?$/,
   /elevation-tiles-prod.*\.png$/,
 ];
 
