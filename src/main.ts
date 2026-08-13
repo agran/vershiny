@@ -6,10 +6,21 @@
 import { renderPanorama, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
 import { toRad, type LatLon } from './core/geo';
-import { t, peakName, getLocale } from './core/i18n';
+import { t } from './core/i18n';
 import { downloadRegion, type DownloadProgress } from './ui/download';
 import type { ResultMessage, WorkerOutMessage, ViewpointResult } from './workers/horizon.worker';
 import type { SearchHit } from './core/search';
+import {
+  ICON_AR,
+  ICON_DOWNLOAD,
+  ICON_DOWN,
+  ICON_LOCATE,
+  ICON_MAP,
+  ICON_PHOTO,
+  ICON_SETTINGS,
+  ICON_UP,
+  iconArrow,
+} from './ui/icons';
 
 let currentRegion = 'elbrus';
 let manualRegion = false; // true = пользователь выбрал вручную в настройках
@@ -383,15 +394,18 @@ async function main(): Promise<void> {
   if (!navUiReady) {
     navUiReady = true;
     setupDownloadButton(origin);
-    setupSearchButton(origin);
-    setupMapButton();
+    setupMapButton(origin);
     setupNavPad();
   }
 }
 
-/** Кнопка карты: где я, куда смотрю и куда перенестись */
-function setupMapButton(): void {
-  const btn = makeButton('🗺', t('map'), 'left:16px;top:76px');
+/**
+ * Кнопка карты: где я, куда смотрю, куда перенестись и поиск вершины.
+ * Поиск живёт здесь, а не отдельной кнопкой на панораме: и то и другое —
+ * «переместиться в другое место», незачем занимать два угла экрана.
+ */
+function setupMapButton(origin: LatLon): void {
+  const btn = makeButton(ICON_MAP, t('map'), 'left:16px;bottom:16px');
   let closeMap: (() => void) | null = null;
   btn.onclick = async () => {
     if (closeMap) {
@@ -399,7 +413,11 @@ function setupMapButton(): void {
       closeMap = null;
       return;
     }
-    const { openMap } = await import('./ui/map');
+    const [{ openMap }, { loadRegions, regionLabel }] = await Promise.all([
+      import('./ui/map'),
+      import('./ui/download'),
+    ]);
+    const regions = await loadRegions();
     closeMap = openMap({
       origin: lastOrigin,
       headingRad: view.centerAzRad,
@@ -407,150 +425,21 @@ function setupMapButton(): void {
         closeMap = null;
         void goToLocation(pos);
       },
+      search: findPeaks,
+      onPickPeak: (hit) => {
+        closeMap = null;
+        void goToHit(hit, origin);
+      },
+      regionTitle: (region) => {
+        const info = regions[region];
+        return info ? regionLabel(info) : region;
+      },
     });
   };
 }
 
-/** Кнопки навигации/поиска/скачивания уже созданы */
+/** Кнопки навигации/карты/скачивания уже созданы */
 let navUiReady = false;
-/** Поиск вершины: поле ввода поверх панорамы + переход с отступом */
-function setupSearchButton(origin: LatLon): void {
-  const btn = makeButton('🔍', t('searchPeak'), 'left:16px;bottom:16px');
-  let searchOverlay: HTMLElement | null = null;
-
-  btn.onclick = () => {
-    if (searchOverlay) {
-      searchOverlay.remove();
-      searchOverlay = null;
-      return;
-    }
-
-    // Поле ввода поверх панорамы (prompt() не работает в PWA/iframe)
-    searchOverlay = document.createElement('div');
-    searchOverlay.style.cssText =
-      'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);' +
-      'background:#1a1a2e;border-radius:12px;padding:16px;z-index:50;' +
-      'display:flex;flex-direction:column;gap:12px;min-width:280px;' +
-      'border:1px solid #415a77';
-
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.placeholder = t('searchPrompt');
-    input.style.cssText =
-      'background:#2b2d42;color:#f1faee;border:1px solid #415a77;' +
-      'border-radius:8px;padding:10px 12px;font-size:14px;outline:none';
-
-    const btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex;gap:8px;justify-content:flex-end';
-
-    const cancelBtn = document.createElement('button');
-    cancelBtn.textContent = t('close');
-    cancelBtn.style.cssText =
-      'background:#415a77;color:#f1faee;border:none;border-radius:8px;' +
-      'padding:8px 16px;font-size:14px;cursor:pointer';
-    const closeSearch = (): void => {
-      searchOverlay?.remove();
-      searchOverlay = null;
-    };
-    cancelBtn.onclick = closeSearch;
-
-    const searchBtn = document.createElement('button');
-    searchBtn.textContent = t('searchPeak');
-    searchBtn.style.cssText =
-      'background:#4cc9f0;color:#1a1a2e;border:none;border-radius:8px;' +
-      'padding:8px 16px;font-size:14px;cursor:pointer;font-weight:500';
-
-    // Список вариантов: одноимённых вершин много, выбор — за человеком
-    const results = document.createElement('div');
-    results.style.cssText =
-      'display:none;flex-direction:column;gap:4px;max-height:min(50vh,320px);' +
-      'overflow-y:auto;margin-top:4px';
-
-    const runSearch = async (): Promise<void> => {
-      const query = input.value.trim();
-      if (!query) return;
-      searchBtn.disabled = true;
-      searchBtn.textContent = '…';
-      const hits = await findPeaks(query);
-      searchBtn.disabled = false;
-      searchBtn.textContent = t('searchPeak');
-
-      if (!hits.length) {
-        results.style.display = 'none';
-        setStatus(t('peakNotFound'));
-        setTimeout(() => setStatus(''), 3000);
-        return;
-      }
-      if (hits.length === 1) {
-        closeSearch();
-        void goToHit(hits[0], origin);
-        return;
-      }
-      await renderResults(results, hits, (hit) => {
-        closeSearch();
-        void goToHit(hit, origin);
-      });
-    };
-
-    searchBtn.onclick = () => void runSearch();
-
-    input.onkeydown = (ev) => {
-      if (ev.key === 'Enter') searchBtn.click();
-      if (ev.key === 'Escape') cancelBtn.click();
-    };
-
-    btnRow.appendChild(cancelBtn);
-    btnRow.appendChild(searchBtn);
-    searchOverlay.appendChild(input);
-    searchOverlay.appendChild(btnRow);
-    searchOverlay.appendChild(results);
-    document.body.appendChild(searchOverlay);
-    input.focus();
-  };
-}
-
-/**
- * Список найденных вершин: название, высота и регион — без региона одинаковые
- * имена («Ostspitze», «Северная») ничем не различить.
- */
-async function renderResults(
-  container: HTMLElement,
-  hits: SearchHit[],
-  onPick: (hit: SearchHit) => void,
-): Promise<void> {
-  const { loadRegions, regionLabel } = await import('./ui/download');
-  const regions = await loadRegions();
-  container.textContent = '';
-  container.style.display = 'flex';
-
-  for (const hit of hits) {
-    const row = document.createElement('button');
-    row.style.cssText =
-      'display:flex;flex-direction:column;align-items:flex-start;gap:2px;' +
-      'background:#2b2d42;color:#f1faee;border:1px solid #415a77;border-radius:8px;' +
-      'padding:8px 10px;font-size:13px;cursor:pointer;text-align:left;width:100%';
-    row.onmouseenter = () => (row.style.background = '#3a3d5c');
-    row.onmouseleave = () => (row.style.background = '#2b2d42');
-
-    const title = document.createElement('span');
-    const ele =
-      hit.peak.ele !== undefined
-        ? ` · ${Math.round(hit.peak.ele)} ${getLocale() === 'ru' ? 'м' : 'm'}`
-        : '';
-    title.textContent = `${peakName(hit.peak)}${ele}`;
-    title.style.cssText = 'font-weight:500';
-
-    const sub = document.createElement('span');
-    const info = regions[hit.region];
-    sub.textContent = info ? regionLabel(info) : hit.region;
-    sub.style.cssText = 'opacity:0.7;font-size:12px';
-
-    row.appendChild(title);
-    row.appendChild(sub);
-    row.onclick = () => onPick(hit);
-    container.appendChild(row);
-  }
-}
 
 /**
  * Переход к найденной вершине: при необходимости меняем регион и подтягиваем
@@ -663,7 +552,7 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
 
 /** Кнопка «Скачать для офлайна» в углу экрана */
 function setupDownloadButton(origin: LatLon): void {
-  const btn = makeButton('⬇', t('downloadRegion'), 'right:16px;bottom:16px');
+  const btn = makeButton(ICON_DOWNLOAD, t('downloadRegion'), 'right:16px;bottom:16px');
   let busy = false;
   btn.onclick = async () => {
     if (busy) return;
@@ -692,11 +581,17 @@ function setupDownloadButton(origin: LatLon): void {
   };
 }
 
-/** Фабрика круглых кнопок действий */
+/**
+ * Фабрика круглых кнопок действий.
+ * icon — инлайновый SVG (см. ui/icons.ts) или текст; SVG рисуется одинаково
+ * на всех платформах, в отличие от эмодзи.
+ */
 function makeButton(icon: string, title: string, pos: string): HTMLButtonElement {
   const btn = document.createElement('button');
-  btn.textContent = icon;
+  if (icon.startsWith('<svg')) btn.innerHTML = icon;
+  else btn.textContent = icon;
   btn.title = title;
+  btn.setAttribute('aria-label', title);
   btn.style.cssText =
     `position:fixed;${pos};width:48px;height:48px;` +
     'border-radius:50%;border:none;background:#415a77;color:#f1faee;' +
@@ -706,45 +601,52 @@ function makeButton(icon: string, title: string, pos: string): HTMLButtonElement
   return btn;
 }
 
-/** Экранный джойстик: перемещение по земле + сброс на GPS */
+/**
+ * Экранный джойстик: перемещение по земле + возврат на GPS.
+ *
+ * Крест без диагоналей: диагональ — это два нажатия соседних стрелок, а
+ * восемь кнопок в углу экрана занимали место и путали. Стрелки показывают
+ * направление относительно взгляда и поворачиваются вместе с камерой.
+ */
 function setupNavPad(): void {
-  const padSize = 120;
+  const padSize = 132;
   const pad = document.createElement('div');
   pad.style.cssText =
     `position:fixed;left:16px;bottom:76px;width:${padSize}px;height:${padSize}px;` +
     'z-index:10;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);' +
-    'gap:2px';
+    'gap:4px';
   document.body.appendChild(pad);
 
-  const dirs = [
-    { icon: '↖', az: -Math.PI * 0.75, label: 'Влево-назад' },
-    { icon: '↑', az: 0, label: 'Вперёд' },
-    { icon: '↗', az: Math.PI * 0.75, label: 'Вправо-вперёд' },
-    { icon: '←', az: -Math.PI / 2, label: 'Влево' },
-    { icon: '📍', az: 0, label: 'К GPS (и на землю)', action: 'gps' },
-    { icon: '→', az: Math.PI / 2, label: 'Вправо' },
-    { icon: '↙', az: -Math.PI * 1.25, label: 'Влево-назад' },
-    { icon: '↓', az: Math.PI, label: 'Назад' },
-    { icon: '↘', az: Math.PI * 1.25, label: 'Вправо-назад' },
+  const dirs: { cell: string; az?: number; label: string; gps?: boolean }[] = [
+    { cell: '1 / 2', az: 0, label: t('navForward') },
+    { cell: '2 / 1', az: -Math.PI / 2, label: t('navLeft') },
+    { cell: '2 / 2', label: t('navGps'), gps: true },
+    { cell: '2 / 3', az: Math.PI / 2, label: t('navRight') },
+    { cell: '3 / 2', az: Math.PI, label: t('navBack') },
   ];
 
   for (const d of dirs) {
     const btn = document.createElement('button');
-    btn.textContent = d.icon;
+    btn.innerHTML = d.gps ? ICON_LOCATE : iconArrow(((d.az ?? 0) * 180) / Math.PI);
     btn.title = d.label;
+    btn.setAttribute('aria-label', d.label);
+    const [row, col] = d.cell.split(' / ');
     btn.style.cssText =
-      'border:none;border-radius:8px;background:#415a77;color:#f1faee;' +
-      'font-size:16px;cursor:pointer;min-width:0;min-height:0';
-    if (d.action === 'gps') {
+      `grid-row:${row};grid-column:${col};` +
+      'border:none;border-radius:10px;background:#415a77;color:#f1faee;' +
+      'cursor:pointer;min-width:0;min-height:0;display:flex;' +
+      'align-items:center;justify-content:center';
+    if (d.gps) {
       btn.onclick = () => {
         getPosition().then((pos) => {
           heightOverride = null; // возврат на землю в точке GPS
+          autoTiltPending = true;
           requestCompute(pos);
         });
       };
     } else {
       btn.onclick = () => {
-        const az = view.centerAzRad + d.az;
+        const az = view.centerAzRad + (d.az ?? 0);
         requestCompute(destination(lastOrigin, az, MOVE_STEP_M));
       };
     }
@@ -754,16 +656,23 @@ function setupNavPad(): void {
   // Высота: вверх/вниз + индикатор
   const heightPad = document.createElement('div');
   heightPad.style.cssText =
-    'position:fixed;left:16px;bottom:204px;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center';
+    'position:fixed;left:16px;bottom:216px;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center';
   document.body.appendChild(heightPad);
 
-  const upBtn = document.createElement('button');
-  upBtn.textContent = '⬆';
-  upBtn.title = 'Выше (+100 м)';
-  upBtn.style.cssText =
-    'border:none;border-radius:8px;background:#415a77;color:#f1faee;width:40px;height:32px;cursor:pointer';
-  upBtn.onclick = () => adjustHeight(100);
-  heightPad.appendChild(upBtn);
+  const heightBtn = (icon: string, title: string, delta: number): HTMLButtonElement => {
+    const b = document.createElement('button');
+    b.innerHTML = icon;
+    b.title = title;
+    b.setAttribute('aria-label', title);
+    b.style.cssText =
+      'border:none;border-radius:10px;background:#415a77;color:#f1faee;' +
+      'width:44px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center';
+    b.onclick = () => adjustHeight(delta);
+    heightPad.appendChild(b);
+    return b;
+  };
+
+  heightBtn(ICON_UP, t('heightUp'), 100);
 
   const heightLabel = document.createElement('div');
   heightLabel.id = 'height-indicator';
@@ -772,13 +681,7 @@ function setupNavPad(): void {
   heightLabel.textContent = `${Math.round(lastObserverH)} м`;
   heightPad.appendChild(heightLabel);
 
-  const downBtn = document.createElement('button');
-  downBtn.textContent = '⬇';
-  downBtn.title = 'Ниже (−100 м)';
-  downBtn.style.cssText =
-    'border:none;border-radius:8px;background:#415a77;color:#f1faee;width:40px;height:32px;cursor:pointer';
-  downBtn.onclick = () => adjustHeight(-100);
-  heightPad.appendChild(downBtn);
+  heightBtn(ICON_DOWN, t('heightDown'), -100);
 }
 
 /** Текущая высота наблюдателя (из DEM) */
@@ -810,7 +713,7 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
   if (actionButtonsReady) return;
   actionButtonsReady = true;
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
-  const settingsBtn = makeButton('⚙', t('settings'), 'left:16px;top:16px');
+  const settingsBtn = makeButton(ICON_SETTINGS, t('settings'), 'left:16px;top:16px');
   let settingsClose: (() => void) | null = null;
   settingsBtn.onclick = async () => {
     if (settingsClose) {
@@ -838,7 +741,7 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
 
   // AR-режим
   let arStop: (() => void) | null = null;
-  const arBtn = makeButton('📷', t('arMode'), 'right:16px;bottom:76px');
+  const arBtn = makeButton(ICON_AR, t('arMode'), 'right:16px;bottom:76px');
   arBtn.onclick = async () => {
     if (arStop) {
       arStop();
@@ -860,7 +763,7 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
   };
 
   // Фото с подписями
-  const photoBtn = makeButton('📸', t('photo'), 'right:16px;bottom:136px');
+  const photoBtn = makeButton(ICON_PHOTO, t('photo'), 'right:16px;bottom:136px');
   photoBtn.onclick = async () => {
     if (!panorama) return;
     const { capturePhoto, sharePhoto } = await import('./ui/photo');

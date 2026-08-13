@@ -10,7 +10,9 @@
  */
 
 import type { LatLon } from '../core/geo';
-import { t, getLocale } from '../core/i18n';
+import type { SearchHit } from '../core/search';
+import { t, getLocale, peakName } from '../core/i18n';
+import { ICON_CLOSE, ICON_LOCATE, ICON_SEARCH } from './icons';
 
 const TILE_PX = 256;
 const MIN_ZOOM = 2;
@@ -44,6 +46,12 @@ export interface MapOptions {
   headingRad: number;
   /** Перенос в выбранную точку */
   onPick: (pos: LatLon) => void;
+  /** Поиск вершины по названию (по всей планете) */
+  search: (query: string) => Promise<SearchHit[]>;
+  /** Перелёт к найденной вершине */
+  onPickPeak: (hit: SearchHit) => void;
+  /** Название региона для строки результата */
+  regionTitle: (region: string) => string;
 }
 
 /** Открывает карту поверх панорамы. Возвращает функцию закрытия. */
@@ -194,11 +202,12 @@ export function openMap(options: MapOptions): () => void {
   // --- Кнопки ---
   const button = (label: string, css: string, onClick: () => void): HTMLButtonElement => {
     const b = document.createElement('button');
-    b.textContent = label;
+    if (label.startsWith('<svg')) b.innerHTML = label;
+    else b.textContent = label;
     b.style.cssText =
       'position:absolute;z-index:2;border:1px solid #415a77;border-radius:10px;' +
       'background:rgba(26,26,46,.92);color:#f1faee;font:15px system-ui,sans-serif;' +
-      `cursor:pointer;${css}`;
+      `cursor:pointer;display:flex;align-items:center;justify-content:center;${css}`;
     b.onclick = onClick;
     root.appendChild(b);
     return b;
@@ -208,17 +217,22 @@ export function openMap(options: MapOptions): () => void {
     root.remove();
   };
 
-  button('✕', 'left:16px;top:16px;width:44px;height:44px;font-size:18px', close);
+  button(ICON_CLOSE, 'left:16px;top:16px;width:44px;height:44px', close).title = t('close');
   button('＋', 'right:16px;top:16px;width:44px;height:44px;font-size:20px', () =>
     setZoom(zoom + 1),
   );
   button('−', 'right:16px;top:68px;width:44px;height:44px;font-size:22px', () =>
     setZoom(zoom - 1),
   );
-  button('📍', 'left:16px;top:68px;width:44px;height:44px', () => {
+  button(ICON_LOCATE, 'left:16px;top:68px;width:44px;height:44px', () => {
     center = { ...options.origin };
     render();
   }).title = t('mapMyPosition');
+
+  const searchBtn = button(ICON_SEARCH, 'left:16px;top:120px;width:44px;height:44px', () =>
+    toggleSearch(),
+  );
+  searchBtn.title = t('searchPeak');
 
   const go = button(
     t('mapGoHere'),
@@ -249,13 +263,100 @@ export function openMap(options: MapOptions): () => void {
   root.appendChild(attribution);
 
   const hint = document.createElement('div');
-  hint.textContent = getLocale() === 'ru' ? 'Ведите карту — центр станет новой точкой' : 'Pan the map — the centre becomes your new spot';
+  hint.textContent =
+    getLocale() === 'ru'
+      ? 'Ведите карту — центр станет новой точкой'
+      : 'Pan the map — the centre becomes your new spot';
   hint.style.cssText =
     'position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:2;' +
     'background:rgba(26,26,46,.85);border-radius:8px;padding:6px 12px;' +
     'font:13px system-ui,sans-serif;color:#cfd8dc;max-width:calc(100vw - 160px);text-align:center';
   root.appendChild(hint);
   setTimeout(() => hint.remove(), 4000);
+
+  // --- Поиск вершины (живёт в карте, а не отдельной кнопкой на панораме) ---
+  const panel = document.createElement('div');
+  panel.style.cssText =
+    'position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:3;' +
+    'display:none;flex-direction:column;gap:8px;width:min(420px,calc(100vw - 128px));' +
+    'background:#1a1a2e;border:1px solid #415a77;border-radius:12px;padding:12px;' +
+    'box-shadow:0 6px 20px rgba(0,0,0,.5)';
+
+  const input = document.createElement('input');
+  input.type = 'search';
+  input.placeholder = t('searchPrompt');
+  input.style.cssText =
+    'background:#2b2d42;color:#f1faee;border:1px solid #415a77;border-radius:8px;' +
+    'padding:10px 12px;font:14px system-ui,sans-serif;outline:none;width:100%';
+
+  const results = document.createElement('div');
+  results.style.cssText =
+    'display:flex;flex-direction:column;gap:4px;max-height:min(46vh,300px);overflow-y:auto';
+
+  panel.append(input, results);
+  root.appendChild(panel);
+
+  function toggleSearch(): void {
+    const open = panel.style.display === 'none';
+    panel.style.display = open ? 'flex' : 'none';
+    hint.remove();
+    if (open) input.focus();
+  }
+
+  const runSearch = async (): Promise<void> => {
+    const query = input.value.trim();
+    results.textContent = '';
+    if (!query) return;
+
+    const searching = document.createElement('div');
+    searching.textContent = '…';
+    searching.style.cssText = 'color:#cfd8dc;font:13px system-ui,sans-serif;padding:4px';
+    results.appendChild(searching);
+
+    const hits = await options.search(query);
+    results.textContent = '';
+    if (!hits.length) {
+      const empty = document.createElement('div');
+      empty.textContent = t('peakNotFound');
+      empty.style.cssText = 'color:#cfd8dc;font:13px system-ui,sans-serif;padding:4px';
+      results.appendChild(empty);
+      return;
+    }
+
+    for (const hit of hits) {
+      const row = document.createElement('button');
+      row.style.cssText =
+        'display:flex;flex-direction:column;align-items:flex-start;gap:2px;' +
+        'background:#2b2d42;color:#f1faee;border:1px solid #415a77;border-radius:8px;' +
+        'padding:8px 10px;font:13px system-ui,sans-serif;cursor:pointer;text-align:left;width:100%';
+      row.onmouseenter = () => (row.style.background = '#3a3d5c');
+      row.onmouseleave = () => (row.style.background = '#2b2d42');
+
+      const ele =
+        hit.peak.ele !== undefined
+          ? ` · ${Math.round(hit.peak.ele)} ${getLocale() === 'ru' ? 'м' : 'm'}`
+          : '';
+      const title = document.createElement('span');
+      title.textContent = `${peakName(hit.peak)}${ele}`;
+      title.style.fontWeight = '500';
+
+      const sub = document.createElement('span');
+      sub.textContent = options.regionTitle(hit.region);
+      sub.style.cssText = 'opacity:.7;font-size:12px';
+
+      row.append(title, sub);
+      row.onclick = () => {
+        options.onPickPeak(hit);
+        close();
+      };
+      results.appendChild(row);
+    }
+  };
+
+  input.onkeydown = (ev) => {
+    if (ev.key === 'Enter') void runSearch();
+    if (ev.key === 'Escape') toggleSearch();
+  };
 
   document.body.appendChild(root);
   render();
