@@ -473,7 +473,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   setStatus('');
   draw();
   // Кнопки AR/фото — после первого результата
-  setupActionButtons(lastOrigin, r.observerH);
+  setupActionButtons();
   console.info(
     `Горизонт: ${r.horizon.length} лучей, ${r.peaks.length} из ${currentPeaks.length} пиков, ` +
       `наблюдатель ${r.observerH.toFixed(0)} м, ${r.computeMs.toFixed(0)} мс`,
@@ -1147,7 +1147,7 @@ function adjustHeight(deltaM: number): void {
 }
 
 /** Кнопки AR и фото (появляются после первого расчёта панорамы) */
-function setupActionButtons(origin: LatLon, observerH: number): void {
+function setupActionButtons(): void {
   // Вызывается на каждый результат воркера — но кнопки нужны одни
   if (actionButtonsReady) return;
   actionButtonsReady = true;
@@ -1237,11 +1237,20 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
     if (!panorama) return;
     const { capturePhoto, sharePhoto } = await import('./ui/photo');
     const blob = await capturePhoto(panorama, view, {
-      origin,
-      observerH,
+      // Именно актуальные, а не аргументы функции: кнопки создаются один раз,
+      // и замыкание держало бы точку первого расчёта — после перелёта к
+      // вершине подпись врала бы координатами и высотой старта
+      origin: lastOrigin,
+      observerH: lastObserverH,
       region: currentRegion,
+      source: canvas,
     });
-    await sharePhoto(blob);
+    try {
+      await sharePhoto(blob);
+    } catch (err) {
+      // Отмена шаринга пользователем — это AbortError, а не сбой
+      if (!(err instanceof DOMException && err.name === 'AbortError')) throw err;
+    }
   };
 }
 

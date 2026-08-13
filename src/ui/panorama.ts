@@ -72,11 +72,18 @@ const HIDDEN_LABEL_BUDGET = 6;
  */
 export const HORIZON_FRAC = 0.62;
 
-/** Рендер одного кадра панорамы: небо + оверлей */
+/**
+ * Рендер одного кадра панорамы: небо + оверлей.
+ *
+ * @param uiScale во сколько раз холст крупнее «экранного» пикселя. По
+ *   умолчанию выводится из DOM-геометрии, но у холста, не вставленного в
+ *   страницу (снимок), она нулевая — такому вызову масштаб нужно передать.
+ */
 export function renderPanorama(
   ctx: CanvasRenderingContext2D,
   state: PanoramaState,
   view: ViewState,
+  uiScale?: number,
 ): void {
   const { width, height } = ctx.canvas;
   const horizonY = height * HORIZON_FRAC; // линия горизонта чуть ниже центра
@@ -89,18 +96,22 @@ export function renderPanorama(
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, width, height);
 
-  drawOverlay(ctx, state, view);
+  drawOverlay(ctx, state, view, uiScale);
 }
 
 /**
  * Оверлей поверх любого фона: контуры гребней, шкала азимутов, подписи вершин.
  * Используется и панорамой, и AR-режимом поверх кадра камеры, поэтому ничего
  * не заливает — только контрастные линии и текст.
+ *
+ * @param uiScale во сколько раз холст крупнее «экранного» пикселя: от него
+ *   зависят кегль подписей и толщина линий.
  */
 export function drawOverlay(
   ctx: CanvasRenderingContext2D,
   state: PanoramaState,
   view: ViewState,
+  uiScaleOverride?: number,
 ): void {
   const { width, height } = ctx.canvas;
   const horizonY = height * HORIZON_FRAC;
@@ -113,8 +124,11 @@ export function drawOverlay(
   const { horizon, stepRad } = state;
   const layers = state.layers ?? [horizon];
 
-  // Масштаб под плотность пикселей (canvas в devicePixelRatio раз крупнее CSS)
-  const uiScale = ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1;
+  // Масштаб под плотность пикселей (canvas в devicePixelRatio раз крупнее CSS).
+  // У холста вне DOM геометрия нулевая — там масштаб приходит параметром:
+  // иначе на снимке шириной 3840 px подписи рисовались кеглем 12 px
+  const uiScale =
+    uiScaleOverride ?? (ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1);
 
   // Профили силуэта: видимые гребни по возрастанию дистанции.
   // Гребень = локальный максимум угла вдоль луча (то, что реально видно как линия).
