@@ -13,6 +13,7 @@ import type { SearchHit } from './core/search';
 import {
   ICON_AR,
   ICON_DOWNLOAD,
+  ICON_DOWNLOADED,
   ICON_DOWN,
   ICON_LOCATE,
   ICON_MAP,
@@ -426,9 +427,12 @@ async function main(): Promise<void> {
   // Кнопки действий; main() повторяется при смене региона — создаём один раз
   if (!navUiReady) {
     navUiReady = true;
-    setupDownloadButton(origin);
+    setupDownloadButton();
     setupMapButton(origin);
     setupNavPad();
+  } else {
+    // Регион мог смениться по GPS — состояние кнопки перечитываем
+    void refreshDownloadState();
   }
 }
 
@@ -495,6 +499,7 @@ async function switchRegion(region: string): Promise<void> {
   currentRegion = region;
   manualRegion = true;
   setStatus(t('loadingRegion'));
+  void refreshDownloadState();
 
   const base = import.meta.env.BASE_URL;
   let peaks: PeaksFile['peaks'] | null = null;
@@ -604,40 +609,72 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
   return mergeHits(fuzzy, lastOrigin);
 }
 
-/** Кнопка «Скачать для офлайна» в углу экрана */
-function setupDownloadButton(origin: LatLon): void {
+/**
+ * Кнопка «Скачать для офлайна» в углу экрана.
+ *
+ * По ней видно состояние текущего региона: пока он не на устройстве — стрелка
+ * на синем, после загрузки — галочка на зелёном. Иначе не понять, скачано ли
+ * уже: панорама-то рисуется в обоих случаях, разница вылезает только в горах
+ * без связи. Нажатие на скачанный регион перекачивает его — данные вершин
+ * обновляются, а тайлы, что уже лежат, повторно не тянутся.
+ */
+function setupDownloadButton(): void {
   const btn = makeButton(ICON_DOWNLOAD, t('downloadRegion'), 'right:16px;bottom:16px');
-  const restore = () => {
-    btn.innerHTML = ICON_DOWNLOAD;
-  };
-  const flash = (mark: string) => {
-    btn.textContent = mark;
-    setTimeout(restore, 3000);
-  };
+  downloadButton = btn;
+  void refreshDownloadState();
+
   let busy = false;
   btn.onclick = async () => {
     if (busy) return;
     busy = true;
     btn.disabled = true;
     try {
-      await downloadRegion(currentRegion, origin, (p: DownloadProgress) => {
+      await downloadRegion(currentRegion, lastOrigin, (p: DownloadProgress) => {
         if (p.phase === 'peaks') {
           setStatus(t('downloadPeaks'));
         } else if (p.phase === 'tiles') {
           setStatus(`${t('downloadTiles')}: ${p.done}/${p.total}`);
         } else if (p.phase === 'done') {
           setStatus('');
-          flash('✓');
         }
       });
+      regionDownloaded = true;
+      applyDownloadState();
     } catch (err) {
       setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
-      flash('✗');
+      btn.textContent = '✗';
+      setTimeout(applyDownloadState, 3000);
     } finally {
       busy = false;
       btn.disabled = false;
     }
   };
+}
+
+/** Кнопка скачивания и состояние текущего региона на устройстве */
+let downloadButton: HTMLButtonElement | null = null;
+let regionDownloaded = false;
+
+/** Перечитать из хранилища, лежит ли текущий регион офлайн */
+async function refreshDownloadState(): Promise<void> {
+  if (!downloadButton) return;
+  try {
+    const { getDownloadedRegions } = await import('./core/db');
+    regionDownloaded = (await getDownloadedRegions()).includes(currentRegion);
+  } catch {
+    regionDownloaded = false; // приватный режим: считаем, что не скачано
+  }
+  applyDownloadState();
+}
+
+function applyDownloadState(): void {
+  const btn = downloadButton;
+  if (!btn) return;
+  btn.innerHTML = regionDownloaded ? ICON_DOWNLOADED : ICON_DOWNLOAD;
+  btn.style.background = regionDownloaded ? '#2d6a4f' : '#415a77';
+  const title = regionDownloaded ? t('regionDownloaded') : t('downloadRegion');
+  btn.title = title;
+  btn.setAttribute('aria-label', title);
 }
 
 /**
@@ -832,6 +869,8 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
       },
       onClose: () => {
         settingsClose = null;
+        // В настройках можно было скачать регион — сверяем состояние кнопки
+        void refreshDownloadState();
       },
     });
   };
