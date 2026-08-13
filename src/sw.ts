@@ -21,9 +21,23 @@ declare const self: ServiceWorkerGlobalScope;
  */
 const VERSION = (self as unknown as { __SW_VERSION__?: string }).__SW_VERSION__ ?? 'dev';
 
+/**
+ * Чанки приложения на предзагрузку (подставляются сборкой, см.
+ * vite.sw.config.ts). Ленивые чанки — настройки, карта, поиск, загрузка
+ * региона — иначе попадали в кеш только после того, как человек их открыл
+ * онлайн. В горах без связи кнопка настроек просто ничего не делала.
+ */
+const PRECACHE = (self as unknown as { __SW_ASSETS__?: string[] }).__SW_ASSETS__ ?? [];
+
 /** Тайлы не меняются никогда — их кеш переживает обновления приложения */
 const TILE_CACHE = 'vershiny-tiles-v1';
-const DATA_CACHE = `vershiny-data-${VERSION}`;
+/**
+ * Данные (peaks, index.json, regions.json) тоже не привязаны к версии
+ * оболочки: стратегия network-first обновляет их сама, как только есть сеть.
+ * Раньше имя кеша содержало версию — после каждого обновления приложения
+ * человек офлайн терял и список регионов, и вершины.
+ */
+const DATA_CACHE = 'vershiny-data-v1';
 const APP_CACHE = `vershiny-app-${VERSION}`;
 /** Кеши, которые не удаляем при активации новой версии */
 const KEEP = new Set([TILE_CACHE, DATA_CACHE, APP_CACHE]);
@@ -47,8 +61,22 @@ function isData(url: string): boolean {
   return DATA_PATTERNS.some((re) => re.test(url));
 }
 
-self.addEventListener('install', () => {
-  // Ждём в состоянии waiting: решение об обновлении принимает пользователь
+self.addEventListener('install', (ev) => {
+  // Ждём в состоянии waiting: решение об обновлении принимает пользователь.
+  // Но чанки складываем в кеш сразу — иначе офлайн доступно только то,
+  // что успели открыть при живой сети
+  ev.waitUntil(
+    (async () => {
+      if (PRECACHE.length === 0) return;
+      const cache = await caches.open(APP_CACHE);
+      // Каждый по отдельности: один отвалившийся файл не должен отменять всё
+      await Promise.all(
+        PRECACHE.map((path) =>
+          cache.add(new URL(path, self.location.href).href).catch(() => {}),
+        ),
+      );
+    })(),
+  );
 });
 
 self.addEventListener('activate', (ev) => {
@@ -127,12 +155,19 @@ async function staleWhileRevalidate(
 ): Promise<Response> {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
-  const fetched = fetch(request).then((response) => {
-    if (response.ok) {
-      cache.put(request, response.clone());
-    }
-    return response;
-  });
+  // Фоновое обновление не должно ронять ответ: офлайн оно отклоняется на
+  // каждом ассете, и без catch это россыпь необработанных отклонений в worker'е
+  const fetched = fetch(request)
+    .then((response) => {
+      if (response.ok) {
+        cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch((err) => {
+      if (cached) return cached.clone();
+      throw err;
+    });
   return cached ?? fetched;
 }
 

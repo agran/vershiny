@@ -22,12 +22,16 @@ const built = buildSync({
   bundle: true,
   format: 'iife',
   write: false,
-  define: { 'self.__SW_VERSION__': '"testver"' },
+  define: {
+    'self.__SW_VERSION__': '"testver"',
+    'self.__SW_ASSETS__': '["assets/main-abc.js","assets/settings-def.js"]',
+  },
 }).outputFiles[0].text;
 
 interface SwEnv {
   handlers: Record<string, (ev: unknown) => void>;
   deleted: string[];
+  added: string[];
   claimed: () => boolean;
   skipped: () => boolean;
 }
@@ -35,6 +39,7 @@ interface SwEnv {
 function runSw(existingCaches: string[]): SwEnv {
   const handlers: Record<string, (ev: unknown) => void> = {};
   const deleted: string[] = [];
+  const added: string[] = [];
   let claimed = false;
   let skipped = false;
 
@@ -43,6 +48,7 @@ function runSw(existingCaches: string[]): SwEnv {
       addEventListener: (type: string, fn: (ev: unknown) => void) => {
         handlers[type] = fn;
       },
+      location: { href: 'https://example.org/vershiny/sw.js' },
       clients: {
         claim: async () => {
           claimed = true;
@@ -58,15 +64,28 @@ function runSw(existingCaches: string[]): SwEnv {
         deleted.push(name);
         return true;
       },
-      open: async () => ({ match: async () => undefined, put: async () => {} }),
+      open: async () => ({
+        match: async () => undefined,
+        put: async () => {},
+        add: async (url: string) => {
+          added.push(url);
+        },
+      }),
     },
     fetch: async () => new Response(''),
     Response,
+    URL,
   };
   vm.createContext(context);
   vm.runInContext(built, context);
 
-  return { handlers, deleted, claimed: () => claimed, skipped: () => skipped };
+  return {
+    handlers,
+    deleted,
+    added,
+    claimed: () => claimed,
+    skipped: () => skipped,
+  };
 }
 
 describe('Service Worker', () => {
@@ -75,10 +94,11 @@ describe('Service Worker', () => {
     expect(Object.keys(handlers).sort()).toEqual(['activate', 'fetch', 'install', 'message']);
   });
 
-  it('при активации удаляет кеши прошлых версий, тайлы и чужие — оставляет', async () => {
+  it('при активации удаляет кеши прошлых версий, тайлы и данные — оставляет', async () => {
     const env = runSw([
       'vershiny-app-oldver',
       'vershiny-data-oldver',
+      'vershiny-data-v1',
       'vershiny-tiles-v1',
       'other-app',
     ]);
@@ -87,10 +107,13 @@ describe('Service Worker', () => {
     await done;
 
     expect(env.deleted).toContain('vershiny-app-oldver');
-    expect(env.deleted).toContain('vershiny-data-oldver');
-    // Тайлы не меняются никогда — их кеш переживает обновление приложения
+    // Тайлы и данные не привязаны к версии оболочки: после обновления
+    // приложения офлайн-запас должен остаться на месте
     expect(env.deleted).not.toContain('vershiny-tiles-v1');
+    expect(env.deleted).not.toContain('vershiny-data-v1');
     expect(env.deleted).not.toContain('other-app');
+    // Кеш данных из старой схемы имён (с версией) больше не нужен
+    expect(env.deleted).toContain('vershiny-data-oldver');
     expect(env.claimed()).toBe(true);
   });
 
@@ -102,6 +125,18 @@ describe('Service Worker', () => {
 
     env.handlers.message({ data: { type: 'SKIP_WAITING' } });
     expect(env.skipped()).toBe(true);
+  });
+
+  it('при установке кладёт чанки приложения в кеш', async () => {
+    // Ленивые чанки (настройки, карта, поиск) грузятся по нажатию: без
+    // предзагрузки офлайн работало только то, что успели открыть при сети
+    const env = runSw([]);
+    let done: Promise<unknown> = Promise.resolve();
+    env.handlers.install({ waitUntil: (p: Promise<unknown>) => (done = p) });
+    await done;
+
+    expect(env.added).toContain('https://example.org/vershiny/assets/settings-def.js');
+    expect(env.added).toContain('https://example.org/vershiny/assets/main-abc.js');
   });
 
   it('не трогает не-GET запросы', () => {

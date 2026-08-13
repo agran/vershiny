@@ -189,12 +189,84 @@ export async function downloadRegion(
   return total;
 }
 
-/** Чтение реестра регионов (public/regions.json, копия tools/regions.json) */
-export async function loadRegions(): Promise<Record<string, RegionInfo>> {
+/**
+ * Хранилище реестра между запусками. Вынесено интерфейсом, чтобы тесты
+ * обходились без IndexedDB.
+ */
+export interface RegionsStore {
+  save(regions: Record<string, RegionInfo>): Promise<void>;
+  load(): Promise<Record<string, RegionInfo> | undefined>;
+}
+
+/** Реестр из последней успешной загрузки: одна страница — одно чтение */
+let registryCache: Record<string, RegionInfo> | null = null;
+/** Идущее чтение: параллельные вызовы не должны дублировать запрос */
+let registryPending: Promise<Record<string, RegionInfo>> | null = null;
+
+/** Сброс памяти реестра (тесты; в приложении реестр живёт до перезагрузки) */
+export function resetRegionsCache(): void {
+  registryCache = null;
+  registryPending = null;
+}
+
+const idbRegionsStore: RegionsStore = {
+  async save(regions) {
+    if (!globalThis.indexedDB) return;
+    const { saveRegionsRegistry } = await import('../core/db');
+    await saveRegionsRegistry(regions);
+  },
+  async load() {
+    if (!globalThis.indexedDB) return undefined;
+    const { getRegionsRegistry } = await import('../core/db');
+    return (await getRegionsRegistry()) as Record<string, RegionInfo> | undefined;
+  },
+};
+
+/**
+ * Чтение реестра регионов (public/regions.json, копия tools/regions.json).
+ *
+ * Реестр — единственный способ узнать, какие регионы вообще есть, и сменить
+ * активный. Офлайн сеть его не отдаёт, а Service Worker кеширует файл только
+ * если тот хоть раз запрашивался онлайн (при ручном выборе региона это могло
+ * не случиться ни разу). Поэтому каждая успешная загрузка складывается в
+ * IndexedDB, и офлайн список берётся оттуда.
+ */
+export function loadRegions(
+  options: { fetchFn?: typeof fetch; store?: RegionsStore } = {},
+): Promise<Record<string, RegionInfo>> {
+  if (registryCache) return Promise.resolve(registryCache);
+  registryPending ??= readRegistry(options).then((regions) => {
+    registryPending = null;
+    if (Object.keys(regions).length > 0) registryCache = regions;
+    return regions;
+  });
+  return registryPending;
+}
+
+async function readRegistry(options: {
+  fetchFn?: typeof fetch;
+  store?: RegionsStore;
+}): Promise<Record<string, RegionInfo>> {
+  const fetchFn = options.fetchFn ?? fetch;
+  const store = options.store ?? idbRegionsStore;
   const base = import.meta.env.BASE_URL;
-  const res = await fetch(`${base}regions.json`);
-  if (!res.ok) return {};
-  return (await res.json()) as Record<string, RegionInfo>;
+
+  try {
+    const res = await fetchFn(`${base}regions.json`);
+    if (!res.ok) throw new Error(`regions.json: HTTP ${res.status}`);
+    // Vite и GitHub Pages на 404 отдают index.html — проверяем тип
+    if (!(res.headers.get('content-type') ?? '').includes('json')) {
+      throw new Error('regions.json: не JSON');
+    }
+    const regions = (await res.json()) as Record<string, RegionInfo>;
+    void store.save(regions).catch(() => {});
+    return regions;
+  } catch (err) {
+    const cached = await store.load().catch(() => undefined);
+    if (cached && Object.keys(cached).length > 0) return cached;
+    console.warn('Реестр регионов недоступен:', err);
+    return {};
+  }
 }
 
 /** Авто-выбор региона по позиции: первый, чей bbox содержит точку.

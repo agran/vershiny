@@ -397,14 +397,18 @@ async function main(): Promise<void> {
   const origin = await getPosition();
   lastOrigin = origin;
 
-  // Авто-выбор региона по GPS (если пользователь не выбрал вручную)
-  if (!manualRegion) {
+  // Авто-выбор региона по GPS (если пользователь не выбрал вручную).
+  // Реестр читаем в любом случае: он же копится в офлайн-кеш, а без него
+  // потом не открыть список регионов без сети.
+  {
     const { loadRegions, findRegionForPosition } = await import('./ui/download');
     const regions = await loadRegions();
-    const autoRegion = findRegionForPosition(origin, regions);
-    if (autoRegion && autoRegion !== currentRegion) {
-      currentRegion = autoRegion;
-      console.info(`Авто-регион: ${autoRegion}`);
+    if (!manualRegion) {
+      const autoRegion = findRegionForPosition(origin, regions);
+      if (autoRegion && autoRegion !== currentRegion) {
+        currentRegion = autoRegion;
+        console.info(`Авто-регион: ${autoRegion}`);
+      }
     }
   }
 
@@ -517,8 +521,9 @@ async function goToHit(hit: SearchHit, origin: LatLon): Promise<void> {
 
 /**
  * Смена региона: вершины из сети, при промахе — из офлайн-кеша.
- * Если не вышло ни то, ни другое (офлайн и регион не скачан), продолжаем
- * со старым списком: панорама всё равно строится по DEM.
+ * Если не вышло ни то, ни другое (офлайн и регион не скачан), остаёмся без
+ * подписей: панорама строится по DEM, а вершины прежнего региона к этому
+ * месту отношения не имеют.
  */
 async function switchRegion(region: string): Promise<void> {
   if (region === currentRegion) return;
@@ -540,6 +545,10 @@ async function switchRegion(region: string): Promise<void> {
     const { annotateIsolation } = await import('./core/peaks');
     annotateIsolation(peaks);
     currentPeaks = peaks;
+  } else {
+    // Офлайн и регион не скачан: вершины прежнего региона оставлять нельзя —
+    // они за сотни километров отсюда. Рельеф при этом есть из пирамиды
+    currentPeaks = [];
   }
 }
 
@@ -936,14 +945,10 @@ function requestCompute(origin: LatLon): void {
   void checkRegionForPosition(origin);
 }
 
-/** Реестр регионов: читается один раз, дальше из памяти */
-let regionsCache: Record<string, RegionInfo> | null = null;
+/** Реестр регионов: читается один раз, дальше из памяти (см. loadRegions) */
 async function allRegions(): Promise<Record<string, RegionInfo>> {
-  if (!regionsCache) {
-    const { loadRegions } = await import('./ui/download');
-    regionsCache = await loadRegions();
-  }
-  return regionsCache;
+  const { loadRegions } = await import('./ui/download');
+  return loadRegions();
 }
 
 /** Регион, от перехода на который пользователь отказался */

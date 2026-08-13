@@ -102,10 +102,21 @@ export function openSettings(
   dlList.style.cssText = 'display:flex;flex-direction:column;gap:4px';
   panel.appendChild(dlList);
 
-  // Загрузка реестра + скачанных
-  Promise.all([loadRegions(), getDownloadedRegions()]).then(
+  // Загрузка реестра + скачанных. Отметки о скачанном — не повод потерять
+  // список: в частном режиме IndexedDB может быть закрыт совсем
+  Promise.all([loadRegions(), getDownloadedRegions().catch(() => [])]).then(
     ([regions, downloaded]) => {
       const downloadedSet = new Set(downloaded);
+
+      // Реестр не приехал и в кеше его нет: пустой список выглядел бы так,
+      // будто регионов не существует — говорим прямо, в чём дело
+      if (Object.keys(regions).length === 0) {
+        const note = document.createElement('div');
+        note.textContent = t('regionsUnavailable');
+        note.style.cssText = 'font-size:12px;color:#e0a458;padding:8px';
+        dlList.appendChild(note);
+        return;
+      }
 
       // Группировка по group, внутри — по priority → алфавиту
       const groups = new Map<string, [string, RegionInfo][]>();
@@ -245,7 +256,15 @@ export function openSettings(
         regionValue.textContent = regionLabel(currentInfo);
       }
     },
-  );
+  ).catch((err) => {
+    // Единственный оставшийся источник отказа — IndexedDB (частный режим,
+    // запрет хранилища): без списка регионов панель бесполезна
+    console.warn('Список регионов не построен:', err);
+    const note = document.createElement('div');
+    note.textContent = t('regionsUnavailable');
+    note.style.cssText = 'font-size:12px;color:#e0a458;padding:8px';
+    dlList.appendChild(note);
+  });
 
   // Кнопка закрытия (✕) — явная, в углу
   const closeBtn = document.createElement('button');

@@ -155,6 +155,18 @@ export async function getDemTileKeys(): Promise<Set<string>> {
   return new Set(await keys(STORE_TILES));
 }
 
+/**
+ * Кеш реестра регионов (regions.json). Без него офлайн не открыть список
+ * регионов и не сменить активный — даже тот, что уже лежит в хранилище.
+ */
+export async function saveRegionsRegistry(regions: unknown): Promise<void> {
+  await set(STORE_META, 'regions', regions);
+}
+
+export async function getRegionsRegistry(): Promise<unknown | undefined> {
+  return get(STORE_META, 'regions');
+}
+
 /** Кеш index.json пирамиды: без него офлайн-старт невозможен */
 export async function saveDemIndex(baseUrl: string, index: unknown): Promise<void> {
   await set(STORE_META, `dem-index:${baseUrl}`, index);

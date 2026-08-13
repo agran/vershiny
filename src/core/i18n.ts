@@ -95,6 +95,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   downloadedRegions: { ru: 'Скачанные регионы', en: 'Downloaded regions' },
   noDownloadedRegions: { ru: 'пока нет', en: 'none yet' },
   regions: { ru: 'Регионы', en: 'Regions' },
+  regionsUnavailable: {
+    ru: 'Список регионов недоступен: подключитесь к сети хотя бы раз',
+    en: 'Region list unavailable: go online at least once',
+  },
   download: { ru: 'Скачать', en: 'Download' },
   downloaded: { ru: 'Скачан', en: 'Downloaded' },
   close: { ru: 'Закрыть', en: 'Close' },

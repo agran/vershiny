@@ -6,11 +6,14 @@
  * шагу нельзя — регионы реестра перекрываются буфером в 200 км.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   suggestRegionForPosition,
   findRegionForPosition,
+  loadRegions,
+  resetRegionsCache,
   type RegionInfo,
+  type RegionsStore,
 } from '../src/ui/download';
 
 const REGIONS: Record<string, RegionInfo> = {
@@ -61,5 +64,93 @@ describe('предложение сменить регион', () => {
   it('переживает регион, которого нет в реестре', () => {
     // Ключ мог остаться от старой версии реестра в сохранённых настройках
     expect(suggestRegionForPosition(FISHT, 'нет-такого', REGIONS)).toBe('caucasus-west');
+  });
+});
+
+/** Хранилище реестра в памяти — вместо IndexedDB */
+function memoryStore(initial?: Record<string, RegionInfo>): RegionsStore & {
+  saved: () => Record<string, RegionInfo> | undefined;
+} {
+  let value = initial;
+  return {
+    save: async (regions) => {
+      value = regions;
+    },
+    load: async () => value,
+    saved: () => value,
+  };
+}
+
+const jsonResponse = (body: unknown) =>
+  new Response(JSON.stringify(body), {
+    headers: { 'content-type': 'application/json' },
+  });
+
+describe('реестр регионов офлайн', () => {
+  beforeEach(() => {
+    resetRegionsCache();
+  });
+
+  it('складывает удачную загрузку в офлайн-хранилище', async () => {
+    const store = memoryStore();
+    const regions = await loadRegions({
+      fetchFn: (async () => jsonResponse(REGIONS)) as unknown as typeof fetch,
+      store,
+    });
+
+    expect(Object.keys(regions)).toContain('elbrus');
+    expect(store.saved()).toEqual(REGIONS);
+  });
+
+  it('без сети отдаёт сохранённый реестр', async () => {
+    // Иначе список регионов офлайн пуст и активный регион не сменить —
+    // даже на тот, что уже лежит в хранилище целиком
+    const regions = await loadRegions({
+      fetchFn: (async () => {
+        throw new TypeError('Failed to fetch');
+      }) as unknown as typeof fetch,
+      store: memoryStore(REGIONS),
+    });
+
+    expect(Object.keys(regions).sort()).toEqual(Object.keys(REGIONS).sort());
+  });
+
+  it('без сети и без запаса отдаёт пустой реестр, а не падает', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const regions = await loadRegions({
+      fetchFn: (async () => {
+        throw new TypeError('Failed to fetch');
+      }) as unknown as typeof fetch,
+      store: memoryStore(),
+    });
+
+    expect(regions).toEqual({});
+    warn.mockRestore();
+  });
+
+  it('SPA-фолбэк с index.html вместо JSON считает за отказ', async () => {
+    // Vite и Pages на 404 отдают HTML со статусом 200: разбор дал бы мусор
+    const regions = await loadRegions({
+      fetchFn: (async () =>
+        new Response('<!doctype html>', {
+          headers: { 'content-type': 'text/html' },
+        })) as unknown as typeof fetch,
+      store: memoryStore(REGIONS),
+    });
+
+    expect(regions.elbrus).toBeDefined();
+  });
+
+  it('читает реестр один раз на страницу', async () => {
+    const fetchFn = vi.fn(async () => jsonResponse(REGIONS));
+    const store = memoryStore();
+    const [a, b] = await Promise.all([
+      loadRegions({ fetchFn: fetchFn as unknown as typeof fetch, store }),
+      loadRegions({ fetchFn: fetchFn as unknown as typeof fetch, store }),
+    ]);
+    await loadRegions({ fetchFn: fetchFn as unknown as typeof fetch, store });
+
+    expect(a).toBe(b);
+    expect(fetchFn).toHaveBeenCalledTimes(1);
   });
 });
