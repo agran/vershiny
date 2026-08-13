@@ -13,6 +13,7 @@ import {
   typoBudget,
   mergeHits,
   loadSearchIndex,
+  resetSearchIndexCache,
   type IndexEntry,
 } from '../src/core/search';
 import type { Peak } from '../src/core/peaks';
@@ -100,10 +101,41 @@ describe('поиск вершин', () => {
   });
 
   it('офлайн без индекса не ломает поиск', async () => {
+    resetSearchIndexCache();
     const failing = (async () => {
       throw new Error('offline');
     }) as unknown as typeof fetch;
     await expect(loadSearchIndex('/vershiny/', failing)).resolves.toEqual([]);
+  });
+
+  it('офлайн не ходит в сеть на каждую букву запроса', async () => {
+    // Без сети Service Worker отвечает 503; повторять этот поход на каждый
+    // символ — значит ждать по кругу там, где ответ заведомо известен
+    resetSearchIndexCache();
+    let calls = 0;
+    const failing = (async () => {
+      calls++;
+      throw new Error('offline');
+    }) as unknown as typeof fetch;
+
+    await loadSearchIndex('/vershiny/', failing);
+    await loadSearchIndex('/vershiny/', failing);
+    await loadSearchIndex('/vershiny/', failing);
+    expect(calls).toBe(1);
+
+    // Сброс кеша (сеть вернулась) снова пускает запрос
+    resetSearchIndexCache();
+    await loadSearchIndex('/vershiny/', failing);
+    expect(calls).toBe(2);
+  });
+
+  it('соседние вершины одного гребня не схлопываются в одну', () => {
+    // Ключ дедупликации округлялся до 3 знаков (~110 м): жандармы
+    // Безенгийской стены стоят и ближе — оставалась одна вершина из двух
+    const a: IndexEntry = ['Джангитау Главная', 43.0300, 43.0300, 5085, 'caucasus-west'];
+    const b: IndexEntry = ['Джангитау Западная', 43.0303, 43.0303, 5058, 'caucasus-west'];
+    const hits = mergeHits([searchIndex('Джангитау', [a, b])]);
+    expect(hits).toHaveLength(2);
   });
 });
 

@@ -118,6 +118,25 @@ export function openSettings(
         return;
       }
 
+      // Точный размер каждого региона гоняет тайловую сетку по всем LOD
+      // пирамиды. Для 115 регионов сразу это заметный фриз при открытии
+      // панели на телефоне — считаем только строки возле видимой области.
+      // Через getBoundingClientRect, а не IntersectionObserver: тот молчит
+      // в окружениях без регулярной перерисовки, и размеры остались бы
+      // навсегда грубой оценкой по площади
+      const pendingRows: HTMLElement[] = [];
+      const estimateVisible = (): void => {
+        const view = panel.getBoundingClientRect();
+        for (let i = pendingRows.length - 1; i >= 0; i--) {
+          const row = pendingRows[i];
+          const box = row.getBoundingClientRect();
+          if (box.bottom < view.top - 200 || box.top > view.bottom + 200) continue;
+          pendingRows.splice(i, 1);
+          (row as HTMLElement & { estimate?: () => void }).estimate?.();
+        }
+      };
+      panel.addEventListener('scroll', estimateVisible, { passive: true });
+
       // Группировка по group, внутри — по priority → алфавиту
       const groups = new Map<string, [string, RegionInfo][]>();
       for (const [key, info] of Object.entries(regions)) {
@@ -184,16 +203,19 @@ export function openSettings(
           }
           const size = estimateRegionSizeMB(regionInfo.bbox);
           const sizeEl = document.createElement('span');
-          sizeEl.textContent = `~${size} МБ`;
+          sizeEl.textContent = `~${size} ${mbUnit()}`;
           sizeEl.style.cssText = 'font-size:11px;color:#a8dadc';
           nameWrap.appendChild(sizeEl);
           // Точный размер требует index.json пирамиды — пока он едет,
-          // показываем оценку по площади, чтобы строка не прыгала пустой
-          void estimateRegionBytes(regionInfo, origin)
-            .then((bytes) => {
-              sizeEl.textContent = formatMB(bytes);
-            })
-            .catch(() => {});
+          // показываем оценку по площади, чтобы строка не прыгала пустой.
+          // Запускается, когда строка появится в видимой части списка
+          (rowEl as HTMLElement & { estimate?: () => void }).estimate = () => {
+            void estimateRegionBytes(regionInfo, origin)
+              .then((bytes) => {
+                sizeEl.textContent = formatMB(bytes);
+              })
+              .catch(() => {});
+          };
           rowEl.appendChild(nameWrap);
 
           // Статус / кнопка скачивания
@@ -247,8 +269,12 @@ export function openSettings(
           }
 
           dlList.appendChild(rowEl);
+          pendingRows.push(rowEl);
         }
       }
+
+      // Первый экран списка считаем сразу, остальное — по мере прокрутки
+      estimateVisible();
 
       // Обновление подписи текущего региона
       const currentInfo = (regions as Record<string, RegionInfo>)[currentRegion];
@@ -428,6 +454,9 @@ function buildCalibration(onChange: () => void): HTMLElement {
       s.input.value = String(values[i]);
       s.valueEl.textContent = s.format(values[i]);
     });
+    // Сброс возвращает и автосовмещение: без этого на экране оставалась
+    // старая галочка, а в хранилище лежало уже другое значение
+    autoInput.checked = fresh.autoCalibrate;
     orientationTracker.applyCalibration();
     onChange();
     resetBtn.textContent = '✓';
@@ -463,9 +492,13 @@ function estimateRegionSizeMB(bbox: [number, number, number, number]): number {
   return Math.max(3, Math.round((areaKm2 / 1000) * 0.0625));
 }
 
+/** Единица объёма по локали: плейсхолдер тоже не должен быть всегда «МБ» */
+function mbUnit(): string {
+  return getLocale() === 'ru' ? 'МБ' : 'MB';
+}
+
 /** Байты → «12 МБ» / «0.8 МБ» с учётом локали */
 function formatMB(bytes: number): string {
   const mb = bytes / 1e6;
-  const unit = getLocale() === 'ru' ? 'МБ' : 'MB';
-  return `${mb < 10 ? mb.toFixed(1) : Math.round(mb)} ${unit}`;
+  return `${mb < 10 ? mb.toFixed(1) : Math.round(mb)} ${mbUnit()}`;
 }

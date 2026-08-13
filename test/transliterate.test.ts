@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { detectScript, translitToLatin } from '../src/core/transliterate';
+import { detectScript, translitToLatin, translitToRu } from '../src/core/transliterate';
 
 describe('transliterate', () => {
   it('определение письменности', () => {
@@ -55,5 +55,14 @@ describe('transliterate', () => {
   it('латиница остаётся как есть', () => {
     expect(translitToLatin('Elbrus')).toBe('Elbrus');
     expect(translitToLatin('Mont Blanc')).toBe('Mont Blanc');
+  });
+
+  it('немецкие диграфы: sch → ш, tsch → ч', () => {
+    // Без них «Schesaplana» превращалась в «Скхесаплану», а «Tschierva» —
+    // в «Тсчиерву»: в Альпах таких названий полно
+    expect(translitToRu('Schesaplana')).toBe('Шесаплана');
+    expect(translitToRu('Tschierva')).toBe('Чиерва');
+    // Русская «щ» (shch) по-прежнему длиннее и разбирается первой
+    expect(translitToRu('Shchara')).toBe('Щара');
   });
 });

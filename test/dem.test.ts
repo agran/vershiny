@@ -280,4 +280,47 @@ describe('DemSampler: отказ сети', () => {
     corrupt = false;
     expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
   });
+
+  it('downloadTiles честно считает, сколько тайлов легло на устройство', async () => {
+    // Офлайн Service Worker отвечает 503 — это ответ, а не исключение.
+    // Раньше цикл «успешно» завершался с нулём сохранённых тайлов, и регион
+    // получал галочку «скачано»: в горах это худший вид обмана
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith('index.json')) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      return new Response('Offline', { status: 503 });
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    await sampler.loadIndex();
+
+    const keys = ['0/444/92', '0/445/92'];
+    let progress = 0;
+    const stats = await sampler.downloadTiles(keys, (n) => (progress = n));
+    expect(stats.ok).toBe(0);
+    expect(stats.failed).toBe(2);
+    expect(progress).toBe(2); // прогресс идёт, но успехом это не считается
+  });
+
+  it('обрыв на одном тайле не прерывает всю загрузку', async () => {
+    const body = await encodeTile(slopeTile(), 2);
+    const fetchFn = (async (url: string) => {
+      const path = String(url);
+      if (path.endsWith('index.json')) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      if (path.includes('445')) throw new TypeError('Failed to fetch');
+      return new Response(body as unknown as BodyInit);
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    await sampler.loadIndex();
+
+    const stats = await sampler.downloadTiles(['0/444/92', '0/445/92'], () => {});
+    expect(stats.ok).toBe(1);
+    expect(stats.failed).toBe(1);
+  });
 });

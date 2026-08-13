@@ -36,7 +36,14 @@ interface SwEnv {
   skipped: () => boolean;
 }
 
-function runSw(existingCaches: string[]): SwEnv {
+interface SwOptions {
+  /** Что отвечает сеть на fetch внутри worker'а */
+  fetchImpl?: () => Promise<Response>;
+  /** Готовое содержимое кеша: URL → тело */
+  cached?: Record<string, string>;
+}
+
+function runSw(existingCaches: string[], opts: SwOptions = {}): SwEnv {
   const handlers: Record<string, (ev: unknown) => void> = {};
   const deleted: string[] = [];
   const added: string[] = [];
@@ -65,14 +72,17 @@ function runSw(existingCaches: string[]): SwEnv {
         return true;
       },
       open: async () => ({
-        match: async () => undefined,
+        match: async (req: { url: string }) => {
+          const body = opts.cached?.[req.url];
+          return body === undefined ? undefined : new Response(body);
+        },
         put: async () => {},
         add: async (url: string) => {
           added.push(url);
         },
       }),
     },
-    fetch: async () => new Response(''),
+    fetch: opts.fetchImpl ?? (async () => new Response('')),
     Response,
     URL,
   };
@@ -137,6 +147,39 @@ describe('Service Worker', () => {
 
     expect(env.added).toContain('https://example.org/vershiny/assets/settings-def.js');
     expect(env.added).toContain('https://example.org/vershiny/assets/main-abc.js');
+  });
+
+  it('при установке кладёт в кеш и саму оболочку', async () => {
+    // Иначе «поставил PWA и ушёл в горы, ни разу не перезагрузив страницу»
+    // кончается белым 503 вместо приложения
+    const env = runSw([]);
+    let done: Promise<unknown> = Promise.resolve();
+    env.handlers.install({ waitUntil: (p: Promise<unknown>) => (done = p) });
+    await done;
+
+    expect(env.added).toContain('https://example.org/vershiny/index.html');
+    expect(env.added).toContain('https://example.org/vershiny/manifest.webmanifest');
+  });
+
+  it('при 500 от сервера отдаёт кеш, а не ошибку', async () => {
+    // Битый деплой Pages не должен выглядеть как отсутствие данных, когда
+    // рабочая копия regions.json лежит рядом в кеше
+    const url = 'https://example.org/vershiny/regions.json';
+    const env = runSw([], {
+      fetchImpl: async () => new Response('boom', { status: 500 }),
+      cached: { [url]: '{"caucasus-west":{}}' },
+    });
+    let responded: Promise<Response> | null = null;
+    env.handlers.fetch({
+      request: { url, method: 'GET', mode: 'cors' },
+      waitUntil: () => {},
+      respondWith: (p: Promise<Response>) => {
+        responded = p;
+      },
+    });
+    const res = await responded!;
+    expect(res.status).toBe(200);
+    expect(await res.text()).toBe('{"caucasus-west":{}}');
   });
 
   it('не трогает не-GET запросы', () => {

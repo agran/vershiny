@@ -58,6 +58,22 @@ describe('разрешение на датчики (iOS)', () => {
     expect(orientationTracker.needsPermission).toBe(true);
   });
 
+  it('два быстрых нажатия не открывают два системных диалога', async () => {
+    // Запрос идёт через await: без общего промиса повторное нажатие успевало
+    // проскочить проверку `listening` и звало requestPermission ещё раз
+    const requestPermission = stubIOS('granted');
+    orientationTracker.start(() => {});
+
+    const [a, b] = await Promise.all([
+      orientationTracker.requestPermission(),
+      orientationTracker.requestPermission(),
+    ]);
+
+    expect(a).toBe(true);
+    expect(b).toBe(true);
+    expect(requestPermission).toHaveBeenCalledTimes(1);
+  });
+
   it('на Android разрешение не нужно: слушаем сразу', () => {
     vi.stubGlobal('DeviceOrientationEvent', class {});
     expect(needsUserGesture()).toBe(false);

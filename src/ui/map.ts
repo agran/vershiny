@@ -102,6 +102,11 @@ export function openMap(options: MapOptions): () => void {
           img.alt = '';
           img.loading = 'eager';
           img.draggable = false;
+          // Не загрузился (офлайн, лимит OSM) — прячем: «битая картинка»
+          // поверх карты хуже, чем просто пустая клетка
+          img.onerror = () => {
+            img!.style.visibility = 'hidden';
+          };
           img.style.cssText =
             `position:absolute;width:${TILE_PX}px;height:${TILE_PX}px;` +
             'pointer-events:none;image-rendering:auto;z-index:0';
@@ -120,7 +125,7 @@ export function openMap(options: MapOptions): () => void {
       }
     }
 
-    // Маркер «я» — только если попадает в кадр
+    // Маркер «я»: за границей кадра его просто не видно — слой обрезан
     const me = project(options.origin, zoom);
     marker.style.left = `${me.x - left}px`;
     marker.style.top = `${me.y - top}px`;
@@ -219,9 +224,16 @@ export function openMap(options: MapOptions): () => void {
     return b;
   };
 
+  // Объявлен до close(): создаётся он в конце, когда корень уже в DOM
+  let resizeObserver: ResizeObserver | null = null;
+
   const close = (): void => {
     root.remove();
     document.removeEventListener('keydown', onKey);
+    // Наблюдатель держал бы ссылку на удалённый корень карты после каждого
+    // открытия
+    resizeObserver?.disconnect();
+    resizeObserver = null;
     options.onClose?.();
   };
 
@@ -317,8 +329,10 @@ export function openMap(options: MapOptions): () => void {
     if (open) input.focus();
   }
 
+  let searchSeq = 0;
   const runSearch = async (): Promise<void> => {
     const query = input.value.trim();
+    const seq = ++searchSeq;
     results.textContent = '';
     if (!query) return;
 
@@ -328,6 +342,9 @@ export function openMap(options: MapOptions): () => void {
     results.appendChild(searching);
 
     const hits = await options.search(query);
+    // Медленный ответ на прежний запрос иначе перетирал свежие результаты:
+    // человек уже дописал название, а список показывает выдачу по трём буквам
+    if (seq !== searchSeq) return;
     results.textContent = '';
     if (!hits.length) {
       const empty = document.createElement('div');
@@ -371,12 +388,18 @@ export function openMap(options: MapOptions): () => void {
 
   input.onkeydown = (ev) => {
     if (ev.key === 'Enter') void runSearch();
-    if (ev.key === 'Escape') toggleSearch();
+    if (ev.key === 'Escape') {
+      // Не даём событию всплыть до document: там Escape увидел бы уже
+      // скрытую панель поиска и закрыл заодно карту — одно нажатие
+      // сворачивало два уровня, а вернуться к карте было нельзя
+      ev.stopPropagation();
+      toggleSearch();
+    }
   };
 
   document.body.appendChild(root);
   render();
-  new ResizeObserver(render).observe(root);
-
+  resizeObserver = new ResizeObserver(render);
+  resizeObserver.observe(root);
   return close;
 }

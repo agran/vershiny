@@ -586,7 +586,7 @@ function findPeakMarkerPosition(
           : 0;
       if (dDist > distTolerance) continue;
 
-      const dAz = Math.abs(((az - peak.azimuthRad + Math.PI) % (2 * Math.PI)) - Math.PI);
+      const dAz = Math.abs(wrapAngle(az - peak.azimuthRad));
       const score =
         -(dDist / distTolerance) * 0.4
         - (dAz / windowRad) * 0.3

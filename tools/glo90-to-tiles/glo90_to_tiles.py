@@ -216,9 +216,56 @@ def region_priority(
 # ──────────────────────────────── кодирование ────────────────────────────────
 
 
+FILL_PASSES = 4
+
+
+def fill_voids(values: np.ndarray) -> np.ndarray:
+    """Дыры DEM → высоты соседей.
+
+    Формат тайла отличать «нет данных» от высоты не умеет, а обнулять дыры
+    нельзя: посреди хребта появлялся провал до уровня моря, и клиент честно
+    рисовал в нём небо. Затягиваем дыру соседями (в GLO-90 они мелкие), а
+    остаток — средним по тайлу: любая правдоподобная высота лучше нуля.
+    """
+    out = np.asarray(values, dtype=np.float32).copy()
+    if not np.isnan(out).any():
+        return out
+    if np.isnan(out).all():
+        return np.zeros_like(out)
+
+    for _ in range(FILL_PASSES):
+        holes = np.isnan(out)
+        if not holes.any():
+            return out
+        padded = np.pad(out, 1, constant_values=np.nan)
+        neighbours = np.stack(
+            [
+                padded[:-2, 1:-1],
+                padded[2:, 1:-1],
+                padded[1:-1, :-2],
+                padded[1:-1, 2:],
+            ]
+        )
+        valid = ~np.isnan(neighbours)
+        count = valid.sum(axis=0)
+        total = np.where(valid, neighbours, 0.0).sum(axis=0)
+        mean = np.divide(
+            total, count, out=np.full_like(total, np.nan), where=count > 0
+        )
+        fill = holes & ~np.isnan(mean)
+        if not fill.any():
+            break
+        out[fill] = mean[fill]
+
+    holes = np.isnan(out)
+    if holes.any():
+        out[holes] = float(np.nanmean(out))
+    return out
+
+
 def encode_tile(values: np.ndarray, quant_m: int) -> bytes:
     """int16 (квант) → дельта по строкам → gzip. Читает src/core/dem.ts."""
-    quantized = np.rint(np.nan_to_num(values, nan=0.0) / quant_m)
+    quantized = np.rint(fill_voids(values) / quant_m)
     np.clip(quantized, -32768, 32767, out=quantized)
     tile = quantized.astype(np.int32)
     # Первый столбец — абсолютное значение (клиент начинает накопление с нуля),

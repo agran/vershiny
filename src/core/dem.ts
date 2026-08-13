@@ -334,33 +334,45 @@ export class DemSampler {
    * Скачать тайлы в офлайн-хранилище (кнопка «Скачать регион»).
    * Сохраняем сжатые байты: распаковка при чтении дешевле, чем вчетверо
    * больший объём на устройстве.
+   *
+   * Возвращает статистику, а не только объём: сервер, отвечающий 503 на всё
+   * (офлайн через Service Worker), раньше давал «успешную» загрузку нуля
+   * тайлов, и регион помечался скачанным. В горах это худший вид обмана.
    */
   async downloadTiles(
     keys: string[],
     onTile: (done: number) => void,
     concurrency = 6,
-  ): Promise<number> {
+  ): Promise<{ bytes: number; ok: number; failed: number }> {
     const db = await this.db();
     const ext = this.index?.tileExt ?? '.bin';
     let done = 0;
     let bytes = 0;
+    let ok = 0;
     for (let i = 0; i < keys.length; i += concurrency) {
       await Promise.all(
         keys.slice(i, i + concurrency).map(async (key) => {
           try {
-            if (db && (await db.getDemTile(key))) return; // уже скачан
+            if (db && (await db.getDemTile(key))) {
+              ok++; // уже скачан
+              return;
+            }
             const res = await this.fetchFn(`${this.baseUrl}/${key}${ext}`);
             if (!res.ok) return;
             const raw = new Uint8Array(await res.arrayBuffer());
             bytes += raw.byteLength;
             if (db) await db.saveDemTile(key, raw);
+            ok++;
+          } catch {
+            // Обрыв сети на одном тайле не должен ронять всю загрузку:
+            // прогресс сохраняется, а недостача видна по счётчику
           } finally {
             onTile(++done);
           }
         }),
       );
     }
-    return bytes;
+    return { bytes, ok, failed: keys.length - ok };
   }
 
   /** Распаковка тайла: gzip → дельта по строкам → квант высоты */

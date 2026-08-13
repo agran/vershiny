@@ -45,4 +45,17 @@ describe('i18n', () => {
     setLocale('en');
     expect(peakName({ name: 'გვანდრა - Гвандра' })).toBe('Gvandra - Gvandra');
   });
+
+  it('peakName: en-локаль не оставляет мхедрули и арабицу как есть', () => {
+    // Проверялась только кириллица, поэтому чисто грузинское или арабское
+    // название англоязычный пользователь видел в исходном письме
+    setLocale('en');
+    expect(peakName({ name: 'გვანდრა' })).toBe('Gvandra');
+    expect(peakName({ name: 'توبقال' })).toBe('Twbqal');
+  });
+
+  it('peakName: ru-локаль доводит нелатинское имя до кириллицы', () => {
+    setLocale('ru');
+    expect(peakName({ name: 'გვანდრა' })).toBe('Гвандра');
+  });
 });

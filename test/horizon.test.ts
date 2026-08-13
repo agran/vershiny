@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   checkPeakVisibility,
   computeHorizon,
+  computeLayeredHorizon,
   nextRayStep,
   type SampleFn,
 } from '../src/core/horizon';
@@ -115,5 +116,31 @@ describe('ray-marching горизонта', () => {
     const farPos = destination(ORIGIN, 0, 250_000);
     const peak: Peak = { ...farPos, name: 'Очень дальняя', ele: 8000 };
     expect(checkPeakVisibility(ORIGIN, 1000, peak, flat, Infinity)).toBeNull();
+  });
+
+  it('ближний и дальний хребты дают разные фронты', () => {
+    // Раньше ветка «провал — закрываем фронт» на каждой точке ниже максимума
+    // растягивала distEndM до текущей дистанции. Разрыв между фронтами не
+    // возникал никогда: дальний хребет прилипал к ближнему, один фронт тянулся
+    // на десятки километров, и маркер вершины выбирал его для чего угодно
+    const az = Math.PI / 2;
+    // Дальний хребет должен быть выше ближнего по углу, иначе он честно
+    // скрыт за ним и своего фронта не получает
+    const near = conicSampler(ORIGIN, az, 5_000, 600);
+    const far = conicSampler(ORIGIN, az, 40_000, 8_000);
+    const sample: SampleFn = (pos, dist) => Math.max(near(pos, dist), far(pos, dist));
+
+    const { fronts, stepRad } = computeLayeredHorizon(ORIGIN, 0, sample, {
+      maxDistM: 60_000,
+      azimuthStepRad: (0.5 * Math.PI) / 180,
+    });
+    const ray = fronts[Math.round(az / stepRad)];
+
+    expect(ray.length).toBeGreaterThanOrEqual(2);
+    const nearFront = ray[ray.length - 2];
+    const farFront = ray[ray.length - 1];
+    // Ближний фронт заканчивается на своём гребне, а не тянется до дальнего
+    expect(nearFront.distEndM).toBeLessThan(10_000);
+    expect(farFront.distM).toBeGreaterThan(20_000);
   });
 });

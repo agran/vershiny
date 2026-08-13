@@ -188,6 +188,29 @@ export class TerrariumSampler {
   }
 
   /**
+   * Значение пикселя по глобальным координатам зума (не внутри одного тайла).
+   *
+   * Нужен именно глобальный доступ: интерполяция на стыке тайлов берёт
+   * соседей из соседнего тайла. Раньше индексы зажимались внутрь своего
+   * тайла, и на каждом стыке дублировался краевой пиксель — шов шириной до
+   * ячейки (38–150 м в зависимости от зума). При этом `heightAt` соседей
+   * честно подгружал, а `sample` их не использовал.
+   */
+  private pixelAt(gx: number, gy: number, zoom: number): number {
+    const n = 2 ** zoom;
+    const world = n * TILE_PX;
+    // По долготе мир замкнут, по широте — упираемся в край проекции
+    let x = gx % world;
+    if (x < 0) x += world;
+    const y = Math.min(world - 1, Math.max(0, gy));
+    const tile = this.tiles.get(
+      `${zoom}/${Math.floor(x / TILE_PX)}/${Math.floor(y / TILE_PX)}`,
+    );
+    if (tile === undefined || tile === null) return NaN;
+    return tile[(y % TILE_PX) * TILE_PX + (x % TILE_PX)];
+  }
+
+  /**
    * Синхронная выборка высоты (после prefetch).
    * Билинейная интерполяция; NaN — тайл не загружен или вне покрытия.
    */
@@ -197,16 +220,23 @@ export class TerrariumSampler {
     const tile = this.tiles.get(`${zoom}/${x}/${y}`);
     if (tile === undefined || tile === null) return NaN;
 
-    const x0 = Math.floor(px);
-    const y0 = Math.floor(py);
-    const fx = px - x0;
-    const fy = py - y0;
-    const clamp = (v: number): number => Math.min(TILE_PX - 1, v);
+    const gx = x * TILE_PX + px;
+    const gy = y * TILE_PX + py;
+    const gx0 = Math.floor(gx);
+    const gy0 = Math.floor(gy);
+    const fx = gx - gx0;
+    const fy = gy - gy0;
 
-    const h00 = tile[y0 * TILE_PX + x0];
-    const h10 = tile[y0 * TILE_PX + clamp(x0 + 1)];
-    const h01 = tile[clamp(y0 + 1) * TILE_PX + x0];
-    const h11 = tile[clamp(y0 + 1) * TILE_PX + clamp(x0 + 1)];
+    const h00 = this.pixelAt(gx0, gy0, zoom);
+    // Соседний тайл может быть не загружен — тогда ведём себя как раньше
+    // и повторяем свой краевой пиксель, а не отдаём NaN на весь луч
+    const at = (ax: number, ay: number): number => {
+      const v = this.pixelAt(ax, ay, zoom);
+      return Number.isNaN(v) ? h00 : v;
+    };
+    const h10 = at(gx0 + 1, gy0);
+    const h01 = at(gx0, gy0 + 1);
+    const h11 = at(gx0 + 1, gy0 + 1);
     const top = h00 + (h10 - h00) * fx;
     const bottom = h01 + (h11 - h01) * fx;
     return top + (bottom - top) * fy;

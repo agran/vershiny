@@ -5,7 +5,7 @@
 
 import { renderPanorama, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
-import { toRad, wrapAngle, type LatLon } from './core/geo';
+import { toRad, wrapAngle, normalizeAz, isValidLatLon, type LatLon } from './core/geo';
 import { t, getLocale } from './core/i18n';
 import {
   downloadRegion,
@@ -230,7 +230,10 @@ canvas.addEventListener('pointermove', (ev) => {
     // Перемещение: dx/dy → шаг в сторону взгляда
     const dist = Math.hypot(dx, dy) * 2; // масштаб: 1px = 2м
     if (dist > 5) {
-      const az = view.centerAzRad + Math.atan2(dy, dx); // направление движения
+      // Экранные оси: x вправо, y вниз; азимут 0 — вперёд (вверх экрана).
+      // Поэтому вперёд — это −dy, вбок — dx: atan2(dy, dx) поворачивал шаг
+      // на четверть оборота, и «тяну вперёд» уводило влево
+      const az = view.centerAzRad + Math.atan2(dx, -dy);
       const newPos = destination(lastOrigin, az, dist);
       requestCompute(newPos);
     }
@@ -252,8 +255,10 @@ canvas.addEventListener('pointermove', (ev) => {
     return;
   }
 
-  // Поворот камеры (без датчиков: десктоп, отказ в доступе к компасу)
-  view.centerAzRad -= (dx / canvas.clientWidth) * view.fovRad;
+  // Поворот камеры (без датчиков: десктоп, отказ в доступе к компасу).
+  // Нормализуем: иначе после нескольких свайпов азимут уходит в минус, и
+  // расчёт сектора для автонаклона/маркеров берёт не тот участок горизонта
+  view.centerAzRad = normalizeAz(view.centerAzRad - (dx / canvas.clientWidth) * view.fovRad);
   view.tiltRad = Math.max(
     -MAX_TILT,
     Math.min(MAX_TILT, view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad),
@@ -321,8 +326,8 @@ window.addEventListener('keydown', (ev) => {
 
   ev.preventDefault();
   if (dHeight !== 0) {
-    // Высота: пока просто логируем (нужен пересчёт с новой высотой наблюдателя)
-    console.info(`Высота наблюдателя: ${dHeight > 0 ? '+' : ''}${dHeight} м (не реализовано)`);
+    // Те же 100 м, что и у экранных кнопок ⬆⬇ — раньше здесь была заглушка
+    adjustHeight(dHeight);
     return;
   }
 
@@ -421,7 +426,7 @@ function applyAutoTilt(r: ResultMessage): void {
 
   for (let i = 0; i < rays; i++) {
     const az = i * r.stepRad;
-    const delta = Math.abs(((az - view.centerAzRad + Math.PI) % (2 * Math.PI)) - Math.PI);
+    const delta = Math.abs(wrapAngle(az - view.centerAzRad));
     if (delta > half) continue;
     // Силуэт — максимум по слоям дистанций на этом азимуте
     let top = -Infinity;
@@ -443,9 +448,17 @@ const worker = new Worker(new URL('./workers/horizon.worker.ts', import.meta.url
   type: 'module',
 });
 
+/** Сквозной номер задания воркеру (см. протокол в horizon.worker.ts) */
+let nextReqId = 1;
+/** Номер последнего отправленного `compute`: ответы постарше — мусор */
+let activeComputeId = 0;
+
 worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   const msg = ev.data;
   if (msg.type === 'error') {
+    // Ошибка чужого задания (перелёт к вершине) — не наша: её покажет тот,
+    // кто это задание отправил. Иначе на экране два сообщения об одном сбое
+    if (msg.reqId !== undefined && msg.reqId !== activeComputeId) return;
     // Без сети техническая формулировка («HTTP 503», «вне покрытия») ничего
     // не объясняет: человеку важно, что данных на это место нет на устройстве
     setStatus(navigator.onLine ? `${t('error')}: ${msg.message}` : t('errorOffline'));
@@ -453,7 +466,10 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   }
   if (msg.type === 'viewpoint') return; // ждёт свой одноразовый обработчик
   const r = msg as ResultMessage;
-  panorama = {
+  // Расчёт старой точки, обогнавший свежий: применить его — значит показать
+  // панораму не оттуда, где стоит наблюдатель
+  if (r.reqId !== undefined && r.reqId !== activeComputeId) return;
+  const next = {
     horizon: r.horizon,
     stepRad: r.stepRad,
     peaks: r.peaks,
@@ -462,6 +478,9 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     fronts: r.fronts,
     crests: r.crests,
   };
+  // Мутируем существующий объект, а не подменяем ссылку: AR-оверлей захватил
+  // его при запуске, и после каждого шага рисовал бы контуры прежней точки
+  panorama = panorama ? Object.assign(panorama, next) : next;
   lastObserverH = r.observerH;
   // Обновляем индикатор высоты
   const heightEl = document.getElementById('height-indicator');
@@ -529,20 +548,13 @@ async function main(): Promise<void> {
 
   // DEM: детальный патч региона → локальная пирамида → внешняя пирамида
   // (agran/vershiny-dem). Промах всех — только Terrarium; офлайн — кеш.
-  const { demCandidates, pickDemBase } = await import('./core/dem-config');
-  const { getDemIndex } = await import('./core/db');
-  const patchBaseUrl = await pickDemBase(demCandidates(base, currentRegion), {
-    online: async (url) => {
-      const probe = await fetch(`${url}/index.json`).catch(() => null);
-      return !!probe && isJson(probe);
-    },
-    cached: async (url) => !!(await getDemIndex(url).catch(() => undefined)),
-  });
-
-  worker.postMessage({ type: 'init', patchBaseUrl });
+  await initDemForRegion(currentRegion);
 
   setStatus(t('computing'));
-  worker.postMessage({ type: 'compute', origin, peaks });
+  // Через requestCompute, а не прямым postMessage: иначе стартовая точка —
+  // единственная, для которой не проверялось соответствие региона, и плашка
+  // «вы в другом районе» появлялась только после первого перемещения
+  requestCompute(origin);
 
   // Кнопки действий; main() повторяется при смене региона — создаём один раз
   if (!navUiReady) {
@@ -615,6 +627,28 @@ async function goToHit(hit: SearchHit, origin: LatLon): Promise<void> {
 }
 
 /**
+ * Подключение источника высот для региона: детальный патч → локальная
+ * пирамида → внешняя (agran/vershiny-dem). Промах всех — только Terrarium.
+ *
+ * Вызывается и при смене региона: раньше `init` уходил воркеру исключительно
+ * из `main()`, и после переключения с карты, из поиска или по плашке рельеф
+ * продолжал считаться по патчу прежнего региона.
+ */
+async function initDemForRegion(region: string): Promise<void> {
+  const base = import.meta.env.BASE_URL;
+  const { demCandidates, pickDemBase } = await import('./core/dem-config');
+  const { getDemIndex } = await import('./core/db');
+  const patchBaseUrl = await pickDemBase(demCandidates(base, region), {
+    online: async (url) => {
+      const probe = await fetch(`${url}/index.json`).catch(() => null);
+      return !!probe && isJson(probe);
+    },
+    cached: async (url) => !!(await getDemIndex(url).catch(() => undefined)),
+  });
+  worker.postMessage({ type: 'init', patchBaseUrl, reqId: nextReqId++ });
+}
+
+/**
  * Смена региона: вершины из сети, при промахе — из офлайн-кеша.
  * Если не вышло ни то, ни другое (офлайн и регион не скачан), остаёмся без
  * подписей: панорама строится по DEM, а вершины прежнего региона к этому
@@ -646,6 +680,9 @@ async function switchRegion(region: string): Promise<void> {
     // они за сотни километров отсюда. Рельеф при этом есть из пирамиды
     currentPeaks = [];
   }
+
+  // Детальный патч рельефа у каждого региона свой
+  await initDemForRegion(region);
 }
 
 /**
@@ -675,24 +712,46 @@ async function jumpToPeak(peak: Peak, from: LatLon): Promise<void> {
   setStatus(t('computing'));
   // Точку обзора подбирает worker: у него DEM, а «просто отойти на 5 км
   // назад по азимуту» приводит в цирк под соседней стеной
-  const spot = await requestViewpoint(peak);
+  let spot: ViewpointResult;
+  try {
+    spot = await requestViewpoint(peak);
+  } catch (err) {
+    // Раньше отказ воркера («нет данных», «вне покрытия») не отклонял промис:
+    // перелёт молча замирал на «Расчёт панорамы…» до перезагрузки страницы
+    setStatus(
+      navigator.onLine
+        ? `${t('error')}: ${err instanceof Error ? err.message : String(err)}`
+        : t('errorOffline'),
+    );
+    return;
+  }
   heightOverride = null; // «телепорт» на землю: набранная высота не имеет смысла
   autoTiltPending = true; // наводимся на рельеф в новой точке
-  view.centerAzRad = spot.azimuthRad;
+  view.centerAzRad = normalizeAz(spot.azimuthRad);
   requestCompute(spot.origin);
   draw();
 }
 
-/** Запрос точки обзора у worker'а (одноразовый обработчик) */
+/**
+ * Запрос точки обзора у worker'а.
+ *
+ * Слушатель одноразовый и сверяет `reqId`: два быстрых перелёта подряд иначе
+ * оба резолвились первым же ответом, а ответ на ошибку не приходил никогда —
+ * промис висел вечно вместе со своим слушателем.
+ */
 function requestViewpoint(peak: Peak): Promise<ViewpointResult> {
-  return new Promise((resolve) => {
+  const reqId = nextReqId++;
+  return new Promise((resolve, reject) => {
     const onMessage = (ev: MessageEvent<WorkerOutMessage>): void => {
-      if (ev.data.type !== 'viewpoint') return;
+      const msg = ev.data;
+      if (msg.reqId !== reqId) return;
+      if (msg.type !== 'viewpoint' && msg.type !== 'error') return;
       worker.removeEventListener('message', onMessage);
-      resolve(ev.data);
+      if (msg.type === 'error') reject(new Error(msg.message));
+      else resolve(msg);
     };
     worker.addEventListener('message', onMessage);
-    worker.postMessage({ type: 'viewpoint', peak });
+    worker.postMessage({ type: 'viewpoint', peak, reqId });
   });
 }
 
@@ -1025,11 +1084,13 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
 /** Пересчёт панорамы: единственная точка отправки задания воркеру */
 function requestCompute(origin: LatLon): void {
   lastOrigin = origin;
+  activeComputeId = nextReqId++;
   worker.postMessage({
     type: 'compute',
     origin,
     peaks: currentPeaks,
     observerHeightOverride: heightOverride ?? undefined,
+    reqId: activeComputeId,
   });
   setStatus(t('computing'));
   // Единая точка пересчёта — единственное место, где видно любое перемещение:
@@ -1167,11 +1228,16 @@ function setupActionButtons(): void {
     const { openSettings } = await import('./ui/settings');
     settingsClose = openSettings(currentRegion, lastOrigin, {
       onRegionChange: (region) => {
-        currentRegion = region;
-        manualRegion = true; // больше не переключаем автоматически
-        rememberRegion();
-        // Перезагружаем панораму с новым регионом
-        main();
+        // Не через main(): тот начинается с getPosition() и возвращал бы
+        // человека, прилетевшего в Альпы с карты, обратно к своей GPS-точке
+        // (а при отказе геолокации — к Приюту 11, подождав до 8 секунд)
+        void (async () => {
+          manualRegion = true; // выбор вручную: авто-переключение больше не трогаем
+          rememberRegion();
+          await switchRegion(region);
+          void refreshDownloadState();
+          requestCompute(lastOrigin);
+        })();
       },
       onLocaleChange: () => {
         // Перерисовываем интерфейс
@@ -1191,20 +1257,24 @@ function setupActionButtons(): void {
 
   // AR-режим
   const arBtn = makeButton(ICON_AR, t('arMode'), `right:${edgeRight()};bottom:${edgeBottom()}`);
+  let arVideo: HTMLVideoElement | null = null;
   arBtn.onclick = async () => {
     if (arSession) {
       arSession.stop();
       arSession = null;
+      arVideo?.remove(); // иначе десять входов в AR — десять <video> под холстом
+      arVideo = null;
       arBtn.style.background = '#415a77';
       calibrateBtn.style.display = 'none';
       return;
     }
     if (!panorama) return;
+    const video = document.createElement('video');
     try {
       const { startAr } = await import('./ui/ar');
-      const video = document.createElement('video');
       video.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1';
       document.body.prepend(video);
+      arVideo = video;
       arSession = await startAr(video, canvas, panorama, view);
       arBtn.style.background = '#e63946';
       calibrateBtn.style.display = 'flex';
@@ -1214,6 +1284,10 @@ function setupActionButtons(): void {
         setTimeout(() => void runAutoCalibration(true), 1200);
       }
     } catch (err) {
+      // Отказ в доступе к камере: элемент вставлен до вызова startAr,
+      // и без уборки он остался бы в DOM насовсем
+      video.remove();
+      arVideo = null;
       setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
     }
   };
@@ -1282,11 +1356,12 @@ function isJson(res: Response): boolean {
 
 function getPosition(): Promise<LatLon> {
   return new Promise((resolve) => {
-    // Отладка/шаринг: ?lat=43.318&lon=42.458 (Приют 11)
+    // Отладка/шаринг: ?lat=43.318&lon=42.458 (Приют 11).
+    // Диапазон проверяем: ?lat=999 иначе молча ломает весь ray-marching
     const q = new URLSearchParams(location.search);
     const qLat = Number(q.get('lat'));
     const qLon = Number(q.get('lon'));
-    if (q.get('lat') && q.get('lon') && !Number.isNaN(qLat) && !Number.isNaN(qLon)) {
+    if (q.get('lat') && q.get('lon') && isValidLatLon({ lat: qLat, lon: qLon })) {
       resolve({ lat: qLat, lon: qLon });
       return;
     }

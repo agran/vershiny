@@ -5,6 +5,8 @@ import {
   distanceM,
   earthDrop,
   elevationAngleRad,
+  isValidLatLon,
+  normalizeAz,
   toDeg,
   wrapAngle,
   type LatLon,
@@ -41,5 +43,32 @@ describe('geo', () => {
   it('wrapAngle нормализует в (−π, π]', () => {
     expect(wrapAngle(3 * Math.PI)).toBeCloseTo(Math.PI, 10);
     expect(wrapAngle(-2.5 * Math.PI)).toBeCloseTo(-Math.PI / 2, 10);
+  });
+
+  it('разность азимутов через wrapAngle, а не через %', () => {
+    // Остаток в JS сохраняет знак делимого: ((0 − 6 + π) % 2π) − π = −6,
+    // то есть «расхождение 6 рад» вместо настоящих 0.28. На этом автонаклон
+    // брал медиану чужого сектора, а маркеры вершин — не тот фронт
+    const naive = Math.abs(((0 - 6.0 + Math.PI) % (2 * Math.PI)) - Math.PI);
+    expect(naive).toBeCloseTo(6.0, 6);
+    expect(Math.abs(wrapAngle(0 - 6.0))).toBeCloseTo(0.2832, 3);
+  });
+
+  it('normalizeAz приводит азимут к [0, 2π)', () => {
+    // Свайп крутит камеру вычитанием без границ: азимут уходит и в минус,
+    // и за 2π, а вся арифметика вокруг считает его нормальным
+    expect(normalizeAz(-0.5)).toBeCloseTo(2 * Math.PI - 0.5, 10);
+    expect(normalizeAz(7 * Math.PI)).toBeCloseTo(Math.PI, 10);
+    expect(normalizeAz(1.2)).toBeCloseTo(1.2, 10);
+    expect(normalizeAz(0)).toBe(0);
+  });
+
+  it('isValidLatLon отбраковывает мусор из ?lat=/lon=', () => {
+    expect(isValidLatLon({ lat: 43.3, lon: 42.4 })).toBe(true);
+    expect(isValidLatLon({ lat: 999, lon: 42.4 })).toBe(false);
+    expect(isValidLatLon({ lat: 43.3, lon: 200 })).toBe(false);
+    expect(isValidLatLon({ lat: NaN, lon: 0 })).toBe(false);
+    // Границы диапазона законны: полюс и антимеридиан
+    expect(isValidLatLon({ lat: 90, lon: -180 })).toBe(true);
   });
 });

@@ -181,6 +181,17 @@ class OrientationTracker {
    */
   async requestPermission(): Promise<boolean> {
     if (this.listening) return true;
+    // Запрос идёт через await: два быстрых нажатия кнопки иначе открывают два
+    // системных диалога подряд. Переиспользуем уже начатый
+    this.permissionRequest ??= this.doRequestPermission().finally(() => {
+      this.permissionRequest = null;
+    });
+    return this.permissionRequest;
+  }
+
+  private permissionRequest: Promise<boolean> | null = null;
+
+  private async doRequestPermission(): Promise<boolean> {
     try {
       const DOE = DeviceOrientationEvent as unknown as {
         requestPermission?: () => Promise<string>;

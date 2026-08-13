@@ -26,6 +26,13 @@ const DETAIL_ZOOMS = [12, 11];
 /** Средний вес Terrarium-PNG (замер по выборке тайлов разных зумов) */
 const TERRARIUM_TILE_BYTES = 60_000;
 
+/**
+ * Какая доля тайлов должна лечь на устройство, чтобы регион считался
+ * скачанным. Не 100%: в покрытии Terrarium есть законные дыры (океан,
+ * полярные шапки), и упираться в них — значит не дать скачать ничего.
+ */
+const MIN_SAVED_RATIO = 0.9;
+
 export interface RegionInfo {
   title_ru?: string;
   title_en?: string;
@@ -130,7 +137,7 @@ function sharedPyramid(): Promise<DemSampler> {
 }
 
 /**
- * Загрузка региона для офлайна. Возвращает число скачанных тайлов.
+ * Загрузка региона для офлайна. Возвращает число сохранённых тайлов.
  */
 export async function downloadRegion(
   region: string,
@@ -167,13 +174,14 @@ export async function downloadRegion(
 
   let done = 0;
   onProgress({ done, total, phase: 'tiles' });
-  await dem.downloadTiles(pyramidKeys, (n) => {
+  const pyramidStats = await dem.downloadTiles(pyramidKeys, (n) => {
     done = n;
     onProgress({ done, total, phase: 'tiles' });
   });
 
   const sampler = new TerrariumSampler();
   const CONCURRENCY = 6;
+  let detailOk = 0;
   for (let i = 0; i < detailKeys.length; i += CONCURRENCY) {
     const batch = detailKeys.slice(i, i + CONCURRENCY);
     await Promise.all(
@@ -181,6 +189,7 @@ export async function downloadRegion(
         const [z, x, y] = key.split('/').map(Number);
         try {
           await sampler.loadTile(z, x, y);
+          detailOk++;
         } catch {
           // Дыра в покрытии Terrarium не должна ронять всю загрузку
         }
@@ -190,9 +199,17 @@ export async function downloadRegion(
     onProgress({ done, total, phase: 'tiles' });
   }
 
+  // Регион считается скачанным только если рельеф действительно лёг на
+  // устройство. Офлайн Service Worker отдаёт 503 — не исключение, а ответ,
+  // поэтому цикл «успешно» завершался с нулём тайлов и ставил галочку
+  const saved = pyramidStats.ok + detailOk;
+  if (total > 0 && saved < total * MIN_SAVED_RATIO) {
+    throw new Error(`Скачано ${saved} тайлов из ${total} — регион не сохранён`);
+  }
+
   onProgress({ done: total, total, phase: 'done' });
   await markRegionDownloaded(region);
-  return total;
+  return saved;
 }
 
 /**

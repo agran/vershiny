@@ -287,9 +287,16 @@ export function searchFuzzy(
   return hits;
 }
 
-/** Ключ дедупликации: регионы реестра перекрываются, вершины в них дублируются */
+/**
+ * Ключ дедупликации: регионы реестра перекрываются, вершины в них дублируются.
+ *
+ * Округление до 3 знаков (~110 м) схлопывало соседние вершины одного гребня в
+ * одну — на Безенгийской стене жандармы стоят и ближе. Пять знаков (~1 м)
+ * ловят ту же вершину из двух регионов (координаты приходят из одного OSM),
+ * но не склеивают разные.
+ */
 function hitKey(hit: SearchHit): string {
-  return `${hit.peak.lat.toFixed(3)},${hit.peak.lon.toFixed(3)}`;
+  return `${hit.peak.lat.toFixed(5)},${hit.peak.lon.toFixed(5)}`;
 }
 
 /** Насколько «тот самый» результат: высота, точность совпадения, близость */
@@ -344,6 +351,16 @@ export function mergeHits(
 }
 
 let indexCache: IndexEntry[] | null = null;
+/**
+ * Когда индекс в последний раз не удалось получить.
+ *
+ * Без этой отметки каждый поисковый запрос заново ждал 503 от Service
+ * Worker'а: набор из десяти букв — десять походов в сеть впустую. Но и
+ * запоминать отказ навсегда нельзя: сеть в горах появляется и пропадает,
+ * поэтому через минуту пробуем снова.
+ */
+let indexFailedAt = 0;
+const INDEX_RETRY_MS = 60_000;
 
 /** Загрузка глобального индекса (один раз за сессию; дальше — кеш SW) */
 export async function loadSearchIndex(
@@ -351,15 +368,25 @@ export async function loadSearchIndex(
   fetchFn: typeof fetch = fetch.bind(globalThis),
 ): Promise<IndexEntry[]> {
   if (indexCache) return indexCache;
+  if (indexFailedAt && Date.now() - indexFailedAt < INDEX_RETRY_MS) return [];
   try {
     const res = await fetchFn(`${base}peaks/_index.json`);
     // Vite на 404 отдаёт index.html с HTTP 200 — проверяем тип
     if (!res.ok || !(res.headers.get('content-type') ?? '').includes('application/json')) {
+      indexFailedAt = Date.now();
       return [];
     }
     indexCache = ((await res.json()) as IndexFile).peaks ?? [];
+    indexFailedAt = 0;
     return indexCache;
   } catch {
+    indexFailedAt = Date.now();
     return []; // офлайн и индекс не в кеше — ищем только по своим регионам
   }
+}
+
+/** Сброс кеша индекса (тесты, принудительное обновление) */
+export function resetSearchIndexCache(): void {
+  indexCache = null;
+  indexFailedAt = 0;
 }

@@ -94,3 +94,29 @@ export function wrapAngle(rad: number): number {
   if (a <= -Math.PI) a += 2 * Math.PI;
   return a;
 }
+
+/**
+ * Нормализация азимута в диапазон [0, 2π) — для абсолютных направлений.
+ *
+ * Свайп крутит камеру простым вычитанием, поэтому без нормализации
+ * `centerAzRad` уходит и в минус, и за 2π, а любая последующая арифметика
+ * через `%` (остаток в JS сохраняет знак делимого) считает не тот сектор.
+ */
+export function normalizeAz(rad: number): number {
+  const a = rad % (2 * Math.PI);
+  return a < 0 ? a + 2 * Math.PI : a;
+}
+
+/**
+ * Точка пригодна для расчёта? Широта вне ±90 ломает ray-marching молча:
+ * `destination` вернёт бессмысленные координаты, DEM отдаст пустоту, а на
+ * экране будет «нет данных» без единого намёка на причину.
+ */
+export function isValidLatLon(p: LatLon): boolean {
+  return (
+    Number.isFinite(p.lat) &&
+    Number.isFinite(p.lon) &&
+    Math.abs(p.lat) <= 90 &&
+    Math.abs(p.lon) <= 180
+  );
+}

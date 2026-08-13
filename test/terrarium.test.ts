@@ -69,4 +69,37 @@ describe('terrarium', () => {
     await expect(sampler.loadTile(12, 100, 100)).resolves.toBeNull();
     expect(calls).toBe(2);
   });
+
+  it('интерполяция продолжается в соседний тайл, а не упирается в край', () => {
+    // Раньше индексы зажимались внутрь своего тайла: на каждом стыке
+    // дублировался краевой пиксель — шов шириной до ячейки (38–150 м)
+    const zoom = 12;
+    const pos = { lat: 43.35, lon: 42.44 };
+    const { x, y } = lonLatToTile(pos, zoom);
+
+    // Свой тайл — ровное плато 1000 м, восточный сосед — 2000 м
+    const flat = (h: number): Int16Array => {
+      const t = new Int16Array(256 * 256);
+      t.fill(h);
+      return t;
+    };
+    const sampler = new TerrariumSampler();
+    const tiles = (sampler as unknown as { tiles: Map<string, Int16Array> }).tiles;
+    tiles.set(`${zoom}/${x}/${y}`, flat(1000));
+    tiles.set(`${zoom}/${x + 1}/${y}`, flat(2000));
+
+    // Точка на последнем пикселе своего тайла: половина веса приходится на
+    // соседний, значит высота обязана уехать вверх от 1000
+    const edge = {
+      ...pos,
+      lon: ((x + 1) / 2 ** zoom) * 360 - 180 - 0.5 * (360 / (2 ** zoom * 256)),
+    };
+    const h = sampler.sample(edge, zoom);
+    expect(h).toBeGreaterThan(1000);
+    expect(h).toBeLessThanOrEqual(2000);
+
+    // Без соседа поведение прежнее: край повторяется, а не даёт NaN
+    tiles.delete(`${zoom}/${x + 1}/${y}`);
+    expect(sampler.sample(edge, zoom)).toBeCloseTo(1000, 6);
+  });
 });

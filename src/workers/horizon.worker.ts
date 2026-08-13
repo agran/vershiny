@@ -3,12 +3,17 @@
  * Источник высот — DemSource (new-geo-data.md): локальный патч → Terrarium.
  *
  * Протокол сообщений:
- *   → { type: 'init', patchBaseUrl? }
- *   → { type: 'compute', origin, peaks }
- *   → { type: 'viewpoint', peak }   — подобрать точку, откуда вершина видна
- *   ← { type: 'result', horizon, stepRad, peaks, observerH, computeMs }
- *   ← { type: 'viewpoint', origin, azimuthRad }
- *   ← { type: 'error', message }
+ *   → { type: 'init', patchBaseUrl?, reqId? }
+ *   → { type: 'compute', origin, peaks, reqId? }
+ *   → { type: 'viewpoint', peak, reqId? }   — подобрать точку, откуда вершина видна
+ *   ← { type: 'result', horizon, stepRad, peaks, observerH, computeMs, reqId? }
+ *   ← { type: 'viewpoint', origin, azimuthRad, reqId? }
+ *   ← { type: 'error', message, reqId? }
+ *
+ * `reqId` эхом возвращается в ответе. Заданий может быть несколько в полёте
+ * (быстрые нажатия навипада, перелёт поверх идущего расчёта), а ответы
+ * приходят в произвольном порядке — без идентификатора старый результат
+ * перетирал свежий, и панорама расходилась с положением наблюдателя.
  */
 
 import { DemSource } from '../core/dem-source';
@@ -25,6 +30,7 @@ export interface InitMessage {
   type: 'init';
   /** URL локального патча (tiles/{region}); без него — только Terrarium */
   patchBaseUrl?: string;
+  reqId?: number;
 }
 
 export interface ComputeMessage {
@@ -33,6 +39,7 @@ export interface ComputeMessage {
   peaks: Peak[];
   /** Переопределение высоты наблюдателя (для навигации вверх/вниз) */
   observerHeightOverride?: number;
+  reqId?: number;
 }
 
 /** Подобрать точку, с которой вершина действительно видна */
@@ -41,6 +48,7 @@ export interface ViewpointMessage {
   peak: Peak;
   /** Желаемое удаление от вершины, м */
   distM?: number;
+  reqId?: number;
 }
 
 export interface ViewpointResult {
@@ -48,6 +56,7 @@ export interface ViewpointResult {
   origin: LatLon;
   /** Азимут с точки на вершину, рад */
   azimuthRad: number;
+  reqId?: number;
 }
 
 export interface ResultMessage {
@@ -69,17 +78,32 @@ export interface ResultMessage {
   /** Высота наблюдателя из DEM */
   observerH: number;
   computeMs: number;
+  reqId?: number;
 }
 
 export interface ErrorMessage {
   type: 'error';
   message: string;
+  reqId?: number;
 }
 
 export type WorkerInMessage = InitMessage | ComputeMessage | ViewpointMessage;
 export type WorkerOutMessage = ResultMessage | ErrorMessage | ViewpointResult;
 
 let dem: DemSource | null = null;
+
+/**
+ * Инициализация источника высот идёт асинхронно, а `self.onmessage = async`
+ * обработчики в очередь не выстраивает: `compute`, пришедший следом за `init`,
+ * стартовал параллельно с `dem.init()`. Пока индекс патча не прочитан,
+ * `inPatch()` всегда ложен, и первая (самая заметная) панорама считалась по
+ * грубому Terrarium вместо выбранного детального патча.
+ *
+ * Поэтому храним промис инициализации и ждём его в начале расчётов. `dem`
+ * подменяется только после успешного `init()`: идущий расчёт продолжает
+ * работать со старым источником и его кешем тайлов, а не с полупустым новым.
+ */
+let initPromise: Promise<void> = Promise.resolve();
 
 /** Максимальная дальность луча — синхронизирована с computeHorizon */
 const MAX_DIST_M = 200_000;
@@ -164,19 +188,29 @@ async function pickViewpoint(peak: Peak, distM: number): Promise<ViewpointResult
 }
 
 self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
+  const reqId = ev.data.reqId;
   try {
     const msg = ev.data;
     if (msg.type === 'init') {
-      dem = new DemSource({ patchBaseUrl: msg.patchBaseUrl });
-      await dem.init();
+      initPromise = (async () => {
+        const next = new DemSource({ patchBaseUrl: msg.patchBaseUrl });
+        await next.init();
+        dem = next;
+      })();
+      await initPromise;
       return;
     }
+    // Расчёты ждут инициализацию: иначе патч рельефа подключится уже после
+    // того, как панорама посчитана по грубым данным
+    await initPromise;
     if (msg.type === 'viewpoint') {
-      self.postMessage(await pickViewpoint(msg.peak, msg.distM ?? 6_000));
+      const out = await pickViewpoint(msg.peak, msg.distM ?? 6_000);
+      self.postMessage({ ...out, reqId });
       return;
     }
     if (msg.type === 'compute') {
       const result = await compute(msg.origin, msg.peaks, msg.observerHeightOverride);
+      result.reqId = reqId;
       // Передаём буфер горизонта без копирования
       (self as unknown as Worker).postMessage(result, [result.horizon.buffer]);
     }
@@ -184,6 +218,7 @@ self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
     const out: ErrorMessage = {
       type: 'error',
       message: err instanceof Error ? err.message : String(err),
+      reqId,
     };
     self.postMessage(out);
   }

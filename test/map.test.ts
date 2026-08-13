@@ -89,4 +89,39 @@ describe('кнопки карты', () => {
     );
     expect(Element.prototype.setPointerCapture).toHaveBeenCalled();
   });
+
+  it('Escape в поиске сворачивает поиск, но не закрывает карту', () => {
+    // Событие всплывало до document-слушателя, тот видел уже скрытую панель
+    // и закрывал карту следом: одно нажатие сворачивало два уровня, а
+    // вернуться к карте было нельзя — она уничтожена
+    const { onClose } = open();
+    tap(byTitle('searchPeak')!);
+    const input = document.querySelector('input') as HTMLInputElement;
+    expect(input).not.toBeNull();
+
+    input.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+    );
+
+    expect(byTitle('close')).not.toBeNull(); // карта на месте
+    expect(onClose).not.toHaveBeenCalled();
+
+    // Второй Escape — уже мимо поля — закрывает саму карту
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    expect(byTitle('close')).toBeNull();
+  });
+
+  it('ResizeObserver отключается при закрытии карты', () => {
+    const disconnect = vi.fn();
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect = disconnect;
+      },
+    );
+    open();
+    tap(byTitle('close')!);
+    expect(disconnect).toHaveBeenCalled();
+  });
 });

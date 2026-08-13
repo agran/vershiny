@@ -185,7 +185,6 @@ export function computeLayeredHorizon(
     // Фронты: точки, где рельеф пробивает текущий максимум
     const rayFronts: VisibleFront[] = [];
     let currentMax = -Infinity;
-    let frontStartDist = 0;
 
     // Пропускаем ближнюю зону для фронтов (0–500 м): мы на этом склоне
     const nearSkip = 500;
@@ -239,7 +238,15 @@ export function computeLayeredHorizon(
         recordCrest();
       }
 
-      // Фронт: новый максимум = начало или продолжение
+      // Фронт: новый максимум = начало или продолжение.
+      //
+      // Провал закрывать отдельно не нужно: `distEndM` — это дистанция
+      // последнего максимума, и следующий максимум дальше чем через 2 км
+      // сам откроет новый фронт. Раньше здесь была ветка «провал — закрываем
+      // фронт», которая на каждой точке ниже максимума растягивала `distEndM`
+      // до текущей дистанции. Тогда разрыва между фронтами не возникало
+      // никогда: дальний хребет прилипал к ближнему, и один фронт тянулся
+      // от 3 до 25 км — маркеры вершин выбирали его для чего угодно.
       if (angle > currentMax && d >= nearSkip) {
         if (rayFronts.length === 0 || d - rayFronts[rayFronts.length - 1].distEndM > 2000) {
           // Новый фронт (после провала >2 км)
@@ -249,7 +256,6 @@ export function computeLayeredHorizon(
             elevStartRad: angle,
             elevMaxRad: angle,
           });
-          frontStartDist = d;
         } else {
           // Продолжение текущего фронта
           const front = rayFronts[rayFronts.length - 1];
@@ -257,10 +263,6 @@ export function computeLayeredHorizon(
           if (angle > front.elevMaxRad) front.elevMaxRad = angle;
         }
         currentMax = angle;
-      } else if (rayFronts.length > 0 && d - frontStartDist > 2000) {
-        // Провал — закрываем фронт
-        const front = rayFronts[rayFronts.length - 1];
-        front.distEndM = d;
       }
 
       // Ранний выход
@@ -308,9 +310,12 @@ function smoothLayers(
         continue;
       }
 
-      // Полразмера ячейки в лучах: (90 / dist) / stepRad
+      // Полразмера ячейки данных в лучах: (cell / dist) / stepRad.
+      // Ячейка не 90 м: на дальних лучах работает LOD ~ dist/150 (у патча) и
+      // Terrarium z11–z9 (76–306 м). Фиксированные 90 м занижали окно в
+      // 2–20 раз, и дальние гребни оставались «пилой» от квантования высоты
       const dist = distanceToHorizonM[i];
-      const cellSizeM = 90; // DEM 90 м
+      const cellSizeM = Math.max(90, dist / 150);
       const halfWin = Math.min(
         8,
         Math.max(0, Math.round((cellSizeM / 2 / dist) / stepRad)),

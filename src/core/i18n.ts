@@ -142,15 +142,25 @@ export function peakName(peak: {
   name_en?: string;
 }): string {
   const name = peak.name ?? '—';
+  // Латиницу транслитерировать незачем, всё остальное — обязательно: раньше
+  // проверялась только кириллица, и чисто грузинское или арабское название
+  // англоязычный пользователь видел в исходном письме
+  const latin = detectScript(name) === 'latin' ? name : translitToLatin(name);
   if (current === 'ru') {
-    return peak.name_ru ?? (isCyrillic(name) ? name : translitToRu(name));
+    if (peak.name_ru) return peak.name_ru;
+    return isCyrillic(name) ? name : translitToRu(latin);
   }
-  return peak.name_en ?? (isCyrillic(name) ? translitToEn(name) : name);
+  return peak.name_en ?? latin;
 }
 
 // Реэкспорт для обратной совместимости (старые импорты из i18n)
 export { isCyrillic, translitToEn, translitToRu } from './transliterate';
-import { isCyrillic, translitToEn, translitToRu } from './transliterate';
+import {
+  detectScript,
+  isCyrillic,
+  translitToLatin,
+  translitToRu,
+} from './transliterate';
 
 /** Название региона с учётом локали */
 export function regionTitle(region: {

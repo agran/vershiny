@@ -29,6 +29,25 @@ const VERSION = (self as unknown as { __SW_VERSION__?: string }).__SW_VERSION__ 
  */
 const PRECACHE = (self as unknown as { __SW_ASSETS__?: string[] }).__SW_ASSETS__ ?? [];
 
+/**
+ * Оболочка приложения: без неё офлайн-запуск сразу после установки упирался
+ * в 503 вместо страницы. Чанки предзагружались, а сам `index.html` попадал в
+ * кеш только по факту успешной онлайн-навигации — то есть «поставил PWA и
+ * ушёл в горы, ни разу не перезагрузив страницу» кончалось белым экраном.
+ */
+const SHELL = [
+  './',
+  './index.html',
+  './install.html',
+  './manifest.webmanifest',
+  './favicon.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/maskable-192.png',
+  './icons/maskable-512.png',
+  './icons/apple-touch-icon.png',
+];
+
 /** Тайлы не меняются никогда — их кеш переживает обновления приложения */
 const TILE_CACHE = 'vershiny-tiles-v1';
 /**
@@ -67,11 +86,10 @@ self.addEventListener('install', (ev) => {
   // что успели открыть при живой сети
   ev.waitUntil(
     (async () => {
-      if (PRECACHE.length === 0) return;
       const cache = await caches.open(APP_CACHE);
       // Каждый по отдельности: один отвалившийся файл не должен отменять всё
       await Promise.all(
-        PRECACHE.map((path) =>
+        [...SHELL, ...PRECACHE].map((path) =>
           cache.add(new URL(path, self.location.href).href).catch(() => {}),
         ),
       );
@@ -107,41 +125,63 @@ self.addEventListener('fetch', (ev) => {
   if (ev.request.method !== 'GET') return;
 
   if (isTile(url)) {
-    ev.respondWith(cacheFirst(ev.request, TILE_CACHE));
+    ev.respondWith(cacheFirst(ev.request, TILE_CACHE, ev));
   } else if (isData(url)) {
-    ev.respondWith(networkFirst(ev.request, DATA_CACHE));
+    ev.respondWith(networkFirst(ev.request, DATA_CACHE, ev));
   } else if (ev.request.mode === 'navigate') {
     // Оболочка: сеть впереди, кеш — офлайн-запас. Так свежий index.html
     // с новыми хешами чанков приезжает сразу, а не через раз
-    ev.respondWith(networkFirst(ev.request, APP_CACHE));
+    ev.respondWith(networkFirst(ev.request, APP_CACHE, ev));
   } else if (url.includes('/assets/') || url.includes('/icons/')) {
-    ev.respondWith(staleWhileRevalidate(ev.request, APP_CACHE));
+    ev.respondWith(staleWhileRevalidate(ev.request, APP_CACHE, ev));
   }
 });
 
-async function cacheFirst(request: Request, cacheName: string): Promise<Response> {
+/**
+ * Запись в кеш живёт дольше ответа: без `waitUntil` браузер вправе остановить
+ * worker сразу после `respondWith`, и `cache.put` без await не успевал —
+ * кеш «недописывался» через раз, а офлайн это ровно те файлы, которых нет.
+ */
+function keep(ev: FetchEvent, promise: Promise<unknown>): void {
+  ev.waitUntil(promise.catch(() => {}));
+}
+
+async function cacheFirst(
+  request: Request,
+  cacheName: string,
+  ev: FetchEvent,
+): Promise<Response> {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
   if (cached) return cached;
   try {
     const response = await fetch(request);
     if (response.ok) {
-      cache.put(request, response.clone());
+      keep(ev, cache.put(request, response.clone()));
     }
     return response;
-  } catch (err) {
+  } catch {
     return new Response('Offline', { status: 503, statusText: 'Offline' });
   }
 }
 
-async function networkFirst(request: Request, cacheName: string): Promise<Response> {
+async function networkFirst(
+  request: Request,
+  cacheName: string,
+  ev: FetchEvent,
+): Promise<Response> {
   const cache = await caches.open(cacheName);
   try {
     const response = await fetch(request);
     if (response.ok) {
-      cache.put(request, response.clone());
+      keep(ev, cache.put(request, response.clone()));
+      return response;
     }
-    return response;
+    // Сервер ответил, но плохо (битый деплой Pages, 404 на месте данных).
+    // Кеш проверялся только в catch — и приложение показывало ошибку, имея
+    // рядом рабочую копию regions.json или самой оболочки
+    const cached = await cache.match(request);
+    return cached ?? response;
   } catch {
     const cached = await cache.match(request);
     if (cached) return cached;
@@ -152,6 +192,7 @@ async function networkFirst(request: Request, cacheName: string): Promise<Respon
 async function staleWhileRevalidate(
   request: Request,
   cacheName: string,
+  ev: FetchEvent,
 ): Promise<Response> {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
@@ -160,7 +201,7 @@ async function staleWhileRevalidate(
   const fetched = fetch(request)
     .then((response) => {
       if (response.ok) {
-        cache.put(request, response.clone());
+        keep(ev, cache.put(request, response.clone()));
       }
       return response;
     })

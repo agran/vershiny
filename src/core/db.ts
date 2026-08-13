@@ -10,8 +10,19 @@ const STORE_PEAKS = 'peaks';
 const STORE_TERRARIUM = 'terrarium';
 const STORE_META = 'meta';
 
+/**
+ * Одно соединение на страницу.
+ *
+ * Раньше `indexedDB.open` вызывался на каждую операцию: при скачивании
+ * региона это тысячи открытий подряд. Промис кешируется, а при отказе
+ * сбрасывается — иначе одна неудача (приватный Safari) закрыла бы
+ * хранилище навсегда.
+ */
+let dbPromise: Promise<IDBDatabase> | null = null;
+
 function openDb(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
+  if (dbPromise) return dbPromise;
+  dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION);
     req.onupgradeneeded = (ev) => {
       const db = req.result;
@@ -34,9 +45,26 @@ function openDb(): Promise<IDBDatabase> {
         db.createObjectStore(STORE_META);
       }
     };
-    req.onsuccess = () => resolve(req.result);
+    // Вторая вкладка со старой версией схемы держит апгрейд: без обработчика
+    // промис не завершался ни успехом, ни ошибкой — приложение висело на
+    // первом же чтении тайла
+    req.onblocked = () => reject(new Error('IndexedDB заблокирована другой вкладкой'));
+    req.onsuccess = () => {
+      const db = req.result;
+      // Наоборот: это мы держим старую схему, а другая вкладка обновляется.
+      // Соединение надо отпустить, иначе там повиснет апгрейд
+      db.onversionchange = () => {
+        db.close();
+        dbPromise = null;
+      };
+      resolve(db);
+    };
     req.onerror = () => reject(req.error);
   });
+  dbPromise.catch(() => {
+    dbPromise = null;
+  });
+  return dbPromise;
 }
 
 async function get<T>(store: string, key: string): Promise<T | undefined> {
