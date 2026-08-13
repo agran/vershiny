@@ -6,13 +6,20 @@
 import { renderPanorama, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
 import { toRad, type LatLon } from './core/geo';
-import { t } from './core/i18n';
-import { downloadRegion, type DownloadProgress } from './ui/download';
+import { t, getLocale } from './core/i18n';
+import {
+  downloadRegion,
+  inBBox,
+  suggestRegionForPosition,
+  type DownloadProgress,
+  type RegionInfo,
+} from './ui/download';
 import type { ResultMessage, WorkerOutMessage, ViewpointResult } from './workers/horizon.worker';
 import type { SearchHit } from './core/search';
 import {
   ICON_AR,
   ICON_CALIBRATE,
+  ICON_CLOSE,
   ICON_DOWNLOAD,
   ICON_DOWNLOADED,
   ICON_DOWN,
@@ -924,6 +931,114 @@ function requestCompute(origin: LatLon): void {
     observerHeightOverride: heightOverride ?? undefined,
   });
   setStatus(t('computing'));
+  // Единая точка пересчёта — единственное место, где видно любое перемещение:
+  // GPS, шаг навипадом, перелёт, перенос с карты
+  void checkRegionForPosition(origin);
+}
+
+/** Реестр регионов: читается один раз, дальше из памяти */
+let regionsCache: Record<string, RegionInfo> | null = null;
+async function allRegions(): Promise<Record<string, RegionInfo>> {
+  if (!regionsCache) {
+    const { loadRegions } = await import('./ui/download');
+    regionsCache = await loadRegions();
+  }
+  return regionsCache;
+}
+
+/** Регион, от перехода на который пользователь отказался */
+let dismissedRegion: string | null = null;
+let suggestionEl: HTMLElement | null = null;
+
+/**
+ * Соответствует ли активный регион тому месту, где мы оказались.
+ *
+ * Регион задаёт список вершин: уйдя за его границы (пешком, по GPS или
+ * перелётом), человек получил бы панораму с подписями за сотни километров
+ * отсюда и без единой ближней горы. Регион при этом не меняется сам:
+ * границы реестра перекрываются и условны, а молча подменить данные под
+ * ногами хуже, чем спросить.
+ *
+ * Пока текущий регион содержит точку, молчим — даже если у соседнего
+ * приоритет выше: работающий регион менять незачем.
+ */
+async function checkRegionForPosition(pos: LatLon): Promise<void> {
+  const all = await allRegions();
+  const suggestion = suggestRegionForPosition(pos, currentRegion, all);
+  if (!suggestion) {
+    // Активный регион точку содержит (или предлагать нечего): если человек
+    // вернулся к себе, прошлый отказ забываем — уйдёт снова, спросим снова
+    const current = all[currentRegion];
+    if (current?.bbox && inBBox(pos, current.bbox)) {
+      dismissedRegion = null;
+      hideRegionSuggestion();
+    }
+    return;
+  }
+  if (suggestion === dismissedRegion) return;
+  showRegionSuggestion(suggestion, all[suggestion]);
+}
+
+function hideRegionSuggestion(): void {
+  suggestionEl?.remove();
+  suggestionEl = null;
+}
+
+/** Плашка «вы в другом районе» с предложением переключиться */
+function showRegionSuggestion(region: string, info: RegionInfo): void {
+  if (suggestionEl?.dataset.region === region) return; // уже предложено
+  hideRegionSuggestion();
+
+  const box = document.createElement('div');
+  box.dataset.region = region;
+  // Ниже верхних кнопок и во всю ширину: между «настройками» и «скачать» на
+  // телефоне остаётся 246 px — текст ломался в столбик, а кнопка вылезала
+  // за плашку и наезжала на соседний угол
+  box.style.cssText =
+    `position:fixed;left:${edgeLeft()};right:${edgeRight()};top:${edgeTop(56)};z-index:50;` +
+    'display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;' +
+    'background:rgba(26,26,46,.95);border:1px solid #415a77;border-radius:12px;' +
+    'padding:10px 12px;font:13px/1.4 system-ui,sans-serif;color:#f1faee;' +
+    'box-shadow:0 4px 16px rgba(0,0,0,.45)';
+
+  const text = document.createElement('span');
+  text.textContent = `${t('regionSuggest')} ${regionLabelSync(info)}`;
+  text.style.cssText = 'flex:1 1 auto;min-width:0';
+  box.appendChild(text);
+
+  const accept = document.createElement('button');
+  accept.textContent = t('regionSwitch');
+  accept.style.cssText =
+    'flex-shrink:0;border:none;border-radius:8px;padding:7px 12px;font-size:13px;' +
+    'font-weight:600;background:#4cc9f0;color:#1a1a2e;cursor:pointer';
+  accept.onclick = async () => {
+    hideRegionSuggestion();
+    await switchRegion(region);
+    requestCompute(lastOrigin);
+  };
+
+  const dismiss = document.createElement('button');
+  dismiss.innerHTML = ICON_CLOSE;
+  dismiss.title = t('close');
+  dismiss.style.cssText =
+    'flex-shrink:0;border:none;border-radius:8px;width:32px;height:32px;' +
+    'background:transparent;color:#cfd8dc;cursor:pointer;display:flex;' +
+    'align-items:center;justify-content:center';
+  dismiss.onclick = () => {
+    dismissedRegion = region;
+    hideRegionSuggestion();
+  };
+
+  box.append(accept, dismiss);
+  document.body.appendChild(box);
+  suggestionEl = box;
+}
+
+/** Название региона без обращения к download.ts (он уже загружен реестром) */
+function regionLabelSync(info: RegionInfo): string {
+  return getLocale() === 'ru'
+    ? (info.title_ru ?? info.title_en ?? '')
+    : (info.title_en ?? info.title_ru ?? '');
 }
 
 /** Изменение высоты наблюдателя (пересчёт панорамы) */

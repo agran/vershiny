@@ -48,6 +48,8 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     ru: 'Регион скачан — нажмите, чтобы обновить',
     en: 'Region downloaded — tap to refresh',
   },
+  regionSuggest: { ru: 'Вы в районе:', en: 'You are in:' },
+  regionSwitch: { ru: 'Переключить', en: 'Switch' },
   downloadPeaks: { ru: 'Загрузка вершин…', en: 'Downloading peaks…' },
   downloadTiles: { ru: 'Загрузка тайлов', en: 'Downloading tiles' },
   appTitle: { ru: 'Вершины — панорама гор', en: 'Vershiny — Mountain Panorama' },

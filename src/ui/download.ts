@@ -48,7 +48,7 @@ export interface DownloadProgress {
 }
 
 /** Точка внутри bbox (с учётом перехода через антимеридиан) */
-function inBBox(pos: LatLon, bbox: [number, number, number, number]): boolean {
+export function inBBox(pos: LatLon, bbox: [number, number, number, number]): boolean {
   const [minLon, minLat, maxLon, maxLat] = bbox;
   const lonOk =
     minLon <= maxLon
@@ -223,6 +223,26 @@ export function regionLabel(info: RegionInfo): string {
   return getLocale() === 'ru'
     ? (info.title_ru ?? info.title_en ?? '')
     : (info.title_en ?? info.title_ru ?? '');
+}
+
+/**
+ * Какой регион предложить для точки, если активный ей больше не подходит.
+ * null — предлагать нечего: активный регион точку содержит, кандидата нет или
+ * это он же.
+ *
+ * Пока текущий регион содержит точку, молчим даже при более приоритетном
+ * соседе: регионы реестра сильно перекрываются (буфер 200 км с каждой
+ * стороны), и работающий регион менять незачем — это только мешало бы.
+ */
+export function suggestRegionForPosition(
+  pos: LatLon,
+  currentRegion: string,
+  regions: Record<string, RegionInfo>,
+): string | null {
+  const current = regions[currentRegion];
+  if (current?.bbox && inBBox(pos, current.bbox)) return null;
+  const best = findRegionForPosition(pos, regions);
+  return best && best !== currentRegion ? best : null;
 }
 
 /** Ключевые вершины региона для UI с учётом локали */
