@@ -5,7 +5,7 @@
 
 import { renderPanorama, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
-import { toRad, type LatLon } from './core/geo';
+import { toRad, wrapAngle, type LatLon } from './core/geo';
 import { t, getLocale } from './core/i18n';
 import {
   downloadRegion,
@@ -1235,23 +1235,42 @@ function setupActionButtons(): void {
   );
   photoBtn.onclick = async () => {
     if (!panorama) return;
-    const { capturePhoto, sharePhoto } = await import('./ui/photo');
-    const blob = await capturePhoto(panorama, view, {
+    const { capturePhoto, savePhoto, photoFilename } = await import('./ui/photo');
+    const options = {
       // Именно актуальные, а не аргументы функции: кнопки создаются один раз,
       // и замыкание держало бы точку первого расчёта — после перелёта к
       // вершине подпись врала бы координатами и высотой старта
       origin: lastOrigin,
       observerH: lastObserverH,
       region: currentRegion,
+      peakName: mainPeakInView(),
       source: canvas,
-    });
-    try {
-      await sharePhoto(blob);
-    } catch (err) {
-      // Отмена шаринга пользователем — это AbortError, а не сбой
-      if (!(err instanceof DOMException && err.name === 'AbortError')) throw err;
-    }
+    };
+    const blob = await capturePhoto(panorama, view, options);
+    savePhoto(blob, photoFilename(options));
+    setStatus(t('photoSaved'));
+    setTimeout(() => setStatus(''), 3000);
   };
+}
+
+/**
+ * Самая заметная вершина в кадре — та, что попала в имя файла.
+ *
+ * «Заметная» здесь — высшая из видимых, а не ближайшая к центру: снимок
+ * называют по горе, ради которой его сделали, а она обычно и есть главная в
+ * кадре. Скрытые за хребтом не считаются: на картинке их не видно.
+ */
+function mainPeakInView(): string | undefined {
+  if (!panorama) return undefined;
+  const half = view.fovRad / 2;
+  let best: { name: string; ele: number } | undefined;
+  for (const peak of panorama.peaks) {
+    if (peak.visibility === 'hidden') continue;
+    if (Math.abs(wrapAngle(peak.azimuthRad - view.centerAzRad)) > half) continue;
+    const ele = peak.ele ?? 0;
+    if (!best || ele > best.ele) best = { name: peak.name, ele };
+  }
+  return best?.name;
 }
 
 /** Ответ — JSON, а не SPA-fallback index.html? */

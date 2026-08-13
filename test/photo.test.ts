@@ -10,7 +10,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { capturePhoto } from '../src/ui/photo';
+import { capturePhoto, photoFilename } from '../src/ui/photo';
 import type { PanoramaState, ViewState } from '../src/ui/panorama';
 
 const STATE: PanoramaState = {
@@ -150,5 +150,62 @@ describe('снимок панорамы', () => {
     expect(shot.width / shot.height).toBeCloseTo(16 / 9, 3);
     // Даже здесь масштаб не единица: иначе подписи снова станут микроскопическими
     expect(Math.min(...fontSizes)).toBeGreaterThan(12);
+  });
+});
+
+describe('имя файла снимка', () => {
+  const AT = new Date(2026, 7, 13, 22, 38);
+
+  it('содержит место, вершину и время', () => {
+    // Имя должно объяснять снимок через полгода в папке «Загрузки»
+    expect(
+      photoFilename(
+        {
+          origin: { lat: 43.3, lon: 42.4 },
+          observerH: 4100,
+          region: 'elbrus',
+          peakName: 'Эльбрус Западный',
+        },
+        AT,
+      ),
+    ).toBe('vershiny-elbrus-zapadnyy-2026-08-13-2238.png');
+  });
+
+  it('без вершины в кадре — регион и время', () => {
+    expect(
+      photoFilename({ origin: { lat: 43.3, lon: 42.4 }, observerH: 4100, region: 'alps' }, AT),
+    ).toBe('vershiny-alps-2026-08-13-2238.png');
+  });
+
+  it('в имени нет ничего, кроме латиницы, цифр и дефисов', () => {
+    const name = photoFilename(
+      {
+        origin: { lat: 43.3, lon: 42.4 },
+        observerH: 4100,
+        region: 'кавказ/западный',
+        peakName: 'Ушба (Южная) 4710 м',
+      },
+      AT,
+    );
+
+    // Слэш увёл бы файл в несуществующий каталог, пробелы и кириллица —
+    // ломаются в облаках и на чужих файловых системах
+    expect(name).toMatch(/^[a-z0-9-]+\.png$/);
+    expect(name.startsWith('vershiny-')).toBe(true);
+    expect(name.endsWith('-2026-08-13-2238.png')).toBe(true);
+  });
+
+  it('время дописывается с ведущими нулями и сортируется по порядку', () => {
+    const early = photoFilename(
+      { origin: { lat: 0, lon: 0 }, observerH: 0, region: 'alps' },
+      new Date(2026, 0, 5, 7, 4),
+    );
+    const late = photoFilename(
+      { origin: { lat: 0, lon: 0 }, observerH: 0, region: 'alps' },
+      new Date(2026, 0, 5, 18, 40),
+    );
+
+    expect(early).toBe('vershiny-alps-2026-01-05-0704.png');
+    expect(early < late).toBe(true);
   });
 });
