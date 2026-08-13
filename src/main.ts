@@ -18,11 +18,17 @@ let currentPeaks: PeaksFile['peaks'] = []; // пики текущего реги
 const statusEl = document.getElementById('status')!;
 const appEl = document.getElementById('app')!;
 
-// Регистрация Service Worker (PWA, офлайн-режим)
+// Регистрация Service Worker (PWA, офлайн-режим и обновления)
 if ('serviceWorker' in navigator && !import.meta.env.DEV) {
-  navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
-    // Офлайн-режим не критичен в dev
-  });
+  navigator.serviceWorker
+    .register(`${import.meta.env.BASE_URL}sw.js`)
+    .then(async (registration) => {
+      const { setupUpdates } = await import('./ui/update');
+      setupUpdates(registration);
+    })
+    .catch(() => {
+      // Офлайн-режим не критичен: приложение работает и без него
+    });
 }
 
 function setStatus(text: string): void {
@@ -378,8 +384,31 @@ async function main(): Promise<void> {
     navUiReady = true;
     setupDownloadButton(origin);
     setupSearchButton(origin);
+    setupMapButton();
     setupNavPad();
   }
+}
+
+/** Кнопка карты: где я, куда смотрю и куда перенестись */
+function setupMapButton(): void {
+  const btn = makeButton('🗺', t('map'), 'left:16px;top:76px');
+  let closeMap: (() => void) | null = null;
+  btn.onclick = async () => {
+    if (closeMap) {
+      closeMap();
+      closeMap = null;
+      return;
+    }
+    const { openMap } = await import('./ui/map');
+    closeMap = openMap({
+      origin: lastOrigin,
+      headingRad: view.centerAzRad,
+      onPick: (pos) => {
+        closeMap = null;
+        void goToLocation(pos);
+      },
+    });
+  };
 }
 
 /** Кнопки навигации/поиска/скачивания уже созданы */
@@ -528,28 +557,56 @@ async function renderResults(
  * его вершины (сеть → офлайн-кеш), затем сам перелёт.
  */
 async function goToHit(hit: SearchHit, origin: LatLon): Promise<void> {
-  if (hit.region !== currentRegion) {
-    currentRegion = hit.region;
-    manualRegion = true;
-    setStatus(t('loadingRegion'));
-    const base = import.meta.env.BASE_URL;
-    let peaks: PeaksFile['peaks'] | null = null;
-    const res = await fetch(`${base}peaks/${hit.region}.json`).catch(() => null);
-    if (res && isJson(res)) {
-      peaks = ((await res.json()) as PeaksFile).peaks;
-    } else {
-      const { getPeaks } = await import('./core/db');
-      peaks = ((await getPeaks(hit.region)) ?? null) as PeaksFile['peaks'] | null;
-    }
-    if (peaks) {
-      const { annotateIsolation } = await import('./core/peaks');
-      annotateIsolation(peaks);
-      currentPeaks = peaks;
-    }
-    // Вершины региона могли не загрузиться (офлайн) — перелёт всё равно делаем:
-    // координаты у нас есть, панорама построится по DEM
-  }
+  await switchRegion(hit.region);
   jumpToPeak(hit.peak, origin);
+}
+
+/**
+ * Смена региона: вершины из сети, при промахе — из офлайн-кеша.
+ * Если не вышло ни то, ни другое (офлайн и регион не скачан), продолжаем
+ * со старым списком: панорама всё равно строится по DEM.
+ */
+async function switchRegion(region: string): Promise<void> {
+  if (region === currentRegion) return;
+  currentRegion = region;
+  manualRegion = true;
+  setStatus(t('loadingRegion'));
+
+  const base = import.meta.env.BASE_URL;
+  let peaks: PeaksFile['peaks'] | null = null;
+  const res = await fetch(`${base}peaks/${region}.json`).catch(() => null);
+  if (res && isJson(res)) {
+    peaks = ((await res.json()) as PeaksFile).peaks;
+  } else {
+    const { getPeaks } = await import('./core/db');
+    peaks = ((await getPeaks(region)) ?? null) as PeaksFile['peaks'] | null;
+  }
+  if (peaks) {
+    const { annotateIsolation } = await import('./core/peaks');
+    annotateIsolation(peaks);
+    currentPeaks = peaks;
+  }
+}
+
+/**
+ * Перенос в произвольную точку планеты (с карты): регион выбираем по bbox,
+ * как при старте по GPS. Вне всех регионов вершин не будет, но рельеф есть
+ * везде — глобальная пирамида покрывает всю сушу.
+ */
+async function goToLocation(pos: LatLon): Promise<void> {
+  setStatus(t('computing'));
+  const { loadRegions, findRegionForPosition } = await import('./ui/download');
+  const region = findRegionForPosition(pos, await loadRegions());
+  if (region) {
+    await switchRegion(region);
+  } else {
+    // Реестр покрывает не всю сушу. Оставлять вершины прежнего региона нельзя:
+    // они за тысячи километров и к этому месту отношения не имеют
+    currentPeaks = [];
+  }
+  heightOverride = null; // на землю: набранная высота к новой точке не относится
+  autoTiltPending = true;
+  requestCompute(pos);
 }
 
 /** Переход к вершине: точка, откуда она видна, и взгляд на неё */

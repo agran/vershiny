@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <title>Установить «Вершины» на телефон</title>
+  <meta name="description" content="Установка «Вершин» на домашний экран: работает офлайн, без магазина приложений и регистрации." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Вершины" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 24px 20px calc(40px + env(safe-area-inset-bottom));
+      background: linear-gradient(#0d1b2a, #2b2d42 70%, #3a4a68);
+      min-height: 100vh;
+      font: 16px/1.55 system-ui, -apple-system, sans-serif; color: #f1faee;
+    }
+    main { max-width: 640px; margin: 0 auto; }
+    header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+    header img { width: 72px; height: 72px; border-radius: 16px; flex: none; }
+    h1 { font-size: 26px; margin: 0 0 2px; line-height: 1.2; }
+    .sub { margin: 0; opacity: .75; font-size: 15px; }
+    .shot {
+      width: 100%; border-radius: 12px; border: 1px solid #415a77;
+      margin: 20px 0 4px; display: block;
+    }
+    .caption { font-size: 13px; opacity: .65; margin: 0 0 24px; }
+    .btn {
+      display: block; width: 100%; text-align: center; text-decoration: none;
+      background: #4cc9f0; color: #1a1a2e; font-weight: 600; font-size: 17px;
+      border: none; border-radius: 12px; padding: 15px 20px; cursor: pointer;
+      margin-bottom: 12px; font-family: inherit;
+    }
+    .btn.secondary { background: transparent; color: #f1faee; border: 1px solid #415a77; font-weight: 500; }
+    .btn[hidden] { display: none; }
+    h2 { font-size: 17px; margin: 28px 0 10px; }
+    ol, ul { margin: 0; padding-left: 22px; }
+    li { margin-bottom: 8px; }
+    kbd {
+      background: #2b2d42; border: 1px solid #415a77; border-radius: 6px;
+      padding: 1px 7px; font: inherit; font-size: 14px; white-space: nowrap;
+    }
+    .note {
+      background: rgba(76, 201, 240, .08); border: 1px solid #415a77;
+      border-radius: 12px; padding: 14px 16px; margin: 24px 0 0; font-size: 15px;
+    }
+    .note p { margin: 0 0 8px; }
+    .note p:last-child { margin-bottom: 0; }
+    footer { margin-top: 32px; font-size: 14px; opacity: .65; }
+    footer a, .note a { color: #4cc9f0; }
+    #installed { display: none; }
+    body.standalone #installed { display: block; }
+    body.standalone #install-steps { display: none; }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="./icons/icon-192.png" alt="" />
+    <div>
+      <h1>Вершины</h1>
+      <p class="sub">Панорама горизонта с подписями вершин</p>
+    </div>
+  </header>
+
+  <img class="shot" src="./media/panorama.png" alt="Панорама Эльбруса с подписями вершин" />
+  <p class="caption">
+    Вид с Приюта 11. Восточная вершина видна — у неё кружок; Западная стоит
+    за склоном, поэтому её выноска обрывается о гребень.
+  </p>
+
+  <a class="btn" href="./">Открыть приложение</a>
+  <button class="btn secondary" id="install" hidden>Установить на телефон</button>
+
+  <div id="installed" class="note">
+    <p><strong>Приложение уже установлено</strong> — вы открыли эту страницу из него.</p>
+    <p>Обновления приезжают сами: когда выйдет новая версия, внизу появится
+      плашка «Доступно обновление».</p>
+  </div>
+
+  <div id="install-steps">
+    <h2>Android — Chrome</h2>
+    <ol>
+      <li>Нажмите кнопку «Установить на телефон» выше.</li>
+      <li>Если её нет — меню <kbd>⋮</kbd> → <kbd>Установить приложение</kbd>
+        (или <kbd>Добавить на главный экран</kbd>).</li>
+    </ol>
+
+    <h2>iPhone и iPad — Safari</h2>
+    <ol>
+      <li>Откройте эту страницу <strong>в Safari</strong> (в других браузерах
+        установка на iOS недоступна).</li>
+      <li>Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.</li>
+      <li>Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.</li>
+    </ol>
+
+    <h2>Компьютер</h2>
+    <ul>
+      <li>Chrome или Edge: значок установки в адресной строке.</li>
+      <li>Можно и не устанавливать — в браузере работает всё то же самое.</li>
+    </ul>
+  </div>
+
+  <div class="note">
+    <p><strong>Обновления.</strong> Приложение проверяет новую версию при
+      каждом запуске и раз в час. Когда она появится, внизу возникнет плашка
+      «Доступно обновление» — нажатие обновит его за пару секунд.</p>
+    <p>Магазин приложений не нужен, аккаунт тоже.</p>
+  </div>
+
+  <div class="note">
+    <p><strong>Офлайн.</strong> Откройте <kbd>⚙</kbd> → выберите свой регион и
+      нажмите «Скачать»: рельеф и вершины лягут в память телефона, и панорама
+      будет строиться без сети — там, где её обычно и нет.</p>
+  </div>
+
+  <footer>
+    Открытый код: <a href="https://github.com/agran/vershiny">github.com/agran/vershiny</a><br />
+    Рельеф — © DLR/ESA Copernicus DEM, вершины — © участники OpenStreetMap
+  </footer>
+</main>
+
+<script>
+  // Страницу открыли из установленного приложения — показываем другой текст
+  if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+    document.body.classList.add('standalone');
+  }
+
+  // Chrome/Edge: перехватываем системное предложение и вешаем на свою кнопку
+  var deferred = null;
+  var button = document.getElementById('install');
+  window.addEventListener('beforeinstallprompt', function (ev) {
+    ev.preventDefault();
+    deferred = ev;
+    button.hidden = false;
+  });
+  button.addEventListener('click', function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function () {
+      deferred = null;
+      button.hidden = true;
+    });
+  });
+  window.addEventListener('appinstalled', function () {
+    button.hidden = true;
+    document.body.classList.add('standalone');
+  });
+</script>
+</body>
+</html>

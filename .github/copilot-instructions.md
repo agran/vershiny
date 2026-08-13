@@ -26,6 +26,9 @@
 - Web Worker для ray-marching горизонта
 - Python 3.12 для инструментов данных (`tools/`)
 - Тесты: vitest (`npm test`), типы: `npx tsc`, сборка: `npm run build`
+- PWA: манифест + `src/sw.ts`; **Service Worker собирается отдельно**
+  (`vite.sw.config.ts` → `dist/sw.js`) — он не может быть частью основного
+  бандла с хешами и чанками
 
 ## Данные
 - Глобальный DEM: AWS Terrarium (онлайн, весь мир) — `src/core/terrarium.ts`

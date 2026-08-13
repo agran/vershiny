@@ -5,6 +5,14 @@ export default defineConfig({
   build: {
     target: 'es2022',
     outDir: 'dist',
+    rollupOptions: {
+      input: {
+        // Приложение и страница установки: вторая нужна как ссылка «поставить
+        // на телефон», её открывают до того, как увидят саму панораму
+        main: new URL('./index.html', import.meta.url).pathname,
+        install: new URL('./install.html', import.meta.url).pathname,
+      },
+    },
   },
   worker: {
     format: 'es',
@@ -16,5 +24,6 @@ export default defineConfig({
       ignored: ['**/dem/**', '**/data/**'],
     },
   },
-  // PWA: регистрация SW через main.ts (без плагина — контроль над кешами)
+  // PWA: Service Worker собирается отдельно (vite.sw.config.ts) — ему нужен
+  // один самодостаточный файл по стабильному адресу, без хешей и чанков
 });

@@ -4,14 +4,29 @@
  * Стратегии:
  *   - Тайлы (.bin, .bin.gz, Terrarium .png) → cache-first (не меняются никогда)
  *   - index.json, peaks/*.json, regions.json → network-first (могут обновиться)
- *   - Остальное (бандл, шрифты) → stale-while-revalidate
+ *   - Бандл и оболочка → stale-while-revalidate
+ *
+ * Обновление приложения: новый worker НЕ вытесняет старый молча — он ждёт,
+ * страница показывает «Доступно обновление», и только по команде SKIP_WAITING
+ * происходит смена версии с перезагрузкой. Иначе пользователь остался бы с
+ * половиной старых чанков в памяти и половиной новых в кеше.
  */
 
 declare const self: ServiceWorkerGlobalScope;
 
+/**
+ * Версия оболочки. Меняется при сборке (см. vite.sw.config.ts): в файл
+ * подставляется хеш содержимого, иначе браузер не увидит разницы в sw.js
+ * и обновление никогда не приедет.
+ */
+const VERSION = (self as unknown as { __SW_VERSION__?: string }).__SW_VERSION__ ?? 'dev';
+
+/** Тайлы не меняются никогда — их кеш переживает обновления приложения */
 const TILE_CACHE = 'vershiny-tiles-v1';
-const DATA_CACHE = 'vershiny-data-v1';
-const APP_CACHE = 'vershiny-app-v1';
+const DATA_CACHE = `vershiny-data-${VERSION}`;
+const APP_CACHE = `vershiny-app-${VERSION}`;
+/** Кеши, которые не удаляем при активации новой версии */
+const KEEP = new Set([TILE_CACHE, DATA_CACHE, APP_CACHE]);
 
 const TILE_PATTERNS = [
   /\/tiles\/.*\.bin(\.gz)?$/,
@@ -32,22 +47,46 @@ function isData(url: string): boolean {
   return DATA_PATTERNS.some((re) => re.test(url));
 }
 
-self.addEventListener('install', (ev) => {
-  ev.waitUntil(self.skipWaiting());
+self.addEventListener('install', () => {
+  // Ждём в состоянии waiting: решение об обновлении принимает пользователь
 });
 
 self.addEventListener('activate', (ev) => {
-  ev.waitUntil(self.clients.claim());
+  ev.waitUntil(
+    (async () => {
+      // Чистим кеши прошлых версий, иначе они копятся навсегда
+      const names = await caches.keys();
+      await Promise.all(
+        names
+          .filter((name) => name.startsWith('vershiny-') && !KEEP.has(name))
+          .map((name) => caches.delete(name)),
+      );
+      await self.clients.claim();
+    })(),
+  );
+});
+
+self.addEventListener('message', (ev) => {
+  if ((ev.data as { type?: string } | undefined)?.type === 'SKIP_WAITING') {
+    void self.skipWaiting();
+  }
 });
 
 self.addEventListener('fetch', (ev) => {
   const url = ev.request.url;
 
+  // Кешируем только GET: остальное (если появится) ломает Cache API
+  if (ev.request.method !== 'GET') return;
+
   if (isTile(url)) {
     ev.respondWith(cacheFirst(ev.request, TILE_CACHE));
   } else if (isData(url)) {
     ev.respondWith(networkFirst(ev.request, DATA_CACHE));
-  } else if (ev.request.mode === 'navigate' || url.includes('/assets/')) {
+  } else if (ev.request.mode === 'navigate') {
+    // Оболочка: сеть впереди, кеш — офлайн-запас. Так свежий index.html
+    // с новыми хешами чанков приезжает сразу, а не через раз
+    ev.respondWith(networkFirst(ev.request, APP_CACHE));
+  } else if (url.includes('/assets/') || url.includes('/icons/')) {
     ev.respondWith(staleWhileRevalidate(ev.request, APP_CACHE));
   }
 });

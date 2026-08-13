@@ -68,6 +68,11 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   searchPeak: { ru: 'Поиск вершины', en: 'Search peak' },
   searchPrompt: { ru: 'Название вершины:', en: 'Peak name:' },
   peakNotFound: { ru: 'Вершина не найдена', en: 'Peak not found' },
+  updateAvailable: { ru: 'Доступно обновление', en: 'Update available' },
+  updateApply: { ru: 'Обновить', en: 'Update' },
+  map: { ru: 'Карта', en: 'Map' },
+  mapGoHere: { ru: 'Перенестись сюда', en: 'Go here' },
+  mapMyPosition: { ru: 'Моё положение', en: 'My position' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },
