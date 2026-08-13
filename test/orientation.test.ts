@@ -8,7 +8,11 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { lookFromDeviceOrientation } from '../src/core/orientation';
+import {
+  lookFromDeviceOrientation,
+  isAbsoluteReading,
+  followAzimuth,
+} from '../src/core/orientation';
 
 const deg = (rad: number): number => ((rad * 180) / Math.PI + 360) % 360;
 const degSigned = (rad: number): number => (rad * 180) / Math.PI;
@@ -61,5 +65,53 @@ describe('направление взгляда по датчику ориент
   it('телефон лежит экраном вверх: взгляд сквозь экран идёт в стол', () => {
     const flat = lookFromDeviceOrientation(0, 0, 0);
     expect(degSigned(flat.elevationRad)).toBeCloseTo(-90, 1);
+  });
+});
+
+describe('выбор источника азимута', () => {
+  it('при наличии абсолютного игнорирует относительное событие', () => {
+    // Android шлёт оба события: absolute — от севера, обычное — от
+    // произвольного нуля. Вперемешку они дёргают панораму на десятки градусов
+    expect(isAbsoluteReading('deviceorientationabsolute', false, true, false)).toBe(true);
+    expect(isAbsoluteReading('deviceorientation', false, false, true)).toBe(false);
+  });
+
+  it('пока абсолютного нет, берёт что есть', () => {
+    expect(isAbsoluteReading('deviceorientation', false, false, false)).toBe(true);
+  });
+
+  it('iOS: webkitCompassHeading абсолютен, хотя событие обычное', () => {
+    expect(isAbsoluteReading('deviceorientation', true, false, true)).toBe(true);
+  });
+
+  it('флаг absolute у обычного события тоже считается', () => {
+    expect(isAbsoluteReading('deviceorientation', false, true, true)).toBe(true);
+  });
+});
+
+describe('слежение за компасом', () => {
+  const deg2rad = (d: number): number => (d * Math.PI) / 180;
+
+  it('гасит дрожание датчика', () => {
+    // Компас шумит на ±1–2° даже в покое: картинка не должна метаться
+    let view = deg2rad(100);
+    for (let i = 0; i < 20; i++) {
+      const noisy = deg2rad(100 + (i % 2 === 0 ? 1.5 : -1.5));
+      view = followAzimuth(view, noisy);
+    }
+    expect(Math.abs(degSigned(view) - 100)).toBeLessThan(0.5);
+  });
+
+  it('отрабатывает настоящий поворот за несколько кадров', () => {
+    let view = deg2rad(0);
+    for (let i = 0; i < 8; i++) view = followAzimuth(view, deg2rad(90));
+    expect(deg(view)).toBeGreaterThan(85);
+  });
+
+  it('идёт кратчайшим путём через север', () => {
+    // 350° → 10° — это +20°, а не −340°
+    const next = followAzimuth(deg2rad(350), deg2rad(10));
+    const d = deg(next);
+    expect(d > 350 || d < 20).toBe(true);
   });
 });

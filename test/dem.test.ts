@@ -162,8 +162,7 @@ describe('DemSampler: формат глобальной пирамиды', () =>
   });
 });
 
-describe('DemSampler: тайлы для офлайн-загрузки', () => {
-  it('собирает существующие тайлы bbox по всем LOD', async () => {
+describe('DemSampler: тайлы для офлайн-загрузки', () => {  it('собирает существующие тайлы bbox по всем LOD', async () => {
     const sampler = samplerWith({});
     await sampler.loadIndex();
 
@@ -193,5 +192,44 @@ describe('DemSampler: тайлы для офлайн-загрузки', () => {
     index.lods[1].avgTileBytes = 18_000;
 
     expect(sampler.bboxDownloadBytes([42, 42.5, 43, 44])).toBe(58_000);
+  });
+});
+
+describe('DemSampler: отказ сети', () => {
+  it('503 от офлайнового Service Worker — это «нет тайла», а не крах', async () => {
+    // SW отдаёт 503 на всё, чего нет в кеше. Раньше это летело исключением
+    // через worker, и вместо панорамы человек видел «Ошибка: HTTP 503»
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith('index.json')) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      return new Response('Offline', { status: 503 });
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    await sampler.loadIndex();
+
+    await expect(sampler.loadTile(0, 444, 92)).resolves.toBeNull();
+  });
+
+  it('не запоминает временную дыру: с сетью тайл догружается', async () => {
+    let offline = true;
+    const body = await encodeTile(slopeTile(), 2);
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith('index.json')) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      if (offline) return new Response('Offline', { status: 503 });
+      return new Response(body as unknown as BodyInit);
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    await sampler.loadIndex();
+
+    expect(await sampler.loadTile(0, 444, 92)).toBeNull();
+    offline = false;
+    expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
   });
 });

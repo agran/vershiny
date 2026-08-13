@@ -265,7 +265,11 @@ export class DemSampler {
       } else if (res.status === 404) {
         tile = null; // вне покрытия (море, край региона, не попал в бюджет)
       } else {
-        throw new Error(`tile ${key}: HTTP ${res.status}`);
+        // Временный отказ: офлайн Service Worker отдаёт 503 на всё, чего нет
+        // в кеше. Это не повод ронять весь расчёт — рисуем по тому, что есть,
+        // и не запоминаем «дыру»: с возвратом сети тайл догрузится
+        this.pending.delete(key);
+        return null;
       }
       this.tiles.set(key, tile);
       this.pending.delete(key);

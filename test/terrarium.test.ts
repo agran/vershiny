@@ -4,6 +4,7 @@ import {
   lonLatToPixel,
   lonLatToTile,
   zoomForDistance,
+  TerrariumSampler,
 } from '../src/core/terrarium';
 
 describe('terrarium', () => {
@@ -40,5 +41,15 @@ describe('terrarium', () => {
     expect(px).toBeLessThan(256);
     expect(py).toBeGreaterThanOrEqual(0);
     expect(py).toBeLessThan(256);
+  });
+
+  it('офлайновый 503 не роняет загрузку тайла', async () => {
+    // Service Worker без сети отвечает 503 на всё, чего нет в кеше:
+    // это «сейчас нет данных», а не повод прервать расчёт панорамы
+    const fetchFn = (async () =>
+      new Response('Offline', { status: 503 })) as unknown as typeof fetch;
+    const sampler = new TerrariumSampler({ fetchFn });
+
+    await expect(sampler.loadTile(12, 100, 100)).resolves.toBeNull();
   });
 });

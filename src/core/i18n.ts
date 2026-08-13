@@ -38,6 +38,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     en: 'No region data.\nRun tools/dem-to-tiles and tools/peaks-to-json.',
   },
   error: { ru: 'Ошибка', en: 'Error' },
+  errorOffline: {
+    ru: 'Нет сети, а данных об этом месте на устройстве нет',
+    en: 'Offline and no stored data for this place',
+  },
   peaks: { ru: 'вершин', en: 'peaks' },
   observer: { ru: 'наблюдатель', en: 'observer' },
   downloadRegion: {

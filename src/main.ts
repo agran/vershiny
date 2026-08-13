@@ -31,8 +31,43 @@ import {
   iconArrow,
 } from './ui/icons';
 
-let currentRegion = 'elbrus';
-let manualRegion = false; // true = пользователь выбрал вручную в настройках
+/**
+ * Активный регион переживает перезапуск: выбранный вручную в настройках
+ * сбрасывался на Приэльбрусье при каждом открытии приложения, и в горах без
+ * связи (где авто-выбор по GPS может не сработать) это лишало вершин.
+ */
+const REGION_KEY = 'vershiny-region';
+
+function storedRegion(): { region: string; manual: boolean } {
+  try {
+    const raw = localStorage.getItem(REGION_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as { region?: unknown; manual?: unknown };
+      if (typeof parsed.region === 'string' && parsed.region) {
+        return { region: parsed.region, manual: parsed.manual === true };
+      }
+    }
+  } catch {
+    // Приватный режим или мусор в хранилище — начинаем с умолчания
+  }
+  return { region: 'elbrus', manual: false };
+}
+
+function rememberRegion(): void {
+  try {
+    localStorage.setItem(
+      REGION_KEY,
+      JSON.stringify({ region: currentRegion, manual: manualRegion }),
+    );
+  } catch {
+    // Без хранилища выбор живёт до перезагрузки — это лучше, чем ничего
+  }
+}
+
+const restored = storedRegion();
+let currentRegion = restored.region;
+/** true = пользователь выбрал регион вручную, автоподбор по GPS его не трогает */
+let manualRegion = restored.manual;
 let currentPeaks: PeaksFile['peaks'] = []; // пики текущего региона (для навигации)
 
 const statusEl = document.getElementById('status')!;
@@ -354,7 +389,9 @@ const worker = new Worker(new URL('./workers/horizon.worker.ts', import.meta.url
 worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   const msg = ev.data;
   if (msg.type === 'error') {
-    setStatus(`${t('error')}: ${msg.message}`);
+    // Без сети техническая формулировка («HTTP 503», «вне покрытия») ничего
+    // не объясняет: человеку важно, что данных на это место нет на устройстве
+    setStatus(navigator.onLine ? `${t('error')}: ${msg.message}` : t('errorOffline'));
     return;
   }
   if (msg.type === 'viewpoint') return; // ждёт свой одноразовый обработчик
@@ -407,6 +444,7 @@ async function main(): Promise<void> {
       const autoRegion = findRegionForPosition(origin, regions);
       if (autoRegion && autoRegion !== currentRegion) {
         currentRegion = autoRegion;
+        rememberRegion();
         console.info(`Авто-регион: ${autoRegion}`);
       }
     }
@@ -434,15 +472,15 @@ async function main(): Promise<void> {
 
   // DEM: детальный патч региона → локальная пирамида → внешняя пирамида
   // (agran/vershiny-dem). Промах всех — только Terrarium; офлайн — кеш.
-  const { demCandidates } = await import('./core/dem-config');
-  let patchBaseUrl: string | undefined;
-  for (const candidate of demCandidates(base, currentRegion)) {
-    const probe = await fetch(`${candidate}/index.json`).catch(() => null);
-    if (probe && isJson(probe)) {
-      patchBaseUrl = candidate;
-      break;
-    }
-  }
+  const { demCandidates, pickDemBase } = await import('./core/dem-config');
+  const { getDemIndex } = await import('./core/db');
+  const patchBaseUrl = await pickDemBase(demCandidates(base, currentRegion), {
+    online: async (url) => {
+      const probe = await fetch(`${url}/index.json`).catch(() => null);
+      return !!probe && isJson(probe);
+    },
+    cached: async (url) => !!(await getDemIndex(url).catch(() => undefined)),
+  });
 
   worker.postMessage({ type: 'init', patchBaseUrl });
 
@@ -529,6 +567,7 @@ async function switchRegion(region: string): Promise<void> {
   if (region === currentRegion) return;
   currentRegion = region;
   manualRegion = true;
+  rememberRegion();
   setStatus(t('loadingRegion'));
   void refreshDownloadState();
 
@@ -1077,6 +1116,7 @@ function setupActionButtons(origin: LatLon, observerH: number): void {
       onRegionChange: (region) => {
         currentRegion = region;
         manualRegion = true; // больше не переключаем автоматически
+        rememberRegion();
         // Перезагружаем панораму с новым регионом
         main();
       },

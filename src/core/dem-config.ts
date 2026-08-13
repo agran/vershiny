@@ -16,3 +16,26 @@ export const GLOBAL_DEM_URL = 'https://agran.github.io/vershiny-dem/tiles/global
 export function demCandidates(base: string, region: string): string[] {
   return [`${base}tiles/${region}`, `${base}tiles/global`, GLOBAL_DEM_URL];
 }
+
+/**
+ * Выбор источника рельефа из кандидатов.
+ *
+ * Проверка «есть ли index.json» раньше была чисто сетевой: офлайн она не
+ * проходила ни для одного кандидата, приложение оставалось на голом Terrarium
+ * и падало с «HTTP 503» — при том что и пирамида, и её тайлы лежали в
+ * IndexedDB. Поэтому кандидат годится, если индекс отдаёт сеть **или** он
+ * сохранён с прошлого раза.
+ */
+export async function pickDemBase(
+  candidates: string[],
+  probes: {
+    online(url: string): Promise<boolean>;
+    cached(url: string): Promise<boolean>;
+  },
+): Promise<string | undefined> {
+  for (const candidate of candidates) {
+    if (await probes.online(candidate)) return candidate;
+    if (await probes.cached(candidate)) return candidate;
+  }
+  return undefined;
+}

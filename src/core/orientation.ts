@@ -25,6 +25,50 @@ type OrientationCallback = (state: OrientationState) => void;
 
 /** Сглаживание сырых данных компаса */
 const GYRO_SMOOTH_WINDOW = 5;
+/** Изменение меньше этого считаем дрожанием датчика, рад (≈2°) */
+const NOISE_RAD = 0.035;
+/** Изменение больше этого — осознанный поворот, пропускаем как есть, рад (≈8°) */
+const MOTION_RAD = 4 * NOISE_RAD;
+/** Минимальная доля шага: иначе за медленным поворотом картинка не поспевает */
+const MIN_FOLLOW = 0.12;
+
+/**
+ * Годится ли показание как источник абсолютного азимута.
+ *
+ * На Android приходят два разных события: `deviceorientationabsolute` — от
+ * севера, и `deviceorientation` — от произвольного нуля, выбранного при
+ * запуске. Раньше оба висели на одном обработчике, и панораму дёргало между
+ * двумя системами отсчёта: на глаз — рывки в десятки градусов на месте.
+ *
+ * На iOS всё наоборот: absolute-события не приходят вовсе, а абсолютный
+ * компас живёт в `webkitCompassHeading` обычного события — такое пропускаем
+ * всегда.
+ */
+export function isAbsoluteReading(
+  eventType: string,
+  hasCompassHeading: boolean,
+  isAbsoluteFlag: boolean,
+  seenAbsolute: boolean,
+): boolean {
+  if (eventType === 'deviceorientationabsolute') return true;
+  if (hasCompassHeading || isAbsoluteFlag) return true;
+  // Относительное показание годится, только если абсолютного нет вовсе
+  return !seenAbsolute;
+}
+
+/**
+ * Слежение картинки за компасом: дрожание гасим, поворот пропускаем.
+ *
+ * Компас телефона шумит на единицы градусов даже в покое, а среднее по окну
+ * этот шум только размазывает. Поэтому доля, на которую картинка подтягивается
+ * к показанию, растёт вместе с величиной расхождения: мелочь почти игнорируем,
+ * настоящий поворот отрабатываем целиком.
+ */
+export function followAzimuth(prevRad: number, targetRad: number): number {
+  const diff = shortestAngle(targetRad - prevRad);
+  const k = Math.min(1, Math.max(MIN_FOLLOW, Math.abs(diff) / MOTION_RAD));
+  return normalizeAngle(prevRad + diff * k);
+}
 
 /**
  * Куда смотрит человек сквозь экран: азимут и угол над горизонтом.
@@ -80,9 +124,13 @@ class OrientationTracker {
     source: 'none',
   };
   private callback: OrientationCallback | null = null;
-  private lastTimestamp = 0;
+  private lastEmitted = 0;
   private gyroSamples: number[] = [];
   private listening = false;
+  /** Пришло ли хоть одно абсолютное показание (север, а не произвольный ноль) */
+  private seenAbsolute = false;
+  /** Сглаженный азимут без ручной поправки, рад */
+  private followedRad: number | null = null;
 
   /** Ручная подстройка (свайп по кадру); хранится в калибровке, рад */
   private get manualOffsetRad(): number {
@@ -127,19 +175,17 @@ class OrientationTracker {
   private listen(): void {
     this.listening = true;
 
-    // Предпочитаем absolute (истинный север); fallback — обычный
-    const handler = (ev: DeviceOrientationEvent) => this.onOrientation(ev);
+    // Оба события ведут в один обработчик, но относительное (произвольный
+    // ноль) используется только пока нет абсолютного — см. isAbsoluteReading
+    const handler = (ev: Event) => this.onOrientation(ev as DeviceOrientationEvent, ev.type);
     if ('ondeviceorientationabsolute' in window) {
-      window.addEventListener('deviceorientationabsolute', handler as EventListener, true);
+      window.addEventListener('deviceorientationabsolute', handler, true);
     }
-    window.addEventListener('deviceorientation', handler as EventListener, true);
+    window.addEventListener('deviceorientation', handler, true);
   }
 
-  private onOrientation(ev: DeviceOrientationEvent): void {
+  private onOrientation(ev: DeviceOrientationEvent, eventType: string): void {
     if (ev.alpha === null) return;
-
-    const now = performance.now();
-    this.lastTimestamp = now;
 
     // iOS: webkitCompassHeading (0–360, от севера по часовой) — единственный
     // абсолютный источник, у самой alpha там произвольный ноль. Переводим его
@@ -148,12 +194,17 @@ class OrientationTracker {
       webkitCompassHeading?: number;
       webkitCompassAccuracy?: number;
     };
-    const accuracy =
-      webkit.webkitCompassHeading !== undefined ? (webkit.webkitCompassAccuracy ?? -1) : -1;
-    const alphaDeg =
-      webkit.webkitCompassHeading !== undefined
-        ? 360 - webkit.webkitCompassHeading
-        : (ev.alpha ?? 0);
+    const hasCompass = webkit.webkitCompassHeading !== undefined;
+    if (!isAbsoluteReading(eventType, hasCompass, ev.absolute === true, this.seenAbsolute)) {
+      return;
+    }
+    if (eventType === 'deviceorientationabsolute' || hasCompass || ev.absolute) {
+      this.seenAbsolute = true;
+    }
+
+    const now = performance.now();
+    const accuracy = hasCompass ? (webkit.webkitCompassAccuracy ?? -1) : -1;
+    const alphaDeg = hasCompass ? 360 - webkit.webkitCompassHeading! : (ev.alpha ?? 0);
 
     const look = lookFromDeviceOrientation(alphaDeg, ev.beta ?? 0, ev.gamma ?? 0);
 
@@ -163,11 +214,14 @@ class OrientationTracker {
       this.gyroSamples.shift();
     }
 
-    // Круговое среднее (чтобы 359° и 1° не давали 180°)
+    // Круговое среднее (чтобы 359° и 1° не давали 180°), затем слежение с
+    // подавлением дрожания: одного среднего мало — шум компаса оно размазывает
     const smoothed = circularMean(this.gyroSamples);
+    this.followedRad =
+      this.followedRad === null ? smoothed : followAzimuth(this.followedRad, smoothed);
 
     // Применяем ручную подстройку (свайп-оффсет)
-    const finalAz = normalizeAngle(smoothed + this.manualOffsetRad);
+    const finalAz = normalizeAngle(this.followedRad + this.manualOffsetRad);
 
     const prev = this.state;
     this.state = {
@@ -177,9 +231,11 @@ class OrientationTracker {
       source: 'sensor',
     };
 
-    // Отправляем только при значимом изменении (>0.1°) или раз в 100 мс
-    const diff = Math.abs(normalizeAngle(finalAz - prev.azimuthRad));
-    if (diff > 0.0017 || now - this.lastTimestamp > 100) {
+    // Отправляем только при значимом изменении (>0.1°) или раз в 100 мс:
+    // сравнивать нужно со временем прошлой отправки, а не с текущим
+    const diff = Math.abs(shortestAngle(finalAz - prev.azimuthRad));
+    if (diff > 0.0017 || now - this.lastEmitted > 100) {
+      this.lastEmitted = now;
       this.callback?.(this.state);
     }
   }
@@ -226,6 +282,13 @@ function circularMean(angles: number[]): number {
 function normalizeAngle(rad: number): number {
   let a = rad % (2 * Math.PI);
   if (a < 0) a += 2 * Math.PI;
+  return a;
+}
+
+/** Кратчайшая разница углов: (−π, π] */
+function shortestAngle(rad: number): number {
+  let a = normalizeAngle(rad);
+  if (a > Math.PI) a -= 2 * Math.PI;
   return a;
 }
 

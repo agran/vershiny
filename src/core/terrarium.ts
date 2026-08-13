@@ -96,11 +96,11 @@ export class TerrariumSampler {
     this.fetchFn = options.fetchFn ?? fetch.bind(globalThis);
   }
 
-  /** Ленивая загрузка db.ts (в тестах IndexedDB может не быть) */
+  /** Ленивая загрузка db.ts (в тестах и приватном режиме IndexedDB может не быть) */
   private async db() {
     if (this.dbCache === undefined) {
       try {
-        this.dbCache = await import('./db');
+        this.dbCache = globalThis.indexedDB ? await import('./db') : null;
       } catch {
         this.dbCache = null;
       }
@@ -130,7 +130,8 @@ export class TerrariumSampler {
 
       // 1. Офлайн-кеш (IndexedDB) — работает без сети
       if (db) {
-        const offline = await db.getTerrariumTile(key);
+        // Запрет хранилища (приватный режим) не должен ронять расчёт
+        const offline = await db.getTerrariumTile(key).catch(() => undefined);
         if (offline) {
           const tile = await this.decodePng(offline);
           this.tiles.set(key, tile);
@@ -150,7 +151,11 @@ export class TerrariumSampler {
       } else if (res.status === 404) {
         tile = null; // вне покрытия (океан южнее/севернее 85°)
       } else {
-        throw new Error(`Terrarium ${key}: HTTP ${res.status}`);
+        // Офлайн Service Worker отвечает 503 на всё, чего нет в кеше. Раньше
+        // это летело исключением через весь worker, и вместо панорамы человек
+        // видел «Ошибка: HTTP 503» — при том что рельеф лежал в хранилище
+        this.pending.delete(key);
+        return null;
       }
       this.tiles.set(key, tile);
       this.pending.delete(key);
