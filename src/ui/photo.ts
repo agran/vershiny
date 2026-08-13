@@ -61,15 +61,28 @@ export async function capturePhoto(
   // Запекаем метаданные внизу
   const pad = 12 * uiScale;
   const fontSize = 7 * uiScale;
+  const meta = buildMetaLine(options);
+  const site = 'https://agran.github.io/vershiny/';
+
   ctx.textAlign = 'left';
   ctx.font = `${fontSize}px system-ui, sans-serif`;
   ctx.fillStyle = 'rgba(13,27,42,0.75)';
-  const meta = buildMetaLine(options);
   const metaW = ctx.measureText(meta).width + pad * 2;
   const metaH = fontSize * 2.2;
   ctx.fillRect(pad, canvas.height - metaH - pad, metaW, metaH);
   ctx.fillStyle = '#f1faee';
   ctx.fillText(meta, pad * 2, canvas.height - pad - metaH / 2 + fontSize / 2 - uiScale);
+
+  const siteFont = Math.max(6 * uiScale, 13);
+  const sitePad = 9 * uiScale;
+  const siteW = ctx.measureText(site).width + sitePad * 2;
+  const siteH = siteFont * 1.8;
+  const siteY = canvas.height - metaH - pad - siteH - sitePad * 0.5;
+  ctx.fillStyle = 'rgba(13,27,42,0.6)';
+  ctx.fillRect(canvas.width - siteW - pad, siteY, siteW, siteH);
+  ctx.fillStyle = '#edf4ff';
+  ctx.font = `${siteFont}px system-ui, sans-serif`;
+  ctx.fillText(site, canvas.width - siteW - pad + sitePad, siteY + siteH * 0.68);
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {

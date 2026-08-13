@@ -111,6 +111,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   updateAvailable: { ru: 'Доступно обновление', en: 'Update available' },
   updateApply: { ru: 'Обновить', en: 'Update' },
   map: { ru: 'Карта', en: 'Map' },
+  mapApply: { ru: 'Применить', en: 'Apply' },
   mapGoHere: { ru: 'Перенестись сюда', en: 'Go here' },
   mapMyPosition: { ru: 'Моё положение', en: 'My position' },
   mapHeading: { ru: 'Куда смотрим — потяните', en: 'Drag to aim the view' },

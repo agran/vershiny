@@ -299,7 +299,9 @@ export function openMap(options: MapOptions): () => void {
   root.addEventListener('pointermove', (ev) => {
     if (!dragging) return;
     const c = project(center, zoom);
-    center = unproject(c.x - (ev.clientX - lastX), c.y - (ev.clientY - lastY), zoom);
+    const nextCenter = unproject(c.x - (ev.clientX - lastX), c.y - (ev.clientY - lastY), zoom);
+    center = nextCenter;
+    observer = { ...nextCenter };
     lastX = ev.clientX;
     lastY = ev.clientY;
     render();
@@ -346,7 +348,10 @@ export function openMap(options: MapOptions): () => void {
   // Объявлен до close(): создаётся он в конце, когда корень уже в DOM
   let resizeObserver: ResizeObserver | null = null;
 
-  const close = (): void => {
+  const close = (commit = false): void => {
+    if (commit) {
+      options.onPick({ ...observer });
+    }
     root.remove();
     document.removeEventListener('keydown', onKey);
     // Наблюдатель держал бы ссылку на удалённый корень карты после каждого
@@ -358,7 +363,7 @@ export function openMap(options: MapOptions): () => void {
 
   // Escape закрывает карту: привычно и спасает, если кнопка ушла под вырез
   const onKey = (ev: KeyboardEvent): void => {
-    if (ev.key === 'Escape' && panel.style.display === 'none') close();
+    if (ev.key === 'Escape' && panel.style.display === 'none') close(true);
   };
   document.addEventListener('keydown', onKey);
 
@@ -382,12 +387,11 @@ export function openMap(options: MapOptions): () => void {
   searchBtn.title = t('searchPeak');
 
   const go = button(
-    t('mapGoHere'),
+    t('mapApply'),
     'left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);' +
       'padding:13px 22px;font-weight:600;background:#4cc9f0;color:#1a1a2e;border-color:#4cc9f0',
     () => {
-      options.onPick({ ...center });
-      close();
+      close(true);
     },
   );
   go.style.whiteSpace = 'nowrap';
@@ -556,8 +560,8 @@ export function openMap(options: MapOptions): () => void {
     render();
     setHint(
       getLocale() === 'ru'
-        ? 'Точка обзора подобрана. Поправьте её и нажмите «Перенестись сюда»'
-        : 'Viewpoint ready. Adjust it and press “Go here”',
+        ? 'Точка обзора подобрана. Поправьте её и нажмите «Применить»'
+        : 'Viewpoint ready. Adjust it and press “Apply”',
     );
   }
 

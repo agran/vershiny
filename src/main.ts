@@ -675,7 +675,14 @@ async function initDemForRegion(region: string): Promise<void> {
  * месту отношения не имеют.
  */
 async function switchRegion(region: string): Promise<void> {
-  if (region === currentRegion) return;
+  if (region === currentRegion && currentPeaks.length) return;
+  if (region !== currentRegion) {
+    currentPeaks = [];
+    if (panorama) {
+      panorama = { ...panorama, peaks: [] };
+      draw();
+    }
+  }
   currentRegion = region;
   manualRegion = true;
   rememberRegion();
