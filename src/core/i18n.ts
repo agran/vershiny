@@ -32,6 +32,10 @@ export function setLocale(locale: Locale): void {
 const STRINGS: Record<string, Record<Locale, string>> = {
   loading: { ru: 'Загрузка…', en: 'Loading…' },
   loadingRegion: { ru: 'Загрузка региона…', en: 'Loading region…' },
+  waitingGps: {
+    ru: 'Определяем положение по спутникам…',
+    en: 'Getting your position from satellites…',
+  },
   computing: { ru: 'Расчёт панорамы…', en: 'Computing panorama…' },
   noRegionData: {
     ru: 'Нет данных региона.\nЗапустите tools/dem-to-tiles и tools/peaks-to-json.',

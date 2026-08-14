@@ -507,13 +507,15 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
 let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
 
 async function main(): Promise<void> {
-  setStatus(t('loadingRegion'));
+  setStatus(t('waitingGps'));
 
   const base = import.meta.env.BASE_URL;
 
   // Позиция: GPS, fallback — Приют 11 (контрольная точка MVP-ACCEPTANCE)
   const origin = await getPosition();
   lastOrigin = origin;
+
+  setStatus(t('loadingRegion'));
 
   // Авто-выбор региона по GPS (если пользователь не выбрал вручную).
   // Реестр читаем в любом случае: он же копится в офлайн-кеш, а без него
@@ -1441,7 +1443,13 @@ function getPosition(): Promise<LatLon> {
       resolve(fallback);
       return;
     }
-    const timer = setTimeout(() => resolve(fallback), 8_000);
+
+    // На смартфоне лучше не показывать горы до первого реального GPS-фикса:
+    // при мгновенном fallback на Эльбрус загрузка выглядит как «попался в
+    // чужой регион», хотя человек ещё ждёт определения своего положения.
+    // Реальный фикс пускает приложение дальше, а после потери сигнала/отказа
+    // в разрешении остаётся запасной вариант только как явная отладочная точка.
+    const timer = setTimeout(() => resolve(fallback), 30_000);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         clearTimeout(timer);
@@ -1451,7 +1459,7 @@ function getPosition(): Promise<LatLon> {
         clearTimeout(timer);
         resolve(fallback);
       },
-      { enableHighAccuracy: true, timeout: 7_000 },
+      { enableHighAccuracy: true, timeout: 30_000 },
     );
   });
 }
