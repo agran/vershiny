@@ -40,7 +40,7 @@ const EN_TO_RU: Record<string, string> = {
  */
 const EN_DIGRAPHS: [string, string][] = [
   ['tsch', 'ч'], ['dsch', 'дж'], ['shch', 'щ'], ['sch', 'ш'],
-  ['zh', 'ж'], ['kh', 'х'], ['ts', 'ц'], ['ch', 'ч'],
+  ['zh', 'ж'], ['kh', 'х'], ['ph', 'ф'], ['ts', 'ц'], ['ch', 'ч'],
   ['sh', 'ш'], ['yu', 'ю'], ['ya', 'я'], ['yo', 'ё'], ['ye', 'е'],
 ];
 
@@ -293,9 +293,28 @@ export function translitToLatin(s: string): string {
 /** Транслитерация кириллицы → латиница (алиас для совместимости) */
 export const translitToEn = translitToLatin;
 
+/**
+ * Латинские буквы, которые NFD не разлагает (ß, ø, ł, ð, þ, ŋ, æ, œ, đ, ħ).
+ * Остальную диакритику (ā, é, ö, ü, ś, ṅ…) снимает normalize('NFD') + отброс
+ * комбинируемых знаков.
+ */
+const LATIN_SPECIAL: [string, string][] = [
+  ['ß', 's'], ['ø', 'o'], ['ł', 'l'], ['ð', 'd'], ['þ', 't'],
+  ['ŋ', 'ng'], ['æ', 'e'], ['œ', 'oe'], ['đ', 'd'], ['ħ', 'h'],
+];
+
+/** Латинская диакритика → базовые буквы: иначе «Malāṅphulāṅ» оставался с ā/ṅ */
+function stripDiacritics(s: string): string {
+  let out = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  for (const [from, to] of LATIN_SPECIAL) {
+    out = out.split(from).join(to);
+  }
+  return out;
+}
+
 /** Транслитерация латиницы → кириллица (грубая, только как fallback) */
 export function translitToRu(s: string): string {
-  let result = s.toLowerCase();
+  let result = stripDiacritics(s.toLowerCase());
   for (const [en, ru] of EN_DIGRAPHS) {
     // split/join вместо replaceAll: последнего нет в Chrome < 85, и на старом
     // Android Chrome русская транслитерация падала бы с TypeError

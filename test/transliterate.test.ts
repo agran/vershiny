@@ -76,4 +76,14 @@ describe('transliterate', () => {
     // Русская «щ» (shch) по-прежнему длиннее и разбирается первой
     expect(translitToRu('Shchara')).toBe('Щара');
   });
+
+  it('латиница с диакритикой → чистая кириллица (Гималаи, Альпы)', () => {
+    // «Странные символы» в русских подписях: ā/ṅ/ù не проходили через карту
+    // a-z и оставались сырыми в готовой подписи
+    expect(translitToRu('Malāṅphulāṅ')).toBe('Маланфулан');
+    expect(translitToRu('Großvenediger')).toBe('Гросвенедигер');
+    expect(translitToRu('Piz Palù')).toBe('Пиз Палу');
+    // В результате не должно остаться ни одного знака с диакритикой
+    expect(translitToRu('Tawé Dās\u2019àyi')).not.toMatch(/[āēīōūśṣṅñ]/);
+  });
 });
