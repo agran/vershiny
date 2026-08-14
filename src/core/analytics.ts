@@ -99,7 +99,10 @@ function browserDeps(): AnalyticsDeps {
       document.head.appendChild(script);
 
       ym(METRIKA_ID, 'init', {
-        clickmap: true,
+        // Карта кликов выключена сознательно: она пишет координаты каждого
+        // нажатия, а нужно знать только, сколько людей пользуется. Собирать
+        // больше, чем нужно для ответа на вопрос, — плохая сделка
+        clickmap: false,
         ecommerce: 'dataLayer',
         accurateTrackBounce: true,
         trackLinks: true,

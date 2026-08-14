@@ -154,6 +154,30 @@ describe('счётчик посещений', () => {
     added[0].remove();
     delete (navigator as { onLine?: boolean }).onLine;
   });
+
+  it('карта кликов выключена: считаем посещения, а не движения пальцем', () => {
+    // Карта кликов пишет координаты каждого нажатия — это уже не счёт
+    // посетителей. Настройка легко возвращается «за компанию» при правке
+    // соседних, поэтому закреплена тестом
+    Object.defineProperty(navigator, 'onLine', { configurable: true, get: () => true });
+    const calls: unknown[][] = [];
+    (window as unknown as { ym?: unknown }).ym = (...args: unknown[]) => calls.push(args);
+
+    setupAnalytics({ whenIdle: (task) => task() });
+
+    const init = calls.find((c) => c[1] === 'init');
+    expect(init, 'счётчик не инициализирован').toBeDefined();
+    const options = init![2] as Record<string, unknown>;
+    expect(options.clickmap).toBe(false);
+    // А адрес по-прежнему без параметров
+    expect(String(options.url)).not.toContain('?');
+
+    Array.from(document.scripts)
+      .filter((s) => s.src.includes('mc.yandex.ru'))
+      .forEach((s) => s.remove());
+    delete (window as unknown as { ym?: unknown }).ym;
+    delete (navigator as { onLine?: boolean }).onLine;
+  });
 });
 
 describe('адрес страницы для счётчика', () => {
