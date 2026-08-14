@@ -92,7 +92,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   photoCaptionTime: { ru: 'Дата и время', en: 'Date and time' },
   settings: { ru: 'Настройки', en: 'Settings' },
   region: { ru: 'Регион', en: 'Region' },
-  language: { ru: 'Язык', en: 'Language' },
+  language: { ru: 'Язык / Language', en: 'Language / Язык' },
   compassAccuracy: { ru: 'Точность компаса', en: 'Compass accuracy' },
   compassUnknown: { ru: 'нет данных', en: 'no data' },
   enableCompass: { ru: 'Включить компас', en: 'Enable compass' },

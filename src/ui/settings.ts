@@ -21,6 +21,7 @@ import {
 import { getDownloadedRegions } from '../core/db';
 import { getPhotoCaption, setPhotoCaption } from '../core/photo-caption';
 import { orientationTracker } from '../core/orientation';
+import { ICON_GLOBE } from './icons';
 import type { LatLon } from '../core/geo';
 
 export interface SettingsCallbacks {
@@ -57,8 +58,22 @@ export function openSettings(
   panel.appendChild(title);
 
   // --- Язык ---
+  //
+  // Единственная строка настроек, которую нельзя переводить: её ищет тот, кто
+  // попал в чужой язык интерфейса и по определению не прочитает подпись на
+  // нём. Поэтому глобус (опознаётся без чтения) и обе подписи сразу, а в
+  // списке — названия языков на них самих: «Русский», «English».
   const langRow = row(t('language'));
+  const langLabel = langRow.firstElementChild as HTMLElement;
+  langLabel.style.display = 'inline-flex';
+  langLabel.style.alignItems = 'center';
+  langLabel.style.gap = '6px';
+  const globe = document.createElement('span');
+  globe.innerHTML = ICON_GLOBE;
+  globe.style.cssText = 'display:inline-flex;flex:none';
+  langLabel.prepend(globe);
   const langSelect = document.createElement('select');
+  langSelect.setAttribute('aria-label', t('language'));
   langSelect.style.cssText = selectStyle();
   for (const loc of ['ru', 'en'] as Locale[]) {
     const opt = document.createElement('option');
