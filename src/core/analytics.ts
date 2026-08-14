@@ -31,6 +31,24 @@ const TAG_URL = `https://mc.yandex.ru/metrika/tag.js?id=${METRIKA_ID}`;
  */
 export const REVISIT_MS = 30 * 60 * 1000;
 
+/**
+ * Адрес страницы для счётчика — без параметров и якоря.
+ *
+ * В ссылке живёт `?lat=&lon=`: ею делятся, чтобы показать место, и по ней же
+ * приложение открывают с чужого телефона. В статистике это оказалось бы
+ * координатами конкретного человека с точностью до метра. Считаем мы
+ * посещения, а не тех, кто их сделал.
+ */
+export function pageUrlForCounter(href: string): string {
+  try {
+    const url = new URL(href);
+    return `${url.origin}${url.pathname}`;
+  } catch {
+    // Адрес неразбираемый — отдаём как есть, но и параметров в нём нет
+    return href;
+  }
+}
+
 /** Очередь вызовов Метрики: до загрузки tag.js обращения копятся в ней */
 type Ym = ((...args: unknown[]) => void) & { a?: unknown[][]; l?: number };
 
@@ -86,13 +104,15 @@ function browserDeps(): AnalyticsDeps {
         accurateTrackBounce: true,
         trackLinks: true,
         referrer: document.referrer,
-        url: location.href,
+        url: pageUrlForCounter(location.href),
       });
     },
 
     sendHit: () => {
       const w = window as unknown as { ym?: Ym };
-      w.ym?.(METRIKA_ID, 'hit', location.href, { referer: document.referrer });
+      w.ym?.(METRIKA_ID, 'hit', pageUrlForCounter(location.href), {
+        referer: document.referrer,
+      });
     },
 
     onVisible: (handler) => {

@@ -150,6 +150,14 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     ru: 'Рельеф — Copernicus DEM GLO-90 (© DLR/ESA) и AWS Terrain Tiles, вершины — © участники OpenStreetMap (ODbL)',
     en: 'Terrain — Copernicus DEM GLO-90 (© DLR/ESA) and AWS Terrain Tiles, peaks — © OpenStreetMap contributors (ODbL)',
   },
+  aboutCounter: {
+    ru:
+      'Посещения считает Яндекс.Метрика. Без сети счётчик не работает, ' +
+      'координаты из ссылки в статистику не попадают.',
+    en:
+      'Visits are counted by Yandex Metrica. The counter stays off without a ' +
+      'connection, and coordinates from the link never reach the statistics.',
+  },
   navForward: { ru: 'Вперёд', en: 'Forward' },
   navBack: { ru: 'Назад', en: 'Back' },
   navLeft: { ru: 'Влево', en: 'Left' },

@@ -353,6 +353,14 @@ function buildAbout(): HTMLElement {
   data.style.cssText = 'color:#8a9ba8;font-size:12px;margin-top:6px;line-height:1.5';
   box.appendChild(data);
 
+  // Про счётчик — здесь же, рядом с происхождением данных: приложение,
+  // которое по умолчанию не подписывает снимок координатами, обязано сказать
+  // и о том, что само отправляет наружу
+  const counter = document.createElement('div');
+  counter.textContent = t('aboutCounter');
+  counter.style.cssText = 'color:#8a9ba8;font-size:12px;margin-top:6px;line-height:1.5';
+  box.appendChild(counter);
+
   return box;
 }
 

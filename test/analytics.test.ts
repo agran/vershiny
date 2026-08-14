@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { setupAnalytics, REVISIT_MS, type AnalyticsDeps } from '../src/core/analytics';
+import { setupAnalytics, pageUrlForCounter, REVISIT_MS, type AnalyticsDeps } from '../src/core/analytics';
 
 /** Окружение под управлением теста: сеть, время и момент простоя */
 function env(online = true) {
@@ -153,5 +153,29 @@ describe('счётчик посещений', () => {
     expect(added[0].async).toBe(true); // разметку не блокирует
     added[0].remove();
     delete (navigator as { onLine?: boolean }).onLine;
+  });
+});
+
+describe('адрес страницы для счётчика', () => {
+  it('не выносит координаты из ссылки в статистику', () => {
+    // Ссылкой ?lat=&lon= делятся, чтобы показать место, и по ней же открывают
+    // приложение с чужого телефона: в статистике это было бы координатами
+    // конкретного человека с точностью до метра
+    expect(pageUrlForCounter('https://agran.github.io/vershiny/?lat=43.35&lon=42.44')).toBe(
+      'https://agran.github.io/vershiny/',
+    );
+    expect(pageUrlForCounter('https://agran.github.io/vershiny/install.html#top')).toBe(
+      'https://agran.github.io/vershiny/install.html',
+    );
+  });
+
+  it('различает страницы сайта — иначе считать было бы нечего', () => {
+    const app = pageUrlForCounter('https://agran.github.io/vershiny/?lat=1&lon=2');
+    const install = pageUrlForCounter('https://agran.github.io/vershiny/install.html');
+    expect(app).not.toBe(install);
+  });
+
+  it('не спотыкается о неразбираемый адрес', () => {
+    expect(pageUrlForCounter('не адрес')).toBe('не адрес');
   });
 });
