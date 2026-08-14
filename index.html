@@ -16,9 +16,24 @@
     html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #1a1a2e; }
     #app { position: fixed; inset: 0; }
     #app canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+    /*
+      Сообщения посреди экрана («Расчёт панорамы…», ошибки, результат
+      совмещения с камерой). Плашка обязательна: текст ложится на что угодно —
+      на снежный склон в кадре камеры, на гущу подписей вершин, на светлое
+      небо, — и светлые буквы без подложки там просто пропадали. Палитра та
+      же, что у плашки высоты и предложения региона; размытие фона помогает
+      именно поверх живого кадра, но и без его поддержки подложка достаточно
+      плотная. pointer-events: none — сообщение не должно перехватывать
+      нажатия по панораме под ним.
+    */
     #status {
       position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      color: #cfd8dc; font: 14px/1.5 system-ui, sans-serif; text-align: center;
+      max-width: min(420px, calc(100vw - 48px));
+      padding: 10px 14px; border-radius: 12px;
+      background: rgba(13, 27, 42, 0.9); border: 1px solid #415a77;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+      color: #f1faee; font: 14px/1.45 system-ui, sans-serif; text-align: center;
       pointer-events: none; white-space: pre-line;
     }
   </style>
