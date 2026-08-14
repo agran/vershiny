@@ -204,20 +204,32 @@ async function staleWhileRevalidate(
 ): Promise<Response> {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
-  // Фоновое обновление не должно ронять ответ: офлайн оно отклоняется на
-  // каждом ассете, и без catch это россыпь необработанных отклонений в worker'е
-  const fetched = fetch(request)
-    .then((response) => {
-      if (response.ok) {
-        keep(ev, cache.put(request, response.clone()));
-      }
-      return response;
-    })
-    .catch((err) => {
-      if (cached) return cached.clone();
-      throw err;
-    });
-  return cached ?? fetched;
+
+  const fetched = fetch(request).then((response) => {
+    if (response.ok) {
+      keep(ev, cache.put(request, response.clone()));
+    }
+    return response;
+  });
+
+  if (cached) {
+    // Ответ уже отдан из кеша, обновление идёт в фоне. Его нужно удержать
+    // через waitUntil: запрос, которого никто не ждёт, браузер вправе
+    // оборвать — и обновление кеша не доезжало.
+    //
+    // Отказ фонового запроса раньше ловился через `cached.clone()`, но к
+    // этому моменту страница тело ответа уже прочитала, и клонирование само
+    // падало: консоль забивалась «Response body is already used» — по ошибке
+    // на каждый ассет при каждой загрузке
+    keep(ev, fetched);
+    return cached;
+  }
+
+  // В кеше пусто — ждать нечего, отдаём сеть. Отказ превращаем в 503, как в
+  // остальных стратегиях: необработанных отклонений в worker'е быть не должно
+  return fetched.catch(
+    () => new Response('Offline', { status: 503, statusText: 'Offline' }),
+  );
 }
 
 export {};

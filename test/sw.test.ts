@@ -210,6 +210,39 @@ describe('Service Worker', () => {
     expect(await res.text()).toContain('панорама');
   });
 
+  it('фоновое обновление ассета не спотыкается о прочитанный ответ', async () => {
+    // Ответ из кеша уже отдан странице, и она прочитала его тело. Прежний код
+    // ловил отказ фонового запроса через `cached.clone()` — клонировать
+    // прочитанный ответ нельзя, и консоль забивалась «Response body is already
+    // used» по ошибке на каждый ассет при каждой загрузке
+    const url = 'https://example.org/vershiny/assets/main-abc.js';
+    const env = runSw([], {
+      fetchImpl: async () => {
+        throw new TypeError('Failed to fetch');
+      },
+      cached: { [url]: 'чанк из кеша' },
+    });
+
+    const kept: Promise<unknown>[] = [];
+    let responded: Promise<Response> | null = null;
+    env.handlers.fetch({
+      request: { url, method: 'GET', mode: 'no-cors' },
+      waitUntil: (p: Promise<unknown>) => kept.push(p),
+      respondWith: (p: Promise<Response>) => {
+        responded = p;
+      },
+    });
+
+    const res = await responded!;
+    expect(await res.text()).toBe('чанк из кеша'); // тело прочитано страницей
+
+    // Фоновое обновление удержано: запрос, которого никто не ждёт, браузер
+    // вправе оборвать — тогда кеш не обновится никогда
+    expect(kept.length).toBeGreaterThan(0);
+    // И завершается молча, без необработанного отклонения
+    await expect(Promise.all(kept)).resolves.toBeDefined();
+  });
+
   it('не трогает не-GET запросы', () => {
     const env = runSw([]);
     let responded = false;

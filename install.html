@@ -9,6 +9,9 @@
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" href="./favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <!-- Стандартный тег рядом с apple-вариантом: старые iOS понимают только
+       второй, а Chrome ругается на него в консоли как на устаревший -->
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Вершины" />
   <style>
