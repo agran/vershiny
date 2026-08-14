@@ -156,8 +156,8 @@ def parse_string_table(r: PBReader) -> list[bytes]:
 
 
 def pick_name(tags: dict[str, str]) -> str | None:
-    """Локальное имя (name) как есть; ru/en идут в отдельные поля."""
-    return tags.get("name") or tags.get("name:ru") or tags.get("name:en")
+    """Имя вершины: name:ru → name → name:en; ru/en идут и в отдельные поля."""
+    return tags.get("name:ru") or tags.get("name") or tags.get("name:en")
 
 
 def parse_ele(raw: str | None) -> float | None:

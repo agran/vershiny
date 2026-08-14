@@ -3,62 +3,72 @@
  * рендер панорамы; поворот пальцем (fallback без сенсоров, ROADMAP 2.2).
  */
 
-import { renderPanorama, silhouetteProfile, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
-import type { Peak, PeaksFile } from './core/peaks';
-import { toRad, wrapAngle, normalizeAz, type LatLon } from './core/geo';
+import { normalizeAz, toRad, wrapAngle, type LatLon } from "./core/geo";
+import { getLocale, t } from "./core/i18n";
+import type { Peak, PeaksFile } from "./core/peaks";
 import {
-  getPosition,
   awaitAccuratePosition,
+  getPosition,
   rememberPosition,
   worthRefining,
-} from './core/position';
-import { t, getLocale } from './core/i18n';
+} from "./core/position";
+import type { SearchHit } from "./core/search";
 import {
   downloadRegion,
   inBBox,
   suggestRegionForPosition,
   type DownloadProgress,
   type RegionInfo,
-} from './ui/download';
-import type { ResultMessage, WorkerOutMessage, ViewpointResult } from './workers/horizon.worker';
-import type { SearchHit } from './core/search';
-import { isTypingTarget } from './ui/keys';
+} from "./ui/download";
 import {
   ICON_AR,
   ICON_CALIBRATE,
   ICON_CLOSE,
   ICON_COMPASS,
+  ICON_DOWN,
   ICON_DOWNLOAD,
   ICON_DOWNLOADED,
-  ICON_DOWN,
   ICON_LOCATE,
   ICON_MAP,
   ICON_PHOTO,
   ICON_SETTINGS,
   ICON_UP,
   iconArrow,
-} from './ui/icons';
+} from "./ui/icons";
+import { isTypingTarget } from "./ui/keys";
+import {
+  HORIZON_FRAC,
+  renderPanorama,
+  silhouetteProfile,
+  type PanoramaState,
+  type ViewState,
+} from "./ui/panorama";
+import type {
+  ResultMessage,
+  ViewpointResult,
+  WorkerOutMessage,
+} from "./workers/horizon.worker";
 
 /**
  * Активный регион переживает перезапуск: выбранный вручную в настройках
  * сбрасывался на Приэльбрусье при каждом открытии приложения, и в горах без
  * связи (где авто-выбор по GPS может не сработать) это лишало вершин.
  */
-const REGION_KEY = 'vershiny-region';
+const REGION_KEY = "vershiny-region";
 
 function storedRegion(): { region: string; manual: boolean } {
   try {
     const raw = localStorage.getItem(REGION_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as { region?: unknown; manual?: unknown };
-      if (typeof parsed.region === 'string' && parsed.region) {
+      if (typeof parsed.region === "string" && parsed.region) {
         return { region: parsed.region, manual: parsed.manual === true };
       }
     }
   } catch {
     // Приватный режим или мусор в хранилище — начинаем с умолчания
   }
-  return { region: 'elbrus', manual: false };
+  return { region: "elbrus", manual: false };
 }
 
 function rememberRegion(): void {
@@ -76,17 +86,17 @@ const restored = storedRegion();
 let currentRegion = restored.region;
 /** true = пользователь выбрал регион вручную, автоподбор по GPS его не трогает */
 let manualRegion = restored.manual;
-let currentPeaks: PeaksFile['peaks'] = []; // пики текущего региона (для навигации)
+let currentPeaks: PeaksFile["peaks"] = []; // пики текущего региона (для навигации)
 
-const statusEl = document.getElementById('status')!;
-const appEl = document.getElementById('app')!;
+const statusEl = document.getElementById("status")!;
+const appEl = document.getElementById("app")!;
 
 // Регистрация Service Worker (PWA, офлайн-режим и обновления)
-if ('serviceWorker' in navigator && !import.meta.env.DEV) {
+if ("serviceWorker" in navigator && !import.meta.env.DEV) {
   navigator.serviceWorker
     .register(`${import.meta.env.BASE_URL}sw.js`)
     .then(async (registration) => {
-      const { setupUpdates } = await import('./ui/update');
+      const { setupUpdates } = await import("./ui/update");
       setupUpdates(registration);
     })
     .catch(() => {
@@ -98,17 +108,19 @@ if ('serviceWorker' in navigator && !import.meta.env.DEV) {
 // людей в горах, а не собственные перезагрузки страницы. Сам счётчик грузится
 // в простое и только при живой сети (см. core/analytics.ts)
 if (!import.meta.env.DEV) {
-  void import('./core/analytics').then(({ setupAnalytics }) => setupAnalytics());
+  void import("./core/analytics").then(({ setupAnalytics }) =>
+    setupAnalytics(),
+  );
 }
 
 function setStatus(text: string): void {
   statusEl.textContent = text;
-  statusEl.style.display = text ? 'block' : 'none';
+  statusEl.style.display = text ? "block" : "none";
 }
 
-const canvas = document.createElement('canvas');
+const canvas = document.createElement("canvas");
 appEl.appendChild(canvas);
-const ctx = canvas.getContext('2d')!;
+const ctx = canvas.getContext("2d")!;
 
 /** Готовая панорама: null, пока worker не прислал первый результат */
 let panorama: PanoramaState | null = null;
@@ -129,7 +141,7 @@ let mapButton: HTMLElement | null = null;
  * компьютере, а на телефоне остаются возврат к своему положению и карта.
  */
 const touchOnly =
-  typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+  typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches;
 
 function resize(): void {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio);
@@ -140,10 +152,26 @@ function resize(): void {
   // следующего пересчёта (поворот телефона — пустой экран)
   draw();
 }
-new ResizeObserver(resize).observe(canvas);
+// ResizeObserver появился только в Safari 13.4 (iOS 13.4): на более старых
+// айфонах `new ResizeObserver` бросал ReferenceError при загрузке модуля,
+// и страница навсегда оставалась на «Загрузка…». Холст у нас во весь экран,
+// поэтому window resize — полноценный запасной вариант.
+if (typeof ResizeObserver === "function") {
+  new ResizeObserver(resize).observe(canvas);
+} else {
+  window.addEventListener("resize", resize);
+}
 // Поворот телефона: ResizeObserver срабатывает не всегда до перерисовки,
-// а на iOS размеры на момент события ещё старые — отсюда отдельный слушатель
-screen.orientation?.addEventListener('change', () => setTimeout(resize, 50));
+// а на iOS размеры на момент события ещё старые — отсюда отдельный слушатель.
+// На старом Android Chrome (до ~59) screen.orientation уже есть, но ещё не
+// EventTarget: addEventListener там отсутствует, и вызов бросал TypeError при
+// загрузке модуля — то же вечное «Загрузка…». Поэтому проверяем сам метод.
+const screenOrientation = screen.orientation;
+if (screenOrientation && typeof screenOrientation.addEventListener === "function") {
+  screenOrientation.addEventListener("change", () => setTimeout(resize, 50));
+} else {
+  window.addEventListener("orientationchange", () => setTimeout(resize, 50));
+}
 
 const view: ViewState = {
   centerAzRad: 0,
@@ -199,10 +227,12 @@ const MAX_TILT = toRad(45);
  * константе ниже по файлу уронило бы запуск целиком.
  */
 const EDGE = 16;
-const edgeTop = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-top))`;
+const edgeTop = (offset = 0): string =>
+  `calc(${EDGE + offset}px + env(safe-area-inset-top))`;
 const edgeBottom = (offset = 0): string =>
   `calc(${EDGE + offset}px + env(safe-area-inset-bottom))`;
-const edgeLeft = (offset = 0): string => `calc(${EDGE + offset}px + env(safe-area-inset-left))`;
+const edgeLeft = (offset = 0): string =>
+  `calc(${EDGE + offset}px + env(safe-area-inset-left))`;
 const edgeRight = (offset = 0): string =>
   `calc(${EDGE + offset}px + env(safe-area-inset-right))`;
 
@@ -220,7 +250,7 @@ let lastX = 0;
 let lastY = 0;
 let lastTap = 0; // для двойного тапа (перемещение вперёд)
 
-canvas.addEventListener('pointerdown', (ev) => {
+canvas.addEventListener("pointerdown", (ev) => {
   dragging = true;
   lastX = ev.clientX;
   lastY = ev.clientY;
@@ -245,7 +275,7 @@ canvas.addEventListener('pointerdown', (ev) => {
   }
 });
 
-canvas.addEventListener('pointermove', (ev) => {
+canvas.addEventListener("pointermove", (ev) => {
   if (!dragging) return;
   const dx = ev.clientX - lastX;
   const dy = ev.clientY - lastY;
@@ -272,29 +302,37 @@ canvas.addEventListener('pointermove', (ev) => {
   // вертикали наклон. Обе поправки запоминаются (core/calibration.ts).
   // Раньше это делал второй слушатель на том же холсте — он получал dx = dy = 0,
   // потому что lastX/lastY были уже обновлены здесь, и подстройка не работала
-  if (orientationTracker.current.source === 'sensor') {
+  if (orientationTracker.current.source === "sensor") {
     if (dy) {
-      const deltaDeg = ((dy / canvas.clientHeight) * view.fovVRad * 180) / Math.PI;
+      const deltaDeg =
+        ((dy / canvas.clientHeight) * view.fovVRad * 180) / Math.PI;
       setCalibration({ tiltDeg: getCalibration().tiltDeg + deltaDeg });
     }
     // Пересобирает состояние и дёргает обработчик — он и перерисует кадр
-    orientationTracker.addManualOffset(-(dx / canvas.clientWidth) * view.fovRad);
+    orientationTracker.addManualOffset(
+      -(dx / canvas.clientWidth) * view.fovRad,
+    );
     return;
   }
 
   // Поворот камеры (без датчиков: десктоп, отказ в доступе к компасу).
   // Нормализуем: иначе после нескольких свайпов азимут уходит в минус, и
   // расчёт сектора для автонаклона/маркеров берёт не тот участок горизонта
-  view.centerAzRad = normalizeAz(view.centerAzRad - (dx / canvas.clientWidth) * view.fovRad);
+  view.centerAzRad = normalizeAz(
+    view.centerAzRad - (dx / canvas.clientWidth) * view.fovRad,
+  );
   view.tiltRad = Math.max(
     -MAX_TILT,
-    Math.min(MAX_TILT, view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad),
+    Math.min(
+      MAX_TILT,
+      view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad,
+    ),
   );
   draw();
 });
 
-canvas.addEventListener('pointerup', () => (dragging = false));
-canvas.addEventListener('contextmenu', (ev) => ev.preventDefault()); // правый клик = перемещение
+canvas.addEventListener("pointerup", () => (dragging = false));
+canvas.addEventListener("contextmenu", (ev) => ev.preventDefault()); // правый клик = перемещение
 
 /**
  * Перемещение вперёд (двойной клик мышью, только на компьютере).
@@ -311,7 +349,11 @@ function moveForward(screenX?: number): void {
     screenX !== undefined && width > 0
       ? ((screenX - width / 2) / width) * view.fovRad
       : 0;
-  const newPos = destination(lastOrigin, view.centerAzRad + offset, MOVE_STEP_M);
+  const newPos = destination(
+    lastOrigin,
+    view.centerAzRad + offset,
+    MOVE_STEP_M,
+  );
   requestCompute(newPos);
 }
 
@@ -319,44 +361,45 @@ function moveForward(screenX?: number): void {
 const MOVE_STEP_M = 500; // шаг перемещения по земле
 const HEIGHT_STEP_M = 100; // шаг по высоте
 
-window.addEventListener('keydown', (ev) => {
+window.addEventListener("keydown", (ev) => {
   if (!panorama) return;
   // Набор текста — не навигация: в поиске по карте «Washington» и «Ushba»
   // теряли буквы w/a/s/d, а стрелки вместо курсора двигали наблюдателя.
   // Ползунки настроек (input[type=range]) подстраиваются теми же стрелками
-  if (isTypingTarget(ev.target) || isTypingTarget(document.activeElement)) return;
+  if (isTypingTarget(ev.target) || isTypingTarget(document.activeElement))
+    return;
   const az = view.centerAzRad;
   let dAz = 0;
   let dDist = 0;
   let dHeight = 0;
 
   switch (ev.key) {
-    case 'ArrowUp':
-    case 'w':
-    case 'W':
+    case "ArrowUp":
+    case "w":
+    case "W":
       dDist = MOVE_STEP_M; // вперёд по азимуту взгляда
       break;
-    case 'ArrowDown':
-    case 's':
-    case 'S':
+    case "ArrowDown":
+    case "s":
+    case "S":
       dDist = -MOVE_STEP_M; // назад
       break;
-    case 'ArrowLeft':
-    case 'a':
-    case 'A':
+    case "ArrowLeft":
+    case "a":
+    case "A":
       dAz = -Math.PI / 2; // влево (перпендикулярно взгляду)
       dDist = MOVE_STEP_M;
       break;
-    case 'ArrowRight':
-    case 'd':
-    case 'D':
+    case "ArrowRight":
+    case "d":
+    case "D":
       dAz = Math.PI / 2; // вправо
       dDist = MOVE_STEP_M;
       break;
-    case 'PageUp':
+    case "PageUp":
       dHeight = HEIGHT_STEP_M;
       break;
-    case 'PageDown':
+    case "PageDown":
       dHeight = -HEIGHT_STEP_M;
       break;
     default:
@@ -386,10 +429,14 @@ window.addEventListener('keydown', (ev) => {
 });
 
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
-import { orientationTracker } from './core/orientation';
-import { getCalibration, setCalibration, DEFAULT_CAMERA_FOV_DEG } from './core/calibration';
-import { rememberArMode, shouldAutoStartAr } from './core/ar-mode';
-import { destination } from './core/geo';
+import { rememberArMode, shouldAutoStartAr } from "./core/ar-mode";
+import {
+  DEFAULT_CAMERA_FOV_DEG,
+  getCalibration,
+  setCalibration,
+} from "./core/calibration";
+import { destination } from "./core/geo";
+import { orientationTracker } from "./core/orientation";
 
 /**
  * Кнопка «Включить компас» — только для iOS.
@@ -413,19 +460,24 @@ function updateCompassButton(): void {
   if (compassBtn) return;
   compassBtn = makeButton(
     ICON_COMPASS,
-    'enableCompass',
+    "enableCompass",
     `right:${edgeRight()};top:${edgeTop(60)}`,
   );
   compassBtn.onclick = () => {
-    void orientationTracker.requestPermission().then(() => updateCompassButton());
+    void orientationTracker
+      .requestPermission()
+      .then(() => updateCompassButton());
   };
 }
 
 orientationTracker.start((state) => {
-  if (state.source === 'sensor') {
+  if (state.source === "sensor") {
     const tiltOffset = (getCalibration().tiltDeg * Math.PI) / 180;
     view.centerAzRad = state.azimuthRad;
-    view.tiltRad = Math.max(-MAX_TILT, Math.min(MAX_TILT, state.tiltRad + tiltOffset));
+    view.tiltRad = Math.max(
+      -MAX_TILT,
+      Math.min(MAX_TILT, state.tiltRad + tiltOffset),
+    );
     draw();
   }
   updateCompassButton();
@@ -461,9 +513,13 @@ let autoTiltPending = true;
  * Считается по уже посчитанному горизонту, поэтому годится и без нового
  * расчёта — например, когда направление взгляда сменили на карте.
  */
-function applyAutoTilt(state: { stepRad: number; layers?: Float32Array[] }): void {
+function applyAutoTilt(state: {
+  stepRad: number;
+  layers?: Float32Array[];
+}): void {
   const layers = state.layers;
-  const rays = state.stepRad > 0 ? Math.round((2 * Math.PI) / state.stepRad) : 0;
+  const rays =
+    state.stepRad > 0 ? Math.round((2 * Math.PI) / state.stepRad) : 0;
   if (!rays || !layers?.length) return;
   const half = view.fovRad / 2;
   const angles: number[] = [];
@@ -488,9 +544,9 @@ function applyAutoTilt(state: { stepRad: number; layers?: Float32Array[] }): voi
   view.tiltRad = Math.max(0, Math.min(MAX_TILT, median));
 }
 
-const worker = new Worker(new URL('./workers/horizon.worker.ts', import.meta.url), {
-  type: 'module',
-});
+const worker = new Worker(
+  new URL("./workers/horizon.worker.ts", import.meta.url),
+);
 
 /** Сквозной номер задания воркеру (см. протокол в horizon.worker.ts) */
 let nextReqId = 1;
@@ -499,16 +555,18 @@ let activeComputeId = 0;
 
 worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   const msg = ev.data;
-  if (msg.type === 'error') {
+  if (msg.type === "error") {
     // Ошибка чужого задания (перелёт к вершине) — не наша: её покажет тот,
     // кто это задание отправил. Иначе на экране два сообщения об одном сбое
     if (msg.reqId !== undefined && msg.reqId !== activeComputeId) return;
     // Без сети техническая формулировка («HTTP 503», «вне покрытия») ничего
     // не объясняет: человеку важно, что данных на это место нет на устройстве
-    setStatus(navigator.onLine ? `${t('error')}: ${msg.message}` : t('errorOffline'));
+    setStatus(
+      navigator.onLine ? `${t("error")}: ${msg.message}` : t("errorOffline"),
+    );
     return;
   }
-  if (msg.type === 'viewpoint') return; // ждёт свой одноразовый обработчик
+  if (msg.type === "viewpoint") return; // ждёт свой одноразовый обработчик
   const r = msg as ResultMessage;
   // Расчёт старой точки, обогнавший свежий: применить его — значит показать
   // панораму не оттуда, где стоит наблюдатель
@@ -527,13 +585,13 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   panorama = panorama ? Object.assign(panorama, next) : next;
   lastObserverH = r.observerH;
   // Обновляем индикатор высоты
-  const heightEl = document.getElementById('height-indicator');
+  const heightEl = document.getElementById("height-indicator");
   if (heightEl) heightEl.textContent = `${Math.round(r.observerH)} м`;
   if (autoTiltPending) {
     autoTiltPending = false;
     applyAutoTilt(r);
   }
-  setStatus('');
+  setStatus("");
   draw();
   // Кнопки AR/фото — после первого результата
   setupActionButtons();
@@ -546,7 +604,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
 let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
 
 async function main(): Promise<void> {
-  setStatus(t('waitingGps'));
+  setStatus(t("waitingGps"));
 
   const base = import.meta.env.BASE_URL;
 
@@ -555,7 +613,7 @@ async function main(): Promise<void> {
   const origin = fix.pos;
   lastOrigin = origin;
 
-  setStatus(t('loadingRegion'));
+  setStatus(t("loadingRegion"));
 
   // Авто-выбор региона по GPS (если пользователь не выбрал вручную).
   // Только по настоящему положению: запасная точка выдумана, и менять по ней
@@ -563,7 +621,7 @@ async function main(): Promise<void> {
   // Реестр читаем в любом случае: он же копится в офлайн-кеш, а без него
   // потом не открыть список регионов без сети.
   {
-    const { loadRegions, regionForPosition } = await import('./ui/download');
+    const { loadRegions, regionForPosition } = await import("./ui/download");
     const regions = await loadRegions();
     if (!manualRegion && fix.trusted) {
       const autoRegion = regionForPosition(origin, regions);
@@ -577,17 +635,19 @@ async function main(): Promise<void> {
 
   // Пики: сеть → офлайн-кеш (IndexedDB). Без них панорама всё равно строится.
   // Vite на 404 отдаёт index.html (SPA-fallback) — проверяем Content-Type.
-  let peaks: PeaksFile['peaks'] = [];
-  const peaksRes = await fetch(`${base}peaks/${currentRegion}.json`).catch(() => null);
+  let peaks: PeaksFile["peaks"] = [];
+  const peaksRes = await fetch(`${base}peaks/${currentRegion}.json`).catch(
+    () => null,
+  );
   if (peaksRes && isJson(peaksRes)) {
     peaks = ((await peaksRes.json()) as PeaksFile).peaks;
   } else {
-    const { getPeaks } = await import('./core/db');
-    peaks = ((await getPeaks(currentRegion)) ?? []) as PeaksFile['peaks'];
+    const { getPeaks } = await import("./core/db");
+    peaks = ((await getPeaks(currentRegion)) ?? []) as PeaksFile["peaks"];
   }
   // Изоляция вершин (расстояние до ближайшей более высокой) — основа
   // приоритета подписей. Считается один раз на регион, не на кадр.
-  const { annotateIsolation } = await import('./core/peaks');
+  const { annotateIsolation } = await import("./core/peaks");
   const isoT0 = performance.now();
   annotateIsolation(peaks);
   console.info(
@@ -599,7 +659,7 @@ async function main(): Promise<void> {
   // (agran/vershiny-dem). Промах всех — только Terrarium; офлайн — кеш.
   await initDemForRegion(currentRegion);
 
-  setStatus(t('computing'));
+  setStatus(t("computing"));
   // Через requestCompute, а не прямым postMessage: иначе стартовая точка —
   // единственная, для которой не проверялось соответствие региона, и плашка
   // «вы в другом районе» появлялась только после первого перемещения.
@@ -647,7 +707,7 @@ async function refineStartPosition(): Promise<void> {
   );
   // Район подбираем сами, только если человек не выбирал его в настройках
   if (!manualRegion) {
-    const { loadRegions, regionForPosition } = await import('./ui/download');
+    const { loadRegions, regionForPosition } = await import("./ui/download");
     const region = regionForPosition(precise, await loadRegions());
     if (region && region !== currentRegion) await switchRegion(region);
   }
@@ -662,7 +722,11 @@ async function refineStartPosition(): Promise<void> {
  * «переместиться в другое место», незачем занимать два угла экрана.
  */
 function setupMapButton(): void {
-  const btn = makeButton(ICON_MAP, 'map', `left:${edgeLeft()};bottom:${edgeBottom()}`);
+  const btn = makeButton(
+    ICON_MAP,
+    "map",
+    `left:${edgeLeft()};bottom:${edgeBottom()}`,
+  );
   mapButton = btn;
   layoutControls();
   let closeMap: (() => void) | null = null;
@@ -673,8 +737,8 @@ function setupMapButton(): void {
       return;
     }
     const [{ openMap }, { loadRegions, regionLabel }] = await Promise.all([
-      import('./ui/map'),
-      import('./ui/download'),
+      import("./ui/map"),
+      import("./ui/download"),
     ]);
     const regions = await loadRegions();
     closeMap = openMap({
@@ -724,7 +788,9 @@ let navUiReady = false;
  *
  * Возвращает точку обзора, чтобы карта могла показать её и дать поправить.
  */
-async function goToHit(hit: SearchHit): Promise<{ origin: LatLon; headingRad: number } | null> {
+async function goToHit(
+  hit: SearchHit,
+): Promise<{ origin: LatLon; headingRad: number } | null> {
   await switchRegion(hit.region);
   return jumpToPeak(hit.peak);
 }
@@ -739,8 +805,8 @@ async function goToHit(hit: SearchHit): Promise<{ origin: LatLon; headingRad: nu
  */
 async function initDemForRegion(region: string): Promise<void> {
   const base = import.meta.env.BASE_URL;
-  const { demCandidates, pickDemBase } = await import('./core/dem-config');
-  const { getDemIndex } = await import('./core/db');
+  const { demCandidates, pickDemBase } = await import("./core/dem-config");
+  const { getDemIndex } = await import("./core/db");
   const patchBaseUrl = await pickDemBase(demCandidates(base, region), {
     online: async (url) => {
       const probe = await fetch(`${url}/index.json`).catch(() => null);
@@ -748,7 +814,7 @@ async function initDemForRegion(region: string): Promise<void> {
     },
     cached: async (url) => !!(await getDemIndex(url).catch(() => undefined)),
   });
-  worker.postMessage({ type: 'init', patchBaseUrl, reqId: nextReqId++ });
+  worker.postMessage({ type: "init", patchBaseUrl, reqId: nextReqId++ });
 }
 
 /**
@@ -782,20 +848,20 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   }
   currentRegion = region;
   rememberRegion();
-  setStatus(t('loadingRegion'));
+  setStatus(t("loadingRegion"));
   void refreshDownloadState();
 
   const base = import.meta.env.BASE_URL;
-  let peaks: PeaksFile['peaks'] | null = null;
+  let peaks: PeaksFile["peaks"] | null = null;
   const res = await fetch(`${base}peaks/${region}.json`).catch(() => null);
   if (res && isJson(res)) {
     peaks = ((await res.json()) as PeaksFile).peaks;
   } else {
-    const { getPeaks } = await import('./core/db');
-    peaks = ((await getPeaks(region)) ?? null) as PeaksFile['peaks'] | null;
+    const { getPeaks } = await import("./core/db");
+    peaks = ((await getPeaks(region)) ?? null) as PeaksFile["peaks"] | null;
   }
   if (peaks) {
-    const { annotateIsolation } = await import('./core/peaks');
+    const { annotateIsolation } = await import("./core/peaks");
     annotateIsolation(peaks);
     currentPeaks = peaks;
   } else {
@@ -814,8 +880,8 @@ async function switchRegion(region: string, manual = false): Promise<void> {
  * везде — глобальная пирамида покрывает всю сушу.
  */
 async function goToLocation(pos: LatLon): Promise<void> {
-  setStatus(t('computing'));
-  const { loadRegions, regionForPosition } = await import('./ui/download');
+  setStatus(t("computing"));
+  const { loadRegions, regionForPosition } = await import("./ui/download");
   const region = regionForPosition(pos, await loadRegions());
   if (region) {
     await switchRegion(region);
@@ -836,8 +902,10 @@ async function goToLocation(pos: LatLon): Promise<void> {
  * @returns подобранная точка обзора (её показывает карта) или `null`, если
  *   подобрать не удалось
  */
-async function jumpToPeak(peak: Peak): Promise<{ origin: LatLon; headingRad: number } | null> {
-  setStatus(t('computing'));
+async function jumpToPeak(
+  peak: Peak,
+): Promise<{ origin: LatLon; headingRad: number } | null> {
+  setStatus(t("computing"));
   // Точку обзора подбирает worker: у него DEM, а «просто отойти на 5 км
   // назад по азимуту» приводит в цирк под соседней стеной
   let spot: ViewpointResult;
@@ -848,8 +916,8 @@ async function jumpToPeak(peak: Peak): Promise<{ origin: LatLon; headingRad: num
     // перелёт молча замирал на «Расчёт панорамы…» до перезагрузки страницы
     setStatus(
       navigator.onLine
-        ? `${t('error')}: ${err instanceof Error ? err.message : String(err)}`
-        : t('errorOffline'),
+        ? `${t("error")}: ${err instanceof Error ? err.message : String(err)}`
+        : t("errorOffline"),
     );
     return null;
   }
@@ -874,13 +942,13 @@ function requestViewpoint(peak: Peak): Promise<ViewpointResult> {
     const onMessage = (ev: MessageEvent<WorkerOutMessage>): void => {
       const msg = ev.data;
       if (msg.reqId !== reqId) return;
-      if (msg.type !== 'viewpoint' && msg.type !== 'error') return;
-      worker.removeEventListener('message', onMessage);
-      if (msg.type === 'error') reject(new Error(msg.message));
+      if (msg.type !== "viewpoint" && msg.type !== "error") return;
+      worker.removeEventListener("message", onMessage);
+      if (msg.type === "error") reject(new Error(msg.message));
       else resolve(msg);
     };
-    worker.addEventListener('message', onMessage);
-    worker.postMessage({ type: 'viewpoint', peak, reqId });
+    worker.addEventListener("message", onMessage);
+    worker.postMessage({ type: "viewpoint", peak, reqId });
   });
 }
 
@@ -894,23 +962,24 @@ function requestViewpoint(peak: Peak): Promise<ViewpointResult> {
  * Казбек или Эверест находятся, даже если их регион никогда не открывали.
  */
 async function findPeaks(query: string): Promise<SearchHit[]> {
-  const { searchPeaks, searchIndex, searchFuzzy, mergeHits, loadSearchIndex } = await import(
-    './core/search'
-  );
-  const groups: SearchHit[][] = [searchPeaks(query, currentPeaks, currentRegion)];
+  const { searchPeaks, searchIndex, searchFuzzy, mergeHits, loadSearchIndex } =
+    await import("./core/search");
+  const groups: SearchHit[][] = [
+    searchPeaks(query, currentPeaks, currentRegion),
+  ];
 
   // Скачанные регионы — работают офлайн; читаются параллельно.
   // Запрет хранилища (приватный режим) не должен ронять поиск: без списка
   // скачанного остаются свой регион и глобальный индекс, а падение здесь
   // оставляло список результатов на «…» навсегда
-  const { getDownloadedRegions, getPeaks } = await import('./core/db');
+  const { getDownloadedRegions, getPeaks } = await import("./core/db");
   const downloaded = (await getDownloadedRegions().catch(() => [])).filter(
     (r) => r !== currentRegion,
   );
   const offline = await Promise.all(
     downloaded.map(async (region) => {
       const peaks = (await getPeaks(region).catch(() => undefined)) as
-        | PeaksFile['peaks']
+        | PeaksFile["peaks"]
         | undefined;
       return peaks ? searchPeaks(query, peaks, region) : [];
     }),
@@ -926,10 +995,12 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
   // «Эльбрус» не должен тонуть среди «Эльбурс», «Эльбруз» и прочих соседей
   if (hits.length) return hits;
 
-  const fuzzy: SearchHit[][] = [searchFuzzy(query, currentPeaks, currentRegion)];
+  const fuzzy: SearchHit[][] = [
+    searchFuzzy(query, currentPeaks, currentRegion),
+  ];
   for (let i = 0; i < downloaded.length; i++) {
     const peaks = (await getPeaks(downloaded[i]).catch(() => undefined)) as
-      | PeaksFile['peaks']
+      | PeaksFile["peaks"]
       | undefined;
     if (peaks) fuzzy.push(searchFuzzy(query, peaks, downloaded[i]));
   }
@@ -949,7 +1020,7 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
 function setupDownloadButton(): void {
   const btn = makeButton(
     ICON_DOWNLOAD,
-    'downloadRegion',
+    "downloadRegion",
     `right:${edgeRight()};top:${edgeTop()}`,
   );
   downloadButton = btn;
@@ -962,19 +1033,19 @@ function setupDownloadButton(): void {
     btn.disabled = true;
     try {
       await downloadRegion(currentRegion, lastOrigin, (p: DownloadProgress) => {
-        if (p.phase === 'peaks') {
-          setStatus(t('downloadPeaks'));
-        } else if (p.phase === 'tiles') {
-          setStatus(`${t('downloadTiles')}: ${p.done}/${p.total}`);
-        } else if (p.phase === 'done') {
-          setStatus('');
+        if (p.phase === "peaks") {
+          setStatus(t("downloadPeaks"));
+        } else if (p.phase === "tiles") {
+          setStatus(`${t("downloadTiles")}: ${p.done}/${p.total}`);
+        } else if (p.phase === "done") {
+          setStatus("");
         }
       });
       regionDownloaded = true;
       applyDownloadState();
     } catch (err) {
-      setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
-      btn.textContent = '✗';
+      setStatus(`${t("error")}: ${err instanceof Error ? err.message : err}`);
+      btn.textContent = "✗";
       setTimeout(applyDownloadState, 3000);
     } finally {
       busy = false;
@@ -991,7 +1062,7 @@ let regionDownloaded = false;
 async function refreshDownloadState(): Promise<void> {
   if (!downloadButton) return;
   try {
-    const { getDownloadedRegions } = await import('./core/db');
+    const { getDownloadedRegions } = await import("./core/db");
     regionDownloaded = (await getDownloadedRegions()).includes(currentRegion);
   } catch {
     regionDownloaded = false; // приватный режим: считаем, что не скачано
@@ -1003,10 +1074,10 @@ function applyDownloadState(): void {
   const btn = downloadButton;
   if (!btn) return;
   btn.innerHTML = regionDownloaded ? ICON_DOWNLOADED : ICON_DOWNLOAD;
-  btn.style.background = regionDownloaded ? '#2d6a4f' : '#415a77';
-  const title = regionDownloaded ? t('regionDownloaded') : t('downloadRegion');
+  btn.style.background = regionDownloaded ? "#2d6a4f" : "#415a77";
+  const title = regionDownloaded ? t("regionDownloaded") : t("downloadRegion");
   btn.title = title;
-  btn.setAttribute('aria-label', title);
+  btn.setAttribute("aria-label", title);
 }
 
 /**
@@ -1019,16 +1090,20 @@ function applyDownloadState(): void {
  * и `aria-label` оставались на прежнем — интерфейс получался наполовину
  * переведённым (см. relabelUi).
  */
-function makeButton(icon: string, titleKey: TitleKey, pos: string): HTMLButtonElement {
-  const btn = document.createElement('button');
-  if (icon.startsWith('<svg')) btn.innerHTML = icon;
+function makeButton(
+  icon: string,
+  titleKey: TitleKey,
+  pos: string,
+): HTMLButtonElement {
+  const btn = document.createElement("button");
+  if (icon.startsWith("<svg")) btn.innerHTML = icon;
   else btn.textContent = icon;
   setTitle(btn, titleKey);
   btn.style.cssText =
     `position:fixed;${pos};width:48px;height:48px;` +
-    'border-radius:50%;border:none;background:#415a77;color:#f1faee;' +
-    'font-size:20px;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.4);' +
-    'display:flex;align-items:center;justify-content:center';
+    "border-radius:50%;border:none;background:#415a77;color:#f1faee;" +
+    "font-size:20px;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.4);" +
+    "display:flex;align-items:center;justify-content:center";
   document.body.appendChild(btn);
   return btn;
 }
@@ -1042,7 +1117,7 @@ const localizedTitles: { el: HTMLElement; key: TitleKey }[] = [];
 function setTitle(el: HTMLElement, key: TitleKey): void {
   const title = t(key);
   el.title = title;
-  el.setAttribute('aria-label', title);
+  el.setAttribute("aria-label", title);
   localizedTitles.push({ el, key });
 }
 
@@ -1051,7 +1126,7 @@ function relabelUi(): void {
   for (const { el, key } of localizedTitles) {
     const title = t(key);
     el.title = title;
-    el.setAttribute('aria-label', title);
+    el.setAttribute("aria-label", title);
   }
   // У кнопки офлайна подпись зависит ещё и от состояния региона
   applyDownloadState();
@@ -1070,43 +1145,50 @@ function relabelUi(): void {
  * случайное нажатие. Остаётся одна кнопка — возврат к своему положению.
  */
 function setupNavPad(): void {
-  const pad = document.createElement('div');
+  const pad = document.createElement("div");
   pad.style.cssText =
-    'position:fixed;z-index:10;display:grid;gap:4px;' +
+    "position:fixed;z-index:10;display:grid;gap:4px;" +
     (touchOnly
-      ? 'grid-template-columns:1fr;grid-template-rows:1fr'
-      : 'grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)');
+      ? "grid-template-columns:1fr;grid-template-rows:1fr"
+      : "grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)");
   document.body.appendChild(pad);
   navPad = pad;
 
-  const arrows: { cell: string; az?: number; label: TitleKey; gps?: boolean }[] = [
-    { cell: '1 / 2', az: 0, label: 'navForward' },
-    { cell: '2 / 1', az: -Math.PI / 2, label: 'navLeft' },
-    { cell: '2 / 3', az: Math.PI / 2, label: 'navRight' },
-    { cell: '3 / 2', az: Math.PI, label: 'navBack' },
+  const arrows: {
+    cell: string;
+    az?: number;
+    label: TitleKey;
+    gps?: boolean;
+  }[] = [
+    { cell: "1 / 2", az: 0, label: "navForward" },
+    { cell: "2 / 1", az: -Math.PI / 2, label: "navLeft" },
+    { cell: "2 / 3", az: Math.PI / 2, label: "navRight" },
+    { cell: "3 / 2", az: Math.PI, label: "navBack" },
   ];
   const dirs = touchOnly
-    ? [{ cell: '1 / 1', label: 'navGps' as TitleKey, gps: true }]
-    : [...arrows, { cell: '2 / 2', label: 'navGps' as TitleKey, gps: true }];
+    ? [{ cell: "1 / 1", label: "navGps" as TitleKey, gps: true }]
+    : [...arrows, { cell: "2 / 2", label: "navGps" as TitleKey, gps: true }];
 
   for (const d of dirs) {
-    const btn = document.createElement('button');
-    btn.innerHTML = d.gps ? ICON_LOCATE : iconArrow(((d.az ?? 0) * 180) / Math.PI);
+    const btn = document.createElement("button");
+    btn.innerHTML = d.gps
+      ? ICON_LOCATE
+      : iconArrow(((d.az ?? 0) * 180) / Math.PI);
     setTitle(btn, d.label);
-    const [row, col] = d.cell.split(' / ');
+    const [row, col] = d.cell.split(" / ");
     btn.style.cssText =
       `grid-row:${row};grid-column:${col};` +
-      `border:none;border-radius:${touchOnly ? '50%' : '10px'};background:#415a77;color:#f1faee;` +
-      'cursor:pointer;min-width:0;min-height:0;display:flex;' +
-      'align-items:center;justify-content:center';
+      `border:none;border-radius:${touchOnly ? "50%" : "10px"};background:#415a77;color:#f1faee;` +
+      "cursor:pointer;min-width:0;min-height:0;display:flex;" +
+      "align-items:center;justify-content:center";
     if (d.gps) {
       btn.onclick = () => {
         void getPosition().then((fix) => {
           // Отказ в геолокации не должен уносить человека на Приют 11:
           // он нажал «к моему положению», а не «к контрольной точке»
           if (!fix.trusted) {
-            setStatus(t('gpsFailed'));
-            setTimeout(() => setStatus(''), 4000);
+            setStatus(t("gpsFailed"));
+            setTimeout(() => setStatus(""), 4000);
             return;
           }
           heightOverride = null; // возврат на землю в точке GPS
@@ -1125,35 +1207,39 @@ function setupNavPad(): void {
   }
 
   // Высота: вверх/вниз + индикатор
-  const heightPad = document.createElement('div');
+  const heightPad = document.createElement("div");
   heightPad.style.cssText =
-    'position:fixed;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center';
+    "position:fixed;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center";
   document.body.appendChild(heightPad);
   heightPadEl = heightPad;
   layoutControls();
 
-  const heightBtn = (icon: string, titleKey: TitleKey, delta: number): HTMLButtonElement => {
-    const b = document.createElement('button');
+  const heightBtn = (
+    icon: string,
+    titleKey: TitleKey,
+    delta: number,
+  ): HTMLButtonElement => {
+    const b = document.createElement("button");
     b.innerHTML = icon;
     setTitle(b, titleKey);
     b.style.cssText =
-      'border:none;border-radius:10px;background:#415a77;color:#f1faee;' +
-      'width:44px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center';
+      "border:none;border-radius:10px;background:#415a77;color:#f1faee;" +
+      "width:44px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center";
     b.onclick = () => adjustHeight(delta);
     heightPad.appendChild(b);
     return b;
   };
 
-  heightBtn(ICON_UP, 'heightUp', 100);
+  heightBtn(ICON_UP, "heightUp", 100);
 
-  const heightLabel = document.createElement('div');
-  heightLabel.id = 'height-indicator';
+  const heightLabel = document.createElement("div");
+  heightLabel.id = "height-indicator";
   heightLabel.style.cssText =
-    'background:rgba(13,27,42,0.8);color:#f1faee;border-radius:6px;padding:2px 8px;font-size:12px;font-family:system-ui';
+    "background:rgba(13,27,42,0.8);color:#f1faee;border-radius:6px;padding:2px 8px;font-size:12px;font-family:system-ui";
   heightLabel.textContent = `${Math.round(lastObserverH)} м`;
   heightPad.appendChild(heightLabel);
 
-  heightBtn(ICON_DOWN, 'heightDown', -100);
+  heightBtn(ICON_DOWN, "heightDown", -100);
 }
 
 /**
@@ -1190,7 +1276,7 @@ function layoutControls(): void {
 let lastObserverH = 0;
 
 /** Сессия AR: нужна автокалибровке, чтобы взять кадр камеры */
-let arSession: import('./ui/ar').ArSession | null = null;
+let arSession: import("./ui/ar").ArSession | null = null;
 
 /**
  * Автокалибровка по кадру: линия «небо / земля» из камеры совмещается с
@@ -1208,12 +1294,13 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   if (!arSession || !panorama) return;
   const frame = arSession.grabFrame();
   if (!frame) {
-    if (!silent) setStatus(t('calibrateNoFrame'));
+    if (!silent) setStatus(t("calibrateNoFrame"));
     return;
   }
 
-  if (!silent) setStatus(t('calibrating'));
-  const { extractSkyline, matchSkyline, MIN_CONFIDENCE } = await import('./core/skyline');
+  if (!silent) setStatus(t("calibrating"));
+  const { extractSkyline, matchSkyline, MIN_CONFIDENCE } =
+    await import("./core/skyline");
   const profile = extractSkyline(frame.rgba, frame.width, frame.height);
   const match = matchSkyline(profile, {
     centerAzRad: view.centerAzRad,
@@ -1230,8 +1317,8 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   });
 
   if (match.confidence < MIN_CONFIDENCE) {
-    setStatus(silent ? '' : t('calibrateFailed'));
-    if (!silent) setTimeout(() => setStatus(''), 4000);
+    setStatus(silent ? "" : t("calibrateFailed"));
+    if (!silent) setTimeout(() => setStatus(""), 4000);
     return;
   }
 
@@ -1246,8 +1333,10 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   draw();
 
   const azDeg = (match.azimuthRad * 180) / Math.PI;
-  setStatus(`${t('calibrateDone')} ${azDeg > 0 ? '+' : ''}${azDeg.toFixed(1)}°`);
-  setTimeout(() => setStatus(''), 3000);
+  setStatus(
+    `${t("calibrateDone")} ${azDeg > 0 ? "+" : ""}${azDeg.toFixed(1)}°`,
+  );
+  setTimeout(() => setStatus(""), 3000);
 }
 
 /**
@@ -1261,13 +1350,13 @@ function requestCompute(origin: LatLon, checkRegion = true): void {
   lastOrigin = origin;
   activeComputeId = nextReqId++;
   worker.postMessage({
-    type: 'compute',
+    type: "compute",
     origin,
     peaks: currentPeaks,
     observerHeightOverride: heightOverride ?? undefined,
     reqId: activeComputeId,
   });
-  setStatus(t('computing'));
+  setStatus(t("computing"));
   // Единая точка пересчёта — единственное место, где видно любое перемещение:
   // GPS, шаг навипадом, перелёт, перенос с карты
   if (checkRegion) void checkRegionForPosition(origin);
@@ -1275,7 +1364,7 @@ function requestCompute(origin: LatLon, checkRegion = true): void {
 
 /** Реестр регионов: читается один раз, дальше из памяти (см. loadRegions) */
 async function allRegions(): Promise<Record<string, RegionInfo>> {
-  const { loadRegions } = await import('./ui/download');
+  const { loadRegions } = await import("./ui/download");
   return loadRegions();
 }
 
@@ -1322,41 +1411,41 @@ function showRegionSuggestion(region: string, info: RegionInfo): void {
   if (suggestionEl?.dataset.region === region) return; // уже предложено
   hideRegionSuggestion();
 
-  const box = document.createElement('div');
+  const box = document.createElement("div");
   box.dataset.region = region;
   // Ниже верхних кнопок и во всю ширину: между «настройками» и «скачать» на
   // телефоне остаётся 246 px — текст ломался в столбик, а кнопка вылезала
   // за плашку и наезжала на соседний угол
   box.style.cssText =
     `position:fixed;left:${edgeLeft()};right:${edgeRight()};top:${edgeTop(56)};z-index:50;` +
-    'display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;' +
-    'background:rgba(26,26,46,.95);border:1px solid #415a77;border-radius:12px;' +
-    'padding:10px 12px;font:13px/1.4 system-ui,sans-serif;color:#f1faee;' +
-    'box-shadow:0 4px 16px rgba(0,0,0,.45)';
+    "display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;" +
+    "background:rgba(26,26,46,.95);border:1px solid #415a77;border-radius:12px;" +
+    "padding:10px 12px;font:13px/1.4 system-ui,sans-serif;color:#f1faee;" +
+    "box-shadow:0 4px 16px rgba(0,0,0,.45)";
 
-  const text = document.createElement('span');
-  text.textContent = `${t('regionSuggest')} ${regionLabelSync(info)}`;
-  text.style.cssText = 'flex:1 1 auto;min-width:0';
+  const text = document.createElement("span");
+  text.textContent = `${t("regionSuggest")} ${regionLabelSync(info)}`;
+  text.style.cssText = "flex:1 1 auto;min-width:0";
   box.appendChild(text);
 
-  const accept = document.createElement('button');
-  accept.textContent = t('regionSwitch');
+  const accept = document.createElement("button");
+  accept.textContent = t("regionSwitch");
   accept.style.cssText =
-    'flex-shrink:0;border:none;border-radius:8px;padding:7px 12px;font-size:13px;' +
-    'font-weight:600;background:#4cc9f0;color:#1a1a2e;cursor:pointer';
+    "flex-shrink:0;border:none;border-radius:8px;padding:7px 12px;font-size:13px;" +
+    "font-weight:600;background:#4cc9f0;color:#1a1a2e;cursor:pointer";
   accept.onclick = async () => {
     hideRegionSuggestion();
     await switchRegion(region);
     requestCompute(lastOrigin);
   };
 
-  const dismiss = document.createElement('button');
+  const dismiss = document.createElement("button");
   dismiss.innerHTML = ICON_CLOSE;
-  dismiss.title = t('close');
+  dismiss.title = t("close");
   dismiss.style.cssText =
-    'flex-shrink:0;border:none;border-radius:8px;width:32px;height:32px;' +
-    'background:transparent;color:#cfd8dc;cursor:pointer;display:flex;' +
-    'align-items:center;justify-content:center';
+    "flex-shrink:0;border:none;border-radius:8px;width:32px;height:32px;" +
+    "background:transparent;color:#cfd8dc;cursor:pointer;display:flex;" +
+    "align-items:center;justify-content:center";
   dismiss.onclick = () => {
     dismissedRegion = region;
     hideRegionSuggestion();
@@ -1369,15 +1458,15 @@ function showRegionSuggestion(region: string, info: RegionInfo): void {
 
 /** Название региона без обращения к download.ts (он уже загружен реестром) */
 function regionLabelSync(info: RegionInfo): string {
-  return getLocale() === 'ru'
-    ? (info.title_ru ?? info.title_en ?? '')
-    : (info.title_en ?? info.title_ru ?? '');
+  return getLocale() === "ru"
+    ? (info.title_ru ?? info.title_en ?? "")
+    : (info.title_en ?? info.title_ru ?? "");
 }
 
 /** Изменение высоты наблюдателя (пересчёт панорамы) */
 function adjustHeight(deltaM: number): void {
   heightOverride = (heightOverride ?? lastObserverH) + deltaM;
-  const el = document.getElementById('height-indicator');
+  const el = document.getElementById("height-indicator");
   if (el) el.textContent = `${Math.round(heightOverride)} м`;
   requestCompute(lastOrigin);
 }
@@ -1390,7 +1479,7 @@ function setupActionButtons(): void {
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
   const settingsBtn = makeButton(
     ICON_SETTINGS,
-    'settings',
+    "settings",
     `left:${edgeLeft()};top:${edgeTop()}`,
   );
   let settingsClose: (() => void) | null = null;
@@ -1400,7 +1489,7 @@ function setupActionButtons(): void {
       settingsClose = null;
       return;
     }
-    const { openSettings } = await import('./ui/settings');
+    const { openSettings } = await import("./ui/settings");
     settingsClose = openSettings(currentRegion, lastOrigin, {
       onRegionChange: (region) => {
         // Не через main(): тот начинается с getPosition() и возвращал бы
@@ -1433,7 +1522,11 @@ function setupActionButtons(): void {
   };
 
   // AR-режим — основной: камера включается сама, см. maybeAutoStartAr()
-  const arBtn = makeButton(ICON_AR, 'arMode', `right:${edgeRight()};bottom:${edgeBottom()}`);
+  const arBtn = makeButton(
+    ICON_AR,
+    "arMode",
+    `right:${edgeRight()};bottom:${edgeBottom()}`,
+  );
   let arVideo: HTMLVideoElement | null = null;
   /** Камера запрашивается прямо сейчас: второй вход открыл бы второй поток */
   let arStarting = false;
@@ -1443,8 +1536,8 @@ function setupActionButtons(): void {
     arSession = null;
     arVideo?.remove(); // иначе десять входов в AR — десять <video> под холстом
     arVideo = null;
-    arBtn.style.background = '#415a77';
-    calibrateBtn.style.display = 'none';
+    arBtn.style.background = "#415a77";
+    calibrateBtn.style.display = "none";
     draw(); // под видео холст не перерисовывался — вернём панораму
   }
 
@@ -1460,35 +1553,37 @@ function setupActionButtons(): void {
    *   время автозапуска (диалог о доступе висит секунды) иначе запоминало бы
    *   «AR не нужен» ровно в тот момент, когда камера успешно включается
    */
-  async function enterAr(auto = false): Promise<'on' | 'off' | 'busy'> {
+  async function enterAr(auto = false): Promise<"on" | "off" | "busy"> {
     // Флаг снимается только вместе с выходом: между проверкой и присвоением
     // `arSession` стоит await, и нажатие кнопки поверх автозапуска открывало
     // вторую камеру — первый поток оставался гореть без ссылки на него
-    if (!panorama || arSession || arStarting) return 'busy';
+    if (!panorama || arSession || arStarting) return "busy";
     arStarting = true;
-    const video = document.createElement('video');
+    const video = document.createElement("video");
     try {
-      const { startAr } = await import('./ui/ar');
-      video.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1';
+      const { startAr } = await import("./ui/ar");
+      video.style.cssText =
+        "position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1";
       document.body.prepend(video);
       arVideo = video;
       arSession = await startAr(video, canvas, panorama, view);
-      arBtn.style.background = '#e63946';
-      calibrateBtn.style.display = 'flex';
+      arBtn.style.background = "#e63946";
+      calibrateBtn.style.display = "flex";
       // Автоматическая попытка при входе в AR (включена по умолчанию):
       // камере нужно пару кадров на экспозицию, иначе анализируем черноту
       if (getCalibration().autoCalibrate) {
         setTimeout(() => void runAutoCalibration(true), 1200);
       }
-      return 'on';
+      return "on";
     } catch (err) {
       // Отказ в доступе к камере: элемент вставлен до вызова startAr,
       // и без уборки он остался бы в DOM насовсем
       video.remove();
       arVideo = null;
-      if (auto) console.info('Камера при запуске не открылась:', err);
-      else setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
-      return 'off';
+      if (auto) console.info("Камера при запуске не открылась:", err);
+      else
+        setStatus(`${t("error")}: ${err instanceof Error ? err.message : err}`);
+      return "off";
     } finally {
       arStarting = false;
     }
@@ -1503,7 +1598,7 @@ function setupActionButtons(): void {
     // Запоминаем результат, а не намерение: отказ в доступе — это «нет».
     // «Занято» не запоминаем вовсе: камеру в этот момент открывает автозапуск
     const result = await enterAr();
-    if (result !== 'busy') rememberArMode(result === 'on');
+    if (result !== "busy") rememberArMode(result === "on");
   };
 
   /**
@@ -1515,27 +1610,28 @@ function setupActionButtons(): void {
     const result = await enterAr(true);
     // Отказ запоминаем: иначе диалог о камере всплывал бы при каждой загрузке.
     // А вот «занято» означает, что человек успел нажать кнопку сам
-    if (result === 'off') rememberArMode(false);
+    if (result === "off") rememberArMode(false);
   }
 
   // Автокалибровка: видна только в AR — сопоставлять нечего, пока нет кадра
   const calibrateBtn = makeButton(
     ICON_CALIBRATE,
-    'autoCalibrate',
+    "autoCalibrate",
     `right:${edgeRight()};bottom:${edgeBottom(120)}`,
   );
-  calibrateBtn.style.display = 'none';
+  calibrateBtn.style.display = "none";
   calibrateBtn.onclick = () => void runAutoCalibration(false);
 
   // Фото с подписями
   const photoBtn = makeButton(
     ICON_PHOTO,
-    'photo',
+    "photo",
     `right:${edgeRight()};bottom:${edgeBottom(60)}`,
   );
   photoBtn.onclick = async () => {
     if (!panorama) return;
-    const { capturePhoto, savePhoto, photoFilename } = await import('./ui/photo');
+    const { capturePhoto, savePhoto, photoFilename } =
+      await import("./ui/photo");
     const options = {
       // Именно актуальные, а не аргументы функции: кнопки создаются один раз,
       // и замыкание держало бы точку первого расчёта — после перелёта к
@@ -1548,8 +1644,8 @@ function setupActionButtons(): void {
     };
     const blob = await capturePhoto(panorama, view, options);
     savePhoto(blob, photoFilename(options));
-    setStatus(t('photoSaved'));
-    setTimeout(() => setStatus(''), 3000);
+    setStatus(t("photoSaved"));
+    setTimeout(() => setStatus(""), 3000);
   };
 
   // Камера — последним шагом: к этому моменту вся раскладка на месте, и
@@ -1569,8 +1665,9 @@ function mainPeakInView(): string | undefined {
   const half = view.fovRad / 2;
   let best: { name: string; ele: number } | undefined;
   for (const peak of panorama.peaks) {
-    if (peak.visibility === 'hidden') continue;
-    if (Math.abs(wrapAngle(peak.azimuthRad - view.centerAzRad)) > half) continue;
+    if (peak.visibility === "hidden") continue;
+    if (Math.abs(wrapAngle(peak.azimuthRad - view.centerAzRad)) > half)
+      continue;
     const ele = peak.ele ?? 0;
     if (!best || ele > best.ele) best = { name: peak.name, ele };
   }
@@ -1580,7 +1677,8 @@ function mainPeakInView(): string | undefined {
 /** Ответ — JSON, а не SPA-fallback index.html? */
 function isJson(res: Response): boolean {
   return (
-    res.ok && (res.headers.get('content-type') ?? '').includes('application/json')
+    res.ok &&
+    (res.headers.get("content-type") ?? "").includes("application/json")
   );
 }
 

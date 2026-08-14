@@ -1,6 +1,6 @@
-import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { defineConfig } from 'vite';
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { defineConfig } from "vite";
 
 /**
  * Отдельная сборка Service Worker: `dist/sw.js`.
@@ -15,7 +15,7 @@ import { defineConfig } from 'vite';
  * обновившимся, только если файл побайтово изменился, а имена кешей и
  * предзагружаемые чанки должны меняться вместе со сборкой приложения.
  */
-const source = readFileSync(new URL('./src/sw.ts', import.meta.url), 'utf-8');
+const source = readFileSync(new URL("./src/sw.ts", import.meta.url), "utf-8");
 
 /**
  * Список чанков приложения для предзагрузки. Собирается уже после основной
@@ -25,33 +25,33 @@ const source = readFileSync(new URL('./src/sw.ts', import.meta.url), 'utf-8');
  * онлайн: ленивые чанки (настройки, карта, поиск) кешировались лишь по факту
  * запроса, и в горах кнопка настроек просто ничего не делала.
  */
-const assetsDir = new URL('./dist/assets/', import.meta.url);
+const assetsDir = new URL("./dist/assets/", import.meta.url);
 const assets = existsSync(assetsDir)
   ? readdirSync(assetsDir)
-      .filter((name) => name.endsWith('.js') || name.endsWith('.css'))
+      .filter((name) => name.endsWith(".js") || name.endsWith(".css"))
       .map((name) => `assets/${name}`)
   : [];
 
-const version = createHash('sha256')
+const version = createHash("sha256")
   .update(source)
-  .update(assets.join('|'))
-  .digest('hex')
+  .update(assets.join("|"))
+  .digest("hex")
   .slice(0, 8);
 
 export default defineConfig({
   define: {
-    'self.__SW_VERSION__': JSON.stringify(version),
-    'self.__SW_ASSETS__': JSON.stringify(assets),
+    "self.__SW_VERSION__": JSON.stringify(version),
+    "self.__SW_ASSETS__": JSON.stringify(assets),
   },
   build: {
-    target: 'es2022',
-    outDir: 'dist',
+    target: "es2019", // та же причина, что в vite.config.ts: парсинг на старом Safari
+    outDir: "dist",
     emptyOutDir: false, // основная сборка уже положила сюда приложение
     rollupOptions: {
-      input: new URL('./src/sw.ts', import.meta.url).pathname,
+      input: new URL("./src/sw.ts", import.meta.url).pathname,
       output: {
-        format: 'iife',
-        entryFileNames: 'sw.js',
+        format: "iife",
+        entryFileNames: "sw.js",
         inlineDynamicImports: true,
       },
     },

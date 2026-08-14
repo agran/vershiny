@@ -19,6 +19,8 @@
  * «повторный визит не чаще получаса» проверялось бы только руками.
  */
 
+import { root } from "./globals";
+
 /** Номер счётчика (agran) */
 export const METRIKA_ID = 111_599_794;
 
@@ -73,7 +75,7 @@ function browserDeps(): AnalyticsDeps {
     isOnline: () => navigator.onLine !== false,
 
     whenIdle: (task) => {
-      const idle = (globalThis as { requestIdleCallback?: (cb: () => void, o?: object) => void })
+      const idle = (root as { requestIdleCallback?: (cb: () => void, o?: object) => void })
         .requestIdleCallback;
       // Таймаут обязателен: без него в занятой вкладке простоя можно ждать
       // сколько угодно, и визит не засчитается вовсе

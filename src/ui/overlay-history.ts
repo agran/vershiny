@@ -17,7 +17,7 @@
  */
 
 /** Метка наших записей: чужие (например, переход по ссылке) не трогаем */
-const MARK = 'vershiny-overlay';
+const MARK = "vershiny-overlay";
 
 interface Overlay {
   id: number;
@@ -27,11 +27,24 @@ interface Overlay {
 let counter = 0;
 const stack: Overlay[] = [];
 let listening = false;
+/**
+ * Сколько `popstate` сейчас порождено нашим собственным `history.back()` из
+ * `release()`. Такие события не должны закрывать следующий слой стопки:
+ * верхний к этому моменту уже снят программно, и иначе «крестик» поиска
+ * закрывал бы заодно и карту под ним.
+ */
+let pendingBacks = 0;
 
 function ensureListener(): void {
   if (listening) return;
   listening = true;
-  window.addEventListener('popstate', () => {
+  window.addEventListener("popstate", () => {
+    // Программное закрытие слоя само убирает запись из истории — гасим
+    // порождённый этим popstate, а не трактуем его как нажатие «назад»
+    if (pendingBacks > 0) {
+      pendingBacks--;
+      return;
+    }
     // Один шаг назад — один закрытый слой, верхний
     stack.pop()?.onBack();
   });
@@ -48,7 +61,7 @@ export function pushOverlay(onBack: () => void): () => void {
   ensureListener();
   const id = ++counter;
   stack.push({ id, onBack });
-  history.pushState({ [MARK]: id }, '');
+  history.pushState({ [MARK]: id }, "");
 
   return () => {
     const index = stack.findIndex((overlay) => overlay.id === id);
@@ -58,6 +71,7 @@ export function pushOverlay(onBack: () => void): () => void {
     // чужое, лучше оставить историю в покое: увести человека со страницы
     // хуже, чем оставить лишний шаг назад
     if ((history.state as Record<string, unknown> | null)?.[MARK] === id) {
+      pendingBacks++;
       history.back();
     }
   };
@@ -66,4 +80,5 @@ export function pushOverlay(onBack: () => void): () => void {
 /** Сброс стопки между тестами: в приложении она живёт до перезагрузки */
 export function resetOverlayHistory(): void {
   stack.length = 0;
+  pendingBacks = 0;
 }

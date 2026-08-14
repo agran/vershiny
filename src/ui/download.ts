@@ -18,6 +18,7 @@ import { GLOBAL_DEM_URL } from '../core/dem-config';
 import { PEAK_VISIBILITY_RADIUS_M } from '../core/peaks';
 import { destination, type LatLon } from '../core/geo';
 import { savePeaks, markRegionDownloaded } from '../core/db';
+import { root } from '../core/globals';
 import { getLocale } from '../core/i18n';
 
 /** Радиус детальной зоны (Terrarium 90 м) вокруг точки наблюдения */
@@ -252,12 +253,12 @@ export function resetRegionsCache(): void {
 
 const idbRegionsStore: RegionsStore = {
   async save(regions) {
-    if (!globalThis.indexedDB) return;
+    if (!root.indexedDB) return;
     const { saveRegionsRegistry } = await import('../core/db');
     await saveRegionsRegistry(regions);
   },
   async load() {
-    if (!globalThis.indexedDB) return undefined;
+    if (!root.indexedDB) return undefined;
     const { getRegionsRegistry } = await import('../core/db');
     return (await getRegionsRegistry()) as Record<string, RegionInfo> | undefined;
   },

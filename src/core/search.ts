@@ -26,6 +26,7 @@
 
 import type { Peak } from './peaks';
 import { translitToLatin } from './transliterate';
+import { root } from './globals';
 
 /** Запись индекса: [имя, lat, lon, ele, регион, имя_en?, имя_ru?] */
 export type IndexEntry = [
@@ -365,7 +366,7 @@ const INDEX_RETRY_MS = 60_000;
 /** Загрузка глобального индекса (один раз за сессию; дальше — кеш SW) */
 export async function loadSearchIndex(
   base: string,
-  fetchFn: typeof fetch = fetch.bind(globalThis),
+  fetchFn: typeof fetch = fetch.bind(root),
 ): Promise<IndexEntry[]> {
   if (indexCache) return indexCache;
   if (indexFailedAt && Date.now() - indexFailedAt < INDEX_RETRY_MS) return [];

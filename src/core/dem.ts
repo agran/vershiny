@@ -13,9 +13,11 @@
  * (детальнее ≠ лучше — угловой размер дальних хребтов мал, а трафик реален).
  */
 
-import type { LatLon } from './geo';
-import { distanceM } from './geo';
-import { demStorePrefix } from './dem-config';
+import { demStorePrefix } from "./dem-config";
+import type { LatLon } from "./geo";
+import { distanceM } from "./geo";
+import { root } from "./globals";
+import { inflateGzip } from "./inflate";
 
 export const TILE_SIZE = 256;
 /** Метры в одном градусе широты (для перевода размера ячейки в метры) */
@@ -46,9 +48,9 @@ export interface DemIndex {
   bbox: [number, number, number, number];
   lods: DemLod[];
   /** Сжатие тайлов: 'gzip' — распаковываем через DecompressionStream */
-  encoding?: 'gzip';
+  encoding?: "gzip";
   /** Фильтр перед сжатием: 'delta-x' — дельта вдоль строк */
-  filter?: 'delta-x';
+  filter?: "delta-x";
   /** Расширение файла тайла (по умолчанию '.bin') */
   tileExt?: string;
 }
@@ -61,12 +63,18 @@ function base64ToBytes(base64: string): Uint8Array {
   return bytes;
 }
 
-/** Распаковка gzip потоковым API платформы (без зависимостей) */
+/** iOS < 16.4: `DecompressionStream` в воркере нет — тогда чистый JS */
+const HAS_DECOMPRESSION_STREAM = typeof DecompressionStream === "function";
+
+/** Распаковка gzip: нативный потоковый API, на старом Safari — инфлятор */
 async function gunzip(bytes: Uint8Array): Promise<Uint8Array> {
-  const stream = new Blob([bytes as BlobPart]).stream().pipeThrough(
-    new DecompressionStream('gzip'),
-  );
-  return new Uint8Array(await new Response(stream).arrayBuffer());
+  if (HAS_DECOMPRESSION_STREAM) {
+    const stream = new Blob([bytes as BlobPart])
+      .stream()
+      .pipeThrough(new DecompressionStream("gzip"));
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+  return inflateGzip(bytes);
 }
 
 export interface DemSamplerOptions {
@@ -92,14 +100,14 @@ export class DemSampler {
   /** Префикс ключа в офлайн-хранилище: у каждого источника своя сетка тайлов */
   private readonly storePrefix: string;
   /** Офлайн-хранилище (IndexedDB); null — недоступно (тесты, приватный режим) */
-  private dbCache: typeof import('./db') | null | undefined;
+  private dbCache: typeof import("./db") | null | undefined;
 
   /** Порог переключения LOD, метры (DATA-PIPELINE: 30 км) */
   lodSwitchM = 30_000;
 
   constructor(options: DemSamplerOptions) {
-    this.baseUrl = options.baseUrl.replace(/\/$/, '');
-    this.fetchFn = options.fetchFn ?? fetch.bind(globalThis);
+    this.baseUrl = options.baseUrl.replace(/\/$/, "");
+    this.fetchFn = options.fetchFn ?? fetch.bind(root);
     this.storePrefix = demStorePrefix(this.baseUrl);
   }
 
@@ -112,7 +120,7 @@ export class DemSampler {
   private async db() {
     if (this.dbCache === undefined) {
       try {
-        this.dbCache = globalThis.indexedDB ? await import('./db') : null;
+        this.dbCache = root.indexedDB ? await import("./db") : null;
       } catch {
         this.dbCache = null;
       }
@@ -143,7 +151,7 @@ export class DemSampler {
 
   /** Приблизительное разрешение LOD в метрах на широте наблюдателя */
   lodResolutionM(lodIndex: number, atLat?: number): number {
-    if (!this.index) throw new Error('loadIndex() не вызван');
+    if (!this.index) throw new Error("loadIndex() не вызван");
     const lod = this.index.lods[lodIndex];
     // Ячейка квадратная в градусах; по широте метры постоянны,
     // по долготе сжимаются cos φ — берём худший случай для выбора LOD
@@ -158,7 +166,7 @@ export class DemSampler {
    * какая лестница уровней в index.json.
    */
   lodForDistance(distM: number): number {
-    if (!this.index) throw new Error('loadIndex() не вызван');
+    if (!this.index) throw new Error("loadIndex() не вызван");
     const targetM = Math.max(90, distM * RES_PER_DIST);
     let best = 0;
     let bestDiff = Infinity;
@@ -190,7 +198,7 @@ export class DemSampler {
    * Если на запрошенном LOD данных нет (разреженная пирамида) — пробуем грубее.
    */
   sample(pos: LatLon, lodIndex: number): number {
-    if (!this.index) throw new Error('loadIndex() не вызван');
+    if (!this.index) throw new Error("loadIndex() не вызван");
     for (let lod = lodIndex; lod < this.index.lods.length; lod++) {
       const h = this.sampleLod(pos, lod);
       if (!Number.isNaN(h)) return h;
@@ -204,7 +212,12 @@ export class DemSampler {
 
     const gx = (pos.lon - minLon) / lod.cellDeg;
     const gy = (this.index!.bbox[3] - pos.lat) / lod.cellDeg; // сетка с севера на юг
-    if (gx < 0 || gy < 0 || gx >= lod.gridWidth - 1 || gy >= lod.gridHeight - 1) {
+    if (
+      gx < 0 ||
+      gy < 0 ||
+      gx >= lod.gridWidth - 1 ||
+      gy >= lod.gridHeight - 1
+    ) {
       return NaN;
     }
 
@@ -217,7 +230,8 @@ export class DemSampler {
     const h10 = this.cell(lodIndex, x0 + 1, y0);
     const h01 = this.cell(lodIndex, x0, y0 + 1);
     const h11 = this.cell(lodIndex, x0 + 1, y0 + 1);
-    if (h00 === null || h10 === null || h01 === null || h11 === null) return NaN;
+    if (h00 === null || h10 === null || h01 === null || h11 === null)
+      return NaN;
 
     const top = h00 + (h10 - h00) * fx;
     const bottom = h01 + (h11 - h01) * fx;
@@ -235,7 +249,11 @@ export class DemSampler {
   }
 
   /** Загрузка одного тайла (с дедупликацией параллельных запросов) */
-  async loadTile(lodIndex: number, tx: number, ty: number): Promise<Int16Array | null> {
+  async loadTile(
+    lodIndex: number,
+    tx: number,
+    ty: number,
+  ): Promise<Int16Array | null> {
     const key = `${lodIndex}/${tx}/${ty}`;
     const cached = this.tiles.get(key);
     if (cached !== undefined) return cached;
@@ -247,7 +265,7 @@ export class DemSampler {
       return null;
     }
 
-    const ext = this.index?.tileExt ?? '.bin';
+    const ext = this.index?.tileExt ?? ".bin";
     const promise = (async () => {
       // Любой отказ (обрыв сети, CORS, запрет IndexedDB, битый тайл) — это
       // «сейчас нет», а не «пусто здесь»: возвращаем null, дыру не запоминаем
@@ -258,7 +276,9 @@ export class DemSampler {
         // Офлайн-хранилище: тайлы не меняются, поэтому кеш безусловно свежий
         const db = await this.db().catch(() => null);
         if (db) {
-          const stored = await db.getDemTile(this.storeKey(key)).catch(() => undefined);
+          const stored = await db
+            .getDemTile(this.storeKey(key))
+            .catch(() => undefined);
           if (stored) {
             const tile = await this.decodeTile(
               stored.buffer.slice(
@@ -272,7 +292,9 @@ export class DemSampler {
           }
         }
 
-        const res = await this.fetchFn(`${this.baseUrl}/${lodIndex}/${tx}/${ty}${ext}`);
+        const res = await this.fetchFn(
+          `${this.baseUrl}/${lodIndex}/${tx}/${ty}${ext}`,
+        );
         let tile: Int16Array | null = null;
         if (res.ok) {
           tile = await this.decodeTile(await res.arrayBuffer(), lodIndex);
@@ -299,7 +321,7 @@ export class DemSampler {
 
   /** Ключи всех существующих тайлов, попадающих в bbox (все LOD) */
   tileKeysInBBox(bbox: [number, number, number, number]): string[] {
-    if (!this.index) throw new Error('loadIndex() не вызван');
+    if (!this.index) throw new Error("loadIndex() не вызван");
     const [minLon, minLat, maxLon, maxLat] = bbox;
     const keys: string[] = [];
     for (let lodIndex = 0; lodIndex < this.index.lods.length; lodIndex++) {
@@ -313,14 +335,19 @@ export class DemSampler {
               [minLon, 180],
               [-180, maxLon],
             ];
-      const y0 = Math.floor((this.index.bbox[3] - Math.min(maxLat, 90)) / tileDeg);
-      const y1 = Math.ceil((this.index.bbox[3] - Math.max(minLat, -90)) / tileDeg);
+      const y0 = Math.floor(
+        (this.index.bbox[3] - Math.min(maxLat, 90)) / tileDeg,
+      );
+      const y1 = Math.ceil(
+        (this.index.bbox[3] - Math.max(minLat, -90)) / tileDeg,
+      );
       for (const [lon0, lon1] of lonRanges) {
         const x0 = Math.floor((lon0 - this.index.bbox[0]) / tileDeg);
         const x1 = Math.ceil((lon1 - this.index.bbox[0]) / tileDeg);
         for (let tx = x0; tx < x1; tx++) {
           for (let ty = y0; ty < y1; ty++) {
-            if (this.hasTile(lodIndex, tx, ty)) keys.push(`${lodIndex}/${tx}/${ty}`);
+            if (this.hasTile(lodIndex, tx, ty))
+              keys.push(`${lodIndex}/${tx}/${ty}`);
           }
         }
       }
@@ -330,10 +357,10 @@ export class DemSampler {
 
   /** Оценка веса тайлов bbox в байтах (по среднему весу тайла из индекса) */
   bboxDownloadBytes(bbox: [number, number, number, number]): number {
-    if (!this.index) throw new Error('loadIndex() не вызван');
+    if (!this.index) throw new Error("loadIndex() не вызван");
     let bytes = 0;
     for (const key of this.tileKeysInBBox(bbox)) {
-      const lodIndex = Number(key.split('/')[0]);
+      const lodIndex = Number(key.split("/")[0]);
       bytes += this.index.lods[lodIndex].avgTileBytes ?? 40_000;
     }
     return bytes;
@@ -354,7 +381,7 @@ export class DemSampler {
     concurrency = 6,
   ): Promise<{ bytes: number; ok: number; failed: number }> {
     const db = await this.db();
-    const ext = this.index?.tileExt ?? '.bin';
+    const ext = this.index?.tileExt ?? ".bin";
     let done = 0;
     let bytes = 0;
     let ok = 0;
@@ -387,10 +414,17 @@ export class DemSampler {
   }
 
   /** Распаковка тайла: gzip → дельта по строкам → квант высоты */
-  private async decodeTile(buffer: ArrayBuffer, lodIndex: number): Promise<Int16Array> {
+  private async decodeTile(
+    buffer: ArrayBuffer,
+    lodIndex: number,
+  ): Promise<Int16Array> {
     let bytes = new Uint8Array(buffer);
     // Сигнатура gzip: сервер (или SW) мог распаковать ответ за нас
-    if (this.index?.encoding === 'gzip' && bytes[0] === 0x1f && bytes[1] === 0x8b) {
+    if (
+      this.index?.encoding === "gzip" &&
+      bytes[0] === 0x1f &&
+      bytes[1] === 0x8b
+    ) {
       bytes = await gunzip(bytes);
     }
     // Int16Array требует чётного смещения — при нужде копируем
@@ -401,7 +435,7 @@ export class DemSampler {
       aligned.byteLength >> 1,
     );
 
-    if (this.index?.filter === 'delta-x') {
+    if (this.index?.filter === "delta-x") {
       for (let y = 0; y < TILE_SIZE; y++) {
         const row = y * TILE_SIZE;
         let acc = 0;
@@ -436,10 +470,18 @@ export class DemSampler {
     const keys = new Set<string>();
     for (let d = 0; d <= maxDistM; d += stepM) {
       const p = destinationFn(origin, azRad, d);
-      for (let lodIdx = this.lodForDistance(d); lodIdx < this.index!.lods.length; lodIdx++) {
+      for (
+        let lodIdx = this.lodForDistance(d);
+        lodIdx < this.index!.lods.length;
+        lodIdx++
+      ) {
         const l = this.index!.lods[lodIdx];
-        const gx = Math.floor((p.lon - this.index!.bbox[0]) / l.cellDeg / TILE_SIZE);
-        const gy = Math.floor((this.index!.bbox[3] - p.lat) / l.cellDeg / TILE_SIZE);
+        const gx = Math.floor(
+          (p.lon - this.index!.bbox[0]) / l.cellDeg / TILE_SIZE,
+        );
+        const gy = Math.floor(
+          (this.index!.bbox[3] - p.lat) / l.cellDeg / TILE_SIZE,
+        );
         if (this.hasTile(lodIdx, gx, gy)) {
           keys.add(`${lodIdx}/${gx}/${gy}`);
         }
@@ -447,7 +489,7 @@ export class DemSampler {
     }
     await Promise.all(
       [...keys].map((key) => {
-        const [l, x, y] = key.split('/').map(Number);
+        const [l, x, y] = key.split("/").map(Number);
         return this.loadTile(l, x, y);
       }),
     );
@@ -461,8 +503,12 @@ export class DemSampler {
   /** Тайлы 2×2 вокруг точки на указанном LOD (для интерполяции у границы) */
   private async loadAround(pos: LatLon, lodIndex: number): Promise<void> {
     const lod = this.index!.lods[lodIndex];
-    const tx = Math.floor((pos.lon - this.index!.bbox[0]) / lod.cellDeg / TILE_SIZE);
-    const ty = Math.floor((this.index!.bbox[3] - pos.lat) / lod.cellDeg / TILE_SIZE);
+    const tx = Math.floor(
+      (pos.lon - this.index!.bbox[0]) / lod.cellDeg / TILE_SIZE,
+    );
+    const ty = Math.floor(
+      (this.index!.bbox[3] - pos.lat) / lod.cellDeg / TILE_SIZE,
+    );
     await Promise.all([
       this.loadTile(lodIndex, tx, ty),
       this.loadTile(lodIndex, tx + 1, ty),
@@ -479,7 +525,7 @@ export class DemSampler {
       const h = this.sample(pos, lodIndex);
       if (!Number.isNaN(h)) return h;
     }
-    throw new Error('Точка вне покрытия DEM');
+    throw new Error("Точка вне покрытия DEM");
   }
 
   /**
@@ -498,11 +544,14 @@ export class DemSampler {
       const maxH = await this.maxAroundAtLod(pos, lodIndex);
       if (maxH !== null) return maxH;
     }
-    throw new Error('Точка вне покрытия DEM');
+    throw new Error("Точка вне покрытия DEM");
   }
 
   /** max по окрестности 3×3 на одном LOD; null — тайлов нет */
-  private async maxAroundAtLod(pos: LatLon, lodIndex: number): Promise<number | null> {
+  private async maxAroundAtLod(
+    pos: LatLon,
+    lodIndex: number,
+  ): Promise<number | null> {
     const lod = this.index!.lods[lodIndex];
     const cellDeg = lod.cellDeg;
     const [minLon, , , maxLat] = this.index!.bbox;

@@ -297,7 +297,9 @@ export const translitToEn = translitToLatin;
 export function translitToRu(s: string): string {
   let result = s.toLowerCase();
   for (const [en, ru] of EN_DIGRAPHS) {
-    result = result.replaceAll(en, ru);
+    // split/join вместо replaceAll: последнего нет в Chrome < 85, и на старом
+    // Android Chrome русская транслитерация падала бы с TypeError
+    result = result.split(en).join(ru);
   }
   return result
     .split('')

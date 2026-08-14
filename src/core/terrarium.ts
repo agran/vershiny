@@ -6,13 +6,16 @@
  * Покрытие 85°S–85°N: SRTM + GLO-90 + ArcticDEM + … — решает проблему >60°N.
  *
  * PNG декодируется через createImageBitmap + OffscreenCanvas (работает
- * в worker, Chrome и Safari 15+).
+ * в worker, Chrome и Safari 15+). На iOS < 16.4, где OffscreenCanvas нет,
+ * декодируем чистым JS (src/core/png.ts).
  */
 
-import { normalizeLon, type LatLon } from './geo';
+import { normalizeLon, type LatLon } from "./geo";
+import { root } from "./globals";
+import { decodePngToRgba } from "./png";
 
 export const TERRARIUM_BASE_URL =
-  'https://s3.amazonaws.com/elevation-tiles-prod/terrarium';
+  "https://s3.amazonaws.com/elevation-tiles-prod/terrarium";
 
 const TILE_PX = 256;
 const MAX_LATITUDE = 85.051_128_78; // предел Web Mercator
@@ -46,7 +49,10 @@ export function zoomForDistance(distM: number): number {
 }
 
 /** lon/lat → индексы тайла slippy map */
-export function lonLatToTile(pos: LatLon, zoom: number): { x: number; y: number } {
+export function lonLatToTile(
+  pos: LatLon,
+  zoom: number,
+): { x: number; y: number } {
   const n = 2 ** zoom;
   const lat = Math.min(MAX_LATITUDE, Math.max(-MAX_LATITUDE, pos.lat));
   const latRad = (lat * Math.PI) / 180;
@@ -61,7 +67,10 @@ export function lonLatToTile(pos: LatLon, zoom: number): { x: number; y: number 
 }
 
 /** Дробная позиция пикселя внутри тайла: [0..256) */
-export function lonLatToPixel(pos: LatLon, zoom: number): { px: number; py: number } {
+export function lonLatToPixel(
+  pos: LatLon,
+  zoom: number,
+): { px: number; py: number } {
   const n = 2 ** zoom;
   const lat = Math.min(MAX_LATITUDE, Math.max(-MAX_LATITUDE, pos.lat));
   const latRad = (lat * Math.PI) / 180;
@@ -78,6 +87,27 @@ export function decodeTerrarium(r: number, g: number, b: number): number {
   return r * 256 + g + b / 256 - 32768;
 }
 
+/** iOS < 16.4: в воркере нет OffscreenCanvas/createImageBitmap */
+const HAS_NATIVE_PNG_DECODE =
+  typeof OffscreenCanvas === "function" &&
+  typeof createImageBitmap === "function";
+
+/** Декодирование Terrarium-PNG чистым JS (фолбэк для старого Safari) */
+function decodeTerrariumPngFallback(bytes: Uint8Array): Float32Array {
+  const img = decodePngToRgba(bytes);
+  if (img.width !== TILE_PX || img.height !== TILE_PX) {
+    throw new Error(
+      `неожиданный размер тайла Terrarium: ${img.width}×${img.height}`,
+    );
+  }
+  const tile = new Float32Array(TILE_PX * TILE_PX);
+  const rgba = img.data;
+  for (let i = 0; i < tile.length; i++) {
+    tile[i] = decodeTerrarium(rgba[i * 4], rgba[i * 4 + 1], rgba[i * 4 + 2]);
+  }
+  return tile;
+}
+
 export interface TerrariumOptions {
   baseUrl?: string;
   fetchFn?: typeof fetch;
@@ -92,18 +122,18 @@ export class TerrariumSampler {
   private canvas: OffscreenCanvas | null = null;
   private ctx: OffscreenCanvasRenderingContext2D | null = null;
   /** Офлайн-кеш (IndexedDB); undefined = ещё не инициализирован */
-  private dbCache: typeof import('./db') | null | undefined;
+  private dbCache: typeof import("./db") | null | undefined;
 
   constructor(options: TerrariumOptions = {}) {
-    this.baseUrl = (options.baseUrl ?? TERRARIUM_BASE_URL).replace(/\/$/, '');
-    this.fetchFn = options.fetchFn ?? fetch.bind(globalThis);
+    this.baseUrl = (options.baseUrl ?? TERRARIUM_BASE_URL).replace(/\/$/, "");
+    this.fetchFn = options.fetchFn ?? fetch.bind(root);
   }
 
   /** Ленивая загрузка db.ts (в тестах и приватном режиме IndexedDB может не быть) */
   private async db() {
     if (this.dbCache === undefined) {
       try {
-        this.dbCache = globalThis.indexedDB ? await import('./db') : null;
+        this.dbCache = root.indexedDB ? await import("./db") : null;
       } catch {
         this.dbCache = null;
       }
@@ -114,14 +144,18 @@ export class TerrariumSampler {
   private ensureCanvas(): OffscreenCanvasRenderingContext2D {
     if (!this.ctx) {
       this.canvas = new OffscreenCanvas(TILE_PX, TILE_PX);
-      const ctx = this.canvas.getContext('2d', { willReadFrequently: true });
-      if (!ctx) throw new Error('OffscreenCanvas 2d недоступен');
+      const ctx = this.canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) throw new Error("OffscreenCanvas 2d недоступен");
       this.ctx = ctx;
     }
     return this.ctx;
   }
 
-  async loadTile(z: number, x: number, y: number): Promise<Float32Array | null> {
+  async loadTile(
+    z: number,
+    x: number,
+    y: number,
+  ): Promise<Float32Array | null> {
     const key = `${z}/${x}/${y}`;
     const cached = this.tiles.get(key);
     if (cached !== undefined) return cached;
@@ -193,25 +227,30 @@ export class TerrariumSampler {
     z: number,
     x: number,
     y: number,
-  ): Promise<'saved' | 'missing' | 'failed'> {
+  ): Promise<"saved" | "missing" | "failed"> {
     const key = `${z}/${x}/${y}`;
     try {
       const db = await this.db();
-      if (db && (await db.getTerrariumTile(key))) return 'saved'; // уже лежит
+      if (db && (await db.getTerrariumTile(key))) return "saved"; // уже лежит
       const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
-      if (res.status === 404) return 'missing';
-      if (!res.ok) return 'failed';
-      if (!db) return 'failed'; // скачали, но положить некуда
+      if (res.status === 404) return "missing";
+      if (!res.ok) return "failed";
+      if (!db) return "failed"; // скачали, но положить некуда
       await db.saveTerrariumTile(key, new Uint8Array(await res.arrayBuffer()));
-      return 'saved';
+      return "saved";
     } catch {
-      return 'failed';
+      return "failed";
     }
   }
 
   /** PNG-байты → сетка высот 256×256 */
   private async decodePng(bytes: Uint8Array): Promise<Float32Array> {
-    const blob = new Blob([bytes as BlobPart], { type: 'image/png' });
+    // Современные браузеры идут прежним путём; фолбэк включается только там,
+    // где OffscreenCanvas нет (iOS < 16.4) — свежим айфонам ничего не меняет
+    if (!HAS_NATIVE_PNG_DECODE) {
+      return decodeTerrariumPngFallback(bytes);
+    }
+    const blob = new Blob([bytes as BlobPart], { type: "image/png" });
     const bitmap = await createImageBitmap(blob);
     const ctx = this.ensureCanvas();
     ctx.drawImage(bitmap, 0, 0);
@@ -296,7 +335,7 @@ export class TerrariumSampler {
     }
     await Promise.all(
       [...keys].map((key) => {
-        const [z, x, y] = key.split('/').map(Number);
+        const [z, x, y] = key.split("/").map(Number);
         return this.loadTile(z, x, y);
       }),
     );
@@ -323,7 +362,7 @@ export class TerrariumSampler {
       const ty = y + dy;
       if (ty < 0 || ty >= n) continue; // по широте мир не замкнут
       for (let dx = -1; dx <= 1; dx++) {
-        tasks.push(this.loadTile(zoom, ((x + dx) % n + n) % n, ty));
+        tasks.push(this.loadTile(zoom, (((x + dx) % n) + n) % n, ty));
       }
     }
     await Promise.all(tasks);
@@ -343,7 +382,7 @@ export class TerrariumSampler {
     if (neighbors.length === 2) neighbors.push([x + 1, y + 1]);
     await Promise.all(neighbors.map(([nx, ny]) => this.loadTile(z, nx, ny)));
     const h = this.sample(pos, z);
-    if (Number.isNaN(h)) throw new Error('Точка вне покрытия Terrarium');
+    if (Number.isNaN(h)) throw new Error("Точка вне покрытия Terrarium");
     return h;
   }
 }
