@@ -5,9 +5,8 @@
  * растровый слой, перетаскивание, зум и маркер — Leaflet ради этого тянуть
  * не хочется, а тайловая математика в проекте уже есть (terrarium.ts).
  *
- * Тайлы — Esri World Topographic (подписи на английском, рельефный стиль);
- * для России — стандартные OSM, чтобы подписи были кириллицей. Язык выбирается
- * по центру тайла (`core/russia.ts`). Оба источника требуют атрибуции, поэтому
+ * Тайлы — Carto Voyager: одна карта, подписи на двух языках — местное
+ * название и английский вариант под ним. Требует атрибуции, поэтому
  * кешировать тайлы в Service Worker мы не стали.
  */
 
@@ -15,16 +14,21 @@ import type { LatLon } from "../core/geo";
 import { normalizeAz } from "../core/geo";
 import { getLocale, peakName, t } from "../core/i18n";
 import type { SearchHit } from "../core/search";
-import { isInRussia } from "../core/russia";
 import { ICON_CLOSE, ICON_HEADING, ICON_LOCATE, ICON_SEARCH } from "./icons";
 import { pushOverlay } from "./overlay-history";
 
 const TILE_PX = 256;
 const MIN_ZOOM = 2;
 const MAX_ZOOM = 17;
-const MAP_TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile";
-/** Стандартные OSM: для России подписи кириллицей */
-const RUS_TILES = "https://tile.openstreetmap.org";
+/** Поддомены Carto — по x+y, чтобы браузер качал тайлы параллельно */
+const CARTO_SUBS = ["a", "b", "c", "d"];
+const CARTO_BASE = "basemaps.cartocdn.com/rastertiles/voyager";
+
+/** Тайл Carto Voyager: местное название + английский вариант под ним */
+function cartoTileUrl(zoom: number, x: number, y: number): string {
+  const sub = CARTO_SUBS[(x + y) % CARTO_SUBS.length];
+  return `https://${sub}.${CARTO_BASE}/${zoom}/${x}/${y}.png`;
+}
 
 /** lon/lat → пиксели мира на зуме z (Web Mercator) */
 function project(pos: LatLon, zoom: number): { x: number; y: number } {
@@ -122,12 +126,7 @@ export function openMap(options: MapOptions): () => void {
         let img = tiles.get(key + `@${tx}`);
         if (!img) {
           img = document.createElement("img");
-          // Язык подписей по центру тайла: Россия — кириллица, остальное —
-          // английский. Тайл у границы может лечь в чужую страну — это ок.
-          const c = unproject((tx + 0.5) * TILE_PX, (ty + 0.5) * TILE_PX, zoom);
-          img.src = isInRussia(c.lon, c.lat)
-            ? `${RUS_TILES}/${zoom}/${wrapped}/${ty}.png`
-            : `${MAP_TILES}/${zoom}/${ty}/${wrapped}`;
+          img.src = cartoTileUrl(zoom, wrapped, ty);
           img.alt = "";
           img.loading = "eager";
           img.draggable = false;
@@ -459,10 +458,10 @@ export function openMap(options: MapOptions): () => void {
     "position:absolute;right:0;bottom:0;z-index:2;background:rgba(26,26,46,.8);" +
     "padding:2px 6px;font:11px system-ui,sans-serif;color:#cfd8dc";
   attribution.innerHTML =
-    '© <a href="https://www.esri.com/en-us/legal/copyright-trademarks" target="_blank" ' +
-    'rel="noreferrer" style="color:#4cc9f0">Esri</a>, HERE, Garmin · ' +
     '© <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
-    'rel="noreferrer" style="color:#4cc9f0">OpenStreetMap</a> contributors';
+    'rel="noreferrer" style="color:#4cc9f0">OpenStreetMap</a> contributors · ' +
+    '© <a href="https://carto.com/attributions" target="_blank" ' +
+    'rel="noreferrer" style="color:#4cc9f0">CARTO</a>';
   root.appendChild(attribution);
 
   const hint = document.createElement("div");

@@ -362,24 +362,17 @@ describe("направление взгляда на карте", () => {
   });
 });
 
-describe("язык подписей карты", () => {
+describe("подписи карты", () => {
   const tileSources = (): string[] => {
     const root = document.body.lastElementChild as HTMLElement;
     return Array.from(root.querySelectorAll("img")).map((i) => i.src);
   };
 
-  it("в России тайлы OSM — подписи кириллицей", () => {
-    // Москва — глубоко внутри страны, все окрестные тайлы российские
-    open({ origin: { lat: 55.75, lon: 37.6 } });
+  it("одна карта Carto с двуязычными подписями, независимо от страны", () => {
+    open({ origin: { lat: 55.75, lon: 37.6 } }); // Москва
     const srcs = tileSources();
     expect(srcs.length).toBeGreaterThan(0);
-    expect(srcs.every((s) => s.includes("tile.openstreetmap.org"))).toBe(true);
-  });
-
-  it("вне России тайлы Esri — подписи английским", () => {
-    open({ origin: { lat: 27.99, lon: 86.93 } }); // Кала-Патхар, Непал
-    const srcs = tileSources();
-    expect(srcs.length).toBeGreaterThan(0);
-    expect(srcs.every((s) => s.includes("arcgisonline.com"))).toBe(true);
+    expect(srcs.every((s) => s.includes("basemaps.cartocdn.com"))).toBe(true);
+    expect(srcs.every((s) => s.includes("/voyager/"))).toBe(true);
   });
 });
