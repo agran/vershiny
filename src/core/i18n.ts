@@ -46,6 +46,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     ru: 'Определяем положение по спутникам…',
     en: 'Getting your position from satellites…',
   },
+  gpsFailed: {
+    ru: 'Не удалось определить положение',
+    en: 'Could not determine your position',
+  },
   computing: { ru: 'Расчёт панорамы…', en: 'Computing panorama…' },
   noRegionData: {
     ru: 'Нет данных региона.\nЗапустите tools/dem-to-tiles и tools/peaks-to-json.',

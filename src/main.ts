@@ -5,7 +5,8 @@
 
 import { renderPanorama, silhouetteProfile, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
-import { toRad, wrapAngle, normalizeAz, isValidLatLon, type LatLon } from './core/geo';
+import { toRad, wrapAngle, normalizeAz, type LatLon } from './core/geo';
+import { getPosition } from './core/position';
 import { t, getLocale } from './core/i18n';
 import {
   downloadRegion,
@@ -544,19 +545,22 @@ async function main(): Promise<void> {
 
   const base = import.meta.env.BASE_URL;
 
-  // Позиция: GPS, fallback — Приют 11 (контрольная точка ROADMAP)
-  const origin = await getPosition();
+  // Позиция: ссылка → GPS → запасная точка (Приют 11, контрольная по ROADMAP)
+  const fix = await getPosition();
+  const origin = fix.pos;
   lastOrigin = origin;
 
   setStatus(t('loadingRegion'));
 
   // Авто-выбор региона по GPS (если пользователь не выбрал вручную).
+  // Только по настоящему положению: запасная точка выдумана, и менять по ней
+  // район — значит подсунуть человеку чужие вершины за его же выбор.
   // Реестр читаем в любом случае: он же копится в офлайн-кеш, а без него
   // потом не открыть список регионов без сети.
   {
     const { loadRegions, findRegionForPosition } = await import('./ui/download');
     const regions = await loadRegions();
-    if (!manualRegion) {
+    if (!manualRegion && fix.trusted) {
       const autoRegion = findRegionForPosition(origin, regions);
       if (autoRegion && autoRegion !== currentRegion) {
         currentRegion = autoRegion;
@@ -593,8 +597,10 @@ async function main(): Promise<void> {
   setStatus(t('computing'));
   // Через requestCompute, а не прямым postMessage: иначе стартовая точка —
   // единственная, для которой не проверялось соответствие региона, и плашка
-  // «вы в другом районе» появлялась только после первого перемещения
-  requestCompute(origin);
+  // «вы в другом районе» появлялась только после первого перемещения.
+  // По запасной точке район не предлагаем: сказать «Вы в районе X» человеку,
+  // которому просто не дали геолокацию, — это выдумка, а не подсказка
+  requestCompute(origin, fix.trusted);
 
   // Кнопки действий; main() повторяется при смене региона — создаём один раз
   if (!navUiReady) {
@@ -1052,10 +1058,17 @@ function setupNavPad(): void {
       'align-items:center;justify-content:center';
     if (d.gps) {
       btn.onclick = () => {
-        getPosition().then((pos) => {
+        void getPosition().then((fix) => {
+          // Отказ в геолокации не должен уносить человека на Приют 11:
+          // он нажал «к моему положению», а не «к контрольной точке»
+          if (!fix.trusted) {
+            setStatus(t('gpsFailed'));
+            setTimeout(() => setStatus(''), 4000);
+            return;
+          }
           heightOverride = null; // возврат на землю в точке GPS
           autoTiltPending = true;
-          requestCompute(pos);
+          requestCompute(fix.pos);
         });
       };
     } else {
@@ -1193,8 +1206,14 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   setTimeout(() => setStatus(''), 3000);
 }
 
-/** Пересчёт панорамы: единственная точка отправки задания воркеру */
-function requestCompute(origin: LatLon): void {
+/**
+ * Пересчёт панорамы: единственная точка отправки задания воркеру.
+ *
+ * @param checkRegion сверять ли район с положением. Ложь — только для
+ *   запасной точки при отказе в геолокации: предлагать по ней смену региона
+ *   значит выдавать выдумку за положение человека
+ */
+function requestCompute(origin: LatLon, checkRegion = true): void {
   lastOrigin = origin;
   activeComputeId = nextReqId++;
   worker.postMessage({
@@ -1207,7 +1226,7 @@ function requestCompute(origin: LatLon): void {
   setStatus(t('computing'));
   // Единая точка пересчёта — единственное место, где видно любое перемещение:
   // GPS, шаг навипадом, перелёт, перенос с карты
-  void checkRegionForPosition(origin);
+  if (checkRegion) void checkRegionForPosition(origin);
 }
 
 /** Реестр регионов: читается один раз, дальше из памяти (см. loadRegions) */
@@ -1519,44 +1538,6 @@ function isJson(res: Response): boolean {
   return (
     res.ok && (res.headers.get('content-type') ?? '').includes('application/json')
   );
-}
-
-function getPosition(): Promise<LatLon> {
-  return new Promise((resolve) => {
-    // Отладка/шаринг: ?lat=43.318&lon=42.458 (Приют 11).
-    // Диапазон проверяем: ?lat=999 иначе молча ломает весь ray-marching
-    const q = new URLSearchParams(location.search);
-    const qLat = Number(q.get('lat'));
-    const qLon = Number(q.get('lon'));
-    if (q.get('lat') && q.get('lon') && isValidLatLon({ lat: qLat, lon: qLon })) {
-      resolve({ lat: qLat, lon: qLon });
-      return;
-    }
-    // Приют 11 (4130 м) — сверено с Terrarium: отметка ~4134 м
-    const fallback: LatLon = { lat: 43.318, lon: 42.458 };
-    if (!('geolocation' in navigator)) {
-      resolve(fallback);
-      return;
-    }
-
-    // На смартфоне лучше не показывать горы до первого реального GPS-фикса:
-    // при мгновенном fallback на Эльбрус загрузка выглядит как «попался в
-    // чужой регион», хотя человек ещё ждёт определения своего положения.
-    // Реальный фикс пускает приложение дальше, а после потери сигнала/отказа
-    // в разрешении остаётся запасной вариант только как явная отладочная точка.
-    const timer = setTimeout(() => resolve(fallback), 30_000);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        clearTimeout(timer);
-        resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-      },
-      () => {
-        clearTimeout(timer);
-        resolve(fallback);
-      },
-      { enableHighAccuracy: true, timeout: 30_000 },
-    );
-  });
 }
 
 main();
