@@ -5,8 +5,8 @@
  * растровый слой, перетаскивание, зум и маркер — Leaflet ради этого тянуть
  * не хочется, а тайловая математика в проекте уже есть (terrarium.ts).
  *
- * Тайлы — Carto light_all: одна карта, подписи на двух языках — местное
- * название и английский вариант под ним. Требует атрибуции, поэтому
+ * Тайлы — OpenTopoMap: рельеф, вершины с высотами и тропы; подписи на
+ * местном языке (в России — кириллица). Требует атрибуции, поэтому
  * кешировать тайлы в Service Worker мы не стали.
  */
 
@@ -20,14 +20,14 @@ import { pushOverlay } from "./overlay-history";
 const TILE_PX = 256;
 const MIN_ZOOM = 2;
 const MAX_ZOOM = 17;
-/** Поддомены Carto — по x+y, чтобы браузер качал тайлы параллельно */
-const CARTO_SUBS = ["a", "b", "c", "d"];
-const CARTO_BASE = "basemaps.cartocdn.com/rastertiles/light_all";
+/** Поддомены OpenTopoMap — по x+y, чтобы браузер качал тайлы параллельно */
+const TOPO_SUBS = ["a", "b", "c"];
+const TOPO_BASE = "tile.opentopomap.org";
 
-/** Тайл Carto light_all: местное название + английский вариант под ним */
-function cartoTileUrl(zoom: number, x: number, y: number): string {
-  const sub = CARTO_SUBS[(x + y) % CARTO_SUBS.length];
-  return `https://${sub}.${CARTO_BASE}/${zoom}/${x}/${y}.png`;
+/** Тайл OpenTopoMap: рельеф, вершины с высотами, тропы */
+function topoTileUrl(zoom: number, x: number, y: number): string {
+  const sub = TOPO_SUBS[(x + y) % TOPO_SUBS.length];
+  return `https://${sub}.${TOPO_BASE}/${zoom}/${x}/${y}.png`;
 }
 
 /** lon/lat → пиксели мира на зуме z (Web Mercator) */
@@ -126,7 +126,7 @@ export function openMap(options: MapOptions): () => void {
         let img = tiles.get(key + `@${tx}`);
         if (!img) {
           img = document.createElement("img");
-          img.src = cartoTileUrl(zoom, wrapped, ty);
+          img.src = topoTileUrl(zoom, wrapped, ty);
           img.alt = "";
           img.loading = "eager";
           img.draggable = false;
@@ -459,9 +459,9 @@ export function openMap(options: MapOptions): () => void {
     "padding:2px 6px;font:11px system-ui,sans-serif;color:#cfd8dc";
   attribution.innerHTML =
     '© <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
-    'rel="noreferrer" style="color:#4cc9f0">OpenStreetMap</a> contributors · ' +
-    '© <a href="https://carto.com/attributions" target="_blank" ' +
-    'rel="noreferrer" style="color:#4cc9f0">CARTO</a>';
+    'rel="noreferrer" style="color:#4cc9f0">OpenStreetMap</a> contributors, SRTM · ' +
+    '© <a href="https://opentopomap.org/about" target="_blank" ' +
+    'rel="noreferrer" style="color:#4cc9f0">OpenTopoMap</a> (CC-BY-SA)';
   root.appendChild(attribution);
 
   const hint = document.createElement("div");

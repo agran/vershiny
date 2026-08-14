@@ -368,11 +368,10 @@ describe("подписи карты", () => {
     return Array.from(root.querySelectorAll("img")).map((i) => i.src);
   };
 
-  it("одна карта Carto с двуязычными подписями, независимо от страны", () => {
+  it("одна карта OpenTopoMap с рельефом и вершинами", () => {
     open({ origin: { lat: 55.75, lon: 37.6 } }); // Москва
     const srcs = tileSources();
     expect(srcs.length).toBeGreaterThan(0);
-    expect(srcs.every((s) => s.includes("basemaps.cartocdn.com"))).toBe(true);
-    expect(srcs.every((s) => s.includes("/light_all/"))).toBe(true);
+    expect(srcs.every((s) => s.includes("opentopomap.org"))).toBe(true);
   });
 });
