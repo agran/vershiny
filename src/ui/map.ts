@@ -5,8 +5,9 @@
  * растровый слой, перетаскивание, зум и маркер — Leaflet ради этого тянуть
  * не хочется, а тайловая математика в проекте уже есть (terrarium.ts).
  *
- * Тайлы — стандартные OSM: политика использования требует атрибуции и
- * умеренных объёмов, поэтому кешировать их в Service Worker мы не стали.
+ * Тайлы — Esri World Topographic: подписи на английском (местные письменности —
+ * деванагари, тибетская, иероглифы — не читаются), стиль рельефный. Требует
+ * атрибуции, поэтому кешировать тайлы в Service Worker мы не стали.
  */
 
 import type { LatLon } from "../core/geo";
@@ -19,7 +20,7 @@ import { pushOverlay } from "./overlay-history";
 const TILE_PX = 256;
 const MIN_ZOOM = 2;
 const MAX_ZOOM = 17;
-const OSM_TILES = "https://tile.openstreetmap.org";
+const MAP_TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile";
 
 /** lon/lat → пиксели мира на зуме z (Web Mercator) */
 function project(pos: LatLon, zoom: number): { x: number; y: number } {
@@ -117,7 +118,7 @@ export function openMap(options: MapOptions): () => void {
         let img = tiles.get(key + `@${tx}`);
         if (!img) {
           img = document.createElement("img");
-          img.src = `${OSM_TILES}/${zoom}/${wrapped}/${ty}.png`;
+          img.src = `${MAP_TILES}/${zoom}/${ty}/${wrapped}`;
           img.alt = "";
           img.loading = "eager";
           img.draggable = false;
@@ -449,8 +450,10 @@ export function openMap(options: MapOptions): () => void {
     "position:absolute;right:0;bottom:0;z-index:2;background:rgba(26,26,46,.8);" +
     "padding:2px 6px;font:11px system-ui,sans-serif;color:#cfd8dc";
   attribution.innerHTML =
+    '© <a href="https://www.esri.com/en-us/legal/copyright-trademarks" target="_blank" ' +
+    'rel="noreferrer" style="color:#4cc9f0">Esri</a>, HERE, Garmin · ' +
     '© <a href="https://www.openstreetmap.org/copyright" target="_blank" ' +
-    'rel="noreferrer" style="color:#4cc9f0">OpenStreetMap</a>';
+    'rel="noreferrer" style="color:#4cc9f0">OpenStreetMap</a> contributors';
   root.appendChild(attribution);
 
   const hint = document.createElement("div");
