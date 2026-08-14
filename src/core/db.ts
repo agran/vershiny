@@ -173,16 +173,6 @@ export async function getTerrariumTile(key: string): Promise<Uint8Array | undefi
   return get<Uint8Array>(STORE_TERRARIUM, key);
 }
 
-/** Ключи Terrarium-тайлов, уже лежащих офлайн (для прогресса загрузки) */
-export async function getTerrariumKeys(): Promise<Set<string>> {
-  return new Set(await keys(STORE_TERRARIUM));
-}
-
-/** Ключи тайлов пирамиды, уже лежащих офлайн */
-export async function getDemTileKeys(): Promise<Set<string>> {
-  return new Set(await keys(STORE_TILES));
-}
-
 /**
  * Кеш реестра регионов (regions.json). Без него офлайн не открыть список
  * регионов и не сменить активный — даже тот, что уже лежит в хранилище.

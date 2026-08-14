@@ -99,9 +99,10 @@ let dem: DemSource | null = null;
  * `inPatch()` всегда ложен, и первая (самая заметная) панорама считалась по
  * грубому Terrarium вместо выбранного детального патча.
  *
- * Поэтому храним промис инициализации и ждём его в начале расчётов. `dem`
- * подменяется только после успешного `init()`: идущий расчёт продолжает
- * работать со старым источником и его кешем тайлов, а не с полупустым новым.
+ * Поэтому храним промис инициализации и ждём его в начале расчётов. Промис
+ * никогда не отклоняется: недоступный патч — это работа по Terrarium, а не
+ * отказ всему воркеру. Идущие расчёты держат свою ссылку на источник
+ * (см. `compute`), поэтому подмена `dem` их не задевает.
  */
 let initPromise: Promise<void> = Promise.resolve();
 
@@ -109,22 +110,30 @@ let initPromise: Promise<void> = Promise.resolve();
 const MAX_DIST_M = 200_000;
 
 async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): Promise<ResultMessage> {
-  if (!dem) throw new Error('Worker не инициализирован (init)');
+  const source = dem;
+  if (!source) throw new Error('Worker не инициализирован (init)');
   const t0 = performance.now();
 
   // Высота наблюдателя: max по окрестности 3×3 (не ниже поверхности)
-  const observerH = heightOverride ?? (await dem.observerHeightSafe(origin));
+  const observerH = heightOverride ?? (await source.observerHeightSafe(origin));
 
-  // Предзагрузка тайлов веером лучей (шаг 5° — достаточно для покрытия)
-  const prefetchTasks: Promise<void>[] = [];
+  // Предзагрузка тайлов веером лучей (шаг 5° — достаточно для покрытия).
+  // Ближняя зона веером не покрывается: на первых километрах все лучи лежат
+  // в одном-двух тайлах, а сетка предзагрузки (5°, 8 км) туда просто не
+  // попадает — до двух третей ближних выборок приходились на незагруженные
+  // тайлы, и передний план молча считался по грубой пирамиде вместо Terrarium
+  const prefetchTasks: Promise<void>[] = [source.prefetchNear(origin)];
   for (let az = 0; az < 2 * Math.PI; az += (5 * Math.PI) / 180) {
     prefetchTasks.push(
-      dem.prefetchAlongRay(origin, az, MAX_DIST_M, 8_000, destination),
+      source.prefetchAlongRay(origin, az, MAX_DIST_M, 8_000, destination),
     );
   }
   await Promise.all(prefetchTasks);
 
-  const sample = (pos: LatLon, distM: number): number => dem!.sample(pos, distM);
+  // Именно `source`, а не живая переменная `dem`: смена региона могла прийти
+  // прямо посреди расчёта, и тогда выборка пошла бы из нового источника с
+  // пустым кешем тайлов — по уже предзагруженной панораме, но без данных
+  const sample = (pos: LatLon, distM: number): number => source.sample(pos, distM);
 
   const layered = computeLayeredHorizon(origin, observerH, sample);
   const visible = filterVisiblePeaks(origin, observerH, peaks, sample, layered);
@@ -154,7 +163,8 @@ async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): 
  * видна, а из таких — самый низкий (открытая долина, гора возвышается целиком).
  */
 async function pickViewpoint(peak: Peak, distM: number): Promise<ViewpointResult> {
-  if (!dem) throw new Error('Worker не инициализирован (init)');
+  const source = dem;
+  if (!source) throw new Error('Worker не инициализирован (init)');
   const summit: LatLon = { lat: peak.lat, lon: peak.lon };
   const candidates: { origin: LatLon; observerH: number; visible: boolean }[] = [];
 
@@ -163,9 +173,9 @@ async function pickViewpoint(peak: Peak, distM: number): Promise<ViewpointResult
     const origin = destination(summit, az, distM);
     const toPeak = azimuthRad(origin, summit);
     try {
-      await dem.prefetchAlongRay(origin, toPeak, distM * 1.2, 200, destination);
-      const observerH = await dem.observerHeightSafe(origin);
-      const sample = (pos: LatLon, d: number): number => dem!.sample(pos, d);
+      await source.prefetchAlongRay(origin, toPeak, distM * 1.2, 200, destination);
+      const observerH = await source.observerHeightSafe(origin);
+      const sample = (pos: LatLon, d: number): number => source.sample(pos, d);
       const check = checkPeakVisibility(origin, observerH, peak, sample, Infinity);
       candidates.push({ origin, observerH, visible: check?.visibility === 'visible' });
     } catch {
@@ -194,7 +204,16 @@ self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
     if (msg.type === 'init') {
       initPromise = (async () => {
         const next = new DemSource({ patchBaseUrl: msg.patchBaseUrl });
-        await next.init();
+        try {
+          await next.init();
+        } catch (err) {
+          // Индекс патча не открылся (обрыв сети, битый деплой Pages). Это не
+          // повод отказывать в панораме: DemSource без патча считает по
+          // Terrarium. Раньше отклонённый промис оставался в переменной, и
+          // каждый следующий расчёт падал на нём же — до перезагрузки
+          // страницы, даже когда сеть возвращалась
+          console.warn('DEM-патч недоступен, работаем по Terrarium:', err);
+        }
         dem = next;
       })();
       await initPromise;

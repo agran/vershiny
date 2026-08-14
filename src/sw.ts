@@ -130,8 +130,13 @@ self.addEventListener('fetch', (ev) => {
     ev.respondWith(networkFirst(ev.request, DATA_CACHE, ev));
   } else if (ev.request.mode === 'navigate') {
     // Оболочка: сеть впереди, кеш — офлайн-запас. Так свежий index.html
-    // с новыми хешами чанков приезжает сразу, а не через раз
-    ev.respondWith(networkFirst(ev.request, APP_CACHE, ev));
+    // с новыми хешами чанков приезжает сразу, а не через раз.
+    // Запасной адрес обязателен: ссылкой делятся с координатами
+    // (?lat=43.318&lon=42.458), а в кеше оболочка лежит без параметров —
+    // офлайн такая ссылка упиралась в 503 вместо панорамы
+    ev.respondWith(
+      networkFirst(ev.request, APP_CACHE, ev, new URL('./', self.location.href).href),
+    );
   } else if (url.includes('/assets/') || url.includes('/icons/')) {
     ev.respondWith(staleWhileRevalidate(ev.request, APP_CACHE, ev));
   }
@@ -169,8 +174,12 @@ async function networkFirst(
   request: Request,
   cacheName: string,
   ev: FetchEvent,
+  fallbackUrl?: string,
 ): Promise<Response> {
   const cache = await caches.open(cacheName);
+  const offline = async (): Promise<Response | undefined> =>
+    (await cache.match(request)) ??
+    (fallbackUrl ? await cache.match(fallbackUrl) : undefined);
   try {
     const response = await fetch(request);
     if (response.ok) {
@@ -180,12 +189,11 @@ async function networkFirst(
     // Сервер ответил, но плохо (битый деплой Pages, 404 на месте данных).
     // Кеш проверялся только в catch — и приложение показывало ошибку, имея
     // рядом рабочую копию regions.json или самой оболочки
-    const cached = await cache.match(request);
-    return cached ?? response;
+    return (await offline()) ?? response;
   } catch {
-    const cached = await cache.match(request);
-    if (cached) return cached;
-    return new Response('Offline', { status: 503, statusText: 'Offline' });
+    return (
+      (await offline()) ?? new Response('Offline', { status: 503, statusText: 'Offline' })
+    );
   }
 }
 

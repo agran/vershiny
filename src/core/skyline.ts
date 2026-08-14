@@ -300,26 +300,3 @@ function medianResidualAcrossShifts(
   values.sort((a, b) => a - b);
   return values[values.length >> 1];
 }
-
-/**
- * Огибающая силуэта по корзинам дистанций: для каждого луча — самая высокая
- * линия рельефа из всех слоёв.
- *
- * Автокалибровке нельзя подавать ближний слой (0–5 км): в горах смотрят на
- * хребет за десятки километров, и ближний слой почти целиком −Infinity —
- * сравнивать кадр не с чем. Человек в кадре видит именно верхнюю линию, её и
- * надо совмещать.
- */
-export function horizonEnvelope(profiles: (Float32Array | undefined)[]): Float32Array {
-  let length = 0;
-  for (const p of profiles) if (p && p.length > length) length = p.length;
-  const out = new Float32Array(length).fill(-Infinity);
-  for (const p of profiles) {
-    if (!p || p.length !== length) continue;
-    for (let i = 0; i < length; i++) {
-      const v = p[i];
-      if (Number.isFinite(v) && v > out[i]) out[i] = v;
-    }
-  }
-  return out;
-}

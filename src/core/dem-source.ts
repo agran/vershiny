@@ -6,7 +6,7 @@
 
 import type { LatLon } from './geo';
 import { DemSampler } from './dem';
-import { TerrariumSampler, zoomForDistance } from './terrarium';
+import { TerrariumSampler, ZOOM_RULES, zoomForDistance } from './terrarium';
 
 export interface DemSourceOptions {
   /** URL локального патча (tiles/{region} или tiles/global); undefined — нет */
@@ -103,6 +103,22 @@ export class DemSource {
     await Promise.all(tasks);
   }
 
+  /**
+   * Ближняя зона вокруг наблюдателя: окрестность тайлов на каждом зуме, где
+   * они мельче шага предзагрузки по лучу.
+   *
+   * Только Terrarium: у пирамиды тайл 0.5° (десятки километров), и ближняя
+   * зона попадает в него целиком — замер промахов дал ровный ноль.
+   */
+  async prefetchNear(origin: LatLon): Promise<void> {
+    const zooms = new Set(
+      ZOOM_RULES.filter((rule) => Number.isFinite(rule.upToDistM)).map((r) => r.zoom),
+    );
+    await Promise.all(
+      [...zooms].map((zoom) => this.terrarium.prefetchAround(origin, zoom)),
+    );
+  }
+
   /** Высота наблюдателя: точнейший источник, с фолбэком на второй */
   async observerHeight(pos: LatLon): Promise<number> {
     const patchAvailable = this.patch !== null && this.inPatch(pos);
@@ -126,6 +142,9 @@ export class DemSource {
    * применяется только к своим детальным патчам — на пирамиде с ячейкой
    * 217 м окрестность 3×3 охватывает 650 м и в узкой долине завышает высоту
    * на сотни метров (Алтай: 2976 м вместо 2660 м).
+   *
+   * Возвращается высота земли: рост глаз добавляет ray-marching
+   * (`observerElevationM`), и делать это дважды незачем.
    */
   async observerHeightSafe(pos: LatLon): Promise<number> {
     const patchAvailable = this.patch !== null && this.inPatch(pos);
@@ -133,7 +152,7 @@ export class DemSource {
       return this.patch!.observerHeightSafe(pos);
     }
     try {
-      return (await this.terrarium.heightAt(pos)) + 2; // +2 м рост глаз
+      return await this.terrarium.heightAt(pos);
     } catch (err) {
       if (!patchAvailable) throw err;
       return this.patch!.observerHeightSafe(pos); // офлайн: только пирамида

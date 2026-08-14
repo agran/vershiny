@@ -72,8 +72,9 @@ function runSw(existingCaches: string[], opts: SwOptions = {}): SwEnv {
         return true;
       },
       open: async () => ({
-        match: async (req: { url: string }) => {
-          const body = opts.cached?.[req.url];
+        // Ключом может быть и Request, и строка (запасной адрес оболочки)
+        match: async (req: { url: string } | string) => {
+          const body = opts.cached?.[typeof req === 'string' ? req : req.url];
           return body === undefined ? undefined : new Response(body);
         },
         put: async () => {},
@@ -180,6 +181,33 @@ describe('Service Worker', () => {
     const res = await responded!;
     expect(res.status).toBe(200);
     expect(await res.text()).toBe('{"caucasus-west":{}}');
+  });
+
+  it('офлайн открывает ссылку с координатами, а не 503', async () => {
+    // Ссылкой на место делятся вместе с параметрами (?lat=&lon=), а в кеше
+    // оболочка лежит без них: `cache.match` их учитывает, и офлайн такая
+    // ссылка упиралась в «Offline» вместо панорамы
+    const env = runSw([], {
+      fetchImpl: async () => {
+        throw new TypeError('Failed to fetch');
+      },
+      cached: { 'https://example.org/vershiny/': '<!doctype html>панорама' },
+    });
+    let responded: Promise<Response> | null = null;
+    env.handlers.fetch({
+      request: {
+        url: 'https://example.org/vershiny/?lat=43.318&lon=42.458',
+        method: 'GET',
+        mode: 'navigate',
+      },
+      waitUntil: () => {},
+      respondWith: (p: Promise<Response>) => {
+        responded = p;
+      },
+    });
+    const res = await responded!;
+    expect(res.status).toBe(200);
+    expect(await res.text()).toContain('панорама');
   });
 
   it('не трогает не-GET запросы', () => {

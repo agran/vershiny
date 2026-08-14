@@ -4,7 +4,12 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildRidgeSegments, MAX_RIDGE_SLOPE } from '../src/ui/panorama';
+import {
+  buildRidgeSegments,
+  silhouetteProfile,
+  MAX_RIDGE_SLOPE,
+  type PanoramaState,
+} from '../src/ui/panorama';
 
 const STEP_RAD = (0.1 * Math.PI) / 180; // 3600 лучей
 const WIDTH = 1000;
@@ -54,5 +59,49 @@ describe('силуэт: разбиение на сегменты', () => {
     expect(segments).toHaveLength(2);
     expect(segments[0]).toHaveLength(2);
     expect(segments[1]).toHaveLength(2);
+  });
+});
+
+describe('видимая линия силуэта', () => {
+  const state = (extra: Partial<PanoramaState>): PanoramaState => ({
+    horizon: Float32Array.from([-Infinity, -Infinity, -Infinity]),
+    stepRad: STEP_RAD,
+    peaks: [],
+    ...extra,
+  });
+
+  it('берёт по каждому лучу самую высокую линию из гребней и слоёв', () => {
+    const profile = silhouetteProfile(
+      state({
+        crests: [Float32Array.from([0.3, 0.05, -Infinity])],
+        layers: [Float32Array.from([-Infinity, 0.1, -Infinity])],
+      }),
+    );
+
+    expect(profile[0]).toBeCloseTo(0.3);
+    expect(profile[1]).toBeCloseTo(0.1);
+    // Луч, где рельефа нет ни в одном слое, так и остаётся дырой: подменить
+    // его нулём значит поставить силуэт на линию горизонта
+    expect(profile[2]).toBe(-Infinity);
+  });
+
+  it('не спотыкается о профили другой длины', () => {
+    // Гребни считаются по тем же 3600 лучам, но подстраховка нужна: чужой
+    // длины массив молча сместил бы весь силуэт по азимуту
+    const profile = silhouetteProfile(
+      state({ crests: [Float32Array.from([0.2, 0.4])], layers: [] }),
+    );
+    expect(profile.length).toBe(3);
+    expect(profile[0]).toBe(-Infinity);
+  });
+
+  it('обходится без гребней и слоёв — остаётся ближний горизонт', () => {
+    const profile = silhouetteProfile({
+      horizon: Float32Array.from([0.02, -Infinity, 0.07]),
+      stepRad: STEP_RAD,
+      peaks: [],
+    });
+    expect(profile[0]).toBeCloseTo(0.02);
+    expect(profile[2]).toBeCloseTo(0.07);
   });
 });

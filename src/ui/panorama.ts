@@ -294,6 +294,36 @@ interface PlacedLabel {
   extra: number;
 }
 
+/**
+ * Видимая линия силуэта по лучам: максимум по всем гребням и слоям.
+ *
+ * Раньше геометрия подписей смотрела в `state.horizon` — а это ближняя
+ * корзина 0–5 км, которая в горах почти целиком −Infinity (за неё отвечает
+ * трава под ногами). Пустые лучи подменялись нулём, то есть линией горизонта:
+ * выноска скрытой вершины обрывалась в воздухе, а подпись «поднималась над
+ * склоном», которого в этом расчёте не было. Человек же видит в кадре именно
+ * верхнюю линию — по ней и работаем.
+ *
+ * Луч без рельефа остаётся −Infinity: подменять его нулём нельзя (см. выше),
+ * потребители переводят его в «силуэт бесконечно низко».
+ */
+export function silhouetteProfile(state: PanoramaState): Float32Array {
+  const profiles: (Float32Array | undefined)[] = [
+    ...(state.crests ?? []),
+    ...(state.layers ?? []),
+    state.horizon,
+  ];
+  const out = new Float32Array(state.horizon.length).fill(-Infinity);
+  for (const prof of profiles) {
+    if (!prof || prof.length !== out.length) continue;
+    for (let i = 0; i < out.length; i++) {
+      const v = prof[i];
+      if (Number.isFinite(v) && v > out[i]) out[i] = v;
+    }
+  }
+  return out;
+}
+
 function drawLabels(
   ctx: CanvasRenderingContext2D,
   peaks: VisiblePeak[],
@@ -308,6 +338,10 @@ function drawLabels(
   // Обратная проекция экрана в азимут — для обрыва выносок о силуэт
   const xToAz = (x: number): number =>
     view.centerAzRad + ((x - width / 2) / width) * view.fovRad;
+  // Видимая линия силуэта: считается один раз на кадр, её спрашивают
+  // и подъём подписи, и обрыв выноски, и запасное место маркера
+  const silhouette = silhouetteProfile(state);
+  const stepRad = state.stepRad;
 
   // Все подписи под одним углом: так они не пересекают друг друга,
   // их помещается больше, а выноска не режет соседние надписи.
@@ -344,7 +378,7 @@ function drawLabels(
         const x = ax + ux * w * s;
         const y = ay + uy * w * s;
         if (x < 0 || x > width) continue;
-        if (y > horizonAtAzimuth(state, xToAz(x), elevToY) - CLEAR) {
+        if (y > horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY) - CLEAR) {
           clear = false;
           break;
         }
@@ -356,7 +390,7 @@ function drawLabels(
 
   /** Попытка занять место под подпись. false — не поместилась */
   const tryPlace = (peak: VisiblePeak): boolean => {
-    const marker = findPeakMarkerPosition(peak, state, azToX, elevToY);
+    const marker = findPeakMarkerPosition(peak, state, silhouette, azToX, elevToY);
     if (!marker) return false;
     const { x: mx, y: my } = marker;
     const hidden = peak.visibility === 'hidden';
@@ -416,7 +450,7 @@ function drawLabels(
     // Скрытая вершина: выноска обрывается о склон, маркера вершины нет
     const end =
       p.peak.visibility === 'hidden'
-        ? clipToSilhouette(p.ax, p.ay, p.mx, p.my, state, xToAz, elevToY)
+        ? clipToSilhouette(p.ax, p.ay, p.mx, p.my, silhouette, stepRad, xToAz, elevToY)
         : { x: p.mx, y: p.my };
     drawPeakAnchor(ctx, end.x, end.y, p.ax, p.ay, p.peak.visibility, uiScale);
     drawRotatedLabel(ctx, p.ax, p.ay, theta, text, p.peak.visibility, uiScale);
@@ -496,21 +530,30 @@ function drawPeakAnchor(
   }
 }
 
-/** Высота силуэта на заданном азимуте (интерполяция между лучами) */
+/**
+ * Высота силуэта на заданном азимуте в пикселях (интерполяция между лучами).
+ * `+Infinity` — рельефа на этом азимуте нет вовсе: силуэт «бесконечно низко»,
+ * и загораживать он ничего не может.
+ */
 function horizonAtAzimuth(
-  state: PanoramaState,
+  silhouette: Float32Array,
+  stepRad: number,
   azRad: number,
   elevToY: (elev: number) => number,
 ): number {
-  const { horizon, stepRad } = state;
   // Азимут приходит и отрицательным (обратная проекция экрана) — нормализуем,
   // иначе индекс уходит в минус и высота силуэта становится NaN
   const idx = azRad / stepRad;
-  const i0 = ((Math.floor(idx) % horizon.length) + horizon.length) % horizon.length;
-  const i1 = (i0 + 1) % horizon.length;
+  const i0 = ((Math.floor(idx) % silhouette.length) + silhouette.length) % silhouette.length;
+  const i1 = (i0 + 1) % silhouette.length;
   const frac = idx - Math.floor(idx);
-  const a0 = horizon[i0] === -Infinity ? 0 : horizon[i0];
-  const a1 = horizon[i1] === -Infinity ? 0 : horizon[i1];
+  const a0 = silhouette[i0];
+  const a1 = silhouette[i1];
+  // Дырявый луч не «опускает» силуэт к нулю: берём соседний, а если данных
+  // нет вовсе — сообщаем, что рельефа здесь не существует
+  if (!Number.isFinite(a0) && !Number.isFinite(a1)) return Infinity;
+  if (!Number.isFinite(a0)) return elevToY(a1);
+  if (!Number.isFinite(a1)) return elevToY(a0);
   return elevToY(a0 + (a1 - a0) * frac);
 }
 
@@ -524,7 +567,8 @@ function clipToSilhouette(
   ay: number,
   mx: number,
   my: number,
-  state: PanoramaState,
+  silhouette: Float32Array,
+  stepRad: number,
   xToAz: (x: number) => number,
   elevToY: (elev: number) => number,
 ): { x: number; y: number } {
@@ -535,7 +579,7 @@ function clipToSilhouette(
     const x = ax + (mx - ax) * t;
     const y = ay + (my - ay) * t;
     // y растёт вниз: точка ниже линии силуэта — уже за склоном
-    if (y > horizonAtAzimuth(state, xToAz(x), elevToY)) break;
+    if (y > horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY)) break;
     last = { x, y };
   }
   return last;
@@ -548,6 +592,7 @@ function clipToSilhouette(
 function findPeakMarkerPosition(
   peak: VisiblePeak,
   state: PanoramaState,
+  silhouette: Float32Array,
   azToX: (az: number) => number,
   elevToY: (elev: number) => number,
 ): { x: number; y: number } | null {
@@ -558,9 +603,15 @@ function findPeakMarkerPosition(
     return { x: azToX(peak.azimuthRad), y: elevToY(peak.elevationRad) };
   }
 
+  // Запасное место маркера: линия силуэта на азимуте вершины. Рельефа на
+  // азимуте может не быть вовсе — тогда маркеру взяться неоткуда
+  const onSilhouette = (): { x: number; y: number } | null => {
+    const y = horizonAtAzimuth(silhouette, state.stepRad, peak.azimuthRad, elevToY);
+    return Number.isFinite(y) ? { x: azToX(peak.azimuthRad), y } : null;
+  };
+
   if (!state.layers || !state.fronts) {
-    // Fallback: силуэт на азимуте
-    return { x: azToX(peak.azimuthRad), y: horizonAtAzimuth(state, peak.azimuthRad, elevToY) };
+    return onSilhouette();
   }
 
   // Окно азимутов: ширина зависит от дистанции (ближние горы шире)
@@ -602,8 +653,8 @@ function findPeakMarkerPosition(
     return { x: azToX(best.az), y: elevToY(best.elev) };
   }
 
-  // Не нашли фронт — fallback: силуэт на азимуте
-  return { x: azToX(peak.azimuthRad), y: horizonAtAzimuth(state, peak.azimuthRad, elevToY) };
+  // Не нашли фронт — запасной вариант: линия силуэта на азимуте
+  return onSilhouette();
 }
 
 function cardinal(deg: number): string {

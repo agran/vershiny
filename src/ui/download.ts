@@ -95,7 +95,12 @@ function detailTileKeys(center: LatLon, radiusM: number): string[] {
     const y0 = Math.floor(tileY(north));
     const y1 = Math.ceil(tileY(south));
     const x0 = Math.floor(((west + 180) / 360) * n);
-    const x1 = Math.ceil(((east + 180) / 360) * n);
+    let x1 = Math.ceil(((east + 180) / 360) * n);
+    // Круг через антимеридиан: восточный край оказывается «левее» западного.
+    // Разворачиваем диапазон за край мира — ключи ниже всё равно заворачиваются.
+    // Без этого цикл не выполнялся бы ни разу, и Врангель скачался бы вовсе
+    // без детальной зоны, отчитавшись об успехе
+    if (x1 <= x0) x1 += n;
     for (let x = x0; x < x1; x++) {
       for (let y = y0; y < y1; y++) {
         // Тайлы за границей мира по долготе заворачиваются, по широте — нет
@@ -125,14 +130,23 @@ export async function estimateRegionBytes(
   );
 }
 
-/** Общий сэмплер пирамиды: index.json (54 КБ) грузится один раз на страницу */
+/**
+ * Общий сэмплер пирамиды: index.json (54 КБ) грузится один раз на страницу.
+ *
+ * При неудаче память сбрасывается: отклонённый промис, оставшийся в
+ * переменной, ломал бы и оценку размеров, и саму загрузку регионов до
+ * перезагрузки страницы — а сеть в горах появляется и пропадает.
+ */
 let pyramid: Promise<DemSampler> | null = null;
 function sharedPyramid(): Promise<DemSampler> {
   pyramid ??= (async () => {
     const dem = new DemSampler({ baseUrl: GLOBAL_DEM_URL });
     await dem.loadIndex();
     return dem;
-  })();
+  })().catch((err) => {
+    pyramid = null;
+    throw err;
+  });
   return pyramid;
 }
 
@@ -187,12 +201,13 @@ export async function downloadRegion(
     await Promise.all(
       batch.map(async (key) => {
         const [z, x, y] = key.split('/').map(Number);
-        try {
-          await sampler.loadTile(z, x, y);
-          detailOk++;
-        } catch {
-          // Дыра в покрытии Terrarium не должна ронять всю загрузку
-        }
+        // Именно saveTileOffline: loadTile молча превращает в null и обрыв
+        // сети, и 503 офлайнового Service Worker'а, поэтому счётчик успехов
+        // по нему всегда сходился — регион «скачивался», не сохранив ничего
+        const status = await sampler.saveTileOffline(z, x, y);
+        // Дыра в покрытии Terrarium (океан, полярная шапка) — не отказ:
+        // требовать её невозможно, а упереться в неё значит не дать скачать
+        if (status !== 'failed') detailOk++;
       }),
     );
     done += batch.length;

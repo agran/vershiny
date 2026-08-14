@@ -9,7 +9,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   extractSkyline,
-  horizonEnvelope,
   matchSkyline,
   MIN_CONFIDENCE,
   type SkylineMatchOptions,
@@ -230,25 +229,5 @@ describe('совмещение кадра с рельефом', () => {
 
     expect(match.confidence).toBe(0);
     expect(match.azimuthRad).toBe(0);
-  });
-});
-
-describe('огибающая силуэта', () => {
-  it('берёт по каждому лучу самый высокий слой', () => {
-    const near = Float32Array.from([-Infinity, 0.1, -Infinity]);
-    const far = Float32Array.from([0.3, 0.05, -Infinity]);
-    const env = horizonEnvelope([near, far]);
-
-    expect(env[0]).toBeCloseTo(0.3);
-    expect(env[1]).toBeCloseTo(0.1);
-    // Луч, где рельефа нет ни в одном слое, так и остаётся дырой
-    expect(env[2]).toBe(-Infinity);
-  });
-
-  it('не спотыкается о пустые и разной длины профили', () => {
-    const env = horizonEnvelope([undefined, new Float32Array(0), Float32Array.from([0.2, 0.4])]);
-    expect(env.length).toBe(2);
-    expect(env[0]).toBeCloseTo(0.2);
-    expect(env[1]).toBeCloseTo(0.4);
   });
 });

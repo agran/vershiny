@@ -5,7 +5,6 @@
 
 import { renderPanorama, type PanoramaState, type ViewState } from './panorama';
 import type { LatLon } from '../core/geo';
-import { toDeg } from '../core/geo';
 import { getLocale } from '../core/i18n';
 import { translitToLatin } from '../core/transliterate';
 
@@ -174,6 +173,3 @@ function slug(raw: string): string {
     .replace(/^-+|-+$/g, '')
     .slice(0, 40);
 }
-
-/** Для совместимости с i18n */
-void toDeg;

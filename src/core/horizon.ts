@@ -29,6 +29,9 @@ export interface HorizonOptions {
   observerElevationM?: number;
 }
 
+/** Насколько выше земли глаз наблюдателя (телефон в руках), м */
+export const OBSERVER_EYE_M = 1.7;
+
 /** Дистанционные корзины для слоёв (метры) */
 export const LAYER_BOUNDS = [0, 5_000, 15_000, 40_000, 100_000, 200_000] as const;
 export const LAYER_COUNT = LAYER_BOUNDS.length - 1;
@@ -123,7 +126,7 @@ export function computeHorizon(
   const stepRad = options.azimuthStepRad ?? (0.1 * Math.PI) / 180;
   const maxDist = options.maxDistM ?? 200_000;
   const minDist = options.minDistM ?? 100;
-  const hO = observerH + (options.observerElevationM ?? 1.7);
+  const hO = observerH + (options.observerElevationM ?? OBSERVER_EYE_M);
 
   const rayCount = Math.ceil(TWO_PI / stepRad);
   const angles = new Float32Array(rayCount).fill(-Infinity);
@@ -164,7 +167,7 @@ export function computeLayeredHorizon(
   const stepRad = options.azimuthStepRad ?? (0.1 * Math.PI) / 180;
   const maxDist = options.maxDistM ?? 200_000;
   const minDist = options.minDistM ?? 100;
-  const hO = observerH + (options.observerElevationM ?? 1.7);
+  const hO = observerH + (options.observerElevationM ?? OBSERVER_EYE_M);
 
   const rayCount = Math.ceil(TWO_PI / stepRad);
   const layers = Array.from({ length: LAYER_COUNT }, () => new Float32Array(rayCount).fill(-Infinity));
@@ -357,7 +360,7 @@ export function checkPeakVisibility(
   if (peak.ele === undefined) return null;
 
   const az = azimuthRad(origin, target);
-  const hO = observerH + 1.7;
+  const hO = observerH + OBSERVER_EYE_M;
 
   // Марш луча до пика: ищем максимальный угол рельефа строго до пика
   let maxAngle = -Infinity;

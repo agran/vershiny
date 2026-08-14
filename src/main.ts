@@ -3,7 +3,7 @@
  * рендер панорамы; поворот пальцем (fallback без сенсоров, ROADMAP 2.2).
  */
 
-import { renderPanorama, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
+import { renderPanorama, silhouetteProfile, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
 import { toRad, wrapAngle, normalizeAz, isValidLatLon, type LatLon } from './core/geo';
 import { t, getLocale } from './core/i18n';
@@ -208,10 +208,10 @@ canvas.addEventListener('pointerdown', (ev) => {
     // Playwright/синтетические события не имеют pointerId — пропускаем
   }
 
-  // Двойной тап = перемещение вперёд
+  // Двойной тап = перемещение вперёд, в сторону тапа
   const now = Date.now();
   if (now - lastTap < 300) {
-    moveForward();
+    moveForward(ev.clientX);
     lastTap = 0;
   } else {
     lastTap = now;
@@ -269,10 +269,24 @@ canvas.addEventListener('pointermove', (ev) => {
 canvas.addEventListener('pointerup', () => (dragging = false));
 canvas.addEventListener('contextmenu', (ev) => ev.preventDefault()); // правый клик = перемещение
 
-/** Перемещение вперёд по азимуту взгляда (двойной тап) */
-function moveForward(): void {
+/**
+ * Перемещение вперёд (двойной тап).
+ *
+ * Азимут берётся из точки касания, а не из центра кадра: на телефоне навипада
+ * нет вовсе, и весь способ ходить по склону — тапнуть туда, куда идёшь.
+ * Раньше шаг всегда шёл по направлению взгляда, то есть по компасу, куда бы
+ * человек ни ткнул.
+ *
+ * @param screenX точка касания в CSS-пикселях; без неё — прямо по взгляду
+ */
+function moveForward(screenX?: number): void {
   if (!panorama) return;
-  const newPos = destination(lastOrigin, view.centerAzRad, MOVE_STEP_M);
+  const width = canvas.clientWidth;
+  const offset =
+    screenX !== undefined && width > 0
+      ? ((screenX - width / 2) / width) * view.fovRad
+      : 0;
+  const newPos = destination(lastOrigin, view.centerAzRad + offset, MOVE_STEP_M);
   requestCompute(newPos);
 }
 
@@ -374,7 +388,7 @@ function updateCompassButton(): void {
   if (compassBtn) return;
   compassBtn = makeButton(
     ICON_COMPASS,
-    t('enableCompass'),
+    'enableCompass',
     `right:${edgeRight()};top:${edgeTop(60)}`,
   );
   compassBtn.onclick = () => {
@@ -581,7 +595,7 @@ async function main(): Promise<void> {
  * «переместиться в другое место», незачем занимать два угла экрана.
  */
 function setupMapButton(): void {
-  const btn = makeButton(ICON_MAP, t('map'), `left:${edgeLeft()};bottom:${edgeBottom()}`);
+  const btn = makeButton(ICON_MAP, 'map', `left:${edgeLeft()};bottom:${edgeBottom()}`);
   mapButton = btn;
   layoutControls();
   let closeMap: (() => void) | null = null;
@@ -675,8 +689,22 @@ async function initDemForRegion(region: string): Promise<void> {
  * Если не вышло ни то, ни другое (офлайн и регион не скачан), остаёмся без
  * подписей: панорама строится по DEM, а вершины прежнего региона к этому
  * месту отношения не имеют.
+ *
+ * @param manual выбор человека из списка в настройках. Только он отключает
+ *   автоподбор по GPS: переход по карте, перелёт к найденной вершине и
+ *   согласие с плашкой «вы в другом районе» — это следствие положения, а не
+ *   решение «всегда показывай мне этот регион». Раньше любой из них навсегда
+ *   гасил автоподбор, и в следующий выход в горы приложение открывалось
+ *   с регионом, выбранным когда-то на диване
  */
-async function switchRegion(region: string): Promise<void> {
+async function switchRegion(region: string, manual = false): Promise<void> {
+  // Флаг ставим до раннего выхода: ткнуть в уже активный регион — это
+  // законный способ закрепить его за собой, и раньше он работал (обработчик
+  // настроек выставлял флаг сам, до вызова)
+  if (manual) {
+    manualRegion = true;
+    rememberRegion();
+  }
   if (region === currentRegion && currentPeaks.length) return;
   if (region !== currentRegion) {
     currentPeaks = [];
@@ -686,7 +714,6 @@ async function switchRegion(region: string): Promise<void> {
     }
   }
   currentRegion = region;
-  manualRegion = true;
   rememberRegion();
   setStatus(t('loadingRegion'));
   void refreshDownloadState();
@@ -804,12 +831,19 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
   );
   const groups: SearchHit[][] = [searchPeaks(query, currentPeaks, currentRegion)];
 
-  // Скачанные регионы — работают офлайн; читаются параллельно
+  // Скачанные регионы — работают офлайн; читаются параллельно.
+  // Запрет хранилища (приватный режим) не должен ронять поиск: без списка
+  // скачанного остаются свой регион и глобальный индекс, а падение здесь
+  // оставляло список результатов на «…» навсегда
   const { getDownloadedRegions, getPeaks } = await import('./core/db');
-  const downloaded = (await getDownloadedRegions()).filter((r) => r !== currentRegion);
+  const downloaded = (await getDownloadedRegions().catch(() => [])).filter(
+    (r) => r !== currentRegion,
+  );
   const offline = await Promise.all(
     downloaded.map(async (region) => {
-      const peaks = (await getPeaks(region)) as PeaksFile['peaks'] | undefined;
+      const peaks = (await getPeaks(region).catch(() => undefined)) as
+        | PeaksFile['peaks']
+        | undefined;
       return peaks ? searchPeaks(query, peaks, region) : [];
     }),
   );
@@ -826,7 +860,9 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
 
   const fuzzy: SearchHit[][] = [searchFuzzy(query, currentPeaks, currentRegion)];
   for (let i = 0; i < downloaded.length; i++) {
-    const peaks = (await getPeaks(downloaded[i])) as PeaksFile['peaks'] | undefined;
+    const peaks = (await getPeaks(downloaded[i]).catch(() => undefined)) as
+      | PeaksFile['peaks']
+      | undefined;
     if (peaks) fuzzy.push(searchFuzzy(query, peaks, downloaded[i]));
   }
   if (index.length) fuzzy.push(searchFuzzy(query, index, null));
@@ -845,7 +881,7 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
 function setupDownloadButton(): void {
   const btn = makeButton(
     ICON_DOWNLOAD,
-    t('downloadRegion'),
+    'downloadRegion',
     `right:${edgeRight()};top:${edgeTop()}`,
   );
   downloadButton = btn;
@@ -909,13 +945,17 @@ function applyDownloadState(): void {
  * Фабрика круглых кнопок действий.
  * icon — инлайновый SVG (см. ui/icons.ts) или текст; SVG рисуется одинаково
  * на всех платформах, в отличие от эмодзи.
+ *
+ * Подпись задаётся ключом словаря, а не готовой строкой: кнопки создаются
+ * один раз за сессию, и при смене языка в настройках их всплывающие подписи
+ * и `aria-label` оставались на прежнем — интерфейс получался наполовину
+ * переведённым (см. relabelUi).
  */
-function makeButton(icon: string, title: string, pos: string): HTMLButtonElement {
+function makeButton(icon: string, titleKey: TitleKey, pos: string): HTMLButtonElement {
   const btn = document.createElement('button');
   if (icon.startsWith('<svg')) btn.innerHTML = icon;
   else btn.textContent = icon;
-  btn.title = title;
-  btn.setAttribute('aria-label', title);
+  setTitle(btn, titleKey);
   btn.style.cssText =
     `position:fixed;${pos};width:48px;height:48px;` +
     'border-radius:50%;border:none;background:#415a77;color:#f1faee;' +
@@ -923,6 +963,30 @@ function makeButton(icon: string, title: string, pos: string): HTMLButtonElement
     'display:flex;align-items:center;justify-content:center';
   document.body.appendChild(btn);
   return btn;
+}
+
+/** Ключ словаря переводов (i18n.t) */
+type TitleKey = Parameters<typeof t>[0];
+
+/** Элементы, чьи подписи надо перевести заново при смене языка */
+const localizedTitles: { el: HTMLElement; key: TitleKey }[] = [];
+
+function setTitle(el: HTMLElement, key: TitleKey): void {
+  const title = t(key);
+  el.title = title;
+  el.setAttribute('aria-label', title);
+  localizedTitles.push({ el, key });
+}
+
+/** Перевести подписи интерфейса после смены языка */
+function relabelUi(): void {
+  for (const { el, key } of localizedTitles) {
+    const title = t(key);
+    el.title = title;
+    el.setAttribute('aria-label', title);
+  }
+  // У кнопки офлайна подпись зависит ещё и от состояния региона
+  applyDownloadState();
 }
 
 /**
@@ -946,21 +1010,20 @@ function setupNavPad(): void {
   document.body.appendChild(pad);
   navPad = pad;
 
-  const arrows: { cell: string; az?: number; label: string; gps?: boolean }[] = [
-    { cell: '1 / 2', az: 0, label: t('navForward') },
-    { cell: '2 / 1', az: -Math.PI / 2, label: t('navLeft') },
-    { cell: '2 / 3', az: Math.PI / 2, label: t('navRight') },
-    { cell: '3 / 2', az: Math.PI, label: t('navBack') },
+  const arrows: { cell: string; az?: number; label: TitleKey; gps?: boolean }[] = [
+    { cell: '1 / 2', az: 0, label: 'navForward' },
+    { cell: '2 / 1', az: -Math.PI / 2, label: 'navLeft' },
+    { cell: '2 / 3', az: Math.PI / 2, label: 'navRight' },
+    { cell: '3 / 2', az: Math.PI, label: 'navBack' },
   ];
   const dirs = touchOnly
-    ? [{ cell: '1 / 1', label: t('navGps'), gps: true }]
-    : [...arrows, { cell: '2 / 2', label: t('navGps'), gps: true }];
+    ? [{ cell: '1 / 1', label: 'navGps' as TitleKey, gps: true }]
+    : [...arrows, { cell: '2 / 2', label: 'navGps' as TitleKey, gps: true }];
 
   for (const d of dirs) {
     const btn = document.createElement('button');
     btn.innerHTML = d.gps ? ICON_LOCATE : iconArrow(((d.az ?? 0) * 180) / Math.PI);
-    btn.title = d.label;
-    btn.setAttribute('aria-label', d.label);
+    setTitle(btn, d.label);
     const [row, col] = d.cell.split(' / ');
     btn.style.cssText =
       `grid-row:${row};grid-column:${col};` +
@@ -992,11 +1055,10 @@ function setupNavPad(): void {
   heightPadEl = heightPad;
   layoutControls();
 
-  const heightBtn = (icon: string, title: string, delta: number): HTMLButtonElement => {
+  const heightBtn = (icon: string, titleKey: TitleKey, delta: number): HTMLButtonElement => {
     const b = document.createElement('button');
     b.innerHTML = icon;
-    b.title = title;
-    b.setAttribute('aria-label', title);
+    setTitle(b, titleKey);
     b.style.cssText =
       'border:none;border-radius:10px;background:#415a77;color:#f1faee;' +
       'width:44px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center';
@@ -1005,7 +1067,7 @@ function setupNavPad(): void {
     return b;
   };
 
-  heightBtn(ICON_UP, t('heightUp'), 100);
+  heightBtn(ICON_UP, 'heightUp', 100);
 
   const heightLabel = document.createElement('div');
   heightLabel.id = 'height-indicator';
@@ -1014,7 +1076,7 @@ function setupNavPad(): void {
   heightLabel.textContent = `${Math.round(lastObserverH)} м`;
   heightPad.appendChild(heightLabel);
 
-  heightBtn(ICON_DOWN, t('heightDown'), -100);
+  heightBtn(ICON_DOWN, 'heightDown', -100);
 }
 
 /**
@@ -1074,9 +1136,7 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   }
 
   if (!silent) setStatus(t('calibrating'));
-  const { extractSkyline, matchSkyline, horizonEnvelope, MIN_CONFIDENCE } = await import(
-    './core/skyline'
-  );
+  const { extractSkyline, matchSkyline, MIN_CONFIDENCE } = await import('./core/skyline');
   const profile = extractSkyline(frame.rgba, frame.width, frame.height);
   const match = matchSkyline(profile, {
     centerAzRad: view.centerAzRad,
@@ -1084,13 +1144,11 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
     fovRad: view.fovRad,
     fovVRad: view.fovVRad,
     horizonFrac: HORIZON_FRAC,
-    // Совмещаем кадр с силуэтом, а не с ближней корзиной 0–5 км: за неё в
-    // горах отвечает трава под ногами, а видно человеку дальний хребет
-    horizon: horizonEnvelope([
-      ...(panorama.crests ?? []),
-      ...(panorama.layers ?? []),
-      panorama.horizon,
-    ]),
+    // Ровно та линия, что нарисована на экране: совмещать кадр с ближней
+    // корзиной 0–5 км нельзя (за неё в горах отвечает трава под ногами), а
+    // считать её здесь по-своему — значит рано или поздно разойтись с
+    // отрисовкой и подгонять контуры не туда, куда человек смотрит
+    horizon: silhouetteProfile(panorama),
     stepRad: panorama.stepRad,
   });
 
@@ -1249,7 +1307,7 @@ function setupActionButtons(): void {
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
   const settingsBtn = makeButton(
     ICON_SETTINGS,
-    t('settings'),
+    'settings',
     `left:${edgeLeft()};top:${edgeTop()}`,
   );
   let settingsClose: (() => void) | null = null;
@@ -1266,15 +1324,17 @@ function setupActionButtons(): void {
         // человека, прилетевшего в Альпы с карты, обратно к своей GPS-точке
         // (а при отказе геолокации — к Приюту 11, подождав до 8 секунд)
         void (async () => {
-          manualRegion = true; // выбор вручную: авто-переключение больше не трогаем
-          rememberRegion();
-          await switchRegion(region);
+          // Единственный по-настоящему ручной выбор: человек открыл список и
+          // ткнул в регион. Дальше автоподбор по GPS его не трогает
+          await switchRegion(region, true);
           void refreshDownloadState();
           requestCompute(lastOrigin);
         })();
       },
       onLocaleChange: () => {
-        // Перерисовываем интерфейс
+        // Кнопки создаются один раз за сессию: без явного перевода их
+        // всплывающие подписи оставались на прежнем языке
+        relabelUi();
         draw();
       },
       onCalibrationChange: () => {
@@ -1290,8 +1350,10 @@ function setupActionButtons(): void {
   };
 
   // AR-режим — основной: камера включается сама, см. maybeAutoStartAr()
-  const arBtn = makeButton(ICON_AR, t('arMode'), `right:${edgeRight()};bottom:${edgeBottom()}`);
+  const arBtn = makeButton(ICON_AR, 'arMode', `right:${edgeRight()};bottom:${edgeBottom()}`);
   let arVideo: HTMLVideoElement | null = null;
+  /** Камера запрашивается прямо сейчас: второй вход открыл бы второй поток */
+  let arStarting = false;
 
   function exitAr(): void {
     arSession?.stop();
@@ -1309,10 +1371,18 @@ function setupActionButtons(): void {
    * @param auto запуск при загрузке, а не по нажатию: об отказе в доступе
    *   человека извещать нечем — он его сам и дал, а красная плашка поверх
    *   панорамы выглядела бы поломкой
-   * @returns удалось ли включить камеру
+   * @returns `on` — камера включена, `off` — отказ, `busy` — вход уже идёт.
+   *   Третий случай отделён не для красоты: результат попадает в память
+   *   предпочтений, а «занято» — это не ответ человека. Нажатие кнопки во
+   *   время автозапуска (диалог о доступе висит секунды) иначе запоминало бы
+   *   «AR не нужен» ровно в тот момент, когда камера успешно включается
    */
-  async function enterAr(auto = false): Promise<boolean> {
-    if (!panorama || arSession) return false;
+  async function enterAr(auto = false): Promise<'on' | 'off' | 'busy'> {
+    // Флаг снимается только вместе с выходом: между проверкой и присвоением
+    // `arSession` стоит await, и нажатие кнопки поверх автозапуска открывало
+    // вторую камеру — первый поток оставался гореть без ссылки на него
+    if (!panorama || arSession || arStarting) return 'busy';
+    arStarting = true;
     const video = document.createElement('video');
     try {
       const { startAr } = await import('./ui/ar');
@@ -1327,7 +1397,7 @@ function setupActionButtons(): void {
       if (getCalibration().autoCalibrate) {
         setTimeout(() => void runAutoCalibration(true), 1200);
       }
-      return true;
+      return 'on';
     } catch (err) {
       // Отказ в доступе к камере: элемент вставлен до вызова startAr,
       // и без уборки он остался бы в DOM насовсем
@@ -1335,7 +1405,9 @@ function setupActionButtons(): void {
       arVideo = null;
       if (auto) console.info('Камера при запуске не открылась:', err);
       else setStatus(`${t('error')}: ${err instanceof Error ? err.message : err}`);
-      return false;
+      return 'off';
+    } finally {
+      arStarting = false;
     }
   }
 
@@ -1345,8 +1417,10 @@ function setupActionButtons(): void {
       rememberArMode(false);
       return;
     }
-    // Запоминаем результат, а не намерение: отказ в доступе — это «нет»
-    rememberArMode(await enterAr());
+    // Запоминаем результат, а не намерение: отказ в доступе — это «нет».
+    // «Занято» не запоминаем вовсе: камеру в этот момент открывает автозапуск
+    const result = await enterAr();
+    if (result !== 'busy') rememberArMode(result === 'on');
   };
 
   /**
@@ -1355,15 +1429,16 @@ function setupActionButtons(): void {
    */
   async function maybeAutoStartAr(): Promise<void> {
     if (!shouldAutoStartAr()) return;
-    const started = await enterAr(true);
-    // Отказ запоминаем: иначе диалог о камере всплывал бы при каждой загрузке
-    if (!started) rememberArMode(false);
+    const result = await enterAr(true);
+    // Отказ запоминаем: иначе диалог о камере всплывал бы при каждой загрузке.
+    // А вот «занято» означает, что человек успел нажать кнопку сам
+    if (result === 'off') rememberArMode(false);
   }
 
   // Автокалибровка: видна только в AR — сопоставлять нечего, пока нет кадра
   const calibrateBtn = makeButton(
     ICON_CALIBRATE,
-    t('autoCalibrate'),
+    'autoCalibrate',
     `right:${edgeRight()};bottom:${edgeBottom(120)}`,
   );
   calibrateBtn.style.display = 'none';
@@ -1372,7 +1447,7 @@ function setupActionButtons(): void {
   // Фото с подписями
   const photoBtn = makeButton(
     ICON_PHOTO,
-    t('photo'),
+    'photo',
     `right:${edgeRight()};bottom:${edgeBottom(60)}`,
   );
   photoBtn.onclick = async () => {

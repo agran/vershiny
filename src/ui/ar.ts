@@ -38,9 +38,18 @@ export async function startAr(
     audio: false,
   });
 
-  videoEl.srcObject = stream;
-  videoEl.playsInline = true;
-  await videoEl.play();
+  // Дальше всё может отказать (часть WebView отклоняет play()), а поток уже
+  // запущен: без явной остановки камера продолжала гореть, вызывающий видел
+  // только исключение и убирал <video> — из которого поток и не выключается
+  try {
+    videoEl.srcObject = stream;
+    videoEl.playsInline = true;
+    await videoEl.play();
+  } catch (err) {
+    stream.getTracks().forEach((track) => track.stop());
+    videoEl.srcObject = null;
+    throw err;
+  }
 
   const ctx = canvas.getContext('2d')!;
   const opacity = options.opacity ?? 0.55;

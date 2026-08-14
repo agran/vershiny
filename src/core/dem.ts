@@ -15,6 +15,7 @@
 
 import type { LatLon } from './geo';
 import { distanceM } from './geo';
+import { demStorePrefix } from './dem-config';
 
 export const TILE_SIZE = 256;
 /** Метры в одном градусе широты (для перевода размера ячейки в метры) */
@@ -88,6 +89,8 @@ export class DemSampler {
   private coverage: (Uint8Array | null)[] = [];
   private readonly baseUrl: string;
   private readonly fetchFn: typeof fetch;
+  /** Префикс ключа в офлайн-хранилище: у каждого источника своя сетка тайлов */
+  private readonly storePrefix: string;
   /** Офлайн-хранилище (IndexedDB); null — недоступно (тесты, приватный режим) */
   private dbCache: typeof import('./db') | null | undefined;
 
@@ -97,6 +100,12 @@ export class DemSampler {
   constructor(options: DemSamplerOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, '');
     this.fetchFn = options.fetchFn ?? fetch.bind(globalThis);
+    this.storePrefix = demStorePrefix(this.baseUrl);
+  }
+
+  /** Ключ тайла в офлайн-хранилище (см. demStorePrefix) */
+  private storeKey(key: string): string {
+    return `${this.storePrefix}${key}`;
   }
 
   /** Ленивая загрузка db.ts (в тестах IndexedDB может не быть) */
@@ -249,7 +258,7 @@ export class DemSampler {
         // Офлайн-хранилище: тайлы не меняются, поэтому кеш безусловно свежий
         const db = await this.db().catch(() => null);
         if (db) {
-          const stored = await db.getDemTile(key).catch(() => undefined);
+          const stored = await db.getDemTile(this.storeKey(key)).catch(() => undefined);
           if (stored) {
             const tile = await this.decodeTile(
               stored.buffer.slice(
@@ -353,7 +362,9 @@ export class DemSampler {
       await Promise.all(
         keys.slice(i, i + concurrency).map(async (key) => {
           try {
-            if (db && (await db.getDemTile(key))) {
+            // Хранилище проверять здесь незачем: без него загрузка региона
+            // отваливается раньше, на сохранении вершин (savePeaks)
+            if (db && (await db.getDemTile(this.storeKey(key)))) {
               ok++; // уже скачан
               return;
             }
@@ -361,7 +372,7 @@ export class DemSampler {
             if (!res.ok) return;
             const raw = new Uint8Array(await res.arrayBuffer());
             bytes += raw.byteLength;
-            if (db) await db.saveDemTile(key, raw);
+            if (db) await db.saveDemTile(this.storeKey(key), raw);
             ok++;
           } catch {
             // Обрыв сети на одном тайле не должен ронять всю загрузку:
@@ -473,14 +484,19 @@ export class DemSampler {
 
   /**
    * Высота наблюдателя с защитой от занижения (для ray-marching):
-   * max по окрестности 3×3 ячейки + рост глаз. На крутом склоне
-   * билинейная интерполяция занижает — соседняя ячейка выше нас.
+   * max по окрестности 3×3 ячейки. На крутом склоне билинейная
+   * интерполяция занижает — соседняя ячейка выше нас.
+   *
+   * Возвращает именно землю: рост глаз добавляет ray-marching
+   * (`observerElevationM`, 1.7 м). Раньше прибавка стояла в обоих местах,
+   * и наблюдатель оказывался на 3.7 м над склоном, а индикатор высоты
+   * показывал на два метра больше отметки под ногами.
    */
   async observerHeightSafe(pos: LatLon): Promise<number> {
     await this.loadIndex();
     for (let lodIndex = 0; lodIndex < this.index!.lods.length; lodIndex++) {
       const maxH = await this.maxAroundAtLod(pos, lodIndex);
-      if (maxH !== null) return maxH + 2; // +2 м рост глаз
+      if (maxH !== null) return maxH;
     }
     throw new Error('Точка вне покрытия DEM');
   }

@@ -56,6 +56,20 @@ export function azimuthRad(a: LatLon, b: LatLon): number {
 }
 
 /**
+ * Нормализация долготы в [−180, 180).
+ *
+ * За антимеридианом счёт продолжается: 180.8° — это арифметически честно и
+ * та же самая точка, но каждый потребитель считает такую долготу «за краем
+ * мира». Terrarium зажимал индекс тайла в нулевой, глобальная пирамида
+ * отсекала точку по `gx < 0` — и у наблюдателя на Врангеле (реестр:
+ * 177.5…−177.5) оба источника разом молчали, оставляя пустой сектор
+ * панорамы. Поэтому долгота нормализуется там, где она рождается.
+ */
+export function normalizeLon(deg: number): number {
+  return ((((deg + 180) % 360) + 360) % 360) - 180;
+}
+
+/**
  * Точка назначения: из origin по азимуту azRad на дистанцию distM.
  * Используется ray-marching'ом для выборки DEM вдоль луча.
  */
@@ -72,7 +86,7 @@ export function destination(origin: LatLon, azRad: number, distM: number): LatLo
       Math.sin(azRad) * Math.sin(d) * Math.cos(lat1),
       Math.cos(d) - Math.sin(lat1) * Math.sin(lat2),
     );
-  return { lat: toDeg(lat2), lon: toDeg(lon2) };
+  return { lat: toDeg(lat2), lon: normalizeLon(toDeg(lon2)) };
 }
 
 /**

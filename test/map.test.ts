@@ -96,6 +96,41 @@ describe('кнопки карты', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it('«Закрыть» не переносит наблюдателя: это отказ, а не «Применить»', () => {
+    // `onclick = close` передавал обработчику MouseEvent, а тот попадал в
+    // первый параметр `commit` — истинный. Крестик работал как «Применить»
+    // и уносил человека в центр перекрестия
+    const onPick = vi.fn();
+    open({ onPick });
+
+    tap(byTitle('close')!);
+
+    expect(onPick).not.toHaveBeenCalled();
+  });
+
+  it('Escape тоже отменяет, а не применяет', () => {
+    const onPick = vi.fn();
+    open({ onPick });
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+    expect(byTitle('close')).toBeNull(); // карта закрылась
+    expect(onPick).not.toHaveBeenCalled();
+  });
+
+  it('«Применить» переносит в центр карты', () => {
+    const onPick = vi.fn();
+    open({ onPick });
+
+    tap(
+      Array.from(document.querySelectorAll('button')).find(
+        (b) => b.textContent === t('mapApply'),
+      )!,
+    );
+
+    expect(onPick).toHaveBeenCalledTimes(1);
+  });
+
   it('перетаскивание по самой карте по-прежнему работает', () => {
     open();
     const root = document.body.lastElementChild as HTMLElement;

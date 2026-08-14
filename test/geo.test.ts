@@ -7,6 +7,7 @@ import {
   elevationAngleRad,
   isValidLatLon,
   normalizeAz,
+  normalizeLon,
   toDeg,
   wrapAngle,
   type LatLon,
@@ -70,5 +71,30 @@ describe('geo', () => {
     expect(isValidLatLon({ lat: NaN, lon: 0 })).toBe(false);
     // Границы диапазона законны: полюс и антимеридиан
     expect(isValidLatLon({ lat: 90, lon: -180 })).toBe(true);
+  });
+
+  it('destination не выпускает долготу за антимеридиан', () => {
+    // За 180° счёт продолжался: 180.84°. Арифметически честно, но каждый
+    // потребитель считает такую долготу «за краем мира» — Terrarium зажимал
+    // индекс тайла в нулевой, пирамида отсекала точку по gx < 0, и у
+    // наблюдателя на Врангеле оба источника молчали разом
+    const west = destination({ lat: 71.2, lon: -180 }, -Math.PI / 2, 30_000);
+    const east = destination({ lat: 71.2, lon: 180 }, Math.PI / 2, 30_000);
+    expect(west.lon).toBeGreaterThan(0); // ушли за −180 и вернулись справа
+    expect(east.lon).toBeLessThan(0);
+    for (const p of [west, east]) {
+      expect(isValidLatLon(p)).toBe(true);
+      expect(Math.abs(p.lon)).toBeLessThanOrEqual(180);
+    }
+    // Точка та же самая: расстояние до неё честные 30 км
+    expect(distanceM({ lat: 71.2, lon: 180 }, east)).toBeCloseTo(30_000, 0);
+  });
+
+  it('normalizeLon: край диапазона и многократные обороты', () => {
+    expect(normalizeLon(180)).toBe(-180); // 180 и −180 — одна долгота
+    expect(normalizeLon(-180)).toBe(-180);
+    expect(normalizeLon(180.837)).toBeCloseTo(-179.163, 6);
+    expect(normalizeLon(-540.5)).toBeCloseTo(179.5, 6);
+    expect(normalizeLon(42.4)).toBeCloseTo(42.4, 10);
   });
 });

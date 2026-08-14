@@ -340,7 +340,10 @@ export function openMap(options: MapOptions): () => void {
       'position:absolute;z-index:2;border:1px solid #415a77;border-radius:10px;' +
       'background:rgba(26,26,46,.92);color:#f1faee;font:15px system-ui,sans-serif;' +
       `cursor:pointer;display:flex;align-items:center;justify-content:center;${css}`;
-    b.onclick = onClick;
+    // Вызываем без аргументов: иначе обработчику прилетает MouseEvent, и
+    // функция с необязательным параметром (как `close(commit)`) принимает
+    // событие за истинный флаг
+    b.onclick = () => onClick();
     root.appendChild(b);
     return b;
   };
@@ -348,6 +351,14 @@ export function openMap(options: MapOptions): () => void {
   // Объявлен до close(): создаётся он в конце, когда корень уже в DOM
   let resizeObserver: ResizeObserver | null = null;
 
+  /**
+   * Закрытие карты.
+   *
+   * `commit` ставится только «Применить»: крестик и Escape — это отказ.
+   * Обработчики оборачиваются в стрелку осознанно: `onclick = close` передавал
+   * бы в первый аргумент `MouseEvent`, а он истинный — и «Закрыть» переносило
+   * наблюдателя в центр перекрестия ровно так же, как «Применить».
+   */
   const close = (commit = false): void => {
     if (commit) {
       options.onPick({ ...observer });
@@ -363,11 +374,12 @@ export function openMap(options: MapOptions): () => void {
 
   // Escape закрывает карту: привычно и спасает, если кнопка ушла под вырез
   const onKey = (ev: KeyboardEvent): void => {
-    if (ev.key === 'Escape' && panel.style.display === 'none') close(true);
+    if (ev.key === 'Escape' && panel.style.display === 'none') close();
   };
   document.addEventListener('keydown', onKey);
 
-  button(ICON_CLOSE, 'left:16px;top:16px;width:44px;height:44px', close).title = t('close');
+  button(ICON_CLOSE, 'left:16px;top:16px;width:44px;height:44px', () => close()).title =
+    t('close');
   button('＋', 'right:16px;top:16px;width:44px;height:44px;font-size:20px', () =>
     setZoom(zoom + 1),
   );
@@ -482,7 +494,12 @@ export function openMap(options: MapOptions): () => void {
     searching.style.cssText = 'color:#cfd8dc;font:13px system-ui,sans-serif;padding:4px';
     results.appendChild(searching);
 
-    const hits = await options.search(query);
+    // Поиск не должен оставлять список на «…»: даже если источник отказал
+    // (запрет хранилища, обрыв сети), человек обязан увидеть внятный ответ
+    const hits = await options.search(query).catch((err) => {
+      console.warn('Поиск вершины не удался:', err);
+      return [] as SearchHit[];
+    });
     // Медленный ответ на прежний запрос иначе перетирал свежие результаты:
     // человек уже дописал название, а список показывает выдачу по трём буквам
     if (seq !== searchSeq) return;

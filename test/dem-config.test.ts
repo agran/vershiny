@@ -7,7 +7,12 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { demCandidates, pickDemBase, GLOBAL_DEM_URL } from '../src/core/dem-config';
+import {
+  demCandidates,
+  demStorePrefix,
+  pickDemBase,
+  GLOBAL_DEM_URL,
+} from '../src/core/dem-config';
 
 const CANDIDATES = demCandidates('/vershiny/', 'elbrus');
 
@@ -44,5 +49,25 @@ describe('выбор источника рельефа', () => {
 
   it('нет ни сети, ни кеша — источника нет', async () => {
     expect(await pickDemBase(CANDIDATES, probes([], []))).toBeUndefined();
+  });
+});
+
+describe('пространство имён тайлов в хранилище', () => {
+  it('у пирамиды ключ прежний, где бы она ни лежала', () => {
+    // Локальная и внешняя копии — одни и те же тайлы; смена ключа обнулила бы
+    // всё, что уже скачано на устройствах
+    expect(demStorePrefix(GLOBAL_DEM_URL)).toBe('');
+    expect(demStorePrefix('/vershiny/tiles/global')).toBe('');
+    expect(demStorePrefix('/vershiny/tiles/global/')).toBe('');
+  });
+
+  it('у детального патча региона ключ свой', () => {
+    // Сетка и начало координат у патча другие: в общем пространстве имён он
+    // молча читал бы тайлы пирамиды, отдавая высоты не того места
+    expect(demStorePrefix('/vershiny/tiles/elbrus')).toBe('elbrus/');
+    expect(demStorePrefix('/vershiny/tiles/alps-east')).toBe('alps-east/');
+    expect(demStorePrefix('/vershiny/tiles/elbrus')).not.toBe(
+      demStorePrefix(GLOBAL_DEM_URL),
+    );
   });
 });

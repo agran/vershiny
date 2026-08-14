@@ -10,10 +10,15 @@ const STORAGE_KEY = 'vershiny-locale';
 let current: Locale = detectLocale();
 
 function detectLocale(): Locale {
-  // localStorage/navigator могут отсутствовать в тестовом окружении
-  const storage = typeof localStorage === 'undefined' ? null : localStorage;
-  const saved = storage?.getItem(STORAGE_KEY);
-  if (saved === 'ru' || saved === 'en') return saved;
+  // localStorage/navigator могут отсутствовать в тестовом окружении,
+  // а в приватном режиме обращение к хранилищу способно и бросить
+  try {
+    const storage = typeof localStorage === 'undefined' ? null : localStorage;
+    const saved = storage?.getItem(STORAGE_KEY);
+    if (saved === 'ru' || saved === 'en') return saved;
+  } catch {
+    // Хранилище закрыто — определяем язык по браузеру
+  }
   if (typeof navigator === 'undefined') return 'ru';
   return navigator.language.toLowerCase().startsWith('ru') ? 'ru' : 'en';
 }
@@ -24,8 +29,13 @@ export function getLocale(): Locale {
 
 export function setLocale(locale: Locale): void {
   current = locale;
-  if (typeof localStorage !== 'undefined') {
-    localStorage.setItem(STORAGE_KEY, locale);
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, locale);
+    }
+  } catch {
+    // Приватный режим или запрет хранилища: язык живёт до перезагрузки —
+    // это лучше, чем уронить переключение исключением
   }
 }
 

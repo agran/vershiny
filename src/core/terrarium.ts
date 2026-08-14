@@ -9,7 +9,7 @@
  * в worker, Chrome и Safari 15+).
  */
 
-import type { LatLon } from './geo';
+import { normalizeLon, type LatLon } from './geo';
 
 export const TERRARIUM_BASE_URL =
   'https://s3.amazonaws.com/elevation-tiles-prod/terrarium';
@@ -50,11 +50,14 @@ export function lonLatToTile(pos: LatLon, zoom: number): { x: number; y: number 
   const n = 2 ** zoom;
   const lat = Math.min(MAX_LATITUDE, Math.max(-MAX_LATITUDE, pos.lat));
   const latRad = (lat * Math.PI) / 180;
-  const x = Math.floor(((pos.lon + 180) / 360) * n);
+  const x = Math.floor(((normalizeLon(pos.lon) + 180) / 360) * n);
   const y = Math.floor(
     ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n,
   );
-  return { x: Math.min(n - 1, Math.max(0, x)), y: Math.min(n - 1, Math.max(0, y)) };
+  // По долготе мир замкнут — индекс заворачивается; по широте упираемся в край
+  // проекции. Раньше зажимались оба, и точка за антимеридианом (луч на Врангеле
+  // уходит туда сразу) получала нулевой тайл — с другого края планеты
+  return { x: ((x % n) + n) % n, y: Math.min(n - 1, Math.max(0, y)) };
 }
 
 /** Дробная позиция пикселя внутри тайла: [0..256) */
@@ -62,7 +65,7 @@ export function lonLatToPixel(pos: LatLon, zoom: number): { px: number; py: numb
   const n = 2 ** zoom;
   const lat = Math.min(MAX_LATITUDE, Math.max(-MAX_LATITUDE, pos.lat));
   const latRad = (lat * Math.PI) / 180;
-  const px = ((pos.lon + 180) / 360) * n * TILE_PX;
+  const px = ((normalizeLon(pos.lon) + 180) / 360) * n * TILE_PX;
   const py =
     ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) *
     n *
@@ -172,6 +175,40 @@ export class TerrariumSampler {
     return promise;
   }
 
+  /**
+   * Скачать тайл в офлайн-хранилище, не декодируя PNG.
+   *
+   * Отдельно от `loadTile` по двум причинам. Во-первых, честный ответ:
+   * `loadTile` любой отказ превращает в `null` (это верно для расчёта
+   * панорамы — «сейчас нет данных»), и загрузка региона считала успехом
+   * ровно всё, включая 503 от офлайнового Service Worker'а. Регион при этом
+   * помечался скачанным, а в горах оказывался пустым. Во-вторых, скорость:
+   * при массовой загрузке декодировать каждый тайл через ImageBitmap незачем,
+   * в хранилище всё равно ложатся исходные байты.
+   *
+   * @returns `saved` — байты в хранилище; `missing` — законная дыра покрытия
+   *   (океан, полярная шапка); `failed` — отказ, тайла на устройстве нет
+   */
+  async saveTileOffline(
+    z: number,
+    x: number,
+    y: number,
+  ): Promise<'saved' | 'missing' | 'failed'> {
+    const key = `${z}/${x}/${y}`;
+    try {
+      const db = await this.db();
+      if (db && (await db.getTerrariumTile(key))) return 'saved'; // уже лежит
+      const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
+      if (res.status === 404) return 'missing';
+      if (!res.ok) return 'failed';
+      if (!db) return 'failed'; // скачали, но положить некуда
+      await db.saveTerrariumTile(key, new Uint8Array(await res.arrayBuffer()));
+      return 'saved';
+    } catch {
+      return 'failed';
+    }
+  }
+
   /** PNG-байты → сетка высот 256×256 */
   private async decodePng(bytes: Uint8Array): Promise<Float32Array> {
     const blob = new Blob([bytes as BlobPart], { type: 'image/png' });
@@ -263,6 +300,33 @@ export class TerrariumSampler {
         return this.loadTile(z, x, y);
       }),
     );
+  }
+
+  /**
+   * Окрестность 3×3 тайлов вокруг точки на каждом ближнем зуме.
+   *
+   * Веер лучей ближнюю зону не покрывает: на первых километрах все 3600 лучей
+   * лежат в одном-двух тайлах, а предзагрузка идёт по точкам через 8 км с
+   * шагом 5° — то есть ровно один тайл на зум. Замер по четырём точкам:
+   * до 65% выборок ближе 2 км приходились на незагруженный тайл. Дырой в
+   * панораме это не становилось только потому, что рядом лежит глобальная
+   * пирамида, — но передний план молча считался по 217 м вместо 90 м.
+   *
+   * Восемь соседей на зум — это единицы мегабайт и единственный способ
+   * закрыть зону, где разница в разрешении как раз и видна.
+   */
+  async prefetchAround(pos: LatLon, zoom: number): Promise<void> {
+    const n = 2 ** zoom;
+    const { x, y } = lonLatToTile(pos, zoom);
+    const tasks: Promise<unknown>[] = [];
+    for (let dy = -1; dy <= 1; dy++) {
+      const ty = y + dy;
+      if (ty < 0 || ty >= n) continue; // по широте мир не замкнут
+      for (let dx = -1; dx <= 1; dx++) {
+        tasks.push(this.loadTile(zoom, ((x + dx) % n + n) % n, ty));
+      }
+    }
+    await Promise.all(tasks);
   }
 
   /** Высота точки (максимальный зум) */

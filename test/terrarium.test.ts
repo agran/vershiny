@@ -102,4 +102,73 @@ describe('terrarium', () => {
     tiles.delete(`${zoom}/${x + 1}/${y}`);
     expect(sampler.sample(edge, zoom)).toBeCloseTo(1000, 6);
   });
+
+  it('тайл за антимеридианом заворачивается, а не зажимается в край', () => {
+    // `destination` от Врангеля уходит за 180° сразу; раньше индекс тайла
+    // зажимался в нулевой — с другого края планеты, — и рельефа не было ни
+    // из Terrarium, ни из пирамиды: половина панорамы оставалась пустой
+    const zoom = 12;
+    const n = 2 ** zoom;
+    const raw = lonLatToTile({ lat: 71.2, lon: -180.837 }, zoom);
+    const same = lonLatToTile({ lat: 71.2, lon: 179.163 }, zoom);
+    expect(raw).toEqual(same);
+    expect(raw.x).toBe(n - 10);
+
+    // Пиксель внутри тайла обязан остаться положительным: отрицательный
+    // уводил интерполяцию в незагруженный тайл на другом краю мира
+    const { px } = lonLatToPixel({ lat: 71.2, lon: -180.837 }, zoom);
+    expect(px).toBeGreaterThanOrEqual(0);
+    expect(px).toBeLessThan(256);
+    expect(px).toBeCloseTo(lonLatToPixel({ lat: 71.2, lon: 179.163 }, zoom).px, 6);
+  });
+
+  it('prefetchAround берёт окрестность 3×3 и заворачивает её по долготе', async () => {
+    // Веер лучей ближнюю зону не покрывает: на первых километрах все 3600
+    // лучей лежат в одном-двух тайлах, а сетка предзагрузки (5°, 8 км) туда
+    // не попадает — до двух третей ближних выборок шли мимо загруженного
+    const asked: string[] = [];
+    const fetchFn = (async (url: string) => {
+      asked.push(String(url).split('/terrarium/')[1]);
+      return new Response('nope', { status: 404 });
+    }) as unknown as typeof fetch;
+    const sampler = new TerrariumSampler({ fetchFn });
+
+    await sampler.prefetchAround({ lat: 71.2, lon: -179.99 }, 4);
+    expect(asked).toHaveLength(9);
+    // Западный сосед лежит за антимеридианом — это последний тайл мира
+    expect(asked).toContain('4/15/3.png');
+    expect(asked).toContain('4/0/3.png');
+  });
+
+  it('prefetchAround не выходит за полюс', async () => {
+    const asked: string[] = [];
+    const fetchFn = (async (url: string) => {
+      asked.push(String(url));
+      return new Response('nope', { status: 404 });
+    }) as unknown as typeof fetch;
+    const sampler = new TerrariumSampler({ fetchFn });
+
+    // Верхний ряд тайлов: соседей выше нет, по широте мир не замкнут
+    await sampler.prefetchAround({ lat: 85, lon: 0 }, 4);
+    expect(asked).toHaveLength(6);
+  });
+
+  it('saveTileOffline отличает отказ от законной дыры покрытия', async () => {
+    // `loadTile` любой отказ превращает в null — это верно для расчёта
+    // панорамы, но загрузка региона считала успехом и 503 офлайнового
+    // Service Worker'а: регион помечался скачанным, а в горах был пуст
+    const answer = (status: number) =>
+      (async () => new Response('x', { status })) as unknown as typeof fetch;
+
+    // Без IndexedDB сохранять некуда — это отказ, а не успех
+    expect(
+      await new TerrariumSampler({ fetchFn: answer(200) }).saveTileOffline(12, 1, 1),
+    ).toBe('failed');
+    expect(
+      await new TerrariumSampler({ fetchFn: answer(503) }).saveTileOffline(12, 1, 1),
+    ).toBe('failed');
+    expect(
+      await new TerrariumSampler({ fetchFn: answer(404) }).saveTileOffline(12, 1, 1),
+    ).toBe('missing');
+  });
 });
