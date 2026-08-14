@@ -52,6 +52,17 @@ describe('transliterate', () => {
     expect(translitToLatin('喜马拉雅山')).toBe('Xi Ma La Ya Shan');
   });
 
+  it('иероглифы Эвереста без name_en транслитерируются, а не остаются сырыми', () => {
+    // Вершины, видимые с Кала-Патхара: иероглифы не должны протекать в подпись
+    expect(translitToLatin('尖兵峰')).toBe('Jian Bing Feng');
+    expect(translitToLatin('洛林峰')).toBe('Luo Lin Feng');
+    expect(translitToLatin('日东那布')).toBe('Ri Dong Na Bu');
+    // Регресс целиком: ни в одном названии не должно остаться иероглифов
+    for (const n of ['德生峰', '拉巴日', '桑莫多', '布丁峰']) {
+      expect(translitToLatin(n)).not.toMatch(/[\u4E00-\u9FFF]/);
+    }
+  });
+
   it('латиница остаётся как есть', () => {
     expect(translitToLatin('Elbrus')).toBe('Elbrus');
     expect(translitToLatin('Mont Blanc')).toBe('Mont Blanc');
