@@ -3,7 +3,13 @@
  * (подписи, координаты, дата) → Web Share API или скачивание.
  */
 
-import { renderPanorama, type PanoramaState, type ViewState } from './panorama';
+import {
+  renderPanorama,
+  INK_DARK,
+  INK_LIGHT,
+  type PanoramaState,
+  type ViewState,
+} from './panorama';
 import type { LatLon } from '../core/geo';
 import { getLocale } from '../core/i18n';
 import { translitToLatin } from '../core/transliterate';
@@ -57,39 +63,51 @@ export async function capturePhoto(
 
   renderPanorama(ctx, state, view, uiScale);
 
-  // Запекаем метаданные внизу.
-  //
-  // Кегль тот же, что у подписей вершин (13 CSS-пикселей): раньше здесь
-  // стояли 7 и 6, то есть вдвое мельче всего остального в кадре. На экране
-  // это ещё читалось, а на снимке 4K подпись в углу превращалась в еле
-  // различимую полоску — при том что именно она отвечает на вопрос
-  // «откуда снято».
-  const pad = 12 * uiScale;
+  // Подпись снимка — тем же приёмом, что подписи вершин: светлый текст с
+  // тёмной обводкой, без плашек. Прямоугольная подложка выглядела наклейкой
+  // поверх кадра и на светлом небе рвала его тёмным квадратом, а обводка
+  // читается на любом фоне и ничего не закрывает (тот же принцип, что у
+  // всего оверлея — см. drawOverlay).
+  const pad = 14 * uiScale;
   const fontSize = 13 * uiScale;
-  const meta = buildMetaLine(options);
-  const site = 'https://agran.github.io/vershiny/';
+  const lineH = fontSize * 1.35;
+  const gap = 16 * uiScale;
+  const parts = buildMetaParts(options);
+  // Адрес без схемы и хвостового слэша: на снимке это подпись авторства, а не
+  // ссылка для копирования, а ширина в портретном кадре на счету
+  const site = 'agran.github.io/vershiny';
 
-  ctx.textAlign = 'left';
   ctx.font = `${fontSize}px system-ui, sans-serif`;
-  ctx.fillStyle = 'rgba(13,27,42,0.75)';
-  const metaW = ctx.measureText(meta).width + pad * 2;
-  const metaH = fontSize * 2.2;
-  ctx.fillRect(pad, canvas.height - metaH - pad, metaW, metaH);
-  ctx.fillStyle = '#f1faee';
-  ctx.fillText(meta, pad * 2, canvas.height - pad - metaH / 2 + fontSize / 2 - uiScale);
+  ctx.textBaseline = 'alphabetic';
+  ctx.lineJoin = 'round';
+  ctx.miterLimit = 2;
+  ctx.lineWidth = 3.5 * uiScale;
 
-  const siteFont = Math.max(12 * uiScale, 13);
-  const sitePad = 9 * uiScale;
-  // Шрифт выставляется до замера: ширина плашки считалась кеглем предыдущей
-  // надписи, и стоило сделать адрес крупнее — текст вылезал за её край
-  ctx.font = `${siteFont}px system-ui, sans-serif`;
-  const siteW = ctx.measureText(site).width + sitePad * 2;
-  const siteH = siteFont * 1.8;
-  const siteY = canvas.height - metaH - pad - siteH - sitePad * 0.5;
-  ctx.fillStyle = 'rgba(13,27,42,0.6)';
-  ctx.fillRect(canvas.width - siteW - pad, siteY, siteW, siteH);
-  ctx.fillStyle = '#edf4ff';
-  ctx.fillText(site, canvas.width - siteW - pad + sitePad, siteY + siteH * 0.68);
+  /** Строка с обводкой: тёмный контур снизу, светлая заливка сверху */
+  const inkText = (text: string, x: number, y: number): void => {
+    ctx.strokeStyle = INK_DARK;
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = INK_LIGHT;
+    ctx.fillText(text, x, y);
+  };
+
+  // Место под координаты — всё, что осталось слева от адреса. В портретной
+  // ориентации кадр вдвое уже, и строка целиком туда не влезала: она уходила
+  // за правый край вместе с датой съёмки
+  const siteWidth = ctx.measureText(site).width;
+  const lines = wrapParts(ctx, parts, canvas.width - 2 * pad - siteWidth - gap);
+
+  // Обе подписи на одной нижней строке. Раньше адрес был отдельным блоком
+  // НАД координатами, поэтому и оказывался заметно дальше от нижнего края —
+  // тем дальше, чем выше плашка координат
+  const baseline = canvas.height - pad;
+  ctx.textAlign = 'left';
+  lines.forEach((line, i) => {
+    inkText(line, pad, baseline - (lines.length - 1 - i) * lineH);
+  });
+  ctx.textAlign = 'right';
+  inkText(site, canvas.width - pad, baseline);
+  ctx.textAlign = 'left';
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -99,7 +117,33 @@ export async function capturePhoto(
   });
 }
 
-function buildMetaLine(options: PhotoOptions): string {
+/**
+ * Разбиение подписи на строки по разделителям между частями.
+ *
+ * Рвём только по «·», а не по словам: «14 авг. 2026 г. 10:53» разорванное
+ * посередине читается как две разные величины.
+ */
+function wrapParts(
+  ctx: CanvasRenderingContext2D,
+  parts: string[],
+  maxWidth: number,
+): string[] {
+  const lines: string[] = [];
+  let current = '';
+  for (const part of parts) {
+    const candidate = current ? `${current} · ${part}` : part;
+    if (current && ctx.measureText(candidate).width > maxWidth) {
+      lines.push(current);
+      current = part;
+    } else {
+      current = candidate;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function buildMetaParts(options: PhotoOptions): string[] {
   const { origin, observerH, region } = options;
   const lat = origin.lat.toFixed(5);
   const lon = origin.lon.toFixed(5);
@@ -120,7 +164,7 @@ function buildMetaLine(options: PhotoOptions): string {
     `${date} ${time}`,
   ];
   if (region) parts.unshift(region);
-  return parts.join(' · ');
+  return parts;
 }
 
 /**

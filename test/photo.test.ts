@@ -40,28 +40,38 @@ function screenCanvas(cssWidth: number, cssHeight: number): HTMLCanvasElement {
 let fontSizes: number[] = [];
 /** Толщина каждой линии */
 let lineWidths: number[] = [];
-/** Весь текст, который нарисовали */
-let texts: string[] = [];
+/** Всё, что нарисовали текстом: содержимое и место */
+let draws: { text: string; x: number; y: number; align: string }[] = [];
+/** Заливки прямоугольников (плашки) — их на снимке быть не должно */
+let fillRects: { x: number; y: number; w: number; h: number }[] = [];
 /** Размер холста, на котором рисовали */
 let captured: { width: number; height: number } | null = null;
+
+/** Ширина текста, как её вернула бы заглушка холста (моноширинное приближение) */
+const textWidth = (text: string, fontSize: number): number => text.length * fontSize * 0.5;
 
 beforeEach(() => {
   fontSizes = [];
   lineWidths = [];
-  texts = [];
+  draws = [];
+  fillRects = [];
   captured = null;
 
   // jsdom не умеет 2D-контекст: подменяем его записывающей заглушкой
   HTMLCanvasElement.prototype.getContext = vi.fn(function (this: HTMLCanvasElement) {
     const canvas = this;
+    let fontSize = 10;
     const ctx = {
       canvas,
       set font(value: string) {
         const size = Number.parseFloat(value);
-        if (Number.isFinite(size)) fontSizes.push(size);
+        if (Number.isFinite(size)) {
+          fontSize = size;
+          fontSizes.push(size);
+        }
       },
       get font() {
-        return '';
+        return `${fontSize}px`;
       },
       set lineWidth(value: number) {
         lineWidths.push(value);
@@ -70,14 +80,20 @@ beforeEach(() => {
         return 0;
       },
       textAlign: 'left',
+      textBaseline: 'alphabetic',
+      miterLimit: 10,
       lineJoin: 'round',
       fillStyle: '',
       strokeStyle: '',
       createLinearGradient: () => ({ addColorStop: () => {} }),
-      measureText: () => ({ width: 100 }),
-      fillRect: () => {},
-      fillText: (text: string) => texts.push(text),
-      strokeText: (text: string) => texts.push(text),
+      // Ширина зависит от текста и кегля: с фиксированным числом не проверить
+      // ни перенос длинной строки, ни то, что подпись влезла в кадр
+      measureText: (text: string) => ({ width: textWidth(text, fontSize) }),
+      fillRect: (x: number, y: number, w: number, h: number) =>
+        fillRects.push({ x, y, w, h }),
+      fillText: (text: string, x: number, y: number) =>
+        draws.push({ text, x, y, align: ctx.textAlign }),
+      strokeText: () => {},
       beginPath: () => {},
       moveTo: () => {},
       lineTo: () => {},
@@ -193,9 +209,78 @@ describe('снимок панорамы', () => {
     });
 
     // Место нашлось не всем — иначе тест ничего не проверяет
-    expect(texts.some((s) => s.startsWith('Alpha'))).toBe(true);
-    expect(texts.some((s) => s.startsWith('Gamma'))).toBe(false);
-    expect(texts.filter((s) => s.includes('+'))).toEqual([]);
+    expect(draws.some((d) => d.text.startsWith('Alpha'))).toBe(true);
+    expect(draws.some((d) => d.text.startsWith('Gamma'))).toBe(false);
+    expect(draws.filter((d) => d.text.includes('+'))).toEqual([]);
+  });
+
+  /**
+   * Строки подписи снимка: всё, что нарисовано текстом, кроме шкалы азимутов
+   * («N 0°», «NE 45°») и самого адреса сайта
+   */
+  const captionLines = (): typeof draws =>
+    draws.filter((d) => !/^\S+ \d+°$/.test(d.text) && !d.text.includes('agran.github.io'));
+  const siteLine = (): (typeof draws)[number] =>
+    draws.find((d) => d.text.includes('agran.github.io'))!;
+
+  it('подпись и адрес стоят на одной нижней строке', async () => {
+    // Адрес рисовался отдельным блоком НАД координатами и оказывался тем
+    // дальше от нижнего края, чем выше была плашка координат
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      region: 'elbrus',
+      source: screenCanvas(1600, 900),
+    });
+
+    const lines = captionLines();
+    expect(lines).toHaveLength(1); // широкий кадр — всё влезает в строку
+    expect(siteLine().y).toBe(lines[0].y);
+  });
+
+  it('подписи рисуются обводкой, без прямоугольной подложки', async () => {
+    // Плашка выглядела наклейкой поверх кадра и на светлом небе рвала его
+    // тёмным квадратом. Обводка читается на любом фоне и ничего не закрывает
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(1600, 900),
+    });
+
+    // Заливка неба на весь кадр законна — а вот плашек под текстом быть не должно
+    const shot = captured!;
+    const plates = fillRects.filter(
+      (r) => !(r.x === 0 && r.y === 0 && r.w === shot.width && r.h === shot.height),
+    );
+    expect(plates).toEqual([]);
+  });
+
+  it('в портретном кадре длинная подпись переносится и влезает по ширине', async () => {
+    // Портретный телефон: кадр вдвое уже, и строка с координатами, высотой и
+    // датой уходила за правый край вместе с адресом сайта
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      region: 'elbrus',
+      source: screenCanvas(390, 844),
+    });
+
+    const width = captured!.width;
+    const lines = captionLines();
+    expect(lines.length).toBeGreaterThan(1); // перенесли, а не обрезали
+
+    const scale = width / 390;
+    for (const line of lines) {
+      // Слева направо от отступа: правый край строки обязан остаться в кадре
+      expect(line.x + textWidth(line.text, 13 * scale)).toBeLessThan(width);
+    }
+    // Адрес выровнен по правому краю и тоже не вылезает
+    const site = siteLine();
+    expect(site.align).toBe('right');
+    expect(site.x).toBeLessThan(width);
+    expect(site.x - textWidth(site.text, 13 * scale)).toBeGreaterThan(0);
+    // И по-прежнему на одной строке с последней строкой координат
+    expect(site.y).toBe(lines[lines.length - 1].y);
   });
 });
 
