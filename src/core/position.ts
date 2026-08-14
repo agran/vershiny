@@ -138,9 +138,14 @@ export async function getPosition(deps: Partial<PositionDeps> = {}): Promise<Pos
     return { pos: remembered ?? FALLBACK_POSITION, trusted: false };
   }
 
-  // Готовый фикс системы приходит мгновенно: его мог оставить навигатор,
-  // камера или карта. Высокая точность здесь не нужна — именно она и
-  // заставляет ждать спутники
+  // Известно, где были в прошлый раз — показываем оттуда немедленно, вообще
+  // ничего не спрашивая. Настоящее положение дослушивается в фоне
+  // (awaitAccuratePosition) и подставляется, если человек оказался не здесь
+  if (remembered) return { pos: remembered, trusted: false };
+
+  // Показывать нечего. Готовый фикс системы приходит мгновенно: его мог
+  // оставить навигатор, камера или карта. Высокая точность здесь не нужна —
+  // именно она и заставляет ждать спутники
   const quick = await requestFix(
     geolocation,
     { enableHighAccuracy: false, maximumAge: CACHE_MAX_AGE_MS, timeout: QUICK_TIMEOUT_MS },
@@ -148,11 +153,7 @@ export async function getPosition(deps: Partial<PositionDeps> = {}): Promise<Pos
   );
   if (quick) return { pos: quick, trusted: true };
 
-  // Известно, где были в прошлый раз — показываем оттуда сразу, а спутники
-  // дослушиваем в фоне (awaitAccuratePosition)
-  if (remembered) return { pos: remembered, trusted: false };
-
-  // Первый запуск и холодный приёмник: показывать нечего, остаётся ждать
+  // Первый запуск и холодный приёмник: остаётся ждать
   const precise = await requestFix(
     geolocation,
     { enableHighAccuracy: true, timeout: GPS_TIMEOUT_MS },
@@ -167,7 +168,9 @@ export async function getPosition(deps: Partial<PositionDeps> = {}): Promise<Pos
  * Настоящее положение — сколько бы спутники его ни искали.
  *
  * Вызывается после того, как панорама уже нарисована по быстрой точке.
- * `null` — ответа так и не было: остаёмся на том, что показали.
+ * Готовый фикс системы принимается: он приходит мгновенно и для вопроса
+ * «в какой я долине» точен более чем достаточно. `null` — ответа так и не
+ * было: остаёмся на том, что показали.
  */
 export function awaitAccuratePosition(
   deps: Partial<PositionDeps> = {},
@@ -176,7 +179,11 @@ export function awaitAccuratePosition(
   if (!geolocation) return Promise.resolve(null);
   return requestFix(
     geolocation,
-    { enableHighAccuracy: true, timeout: ACCURATE_TIMEOUT_MS, maximumAge: 0 },
+    {
+      enableHighAccuracy: true,
+      timeout: ACCURATE_TIMEOUT_MS,
+      maximumAge: CACHE_MAX_AGE_MS,
+    },
     ACCURATE_TIMEOUT_MS,
   );
 }
