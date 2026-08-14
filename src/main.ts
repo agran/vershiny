@@ -558,10 +558,10 @@ async function main(): Promise<void> {
   // Реестр читаем в любом случае: он же копится в офлайн-кеш, а без него
   // потом не открыть список регионов без сети.
   {
-    const { loadRegions, findRegionForPosition } = await import('./ui/download');
+    const { loadRegions, regionForPosition } = await import('./ui/download');
     const regions = await loadRegions();
     if (!manualRegion && fix.trusted) {
-      const autoRegion = findRegionForPosition(origin, regions);
+      const autoRegion = regionForPosition(origin, regions);
       if (autoRegion && autoRegion !== currentRegion) {
         currentRegion = autoRegion;
         rememberRegion();
@@ -773,13 +773,14 @@ async function switchRegion(region: string, manual = false): Promise<void> {
  */
 async function goToLocation(pos: LatLon): Promise<void> {
   setStatus(t('computing'));
-  const { loadRegions, findRegionForPosition } = await import('./ui/download');
-  const region = findRegionForPosition(pos, await loadRegions());
+  const { loadRegions, regionForPosition } = await import('./ui/download');
+  const region = regionForPosition(pos, await loadRegions());
   if (region) {
     await switchRegion(region);
   } else {
-    // Реестр покрывает не всю сушу. Оставлять вершины прежнего региона нельзя:
-    // они за тысячи километров и к этому месту отношения не имеют
+    // Реестр покрывает не всю сушу, и ближайший район может быть за сотни
+    // километров. Оставлять вершины прежнего нельзя: они к этому месту
+    // отношения не имеют
     currentPeaks = [];
   }
   heightOverride = null; // на землю: набранная высота к новой точке не относится

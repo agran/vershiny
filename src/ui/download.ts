@@ -15,12 +15,15 @@
 import { TerrariumSampler } from '../core/terrarium';
 import { DemSampler } from '../core/dem';
 import { GLOBAL_DEM_URL } from '../core/dem-config';
+import { PEAK_VISIBILITY_RADIUS_M } from '../core/peaks';
 import { destination, type LatLon } from '../core/geo';
 import { savePeaks, markRegionDownloaded } from '../core/db';
 import { getLocale } from '../core/i18n';
 
 /** Радиус детальной зоны (Terrarium 90 м) вокруг точки наблюдения */
 export const DETAIL_RADIUS_M = 30_000;
+/** Метров в градусе широты — для расстояния до границ региона */
+const M_PER_DEG_LAT = 111_320;
 /** Зумы детальной зоны: 12 ≈ 38 м/пиксель на экваторе, 11 — запас на фолбэк */
 const DETAIL_ZOOMS = [12, 11];
 /** Средний вес Terrarium-PNG (замер по выборке тайлов разных зумов) */
@@ -328,6 +331,72 @@ export function findRegionForPosition(
   return best;
 }
 
+/** Расстояние от точки до bbox по поверхности, метры (0 — точка внутри) */
+export function distanceToBBox(
+  pos: LatLon,
+  bbox: [number, number, number, number],
+): number {
+  const [minLon, minLat, maxLon, maxLat] = bbox;
+  const dLat = pos.lat < minLat ? minLat - pos.lat : pos.lat > maxLat ? pos.lat - maxLat : 0;
+  // По долготе мир замкнут: до края считаем кратчайший зазор, а не разность
+  const gapDeg = (a: number, b: number): number => Math.abs((((a - b) % 360) + 540) % 360 - 180);
+  const insideLon =
+    minLon <= maxLon
+      ? pos.lon >= minLon && pos.lon <= maxLon
+      : pos.lon >= minLon || pos.lon <= maxLon;
+  const dLon = insideLon ? 0 : Math.min(gapDeg(pos.lon, minLon), gapDeg(pos.lon, maxLon));
+  return Math.hypot(
+    dLat * M_PER_DEG_LAT,
+    dLon * M_PER_DEG_LAT * Math.cos((pos.lat * Math.PI) / 180),
+  );
+}
+
+/**
+ * Ближайший регион, вершины которого отсюда в принципе могут быть видны.
+ *
+ * Реестр покрывает горные узлы, а не всю сушу: в Краснодаре, Ростове или
+ * Тбилиси человек оказывается вне всех bbox, и правило «регион тот, чей bbox
+ * содержит точку» не отвечает ничего — приложение молчало, оставляя вершины
+ * прежнего района, хотя рядом есть подходящий.
+ *
+ * Дальше радиуса видимости вершин не смотрим: район, чьи горы отсюда не видны
+ * ни при какой погоде, предлагать незачем — это был бы шум.
+ */
+export function nearestRegionForPosition(
+  pos: LatLon,
+  regions: Record<string, RegionInfo>,
+  maxDistM: number = PEAK_VISIBILITY_RADIUS_M,
+): string | null {
+  let best: string | null = null;
+  let bestDist = Infinity;
+  let bestPriority = Infinity;
+  for (const [key, info] of Object.entries(regions)) {
+    if (key.startsWith('$') || typeof info !== 'object' || !info.bbox) continue;
+    const dist = distanceToBBox(pos, info.bbox);
+    if (dist > maxDistM) continue;
+    const priority = info.priority ?? 9;
+    // На равных расстояниях выигрывает более конкретный район
+    if (dist < bestDist || (dist === bestDist && priority < bestPriority)) {
+      best = key;
+      bestDist = dist;
+      bestPriority = priority;
+    }
+  }
+  return best;
+}
+
+/**
+ * Район под эту точку: содержащий её, а если таких нет — ближайший.
+ * Единая точка выбора для старта по GPS, переноса с карты и предложения
+ * сменить регион.
+ */
+export function regionForPosition(
+  pos: LatLon,
+  regions: Record<string, RegionInfo>,
+): string | null {
+  return findRegionForPosition(pos, regions) ?? nearestRegionForPosition(pos, regions);
+}
+
 /** Имя региона для UI с учётом локали */
 export function regionLabel(info: RegionInfo): string {
   return getLocale() === 'ru'
@@ -343,6 +412,10 @@ export function regionLabel(info: RegionInfo): string {
  * Пока текущий регион содержит точку, молчим даже при более приоритетном
  * соседе: регионы реестра сильно перекрываются (буфер 200 км с каждой
  * стороны), и работающий регион менять незачем — это только мешало бы.
+ *
+ * Вне всех bbox (равнина у подножия: Краснодар, Ростов) берётся ближайший
+ * подходящий район. Раньше там не предлагалось ничего, и человек оставался
+ * с вершинами того района, который выбрал когда-то на другом конце страны.
  */
 export function suggestRegionForPosition(
   pos: LatLon,
@@ -351,7 +424,7 @@ export function suggestRegionForPosition(
 ): string | null {
   const current = regions[currentRegion];
   if (current?.bbox && inBBox(pos, current.bbox)) return null;
-  const best = findRegionForPosition(pos, regions);
+  const best = regionForPosition(pos, regions);
   return best && best !== currentRegion ? best : null;
 }
 

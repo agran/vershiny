@@ -10,6 +10,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   suggestRegionForPosition,
   findRegionForPosition,
+  nearestRegionForPosition,
+  distanceToBBox,
   loadRegions,
   resetRegionsCache,
   bboxCenter,
@@ -29,6 +31,8 @@ const REGIONS: Record<string, RegionInfo> = {
 const ELBRUS = { lat: 43.35, lon: 42.44 }; // в обоих кавказских регионах
 const FISHT = { lat: 43.95, lon: 39.9 }; // только в Западном Кавказе
 const BELUKHA = { lat: 49.8, lon: 86.59 }; // Алтай
+const KRASNODAR = { lat: 45.035, lon: 38.975 }; // равнина: вне всех bbox, горы рядом
+const MOSCOW = { lat: 55.75, lon: 37.62 }; // до ближайших гор тысяча километров
 const SEA = { lat: 10, lon: -30 }; // Атлантика: регионов нет
 
 describe('предложение сменить регион', () => {
@@ -66,6 +70,51 @@ describe('предложение сменить регион', () => {
   it('переживает регион, которого нет в реестре', () => {
     // Ключ мог остаться от старой версии реестра в сохранённых настройках
     expect(suggestRegionForPosition(FISHT, 'нет-такого', REGIONS)).toBe('caucasus-west');
+  });
+
+  it('на равнине у подножия предлагает ближайший район', () => {
+    // Краснодар вне всех bbox: реестр покрывает горные узлы, а не всю сушу.
+    // Раньше здесь не предлагалось ничего, и человек оставался с вершинами
+    // того района, который выбрал когда-то на другом конце страны
+    expect(suggestRegionForPosition(KRASNODAR, 'elbrus', REGIONS)).toBe('caucasus-west');
+    expect(suggestRegionForPosition(KRASNODAR, 'altai', REGIONS)).toBe('caucasus-west');
+  });
+
+  it('но не предлагает уже выбранный ближайший', () => {
+    // Ровно случай «стою в Краснодаре, активен Западный Кавказ»: он и есть
+    // ближайший, менять не на что — молчим
+    expect(suggestRegionForPosition(KRASNODAR, 'caucasus-west', REGIONS)).toBeNull();
+  });
+
+  it('вдали от гор молчит: оттуда всё равно ничего не видно', () => {
+    // Москва — до ближайшего района сотни километров, его вершины не видны
+    // ни при какой погоде. Предлагать такое значит шуметь
+    expect(suggestRegionForPosition(MOSCOW, 'elbrus', REGIONS)).toBeNull();
+  });
+});
+
+describe('расстояние до района', () => {
+  it('внутри bbox — ноль', () => {
+    expect(distanceToBBox(ELBRUS, REGIONS.elbrus.bbox)).toBe(0);
+  });
+
+  it('снаружи считается до ближайшей границы', () => {
+    // Краснодар севернее Западного Кавказа: 45.035 − 44.5 ≈ 0.535° ≈ 60 км
+    const d = distanceToBBox(KRASNODAR, REGIONS['caucasus-west'].bbox);
+    expect(d / 1000).toBeGreaterThan(50);
+    expect(d / 1000).toBeLessThan(70);
+  });
+
+  it('через антимеридиан не считает полмира', () => {
+    // Точка в 0.5° к востоку от восточной границы Врангеля (−177.5)
+    const d = distanceToBBox({ lat: 71.2, lon: -177 }, REGIONS.wrangel.bbox);
+    expect(d / 1000).toBeLessThan(30);
+  });
+
+  it('ближайший район не ищется за пределом видимости вершин', () => {
+    expect(nearestRegionForPosition(MOSCOW, REGIONS)).toBeNull();
+    // С поднятым пределом находится — значит молчание именно из-за расстояния
+    expect(nearestRegionForPosition(MOSCOW, REGIONS, 2_000_000)).toBe('caucasus-west');
   });
 });
 
