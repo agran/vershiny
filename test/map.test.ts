@@ -373,6 +373,6 @@ describe("подписи карты", () => {
     const srcs = tileSources();
     expect(srcs.length).toBeGreaterThan(0);
     expect(srcs.every((s) => s.includes("basemaps.cartocdn.com"))).toBe(true);
-    expect(srcs.every((s) => s.includes("/voyager/"))).toBe(true);
+    expect(srcs.every((s) => s.includes("/light_all/"))).toBe(true);
   });
 });

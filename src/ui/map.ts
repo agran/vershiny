@@ -5,7 +5,7 @@
  * растровый слой, перетаскивание, зум и маркер — Leaflet ради этого тянуть
  * не хочется, а тайловая математика в проекте уже есть (terrarium.ts).
  *
- * Тайлы — Carto Voyager: одна карта, подписи на двух языках — местное
+ * Тайлы — Carto light_all: одна карта, подписи на двух языках — местное
  * название и английский вариант под ним. Требует атрибуции, поэтому
  * кешировать тайлы в Service Worker мы не стали.
  */
@@ -22,9 +22,9 @@ const MIN_ZOOM = 2;
 const MAX_ZOOM = 17;
 /** Поддомены Carto — по x+y, чтобы браузер качал тайлы параллельно */
 const CARTO_SUBS = ["a", "b", "c", "d"];
-const CARTO_BASE = "basemaps.cartocdn.com/rastertiles/voyager";
+const CARTO_BASE = "basemaps.cartocdn.com/rastertiles/light_all";
 
-/** Тайл Carto Voyager: местное название + английский вариант под ним */
+/** Тайл Carto light_all: местное название + английский вариант под ним */
 function cartoTileUrl(zoom: number, x: number, y: number): string {
   const sub = CARTO_SUBS[(x + y) % CARTO_SUBS.length];
   return `https://${sub}.${CARTO_BASE}/${zoom}/${x}/${y}.png`;
