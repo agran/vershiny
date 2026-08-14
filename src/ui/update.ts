@@ -5,8 +5,9 @@
  * состоянии waiting, а мы показываем плашку «Доступно обновление». Иначе
  * страница осталась бы с половиной старых чанков в памяти и новыми в кеше.
  *
- * По нажатию отправляем SKIP_WAITING и перезагружаемся на controllerchange —
- * это единственный момент, когда версия действительно меняется.
+ * По нажатию отправляем SKIP_WAITING. Перезагружаемся по первому же сигналу,
+ * что новая версия взяла управление: `controllerchange` или активация нового
+ * worker'а. Плюс страховка по таймауту — «нажал и ничего» быть не должно.
  */
 
 import { t } from '../core/i18n';
@@ -14,10 +15,28 @@ import { t } from '../core/i18n';
 /** Как часто спрашивать сервер о новой версии (мс) */
 const UPDATE_CHECK_MS = 60 * 60 * 1000;
 
+/**
+ * Перезагрузка страницы. Обёртка ради теста: `location.reload` в jsdom
+ * неконфигурируем и подменить его нельзя, а `navigation.reload` — можно.
+ */
+export const navigation = {
+  reload: (): void => location.reload(),
+};
+
 export function setupUpdates(registration: ServiceWorkerRegistration): void {
+  // Один раз перезагрузить страницу, когда новая версия взяла управление.
+  // Защита от повторного срабатывания: controllerchange, активация worker'а
+  // и таймаут зовут один и тот же reload
+  let reloading = false;
+  const reload = (): void => {
+    if (reloading) return;
+    reloading = true;
+    navigation.reload();
+  };
+
   // Worker мог оказаться в waiting ещё до подписки на updatefound
   if (registration.waiting && navigator.serviceWorker.controller) {
-    showUpdateBanner(registration.waiting);
+    showUpdateBanner(registration, registration.waiting, reload);
   }
 
   registration.addEventListener('updatefound', () => {
@@ -26,17 +45,12 @@ export function setupUpdates(registration: ServiceWorkerRegistration): void {
     installing.addEventListener('statechange', () => {
       // controller есть — значит это обновление, а не первая установка
       if (installing.state === 'installed' && navigator.serviceWorker.controller) {
-        showUpdateBanner(installing);
+        showUpdateBanner(registration, installing, reload);
       }
     });
   });
 
-  let reloading = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloading) return;
-    reloading = true;
-    location.reload();
-  });
+  navigator.serviceWorker.addEventListener('controllerchange', reload);
 
   // Проверяем обновления при возвращении на вкладку и раз в час: у PWA
   // на телефоне вкладка живёт неделями, перезагрузки может не случиться
@@ -51,14 +65,18 @@ export function setupUpdates(registration: ServiceWorkerRegistration): void {
   });
 }
 
-function showUpdateBanner(worker: ServiceWorker): void {
+function showUpdateBanner(
+  registration: ServiceWorkerRegistration,
+  worker: ServiceWorker,
+  reload: () => void,
+): void {
   if (document.getElementById('update-banner')) return;
 
   const banner = document.createElement('div');
   banner.id = 'update-banner';
   banner.style.cssText =
     'position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));' +
-    'transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:12px;' +
+    'transform:translateX(-50%);z-index:1000;display:flex;align-items:center;gap:12px;' +
     'background:#1a1a2e;border:1px solid #415a77;border-radius:12px;' +
     'padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.5);' +
     'font:14px/1.3 system-ui,sans-serif;color:#f1faee;max-width:calc(100vw - 32px)';
@@ -73,7 +91,19 @@ function showUpdateBanner(worker: ServiceWorker): void {
     'padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap';
   apply.onclick = () => {
     apply.disabled = true;
-    worker.postMessage({ type: 'SKIP_WAITING' });
+    // На момент клика берём свежего waiting'а: за время показа плашки
+    // update() мог установить ещё более нового worker'а
+    const target = registration.waiting ?? worker;
+    // Как только новый worker активировался — версия сменилась. Полагаться
+    // только на controllerchange нельзя: на старых Safari он приходил не
+    // всегда, и кнопка выглядела «мёртвой»
+    target.addEventListener('statechange', () => {
+      if (target.state === 'activated') reload();
+    });
+    // Страховка от «нажал и ничего»: если ни одно событие не пришло,
+    // перезагружаемся сами — ждущий worker возьмёт управление при старте
+    setTimeout(reload, 5000);
+    target.postMessage({ type: 'SKIP_WAITING' });
   };
 
   const dismiss = document.createElement('button');
