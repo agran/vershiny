@@ -5,15 +5,17 @@
  * растровый слой, перетаскивание, зум и маркер — Leaflet ради этого тянуть
  * не хочется, а тайловая математика в проекте уже есть (terrarium.ts).
  *
- * Тайлы — Esri World Topographic: подписи на английском (местные письменности —
- * деванагари, тибетская, иероглифы — не читаются), стиль рельефный. Требует
- * атрибуции, поэтому кешировать тайлы в Service Worker мы не стали.
+ * Тайлы — Esri World Topographic (подписи на английском, рельефный стиль);
+ * для России — стандартные OSM, чтобы подписи были кириллицей. Язык выбирается
+ * по центру тайла (`core/russia.ts`). Оба источника требуют атрибуции, поэтому
+ * кешировать тайлы в Service Worker мы не стали.
  */
 
 import type { LatLon } from "../core/geo";
 import { normalizeAz } from "../core/geo";
 import { getLocale, peakName, t } from "../core/i18n";
 import type { SearchHit } from "../core/search";
+import { isInRussia } from "../core/russia";
 import { ICON_CLOSE, ICON_HEADING, ICON_LOCATE, ICON_SEARCH } from "./icons";
 import { pushOverlay } from "./overlay-history";
 
@@ -21,6 +23,8 @@ const TILE_PX = 256;
 const MIN_ZOOM = 2;
 const MAX_ZOOM = 17;
 const MAP_TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile";
+/** Стандартные OSM: для России подписи кириллицей */
+const RUS_TILES = "https://tile.openstreetmap.org";
 
 /** lon/lat → пиксели мира на зуме z (Web Mercator) */
 function project(pos: LatLon, zoom: number): { x: number; y: number } {
@@ -118,7 +122,12 @@ export function openMap(options: MapOptions): () => void {
         let img = tiles.get(key + `@${tx}`);
         if (!img) {
           img = document.createElement("img");
-          img.src = `${MAP_TILES}/${zoom}/${ty}/${wrapped}`;
+          // Язык подписей по центру тайла: Россия — кириллица, остальное —
+          // английский. Тайл у границы может лечь в чужую страну — это ок.
+          const c = unproject((tx + 0.5) * TILE_PX, (ty + 0.5) * TILE_PX, zoom);
+          img.src = isInRussia(c.lon, c.lat)
+            ? `${RUS_TILES}/${zoom}/${wrapped}/${ty}.png`
+            : `${MAP_TILES}/${zoom}/${ty}/${wrapped}`;
           img.alt = "";
           img.loading = "eager";
           img.draggable = false;

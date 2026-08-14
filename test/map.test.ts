@@ -361,3 +361,25 @@ describe("направление взгляда на карте", () => {
     expect(document.body.textContent ?? "").toContain("43.3000, 42.4000");
   });
 });
+
+describe("язык подписей карты", () => {
+  const tileSources = (): string[] => {
+    const root = document.body.lastElementChild as HTMLElement;
+    return Array.from(root.querySelectorAll("img")).map((i) => i.src);
+  };
+
+  it("в России тайлы OSM — подписи кириллицей", () => {
+    // Москва — глубоко внутри страны, все окрестные тайлы российские
+    open({ origin: { lat: 55.75, lon: 37.6 } });
+    const srcs = tileSources();
+    expect(srcs.length).toBeGreaterThan(0);
+    expect(srcs.every((s) => s.includes("tile.openstreetmap.org"))).toBe(true);
+  });
+
+  it("вне России тайлы Esri — подписи английским", () => {
+    open({ origin: { lat: 27.99, lon: 86.93 } }); // Кала-Патхар, Непал
+    const srcs = tileSources();
+    expect(srcs.length).toBeGreaterThan(0);
+    expect(srcs.every((s) => s.includes("arcgisonline.com"))).toBe(true);
+  });
+});
