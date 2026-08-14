@@ -145,6 +145,8 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   mapGoHere: { ru: 'Перенестись сюда', en: 'Go here' },
   mapMyPosition: { ru: 'Моё положение', en: 'My position' },
   mapHeading: { ru: 'Куда смотрим — потяните', en: 'Drag to aim the view' },
+  shareInstall: { ru: 'Поделиться ссылкой на установку', en: 'Share install link' },
+  shareInstallCopied: { ru: 'Ссылка скопирована', en: 'Link copied' },
   about: { ru: 'О проекте', en: 'About' },
   aboutSource: {
     ru: 'Открытый исходный код, лицензия MIT',

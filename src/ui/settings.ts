@@ -22,8 +22,9 @@ import {
   regionLabel,
   type RegionInfo,
 } from "./download";
-import { ICON_GLOBE } from "./icons";
+import { ICON_GLOBE, ICON_SHARE } from "./icons";
 import { pushOverlay } from "./overlay-history";
+import { shareUrl } from "./share";
 
 export interface SettingsCallbacks {
   onRegionChange: (region: string) => void;
@@ -57,6 +58,9 @@ export function openSettings(
   title.textContent = t("settings");
   title.style.cssText = "margin:0 0 16px;font-size:20px;font-weight:600";
   panel.appendChild(title);
+
+  // --- Поделиться ссылкой на установку (install.html) ---
+  panel.appendChild(buildShareInstall());
 
   // --- Язык ---
   //
@@ -343,6 +347,40 @@ export function openSettings(
     callbacks.onClose();
   }
   return close;
+}
+
+/**
+ * Кнопка «Поделиться ссылкой на установку» — вверху, сразу под заголовком.
+ *
+ * Устанавливают приложение обычно по ссылке от того, кто уже им пользуется,
+ * поэтому делиться нужно уметь в два касания. Сначала Web Share (нативный
+ * лист «Поделиться» на телефонах), иначе — копирование в буфер обмена.
+ */
+function buildShareInstall(): HTMLElement {
+  const btn = document.createElement("button");
+  const icon = document.createElement("span");
+  icon.innerHTML = ICON_SHARE;
+  icon.style.cssText = "display:inline-flex;flex:none";
+  const label = document.createElement("span");
+  label.textContent = t("shareInstall");
+  btn.append(icon, label);
+  btn.style.cssText =
+    "width:100%;border:none;border-radius:10px;padding:10px 12px;" +
+    "background:#415a77;color:#f1faee;font-size:14px;cursor:pointer;" +
+    "margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px";
+  btn.onclick = async () => {
+    const url = `${location.origin}${import.meta.env.BASE_URL}install.html`;
+    const result = await shareUrl({ title: t("appTitle"), url });
+    if (result === "copied") {
+      // Десктоп: копируем и честно сообщаем — иначе кнопка выглядит мёртвой
+      const prev = label.textContent;
+      label.textContent = t("shareInstallCopied");
+      setTimeout(() => {
+        label.textContent = prev;
+      }, 2000);
+    }
+  };
+  return btn;
 }
 
 /**

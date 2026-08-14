@@ -52,6 +52,14 @@ export const ICON_DOWNLOADED = svg(
     '<path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16"/>',
 );
 
+/** Поделиться ссылкой: три узла, соединённые линиями */
+export const ICON_SHARE = svg(
+  '<circle cx="6" cy="12" r="2.4"/>' +
+    '<circle cx="17.5" cy="6" r="2.4"/>' +
+    '<circle cx="17.5" cy="18" r="2.4"/>' +
+    '<path d="m8.2 10.7 7.3-3.4"/><path d="m8.2 13.3 7.3 3.4"/>',
+);
+
 /** Компас: стрелка в круге — кнопка «Включить компас» (iOS) */
 export const ICON_COMPASS = svg(
   '<circle cx="12" cy="12" r="8.5"/>' +
