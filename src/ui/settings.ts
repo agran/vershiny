@@ -22,6 +22,7 @@ import { getDownloadedRegions } from '../core/db';
 import { getPhotoCaption, setPhotoCaption } from '../core/photo-caption';
 import { orientationTracker } from '../core/orientation';
 import { ICON_GLOBE } from './icons';
+import { pushOverlay } from './overlay-history';
 import type { LatLon } from '../core/geo';
 
 export interface SettingsCallbacks {
@@ -327,7 +328,11 @@ export function openSettings(
     if (ev.target === overlay) close();
   };
   document.body.appendChild(overlay);
+  // Системный «назад» на телефоне должен закрывать настройки, а не
+  // приложение: человек, зашедший сменить язык, вылетал из него
+  const releaseBack = pushOverlay(() => close());
   function close(): void {
+    releaseBack();
     overlay.remove();
     callbacks.onClose();
   }

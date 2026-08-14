@@ -162,6 +162,37 @@ describe('кнопки карты', () => {
     expect(byTitle('close')).toBeNull();
   });
 
+  it('«назад» закрывает карту, а не приложение', async () => {
+    // На телефоне жест «назад» — основной способ выйти откуда угодно. Пока
+    // история не знала об открытой карте, он уводил со страницы целиком
+    const { onClose } = open();
+    expect(byTitle('close')).not.toBeNull();
+
+    window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(byTitle('close')).toBeNull();
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('«назад» при открытом поиске убирает сначала поиск', async () => {
+    // Два слоя — два нажатия: иначе поиск утаскивал бы за собой карту
+    const { onClose } = open();
+    tap(byTitle('searchPeak')!);
+    expect(document.querySelector('input')).not.toBeNull();
+
+    window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(byTitle('close')).not.toBeNull(); // карта на месте
+    expect(onClose).not.toHaveBeenCalled();
+
+    window.dispatchEvent(new PopStateEvent('popstate', { state: history.state }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(byTitle('close')).toBeNull(); // теперь ушла и карта
+  });
+
   it('ResizeObserver отключается при закрытии карты', () => {
     const disconnect = vi.fn();
     vi.stubGlobal(

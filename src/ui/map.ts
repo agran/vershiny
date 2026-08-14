@@ -14,6 +14,7 @@ import { normalizeAz } from '../core/geo';
 import type { SearchHit } from '../core/search';
 import { t, getLocale, peakName } from '../core/i18n';
 import { ICON_CLOSE, ICON_HEADING, ICON_LOCATE, ICON_SEARCH } from './icons';
+import { pushOverlay } from './overlay-history';
 
 const TILE_PX = 256;
 const MIN_ZOOM = 2;
@@ -351,6 +352,9 @@ export function openMap(options: MapOptions): () => void {
   // Объявлен до close(): создаётся он в конце, когда корень уже в DOM
   let resizeObserver: ResizeObserver | null = null;
 
+  // Системный «назад» на телефоне должен закрывать карту, а не приложение
+  const releaseBack = pushOverlay(() => close());
+
   /**
    * Закрытие карты.
    *
@@ -363,6 +367,8 @@ export function openMap(options: MapOptions): () => void {
     if (commit) {
       options.onPick({ ...observer });
     }
+    closeSearch(); // снимаем с истории и вложенный слой поиска
+    releaseBack();
     root.remove();
     document.removeEventListener('keydown', onKey);
     // Наблюдатель держал бы ссылку на удалённый корень карты после каждого
@@ -475,11 +481,31 @@ export function openMap(options: MapOptions): () => void {
   panel.append(input, results);
   root.appendChild(panel);
 
-  function toggleSearch(): void {
-    const open = panel.style.display === 'none';
-    panel.style.display = open ? 'flex' : 'none';
+  /**
+   * Панель поиска — слой поверх карты, и «назад» должен закрывать сначала её,
+   * а потом уже карту: ровно так же ведёт себя Escape.
+   */
+  let releaseSearchBack: (() => void) | null = null;
+
+  function openSearch(): void {
+    if (panel.style.display !== 'none') return;
+    panel.style.display = 'flex';
     hint.remove();
-    if (open) input.focus();
+    input.focus();
+    releaseSearchBack = pushOverlay(() => closeSearch());
+  }
+
+  function closeSearch(): void {
+    releaseSearchBack?.();
+    releaseSearchBack = null;
+    if (panel.style.display === 'none') return;
+    panel.style.display = 'none';
+    hint.remove();
+  }
+
+  function toggleSearch(): void {
+    if (panel.style.display === 'none') openSearch();
+    else closeSearch();
   }
 
   let searchSeq = 0;
