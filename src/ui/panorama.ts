@@ -291,7 +291,6 @@ interface PlacedLabel {
   u0: number;
   u1: number;
   v: number;
-  extra: number;
 }
 
 /**
@@ -414,18 +413,15 @@ function drawLabels(
     const u1 = u0 + w;
 
     // Пересечение параллельных прямоугольников — это пересечение интервалов
-    // по обеим осям повёрнутой системы координат
-    const conflict = placed.find(
+    // по обеим осям повёрнутой системы координат. Вытесненная вершина просто
+    // не подписывается: счётчик «+N» рядом с соседней подписью ничего не
+    // сообщал (что именно за N — не узнать), но забирал место в кадре
+    const conflict = placed.some(
       (p) => Math.abs(p.v - v) < LINE_H && u0 < p.u1 + PAD_U && u1 > p.u0 - PAD_U,
     );
-    if (conflict) {
-      // «+N» считает только реально видимые вершины: скрытая за гребнем
-      // не должна раздувать счётчик — её там всё равно не разглядеть
-      if (peak.visibility !== 'hidden') conflict.extra++;
-      return false;
-    }
+    if (conflict) return false;
 
-    placed.push({ peak, mx, my, ax, ay, u0, u1, v, extra: 0 });
+    placed.push({ peak, mx, my, ax, ay, u0, u1, v });
     return true;
   };
 
@@ -444,9 +440,9 @@ function drawLabels(
     if (peak.visibility === 'hidden' && tryPlace(peak)) budget--;
   }
 
-  // Рендер: подпись приоритетной вершины, вытесненные соседи — как «+N»
+  // Рендер: подпись вершины, для которой нашлось место
   for (const p of placed) {
-    const text = labelText(p.peak) + (p.extra > 0 ? `  +${p.extra}` : '');
+    const text = labelText(p.peak);
     // Скрытая вершина: выноска обрывается о склон, маркера вершины нет
     const end =
       p.peak.visibility === 'hidden'

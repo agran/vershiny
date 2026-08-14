@@ -57,9 +57,15 @@ export async function capturePhoto(
 
   renderPanorama(ctx, state, view, uiScale);
 
-  // Запекаем метаданные внизу
+  // Запекаем метаданные внизу.
+  //
+  // Кегль тот же, что у подписей вершин (13 CSS-пикселей): раньше здесь
+  // стояли 7 и 6, то есть вдвое мельче всего остального в кадре. На экране
+  // это ещё читалось, а на снимке 4K подпись в углу превращалась в еле
+  // различимую полоску — при том что именно она отвечает на вопрос
+  // «откуда снято».
   const pad = 12 * uiScale;
-  const fontSize = 7 * uiScale;
+  const fontSize = 13 * uiScale;
   const meta = buildMetaLine(options);
   const site = 'https://agran.github.io/vershiny/';
 
@@ -72,15 +78,17 @@ export async function capturePhoto(
   ctx.fillStyle = '#f1faee';
   ctx.fillText(meta, pad * 2, canvas.height - pad - metaH / 2 + fontSize / 2 - uiScale);
 
-  const siteFont = Math.max(6 * uiScale, 13);
+  const siteFont = Math.max(12 * uiScale, 13);
   const sitePad = 9 * uiScale;
+  // Шрифт выставляется до замера: ширина плашки считалась кеглем предыдущей
+  // надписи, и стоило сделать адрес крупнее — текст вылезал за её край
+  ctx.font = `${siteFont}px system-ui, sans-serif`;
   const siteW = ctx.measureText(site).width + sitePad * 2;
   const siteH = siteFont * 1.8;
   const siteY = canvas.height - metaH - pad - siteH - sitePad * 0.5;
   ctx.fillStyle = 'rgba(13,27,42,0.6)';
   ctx.fillRect(canvas.width - siteW - pad, siteY, siteW, siteH);
   ctx.fillStyle = '#edf4ff';
-  ctx.font = `${siteFont}px system-ui, sans-serif`;
   ctx.fillText(site, canvas.width - siteW - pad + sitePad, siteY + siteH * 0.68);
 
   return new Promise((resolve, reject) => {

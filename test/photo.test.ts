@@ -40,12 +40,15 @@ function screenCanvas(cssWidth: number, cssHeight: number): HTMLCanvasElement {
 let fontSizes: number[] = [];
 /** Толщина каждой линии */
 let lineWidths: number[] = [];
+/** Весь текст, который нарисовали */
+let texts: string[] = [];
 /** Размер холста, на котором рисовали */
 let captured: { width: number; height: number } | null = null;
 
 beforeEach(() => {
   fontSizes = [];
   lineWidths = [];
+  texts = [];
   captured = null;
 
   // jsdom не умеет 2D-контекст: подменяем его записывающей заглушкой
@@ -73,8 +76,8 @@ beforeEach(() => {
       createLinearGradient: () => ({ addColorStop: () => {} }),
       measureText: () => ({ width: 100 }),
       fillRect: () => {},
-      fillText: () => {},
-      strokeText: () => {},
+      fillText: (text: string) => texts.push(text),
+      strokeText: (text: string) => texts.push(text),
       beginPath: () => {},
       moveTo: () => {},
       lineTo: () => {},
@@ -150,6 +153,49 @@ describe('снимок панорамы', () => {
     expect(shot.width / shot.height).toBeCloseTo(16 / 9, 3);
     // Даже здесь масштаб не единица: иначе подписи снова станут микроскопическими
     expect(Math.min(...fontSizes)).toBeGreaterThan(12);
+  });
+
+  it('подписи в углах снимка не мельче подписей вершин', async () => {
+    // Метаданные и адрес сайта рисовались кеглем 7 и 6 CSS-пикселей — вдвое
+    // мельче всего остального в кадре. На снимке 4K это превращалось в еле
+    // различимую полоску, хотя именно она отвечает «откуда снято»
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(800, 450),
+    });
+
+    const scale = 3840 / 800;
+    expect(Math.min(...fontSizes)).toBeGreaterThanOrEqual(12 * scale);
+  });
+
+  it('вытесненные подписи не превращаются в «+N»', async () => {
+    // Счётчик «+N» рядом с подписью не сообщал ничего: какая именно вершина
+    // за ним стоит — не узнать, а место в кадре он занимал
+    // Имена латиницей: подписи проходят через транслитерацию под локаль,
+    // и кириллица сделала бы тест зависимым от языка окружения
+    const crowd: PanoramaState = {
+      ...STATE,
+      peaks: [
+        { name: 'Alpha', lat: 43.3, lon: 42.4, ele: 5000, azimuthRad: 0.02,
+          elevationRad: 0.05, distanceM: 4000, visibility: 'visible' },
+        { name: 'Beta', lat: 43.3, lon: 42.4, ele: 4900, azimuthRad: 0.021,
+          elevationRad: 0.05, distanceM: 4100, visibility: 'visible' },
+        { name: 'Gamma', lat: 43.3, lon: 42.4, ele: 4800, azimuthRad: 0.022,
+          elevationRad: 0.05, distanceM: 4200, visibility: 'visible' },
+      ],
+    };
+
+    await capturePhoto(crowd, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(800, 450),
+    });
+
+    // Место нашлось не всем — иначе тест ничего не проверяет
+    expect(texts.some((s) => s.startsWith('Alpha'))).toBe(true);
+    expect(texts.some((s) => s.startsWith('Gamma'))).toBe(false);
+    expect(texts.filter((s) => s.includes('+'))).toEqual([]);
   });
 });
 
