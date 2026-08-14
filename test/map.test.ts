@@ -294,6 +294,28 @@ describe("выбор вершины из поиска", () => {
       "Не удалось подобрать точку обзора",
     );
   });
+
+  it("крестик очистки отменяет результаты поиска", async () => {
+    open({ search: async () => [HIT] });
+    tap(byTitle("searchPeak")!);
+    const input = document.querySelector("input") as HTMLInputElement;
+    input.value = "Ушба";
+    input.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+    );
+    await new Promise((r) => setTimeout(r, 0));
+    // Выдача показана
+    expect(document.body.textContent).toContain("Ушба Южная");
+
+    const clearBtn = byTitle("searchClear")!;
+    expect(clearBtn).not.toBeNull();
+    tap(clearBtn);
+
+    // Выдача скрыта, поле очищено, а сама карта осталась на месте
+    expect(document.body.textContent).not.toContain("Ушба Южная");
+    expect(input.value).toBe("");
+    expect(byTitle("close")).not.toBeNull();
+  });
 });
 
 describe("направление взгляда на карте", () => {

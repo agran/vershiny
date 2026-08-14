@@ -494,13 +494,27 @@ export function openMap(options: MapOptions): () => void {
   input.placeholder = t("searchPrompt");
   input.style.cssText =
     "background:#2b2d42;color:#f1faee;border:1px solid #415a77;border-radius:8px;" +
-    "padding:10px 12px;font:14px system-ui,sans-serif;outline:none;width:100%";
+    "padding:10px 12px;font:14px system-ui,sans-serif;outline:none;flex:1;min-width:0";
+
+  // Крестик очистки: убирает и запрос, и выдачу. Нативный ✕ у input[type=search]
+  // стирает только текст, а список результатов оставался бы висеть на экране.
+  const clearBtn = document.createElement("button");
+  clearBtn.textContent = "✕";
+  clearBtn.title = t("searchClear");
+  clearBtn.style.cssText =
+    "flex:none;width:34px;height:34px;border:none;border-radius:8px;" +
+    "background:#415a77;color:#f1faee;font-size:15px;cursor:pointer;" +
+    "display:flex;align-items:center;justify-content:center";
+
+  const inputRow = document.createElement("div");
+  inputRow.style.cssText = "display:flex;align-items:center;gap:8px";
 
   const results = document.createElement("div");
   results.style.cssText =
     "display:flex;flex-direction:column;gap:4px;max-height:min(46vh,300px);overflow-y:auto";
 
-  panel.append(input, results);
+  inputRow.append(input, clearBtn);
+  panel.append(inputRow, results);
   root.appendChild(panel);
 
   /**
@@ -646,6 +660,19 @@ export function openMap(options: MapOptions): () => void {
       toggleSearch();
     }
   };
+
+  /** Отменить результаты поиска: снять и запрос, и список выдачи */
+  const clearSearch = (): void => {
+    searchSeq++; // ответ, который ещё едет, больше не применится
+    input.value = "";
+    results.textContent = "";
+    input.focus();
+  };
+  clearBtn.onclick = clearSearch;
+  // Стерли текст до пустоты (в т.ч. нативным ✕) — прячем и результаты
+  input.addEventListener("input", () => {
+    if (!input.value) clearSearch();
+  });
 
   document.body.appendChild(root);
   render();

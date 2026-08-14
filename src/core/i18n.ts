@@ -136,6 +136,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   close: { ru: 'Закрыть', en: 'Close' },
   searchPeak: { ru: 'Поиск вершины', en: 'Search peak' },
   searchPrompt: { ru: 'Название вершины', en: 'Peak name' },
+  searchClear: { ru: 'Очистить', en: 'Clear' },
   peakNotFound: { ru: 'Вершина не найдена', en: 'Peak not found' },
   searchCorrected: { ru: 'с исправлением опечатки', en: 'spelling corrected' },
   updateAvailable: { ru: 'Доступно обновление', en: 'Update available' },
