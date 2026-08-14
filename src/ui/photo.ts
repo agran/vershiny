@@ -12,6 +12,7 @@ import {
 } from './panorama';
 import type { LatLon } from '../core/geo';
 import { getLocale } from '../core/i18n';
+import { getPhotoCaption } from '../core/photo-caption';
 import { translitToLatin } from '../core/transliterate';
 
 export interface PhotoOptions {
@@ -143,27 +144,40 @@ function wrapParts(
   return lines;
 }
 
+/**
+ * Части подписи снимка. Пустой список — подпись не рисуется вовсе.
+ *
+ * Состав задаётся в настройках и по умолчанию пуст: координаты и время
+ * съёмки — данные о человеке, а не о горах (см. core/photo-caption.ts).
+ */
 function buildMetaParts(options: PhotoOptions): string[] {
+  const caption = getPhotoCaption();
   const { origin, observerH, region } = options;
-  const lat = origin.lat.toFixed(5);
-  const lon = origin.lon.toFixed(5);
-  const h = Math.round(observerH);
-  const date = new Date().toLocaleDateString(getLocale() === 'ru' ? 'ru-RU' : 'en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-  const time = new Date().toLocaleTimeString(getLocale() === 'ru' ? 'ru-RU' : 'en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-  const parts = [
-    `${Math.abs(Number(lat))}°${Number(lat) >= 0 ? 'N' : 'S'}`,
-    `${Math.abs(Number(lon))}°${Number(lon) >= 0 ? 'E' : 'W'}`,
-    `${h} ${getLocale() === 'ru' ? 'м' : 'm'}`,
-    `${date} ${time}`,
-  ];
-  if (region) parts.unshift(region);
+  const parts: string[] = [];
+
+  if (caption.place) {
+    const lat = origin.lat.toFixed(5);
+    const lon = origin.lon.toFixed(5);
+    if (region) parts.push(region);
+    parts.push(
+      `${Math.abs(Number(lat))}°${Number(lat) >= 0 ? 'N' : 'S'}`,
+      `${Math.abs(Number(lon))}°${Number(lon) >= 0 ? 'E' : 'W'}`,
+      `${Math.round(observerH)} ${getLocale() === 'ru' ? 'м' : 'm'}`,
+    );
+  }
+
+  if (caption.time) {
+    const now = new Date();
+    const locale = getLocale() === 'ru' ? 'ru-RU' : 'en-US';
+    const date = now.toLocaleDateString(locale, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+    const time = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+    parts.push(`${date} ${time}`);
+  }
+
   return parts;
 }
 

@@ -19,6 +19,7 @@ import {
   type RegionInfo,
 } from './download';
 import { getDownloadedRegions } from '../core/db';
+import { getPhotoCaption, setPhotoCaption } from '../core/photo-caption';
 import { orientationTracker } from '../core/orientation';
 import type { LatLon } from '../core/geo';
 
@@ -91,6 +92,7 @@ export function openSettings(
   panel.appendChild(accRow);
 
   panel.appendChild(buildCalibration(callbacks.onCalibrationChange));
+  panel.appendChild(buildPhotoCaption());
 
   // --- Регионы: выбор + скачивание (сгруппированные) ---
   const dlTitle = document.createElement('h3');
@@ -500,6 +502,44 @@ function buildCalibration(onChange: () => void): HTMLElement {
     setTimeout(() => (resetBtn.textContent = t('resetOffset')), 1500);
   };
   box.appendChild(resetBtn);
+
+  return box;
+}
+
+/**
+ * Состав подписи на снимке.
+ *
+ * Обе галочки выключены по умолчанию: снимком делятся, а координаты с
+ * точностью до метра и время съёмки — это данные о человеке, а не о горах.
+ * Две галочки, а не одна, потому что утекают они по-разному: в отчёте о
+ * восхождении дата уместна, а точка стоянки — не всегда.
+ */
+function buildPhotoCaption(): HTMLElement {
+  const box = document.createElement('div');
+
+  const title = document.createElement('h3');
+  title.textContent = t('photoCaption');
+  title.style.cssText = 'margin:20px 0 4px;font-size:16px;font-weight:600';
+  box.appendChild(title);
+
+  const hint = document.createElement('div');
+  hint.textContent = t('photoCaptionHint');
+  hint.style.cssText = 'color:#8a9ba8;font-size:12px;line-height:1.4;margin-bottom:12px';
+  box.appendChild(hint);
+
+  const toggle = (label: string, key: 'place' | 'time'): void => {
+    const line = row(label);
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = getPhotoCaption()[key];
+    input.style.cssText = 'width:20px;height:20px;accent-color:#4cc9f0;cursor:pointer';
+    input.onchange = () => setPhotoCaption({ [key]: input.checked });
+    line.appendChild(input);
+    box.appendChild(line);
+  };
+
+  toggle(t('photoCaptionPlace'), 'place');
+  toggle(t('photoCaptionTime'), 'time');
 
   return box;
 }

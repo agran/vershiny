@@ -74,6 +74,18 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   arMode: { ru: 'AR-режим', en: 'AR mode' },
   photo: { ru: 'Фото с подписями', en: 'Photo with labels' },
   photoSaved: { ru: 'Снимок сохранён', en: 'Photo saved' },
+  photoCaption: { ru: 'Подпись на снимке', en: 'Photo caption' },
+  photoCaptionHint: {
+    ru:
+      'По умолчанию снимок не подписывается: координатами и временем съёмки ' +
+      'делятся вместе с картинкой, а это данные о вас, а не о горах.',
+    en:
+      'By default the photo carries no caption: coordinates and the time of ' +
+      'the shot travel with the picture, and that says more about you than ' +
+      'about the mountains.',
+  },
+  photoCaptionPlace: { ru: 'Место съёмки', en: 'Shooting location' },
+  photoCaptionTime: { ru: 'Дата и время', en: 'Date and time' },
   settings: { ru: 'Настройки', en: 'Settings' },
   region: { ru: 'Регион', en: 'Region' },
   language: { ru: 'Язык', en: 'Language' },

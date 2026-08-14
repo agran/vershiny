@@ -11,6 +11,11 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { capturePhoto, photoFilename } from '../src/ui/photo';
+import {
+  setPhotoCaption,
+  DEFAULT_PHOTO_CAPTION,
+  type PhotoCaption,
+} from '../src/core/photo-caption';
 import type { PanoramaState, ViewState } from '../src/ui/panorama';
 
 const STATE: PanoramaState = {
@@ -56,6 +61,9 @@ beforeEach(() => {
   draws = [];
   fillRects = [];
   captured = null;
+  // Состав подписи живёт в localStorage: без сброса выбор одного теста
+  // протекал бы в следующий
+  setPhotoCaption(DEFAULT_PHOTO_CAPTION);
 
   // jsdom не умеет 2D-контекст: подменяем его записывающей заглушкой
   HTMLCanvasElement.prototype.getContext = vi.fn(function (this: HTMLCanvasElement) {
@@ -226,6 +234,7 @@ describe('снимок панорамы', () => {
   it('подпись и адрес стоят на одной нижней строке', async () => {
     // Адрес рисовался отдельным блоком НАД координатами и оказывался тем
     // дальше от нижнего края, чем выше была плашка координат
+    setPhotoCaption({ place: true, time: true });
     await capturePhoto(STATE, VIEW, {
       origin: { lat: 43.3, lon: 42.4 },
       observerH: 4100,
@@ -258,6 +267,7 @@ describe('снимок панорамы', () => {
   it('в портретном кадре длинная подпись переносится и влезает по ширине', async () => {
     // Портретный телефон: кадр вдвое уже, и строка с координатами, высотой и
     // датой уходила за правый край вместе с адресом сайта
+    setPhotoCaption({ place: true, time: true });
     await capturePhoto(STATE, VIEW, {
       origin: { lat: 43.3, lon: 42.4 },
       observerH: 4100,
@@ -281,6 +291,47 @@ describe('снимок панорамы', () => {
     expect(site.x - textWidth(site.text, 13 * scale)).toBeGreaterThan(0);
     // И по-прежнему на одной строке с последней строкой координат
     expect(site.y).toBe(lines[lines.length - 1].y);
+  });
+
+  /** Снимок с заданным составом подписи; возвращает её строки */
+  const captionWith = async (caption: Partial<PhotoCaption>): Promise<string[]> => {
+    setPhotoCaption(caption);
+    draws = []; // иначе в выборку попадут строки предыдущего снимка
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      region: 'elbrus',
+      source: screenCanvas(1600, 900),
+    });
+    return captionLines().map((d) => d.text);
+  };
+
+  it('по умолчанию снимок не подписан ничем, кроме адреса сайта', async () => {
+    // Снимком делятся, а координаты с точностью до метра и время съёмки —
+    // данные о человеке, а не о горах
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      region: 'elbrus',
+      source: screenCanvas(1600, 900),
+    });
+
+    expect(captionLines()).toEqual([]);
+    expect(siteLine()).toBeDefined(); // авторство остаётся
+  });
+
+  it('место и время включаются в настройках по отдельности', async () => {
+    const place = (await captionWith({ place: true, time: false })).join(' ');
+    expect(place).toContain('43.3°N');
+    expect(place).toContain('42.4°E');
+    expect(place).toContain('4100'); // высота наблюдателя
+    expect(place).toContain('elbrus'); // район съёмки
+    expect(place).not.toMatch(/\d{1,2}:\d{2}/); // времени съёмки нет
+
+    const time = (await captionWith({ place: false, time: true })).join(' ');
+    expect(time).toMatch(/\d{1,2}:\d{2}/); // время есть
+    expect(time).not.toContain('°N');
+    expect(time).not.toContain('elbrus');
   });
 });
 
