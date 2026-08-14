@@ -1,6 +1,6 @@
 # Пайплайн данных
 
-## Архитектура геоданных (3 слоя, см. new-geo-data.md)
+## Архитектура геоданных (3 слоя)
 
 ```
 Слой 1. Глобальный базовый DEM — ЧУЖОЙ, готовый, бесплатный
@@ -114,6 +114,31 @@ https://agran.github.io/vershiny-dem/tiles/global/index.json
 По той же причине порог рельефа для приоритетных регионов смягчается
 (`PRIORITY_WEIGHT`). Итоговый размер известен точно, а не по оценке.
 
+### Исходники: скачивание GLO-90
+
+**Copernicus DEM GLO-90** — AWS Open Data, без регистрации: бакет
+`s3://copernicus-dem-90m/` (eu-central-1), Cloud-Optimized GeoTIFF 1°×1°,
+лицензия свободная с атрибуцией © DLR/ESA.
+
+```powershell
+winget install Amazon.AWSCLI
+
+# Вся планета: 26 475 папок, ~175 ГБ вместе с AUXFILES (около суток на бытовом канале).
+# aws s3 sync идемпотентен: после обрыва просто повторите ту же команду.
+aws s3 sync s3://copernicus-dem-90m/ ./dem/glo-90/ --no-sign-request
+
+# Только DEM без вспомогательных слоёв — примерно вдвое меньше
+aws s3 sync s3://copernicus-dem-90m/ ./dem/glo-90/ --no-sign-request `
+  --exclude "*/AUXFILES/*" --exclude "*/PREVIEW/*" --exclude "*/INFO/*"
+```
+
+Имена в бакете — `COG_30` (не `90`) с суффиксом `_DEM`; `30` здесь — угловые
+секунды, это и есть ~90 м на экваторе. `N43_00_E042_00` — юго-западный угол
+клетки: `Copernicus_DSM_COG_30_N43_00_E042_00_DEM/…_DEM.tif`. Папка `dem/`
+в `.gitignore`.
+
+### Сборка пирамиды
+
 ```powershell
 # статистика исходников (кеш dem/glo-90-scan.json, ~5 мин на 26 475 тайлов)
 python tools\glo90-to-tiles\glo90_to_tiles.py scan
@@ -130,6 +155,10 @@ python tools\glo90-to-tiles\glo90_to_tiles.py build --budget-mb 900 `
 python tools\glo90-to-tiles\glo90_to_tiles.py build --only-region elbrus --budget-mb 40
 ```
 
+Ключи: `--workers N` (по умолчанию ядра−1), `--only-region elbrus`, `--clean`
+(пересобрать с нуля — нужно, если менялись уровни или правила отбора),
+`--levels N:квант:мин_размах:доля_бюджета` (своя лестница уровней).
+
 Локальная копия в `public/tiles/global` тоже работает (клиент проверяет её
 раньше внешнего адреса), но в `public/` держать её не стоит: 26 тыс. файлов
 замедляют старт Vite с 0.25 до 4.6 с.
@@ -137,6 +166,34 @@ python tools\glo90-to-tiles\glo90_to_tiles.py build --only-region elbrus --budge
 Проверено на Приэльбрусье: Приют 11 → 4133 м (реально ~4050 м, ячейка 217 м
 на склоне), Азау → 2330 м (реально ~2350 м), вершина Эльбруса → 5524 м
 (5642 м; пик сглажен размером ячейки — это ожидаемо).
+
+| Этап | Время |
+|---|---|
+| Скачивание планеты (~175 ГБ) | около суток на бытовом канале |
+| `scan` (26 475 тайлов) | ~5 мин, кешируется |
+| `build --dry-run` | ~1–2 мин |
+| `build` планеты в 900 МБ | ~4 мин (16 воркеров) |
+| `build --only-region` | секунды-минуты |
+
+### Детальный патч отдельного региона (90 м)
+
+Патч приоритетнее пирамиды — если району нужна максимальная детализация:
+
+```powershell
+# Слияние тайлов в один GeoTIFF (COG лежат по подпапкам)
+gdal_merge.py -o dem/elbrus-merged.tif (Get-ChildItem dem/elbrus -Recurse -Filter *_DEM.tif).FullName
+
+# Перепроекция в EPSG:4326 (уже в нём, но на всякий случай)
+gdalwarp -t_srs EPSG:4326 -tr 0.000833333 0.000833333 dem/elbrus-merged.tif dem/elbrus-90m.tif
+
+python tools/dem-to-tiles/dem_to_tiles.py dem/elbrus-90m.tif -o public/tiles/elbrus
+```
+
+Патч подхватывается автоматически: `DemSource` сначала спрашивает его, затем
+Terrarium, затем глобальную пирамиду.
+
+Ссылки: [реестр AWS](https://registry.opendata.aws/copernicus-dem/),
+[документация бакета](https://copernicus-dem-90m.s3.amazonaws.com/readme.html).
 
 ## Вершины (POI)
 
@@ -173,7 +230,7 @@ python tools\glo90-to-tiles\glo90_to_tiles.py build --only-region elbrus --budge
 ALGORITHMS.md). Границы — по горным системам, названия — как у туристов.
 Перекрытия соседних регионов — норма: дубли пиков весят копейки, зато нет
 «слепых зон» на стыках. Один регион = одна кнопка «Скачать» в приложении,
-целевой размер ≤20 МБ (MVP-ACCEPTANCE).
+целевой размер ≤20 МБ (ROADMAP, критерии приёмки).
 
 Полный список (**115 регионов**) — в `tools/regions.json`. Покрытие: весь мир,
 включая Килиманджаро (east-africa), Патагонию (patagonia), Антарктиду,

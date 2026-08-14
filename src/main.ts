@@ -511,7 +511,7 @@ async function main(): Promise<void> {
 
   const base = import.meta.env.BASE_URL;
 
-  // Позиция: GPS, fallback — Приют 11 (контрольная точка MVP-ACCEPTANCE)
+  // Позиция: GPS, fallback — Приют 11 (контрольная точка ROADMAP)
   const origin = await getPosition();
   lastOrigin = origin;
 

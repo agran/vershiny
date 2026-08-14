@@ -1,6 +1,6 @@
 /**
  * Web Worker: ray-marching горизонта и видимость пиков (ARCHITECTURE.md).
- * Источник высот — DemSource (new-geo-data.md): локальный патч → Terrarium.
+ * Источник высот — DemSource (DATA-PIPELINE.md): локальный патч → Terrarium.
  *
  * Протокол сообщений:
  *   → { type: 'init', patchBaseUrl?, reqId? }

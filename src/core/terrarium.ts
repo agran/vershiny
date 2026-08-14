@@ -1,5 +1,5 @@
 /**
- * TerrariumSampler — глобальный базовый DEM (docs/new-geo-data.md, слой 1).
+ * TerrariumSampler — глобальный базовый DEM (docs/DATA-PIPELINE.md, слой 1).
  * AWS Open Data «Terrain Tiles» (Mapzen Joerd), Terrarium PNG, зумы 0–15:
  *   https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png
  * Декодирование: h = R·256 + G + B/256 − 32768.

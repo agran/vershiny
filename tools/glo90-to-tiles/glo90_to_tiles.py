@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 glo90-to-tiles: Copernicus GLO-90 (26 475 GeoTIFF, ~175 ГБ) → глобальная
-разреженная пирамида тайлов для GitHub Pages (docs/DEM-ECONOMICAL.md).
+разреженная пирамида тайлов для GitHub Pages (docs/DATA-PIPELINE.md).
 
 Схема (docs/DATA-PIPELINE.md, раздел «Глобальная пирамида»):
 

@@ -1,5 +1,5 @@
 /**
- * DemSource — единая точка доступа к высотам (docs/new-geo-data.md):
+ * DemSource — единая точка доступа к высотам (docs/DATA-PIPELINE.md):
  *   запрос → локальный патч (IndexedDB/int16) → Terrarium (онлайн) → NaN.
  * Ray-marching знает только синхронный sample() после prefetch.
  */
