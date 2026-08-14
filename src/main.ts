@@ -450,6 +450,18 @@ import { orientationTracker } from "./core/orientation";
  * него же, и обращение к ещё не инициализированной переменной уронило бы
  * запуск целиком.
  */
+
+/**
+ * Кнопки, чьи подписи переводятся заново при смене языка.
+ *
+ * Стоит ДО `orientationTracker.start()` по той же причине, что и `compassBtn`:
+ * на iOS `start()` синхронно зовёт callback, тот создаёт кнопку «Включить
+ * компас», а `setTitle` делает `localizedTitles.push`. Константа ниже по
+ * файлу попадала бы в temporal dead zone
+ * (`ReferenceError: Cannot access uninitialized variable`) — и страница
+ * навсегда оставалась бы на «Загрузка…» (только на iPhone).
+ */
+const localizedTitles: { el: HTMLElement; key: TitleKey }[] = [];
 let compassBtn: HTMLButtonElement | null = null;
 function updateCompassButton(): void {
   if (!orientationTracker.needsPermission) {
@@ -1110,9 +1122,6 @@ function makeButton(
 
 /** Ключ словаря переводов (i18n.t) */
 type TitleKey = Parameters<typeof t>[0];
-
-/** Элементы, чьи подписи надо перевести заново при смене языка */
-const localizedTitles: { el: HTMLElement; key: TitleKey }[] = [];
 
 function setTitle(el: HTMLElement, key: TitleKey): void {
   const title = t(key);

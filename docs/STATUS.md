@@ -97,6 +97,20 @@ JS-фолбэки — распаковка DEFLATE (zlib/gzip) через биб
 отсутствии нативных API, поэтому свежие браузеры идут прежним путём без
 изменений. Тест: `test/png.test.ts`.
 
+### iPhone снова висел на «Загрузка…» — temporal dead zone (решено)
+
+После исправления ES2022 и module worker плашка «Загрузка…» оставалась на
+iPhone (Safari, где `DeviceOrientationEvent.requestPermission` есть):
+`orientationTracker.start()` на iOS вызывает callback синхронно при загрузке
+модуля, тот создаёт кнопку «Включить компас», а `setTitle` пишет в
+`localizedTitles`. Константа была объявлена ниже по файлу, и первое обращение
+попадало в temporal dead zone — `ReferenceError: Cannot access uninitialized
+variable`, модуль не выполнялся. На Android/десктопе callback при старте не
+вызывается, поэтому баг был виден только на iPhone. Константа перенесена до
+`orientationTracker.start()` (`src/main.ts`); тест `test/main-module.test.ts`
+импортирует модуль с заглушкой iOS-пути и проверяет, что кнопка компаса
+создаётся без исключения.
+
 ### Старый Android Chrome падал при старте и не грузил рельеф (решено)
 
 На старых прошивках Android (Chrome < 71–85) проявлялись три «тихих» краша:
