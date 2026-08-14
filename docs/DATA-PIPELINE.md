@@ -91,8 +91,8 @@ https://agran.github.io/vershiny-dem/tiles/global/index.json
 `lon = −180 + i/N`, `lat = 90 − j/N` (пиксель-точка, как и в исходном COG).
 
 **Формат тайла**: значения `h/quantM` → дельта вдоль строк → gzip. Клиент
-распаковывает `DecompressionStream('gzip')` (на старых браузерах — чистый
-JS-инфлятор `src/core/inflate.ts`), накапливает дельту с
+распаковывает `DecompressionStream('gzip')` (на старых браузерах — `fflate`),
+накапливает дельту с
 переполнением int16 и умножает на `quantM`. GitHub Pages бинарники не жмёт,
 поэтому сжатие своё: ~2× к объёму и трафику.
 

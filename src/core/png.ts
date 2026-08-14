@@ -9,7 +9,7 @@
  * глубина 8, colorType 2 (RGB) или 6 (RGBA), фильтры 0–4, без чересстрочности.
  */
 
-import { inflateZlib } from "./inflate";
+import { unzlibSync } from "fflate";
 
 export interface DecodedPng {
   width: number;
@@ -132,7 +132,7 @@ export function decodePngToRgba(png: Uint8Array): DecodedPng {
     off += part.length;
   }
 
-  const inflated = inflateZlib(raw);
+  const inflated = unzlibSync(raw);
   const stride = width * bpp;
   if (inflated.length < height * (1 + stride))
     throw new Error("PNG: неполные данные IDAT");

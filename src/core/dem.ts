@@ -13,11 +13,11 @@
  * (детальнее ≠ лучше — угловой размер дальних хребтов мал, а трафик реален).
  */
 
+import { gunzipSync } from "fflate";
 import { demStorePrefix } from "./dem-config";
 import type { LatLon } from "./geo";
 import { distanceM } from "./geo";
 import { root } from "./globals";
-import { inflateGzip } from "./inflate";
 
 export const TILE_SIZE = 256;
 /** Метры в одном градусе широты (для перевода размера ячейки в метры) */
@@ -63,10 +63,10 @@ function base64ToBytes(base64: string): Uint8Array {
   return bytes;
 }
 
-/** iOS < 16.4: `DecompressionStream` в воркере нет — тогда чистый JS */
+/** iOS < 16.4: `DecompressionStream` в воркере нет — тогда fflate */
 const HAS_DECOMPRESSION_STREAM = typeof DecompressionStream === "function";
 
-/** Распаковка gzip: нативный потоковый API, на старом Safari — инфлятор */
+/** Распаковка gzip: нативный потоковый API, на старом Safari — fflate */
 async function gunzip(bytes: Uint8Array): Promise<Uint8Array> {
   if (HAS_DECOMPRESSION_STREAM) {
     const stream = new Blob([bytes as BlobPart])
@@ -74,7 +74,7 @@ async function gunzip(bytes: Uint8Array): Promise<Uint8Array> {
       .pipeThrough(new DecompressionStream("gzip"));
     return new Uint8Array(await new Response(stream).arrayBuffer());
   }
-  return inflateGzip(bytes);
+  return gunzipSync(bytes);
 }
 
 export interface DemSamplerOptions {
