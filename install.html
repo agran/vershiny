@@ -153,5 +153,15 @@
     document.body.classList.add('standalone');
   });
 </script>
+<!--
+  Счётчик посещений — тем же модулем, что и в приложении: без сети не грузится,
+  старт страницы не задерживает (src/core/analytics.ts). Отдельным сниппетом
+  здесь была бы вторая копия настроек счётчика, которая рано или поздно
+  разъедется с первой.
+-->
+<script type="module">
+  import { setupAnalytics } from './src/core/analytics.ts';
+  setupAnalytics();
+</script>
 </body>
 </html>

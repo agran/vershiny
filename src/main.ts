@@ -88,6 +88,13 @@ if ('serviceWorker' in navigator && !import.meta.env.DEV) {
     });
 }
 
+// Счётчик посещений. Как и Service Worker — не в разработке: считать надо
+// людей в горах, а не собственные перезагрузки страницы. Сам счётчик грузится
+// в простое и только при живой сети (см. core/analytics.ts)
+if (!import.meta.env.DEV) {
+  void import('./core/analytics').then(({ setupAnalytics }) => setupAnalytics());
+}
+
 function setStatus(text: string): void {
   statusEl.textContent = text;
   statusEl.style.display = text ? 'block' : 'none';
