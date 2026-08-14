@@ -6,7 +6,12 @@
 import { renderPanorama, silhouetteProfile, HORIZON_FRAC, type PanoramaState, type ViewState } from './ui/panorama';
 import type { Peak, PeaksFile } from './core/peaks';
 import { toRad, wrapAngle, normalizeAz, type LatLon } from './core/geo';
-import { getPosition } from './core/position';
+import {
+  getPosition,
+  awaitAccuratePosition,
+  rememberPosition,
+  worthRefining,
+} from './core/position';
 import { t, getLocale } from './core/i18n';
 import {
   downloadRegion,
@@ -598,9 +603,18 @@ async function main(): Promise<void> {
   // Через requestCompute, а не прямым postMessage: иначе стартовая точка —
   // единственная, для которой не проверялось соответствие региона, и плашка
   // «вы в другом районе» появлялась только после первого перемещения.
-  // По запасной точке район не предлагаем: сказать «Вы в районе X» человеку,
-  // которому просто не дали геолокацию, — это выдумка, а не подсказка
+  // По ненадёжной точке район не предлагаем: сказать «Вы в районе X»
+  // человеку, которому не дали геолокацию, — это выдумка, а не подсказка
   requestCompute(origin, fix.trusted);
+
+  if (fix.trusted) {
+    rememberPosition(origin);
+  } else {
+    // Показали, что было под рукой, — теперь дослушиваем спутники. Без сети
+    // недоступен A-GPS, и холодный фикс занимает минуты: ждать его до первого
+    // кадра значит держать человека на заставке всё это время
+    void refineStartPosition();
+  }
 
   // Кнопки действий; main() повторяется при смене региона — создаём один раз
   if (!navUiReady) {
@@ -612,6 +626,34 @@ async function main(): Promise<void> {
     // Регион мог смениться по GPS — состояние кнопки перечитываем
     void refreshDownloadState();
   }
+}
+
+/**
+ * Уточнение стартовой точки, когда спутники наконец ответили.
+ *
+ * Панорама к этому моменту уже нарисована — по готовому фиксу системы или по
+ * точке прошлого запуска. Здесь только поправка: если человек оказался не
+ * там, где показали, район и панорама пересчитываются, а плашка «вы в другом
+ * районе» появляется уже по настоящему положению.
+ */
+async function refineStartPosition(): Promise<void> {
+  const precise = await awaitAccuratePosition();
+  if (!precise) return; // спутники не ответили — остаёмся на том, что показали
+  rememberPosition(precise);
+  if (!worthRefining(lastOrigin, precise)) return;
+
+  console.info(
+    `Уточнение по спутникам: ${precise.lat.toFixed(4)}, ${precise.lon.toFixed(4)}`,
+  );
+  // Район подбираем сами, только если человек не выбирал его в настройках
+  if (!manualRegion) {
+    const { loadRegions, regionForPosition } = await import('./ui/download');
+    const region = regionForPosition(precise, await loadRegions());
+    if (region && region !== currentRegion) await switchRegion(region);
+  }
+  heightOverride = null; // мы на земле в своей точке
+  autoTiltPending = true;
+  requestCompute(precise);
 }
 
 /**
@@ -1069,6 +1111,7 @@ function setupNavPad(): void {
           }
           heightOverride = null; // возврат на землю в точке GPS
           autoTiltPending = true;
+          rememberPosition(fix.pos); // следующий запуск начнётся отсюда
           requestCompute(fix.pos);
         });
       };
