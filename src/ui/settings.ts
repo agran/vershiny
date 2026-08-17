@@ -228,7 +228,10 @@ export function openSettings(
               "font-size:11px;color:#8a9ba8;font-style:italic";
             nameWrap.appendChild(coreEl);
           }
-          const size = estimateRegionSizeMB(regionInfo.bbox);
+          const size = estimateRegionSizeMB(
+            regionInfo.bbox,
+            regionInfo.priority,
+          );
           const sizeEl = document.createElement("span");
           sizeEl.textContent = `~${size} ${mbUnit()}`;
           sizeEl.style.cssText = "font-size:11px;color:#a8dadc";
@@ -675,8 +678,14 @@ function btnStyle(): string {
 }
 
 /** Грубая оценка по площади bbox — заглушка на те доли секунды, пока не
- *  приедет index.json пирамиды и не посчитается точный размер. */
-function estimateRegionSizeMB(bbox: [number, number, number, number]): number {
+ *  приедет index.json пирамиды и не посчитается точный размер.
+ *  У p1–p3 коэффициент выше: hi-слой (~87 м) покрывает их целиком и весит
+ *  заметно больше базовой пирамиды 217 м (замер: Эльбрус hi 10.4 МБ, Алтай
+ *  hi 40.3 МБ). */
+function estimateRegionSizeMB(
+  bbox: [number, number, number, number],
+  priority = 4,
+): number {
   const [minLon, minLat, maxLon, maxLat] = bbox;
   const latMid = (minLat + maxLat) / 2;
   // bbox через антимеридиан (Врангель: 177.5…−177.5) разворачиваем в
@@ -685,7 +694,8 @@ function estimateRegionSizeMB(bbox: [number, number, number, number]): number {
   const lonSpanKm = lonSpanDeg * 111.32 * Math.cos((latMid * Math.PI) / 180);
   const latSpanKm = (maxLat - minLat) * 111.32;
   const areaKm2 = lonSpanKm * latSpanKm;
-  return Math.max(3, Math.round((areaKm2 / 1000) * 0.0625));
+  const perThousandKm2 = priority <= 3 ? 0.2 : 0.0625;
+  return Math.max(3, Math.round((areaKm2 / 1000) * perThousandKm2));
 }
 
 /** Единица объёма по локали: плейсхолдер тоже не должен быть всегда «МБ» */
