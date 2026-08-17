@@ -1378,6 +1378,45 @@ function btnRect(btn: HTMLElement): DOMRect {
 }
 
 /**
+ * Точка на рамке прямоугольника, куда упирается луч из его центра к цели.
+ * Так стрелка плашки начинается с той стороны (бок, верх, низ), которая
+ * реально ближе к кнопке, а не с той, что «положена» по стороне размещения.
+ */
+function rectBorderPoint(
+  rx: number,
+  ry: number,
+  rw: number,
+  rh: number,
+  targetX: number,
+  targetY: number,
+): { x: number; y: number } {
+  const cx = rx + rw / 2;
+  const cy = ry + rh / 2;
+  const dx = targetX - cx;
+  const dy = targetY - cy;
+  if (!dx && !dy) return { x: cx, y: cy };
+  const scaleX = dx !== 0 ? rw / 2 / Math.abs(dx) : Infinity;
+  const scaleY = dy !== 0 ? rh / 2 / Math.abs(dy) : Infinity;
+  const scale = Math.min(scaleX, scaleY);
+  return { x: cx + dx * scale, y: cy + dy * scale };
+}
+
+/** Точка на окружности кнопки, ближайшая к цели (кнопки у нас круглые) */
+function circleBorderPoint(
+  cx: number,
+  cy: number,
+  radius: number,
+  targetX: number,
+  targetY: number,
+): { x: number; y: number } {
+  const dx = targetX - cx;
+  const dy = targetY - cy;
+  const dist = Math.hypot(dx, dy);
+  if (!dist) return { x: cx, y: cy };
+  return { x: cx + (dx / dist) * radius, y: cy + (dy / dist) * radius };
+}
+
+/**
  * Раскладка плашек: базовая точка в стороне от кнопки, затем раздвижка
  * вдоль оси, пока плашка не перестанет пересекаться с кнопками и другими
  * плашками. Ось: left/right — по вертикали, above/below — по горизонтали.
@@ -1502,16 +1541,20 @@ function layoutCaptions(): void {
     c.root.style.visibility = "visible";
     placed.push(new DOMRect(x, y, lw, lh));
 
-    // Стрелка от края плашки к краю кнопки
+    // Стрелка от плашки к кнопке. Концы выбираем по геометрии, а не по
+    // стороне размещения: после раздвижки плашка может стоять ниже или выше
+    // своей кнопки, и линия из «условной середины бока» шла наискосок через
+    // пустоту. Вместо этого — луч из центра плашки в центр кнопки: начало
+    // там, где луч пересекает рамку плашки (бок, верх или низ — что ближе),
+    // конец — на окружности кнопки. Так линия всегда кратчайшая и выглядит
+    // указателем, а не кривой через экран.
+    const from = rectBorderPoint(x, y, lw, lh, cx, cy);
+    const to = circleBorderPoint(cx, cy, br.width / 2, x + lw / 2, y + lh / 2);
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    const fromX = vertical ? (c.side === "left" ? x + lw : x) : cx;
-    const fromY = vertical ? y + lh / 2 : c.side === "above" ? y + lh : y;
-    const toX = vertical ? (c.side === "left" ? br.left : br.right) : cx;
-    const toY = vertical ? cy : c.side === "above" ? br.top : br.bottom;
-    line.setAttribute("x1", String(fromX));
-    line.setAttribute("y1", String(fromY));
-    line.setAttribute("x2", String(toX));
-    line.setAttribute("y2", String(toY));
+    line.setAttribute("x1", String(from.x));
+    line.setAttribute("y1", String(from.y));
+    line.setAttribute("x2", String(to.x));
+    line.setAttribute("y2", String(to.y));
     line.setAttribute("stroke", "rgba(241,250,238,0.55)");
     line.setAttribute("stroke-width", "1.2");
     line.setAttribute("stroke-dasharray", "3 3");
@@ -1940,6 +1983,15 @@ function setupOrientationButton(): void {
       : pref === "landscape"
         ? "orientationPortrait"
         : "orientationAuto";
+  /** Ключ ТЕКУЩЕГО режима — для статус-плашки по нажатию */
+  const currentKey = (): TitleKey =>
+    pref === "auto"
+      ? "orientationAuto"
+      : pref === "landscape"
+        ? "orientationLandscape"
+        : "orientationPortrait";
+  /** Таймер автоскрытия статуса режима: повторное нажатие не должно гасить свежий */
+  let statusTimer: ReturnType<typeof setTimeout> | null = null;
   // Иконка показывает ТЕКУЩИЙ режим: авто — телефон в дуге, запертые —
   // телефон с замком. Подпись по-прежнему говорит, что включится по нажатию.
   const currentIcon = (): string =>
@@ -1954,22 +2006,33 @@ function setupOrientationButton(): void {
     `left:${edgeLeft(56)};top:${edgeTop()}`,
     "right",
   );
-  /** Внешний вид под текущий режим: иконка + цвет запертого + подпись */
+  // Плашка-подпись при загрузке — общий смысл кнопки, а не следующий режим:
+  // «Ландшафтная ориентация» у незапертого экрана читалась как описание
+  // текущего состояния, а не как объяснение, зачем кнопка
+  const cap = captionEntries.find((c) => c.btn === btn);
+  if (cap) {
+    cap.key = "orientation";
+    cap.label.textContent = t("orientation");
+  }
+  /** Внешний вид под текущий режим: иконка + цвет запертого + подпись title */
   const sync = (): void => {
     setTitle(btn, nextKey());
     btn.innerHTML = currentIcon();
     btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
-    const cap = captionEntries.find((c) => c.btn === btn);
-    if (cap) {
-      cap.key = nextKey();
-      cap.label.textContent = t(cap.key);
-    }
   };
   btn.onclick = async () => {
     pref = pref === "auto" ? "landscape" : pref === "landscape" ? "portrait" : "auto";
     rememberOrientation(pref);
     sync();
     await applyOrientation(pref);
+    // Подтверждение режима: title кнопки говорит, что БУДЕТ по нажатию,
+    // поэтому само нажатие без отклика выглядело молчаливой подменой
+    if (statusTimer) clearTimeout(statusTimer);
+    setStatus(t(currentKey()));
+    statusTimer = setTimeout(() => {
+      statusTimer = null;
+      setStatus("");
+    }, 2500);
   };
   sync();
 }

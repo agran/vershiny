@@ -104,6 +104,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
       'the camera, outlines are always drawn.',
   },
   settings: { ru: 'Настройки', en: 'Settings' },
+  orientation: { ru: 'Поворот экрана', en: 'Screen rotation' },
   orientationLandscape: { ru: 'Ландшафтная ориентация', en: 'Landscape orientation' },
   orientationPortrait: { ru: 'Портретная ориентация', en: 'Portrait orientation' },
   orientationAuto: { ru: 'Автоповорот экрана', en: 'Auto-rotate screen' },

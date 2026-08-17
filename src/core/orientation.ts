@@ -29,6 +29,7 @@ export interface OrientationState {
    * Точность компаса (iOS webkitCompassAccuracy), градусы. Отрицательное
    * значение — датчик раскалиброван: iOS отдаёт −1, когда магнитометру
    * нельзя верить, пока человек не покрутит телефон «восьмёркой».
+   * NaN — точность неизвестна (Android не сообщает её вовсе).
    */
   accuracyDeg: number;
   /** Откуда данные: 'sensor' | 'manual' | 'none' */
@@ -219,8 +220,15 @@ class OrientationTracker {
     );
   }
 
-  /** iOS попросила калибровку системным событием compassneedscalibration */
+  /** Система попросила калибровку событием compassneedscalibration */
   private calibrationRequested = false;
+  /**
+   * Таймер авто-снятия просьбы о калибровке. На iOS флаг снимает вернувшаяся
+   * точность (onOrientation), но там, где точности нет (Android), событие
+   * приходит повторно, пока датчик плох, — а тишина означает «откалибровался».
+   * Без таймера одна-единственная просьба висела бы вечно.
+   */
+  private calibrationTimer: ReturnType<typeof setTimeout> | null = null;
 
   start(callback: OrientationCallback): void {
     this.callback = callback;
@@ -293,8 +301,13 @@ class OrientationTracker {
   }
 
   private onCalibrationNeeded = (): void => {
-    if (this.calibrationRequested) return;
     this.calibrationRequested = true;
+    if (this.calibrationTimer) clearTimeout(this.calibrationTimer);
+    this.calibrationTimer = setTimeout(() => {
+      this.calibrationTimer = null;
+      this.calibrationRequested = false;
+      this.callback?.(this.state);
+    }, 15000);
     this.callback?.(this.state); // UI перечитает needsCalibration
   };
 
@@ -346,7 +359,11 @@ class OrientationTracker {
       : look.azimuthRad;
 
     const now = performance.now();
-    const accuracy = hasCompass ? (webkit.webkitCompassAccuracy ?? -1) : -1;
+    // Точность −1 — это iOS-семантика «магнитометр раскалиброван». На Android
+    // webkitCompass* нет вовсе, и прежний код присваивал −1 КАЖДОМУ сенсорному
+    // показанию: подсказка про «восьмёрку» висела вечно, сколько ни крути.
+    // Там точность неизвестна — честный NaN, а не «плохо»
+    const accuracy = hasCompass ? (webkit.webkitCompassAccuracy ?? -1) : NaN;
 
     // Комплементарный фильтр: сглаживаем скачки компаса
     this.gyroSamples.push(azimuthRad);
@@ -421,6 +438,10 @@ class OrientationTracker {
       this.handler = null;
     }
     window.removeEventListener('compassneedscalibration', this.onCalibrationNeeded, true);
+    if (this.calibrationTimer) {
+      clearTimeout(this.calibrationTimer);
+      this.calibrationTimer = null;
+    }
     this.calibrationRequested = false;
     this.listening = false;
     this.callback = null;

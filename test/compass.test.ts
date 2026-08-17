@@ -131,3 +131,45 @@ describe('раскалиброванный компас (iOS)', () => {
     expect(orientationTracker.needsCalibration).toBe(false);
   });
 });
+
+describe('точность компаса на Android', () => {
+  /**
+   * Регресс: без webkitCompass* (весь Android) точность присваивалась −1 —
+   * iOS-код «магнитометр раскалиброван». Подсказка про «восьмёрку» висела
+   * вечно, сколько телефон ни крути (жалоба с Samsung).
+   */
+  it('без webkitCompass* точность неизвестна (NaN), а не «плохая»', () => {
+    vi.stubGlobal('DeviceOrientationEvent', class {});
+    Object.defineProperty(window, 'ondeviceorientationabsolute', {
+      value: null,
+      configurable: true,
+    });
+    const states: OrientationState[] = [];
+    orientationTracker.start((s) => states.push({ ...s }));
+
+    const ev = new Event('deviceorientationabsolute') as Event & DeviceOrientationEvent;
+    Object.assign(ev, { alpha: 10, beta: 45, gamma: 0, absolute: true });
+    window.dispatchEvent(ev);
+
+    expect(orientationTracker.needsCalibration).toBe(false);
+    expect(states.at(-1)?.source).toBe('sensor');
+    expect(states.at(-1)?.accuracyDeg).toBeNaN();
+  });
+
+  it('просьба о калибровке без точности сама гаснет по таймауту', () => {
+    vi.useFakeTimers();
+    try {
+      vi.stubGlobal('DeviceOrientationEvent', class {});
+      orientationTracker.start(() => {});
+
+      window.dispatchEvent(new Event('compassneedscalibration'));
+      expect(orientationTracker.needsCalibration).toBe(true);
+
+      // Событие приходит повторно, пока датчик плох; 15 с тишины — в норме
+      vi.advanceTimersByTime(15000);
+      expect(orientationTracker.needsCalibration).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
