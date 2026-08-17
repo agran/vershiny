@@ -33,6 +33,7 @@ import {
   ICON_LOCATE,
   ICON_MAP,
   ICON_PHOTO,
+  ICON_ROTATE,
   ICON_SETTINGS,
   ICON_UP,
   iconArrow,
@@ -483,6 +484,7 @@ window.addEventListener("keydown", (ev) => {
 
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
 import { rememberArMode, shouldAutoStartAr } from "./core/ar-mode";
+import * as screenOrientationModule from "./core/screen-orientation";
 import {
   DEFAULT_CAMERA_FOV_DEG,
   getCalibration,
@@ -727,6 +729,10 @@ let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
 
 async function main(): Promise<void> {
   setStatus(t("waitingGps"));
+
+  // Ориентация, запертая в прошлый раз, применится при первом же жесте
+  // (lock без пользовательского жеста браузер не даёт) — кнопка уже
+  // показывает запомненный режим, так что сюрприза не будет.
 
   // Кнопки — сразу, до GPS и загрузки региона: всё время загрузки они видны
   // и подписаны (addCaption), незачем человеку смотреть на пустой экран.
@@ -1707,10 +1713,63 @@ function adjustHeight(deltaM: number): void {
   requestCompute(lastOrigin);
 }
 
+/**
+ * Кнопка поворота экрана рядом с настройками.
+ *
+ * Панорама смотрится в ландшафте (горизонт длинный), а системный автоповорот
+ * в горах мешает: лёгкий наклон телефона переключает экран туда-сюда. Поэтому
+ * у нас ориентация ручная: кнопка циклит авто → ландшафт → портрет; выбор
+ * запоминается. Подпись показывает, ЧТО включится по нажатию, а зелёный фон —
+ * что сейчас заперто (не авто).
+ *
+ * Там, где lock недоступен (десктоп, старый Android, iOS без полноэкранного
+ * режима), кнопки нет: показывать ручку, которая ничего не делает, нельзя.
+ */
+function setupOrientationButton(): void {
+  const {
+    canLockOrientation,
+    applyOrientation,
+    rememberOrientation,
+    storedOrientation,
+  } = screenOrientationModule;
+  if (!canLockOrientation()) return;
+  let pref = storedOrientation();
+  const nextKey = (): TitleKey =>
+    pref === "auto"
+      ? "orientationLandscape"
+      : pref === "landscape"
+        ? "orientationPortrait"
+        : "orientationAuto";
+  const btn = makeButton(
+    ICON_ROTATE,
+    nextKey(),
+    `left:${edgeLeft(56)};top:${edgeTop()}`,
+    "right",
+  );
+  /** Внешний вид под текущий режим: подпись следующего + цвет запертого */
+  const sync = (): void => {
+    setTitle(btn, nextKey());
+    btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
+    const cap = captions.find((c) => c.btn === btn);
+    if (cap) {
+      cap.key = nextKey();
+      cap.span.textContent = t(cap.key);
+    }
+  };
+  btn.onclick = async () => {
+    pref = pref === "auto" ? "landscape" : pref === "landscape" ? "portrait" : "auto";
+    rememberOrientation(pref);
+    sync();
+    await applyOrientation(pref);
+  };
+  sync();
+}
+
 /** Кнопки ⚙/AR/фото: создаются при старте, видны уже во время загрузки */
 function setupActionButtons(): void {
   if (actionButtonsReady) return;
   actionButtonsReady = true;
+  setupOrientationButton();
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
   const settingsBtn = makeButton(
     ICON_SETTINGS,

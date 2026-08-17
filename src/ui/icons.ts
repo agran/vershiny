@@ -24,6 +24,13 @@ function svg(paths: string, size = 24): string {
   );
 }
 
+/** Поворот экрана: прямоугольник телефона с круговой стрелкой */
+export const ICON_ROTATE = svg(
+  '<rect x="7" y="3" width="10" height="18" rx="2"/>' +
+    '<path d="M15.5 8.5a4 4 0 1 1-5.8 3.5"/>' +
+    '<path d="M15.5 4.5v4h-4"/>',
+);
+
 /** AR: рамка видоискателя, внутри — гребень с вершиной */
 export const ICON_AR = svg(
   '<path d="M3 8V5.5A1.5 1.5 0 0 1 4.5 4H7"/>' +
