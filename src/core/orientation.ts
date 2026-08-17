@@ -4,18 +4,32 @@
  *
  * Стратегия:
  *   - iOS 13+: DeviceOrientationEvent.requestPermission() по user gesture
- *   - Android: deviceorientationabsolute (истинный север) или deviceorientation
+ *   - Android: deviceorientationabsolute или deviceorientation
  *   - Fallback: ручной свайп + поправка из калибровки (core/calibration.ts)
+ *
+ * Важно: «absolute» у обеих платформ — от **магнитного** севера, а панорама
+ * строится от истинного. Склонение (на Кавказе +7°, на Камчатке −9°) мы
+ * добавляем сами по модели WMM (core/declination.ts), как только известно
+ * физическое положение (setLocation). Ручная поправка в калибровке остаётся —
+ * она теперь закрывает только железо рядом и дешёвый магнитометр.
+ * На iOS webkitCompassHeading тоже магнитный: WebKit транслирует
+ * CLHeading.magneticHeading, а не trueHeading (подтверждено по исходникам
+ * WebKit и спецификации WebKit DOM Additions, 2026-08).
  */
 
 import { getCalibration, setCalibration } from './calibration';
+import { decimalYear, magneticDeclinationDeg } from './declination';
 
 export interface OrientationState {
   /** Азимут (истинный север), рад [0, 2π) */
   azimuthRad: number;
   /** Наклон (beta: −180..180 → 0 = горизонтально), рад */
   tiltRad: number;
-  /** Точность компаса (iOS webkitCompassAccuracy), градусы или −1 */
+  /**
+   * Точность компаса (iOS webkitCompassAccuracy), градусы. Отрицательное
+   * значение — датчик раскалиброван: iOS отдаёт −1, когда магнитометру
+   * нельзя верить, пока человек не покрутит телефон «восьмёркой».
+   */
   accuracyDeg: number;
   /** Откуда данные: 'sensor' | 'manual' | 'none' */
   source: 'sensor' | 'manual' | 'none';
@@ -140,6 +154,40 @@ class OrientationTracker {
   private seenAbsolute = false;
   /** Сглаженный азимут без ручной поправки, рад */
   private followedRad: number | null = null;
+  /** Физическое положение устройства (GPS) — для склонения по WMM */
+  private locationDeg: { lat: number; lon: number } | null = null;
+  /** Кэш склонения: WMM-суммирование — ~90 гармоник, на каждое событие незачем */
+  private declinationCache: { key: string; rad: number } | null = null;
+
+  /**
+   * Физическое положение устройства (не виртуальная точка обзора!).
+   * По нему считается магнитное склонение: компас отсчитывает азимут от
+   * магнитного севера, и поправка зависит от того, где стоит человек.
+   */
+  setLocation(latDeg: number, lonDeg: number): void {
+    this.locationDeg = { lat: latDeg, lon: lonDeg };
+  }
+
+  /**
+   * Склонение в текущей точке, рад. Кэшируем по округлённым координатам
+   * и дате: поле меняется на градусы за сотни километров и за годы.
+   */
+  private declinationRad(): number {
+    if (!this.locationDeg) return 0;
+    const year = decimalYear();
+    const key =
+      `${Math.round(this.locationDeg.lat * 2)},` +
+      `${Math.round(this.locationDeg.lon * 2)},${Math.round(year * 10)}`;
+    if (this.declinationCache?.key !== key) {
+      const deg = magneticDeclinationDeg(
+        this.locationDeg.lat,
+        this.locationDeg.lon,
+        year,
+      );
+      this.declinationCache = { key, rad: (deg * Math.PI) / 180 };
+    }
+    return this.declinationCache.rad;
+  }
 
   /** Ручная подстройка (свайп по кадру); хранится в калибровке, рад */
   private get manualOffsetRad(): number {
@@ -157,6 +205,22 @@ class OrientationTracker {
   get needsPermission(): boolean {
     return this.permissionPending && !this.listening;
   }
+
+  /**
+   * Компасу нельзя верить: iOS сообщила отрицательную точность (−1 —
+   * магнитометр раскалиброван) или прислала системное событие
+   * `compassneedscalibration`. Пока флаг стоит, показания азимута
+   * недостоверны, и интерфейсу лучше показать подсказку про «восьмёрку».
+   */
+  get needsCalibration(): boolean {
+    return (
+      this.calibrationRequested ||
+      (this.state.source === 'sensor' && this.state.accuracyDeg < 0)
+    );
+  }
+
+  /** iOS попросила калибровку системным событием compassneedscalibration */
+  private calibrationRequested = false;
 
   start(callback: OrientationCallback): void {
     this.callback = callback;
@@ -223,14 +287,24 @@ class OrientationTracker {
       window.addEventListener('deviceorientationabsolute', handler, true);
     }
     window.addEventListener('deviceorientation', handler, true);
+    // iOS сама просит калибровку: событие приходит, когда магнитометр
+    // раскалиброван или рядом источник помех
+    window.addEventListener('compassneedscalibration', this.onCalibrationNeeded, true);
   }
+
+  private onCalibrationNeeded = (): void => {
+    if (this.calibrationRequested) return;
+    this.calibrationRequested = true;
+    this.callback?.(this.state); // UI перечитает needsCalibration
+  };
 
   private onOrientation(ev: DeviceOrientationEvent, eventType: string): void {
     if (ev.alpha === null) return;
 
-    // iOS: webkitCompassHeading (0–360, от севера по часовой) — единственный
-    // абсолютный источник, у самой alpha там произвольный ноль. Переводим его
-    // обратно в alpha-подобный угол, чтобы матрица считалась одинаково.
+    // iOS: webkitCompassHeading (0–360, от МАГНИТНОГО севера по часовой) —
+    // единственный абсолютный источник, у самой alpha там произвольный ноль.
+    // Переводим его обратно в alpha-подобный угол, чтобы матрица считалась
+    // одинаково. Склонение добавится ниже, как и на Android.
     const webkit = ev as DeviceOrientationEvent & {
       webkitCompassHeading?: number;
       webkitCompassAccuracy?: number;
@@ -258,15 +332,24 @@ class OrientationTracker {
     // Флаг «абсолютное показание уже видели» ставим только по годным данным:
     // иначе одно битое событие закрывало дорогу относительным показаниям,
     // которые в этот момент — единственный рабочий источник
-    if (eventType === 'deviceorientationabsolute' || hasCompass || ev.absolute) {
+    const absolute =
+      eventType === 'deviceorientationabsolute' || hasCompass || ev.absolute === true;
+    if (absolute) {
       this.seenAbsolute = true;
     }
+
+    // Компас отсчитывает азимут от магнитного севера — переводим в истинный
+    // по WMM. Только абсолютным показаниям: у относительных ноль произвольный,
+    // и склонение было бы просто лишним сдвигом.
+    const azimuthRad = absolute
+      ? normalizeAngle(look.azimuthRad + this.declinationRad())
+      : look.azimuthRad;
 
     const now = performance.now();
     const accuracy = hasCompass ? (webkit.webkitCompassAccuracy ?? -1) : -1;
 
     // Комплементарный фильтр: сглаживаем скачки компаса
-    this.gyroSamples.push(look.azimuthRad);
+    this.gyroSamples.push(azimuthRad);
     if (this.gyroSamples.length > GYRO_SMOOTH_WINDOW) {
       this.gyroSamples.shift();
     }
@@ -280,6 +363,9 @@ class OrientationTracker {
     // Применяем ручную подстройку (свайп-оффсет)
     const finalAz = normalizeAngle(this.followedRad + this.manualOffsetRad);
 
+    // Точность вернулась в норму — системная просьба о калибровке отработана
+    if (accuracy >= 0) this.calibrationRequested = false;
+
     const prev = this.state;
     this.state = {
       azimuthRad: finalAz,
@@ -289,9 +375,16 @@ class OrientationTracker {
     };
 
     // Отправляем только при значимом изменении (>0.1°) или раз в 100 мс:
-    // сравнивать нужно со временем прошлой отправки, а не с текущим
+    // сравнивать нужно со временем прошлой отправки, а не с текущим.
+    // Смена флага калибровки — тоже повод сообщить: UI показывает подсказку
+    const wasUncalibrated = prev.source === 'sensor' && prev.accuracyDeg < 0;
+    const isUncalibrated = accuracy < 0;
     const diff = Math.abs(shortestAngle(finalAz - prev.azimuthRad));
-    if (diff > 0.0017 || now - this.lastEmitted > 100) {
+    if (
+      diff > 0.0017 ||
+      now - this.lastEmitted > 100 ||
+      wasUncalibrated !== isUncalibrated
+    ) {
       this.lastEmitted = now;
       this.callback?.(this.state);
     }
@@ -327,6 +420,8 @@ class OrientationTracker {
       window.removeEventListener('deviceorientation', this.handler, true);
       this.handler = null;
     }
+    window.removeEventListener('compassneedscalibration', this.onCalibrationNeeded, true);
+    this.calibrationRequested = false;
     this.listening = false;
     this.callback = null;
   }

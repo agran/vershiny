@@ -83,3 +83,51 @@ describe('разрешение на датчики (iOS)', () => {
     expect(orientationTracker.needsPermission).toBe(false);
   });
 });
+
+describe('раскалиброванный компас (iOS)', () => {
+  it('отрицательная точность — повод для подсказки, положительная её снимает', async () => {
+    stubIOS('granted');
+    const states: OrientationState[] = [];
+    orientationTracker.start((s) => states.push({ ...s }));
+    await orientationTracker.requestPermission();
+
+    expect(orientationTracker.needsCalibration).toBe(false);
+
+    // iOS: компас с точностью −1 (раскалиброван) — показаниям нельзя верить
+    const bad = new Event('deviceorientation') as Event & DeviceOrientationEvent;
+    Object.assign(bad, {
+      alpha: 0, beta: 90, gamma: 0,
+      webkitCompassHeading: 42, webkitCompassAccuracy: -1,
+    });
+    window.dispatchEvent(bad);
+    expect(orientationTracker.needsCalibration).toBe(true);
+    expect(states.at(-1)?.accuracyDeg).toBe(-1);
+
+    // После «восьмёрки» точность вернулась — подсказку снимаем
+    const good = new Event('deviceorientation') as Event & DeviceOrientationEvent;
+    Object.assign(good, {
+      alpha: 0, beta: 90, gamma: 0,
+      webkitCompassHeading: 42, webkitCompassAccuracy: 5,
+    });
+    window.dispatchEvent(good);
+    expect(orientationTracker.needsCalibration).toBe(false);
+  });
+
+  it('системное событие compassneedscalibration тоже поднимает флаг', async () => {
+    stubIOS('granted');
+    orientationTracker.start(() => {});
+    await orientationTracker.requestPermission();
+
+    window.dispatchEvent(new Event('compassneedscalibration'));
+    expect(orientationTracker.needsCalibration).toBe(true);
+
+    // Нормальное показание снимает и этот флаг
+    const good = new Event('deviceorientation') as Event & DeviceOrientationEvent;
+    Object.assign(good, {
+      alpha: 0, beta: 90, gamma: 0,
+      webkitCompassHeading: 10, webkitCompassAccuracy: 3,
+    });
+    window.dispatchEvent(good);
+    expect(orientationTracker.needsCalibration).toBe(false);
+  });
+});
