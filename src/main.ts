@@ -1438,7 +1438,19 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   if (!silent) setStatus(t("calibrating"));
   const { extractSkyline, matchSkyline, MIN_CONFIDENCE } =
     await import("./core/skyline");
-  const profile = extractSkyline(frame.rgba, frame.width, frame.height);
+  const { SkylineTracker } = await import("./core/skyline-track");
+  // Временна́я стабилизация (core/skyline-track.ts): ~0.8 с видео давят шум
+  // сенсора и отбрасывают колонки, где линия ползёт (облака над гребнем,
+  // блики) — они уходят в NaN и не тянут совмещение
+  const tracker = new SkylineTracker(8);
+  let stab = tracker.push(extractSkyline(frame.rgba, frame.width, frame.height));
+  for (let k = 1; k < 8; k++) {
+    await new Promise((resolve) => setTimeout(resolve, 110));
+    const next = arSession.grabFrame();
+    if (!next) break;
+    stab = tracker.push(extractSkyline(next.rgba, next.width, next.height));
+  }
+  const profile = stab.profile;
   // Профиль измерен в долях ПОЛНОГО кадра камеры, поэтому и геометрия нужна
   // кадра, а не экрана: view.fovRad/HORIZON_FRAC описывают картинку после
   // cover-кропа (ui/ar.ts), и с ними совмещение ехало бы на величину обрезки

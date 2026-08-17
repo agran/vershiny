@@ -24,81 +24,326 @@ import { matchSkylineCoarse } from './skyline-match';
 const GRID_W = 160;
 const GRID_H = 120;
 
+// Веса и пороги экстрактора. Подобраны на синтетике (test/skyline-weather.test.ts:
+// матрица «погода × рельеф»), менять — только вместе с прогоном той матрицы.
+
+/**
+ * Вес скачка текстуры «внизу шершаво — вверху гладко» относительно
+ * градиентных членов. Сами градиенты входят в силу как dY + dC + 0.5·dS
+ * (яркость, цвет B−R, насыщенность) — см. edgeAll.
+ */
+const W_TEX = 5.0;
+/** Скачок текстуры слабее этого — сенсорный шум, а не признак */
+const TEX_JUMP_MIN = 0.004;
+/** Потолок текстурного члена: не должен перекрикивать градиенты */
+const TEX_CAP = 0.06;
+/** Полуокно вертикальных полос текстуры вокруг кандидата, строк */
+const TEX_WIN = 4;
+
+/** Проверка «небо сверху»: средняя локальная текстура выше кандидата */
+const SKY_TEX_MAX = 0.015;
+/** Проверка «небо сверху»: σ яркости выше кандидата (градиент неба допустим) */
+const SKY_STD_MAX = 0.12;
+
+/** ДП: штраф за излом линии λ·|Δy|^1.5 — приор непрерывности горизонта */
+const DP_LAMBDA = 0.02;
+/** ДП: наибольший перепад линии между соседними колонками, строк сетки */
+const DP_MAX_STEP = 6;
+/** ДП: цена колонки без границы; слабее этого уровня границе не верим */
+const DP_NONE_COST = 0.04;
+/**
+ * ДП: цена ВОЗОБНОВЛЕНИЯ линии после разрыва (переход NONE→y). Без неё
+ * линия бесплатно соскакивала с гребня на одиночный сильный выброс ниже
+ * (фонарь, блик): выгода −strength доставалась даром. Теперь выброс должен
+ * окупить вход, а честный гребень окупает его серией колонок.
+ */
+const DP_ENTER_COST = 0.25;
+
+/**
+ * Окно поиска обратного перепада вокруг кандидата, строк сетки. Граница
+ * «небо/земля» — ступенька: ниже неё земля тянется до низа кадра, выше —
+ * небо до верха. Фонарь и снежное поле — импульс: через несколько строк
+ * яркость возвращается обратным перепадом. 20 строк хватает и на точечные
+ * огни, и на поля высотой ~15 строк.
+ */
+const PULSE_WIN = 20;
+/** Обратный перепад сильнее этой доли основного — кандидат импульс, не граница */
+const PULSE_RATIO = 0.7;
+/**
+ * ...но не слабее этого абсолютного уровня: пятна текстуры склона дают
+ * обратные перепады всегда, и без абсолютного порога каждая вторая колонка
+ * леса объявлялась бы «импульсом»
+ */
+const PULSE_ABS = 0.05;
+
+/**
+ * «Граница неба — самая верхняя значимая граница колонки»: перепад выше
+ * кандидата сильнее этого уровня отбрасывает кандидата (снежные поля,
+ * поляны, нижние кромки фонарей лежат НИЖЕ гребня)
+ */
+const EDGE_ABOVE_MIN = 0.1;
+/** ...или сильнее этой доли собственной силы кандидата */
+const EDGE_ABOVE_RATIO = 0.5;
+
 /**
  * Профиль неба из кадра: для каждой из GRID_W колонок — доля высоты кадра,
  * на которой проходит граница «небо / земля» (0 — верх кадра, 1 — низ).
- * NaN, если в колонке границы нет (сплошное небо или сплошная земля).
+ * NaN, если в колонке границы нет (сплошное небо, сплошная земля, засветка).
  *
- * Способ разделения — поколоночный порог по Оцу: ищем строку, которая делит
- * колонку на две максимально непохожие части. Простой порог яркости не годится
- * — снежная вершина ярче неба в дымке, а лес в тени темнее скалы; важна не
- * абсолютная яркость, а то, что небо однородно, а земля нет.
+ * Вместо поколоночного порога Оцу (он ломался на закате — «синева»
+ * отрицательна, в дымке — ловил ближний склон, в пасмурность — снежные поля)
+ * здесь глобально-согласованная линия (план docs/SKYLINE-EXTRACT-NEXT.md,
+ * подход A):
+ *
+ * 1. Каждой ячейке ставится в соответствие СИЛА кандидата — сумма модулей
+ *    вертикальных градиентов яркости, цветового вектора и насыщенности плюс
+ *    скачок текстуры. Признаки — про ПЕРЕПАД, а не про абсолютный цвет,
+ *    поэтому работают на закате (небо оранжевое — всё равно другого вектора,
+ *    чем склон), в пасмурность и ночью (знак перепада не используется).
+ * 2. Кандидат обязан пройти проверку «небо сверху»: область выше него гладкая
+ *    (низкая локальная текстура) и однородная по яркости. Снежное поле на
+ *    склоне её проваливает — над ним шершавый лес/скалы.
+ * 3. Линия выбирается динамическим программированием слева направо: сила
+ *    кандидатов минус штраф за излом, с состоянием NONE («в этой колонке
+ *    границы нет»). Физический приор непрерывности горизонта вшит в штрафы:
+ *    слабая, но непрерывная линия дальнего гребня выигрывает у сильной,
+ *    но рваной линии «туман/ближний склон».
  */
 export function extractSkyline(
   rgba: Uint8ClampedArray,
   width: number,
   height: number,
 ): Float32Array {
-  const grid = downsample(rgba, width, height);
-  const profile = new Float32Array(GRID_W);
+  const { lum, cbr, sat } = downsampleFeatures(rgba, width, height);
+  const W = GRID_W;
+  const H = GRID_H;
 
-  for (let x = 0; x < GRID_W; x++) {
-    // Префиксные суммы по колонке: split за один проход вместо квадрата
-    let sum = 0;
-    let sumSq = 0;
-    const values = new Float32Array(GRID_H);
-    for (let y = 0; y < GRID_H; y++) {
-      const v = grid[y * GRID_W + x];
-      values[y] = v;
-      sum += v;
-      sumSq += v * v;
+  // Локальная текстура яркости: |отклонение от среднего четырёх соседей|.
+  // Считается по сглаженной 3×3 яркости: белый сенсорный шум (небо ночью)
+  // бокс-фильтр давит втрое, а текстура леса после даунскейла живёт на
+  // масштабе нескольких ячеек и выживает.
+  const smooth = box3x3(lum);
+  const tex = new Float32Array(W * H);
+  for (let y = 1; y < H - 1; y++) {
+    for (let x = 1; x < W - 1; x++) {
+      const i = y * W + x;
+      tex[i] =
+        Math.abs(4 * smooth[i] - smooth[i - 1] - smooth[i + 1] - smooth[i - W] - smooth[i + W]) / 4;
     }
+  }
 
-    let bestScore = 0;
-    let bestY = -1;
-    let bestDiff = 0;
-    let above = 0;
-    for (let y = 1; y < GRID_H - 1; y++) {
-      above += values[y - 1];
-      const nAbove = y;
-      const nBelow = GRID_H - y;
-      const meanAbove = above / nAbove;
-      const meanBelow = (sum - above) / nBelow;
-      const diff = meanAbove - meanBelow;
-      // Небо всегда «небеснее» земли: отрицательную разницу не рассматриваем,
-      // иначе граница уедет на тень под гребнем
-      if (diff <= 0) continue;
-      const score = nAbove * nBelow * diff * diff;
-      if (score > bestScore) {
-        bestScore = score;
-        bestY = y;
-        bestDiff = diff;
+  // Интегральные суммы по колонкам: текстура, яркость, яркость².
+  // pref[x + (y+1)·W] — сумма по строкам [0..y] включительно: проверка
+  // «небо сверху» и полосы текстуры считаются за O(1) на кандидата.
+  const prefT = new Float32Array(W * (H + 1));
+  const prefY = new Float32Array(W * (H + 1));
+  const prefY2 = new Float32Array(W * (H + 1));
+  for (let x = 0; x < W; x++) {
+    let st = 0;
+    let sy = 0;
+    let sy2 = 0;
+    for (let y = 0; y < H; y++) {
+      const i = y * W + x;
+      st += tex[i];
+      sy += lum[i];
+      sy2 += lum[i] * lum[i];
+      const p = (y + 1) * W + x;
+      prefT[p] = st;
+      prefY[p] = sy;
+      prefY2[p] = sy2;
+    }
+  }
+
+  // Сырые перепады по всей высоте: правилам «импульс» и «сильная граница
+  // выше» нужны соседи кандидата, в том числе вне диапазона [Y_MIN..Y_MAX].
+  // Знак перепада яркости храним: ночью граница может быть инвертированной,
+  // поэтому в силу идёт модуль, а знак нужен только для поиска обратного хода.
+  const dYsignedAll = new Float32Array(W * H);
+  const edgeAll = new Float32Array(W * H); // dY+dC+0.5·dS, без текстуры
+  for (let x = 0; x < W; x++) {
+    for (let y = 1; y < H - 1; y++) {
+      const i = y * W + x;
+      const dYs = (lum[i + W] - lum[i - W]) / 2;
+      dYsignedAll[i] = dYs;
+      edgeAll[i] =
+        Math.abs(dYs) +
+        Math.abs(cbr[i + W] - cbr[i - W]) / 2 +
+        (Math.abs(sat[i + W] - sat[i - W]) / 2) * 0.5;
+    }
+  }
+  // Префиксный максимум edgeAll по колонке — «самая сильная граница выше» за O(1)
+  const prefMaxEdge = new Float32Array(W * (H + 1));
+  for (let x = 0; x < W; x++) {
+    let m = 0;
+    for (let y = 0; y < H; y++) {
+      m = Math.max(m, edgeAll[y * W + x]);
+      prefMaxEdge[(y + 1) * W + x] = m;
+    }
+  }
+
+  // Карта силы кандидатов
+  const Y_MIN = 3; // нужна окрестность для градиентов и текстурных полос
+  const Y_MAX = H - TEX_WIN - 2;
+  const strength = new Float32Array(W * H);
+  for (let x = 0; x < W; x++) {
+    for (let y = Y_MIN; y <= Y_MAX; y++) {
+      const i = y * W + x;
+      const dYsigned = dYsignedAll[i];
+      const dY = Math.abs(dYsigned);
+      // Импульс или ступенька: у фонаря и снежного поля яркость возвращается
+      // обратным перепадом сопоставимой силы. Смотрим В ОБЕ стороны: нижнюю
+      // кромку фонаря отдаёт верхняя и наоборот. Своя «тень» центральной
+      // разности (соседние строки) исключена.
+      if (dY > 0.02) {
+        const s = Math.sign(dYsigned);
+        const need = Math.max(PULSE_RATIO * dY, PULSE_ABS);
+        const lo = Math.max(1, y - PULSE_WIN);
+        const hi = Math.min(H - 2, y + PULSE_WIN);
+        let pulsed = false;
+        for (let y2 = lo; y2 <= hi; y2++) {
+          if (Math.abs(y2 - y) < 2) continue;
+          if (-s * dYsignedAll[y2 * W + x] > need) {
+            pulsed = true;
+            break;
+          }
+        }
+        if (pulsed) continue;
+      }
+      // Граница неба — самая верхняя значимая граница колонки: выше неё
+      // только небо. Кандидаты ниже сильного перепада (снежные поля, поляны,
+      // нижние кромки огней) лежат на склоне. Максимум берём по [0, y−2]:
+      // строка y−1 несёт «тень» самого кандидата (центральная разность
+      // размазывает перепад на две строки).
+      const above = prefMaxEdge[(y - 1) * W + x];
+      if (above > Math.max(EDGE_ABOVE_MIN, EDGE_ABOVE_RATIO * edgeAll[i])) continue;
+      // «Небо сверху»: от верха кадра до кандидата — гладко и однородно.
+      // При y < 8 данных мало, чтобы карать, — проверку пропускаем.
+      if (y >= 8) {
+        const meanT = prefT[y * W + x] / y;
+        if (meanT > SKY_TEX_MAX) continue;
+        const meanY = prefY[y * W + x] / y;
+        const varY = prefY2[y * W + x] / y - meanY * meanY;
+        if (varY > SKY_STD_MAX * SKY_STD_MAX) continue;
+      }
+      // Скачок текстуры: ниже кандидата шершаво (лес/скалы), выше гладко
+      // (небо). Ключ к «лес в тени vs небо в дымке»: яркости равны,
+      // а текстура — нет.
+      const tBelow = (prefT[(y + 1 + TEX_WIN) * W + x] - prefT[(y + 1) * W + x]) / TEX_WIN;
+      const a0 = Math.max(0, y - TEX_WIN);
+      const tAbove = (prefT[y * W + x] - prefT[a0 * W + x]) / Math.max(1, y - a0);
+      const jump = Math.max(0, tBelow - tAbove - TEX_JUMP_MIN);
+      strength[i] = edgeAll[i] + W_TEX * Math.min(jump, TEX_CAP);
+    }
+  }
+
+  return dynamicProgrammingProfile(strength, Y_MIN, Y_MAX);
+}
+
+/**
+ * Выбор линии динамическим программированием слева направо.
+ *
+ * Состояния колонки: строка кандидата y ∈ [yMin..yMax] или NONE («границы
+ * нет»). NONE бесплатна; узел линии стоит (DP_NONE_COST − strength): граница
+ * должна окупить «цену обнаружения», иначе колонке честно ставится NONE.
+ * Переход y'→y штрафуется за излом λ·|Δy|^1.5 при |Δy| ≤ DP_MAX_STEP;
+ * уход в NONE бесплатен, возобновление после разрыва стоит DP_ENTER_COST,
+ * поэтому линия может «перескочить» через засвеченные или затянутые облаком
+ * колонки, но не соскочить на одиночный выброс ниже гребня.
+ */
+function dynamicProgrammingProfile(
+  strength: Float32Array,
+  yMin: number,
+  yMax: number,
+): Float32Array {
+  const W = GRID_W;
+  const NY = yMax - yMin + 1;
+  // Родитель для отката: y'−yMin или −1 = из NONE
+  const parent = new Int16Array(W * NY);
+  const parentNone = new Int16Array(W); // −1 = из NONE предыдущей колонки
+
+  let dpPrev = new Float64Array(NY);
+  let dpPrevNone = 0;
+  for (let yi = 0; yi < NY; yi++) {
+    dpPrev[yi] = DP_NONE_COST - strength[(yi + yMin) * W];
+    parent[yi] = -1;
+  }
+  parentNone[0] = -1;
+
+  for (let x = 1; x < W; x++) {
+    const dp = new Float64Array(NY);
+    let bestPrev = Infinity;
+    let bestPrevIdx = -1;
+    for (let yi = 0; yi < NY; yi++) {
+      if (dpPrev[yi] < bestPrev) {
+        bestPrev = dpPrev[yi];
+        bestPrevIdx = yi;
       }
     }
+    const dpNone = Math.min(dpPrevNone, bestPrev);
+    parentNone[x] = dpPrevNone <= bestPrev ? -1 : bestPrevIdx;
 
-    // Насколько уверенно разделилась колонка. Двух проверок мало по
-    // отдельности: относительная (насколько разделение лучше разброса внутри
-    // колонки) сходит с ума на почти однородной картинке — засвеченное небо
-    // делится «идеально» при разнице в пару единиц яркости. Поэтому вторая,
-    // абсолютная: настоящая граница неба и земли даёт разницу в разы большую
-    const variance = sumSq / GRID_H - (sum / GRID_H) ** 2;
-    const separation = bestScore / (GRID_H * GRID_H * Math.max(variance, 1e-6));
-    const weak = bestY < 0 || separation < 0.25 || bestDiff < MIN_CONTRAST;
-    profile[x] = weak ? NaN : bestY / GRID_H;
+    for (let yi = 0; yi < NY; yi++) {
+      let best = dpPrevNone + DP_ENTER_COST; // возобновление после разрыва платно
+      let par = -1;
+      const lo = Math.max(0, yi - DP_MAX_STEP);
+      const hi = Math.min(NY - 1, yi + DP_MAX_STEP);
+      for (let yj = lo; yj <= hi; yj++) {
+        const dy = Math.abs(yj - yi);
+        const c = dpPrev[yj] + DP_LAMBDA * Math.pow(dy, 1.5);
+        if (c < best) {
+          best = c;
+          par = yj;
+        }
+      }
+      dp[yi] = best + DP_NONE_COST - strength[(yi + yMin) * W + x];
+      parent[x * NY + yi] = par;
+    }
+    dpPrev = dp;
+    dpPrevNone = dpNone;
+  }
+
+  // Откат от лучшего конечного состояния
+  let bestFinal = dpPrevNone;
+  let cur = -1; // −1 = NONE
+  for (let yi = 0; yi < NY; yi++) {
+    if (dpPrev[yi] < bestFinal) {
+      bestFinal = dpPrev[yi];
+      cur = yi;
+    }
+  }
+  const profile = new Float32Array(W).fill(NaN);
+  for (let x = W - 1; x >= 0; x--) {
+    if (cur >= 0) {
+      profile[x] = (cur + yMin) / GRID_H;
+      cur = parent[x * NY + cur];
+    } else {
+      cur = parentNone[x];
+    }
   }
   return profile;
 }
 
-/**
- * Наименьшая разница «небесности» неба и земли, при которой верим границе.
- * Ниже — туман, засветка или объектив, упёртый в стену.
- */
-const MIN_CONTRAST = 0.06;
+/** Три канала признаков на ячейку сетки */
+interface FeatureGrid {
+  /** Яркость 0…1 */
+  lum: Float32Array;
+  /** Цветовой вектор (B−R)/255: небо и земля различаются даже при равной яркости */
+  cbr: Float32Array;
+  /** Насыщенность 0…1 */
+  sat: Float32Array;
+}
 
-/** Кадр → сетка GRID_W×GRID_H значений «небесности» 0…1 */
-function downsample(rgba: Uint8ClampedArray, width: number, height: number): Float32Array {
-  const grid = new Float32Array(GRID_W * GRID_H);
-  const counts = new Float32Array(GRID_W * GRID_H);
+/** Кадр → сетка GRID_W×GRID_H трёх признаков (усреднение по ячейкам) */
+function downsampleFeatures(
+  rgba: Uint8ClampedArray,
+  width: number,
+  height: number,
+): FeatureGrid {
+  const n = GRID_W * GRID_H;
+  const lum = new Float32Array(n);
+  const cbr = new Float32Array(n);
+  const sat = new Float32Array(n);
+  const counts = new Float32Array(n);
   for (let y = 0; y < height; y++) {
     const gy = Math.min(GRID_H - 1, ((y / height) * GRID_H) | 0);
     for (let x = 0; x < width; x++) {
@@ -107,17 +352,45 @@ function downsample(rgba: Uint8ClampedArray, width: number, height: number): Flo
       const r = rgba[i];
       const g = rgba[i + 1];
       const b = rgba[i + 2];
-      // Яркость плюс «синева»: небо и светлое, и синее, а скала с лесом —
-      // ни то ни другое. Снег ловится яркостью, дымка над хребтом — синевой
-      const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-      const blue = (b - Math.max(r, g)) / 255;
       const cell = gy * GRID_W + gx;
-      grid[cell] += 0.6 * lum + 0.4 * (blue + 1) * 0.5;
+      lum[cell] += (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      cbr[cell] += (b - r) / 255;
+      sat[cell] += (Math.max(r, g, b) - Math.min(r, g, b)) / 255;
       counts[cell]++;
     }
   }
-  for (let i = 0; i < grid.length; i++) if (counts[i]) grid[i] /= counts[i];
-  return grid;
+  for (let i = 0; i < n; i++) {
+    if (counts[i]) {
+      lum[i] /= counts[i];
+      cbr[i] /= counts[i];
+      sat[i] /= counts[i];
+    }
+  }
+  return { lum, cbr, sat };
+}
+
+/** Бокс-фильтр 3×3 по яркости сетки (подавление белого шума перед текстурой) */
+function box3x3(src: Float32Array): Float32Array {
+  const W = GRID_W;
+  const H = GRID_H;
+  const out = Float32Array.from(src);
+  for (let y = 1; y < H - 1; y++) {
+    for (let x = 1; x < W - 1; x++) {
+      const i = y * W + x;
+      out[i] =
+        (src[i - W - 1] +
+          src[i - W] +
+          src[i - W + 1] +
+          src[i - 1] +
+          src[i] +
+          src[i + 1] +
+          src[i + W - 1] +
+          src[i + W] +
+          src[i + W + 1]) /
+        9;
+    }
+  }
+  return out;
 }
 
 export interface SkylineMatchOptions {
