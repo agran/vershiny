@@ -587,12 +587,16 @@ function buildCalibration(onChange: () => void): HTMLElement {
 }
 
 /**
- * Состав подписи на снимке.
+ * Состав сохраняемого снимка.
  *
- * Обе галочки выключены по умолчанию: снимком делятся, а координаты с
- * точностью до метра и время съёмки — это данные о человеке, а не о горах.
- * Две галочки, а не одна, потому что утекают они по-разному: в отчёте о
- * восхождении дата уместна, а точка стоянки — не всегда.
+ * Галочки места и времени выключены по умолчанию: снимком делятся, а
+ * координаты с точностью до метра и время съёмки — это данные о человеке, а
+ * не о горах. Две галочки, а не одна, потому что утекают они по-разному: в
+ * отчёте о восхождении дата уместна, а точка стоянки — не всегда.
+ *
+ * Контуры склонов тоже выключены по умолчанию: в AR кадр содержит настоящие
+ * горы, и нарисованный силуэт конфликтует с ними. На снимке остаются только
+ * подписи вершин — то, ради чего снимок и делается.
  */
 function buildPhotoCaption(): HTMLElement {
   const box = document.createElement("div");
@@ -608,7 +612,7 @@ function buildPhotoCaption(): HTMLElement {
     "color:#8a9ba8;font-size:12px;line-height:1.4;margin-bottom:12px";
   box.appendChild(hint);
 
-  const toggle = (label: string, key: "place" | "time"): void => {
+  const toggle = (label: string, key: "place" | "time" | "ridges"): void => {
     const line = row(label);
     const input = document.createElement("input");
     input.type = "checkbox";
@@ -622,6 +626,14 @@ function buildPhotoCaption(): HTMLElement {
 
   toggle(t("photoCaptionPlace"), "place");
   toggle(t("photoCaptionTime"), "time");
+  toggle(t("photoRidges"), "ridges");
+
+  // Зачем галочка про контуры: её смысл неочевиден из названия
+  const ridgesHint = document.createElement("div");
+  ridgesHint.textContent = t("photoRidgesHint");
+  ridgesHint.style.cssText =
+    "color:#8a9ba8;font-size:12px;line-height:1.4;margin-top:4px";
+  box.appendChild(ridgesHint);
 
   return box;
 }

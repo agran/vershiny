@@ -78,7 +78,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   arMode: { ru: 'AR-режим', en: 'AR mode' },
   photo: { ru: 'Фото с подписями', en: 'Photo with labels' },
   photoSaved: { ru: 'Снимок сохранён', en: 'Photo saved' },
-  photoCaption: { ru: 'Подпись на снимке', en: 'Photo caption' },
+  photoCaption: { ru: 'Снимок', en: 'Photo' },
   photoCaptionHint: {
     ru:
       'По умолчанию снимок не подписывается: координатами и временем съёмки ' +
@@ -90,11 +90,26 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   },
   photoCaptionPlace: { ru: 'Место съёмки', en: 'Shooting location' },
   photoCaptionTime: { ru: 'Дата и время', en: 'Date and time' },
+  photoRidges: { ru: 'Контуры склонов', en: 'Slope outlines' },
+  photoRidgesHint: {
+    ru:
+      'При съёмке с камерой на снимке — только подписи вершин: нарисованный ' +
+      'силуэт расходится с настоящими горами в кадре. Без камеры контуры ' +
+      'рисуются всегда.',
+    en:
+      'When shooting with the camera, the photo carries peak labels only: ' +
+      'the drawn skyline mismatches the real mountains in the frame. Without ' +
+      'the camera, outlines are always drawn.',
+  },
   settings: { ru: 'Настройки', en: 'Settings' },
   region: { ru: 'Регион', en: 'Region' },
   language: { ru: 'Язык / Language', en: 'Language / Язык' },
   compassAccuracy: { ru: 'Точность компаса', en: 'Compass accuracy' },
   compassUnknown: { ru: 'нет данных', en: 'no data' },
+  compassUncalibrated: {
+    ru: 'Компас сбит: поводите телефоном «восьмёркой»',
+    en: 'Compass is off: wave the phone in a figure-eight',
+  },
   enableCompass: { ru: 'Включить компас', en: 'Enable compass' },
   resetOffset: { ru: 'Сбросить подстройку', en: 'Reset offset' },
   calibration: { ru: 'Калибровка', en: 'Calibration' },
