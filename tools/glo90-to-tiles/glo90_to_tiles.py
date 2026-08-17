@@ -653,6 +653,15 @@ def cmd_build(args: argparse.Namespace) -> None:
         }
         print(f"Только регион {args.only_region}: {len(stats)} ячеек 1°×1°")
 
+    if args.only_priority:
+        wanted = {int(p) for p in args.only_priority.split(",")}
+        stats = {
+            cell: stat
+            for cell, stat in stats.items()
+            if priority.get(cell, NO_REGION_PRIORITY) in wanted
+        }
+        print(f"Только приоритеты {sorted(wanted)}: {len(stats)} ячеек 1°×1°")
+
     print(f"\nИсходников: {len(sources)} ячеек 1°×1°, бюджет {args.budget_mb:.0f} МБ")
     plan = []
     for lod, level in enumerate(levels):
@@ -766,6 +775,11 @@ def main() -> None:
         "--only-region",
         help="Ограничить bbox региона из реестра (например elbrus) — для проверки "
         "или пересборки одного района",
+    )
+    p_build.add_argument(
+        "--only-priority",
+        help="Ограничить приоритетами регионов через запятую (например 1,2) — "
+        "детальный слой поверх базовой пирамиды для vershiny-dem-hi",
     )
     p_build.add_argument(
         "--clean", action="store_true", help="Удалить каталог тайлов перед сборкой"

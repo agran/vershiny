@@ -1,9 +1,11 @@
 /**
  * Предзагрузка региона для офлайна (ROADMAP 4.2, критерии приёмки).
  *
- * Качаются два слоя, каждый под свою задачу:
+ * Качаются три слоя, каждый под свою задачу:
  *   - вся площадь региона из глобальной пирамиды (217 м) — далёкие хребты,
  *     ~1–3 МБ сжатыми байтами;
+ *   - детальный слой p1–p2 (~87 м) из vershiny-dem-hi — вне его покрытия
+ *     (прочие регионы) ключей ноль, ничего не добавляет;
  *   - круг DETAIL_RADIUS_M вокруг точки из Terrarium (90 м) — ближняя зона,
  *     где разница в разрешении видна на панораме.
  *
@@ -14,10 +16,10 @@
 
 import { TerrariumSampler } from '../core/terrarium';
 import { DemSampler } from '../core/dem';
-import { GLOBAL_DEM_URL } from '../core/dem-config';
+import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from '../core/dem-config';
 import { PEAK_VISIBILITY_RADIUS_M } from '../core/peaks';
 import { destination, type LatLon } from '../core/geo';
-import { savePeaks, markRegionDownloaded } from '../core/db';
+import { savePeaks, markRegionDownloaded, getDemTile } from '../core/db';
 import { root } from '../core/globals';
 import { getLocale } from '../core/i18n';
 
@@ -128,8 +130,13 @@ export async function estimateRegionBytes(
 ): Promise<number> {
   const dem = sampler ?? (await sharedPyramid());
   const center = inBBox(origin, info.bbox) ? origin : bboxCenter(info.bbox);
+  // Детальный слой разрежён: вне p1–p2 даст ноль байт; недоступен — не мешает
+  const hiBytes = await sharedPyramidHi()
+    .then((hi) => hi.bboxDownloadBytes(info.bbox))
+    .catch(() => 0);
   return (
     dem.bboxDownloadBytes(info.bbox) +
+    hiBytes +
     detailTileKeys(center, DETAIL_RADIUS_M).length * TERRARIUM_TILE_BYTES
   );
 }
@@ -152,6 +159,20 @@ function sharedPyramid(): Promise<DemSampler> {
     throw err;
   });
   return pyramid;
+}
+
+/** Детальный слой p1–p2; не развёрнут или офлайн — регион качается без него */
+let pyramidHi: Promise<DemSampler> | null = null;
+function sharedPyramidHi(): Promise<DemSampler> {
+  pyramidHi ??= (async () => {
+    const dem = new DemSampler({ baseUrl: GLOBAL_DEM_HI_URL });
+    await dem.loadIndex();
+    return dem;
+  })().catch((err) => {
+    pyramidHi = null;
+    throw err;
+  });
+  return pyramidHi;
 }
 
 /**
@@ -181,14 +202,16 @@ export async function downloadRegion(
     throw new Error(`Регион ${region} не найден в реестре`);
   }
 
-  // 2. Пирамида по всему bbox + Terrarium вокруг точки наблюдения.
-  // Если пользователь сейчас в другом регионе, детализируем центр bbox —
-  // приедет он всё-таки туда.
+  // 2. Пирамида по всему bbox + детальный слой p1–p3 + Terrarium вокруг точки
+  // наблюдения. Если пользователь сейчас в другом регионе, детализируем центр
+  // bbox — приедет он всё-таки туда.
   const dem = await sharedPyramid();
+  const demHi = await sharedPyramidHi().catch(() => null);
   const pyramidKeys = dem.tileKeysInBBox(info.bbox);
+  const hiKeys = demHi?.tileKeysInBBox(info.bbox) ?? [];
   const center = inBBox(origin, info.bbox) ? origin : bboxCenter(info.bbox);
   const detailKeys = detailTileKeys(center, DETAIL_RADIUS_M);
-  const total = pyramidKeys.length + detailKeys.length;
+  const total = pyramidKeys.length + hiKeys.length + detailKeys.length;
 
   let done = 0;
   onProgress({ done, total, phase: 'tiles' });
@@ -196,6 +219,12 @@ export async function downloadRegion(
     done = n;
     onProgress({ done, total, phase: 'tiles' });
   });
+  const hiStats = demHi
+    ? await demHi.downloadTiles(hiKeys, (n) => {
+        done = pyramidKeys.length + n;
+        onProgress({ done, total, phase: 'tiles' });
+      })
+    : { bytes: 0, ok: 0, failed: 0 };
 
   const sampler = new TerrariumSampler();
   const CONCURRENCY = 6;
@@ -221,7 +250,7 @@ export async function downloadRegion(
   // Регион считается скачанным только если рельеф действительно лёг на
   // устройство. Офлайн Service Worker отдаёт 503 — не исключение, а ответ,
   // поэтому цикл «успешно» завершался с нулём тайлов и ставил галочку
-  const saved = pyramidStats.ok + detailOk;
+  const saved = pyramidStats.ok + hiStats.ok + detailOk;
   if (total > 0 && saved < total * MIN_SAVED_RATIO) {
     throw new Error(`Скачано ${saved} тайлов из ${total} — регион не сохранён`);
   }
@@ -229,6 +258,35 @@ export async function downloadRegion(
   onProgress({ done: total, total, phase: 'done' });
   await markRegionDownloaded(region);
   return saved;
+}
+
+/**
+ * Докачан ли у региона детальный слой hi (p1–p3, ~87 м).
+ *
+ * Регионы, скачанные до появления hi-слоя, содержат только базовую пирамиду
+ * 217 м — кнопка в настройках должна предлагать «Обновить», а не стоять
+ * мёртвой «Скачан». У регионов вне покрытия hi (p4) тайлов нет вовсе — там
+ * обновлять нечего, ответ true.
+ *
+ * Проверяем только LOD 0 (детальный): LOD 1 — грубая вся-суша, её наличие
+ * качества не добавляет. Признак — хотя бы один тайл LOD 0 в хранилище.
+ */
+export async function hasHiDetail(region: RegionInfo): Promise<boolean> {
+  if (!region.bbox) return true;
+  try {
+    const hi = await sharedPyramidHi();
+    const keys = hi
+      .tileKeysInBBox(region.bbox)
+      .filter((k) => k.startsWith('0/'));
+    if (keys.length === 0) return true; // вне покрытия hi (p4) — нечего качать
+    for (const key of keys) {
+      if (await getDemTile(`hi/${key}`)) return true;
+    }
+    return false;
+  } catch {
+    // Индекс hi недоступен (офлайн и не кеширован) — не блокируем UI
+    return true;
+  }
 }
 
 /**

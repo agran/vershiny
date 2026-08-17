@@ -154,6 +154,11 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   },
   download: { ru: 'Скачать', en: 'Download' },
   downloaded: { ru: 'Скачан', en: 'Downloaded' },
+  refresh: { ru: 'Обновить', en: 'Refresh' },
+  hiDetailAvailable: {
+    ru: 'Доступен детальный слой рельефа (~90 м) — докачать',
+    en: 'Detailed terrain layer (~90 m) available — tap to fetch',
+  },
   close: { ru: 'Закрыть', en: 'Close' },
   searchPeak: { ru: 'Поиск вершины', en: 'Search peak' },
   searchPrompt: { ru: 'Название вершины', en: 'Peak name' },

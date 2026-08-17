@@ -1,6 +1,7 @@
 /**
  * DemSource — единая точка доступа к высотам (docs/DATA-PIPELINE.md):
- *   запрос → локальный патч (IndexedDB/int16) → Terrarium (онлайн) → NaN.
+ *   запрос → локальные слои по убыванию детализации (патч региона / hi-слой
+ *   ~87 м / базовая пирамида ~217 м) → Terrarium (онлайн) → NaN.
  * Ray-marching знает только синхронный sample() после prefetch.
  */
 
@@ -9,8 +10,11 @@ import { DemSampler } from './dem';
 import { TerrariumSampler, ZOOM_RULES, zoomForDistance } from './terrarium';
 
 export interface DemSourceOptions {
-  /** URL локального патча (tiles/{region} или tiles/global); undefined — нет */
-  patchBaseUrl?: string;
+  /**
+   * URL локальных источников в порядке убывания детализации
+   * (tiles/{region}, tiles/hi, tiles/global); пустой — только Terrarium
+   */
+  patchBaseUrls?: string[];
   terrariumBaseUrl?: string;
   fetchFn?: typeof fetch;
 }
@@ -20,71 +24,109 @@ const NEAR_M = 30_000;
 /** Патч детальнее этого порога считаем «своим» и приоритетным (90-м патчи) */
 const FINE_RES_M = 120;
 
-export class DemSource {
-  readonly patch: DemSampler | null = null;
-  readonly terrarium: TerrariumSampler;
-  /** Патч загружен и точка в его bbox — проверяется один раз на compute */
-  private patchIndex = null as null | { bbox: [number, number, number, number] };
+/** Подключённый источник: сэмплер + классификация по разрешению */
+interface Patch {
+  sampler: DemSampler;
+  bbox: [number, number, number, number];
   /**
    * Патч грубее онлайн-данных (глобальная пирамида ~217 м против Terrarium
    * ~90 м): в ближней зоне сначала спрашиваем сеть, патч — офлайн-запас.
+   * Детальный слой (~87 м) и патчи регионов грубым не считаются.
    */
-  private patchIsCoarse = false;
+  coarse: boolean;
+}
+
+export class DemSource {
+  private patches: Patch[] = [];
+  readonly terrarium: TerrariumSampler;
 
   constructor(options: DemSourceOptions) {
-    if (options.patchBaseUrl) {
-      this.patch = new DemSampler({
-        baseUrl: options.patchBaseUrl,
-        fetchFn: options.fetchFn,
-      });
-    }
+    this.patchSamplers = (options.patchBaseUrls ?? []).map(
+      (baseUrl) => new DemSampler({ baseUrl, fetchFn: options.fetchFn }),
+    );
     this.terrarium = new TerrariumSampler({
       baseUrl: options.terrariumBaseUrl,
       fetchFn: options.fetchFn,
     });
   }
 
-  async init(): Promise<void> {
-    if (this.patch) {
-      const index = await this.patch.loadIndex();
-      this.patchIndex = { bbox: index.bbox };
-      this.patchIsCoarse = this.patch.finestResM() > FINE_RES_M;
-    }
+  /** Сэмплеры до init(): индексы им ещё не загружены */
+  private readonly patchSamplers: DemSampler[];
+
+  /**
+   * Первый (самый детальный) подключённый сэмплер — для панели настроек и
+   * прочих мест, которым нужен «патч» как таковой.
+   */
+  get patch(): DemSampler | null {
+    return this.patches[0]?.sampler ?? null;
   }
 
-  /** Точка внутри bbox локального патча? */
+  async init(): Promise<void> {
+    // Источники независимы: один не открылся (обрыв сети, битый деплой) —
+    // работаем на остальных, а не падаем целиком
+    const loaded = await Promise.all(
+      this.patchSamplers.map(async (sampler): Promise<Patch | null> => {
+        try {
+          const index = await sampler.loadIndex();
+          return {
+            sampler,
+            bbox: index.bbox,
+            coarse: sampler.finestResM() > FINE_RES_M,
+          };
+        } catch (err) {
+          console.warn('DEM-источник недоступен, пропускаем:', err);
+          return null;
+        }
+      }),
+    );
+    this.patches = loaded.filter((p): p is Patch => p !== null);
+  }
+
+  /** Точка внутри bbox хотя бы одного локального источника? */
   inPatch(pos: LatLon): boolean {
-    if (!this.patchIndex) return false;
-    const [minLon, minLat, maxLon, maxLat] = this.patchIndex.bbox;
+    return this.patches.some((p) => this.inBBox(p, pos));
+  }
+
+  private inBBox(p: Patch, pos: LatLon): boolean {
+    const [minLon, minLat, maxLon, maxLat] = p.bbox;
     return (
       pos.lon >= minLon && pos.lon <= maxLon && pos.lat >= minLat && pos.lat <= maxLat
     );
   }
 
-  /**
-   * Синхронная выборка: берём точнейший из доступных источников.
-   * Детальный патч (90 м) приоритетнее всегда; грубая глобальная пирамида —
-   * только вдали или там, где Terrarium не загружен (офлайн).
-   * NaN — нет данных нигде.
-   */
-  sample(pos: LatLon, distM: number): number {
-    const patchAvailable = this.patch !== null && this.inPatch(pos);
-    const patchFirst = patchAvailable && (!this.patchIsCoarse || distM >= NEAR_M);
-
-    if (patchFirst) {
-      const h = this.patch!.sample(pos, this.patch!.lodForDistance(distM));
-      if (!Number.isNaN(h)) return h;
-      return this.terrarium.sample(pos, zoomForDistance(distM));
-    }
-
-    const online = this.terrarium.sample(pos, zoomForDistance(distM));
-    if (!Number.isNaN(online)) return online;
-    return patchAvailable
-      ? this.patch!.sample(pos, this.patch!.lodForDistance(distM))
-      : NaN;
+  /** Источники, чей bbox покрывает точку, по классу детализации */
+  private covering(pos: LatLon, coarse: boolean): Patch[] {
+    return this.patches.filter((p) => p.coarse === coarse && this.inBBox(p, pos));
   }
 
-  /** Предзагрузка вдоль луча обоими слоями */
+  /**
+   * Синхронная выборка: берём точнейший из доступных источников.
+   * Детальные слои (патч региона, hi-слой ~87 м) приоритетнее всегда;
+   * грубая глобальная пирамида — только вдали или там, где Terrarium не
+   * загружен (офлайн). NaN — нет данных нигде.
+   */
+  sample(pos: LatLon, distM: number): number {
+    const fine = this.covering(pos, false);
+    const coarse = this.covering(pos, true);
+    // Вдали патч важнее сети (офлайн-запас), вблизи грубый — после неё
+    const order: (Patch | TerrariumSampler)[] =
+      distM >= NEAR_M
+        ? [...fine, ...coarse, this.terrarium]
+        : [...fine, this.terrarium, ...coarse];
+    for (const src of order) {
+      // Луч идёт на детальном LOD, но в разреженной пирамиде тайл может
+      // отсутствовать (выбыл из бюджета) — тогда уходим глубже, до LOD 2
+      // «вся суша», а уже потом к следующему источнику
+      const h =
+        src instanceof TerrariumSampler
+          ? src.sample(pos, zoomForDistance(distM))
+          : src.sampler.sample(pos, 0);
+      if (!Number.isNaN(h)) return h;
+    }
+    return NaN;
+  }
+
+  /** Предзагрузка вдоль луча всеми слоями */
   async prefetchAlongRay(
     origin: LatLon,
     azRad: number,
@@ -95,9 +137,14 @@ export class DemSource {
     const tasks: Promise<void>[] = [
       this.terrarium.prefetchAlongRay(origin, azRad, maxDistM, stepM, destinationFn),
     ];
-    if (this.patch) {
+    // Грубую пирамиду не тянем там, где точку наблюдателя уже покрывает
+    // детальный слой: лучи отсюда прочитают hi-тайлы, а global-тайлы того же
+    // места — двойной трафик без выигрыша
+    const fineAtOrigin = this.covering(origin, false).length > 0;
+    for (const p of this.patches) {
+      if (p.coarse && fineAtOrigin) continue;
       tasks.push(
-        this.patch.prefetchAlongRay(origin, azRad, maxDistM, stepM, destinationFn),
+        p.sampler.prefetchAlongRay(origin, azRad, maxDistM, stepM, destinationFn),
       );
     }
     await Promise.all(tasks);
@@ -119,17 +166,16 @@ export class DemSource {
     );
   }
 
-  /** Высота наблюдателя: точнейший источник, с фолбэком на второй */
+  /** Высота наблюдателя: точнейший источник, с фолбэком на остальные */
   async observerHeight(pos: LatLon): Promise<number> {
-    const patchAvailable = this.patch !== null && this.inPatch(pos);
-    if (patchAvailable && !this.patchIsCoarse) {
-      return this.patch!.observerHeight(pos);
-    }
+    const fine = this.covering(pos, false)[0];
+    if (fine) return fine.sampler.observerHeight(pos);
     try {
       return await this.terrarium.heightAt(pos);
     } catch (err) {
-      if (!patchAvailable) throw err;
-      return this.patch!.observerHeight(pos); // офлайн: глобальная пирамида
+      const coarse = this.covering(pos, true)[0];
+      if (!coarse) throw err;
+      return coarse.sampler.observerHeight(pos); // офлайн: глобальная пирамида
     }
   }
 
@@ -147,15 +193,14 @@ export class DemSource {
    * (`observerElevationM`), и делать это дважды незачем.
    */
   async observerHeightSafe(pos: LatLon): Promise<number> {
-    const patchAvailable = this.patch !== null && this.inPatch(pos);
-    if (patchAvailable && !this.patchIsCoarse) {
-      return this.patch!.observerHeightSafe(pos);
-    }
+    const fine = this.covering(pos, false)[0];
+    if (fine) return fine.sampler.observerHeightSafe(pos);
     try {
       return await this.terrarium.heightAt(pos);
     } catch (err) {
-      if (!patchAvailable) throw err;
-      return this.patch!.observerHeightSafe(pos); // офлайн: только пирамида
+      const coarse = this.covering(pos, true)[0];
+      if (!coarse) throw err;
+      return coarse.sampler.observerHeightSafe(pos); // офлайн: только пирамида
     }
   }
 }

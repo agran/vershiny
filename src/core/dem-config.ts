@@ -10,11 +10,28 @@
 export const GLOBAL_DEM_URL = 'https://agran.github.io/vershiny-dem/tiles/global';
 
 /**
+ * Детальный слой (~87 м, квант 1 м) для регионов приоритета 1–2:
+ * agran/vershiny-dem-hi → GitHub Pages. Разреженный: вне их bbox тайлов нет,
+ * клиент не тратит запросы (битсет coverage) и уходит на базовую пирамиду.
+ */
+export const GLOBAL_DEM_HI_URL = 'https://agran.github.io/vershiny-dem-hi/tiles/hi';
+
+/**
  * Кандидаты на роль локального патча, в порядке убывания детализации:
  * детальный патч региона → локальная пирамида → внешняя пирамида.
  */
 export function demCandidates(base: string, region: string): string[] {
   return [`${base}tiles/${region}`, `${base}tiles/global`, GLOBAL_DEM_URL];
+}
+
+/** Детальный слой p1–p2: локальная копия (разработка) → внешний сайт */
+export function hiDemCandidates(base: string): string[] {
+  return [`${base}tiles/hi`, GLOBAL_DEM_HI_URL];
+}
+
+/** Базовая пирамида: локальная копия (разработка) → внешний сайт */
+export function globalDemCandidates(base: string): string[] {
+  return [`${base}tiles/global`, GLOBAL_DEM_URL];
 }
 
 /**

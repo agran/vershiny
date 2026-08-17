@@ -990,8 +990,13 @@ async function goToHit(
 }
 
 /**
- * Подключение источника высот для региона: детальный патч → локальная
- * пирамида → внешняя (agran/vershiny-dem). Промах всех — только Terrarium.
+ * Подключение источников высот для региона: детальный патч → детальный слой
+ * p1–p2 (vershiny-dem-hi) + базовая пирамида (agran/vershiny-dem). Промах
+ * всех — только Terrarium.
+ *
+ * Патч региона исключает пирамиды: его LOD-кольца сами покрывают дальнюю
+ * зону. А hi-слой и базовая пирамида работают вместе: первый разрежён
+ * (только p1–p2), вторая добирает остальное.
  *
  * Вызывается и при смене региона: раньше `init` уходил воркеру исключительно
  * из `main()`, и после переключения с карты, из поиска или по плашке рельеф
@@ -999,16 +1004,27 @@ async function goToHit(
  */
 async function initDemForRegion(region: string): Promise<void> {
   const base = import.meta.env.BASE_URL;
-  const { demCandidates, pickDemBase } = await import("./core/dem-config");
+  const {
+    hiDemCandidates,
+    globalDemCandidates,
+    pickDemBase,
+  } = await import("./core/dem-config");
   const { getDemIndex } = await import("./core/db");
-  const patchBaseUrl = await pickDemBase(demCandidates(base, region), {
-    online: async (url) => {
+  const probes = {
+    online: async (url: string) => {
       const probe = await fetch(`${url}/index.json`).catch(() => null);
       return !!probe && isJson(probe);
     },
-    cached: async (url) => !!(await getDemIndex(url).catch(() => undefined)),
-  });
-  worker.postMessage({ type: "init", patchBaseUrl, reqId: nextReqId++ });
+    cached: async (url: string) => !!(await getDemIndex(url).catch(() => undefined)),
+  };
+  const patchBaseUrls = (
+    await Promise.all([
+      pickDemBase([`${base}tiles/${region}`], probes),
+      pickDemBase(hiDemCandidates(base), probes),
+      pickDemBase(globalDemCandidates(base), probes),
+    ])
+  ).filter((url): url is string => !!url);
+  worker.postMessage({ type: "init", patchBaseUrls, reqId: nextReqId++ });
 }
 
 /**

@@ -3,7 +3,7 @@
  * Источник высот — DemSource (DATA-PIPELINE.md): локальный патч → Terrarium.
  *
  * Протокол сообщений:
- *   → { type: 'init', patchBaseUrl?, reqId? }
+ *   → { type: 'init', patchBaseUrls?, reqId? }
  *   → { type: 'compute', origin, peaks, reqId? }
  *   → { type: 'viewpoint', peak, reqId? }   — подобрать точку, откуда вершина видна
  *   ← { type: 'result', horizon, stepRad, peaks, observerH, computeMs, reqId? }
@@ -28,8 +28,11 @@ import type { Peak } from '../core/peaks';
 
 export interface InitMessage {
   type: 'init';
-  /** URL локального патча (tiles/{region}); без него — только Terrarium */
-  patchBaseUrl?: string;
+  /**
+   * URL локальных источников рельефа по убыванию детализации
+   * (tiles/{region} | tiles/hi + tiles/global); пустой — только Terrarium
+   */
+  patchBaseUrls?: string[];
   reqId?: number;
 }
 
@@ -203,7 +206,7 @@ self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
     const msg = ev.data;
     if (msg.type === 'init') {
       initPromise = (async () => {
-        const next = new DemSource({ patchBaseUrl: msg.patchBaseUrl });
+        const next = new DemSource({ patchBaseUrls: msg.patchBaseUrls });
         try {
           await next.init();
         } catch (err) {

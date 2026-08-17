@@ -17,6 +17,7 @@ import { orientationTracker } from "../core/orientation";
 import { getPhotoCaption, setPhotoCaption } from "../core/photo-caption";
 import {
   estimateRegionBytes,
+  hasHiDetail,
   loadRegions,
   regionCore,
   regionLabel,
@@ -249,38 +250,59 @@ export function openSettings(
           btn.style.cssText =
             "border:none;border-radius:6px;padding:4px 10px;font-size:12px;" +
             "cursor:pointer;flex-shrink:0";
+          // Общий обработчик (скачивание и обновление): downloadRegion
+          // идемпотентен, докачает лишь недостающее (например, hi-слой)
+          const runDownload = async () => {
+            btn.disabled = true;
+            btn.textContent = "…";
+            try {
+              const { downloadRegion } = await import("./download");
+              await downloadRegion(key, origin, (p) => {
+                if (p.phase === "tiles") {
+                  btn.textContent = `${p.done}/${p.total}`;
+                }
+              });
+              btn.textContent = t("downloaded");
+              btn.style.background = "#2d6a4f";
+              btn.style.color = "#d8f3dc";
+              btn.disabled = true;
+            } catch {
+              btn.textContent = "✗";
+              btn.style.background = "#e63946";
+              setTimeout(() => {
+                btn.textContent = isDownloaded ? t("refresh") : t("download");
+                btn.style.background = "#415a77";
+                btn.style.color = "#f1faee";
+                btn.disabled = false;
+              }, 2000);
+            }
+          };
           if (isDownloaded) {
+            // Скачан до появления детального hi-слоя — предлагаем докачать
+            // его отдельной кнопкой, а не стоять мёртвой «Скачан»
             btn.textContent = t("downloaded");
             btn.style.background = "#2d6a4f";
             btn.style.color = "#d8f3dc";
             btn.disabled = true;
+            void hasHiDetail(regionInfo).then((ok) => {
+              if (ok) return;
+              btn.textContent = t("refresh");
+              btn.style.background = "#7a5c18";
+              btn.style.color = "#ffe9b8";
+              btn.disabled = false;
+              btn.title = t("hiDetailAvailable");
+              btn.onclick = (ev) => {
+                ev.stopPropagation();
+                void runDownload();
+              };
+            });
           } else {
             btn.textContent = t("download");
             btn.style.background = "#415a77";
             btn.style.color = "#f1faee";
             btn.onclick = async (ev) => {
               ev.stopPropagation(); // не выбирать регион при клике на скачивание
-              btn.disabled = true;
-              btn.textContent = "…";
-              try {
-                const { downloadRegion } = await import("./download");
-                await downloadRegion(key, origin, (p) => {
-                  if (p.phase === "tiles") {
-                    btn.textContent = `${p.done}/${p.total}`;
-                  }
-                });
-                btn.textContent = t("downloaded");
-                btn.style.background = "#2d6a4f";
-                btn.style.color = "#d8f3dc";
-              } catch {
-                btn.textContent = "✗";
-                btn.style.background = "#e63946";
-                setTimeout(() => {
-                  btn.textContent = t("download");
-                  btn.style.background = "#415a77";
-                  btn.disabled = false;
-                }, 2000);
-              }
+              await runDownload();
             };
           }
           rowEl.appendChild(btn);
