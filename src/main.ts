@@ -1543,14 +1543,14 @@ function layoutCaptions(): void {
       .map((b) => btnRect(b))
       .filter((r) => r.width)
       .map((r) => ({ left: r.left, right: r.right, top: r.top, bottom: r.bottom }));
-    const collides = (rx: number, ry: number): boolean => {
+    const rectHits = (rx: number, ry: number): boolean => {
       const self = { left: rx, right: rx + lw, top: ry, bottom: ry + lh };
       const hits = (r: { left: number; right: number; top: number; bottom: number }) =>
         self.left < r.right && self.right > r.left && self.top < r.bottom && self.bottom > r.top;
-      if (obstacles.some(hits)) return true;
-      if (placed.some(hits)) return true;
-      // Стрелка этой плашки не должна резать чужие плашки, кнопки и стрелки.
-      // Геометрия стрелки зависит от позиции плашки, поэтому проверяем здесь.
+      return obstacles.some(hits) || placed.some(hits);
+    };
+    /** Пересекает ли СТРЕЛКА этой плашки чужие плашки, кнопки или стрелки */
+    const arrowHits = (rx: number, ry: number): boolean => {
       const from = rectBorderPoint(rx, ry, lw, lh, cx, cy);
       const bc = btnCenters.get(c.btn);
       if (!bc) return false;
@@ -1561,9 +1561,7 @@ function layoutCaptions(): void {
       for (const [b, o] of btnCenters) {
         if (b === c.btn) continue;
         // Отрезок до окружности чужой кнопки: дальше её центра не идём
-        const dx = to.x - from.x;
-        const dy = to.y - from.y;
-        const len = Math.hypot(dx, dy);
+        const len = Math.hypot(to.x - from.x, to.y - from.y);
         const distTo = Math.hypot(o.cx - from.x, o.cy - from.y);
         if (distTo - o.r < len && segIntersectsRect(from, to, {
           left: o.cx - o.r, top: o.cy - o.r, right: o.cx + o.r, bottom: o.cy + o.r,
@@ -1574,6 +1572,8 @@ function layoutCaptions(): void {
         if (segSeg(from, to, a2, b2)) return true;
       return false;
     };
+    const collides = (rx: number, ry: number): boolean =>
+      rectHits(rx, ry) || arrowHits(rx, ry);
     if (c.side === "above" || c.side === "below") {
       // Поднять/опустить, пока плашка в своём ряду не перестанет задевать
       // кнопки по вертикали (навипад: центр на строке с «Вперёд»)
@@ -1598,9 +1598,11 @@ function layoutCaptions(): void {
     // комбинация «выше и в сторону» выводит из креста).
     // Если чистой позиции нет (узкий экран в портрете: четыре плашки правого
     // края не помещаются в одну колонку) — берём позицию с наименьшим
-    // пересечением: лучше слегка задеть соседа, чем наложиться наполовину.
+    // пересечением ПЛАШКИ, но среди равных предпочитаем ту, где стрелка не
+    // режет чужие подписи/кнопки: плашка, задетая с краю, читается, а стрелка,
+    // проходящая через чужой текст, — нет.
     let placed_ok = false;
-    let bestOverlap = Infinity;
+    let bestScore = Infinity;
     let bestPos: { x: number; y: number } | null = null;
     const overlapArea = (rx: number, ry: number): number => {
       const self = { left: rx, right: rx + lw, top: ry, bottom: ry + lh };
@@ -1621,9 +1623,10 @@ function layoutCaptions(): void {
         placed_ok = true;
         return true;
       }
-      const ov = overlapArea(tx, ty);
-      if (ov < bestOverlap) {
-        bestOverlap = ov;
+      // Грязная стрелка штрафуется сильнее любого пересечения плашки
+      const score = overlapArea(tx, ty) + (arrowHits(tx, ty) ? 1e6 : 0);
+      if (score < bestScore) {
+        bestScore = score;
         bestPos = { x: tx, y: ty };
       }
       return false;

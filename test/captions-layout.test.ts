@@ -116,23 +116,19 @@ function layout(caps: Cap[], W: number, H: number): LaidOut {
       }
     }
 
-    const vertical = c.side === 'left' || c.side === 'right';
-    const collides = (rx: number, ry: number): boolean => {
+    const rectHits = (rx: number, ry: number): boolean => {
       const self = { left: rx, right: rx + c.w, top: ry, bottom: ry + c.h };
       const hits = (r: { left: number; right: number; top: number; bottom: number }) =>
         self.left < r.right && self.right > r.left && self.top < r.bottom && self.bottom > r.top;
-      // Своя кнопка не считается: плашка может касаться её зазором, но не пересекать
       for (const o of caps) {
         if (o === c) continue;
         const b = o.btn;
-        if (
-          hits({ left: b.left, right: b.left + b.width, top: b.top, bottom: b.top + b.height })
-        )
+        if (hits({ left: b.left, right: b.left + b.width, top: b.top, bottom: b.top + b.height }))
           return true;
       }
-      if (placed.some((p) => hits({ left: p.x, right: p.x + p.w, top: p.y, bottom: p.y + p.h })))
-        return true;
-      // Стрелка не должна резать чужие плашки, кнопки и стрелки
+      return placed.some((p) => hits({ left: p.x, right: p.x + p.w, top: p.y, bottom: p.y + p.h }));
+    };
+    const arrowHits = (rx: number, ry: number): boolean => {
       const from = rectBorderPoint(rx, ry, c.w, c.h, cx, cy);
       const to = circleBorderPoint(cx, cy, br.width / 2, rx + c.w / 2, ry + c.h / 2);
       for (const p of placed)
@@ -151,6 +147,8 @@ function layout(caps: Cap[], W: number, H: number): LaidOut {
         if (segSeg(from, to, a2, b2)) return true;
       return false;
     };
+    const collides = (rx: number, ry: number): boolean => rectHits(rx, ry) || arrowHits(rx, ry);
+    const vertical = c.side === 'left' || c.side === 'right';
     // Ближайший сдвиг без коллизий: боковые — по вертикали, верхние/нижние —
     // по обеим осям (крест навипада: чистый сдвиг вбок задевает боковые стрелки).
     // Нет чистой позиции (портрет: четыре плашки правого края не влезают в одну
@@ -180,9 +178,10 @@ function layout(caps: Cap[], W: number, H: number): LaidOut {
         ok = true;
         return true;
       }
-      const ov = overlapArea(tx, ty);
-      if (ov < bestOverlap) {
-        bestOverlap = ov;
+      // Грязная стрелка штрафуется сильнее любого пересечения плашки
+      const score = overlapArea(tx, ty) + (arrowHits(tx, ty) ? 1e6 : 0);
+      if (score < bestOverlap) {
+        bestOverlap = score;
         bestPos = { x: tx, y: ty };
       }
       return false;
@@ -406,20 +405,17 @@ describe('раскладка плашек в портрете (узкий экр
     }
   });
 
-  it('перекрытие плашек минимально (не более четверти меньшей)', () => {
+  it('плашки не налезают друг на друга', () => {
     for (let i = 0; i < placed.length; i++)
       for (let j = i + 1; j < placed.length; j++) {
         const a = placed[i];
         const b = placed[j];
         const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
         const h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
-        if (w <= 0 || h <= 0) continue;
-        const area = w * h;
-        const smaller = Math.min(a.w * a.h, b.w * b.h);
         expect(
-          area / smaller,
-          `«${a.text}» × «${b.text}» пересекаются на ${Math.round((area / smaller) * 100)}%`,
-        ).toBeLessThanOrEqual(0.25);
+          w > 0 && h > 0,
+          `«${a.text}» × «${b.text}» пересекаются на ${w}x${h}`,
+        ).toBe(false);
       }
   });
 
