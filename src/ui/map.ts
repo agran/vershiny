@@ -13,6 +13,8 @@
 import type { LatLon } from "../core/geo";
 import { normalizeAz } from "../core/geo";
 import { getLocale, peakName, t } from "../core/i18n";
+import type { Peak } from "../core/peaks";
+import { peakScore } from "../core/peaks";
 import type { SearchHit } from "../core/search";
 import { ICON_CLOSE, ICON_HEADING, ICON_LOCATE, ICON_SEARCH } from "./icons";
 import { pushOverlay } from "./overlay-history";
@@ -50,6 +52,95 @@ function unproject(x: number, y: number, zoom: number): LatLon {
   return { lat, lon };
 }
 
+// --- Слой вершин (работает и без сети: данные свои, с устройства) ---
+
+/**
+ * Сколько вершин подписывать на зуме.
+ *
+ * Без порога крупный регион (десятки тысяч точек) на зуме 7 засыпал бы карту
+ * кашей из подписей. Смысл кривой: вдали — только главные вершины, с
+ * приближением подписываем всё мельче, а с зума 14 вершины уже не теснятся
+ * (узел — десятки метров) и порог снимается вовсе.
+ */
+export const MAP_PEAK_LIMITS: ReadonlyArray<readonly [number, number]> = [
+  [14, Infinity],
+  [11, 24],
+  [9, 12],
+  [0, 6],
+];
+
+/** Предел подписей на зуме; с мелкого зума — все */
+export function mapPeakLimit(zoom: number): number {
+  for (const [minZoom, limit] of MAP_PEAK_LIMITS) {
+    if (zoom >= minZoom) return limit;
+  }
+  return MAP_PEAK_LIMITS[MAP_PEAK_LIMITS.length - 1][1];
+}
+
+/**
+ * Отбор вершин для слоя карты на этом зуме: N самых значимых по той же
+ * формуле, что и подписи на панораме (высота · изоляция; `peakScore`).
+ *
+ * Сортировка важна не только для отбора: подписи накладываются в порядке
+ * DOM, и ранняя вершина перекрывает позднюю — поэтому рисуем от хвоста к
+ * голове (см. render), и главная гора остаётся читаемой в толпе.
+ */
+export function selectMapPeaks(peaks: Peak[], zoom: number): Peak[] {
+  const limit = mapPeakLimit(zoom);
+  if (!Number.isFinite(limit) && limit > 0) {
+    // «Все» — но всё равно сортируем: верх в DOM должен быть у главных
+    return [...peaks].sort(
+      (a, b) => peakScore(b, 0) - peakScore(a, 0) || (b.ele ?? 0) - (a.ele ?? 0),
+    );
+  }
+  return [...peaks]
+    .sort((a, b) => peakScore(b, 0) - peakScore(a, 0) || (b.ele ?? 0) - (a.ele ?? 0))
+    .slice(0, limit);
+}
+
+export interface ProjectedMapPeak {
+  peak: Peak;
+  /** Экранные координаты от левого верхнего угла видимого куска мира, px */
+  x: number;
+  y: number;
+}
+
+/**
+ * Проекция вершин на экран с отсевом за краем (запас в полподписи, чтобы
+ * метка у кромки не мигала при микросдвиге карты). Долгота заворачивается
+ * через кратчайшую разницу с центром: у антимеридиана вершины «за краем
+ * мира» иначе не рисовались бы вовсе.
+ */
+export function projectPeaks(
+  peaks: Peak[],
+  center: LatLon,
+  zoom: number,
+  width: number,
+  height: number,
+): ProjectedMapPeak[] {
+  const c = project(center, zoom);
+  const left = c.x - width / 2;
+  const top = c.y - height / 2;
+  const worldPx = TILE_PX * 2 ** zoom;
+  const margin = 80;
+  const out: ProjectedMapPeak[] = [];
+  for (const peak of peaks) {
+    let px = project(peak, zoom).x;
+    // Кратчайший путь по долготе: центр −179°, вершина +179° — соседи,
+    // а без заворота между ними «весь мир»
+    const dxWorld = px - c.x;
+    if (dxWorld > worldPx / 2) px -= worldPx;
+    else if (dxWorld < -worldPx / 2) px += worldPx;
+    const x = px - left;
+    const y = project(peak, zoom).y - top;
+    if (x < -margin || x > width + margin || y < -margin || y > height + margin) {
+      continue;
+    }
+    out.push({ peak, x, y });
+  }
+  return out;
+}
+
 export interface MapOptions {
   /** Где мы сейчас стоим */
   origin: LatLon;
@@ -72,6 +163,15 @@ export interface MapOptions {
   ) => Promise<{ origin: LatLon; headingRad: number } | null>;
   /** Название региона для строки результата */
   regionTitle: (region: string) => string;
+  /**
+   * Вершины для базового слоя карты: сначала текущий регион (он уже в
+   * памяти), затем владелец может подложить остальные скачанные — карта
+   * перечитает слой по `onPeaksAdded`. Без сети это единственное содержимое
+   * карты: тайлы OpenTopoMap не приходят, а вершины остаются.
+   */
+  peaks?: Peak[];
+  /** Владелец догрузил вершины (офлайн-регионы из IndexedDB) */
+  onPeaksAdded?: (peaks: Peak[]) => void;
   /**
    * Направление взгляда изменили ручкой на маркере.
    *
@@ -101,6 +201,107 @@ export function openMap(options: MapOptions): () => void {
 
   const tiles = new Map<string, HTMLImageElement>();
 
+  /**
+   * Базовый слой вершин: наши данные, поэтому это единственное содержимое
+   * карты офлайн, когда тайлов нет вовсе. Онлайн слой скрывается целиком:
+   * на OpenTopoMap вершины уже подписаны, и наши метки сверху только
+   * дублировали бы их. Элементы переиспользуются из пула — регион с
+   * тысячами вершин при каждом сдвиге карты иначе создавал бы тысячи
+   * DOM-узлов заново. Под маркером наблюдателя и меткой цели.
+   */
+  const peaksLayer = document.createElement("div");
+  peaksLayer.style.cssText = "position:absolute;inset:0;z-index:1";
+  layer.appendChild(peaksLayer);
+
+  /** Вершины слоя: текущий регион сразу, скачанные владелец доложит позже */
+  let mapPeaks: Peak[] = options.peaks ? [...options.peaks] : [];
+  /** Пул DOM-элементов меток: скрываем лишние, а не удаляем */
+  const peakEls: HTMLElement[] = [];
+  /** Слой виден, только пока тайлы не загрузились (офлайн) — см. render */
+  let peaksLayerNeeded = true;
+
+  /** Спрятать все метки вершин (слой закрыт тайлами, пуст или карта нулевая) */
+  const hidePeakLabels = (): void => {
+    peaksLayer.style.display = "none";
+  };
+
+  /**
+   * Нужен ли слой вершин: только когда тайлов нет. Кадр считается покрытым,
+   * если хотя бы один видимый тайл загрузился И НИ ОДИН видимый не упал с
+   * ошибкой — половинчатая картина (часть тайлов отвалилась по 429/обрыву)
+   * дырявее с закрытым слоем, чем с двойными подписями.
+   */
+  const updatePeaksLayerNeed = (): void => {
+    let anyOk = false;
+    let anyFailed = false;
+    for (const img of tiles.values()) {
+      if (img.dataset.ok) anyOk = true;
+      else if (img.style.visibility === "hidden") anyFailed = true;
+    }
+    const needed = !(anyOk && !anyFailed);
+    if (needed !== peaksLayerNeeded) {
+      peaksLayerNeeded = needed;
+      renderPeaks();
+    }
+  };
+
+  /** Перерисовать слой вершин под текущий центр/зум */
+  let renderPeaks = (): void => {
+    const w = root.clientWidth;
+    const h = root.clientHeight;
+    if (!mapPeaks.length || !w || !h || !peaksLayerNeeded) {
+      hidePeakLabels();
+      return;
+    }
+    peaksLayer.style.display = "block";
+    const selected = selectMapPeaks(mapPeaks, zoom);
+    const projected = projectPeaks(selected, center, zoom, w, h);
+
+    // Метки одноимённых вершин не плодим: в горах «Пик №3» встречается
+    // пачками, и на мелком зуме они наезжают друг на друга одним пятном
+    const shown = new Set<string>();
+    let used = 0;
+    // Главные рисуем последними (выше в DOM): selectMapPeaks отсортировал
+    // по убыванию значимости, поэтому идём с хвоста
+    for (let i = projected.length - 1; i >= 0; i--) {
+      const { peak, x, y } = projected[i];
+      const name = peakName(peak);
+      if (zoom < 14 && shown.has(name)) continue;
+      shown.add(name);
+
+      let el = peakEls[used];
+      if (!el) {
+        el = document.createElement("div");
+        el.style.cssText =
+          "position:absolute;transform:translate(-50%,-100%);display:flex;" +
+          "flex-direction:column;align-items:center;pointer-events:auto;" +
+          "cursor:pointer;z-index:1";
+        const markerEl = document.createElement("div");
+        markerEl.style.cssText =
+          "width:0;height:0;border-left:5px solid transparent;" +
+          "border-right:5px solid transparent;border-bottom:8px solid #f1faee;" +
+          "filter:drop-shadow(0 0 2px rgba(0,0,0,.9));flex:none";
+        const label = document.createElement("div");
+        label.style.cssText =
+          "background:rgba(13,27,42,.8);border-radius:4px;padding:0 4px;" +
+          "font:11px system-ui,sans-serif;color:#f1faee;white-space:nowrap;" +
+          "max-width:140px;overflow:hidden;text-overflow:ellipsis";
+        el.append(label, markerEl);
+        peaksLayer.appendChild(el);
+        peakEls.push(el);
+      }
+      const ele = peak.ele !== undefined ? ` ${Math.round(peak.ele)}` : "";
+      // Подпись — ПЕРВЫЙ ребёнок (label), маркер-стрелка вторым: иначе текст
+      // уходил в треугольник, оставался без стилей и разворачивался крупно
+      (el.firstElementChild as HTMLElement).textContent = `${name}${ele}`;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.display = "flex";
+      used++;
+    }
+    for (let i = used; i < peakEls.length; i++) peakEls[i].style.display = "none";
+  };
+
   /** Перерисовка слоя под текущий центр и зум */
   const render = (): void => {
     const w = root.clientWidth;
@@ -126,15 +327,23 @@ export function openMap(options: MapOptions): () => void {
         let img = tiles.get(key + `@${tx}`);
         if (!img) {
           img = document.createElement("img");
-          img.src = topoTileUrl(zoom, wrapped, ty);
           img.alt = "";
           img.loading = "eager";
           img.draggable = false;
+          // Загрузившийся тайл перекрывает наш слой вершин: на OpenTopoMap они
+          // уже подписаны, дублировать незачем. Скрытие — в конце render(),
+          // когда все тайлы кадра пройдены (часть могла быть из кеша)
+          img.onload = () => {
+            img!.dataset.ok = "1";
+            updatePeaksLayerNeed();
+          };
           // Не загрузился (офлайн, лимит OSM) — прячем: «битая картинка»
           // поверх карты хуже, чем просто пустая клетка
           img.onerror = () => {
             img!.style.visibility = "hidden";
+            updatePeaksLayerNeed();
           };
+          img.src = topoTileUrl(zoom, wrapped, ty);
           img.style.cssText =
             `position:absolute;width:${TILE_PX}px;height:${TILE_PX}px;` +
             "pointer-events:none;image-rendering:auto;z-index:0";
@@ -152,6 +361,9 @@ export function openMap(options: MapOptions): () => void {
         tiles.delete(key);
       }
     }
+
+    updatePeaksLayerNeed();
+    renderPeaks();
 
     // Маркер «я»: за границей кадра его просто не видно — слой обрезан
     const me = project(observer, zoom);
@@ -244,6 +456,18 @@ export function openMap(options: MapOptions): () => void {
     handle.style.transform = `rotate(${deg}deg) translateY(-78px)`;
   };
   applyHeading();
+
+  // Владелец может доложить вершины после открытия (офлайн-регионы из
+  // IndexedDB читаются асинхронно): добавляем и перерисовываем слой
+  options.onPeaksAdded = (extra) => {
+    mapPeaks.push(...extra);
+    renderPeaks();
+  };
+
+  /** Остановка слушателя добавления вершин: карта закрыта — обновления не нужны */
+  const stopPeaksFeed = (): void => {
+    options.onPeaksAdded = undefined;
+  };
 
   // Перекрестие центра — точка, куда перенесёмся
   const cross = document.createElement("div");
@@ -401,6 +625,7 @@ export function openMap(options: MapOptions): () => void {
     // открытия
     stopResize?.();
     resizeObserver = null;
+    stopPeaksFeed();
     options.onClose?.();
   };
 
