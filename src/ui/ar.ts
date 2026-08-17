@@ -1,10 +1,24 @@
 /**
  * AR-режим (ROADMAP 4.1): getUserMedia + полупрозрачный оверлей панорамы.
  * Та же проекция, что в panorama.ts — просто фон прозрачный, видео под низом.
+ *
+ * Про совпадение с кадром: видео рисуется с заполнением экрана (cover), и
+ * обрезанные края сужают видимый угол обзора; зум камеры сужает его ещё
+ * сильнее. Оверлей поэтому рисуется не с экранными FOV, а с FOV видимой
+ * части кадра камеры (core/camera-fov.ts) — иначе контуры сходились по
+ * центру и расходились у краёв.
  */
 
+import {
+  applyCoverCrop,
+  applyZoom,
+  fovForFrame,
+  horizonFracInFrame,
+  type FrameFov,
+} from '../core/camera-fov';
+import { DEFAULT_CAMERA_FOV_DEG, getCalibration } from '../core/calibration';
 import type { PanoramaState, ViewState } from './panorama';
-import { drawOverlay } from './panorama';
+import { HORIZON_FRAC, drawOverlay } from './panorama';
 
 export interface ArOptions {
   /** Прозрачность оверлея 0–1 */
@@ -19,7 +33,32 @@ export interface ArSession {
    * null, пока камера не отдала первый кадр.
    */
   grabFrame: () => { rgba: Uint8ClampedArray; width: number; height: number } | null;
+  /**
+   * Углы обзора ПОЛНОГО кадра камеры (с учётом зума, без cover-кропа), рад.
+   * Именно они нужны автокалибровке: grabFrame отдаёт кадр целиком.
+   */
+  fullFrameFov: () => FrameFov;
+  /**
+   * Доля высоты полного кадра, где рисуется линия горизонта оверлея, —
+   * вторая половина привязки автокалибровки к кадру.
+   */
+  frameHorizonFrac: () => number;
 }
+
+/** Базовый угол обзора по длинной стороне кадра камеры (калибровка), рад */
+function baseFovRad(): number {
+  return ((getCalibration().cameraFovDeg ?? DEFAULT_CAMERA_FOV_DEG) * Math.PI) / 180;
+}
+
+/** Параметры запроса камеры — вынесены: понадобятся при перезапуске трека */
+const CAMERA_CONSTRAINTS: MediaStreamConstraints = {
+  video: {
+    facingMode: 'environment', // задняя камера
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+  },
+  audio: false,
+};
 
 /** Запуск камеры и привязка к canvas */
 export async function startAr(
@@ -29,14 +68,7 @@ export async function startAr(
   view: ViewState,
   options: ArOptions = {},
 ): Promise<ArSession> {
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      facingMode: 'environment', // задняя камера
-      width: { ideal: 1920 },
-      height: { ideal: 1080 },
-    },
-    audio: false,
-  });
+  let stream = await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
 
   // Дальше всё может отказать (часть WebView отклоняет play()), а поток уже
   // запущен: без явной остановки камера продолжала гореть, вызывающий видел
@@ -51,12 +83,78 @@ export async function startAr(
     throw err;
   }
 
+  let stopped = false;
+
+  /**
+   * Возобновление после блокировки экрана / сворачивания вкладки.
+   *
+   * Пока страница была фоном, браузер приостанавливает камеру, а часть
+   * платформ (Android Chrome) трек завершает совсем: после разблокировки
+   * <video> показывает последний кадр, хотя requestAnimationFrame рисует
+   * исправно. Живой трек достаточно снова play(), завершённый приходится
+   * запрашивать заново — разрешение на камеру уже дано, диалога не будет.
+   */
+  const resume = async (): Promise<void> => {
+    if (stopped) return;
+    const track = stream.getVideoTracks()[0];
+    if (track && track.readyState === 'ended') {
+      stream.getTracks().forEach((t) => t.stop());
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
+        videoEl.srcObject = stream;
+        readZoom();
+      } catch (err) {
+        console.warn('Камера после сворачивания не перезапустилась:', err);
+        return;
+      }
+    }
+    try {
+      await videoEl.play();
+    } catch {
+      // Повторный play при живом воспроизведении безвреден; отказ — только в лог
+    }
+  };
+
+  const onVisible = (): void => {
+    if (!document.hidden) void resume();
+  };
+  document.addEventListener('visibilitychange', onVisible);
+  // Трек может завершиться и в видимой вкладке (камеру отобрало другое
+  // приложение) — пытаемся перезапустить сразу, не дожидаясь сворачивания
+  const onTrackEnded = (): void => void resume();
+  stream.getVideoTracks()[0]?.addEventListener('ended', onTrackEnded);
+
   const ctx = canvas.getContext('2d')!;
   const opacity = options.opacity ?? 0.55;
 
+  // Зум камеры, если браузер его сообщает (Android Chrome; на iOS поля нет).
+  // События смены зума в спецификации нет — читаем при старте и перезапуске.
+  let zoomFactor = 1;
+  function readZoom(): void {
+    try {
+      const settings = stream.getVideoTracks()[0]?.getSettings() as
+        | { zoom?: number }
+        | undefined;
+      if (settings && Number.isFinite(settings.zoom) && (settings.zoom as number) > 0) {
+        zoomFactor = settings.zoom as number;
+      }
+    } catch {
+      // getSettings не обязателен — остаёмся на зуме 1
+    }
+  }
+  readZoom();
+
+  /** FOV полного кадра камеры: базовый угол → пропорции кадра → зум */
+  function fullFrameFov(): FrameFov {
+    return applyZoom(
+      fovForFrame(baseFovRad(), videoEl.videoWidth, videoEl.videoHeight),
+      zoomFactor,
+    );
+  }
+
   let raf = 0;
   function frame() {
-    drawArFrame(ctx, videoEl, state, view, opacity);
+    drawArFrame(ctx, videoEl, state, view, opacity, zoomFactor);
     raf = requestAnimationFrame(frame);
   }
   raf = requestAnimationFrame(frame);
@@ -68,10 +166,22 @@ export async function startAr(
 
   return {
     stop: () => {
+      stopped = true;
+      document.removeEventListener('visibilitychange', onVisible);
+      stream.getVideoTracks()[0]?.removeEventListener('ended', onTrackEnded);
       cancelAnimationFrame(raf);
       stream.getTracks().forEach((t) => t.stop());
       videoEl.srcObject = null;
     },
+    fullFrameFov,
+    frameHorizonFrac: () =>
+      horizonFracInFrame(
+        videoEl.videoWidth,
+        videoEl.videoHeight,
+        canvas.width,
+        canvas.height,
+        HORIZON_FRAC,
+      ),
     grabFrame: () => {
       if (!probeCtx || videoEl.readyState < 2) return null;
       const width = 320;
@@ -94,18 +204,25 @@ function drawArFrame(
   state: PanoramaState,
   view: ViewState,
   opacity: number,
+  zoomFactor: number,
 ): void {
   const { width, height } = ctx.canvas;
 
-  // Видео-фон
-  if (video.readyState >= 2) {
-    // Cover: сохраняем пропорции
+  let overlayView = view;
+  if (video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
     const scale = Math.max(width / vw, height / vh);
     const dw = vw * scale;
     const dh = vh * scale;
     ctx.drawImage(video, (width - dw) / 2, (height - dh) / 2, dw, dh);
+
+    // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
+    // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
+    // кадра и расходились к краям, когда пропорции экрана и видео различались
+    const full = applyZoom(fovForFrame(baseFovRad(), vw, vh), zoomFactor);
+    const visible = applyCoverCrop(full, vw, vh, width, height);
+    overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
   } else {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, width, height);
@@ -115,6 +232,6 @@ function drawArFrame(
   // важно видеть кадр камеры под линиями)
   ctx.save();
   ctx.globalAlpha = opacity;
-  drawOverlay(ctx, state, view);
+  drawOverlay(ctx, state, overlayView);
   ctx.restore();
 }
