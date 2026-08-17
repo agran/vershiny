@@ -3,11 +3,13 @@
  * рендер панорамы; поворот пальцем (fallback без сенсоров, ROADMAP 2.2).
  */
 
+import { fovForFrame } from "./core/camera-fov";
 import { normalizeAz, toRad, wrapAngle, type LatLon } from "./core/geo";
 import { getLocale, t } from "./core/i18n";
 import type { Peak, PeaksFile } from "./core/peaks";
 import {
   awaitAccuratePosition,
+  getFreshPosition,
   getPosition,
   rememberPosition,
   worthRefining,
@@ -37,7 +39,6 @@ import {
 } from "./ui/icons";
 import { isTypingTarget } from "./ui/keys";
 import {
-  HORIZON_FRAC,
   renderPanorama,
   silhouetteProfile,
   type PanoramaState,
@@ -183,34 +184,23 @@ const view: ViewState = {
 /**
  * Углы обзора под текущую форму экрана.
  *
- * Длинная сторона всегда получает BASE_FOV, короткая — производный угол, как
- * у объектива камеры. Иначе поворот телефона менял бы масштаб: при постоянных
- * 60° по горизонтали портретный экран растягивал вертикаль до сотни градусов,
- * и те же горы становились вдвое мельче, чем в ландшафте.
- *
- * Второй угол выводится через тангенс, а не пропорцией: только так пиксель
- * стоит одинаково по обеим осям и картинка не сплющена — это же требование
- * приходит от AR, где панорама совмещается с кадром камеры.
+ * Формула — в core/camera-fov.ts (общая с AR): длинная сторона всегда
+ * получает базовый угол, короткая — производный через тангенс, чтобы пиксель
+ * «стоил» одинаково по обеим осям. Иначе поворот телефона менял бы масштаб:
+ * при постоянных 60° по горизонтали портретный экран растягивал вертикаль
+ * до сотни градусов, и те же горы становились вдвое мельче, чем в ландшафте.
  *
  * Если поле зрения задано в калибровке, берётся оно: у каждого телефона свой
  * объектив, и при расхождении углов контуры совпадают в центре кадра, но
- * разъезжаются к краям — азимутом это не лечится. Панорама и AR рисуют одни и
- * те же контуры, поэтому угол у них общий: подстроив его по кадру камеры,
- * пользователь сразу видит результат и без AR.
+ * разъезжаются к краям — азимутом это не лечится.
  */
 function syncFov(): void {
   const { width, height } = canvas;
   if (!width || !height) return;
   const baseDeg = getCalibration().cameraFovDeg ?? DEFAULT_CAMERA_FOV_DEG;
-  const baseRad = toRad(baseDeg);
-  const half = Math.tan(baseRad / 2);
-  if (width >= height) {
-    view.fovRad = baseRad;
-    view.fovVRad = 2 * Math.atan(half * (height / width));
-  } else {
-    view.fovVRad = baseRad;
-    view.fovRad = 2 * Math.atan(half * (width / height));
-  }
+  const fov = fovForFrame(toRad(baseDeg), width, height);
+  view.fovRad = fov.h;
+  view.fovVRad = fov.v;
 }
 syncFov();
 resize();
@@ -250,7 +240,29 @@ let lastX = 0;
 let lastY = 0;
 let lastTap = 0; // для двойного тапа (перемещение вперёд)
 
+/** Активные пальцы: по паре отслеживаем pinch — подгонку поля зрения в AR */
+const activePointers = new Map<number, { x: number; y: number }>();
+/** Расстояние между пальцами и поле зрения на момент начала pinch */
+let pinchStartDist = 0;
+let pinchStartFovDeg = DEFAULT_CAMERA_FOV_DEG;
+
 canvas.addEventListener("pointerdown", (ev) => {
+  activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+
+  // Второй палец в AR: pinch — подгонка поля зрения под кадр камеры, прямо
+  // на месте (альтернатива ползунку в настройках: результат виден сразу).
+  // Поворот на время pinch отключаем: разъезд пальцев иначе крутил картинку
+  if (activePointers.size === 2 && arSession) {
+    const [a, b] = [...activePointers.values()];
+    pinchStartDist = Math.hypot(a.x - b.x, a.y - b.y);
+    pinchStartFovDeg = getCalibration().cameraFovDeg ?? DEFAULT_CAMERA_FOV_DEG;
+    dragging = false;
+    return;
+  }
+  // Второй палец вне AR игнорируем: два пальца на одном «повороте» — это
+  // дёрганье картинки туда-сюда между точками касания
+  if (activePointers.size > 1) return;
+
   dragging = true;
   lastX = ev.clientX;
   lastY = ev.clientY;
@@ -276,6 +288,30 @@ canvas.addEventListener("pointerdown", (ev) => {
 });
 
 canvas.addEventListener("pointermove", (ev) => {
+  const pointer = activePointers.get(ev.pointerId);
+  if (pointer) {
+    pointer.x = ev.clientX;
+    pointer.y = ev.clientY;
+  }
+
+  // Pinch в AR: раздвинули пальцы — приближаем (поле зрения меньше).
+  // Отсчёт от начала жеста, а не от прошлого кадра: поправка не накапливает
+  // шум и возврат пальцев возвращает исходный угол
+  if (arSession && pinchStartDist > 0 && activePointers.size === 2) {
+    const [a, b] = [...activePointers.values()];
+    const dist = Math.hypot(a.x - b.x, a.y - b.y);
+    if (dist > 0) {
+      // Границы (40–100°) зажмет сам setCalibration
+      setCalibration({
+        cameraFovDeg: pinchStartFovDeg / (dist / pinchStartDist),
+      });
+      syncFov();
+      draw();
+    }
+    return;
+  }
+  if (activePointers.size > 1) return;
+
   if (!dragging) return;
   const dx = ev.clientX - lastX;
   const dy = ev.clientY - lastY;
@@ -331,7 +367,24 @@ canvas.addEventListener("pointermove", (ev) => {
   draw();
 });
 
-canvas.addEventListener("pointerup", () => (dragging = false));
+const endPointer = (ev: PointerEvent): void => {
+  activePointers.delete(ev.pointerId);
+  if (activePointers.size < 2) pinchStartDist = 0;
+  if (activePointers.size === 0) {
+    dragging = false;
+  } else if (activePointers.size === 1 && !dragging) {
+    // После pinch остался один палец: продолжаем поворот им, но от текущей
+    // точки — иначе картинка прыгала бы на разницу между пальцами
+    const [p] = activePointers.values();
+    lastX = p.x;
+    lastY = p.y;
+    dragging = true;
+  }
+};
+// pointercancel обязателен: системный жест (свайп с края) отменяет касание
+// без pointerup, и «застывший» второй палец ломал бы дальнейшие повороты
+canvas.addEventListener("pointerup", endPointer);
+canvas.addEventListener("pointercancel", endPointer);
 canvas.addEventListener("contextmenu", (ev) => ev.preventDefault()); // правый клик = перемещение
 
 /**
@@ -482,6 +535,21 @@ function updateCompassButton(): void {
   };
 }
 
+/**
+ * Подсказка про раскалиброванный компас (iOS: точность −1 или событие
+ * compassneedscalibration). Молча продолжать рисовать по таким показаниям
+ * нельзя: азимут может врать на десятки градусов, а человек поверит
+ * подписям. Плашка висит, пока точность не вернётся в норму.
+ */
+let compassCalibrated = true;
+function updateCompassCalibration(): void {
+  const bad = orientationTracker.needsCalibration;
+  if (bad === !compassCalibrated) return;
+  compassCalibrated = !bad;
+  if (bad) setStatus(t("compassUncalibrated"));
+  else setStatus(""); // точность вернулась — прячем
+}
+
 orientationTracker.start((state) => {
   if (state.source === "sensor") {
     const tiltOffset = (getCalibration().tiltDeg * Math.PI) / 180;
@@ -493,6 +561,7 @@ orientationTracker.start((state) => {
     draw();
   }
   updateCompassButton();
+  updateCompassCalibration();
 });
 updateCompassButton();
 
@@ -558,6 +627,13 @@ function applyAutoTilt(state: {
 
 const worker = new Worker(
   new URL("./workers/horizon.worker.ts", import.meta.url),
+  // Явный module: без него Vite в dev отдаёт воркер как classic, а импорты
+  // внутри него в dev не бандлит — «Cannot use import statement outside
+  // a module», и панорама висела на «Расчёт…» навсегда. Module workers —
+  // Safari 15+; наш минимум iOS 13.4 уже выше по другим причинам (стрелочные
+  // функции, ??), так что пола не снижаем. В проде формат всё равно iife
+  // (worker.format в vite.config.ts) — там эта опция ни на что не влияет.
+  { type: "module" },
 );
 
 /** Сквозной номер задания воркеру (см. протокол в horizon.worker.ts) */
@@ -624,6 +700,10 @@ async function main(): Promise<void> {
   const fix = await getPosition();
   const origin = fix.pos;
   lastOrigin = origin;
+  // Физическое положение — для магнитного склонения компаса (WMM). Только
+  // настоящий фикс: запасная точка выдумана, и склонение Приюта 11 человеку
+  // в Антарктиде добавило бы к азимуту лишние −7°
+  if (fix.trusted) orientationTracker.setLocation(origin.lat, origin.lon);
 
   setStatus(t("loadingRegion"));
 
@@ -712,6 +792,8 @@ async function refineStartPosition(): Promise<void> {
   const precise = await awaitAccuratePosition();
   if (!precise) return; // спутники не ответили — остаёмся на том, что показали
   rememberPosition(precise);
+  // Склонению достаточно знать, где человек, — даже если панораму не двигаем
+  orientationTracker.setLocation(precise.lat, precise.lon);
   if (!worthRefining(lastOrigin, precise)) return;
 
   console.info(
@@ -753,9 +835,13 @@ function setupMapButton(): void {
       import("./ui/download"),
     ]);
     const regions = await loadRegions();
-    closeMap = openMap({
+    const mapOptions: import("./ui/map").MapOptions = {
       origin: lastOrigin,
       headingRad: view.centerAzRad,
+      // Базовый слой карты: вершины текущего региона уже в памяти, скачанные
+      // догружаем фоном из IndexedDB. Без сети это единственное содержимое
+      // карты — тайлы OpenTopoMap тогда не приходят вовсе
+      peaks: currentPeaks,
       onPick: (pos) => {
         closeMap = null;
         void goToLocation(pos);
@@ -787,7 +873,29 @@ function setupMapButton(): void {
         const info = regions[region];
         return info ? regionLabel(info) : region;
       },
-    });
+    };
+    closeMap = openMap(mapOptions);
+
+    // Вершины скачанных регионов — фоном: карта уже открыта и рисует то,
+    // что есть. Запрет хранилища или обрыв не должны ронять открытие карты
+    void (async () => {
+      const { getDownloadedRegions, getPeaks } = await import("./core/db");
+      const { annotateIsolation } = await import("./core/peaks");
+      const others = (await getDownloadedRegions().catch(() => [])).filter(
+        (r) => r !== currentRegion,
+      );
+      for (const region of others) {
+        const listener = mapOptions.onPeaksAdded;
+        if (!listener) return; // карта уже закрыта — докладывать некому
+        const peaks = (await getPeaks(region).catch(() => undefined)) as
+          | PeaksFile["peaks"]
+          | undefined;
+        if (peaks?.length) {
+          annotateIsolation(peaks); // значимость вершин нужна отбору слоя
+          listener(peaks);
+        }
+      }
+    })();
   };
 }
 
@@ -1192,18 +1300,21 @@ function setupNavPad(): void {
       "align-items:center;justify-content:center";
     if (d.gps) {
       btn.onclick = () => {
-        void getPosition().then((fix) => {
-          // Отказ в геолокации не должен уносить человека на Приют 11:
-          // он нажал «к моему положению», а не «к контрольной точке»
-          if (!fix.trusted) {
+        // «К моему положению» — явная просьба о СВЕЖЕМ фиксе. getPosition()
+        // для старта отдавал бы точку прошлого запуска как недостоверную,
+        // не спросив GPS, и кнопка кричала об ошибке при рабочей геолокации
+        setStatus(t("waitingGps"));
+        void getFreshPosition().then((pos) => {
+          if (!pos) {
             setStatus(t("gpsFailed"));
             setTimeout(() => setStatus(""), 4000);
             return;
           }
           heightOverride = null; // возврат на землю в точке GPS
           autoTiltPending = true;
-          rememberPosition(fix.pos); // следующий запуск начнётся отсюда
-          requestCompute(fix.pos);
+          rememberPosition(pos); // следующий запуск начнётся отсюда
+          orientationTracker.setLocation(pos.lat, pos.lon);
+          requestCompute(pos);
         });
       };
     } else {
@@ -1311,12 +1422,16 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   const { extractSkyline, matchSkyline, MIN_CONFIDENCE } =
     await import("./core/skyline");
   const profile = extractSkyline(frame.rgba, frame.width, frame.height);
+  // Профиль измерен в долях ПОЛНОГО кадра камеры, поэтому и геометрия нужна
+  // кадра, а не экрана: view.fovRad/HORIZON_FRAC описывают картинку после
+  // cover-кропа (ui/ar.ts), и с ними совмещение ехало бы на величину обрезки
+  const frameFov = arSession.fullFrameFov();
   const match = matchSkyline(profile, {
     centerAzRad: view.centerAzRad,
     tiltRad: view.tiltRad,
-    fovRad: view.fovRad,
-    fovVRad: view.fovVRad,
-    horizonFrac: HORIZON_FRAC,
+    fovRad: frameFov.h,
+    fovVRad: frameFov.v,
+    horizonFrac: arSession.frameHorizonFrac(),
     // Ровно та линия, что нарисована на экране: совмещать кадр с ближней
     // корзиной 0–5 км нельзя (за неё в горах отвечает трава под ногами), а
     // считать её здесь по-своему — значит рано или поздно разойтись с
@@ -1650,6 +1765,9 @@ function setupActionButtons(): void {
       region: currentRegion,
       peakName: mainPeakInView(),
       source: canvas,
+      // В AR кадр содержит настоящие горы — там действует галочка «Контуры
+      // склонов». Без камеры силуэту не с чем конфликтовать: рисуем всегда
+      fromCamera: arSession !== null,
     };
     const blob = await capturePhoto(panorama, view, options);
     savePhoto(blob, photoFilename(options));
