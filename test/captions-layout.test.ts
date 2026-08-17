@@ -152,18 +152,47 @@ function layout(caps: Cap[], W: number, H: number): LaidOut {
       return false;
     };
     // Ближайший сдвиг без коллизий: боковые — по вертикали, верхние/нижние —
-    // по обеим осям (крест навипада: чистый сдвиг вбок задевает боковые стрелки)
+    // по обеим осям (крест навипада: чистый сдвиг вбок задевает боковые стрелки).
+    // Нет чистой позиции (портрет: четыре плашки правого края не влезают в одну
+    // колонку) — берём позицию с наименьшим пересечением, а не исходную.
     let ok = false;
+    let bestOverlap = Infinity;
+    let bestPos: { x: number; y: number } | null = null;
+    const overlapArea = (rx: number, ry: number): number => {
+      const self = { left: rx, right: rx + c.w, top: ry, bottom: ry + c.h };
+      let area = 0;
+      const add = (r: { left: number; right: number; top: number; bottom: number }) => {
+        const w = Math.min(self.right, r.right) - Math.max(self.left, r.left);
+        const h = Math.min(self.bottom, r.bottom) - Math.max(self.top, r.top);
+        if (w > 0 && h > 0) area += w * h;
+      };
+      for (const o of caps) {
+        if (o === c) continue;
+        add({ left: o.btn.left, right: o.btn.left + o.btn.width, top: o.btn.top, bottom: o.btn.top + o.btn.height });
+      }
+      for (const p of placed) add({ left: p.x, right: p.x + p.w, top: p.y, bottom: p.y + p.h });
+      return area;
+    };
+    const consider = (tx: number, ty: number): boolean => {
+      if (!collides(tx, ty)) {
+        x = tx;
+        y = ty;
+        ok = true;
+        return true;
+      }
+      const ov = overlapArea(tx, ty);
+      if (ov < bestOverlap) {
+        bestOverlap = ov;
+        bestPos = { x: tx, y: ty };
+      }
+      return false;
+    };
     if (vertical) {
       for (let step = 0; step <= 40 && !ok; step++) {
         for (const dir of step === 0 ? [1] : [1, -1]) {
           const v = y + dir * step * 14;
           if (v < 4 || v > H - c.h - 4) continue;
-          if (!collides(x, v)) {
-            y = v;
-            ok = true;
-            break;
-          }
+          if (consider(x, v)) break;
         }
       }
     } else {
@@ -174,15 +203,14 @@ function layout(caps: Cap[], W: number, H: number): LaidOut {
             const tx = x + dx * 14;
             const ty = y + dy * 14;
             if (tx < 4 || tx > W - c.w - 4 || ty < 4 || ty > H - c.h - 4) continue;
-            if (!collides(tx, ty)) {
-              x = tx;
-              y = ty;
-              ok = true;
-              break;
-            }
+            if (consider(tx, ty)) break;
           }
         }
       }
+    }
+    if (!ok && bestPos) {
+      x = (bestPos as { x: number; y: number }).x;
+      y = (bestPos as { x: number; y: number }).y;
     }
     placed.push({ text: c.text, x, y, w: c.w, h: c.h });
     const from = rectBorderPoint(x, y, c.w, c.h, cx, cy);
@@ -328,5 +356,83 @@ describe('раскладка плашек подписей', () => {
           `стрелка «${placed[i].text}» × стрелка «${placed[j].text}»`,
         ).toBe(false);
       }
+  });
+});
+
+/**
+ * Портрет смартфона 390×844 — геометрия со скриншота пользователя.
+ * Кнопки правого края (скачать, калибровка, фото, камера) берут подпись
+ * ВЛЕВО; на узком экране плашка упирается в левый край, и четырём длинным
+ * плашкам не хватает одной колонки — раньше они наезжали друг на друга
+ * («Сохранить фото с подписями» × «Ниже на 100 м» и т.п.). Здесь критерий
+ * мягче: непересечение гарантировать нельзя, поэтому проверяем, что
+ * перекрытие минимально (fallback «наименьшее пересечение»), а не половина
+ * плашки.
+ */
+function portraitCaps(): Cap[] {
+  const sz = 48;
+  const mk = (left: number, top: number) => ({ left, top, width: sz, height: sz });
+  const text = (t: string) => ({ text: t, w: t.length * 6 + 16, h: 18 });
+  return [
+    { btn: mk(12, 12), side: 'right', ...text('Настройки') },
+    { btn: mk(68, 12), side: 'right', ...text('Поворот экрана') },
+    { btn: mk(330, 12), side: 'left', ...text('Скачать регион для офлайна') },
+    { btn: mk(330, 100), side: 'left', ...text('Совместить вершины с камерой') },
+    { btn: mk(330, 640), side: 'left', ...text('Сохранить фото с подписями') },
+    { btn: mk(330, 720), side: 'left', ...text('Включить камеру') },
+    { btn: mk(12, 780), side: 'above', ...text('Карта') },
+    // навипад (без подписей) — плашки не должны резать его стрелки
+    { btn: mk(90, 700), side: 'above', w: 0, h: 0, text: '' },
+    { btn: mk(150, 760), side: 'above', w: 0, h: 0, text: '' },
+    { btn: mk(90, 820), side: 'above', w: 0, h: 0, text: '' },
+    // стрелки высоты — их подписи справа от кнопок
+    { btn: mk(240, 700), side: 'right', ...text('Выше на 100 м') },
+    { btn: mk(240, 780), side: 'right', ...text('Ниже на 100 м') },
+  ];
+}
+
+describe('раскладка плашек в портрете (узкий экран)', () => {
+  const caps = portraitCaps();
+  const W = 390;
+  const H = 844;
+  const { placed, arrows } = layout(caps.filter((c) => c.text), W, H);
+
+  it('плашки в пределах экрана', () => {
+    for (const p of placed) {
+      expect(p.x, p.text).toBeGreaterThanOrEqual(0);
+      expect(p.y, p.text).toBeGreaterThanOrEqual(0);
+      expect(p.x + p.w, p.text).toBeLessThanOrEqual(W);
+      expect(p.y + p.h, p.text).toBeLessThanOrEqual(H);
+    }
+  });
+
+  it('перекрытие плашек минимально (не более четверти меньшей)', () => {
+    for (let i = 0; i < placed.length; i++)
+      for (let j = i + 1; j < placed.length; j++) {
+        const a = placed[i];
+        const b = placed[j];
+        const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+        const h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+        if (w <= 0 || h <= 0) continue;
+        const area = w * h;
+        const smaller = Math.min(a.w * a.h, b.w * b.h);
+        expect(
+          area / smaller,
+          `«${a.text}» × «${b.text}» пересекаются на ${Math.round((area / smaller) * 100)}%`,
+        ).toBeLessThanOrEqual(0.25);
+      }
+  });
+
+  it('стрелки не режут чужие плашки', () => {
+    placed.forEach((p, i) => {
+      const [a, b] = arrows[i];
+      placed.forEach((q, j) => {
+        if (i === j) return;
+        expect(
+          segIntersectsRect(a, b, { left: q.x, top: q.y, right: q.x + q.w, bottom: q.y + q.h }),
+          `стрелка «${p.text}» режет плашку «${q.text}»`,
+        ).toBe(false);
+      });
+    });
   });
 });

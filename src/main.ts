@@ -1596,17 +1596,44 @@ function layoutCaptions(): void {
     // плашек — по вертикали, для верхних/нижних — по обеим осям сразу
     // (крест навипада: сдвинуть вбок — заденет боковую стрелку; только
     // комбинация «выше и в сторону» выводит из креста).
+    // Если чистой позиции нет (узкий экран в портрете: четыре плашки правого
+    // края не помещаются в одну колонку) — берём позицию с наименьшим
+    // пересечением: лучше слегка задеть соседа, чем наложиться наполовину.
     let placed_ok = false;
+    let bestOverlap = Infinity;
+    let bestPos: { x: number; y: number } | null = null;
+    const overlapArea = (rx: number, ry: number): number => {
+      const self = { left: rx, right: rx + lw, top: ry, bottom: ry + lh };
+      let area = 0;
+      const add = (r: { left: number; right: number; top: number; bottom: number }) => {
+        const w = Math.min(self.right, r.right) - Math.max(self.left, r.left);
+        const h = Math.min(self.bottom, r.bottom) - Math.max(self.top, r.top);
+        if (w > 0 && h > 0) area += w * h;
+      };
+      for (const r of obstacles) add(r);
+      for (const p of placed) add({ left: p.x, right: p.x + p.width, top: p.y, bottom: p.y + p.height });
+      return area;
+    };
+    const consider = (tx: number, ty: number): boolean => {
+      if (!collides(tx, ty)) {
+        x = tx;
+        y = ty;
+        placed_ok = true;
+        return true;
+      }
+      const ov = overlapArea(tx, ty);
+      if (ov < bestOverlap) {
+        bestOverlap = ov;
+        bestPos = { x: tx, y: ty };
+      }
+      return false;
+    };
     if (vertical) {
       for (let step = 0; step <= 40 && !placed_ok; step++) {
         for (const dir of step === 0 ? [1] : [1, -1]) {
           const v = y + dir * step * 14;
           if (v < 4 || v > H - lh - 4) continue;
-          if (!collides(x, v)) {
-            y = v;
-            placed_ok = true;
-            break;
-          }
+          if (consider(x, v)) break;
         }
       }
     } else {
@@ -1617,16 +1644,14 @@ function layoutCaptions(): void {
             const tx = x + dx * 14;
             const ty = y + dy * 14;
             if (tx < 4 || tx > W - lw - 4 || ty < 4 || ty > H - lh - 4) continue;
-            if (!collides(tx, ty)) {
-              x = tx;
-              y = ty;
-              placed_ok = true;
-              break;
-            }
+            if (consider(tx, ty)) break outer;
           }
         }
-        if (placed_ok) break outer;
       }
+    }
+    if (!placed_ok && bestPos) {
+      x = (bestPos as { x: number; y: number }).x;
+      y = (bestPos as { x: number; y: number }).y;
     }
 
     c.root.style.left = `${x}px`;
