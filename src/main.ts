@@ -1661,7 +1661,14 @@ function hideButtonCaptions(): void {
   if (!captionsVisible) return;
   captionsVisible = false;
   if (captionLayer) captionLayer.style.display = "none";
+  // Кнопки, чья видимость зависит от фазы загрузки (автокалибровка: при
+  // загрузке — неактивная с подписью, после — скрыта до входа в AR)
+  updateCalibrateBtnRef?.();
 }
+
+/** Позднее связывание: updateCalibrateBtn объявлен в setupControls() ниже,
+ *  а hideButtonCaptions() может вызваться до него (ошибка раннего compute) */
+let updateCalibrateBtnRef: (() => void) | null = null;
 
 /** Перевести подписи интерфейса после смены языка */
 function relabelUi(): void {
@@ -2197,7 +2204,7 @@ function setupActionButtons(): void {
     arVideo?.remove(); // иначе десять входов в AR — десять <video> под холстом
     arVideo = null;
     arBtn.style.background = "#415a77";
-    calibrateBtn.style.display = "none";
+    updateCalibrateBtn();
     draw(); // под видео холст не перерисовывался — вернём панораму
   }
 
@@ -2228,7 +2235,7 @@ function setupActionButtons(): void {
       arVideo = video;
       arSession = await startAr(video, canvas, panorama, view);
       arBtn.style.background = "#e63946";
-      calibrateBtn.style.display = "flex";
+      updateCalibrateBtn();
       // Автоматическая попытка при входе в AR (включена по умолчанию):
       // камере нужно пару кадров на экспозицию, иначе анализируем черноту
       if (getCalibration().autoCalibrate) {
@@ -2273,14 +2280,34 @@ function setupActionButtons(): void {
     if (result === "off") rememberArMode(false);
   }
 
-  // Автокалибровка: видна только в AR — сопоставлять нечего, пока нет кадра
+  // Автокалибровка. На старте — видна с подписью, но неактивна (нет кадра
+  // камеры — сопоставлять нечего): так у неё есть пояснение, а нажать нельзя.
+  // После загрузки скрывается; появляется активной только в AR.
   const calibrateBtn = makeButton(
     ICON_CALIBRATE,
     "autoCalibrate",
     `right:${edgeRight()};bottom:${edgeBottom(120)}`,
   );
-  calibrateBtn.style.display = "none";
-  calibrateBtn.onclick = () => void runAutoCalibration(false);
+  /** Видимость/активность кнопки по фазе: загрузка (подпись, disabled) /
+   *  готово (скрыта) / AR (активна) */
+  function updateCalibrateBtn(): void {
+    if (arSession) {
+      calibrateBtn.style.display = "flex";
+      calibrateBtn.disabled = false;
+      calibrateBtn.style.opacity = "1";
+    } else if (captionsVisible) {
+      calibrateBtn.style.display = "flex";
+      calibrateBtn.disabled = true;
+      calibrateBtn.style.opacity = "0.45";
+    } else {
+      calibrateBtn.style.display = "none";
+    }
+  }
+  calibrateBtn.onclick = () => {
+    if (!calibrateBtn.disabled) void runAutoCalibration(false);
+  };
+  updateCalibrateBtnRef = updateCalibrateBtn;
+  updateCalibrateBtn(); // старт: видна, но неактивна (подпись есть, нажать нельзя)
 
   // Фото с подписями
   const photoBtn = makeButton(

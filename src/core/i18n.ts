@@ -133,7 +133,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   calibrationFov: { ru: 'Поле зрения камеры', en: 'Camera field of view' },
   calibrationAzimuth: { ru: 'Поправка азимута', en: 'Azimuth offset' },
   calibrationTilt: { ru: 'Поправка наклона', en: 'Tilt offset' },
-  autoCalibrate: { ru: 'Совместить с камерой', en: 'Match to camera' },
+  autoCalibrate: { ru: 'Совместить вершины с камерой', en: 'Match peaks to camera' },
   autoCalibrateOnStart: {
     ru: 'Совмещать автоматически в AR',
     en: 'Match automatically in AR',
@@ -195,7 +195,7 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   navBack: { ru: 'Назад', en: 'Back' },
   navLeft: { ru: 'Влево', en: 'Left' },
   navRight: { ru: 'Вправо', en: 'Right' },
-  navGps: { ru: 'К моему положению', en: 'To my position' },
+  navGps: { ru: 'К моей геопозиции', en: 'To my location' },
   heightUp: { ru: 'Выше на 100 м', en: '100 m higher' },
   heightDown: { ru: 'Ниже на 100 м', en: '100 m lower' },
   // Стороны света
