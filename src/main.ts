@@ -539,15 +539,32 @@ function updateCompassButton(): void {
  * Подсказка про раскалиброванный компас (iOS: точность −1 или событие
  * compassneedscalibration). Молча продолжать рисовать по таким показаниям
  * нельзя: азимут может врать на десятки градусов, а человек поверит
- * подписям. Плашка висит, пока точность не вернётся в норму.
+ * подписям. Но и центральной плашкой (#status) это не закрываем — она
+ * перекрывает кадр и предназначена для расчётов/ошибок. Маленькая плашка у
+ * верхнего края заметна, но не загораживает панораму; висит, пока точность
+ * не вернётся в норму.
  */
 let compassCalibrated = true;
+let compassNote: HTMLElement | null = null;
 function updateCompassCalibration(): void {
   const bad = orientationTracker.needsCalibration;
   if (bad === !compassCalibrated) return;
   compassCalibrated = !bad;
-  if (bad) setStatus(t("compassUncalibrated"));
-  else setStatus(""); // точность вернулась — прячем
+  if (bad) {
+    if (!compassNote) {
+      compassNote = document.createElement("div");
+      compassNote.style.cssText =
+        `position:fixed;left:50%;top:${edgeTop(56)};transform:translateX(-50%);` +
+        "z-index:40;pointer-events:none;white-space:nowrap;" +
+        "background:rgba(13,27,42,.85);border:1px solid #e0a458;border-radius:10px;" +
+        "padding:6px 12px;color:#f1d7a8;font:13px system-ui,sans-serif";
+      compassNote.textContent = t("compassUncalibrated");
+      document.body.appendChild(compassNote);
+    }
+  } else {
+    compassNote?.remove();
+    compassNote = null;
+  }
 }
 
 orientationTracker.start((state) => {
