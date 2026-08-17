@@ -33,7 +33,9 @@ import {
   ICON_LOCATE,
   ICON_MAP,
   ICON_PHOTO,
-  ICON_ROTATE,
+  ICON_ROTATE_AUTO,
+  ICON_ROTATE_LANDSCAPE,
+  ICON_ROTATE_PORTRAIT,
   ICON_SETTINGS,
   ICON_UP,
   iconArrow,
@@ -1938,15 +1940,24 @@ function setupOrientationButton(): void {
       : pref === "landscape"
         ? "orientationPortrait"
         : "orientationAuto";
+  // Иконка показывает ТЕКУЩИЙ режим: авто — телефон в дуге, запертые —
+  // телефон с замком. Подпись по-прежнему говорит, что включится по нажатию.
+  const currentIcon = (): string =>
+    pref === "auto"
+      ? ICON_ROTATE_AUTO
+      : pref === "landscape"
+        ? ICON_ROTATE_LANDSCAPE
+        : ICON_ROTATE_PORTRAIT;
   const btn = makeButton(
-    ICON_ROTATE,
+    currentIcon(),
     nextKey(),
     `left:${edgeLeft(56)};top:${edgeTop()}`,
     "right",
   );
-  /** Внешний вид под текущий режим: подпись следующего + цвет запертого */
+  /** Внешний вид под текущий режим: иконка + цвет запертого + подпись */
   const sync = (): void => {
     setTitle(btn, nextKey());
+    btn.innerHTML = currentIcon();
     btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
     const cap = captionEntries.find((c) => c.btn === btn);
     if (cap) {
