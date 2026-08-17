@@ -165,6 +165,43 @@ export async function getPosition(deps: Partial<PositionDeps> = {}): Promise<Pos
 }
 
 /**
+ * Свежий фикс по явному запросу пользователя (кнопка «К моему положению»).
+ *
+ * Отличается от getPosition(): тот обслуживает СТАРТ приложения и сознательно
+ * отдаёт точку прошлого запуска как недостоверную — показать что-то сразу,
+ * спутники дослушать в фоне. Кнопка имеет противоположный смысл: «сходи за
+ * положением СЕЙЧАС». Если взять getPosition(), то при наличии точки прошлого
+ * запуска она возвращается мгновенно с trusted=false, не спросив GPS вовсе,
+ * и кнопка выводила «Не удалось определить положение» при полностью рабочей
+ * геолокации — каждый раз после первого успешного фикса.
+ *
+ * Здесь — только живые источники: готовый фикс системы (мгновенно, если его
+ * недавно оставил навигатор или карта), затем точный запрос к спутникам.
+ * `null` — геолокация недоступна, отклонена или спутники не ответили.
+ */
+export async function getFreshPosition(
+  deps: Partial<PositionDeps> = {},
+): Promise<LatLon | null> {
+  const geolocation = geolocationOf(deps);
+  if (!geolocation) return null;
+
+  // Готовый фикс — как в getPosition(): мгновенно и достаточно точен
+  const quick = await requestFix(
+    geolocation,
+    { enableHighAccuracy: false, maximumAge: CACHE_MAX_AGE_MS, timeout: QUICK_TIMEOUT_MS },
+    QUICK_TIMEOUT_MS,
+  );
+  if (quick) return quick;
+
+  // Кеша нет — идём к спутникам, сколько нужно
+  return requestFix(
+    geolocation,
+    { enableHighAccuracy: true, timeout: GPS_TIMEOUT_MS },
+    GPS_TIMEOUT_MS,
+  );
+}
+
+/**
  * Настоящее положение — сколько бы спутники его ни искали.
  *
  * Вызывается после того, как панорама уже нарисована по быстрой точке.

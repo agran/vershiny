@@ -12,6 +12,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   getPosition,
+  getFreshPosition,
   awaitAccuratePosition,
   rememberPosition,
   lastKnownPosition,
@@ -151,6 +152,50 @@ describe('положение наблюдателя', () => {
 
     expect(fix.pos).toEqual(FALLBACK_POSITION);
     expect(fix.trusted).toBe(false);
+  });
+});
+
+describe('свежий фикс по кнопке «К моему положению»', () => {
+  it('точка прошлого запуска НЕ подставляется: идём к спутникам', async () => {
+    // Регресс: getPosition() при наличии запомненной точки возвращал её с
+    // trusted=false, не спросив GPS вовсе, — и кнопка «К моему положению»
+    // кричала об ошибке при полностью рабочей геолокации после каждого
+    // первого успешного фикса
+    rememberPosition({ lat: 43.35, lon: 42.44 });
+    const pos = await getFreshPosition({ geolocation: geo({ cached: ALPS }) });
+
+    expect(pos).toEqual({ lat: 46.5, lon: 8.0 }); // Альпы, а не вчерашний Приют
+  });
+
+  it('готовый фикс системы годится: кнопка отвечает мгновенно', async () => {
+    vi.useFakeTimers();
+    const pending = getFreshPosition({ geolocation: geo({ cached: ALPS }) });
+    // Таймеры не сдвигались: промис разрешился синхронно, спутников не ждали
+    await expect(pending).resolves.toEqual({ lat: 46.5, lon: 8.0 });
+  });
+
+  it('без готового фикса дожидается спутников', async () => {
+    vi.useFakeTimers();
+    const pending = getFreshPosition({
+      geolocation: geo({ cached: null, precise: ALPS }),
+    });
+    await vi.advanceTimersByTimeAsync(QUICK_TIMEOUT_MS);
+    await expect(pending).resolves.toEqual({ lat: 46.5, lon: 8.0 });
+  });
+
+  it('спутники молчат — честный null, а не вчерашняя точка', async () => {
+    vi.useFakeTimers();
+    rememberPosition({ lat: 43.35, lon: 42.44 });
+    const pending = getFreshPosition({
+      geolocation: geo({ cached: null, preciseSilent: true }),
+    });
+    await vi.advanceTimersByTimeAsync(QUICK_TIMEOUT_MS + GPS_TIMEOUT_MS);
+    await expect(pending).resolves.toBeNull();
+  });
+
+  it('без геолокации вовсе — null, запасной точки нет', async () => {
+    rememberPosition({ lat: 49.8, lon: 86.6 });
+    await expect(getFreshPosition({ geolocation: null })).resolves.toBeNull();
   });
 });
 
