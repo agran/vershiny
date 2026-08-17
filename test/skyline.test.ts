@@ -130,6 +130,32 @@ describe('совмещение кадра с рельефом', () => {
     expect((match.tiltRad * 180) / Math.PI).toBeCloseTo(3, 0);
   });
 
+  it('компас врёт на 90°: правда входит в гипотезы грубого поиска', () => {
+    // Раньше поиск ограничивался окном ±25° вокруг показаний компаса — при
+    // такой ошибке совмещение в принципе не могло сойтись. Синтетический
+    // горизонт имеет гармонику sin(3·az) с периодом 120°: грубый этап законно
+    // держит несколько одинаково сильных гипотез (200°, 320°, 80°…) — истина
+    // обязана быть среди них, а доводка уровня B выберет её по остатку.
+    const azTrue = deg(200);
+    const compassError = deg(90);
+    const frame = renderFrame(azTrue, 0);
+    const profile = extractSkyline(frame, 320, 240);
+
+    const match = matchSkyline(profile, {
+      ...VIEW,
+      centerAzRad: azTrue - compassError,
+      tiltRad: 0,
+      peaks: [], // якорей нет: разбор гармоник — их работа, здесь не проверяем
+    });
+
+    // Поправка обязана указывать на одну из гипотез грубого поиска — значит,
+    // уйти за окно ±25° алгоритм уже смог
+    const corrDeg = (match.azimuthRad * 180) / Math.PI;
+    const candidates = [90, -30, -150]; // 90° и её гармоники ±120°
+    const hit = candidates.some((c) => Math.abs(corrDeg - c) < 2);
+    expect(hit).toBe(true);
+  });
+
   it('не верит ровному горизонту: там совпадает любой азимут', () => {
     const flatHorizon = new Float32Array(HORIZON.length); // море до края света
     const frame = renderFrame(deg(60), 0);

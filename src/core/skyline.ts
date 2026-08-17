@@ -17,6 +17,9 @@
  * тестах на синтетическом рельефе, не поднимая камеру.
  */
 
+import { wrapAngle } from './geo';
+import { matchSkylineCoarse } from './skyline-match';
+
 /** Ширина рабочей сетки: больше не нужно, гребень — крупная форма */
 const GRID_W = 160;
 const GRID_H = 120;
@@ -135,6 +138,12 @@ export interface SkylineMatchOptions {
   maxAzRad?: number;
   /** Предел поиска по наклону, рад */
   maxTiltRad?: number;
+  /**
+   * Видимые вершины из воркера (азимут/возвышение известны) — якорная
+   * проверка гипотез грубого поиска по полному кругу. Без них грубый поиск
+   * работает, но ложные совпадения на периодичных гребнях фильтруются слабее.
+   */
+  peaks?: import('./horizon').VisiblePeak[];
 }
 
 export interface SkylineMatch {
@@ -237,31 +246,67 @@ export function matchSkyline(
     return errors[errors.length >> 1];
   };
 
-  let best = { az: 0, tilt: 0, err: Infinity };
-  let azStep = (2 * Math.PI) / 180;
-  let tiltStep = (1 * Math.PI) / 180;
-  let azRange = maxAzRad;
-  let tiltRange = maxTiltRad;
-  let azCenter = 0;
-  let tiltCenter = 0;
+  /**
+   * Грубый поиск по ПОЛНОМУ кругу (core/skyline-match.ts): если компас врёт
+   * больше окна ±25°, оконный перебор правды не найдёт в принципе. ZNCC
+   * производной профиля по кольцу горизонта даёт топ-K гипотез азимута за
+   * три БПФ; лучшую доводим тем же трёхпроходным поиском ниже. Гипотезы
+   * равнины/тумана (низкий разброс профиля) отсеиваются там же — сюда они
+   * не доходят, и ложного совпадения «ровное с ровным» не бывает.
+   */
+  const coarse = matchSkylineCoarse({
+    horizon,
+    stepRad,
+    frameElev,
+    leftAzRad: centerAzRad - fovRad / 2,
+    fovRad,
+    hintAzRad: centerAzRad,
+    peaks: options.peaks,
+  });
 
-  for (let pass = 0; pass < 3; pass++) {
-    for (let az = azCenter - azRange; az <= azCenter + azRange + 1e-9; az += azStep) {
-      for (
-        let tilt = tiltCenter - tiltRange;
-        tilt <= tiltCenter + tiltRange + 1e-9;
-        tilt += tiltStep
-      ) {
-        const err = residual(az, tilt);
-        if (err < best.err) best = { az, tilt, err };
+  /**
+   * Стартовые центры для доводки: (0, 0) — компас не врёт, плюс каждая
+   * гипотеза грубого поиска. Доводка по-прежнему локальная (±3°/±1.5°), но
+   * стартует уже рядом с правдой, куда бы компас ни смотрел.
+   */
+  const seeds: { az: number; tilt: number }[] = [{ az: 0, tilt: 0 }];
+  for (const h of coarse) {
+    seeds.push({
+      az: wrapAngle(h.centerAzRad - centerAzRad),
+      tilt: 0,
+    });
+  }
+
+  let best = { az: 0, tilt: 0, err: Infinity };
+
+  for (const seed of seeds) {
+    let azStep = (2 * Math.PI) / 180;
+    let tiltStep = (1 * Math.PI) / 180;
+    // Окно первого прохода: для компаса — прежние пределы, для гипотез грубого
+    // поиска ±3°/±1.5° достаточно (точность ZNCC — доли градуса)
+    let azRange = seed.az === 0 && seed.tilt === 0 ? maxAzRad : (3 * Math.PI) / 180;
+    let tiltRange = seed.az === 0 && seed.tilt === 0 ? maxTiltRad : (1.5 * Math.PI) / 180;
+    let azCenter = seed.az;
+    let tiltCenter = seed.tilt;
+
+    for (let pass = 0; pass < 3; pass++) {
+      for (let az = azCenter - azRange; az <= azCenter + azRange + 1e-9; az += azStep) {
+        for (
+          let tilt = tiltCenter - tiltRange;
+          tilt <= tiltCenter + tiltRange + 1e-9;
+          tilt += tiltStep
+        ) {
+          const err = residual(az, tilt);
+          if (err < best.err) best = { az, tilt, err };
+        }
       }
+      azCenter = best.az;
+      tiltCenter = best.tilt;
+      azRange = azStep;
+      tiltRange = tiltStep;
+      azStep /= 5;
+      tiltStep /= 5;
     }
-    azCenter = best.az;
-    tiltCenter = best.tilt;
-    azRange = azStep;
-    tiltRange = tiltStep;
-    azStep /= 5;
-    tiltStep /= 5;
   }
 
   // Доверие: насколько найденный минимум лучше «типичного» сдвига. Совпадение
@@ -272,7 +317,18 @@ export function matchSkyline(
     return { azimuthRad: 0, tiltRad: 0, confidence: 0, columns: cols.length };
   }
   const baseline = medianResidualAcrossShifts(residual, maxAzRad, best.tilt);
-  const confidence = baseline > 0 ? Math.max(0, 1 - best.err / baseline) : 0;
+  let confidence = baseline > 0 ? Math.max(0, 1 - best.err / baseline) : 0;
+
+  // Если лучший ответ пришёл с гипотезы грубого поиска, его однозначность
+  // (разрыв с вторым разным пиком ZNCC) и вершины-якоря входят в доверие:
+  // без них «похожий соседний гребень» неотличим от истины
+  const coarseBest = coarse[0];
+  if (coarseBest && Math.abs(wrapAngle(best.az - wrapAngle(coarseBest.centerAzRad - centerAzRad))) < (1 * Math.PI) / 180) {
+    // Ответ совпал с гипотезой грубого поиска — учитываем её качество
+    confidence *= Math.min(1, coarseBest.uniqueness / 1.5);
+    if (coarseBest.anchorScore >= 0.6) confidence = Math.min(1, confidence + 0.2);
+    else if (coarseBest.anchorScore === 0 && options.peaks?.length) confidence *= 0.5;
+  }
 
   return {
     azimuthRad: best.az,

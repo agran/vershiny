@@ -1455,6 +1455,10 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
     // отрисовкой и подгонять контуры не туда, куда человек смотрит
     horizon: silhouetteProfile(panorama),
     stepRad: panorama.stepRad,
+    // Видимые вершины — якоря для грубого поиска по полному кругу: без них
+    // периодичные гребни неотличимы, с ними ложный максимум ZNCC почти
+    // никогда не угадает ещё и позицию Эльбруса
+    peaks: panorama.peaks,
   });
 
   if (match.confidence < MIN_CONFIDENCE) {
