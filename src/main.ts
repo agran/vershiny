@@ -515,6 +515,14 @@ import { orientationTracker } from "./core/orientation";
  * навсегда оставалась бы на «Загрузка…» (только на iPhone).
  */
 const localizedTitles: { el: HTMLElement; key: TitleKey }[] = [];
+/**
+ * Подписи к кнопкам главного экрана и их видимость. Стоят здесь же по
+ * причине из комментария выше: первая кнопка (компас на iOS) создаётся из
+ * `orientationTracker.start()` синхронно, `addCaption` читает обе переменные.
+ * Видимы на старте — весь период «Загрузка… → Расчёт панорамы…».
+ */
+const captions: { btn: HTMLElement; span: HTMLElement; key: TitleKey }[] = [];
+let captionsVisible = true;
 let compassBtn: HTMLButtonElement | null = null;
 function updateCompassButton(): void {
   if (!orientationTracker.needsPermission) {
@@ -593,6 +601,12 @@ let heightOverride: number | null = null;
 
 /** Кнопки ⚙/📷/📸 уже созданы (иначе плодятся на каждый пересчёт) */
 let actionButtonsReady = false;
+/**
+ * Автозапуск камеры: назначается в setupActionButtons (кнопки создаются
+ * при старте), вызывается по первому результату воркера — оверлею нужна
+ * панорама
+ */
+let arAutoStart: (() => void) | null = null;
 
 /**
  * Навести камеру по вертикали на рельеф при следующем результате.
@@ -669,6 +683,8 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     setStatus(
       navigator.onLine ? `${t("error")}: ${msg.message}` : t("errorOffline"),
     );
+    // Загрузка всё равно закончилась (пусть и ошибкой) — подписи убираем
+    hideButtonCaptions();
     return;
   }
   if (msg.type === "viewpoint") return; // ждёт свой одноразовый обработчик
@@ -697,9 +713,10 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     applyAutoTilt(r);
   }
   setStatus("");
+  hideButtonCaptions(); // первая панорама есть — загрузка кончилась
   draw();
-  // Кнопки AR/фото — после первого результата
-  setupActionButtons();
+  // Камера — по первому результату: оверлею нужна панорама
+  arAutoStart?.();
   console.info(
     `Горизонт: ${r.horizon.length} лучей, ${r.peaks.length} из ${currentPeaks.length} пиков, ` +
       `наблюдатель ${r.observerH.toFixed(0)} м, ${r.computeMs.toFixed(0)} мс`,
@@ -710,6 +727,20 @@ let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
 
 async function main(): Promise<void> {
   setStatus(t("waitingGps"));
+
+  // Кнопки — сразу, до GPS и загрузки региона: всё время загрузки они видны
+  // и подписаны (addCaption), незачем человеку смотреть на пустой экран.
+  // main() повторяется при смене региона — создаём один раз
+  if (!navUiReady) {
+    navUiReady = true;
+    setupDownloadButton();
+    setupMapButton();
+    setupNavPad();
+    setupActionButtons();
+  } else {
+    // Регион мог смениться по GPS — состояние кнопки перечитываем
+    void refreshDownloadState();
+  }
 
   const base = import.meta.env.BASE_URL;
 
@@ -784,17 +815,6 @@ async function main(): Promise<void> {
     // кадра значит держать человека на заставке всё это время
     void refineStartPosition();
   }
-
-  // Кнопки действий; main() повторяется при смене региона — создаём один раз
-  if (!navUiReady) {
-    navUiReady = true;
-    setupDownloadButton();
-    setupMapButton();
-    setupNavPad();
-  } else {
-    // Регион мог смениться по GPS — состояние кнопки перечитываем
-    void refreshDownloadState();
-  }
 }
 
 /**
@@ -837,6 +857,8 @@ function setupMapButton(): void {
     ICON_MAP,
     "map",
     `left:${edgeLeft()};bottom:${edgeBottom()}`,
+    // Справа вплотную стоит навипад — подпись над кнопкой, а не сбоку
+    "above",
   );
   mapButton = btn;
   layoutControls();
@@ -1211,6 +1233,9 @@ function applyDownloadState(): void {
   const btn = downloadButton;
   if (!btn) return;
   btn.innerHTML = regionDownloaded ? ICON_DOWNLOADED : ICON_DOWNLOAD;
+  // innerHTML сносит подпись-плашку — возвращаем на место
+  const cap = captions.find((c) => c.btn === btn);
+  if (cap) btn.appendChild(cap.span);
   btn.style.background = regionDownloaded ? "#2d6a4f" : "#415a77";
   const title = regionDownloaded ? t("regionDownloaded") : t("downloadRegion");
   btn.title = title;
@@ -1231,6 +1256,7 @@ function makeButton(
   icon: string,
   titleKey: TitleKey,
   pos: string,
+  captionPlace?: CaptionPlace,
 ): HTMLButtonElement {
   const btn = document.createElement("button");
   if (icon.startsWith("<svg")) btn.innerHTML = icon;
@@ -1241,6 +1267,14 @@ function makeButton(
     "border-radius:50%;border:none;background:#415a77;color:#f1faee;" +
     "font-size:20px;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.4);" +
     "display:flex;align-items:center;justify-content:center";
+  // Подпись на время загрузки: приоритет — сбоку (у кнопок правого края
+  // слева, у левого — справа): так текст читается на одной строке с кнопкой
+  // и не уходит за экран. Сверху/снизу — только где сбоку занято (карте
+  // справа мешает навипад — её подпись явно "above").
+  const place =
+    captionPlace ??
+    (pos.includes("right:") ? "left" : pos.includes("left:") ? "right" : "below");
+  addCaption(btn, titleKey, place);
   document.body.appendChild(btn);
   return btn;
 }
@@ -1255,6 +1289,44 @@ function setTitle(el: HTMLElement, key: TitleKey): void {
   localizedTitles.push({ el, key });
 }
 
+/**
+ * Подписи к кнопкам главного экрана. На старте (пока идут «Загрузка…» →
+ * «Загрузка региона…» → «Расчёт панорамы…») иконки без слов не говорят
+ * новичку ничего, поэтому на время начальной загрузки каждая кнопка
+ * подписывается текстом; как только пришёл первый результат воркера
+ * (или ошибка — загрузка всё равно закончилась), подписи прячутся.
+ * Реестр объявлен рядом с localizedTitles — см. комментарий там (TDZ на iOS).
+ */
+type CaptionPlace = "above" | "below" | "left" | "right";
+
+function addCaption(btn: HTMLElement, key: TitleKey, place: CaptionPlace): void {
+  const span = document.createElement("span");
+  span.textContent = t(key);
+  const at =
+    place === "above"
+      ? "bottom:calc(100% + 3px);left:50%;transform:translateX(-50%)"
+      : place === "left"
+        ? "right:calc(100% + 4px);top:50%;transform:translateY(-50%)"
+        : place === "right"
+          ? "left:calc(100% + 4px);top:50%;transform:translateY(-50%)"
+          : "top:calc(100% + 3px);left:50%;transform:translateX(-50%)";
+  span.style.cssText =
+    `position:absolute;${at};` +
+    "white-space:nowrap;font-size:11px;line-height:1.2;padding:1px 6px;" +
+    "border-radius:6px;background:rgba(13,27,42,0.8);color:#f1faee;" +
+    "pointer-events:none;font-family:system-ui";
+  span.style.display = captionsVisible ? "" : "none";
+  btn.appendChild(span);
+  captions.push({ btn, span, key });
+}
+
+/** Скрыть подписи кнопок: начальная загрузка завершена (результат или ошибка) */
+function hideButtonCaptions(): void {
+  if (!captionsVisible) return;
+  captionsVisible = false;
+  for (const c of captions) c.span.style.display = "none";
+}
+
 /** Перевести подписи интерфейса после смены языка */
 function relabelUi(): void {
   for (const { el, key } of localizedTitles) {
@@ -1262,6 +1334,7 @@ function relabelUi(): void {
     el.title = title;
     el.setAttribute("aria-label", title);
   }
+  for (const c of captions) c.span.textContent = t(c.key);
   // У кнопки офлайна подпись зависит ещё и от состояния региона
   applyDownloadState();
 }
@@ -1311,10 +1384,13 @@ function setupNavPad(): void {
     setTitle(btn, d.label);
     const [row, col] = d.cell.split(" / ");
     btn.style.cssText =
-      `grid-row:${row};grid-column:${col};` +
+      `grid-row:${row};grid-column:${col};position:relative;` +
       `border:none;border-radius:${touchOnly ? "50%" : "10px"};background:#415a77;color:#f1faee;` +
       "cursor:pointer;min-width:0;min-height:0;display:flex;" +
       "align-items:center;justify-content:center";
+    // Подпись на время загрузки — только GPS-кнопке: навипад у нижнего края,
+    // а стрелки креста подписывать нечего — направление видно по самой иконке
+    if (d.gps) addCaption(btn, d.label, "above");
     if (d.gps) {
       btn.onclick = () => {
         // «К моему положению» — явная просьба о СВЕЖЕМ фиксе. getPosition()
@@ -1360,8 +1436,11 @@ function setupNavPad(): void {
     b.innerHTML = icon;
     setTitle(b, titleKey);
     b.style.cssText =
-      "border:none;border-radius:10px;background:#415a77;color:#f1faee;" +
+      "position:relative;border:none;border-radius:10px;background:#415a77;color:#f1faee;" +
       "width:44px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center";
+    // Подпись на время загрузки — справа: справа от высотного блока пусто,
+    // а сверху/снизу — соседние кнопки и край экрана
+    addCaption(b, titleKey, "right");
     b.onclick = () => adjustHeight(delta);
     heightPad.appendChild(b);
     return b;
@@ -1628,9 +1707,8 @@ function adjustHeight(deltaM: number): void {
   requestCompute(lastOrigin);
 }
 
-/** Кнопки AR и фото (появляются после первого расчёта панорамы) */
+/** Кнопки ⚙/AR/фото: создаются при старте, видны уже во время загрузки */
 function setupActionButtons(): void {
-  // Вызывается на каждый результат воркера — но кнопки нужны одни
   if (actionButtonsReady) return;
   actionButtonsReady = true;
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
@@ -1808,9 +1886,9 @@ function setupActionButtons(): void {
     setTimeout(() => setStatus(""), 3000);
   };
 
-  // Камера — последним шагом: к этому моменту вся раскладка на месте, и
-  // человек видит панораму, даже если разрешение он даст не сразу
-  void maybeAutoStartAr();
+  // Камера стартует не отсюда, а по первому результату воркера
+  // (arAutoStart в обработчике ответа): оверлей без панорамы рисовать нечем
+  arAutoStart = () => void maybeAutoStartAr();
 }
 
 /**

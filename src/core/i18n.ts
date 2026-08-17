@@ -75,7 +75,9 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   downloadPeaks: { ru: 'Загрузка вершин…', en: 'Downloading peaks…' },
   downloadTiles: { ru: 'Загрузка тайлов', en: 'Downloading tiles' },
   appTitle: { ru: 'Вершины — панорама гор', en: 'Vershiny — Mountain Panorama' },
-  arMode: { ru: 'AR-режим', en: 'AR mode' },
+  // «Камера», а не «AR-режим»: аббревиатура AR многим ничего не говорит,
+  // а кнопка включает именно камеру с подписями поверх кадра
+  arMode: { ru: 'Камера', en: 'Camera' },
   photo: { ru: 'Фото с подписями', en: 'Photo with labels' },
   photoSaved: { ru: 'Снимок сохранён', en: 'Photo saved' },
   photoCaption: { ru: 'Снимок', en: 'Photo' },
