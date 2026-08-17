@@ -78,24 +78,61 @@ export function mapPeakLimit(zoom: number): number {
 }
 
 /**
- * Отбор вершин для слоя карты на этом зуме: N самых значимых по той же
- * формуле, что и подписи на панораме (высота · изоляция; `peakScore`).
+ * Отбор вершин для слоя карты на этом зуме: N самых значимых В КАДРЕ
+ * по той же формуле, что и подписи на панораме (высота · изоляция;
+ * `peakScore`). Геометрия кадра та же, что у projectPeaks: центр, зум,
+ * размер экрана и запас в полподписи за краем.
+ *
+ * Почему кадр, а не весь регион: регионы у нас крупные (Западный Кавказ —
+ * 1226 вершин и Эльбрус по краю bbox), и глобальный топ-N по значимости
+ * отдавливал локальные главные вершины видимого кадра: из Краснодара карта
+ * на зуме 11 показывала Эльбрус с соседями, а стоящий на виду Фишт-Оштен
+ * в лимит не проходил. Миганием это не грозит: проекция детерминирована,
+ * микросдвиг центра сдвигает окно на доли градуса, и состав топ-N в нём
+ * меняется только когда вершина реально входит/уходит из кадра.
  *
  * Сортировка важна не только для отбора: подписи накладываются в порядке
  * DOM, и ранняя вершина перекрывает позднюю — поэтому рисуем от хвоста к
  * голове (см. render), и главная гора остаётся читаемой в толпе.
  */
-export function selectMapPeaks(peaks: Peak[], zoom: number): Peak[] {
-  const limit = mapPeakLimit(zoom);
-  if (!Number.isFinite(limit) && limit > 0) {
-    // «Все» — но всё равно сортируем: верх в DOM должен быть у главных
-    return [...peaks].sort(
-      (a, b) => peakScore(b, 0) - peakScore(a, 0) || (b.ele ?? 0) - (a.ele ?? 0),
-    );
+export function selectMapPeaks(
+  peaks: Peak[],
+  zoom: number,
+  center?: LatLon,
+  width?: number,
+  height?: number,
+): Peak[] {
+  // Окно кадра в lon/lat с запасом (как margin у projectPeaks)
+  let inView = peaks;
+  if (center && width && height) {
+    const c = project(center, zoom);
+    const margin = 80;
+    const left = c.x - width / 2 - margin;
+    const right = c.x + width / 2 + margin;
+    const top = c.y - height / 2 - margin;
+    const bottom = c.y + height / 2 + margin;
+    const scale = TILE_PX * 2 ** zoom;
+    const worldPx = scale;
+    const lonLeft = (left / scale) * 360 - 180;
+    const lonRight = (right / scale) * 360 - 180;
+    const latTop = unproject(0, Math.max(0, top), zoom).lat;
+    const latBottom = unproject(0, Math.min(worldPx, bottom), zoom).lat;
+    inView = peaks.filter((p) => {
+      if (p.lat > latTop || p.lat < latBottom) return false;
+      // Долгота с заворотом: кадр у антимеридиана пересекает ±180
+      if (lonLeft < -180 || lonRight > 180) {
+        const lon = p.lon > 0 && lonLeft < -180 ? p.lon - 360 : p.lon < 0 && lonRight > 180 ? p.lon + 360 : p.lon;
+        return lon >= lonLeft && lon <= lonRight;
+      }
+      return p.lon >= lonLeft && p.lon <= lonRight;
+    });
   }
-  return [...peaks]
-    .sort((a, b) => peakScore(b, 0) - peakScore(a, 0) || (b.ele ?? 0) - (a.ele ?? 0))
-    .slice(0, limit);
+  const sorted = [...inView].sort(
+    (a, b) => peakScore(b, 0) - peakScore(a, 0) || (b.ele ?? 0) - (a.ele ?? 0),
+  );
+  const limit = mapPeakLimit(zoom);
+  if (!Number.isFinite(limit) && limit > 0) return sorted; // «все», но в порядке значимости
+  return sorted.slice(0, limit);
 }
 
 export interface ProjectedMapPeak {
@@ -254,7 +291,7 @@ export function openMap(options: MapOptions): () => void {
       return;
     }
     peaksLayer.style.display = "block";
-    const selected = selectMapPeaks(mapPeaks, zoom);
+    const selected = selectMapPeaks(mapPeaks, zoom, center, w, h);
     const projected = projectPeaks(selected, center, zoom, w, h);
 
     // Метки одноимённых вершин не плодим: в горах «Пик №3» встречается
