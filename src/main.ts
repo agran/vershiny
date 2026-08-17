@@ -145,11 +145,26 @@ let mapButton: HTMLElement | null = null;
 const touchOnly =
   typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches;
 
+/**
+ * Флаг «плашки подписей уже в очереди на раскладку».
+ * Стоит ДО resize(): тот вызывается при вычислении модуля (строка ниже),
+ * и обращение к `let` ниже по файлу — TDZ ReferenceError на iPhone.
+ */
+let captionLayoutQueued = false;
+
 function resize(): void {
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio);
   canvas.height = Math.round(canvas.clientHeight * devicePixelRatio);
   syncFov();
   layoutControls();
+  // Плашки подписей привязаны к кнопкам: кнопки переехали — плашки тоже
+  if (!captionLayoutQueued) {
+    captionLayoutQueued = true;
+    requestAnimationFrame(() => {
+      captionLayoutQueued = false;
+      layoutCaptions();
+    });
+  }
   // Смена размера очищает холст: без перерисовки панорама пропадала до
   // следующего пересчёта (поворот телефона — пустой экран)
   draw();
@@ -518,13 +533,25 @@ import { orientationTracker } from "./core/orientation";
  */
 const localizedTitles: { el: HTMLElement; key: TitleKey }[] = [];
 /**
- * Подписи к кнопкам главного экрана и их видимость. Стоят здесь же по
- * причине из комментария выше: первая кнопка (компас на iOS) создаётся из
- * `orientationTracker.start()` синхронно, `addCaption` читает обе переменные.
- * Видимы на старте — весь период «Загрузка… → Расчёт панорамы…».
+ * Подписи-плашки к кнопкам и их структуры. Стоят здесь же по причине из
+ * комментария выше: первая кнопка (компас на iOS) создаётся из
+ * `orientationTracker.start()` синхронно, и `addCaption` →
+ * `ensureCaptionLayer` читает captionEntries/captionLayer ещё до того, как
+ * вычислена нижняя половина модуля.
  */
-const captions: { btn: HTMLElement; span: HTMLElement; key: TitleKey }[] = [];
 let captionsVisible = true;
+interface CaptionEntry {
+  btn: HTMLElement;
+  root: HTMLElement;
+  label: HTMLElement;
+  key: TitleKey;
+  side: "left" | "right" | "above" | "below";
+  offset: number;
+  base: { x: number; y: number; w: number; h: number } | null;
+}
+const captionEntries: CaptionEntry[] = [];
+let captionLayer: HTMLElement | null = null;
+let captionArrowLayer: SVGSVGElement | null = null;
 let compassBtn: HTMLButtonElement | null = null;
 function updateCompassButton(): void {
   if (!orientationTracker.needsPermission) {
@@ -1238,10 +1265,9 @@ async function refreshDownloadState(): Promise<void> {
 function applyDownloadState(): void {
   const btn = downloadButton;
   if (!btn) return;
+  // Плашка-подпись живёт в общем слое (не внутри кнопки) — innerHTML ей
+  // не страшен
   btn.innerHTML = regionDownloaded ? ICON_DOWNLOADED : ICON_DOWNLOAD;
-  // innerHTML сносит подпись-плашку — возвращаем на место
-  const cap = captions.find((c) => c.btn === btn);
-  if (cap) btn.appendChild(cap.span);
   btn.style.background = regionDownloaded ? "#2d6a4f" : "#415a77";
   const title = regionDownloaded ? t("regionDownloaded") : t("downloadRegion");
   btn.title = title;
@@ -1262,7 +1288,7 @@ function makeButton(
   icon: string,
   titleKey: TitleKey,
   pos: string,
-  captionPlace?: CaptionPlace,
+  captionPlace?: CaptionEntry["side"],
 ): HTMLButtonElement {
   const btn = document.createElement("button");
   if (icon.startsWith("<svg")) btn.innerHTML = icon;
@@ -1282,6 +1308,8 @@ function makeButton(
     (pos.includes("right:") ? "left" : pos.includes("left:") ? "right" : "below");
   addCaption(btn, titleKey, place);
   document.body.appendChild(btn);
+  // Раскладка плашек — после вставки кнопки в DOM, когда у неё есть размеры
+  requestAnimationFrame(layoutCaptions);
   return btn;
 }
 
@@ -1296,41 +1324,204 @@ function setTitle(el: HTMLElement, key: TitleKey): void {
 }
 
 /**
- * Подписи к кнопкам главного экрана. На старте (пока идут «Загрузка…» →
- * «Загрузка региона…» → «Расчёт панорамы…») иконки без слов не говорят
- * новичку ничего, поэтому на время начальной загрузки каждая кнопка
- * подписывается текстом; как только пришёл первый результат воркера
- * (или ошибка — загрузка всё равно закончилась), подписи прячутся.
- * Реестр объявлен рядом с localizedTitles — см. комментарий там (TDZ на iOS).
+ * Подписи к кнопкам главного экрана: выносные плашки со стрелкой.
+ *
+ * На старте (пока идут «Загрузка…» → «Загрузка региона…» → «Расчёт
+ * панорамы…») иконки без слов не говорят новичку ничего, поэтому на время
+ * начальной загрузки каждая кнопка подписывается. Плашка кладётся В СТОРОНЕ
+ * от кнопки и указывает на неё стрелкой — прижатый к кнопке текст налезал и
+ * на соседние кнопки, и на соседние плашки (левый верхний угол, навипад).
+ * Разводка — layoutCaptions(): сдвигает плашки, пока не исчезнут
+ * пересечения друг с другом и с кнопками; гарантию проверяет тест
+ * (test/captions-layout.test.ts). Реестр (captionEntries, слои) объявлен
+ * рядом с localizedTitles — см. комментарий там (TDZ на iOS).
  */
-type CaptionPlace = "above" | "below" | "left" | "right";
 
-function addCaption(btn: HTMLElement, key: TitleKey, place: CaptionPlace): void {
-  const span = document.createElement("span");
-  span.textContent = t(key);
-  const at =
-    place === "above"
-      ? "bottom:calc(100% + 3px);left:50%;transform:translateX(-50%)"
-      : place === "left"
-        ? "right:calc(100% + 4px);top:50%;transform:translateY(-50%)"
-        : place === "right"
-          ? "left:calc(100% + 4px);top:50%;transform:translateY(-50%)"
-          : "top:calc(100% + 3px);left:50%;transform:translateX(-50%)";
-  span.style.cssText =
-    `position:absolute;${at};` +
-    "white-space:nowrap;font-size:11px;line-height:1.2;padding:1px 6px;" +
-    "border-radius:6px;background:rgba(13,27,42,0.8);color:#f1faee;" +
-    "pointer-events:none;font-family:system-ui";
-  span.style.display = captionsVisible ? "" : "none";
-  btn.appendChild(span);
-  captions.push({ btn, span, key });
+function ensureCaptionLayer(): { layer: HTMLElement; arrows: SVGSVGElement } {
+  if (!captionLayer) {
+    captionLayer = document.createElement("div");
+    captionLayer.style.cssText =
+      "position:fixed;inset:0;z-index:11;pointer-events:none;overflow:hidden";
+    captionArrowLayer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    captionArrowLayer.setAttribute("style", "position:absolute;inset:0;width:100%;height:100%");
+    captionLayer.appendChild(captionArrowLayer);
+    document.body.appendChild(captionLayer);
+  }
+  return { layer: captionLayer, arrows: captionArrowLayer! };
+}
+
+function addCaption(
+  btn: HTMLElement,
+  key: TitleKey,
+  side: CaptionEntry["side"],
+): void {
+  const { layer } = ensureCaptionLayer();
+  const root = document.createElement("div");
+  root.style.cssText = "position:absolute;visibility:hidden";
+  const label = document.createElement("div");
+  label.textContent = t(key);
+  label.style.cssText =
+    "white-space:nowrap;font-size:11px;line-height:1.3;padding:2px 8px;" +
+    "border-radius:6px;background:rgba(13,27,42,0.85);color:#f1faee;" +
+    "font-family:system-ui;box-shadow:0 1px 4px rgba(0,0,0,.4)";
+  root.appendChild(label);
+  root.style.display = captionsVisible ? "" : "none";
+  layer.appendChild(root);
+  captionEntries.push({ btn, root, label, key, side, offset: 0, base: null });
+}
+
+/** Положение кнопки на экране */
+function btnRect(btn: HTMLElement): DOMRect {
+  return btn.getBoundingClientRect();
+}
+
+/**
+ * Раскладка плашек: базовая точка в стороне от кнопки, затем раздвижка
+ * вдоль оси, пока плашка не перестанет пересекаться с кнопками и другими
+ * плашками. Ось: left/right — по вертикали, above/below — по горизонтали.
+ */
+function layoutCaptions(): void {
+  // Ранний вызов из resize() при вычислении модуля (requestAnimationFrame в
+  // jsdom срабатывает синхронно): captionEntries/captionLayer ещё в TDZ —
+  // откладываем: настоящая раскладка случится при первом показе кнопок.
+  try {
+    if (!captionsVisible || !captionEntries.length || !captionLayer) return;
+  } catch {
+    return; // TDZ на этапе инициализации модуля
+  }
+  const arrows = captionArrowLayer!;
+  arrows.replaceChildren();
+  const buttons = captionEntries.map((c) => c.btn);
+  const placed: DOMRect[] = [];
+
+  for (const c of captionEntries) {
+    const br = btnRect(c.btn);
+    if (!br.width) continue;
+    const label = c.label;
+    const lw = label.offsetWidth || 80;
+    const lh = label.offsetHeight || 18;
+    const gap = 6; // зазор между плашкой и кнопкой
+    const cx = br.left + br.width / 2;
+    const cy = br.top + br.height / 2;
+
+    let x = 0;
+    let y = 0;
+    if (c.side === "left") {
+      x = br.left - gap - lw;
+      y = cy - lh / 2;
+    } else if (c.side === "right") {
+      x = br.right + gap;
+      y = cy - lh / 2;
+    } else if (c.side === "above") {
+      x = cx - lw / 2;
+      y = br.top - gap - lh;
+    } else {
+      x = cx - lw / 2;
+      y = br.bottom + gap;
+    }
+    // В пределы экрана; для above/below — ещё и выше/ниже чужих кнопок
+    // того же ряда (плашка шире кнопки и по центру задевает соседей)
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    x = Math.max(4, Math.min(x, W - lw - 4));
+    y = Math.max(4, Math.min(y, H - lh - 4));
+    // Раздвижка, пока есть пересечения. Своя кнопка не считается
+    // препятствием: плашка отстоит от неё на gap, но не пересекает.
+    const vertical = c.side === "left" || c.side === "right";
+    const obstacles = buttons
+      .filter((b) => b !== c.btn)
+      .map((b) => btnRect(b))
+      .filter((r) => r.width)
+      .map((r) => ({ left: r.left, right: r.right, top: r.top, bottom: r.bottom }));
+    const collides = (rx: number, ry: number): boolean => {
+      const self = { left: rx, right: rx + lw, top: ry, bottom: ry + lh };
+      const hits = (r: { left: number; right: number; top: number; bottom: number }) =>
+        self.left < r.right && self.right > r.left && self.top < r.bottom && self.bottom > r.top;
+      if (obstacles.some(hits)) return true;
+      return placed.some(hits);
+    };
+    if (c.side === "above" || c.side === "below") {
+      // Поднять/опустить, пока плашка в своём ряду не перестанет задевать
+      // кнопки по вертикали (навипад: центр на строке с «Вперёд»)
+      let guard = 0;
+      const vertHits = (ry: number): boolean => {
+        const self = { top: ry, bottom: ry + lh };
+        for (const r of obstacles) {
+          const horiz = x < r.right && x + lw > r.left;
+          if (horiz && self.top < r.bottom && self.bottom > r.top) return true;
+        }
+        return false;
+      };
+      while (vertHits(y) && guard++ < 100) {
+        y = c.side === "above" ? y - 14 : y + 14;
+        if (y < 4 || y + lh > H - 4) break;
+      }
+    }
+
+    // Ищем ближайший к базовой точке сдвиг без коллизий: для боковых
+    // плашек — по вертикали, для верхних/нижних — по обеим осям сразу
+    // (крест навипада: сдвинуть вбок — заденет боковую стрелку; только
+    // комбинация «выше и в сторону» выводит из креста).
+    let placed_ok = false;
+    if (vertical) {
+      for (let step = 0; step <= 40 && !placed_ok; step++) {
+        for (const dir of step === 0 ? [1] : [1, -1]) {
+          const v = y + dir * step * 14;
+          if (v < 4 || v > H - lh - 4) continue;
+          if (!collides(x, v)) {
+            y = v;
+            placed_ok = true;
+            break;
+          }
+        }
+      }
+    } else {
+      outer: for (let radius = 0; radius <= 60 && !placed_ok; radius++) {
+        for (let dx = -radius; dx <= radius && !placed_ok; dx++) {
+          for (const dy of [-radius, radius]) {
+            if (Math.max(Math.abs(dx), Math.abs(dy)) !== radius) continue;
+            const tx = x + dx * 14;
+            const ty = y + dy * 14;
+            if (tx < 4 || tx > W - lw - 4 || ty < 4 || ty > H - lh - 4) continue;
+            if (!collides(tx, ty)) {
+              x = tx;
+              y = ty;
+              placed_ok = true;
+              break;
+            }
+          }
+        }
+        if (placed_ok) break outer;
+      }
+    }
+
+    c.root.style.left = `${x}px`;
+    c.root.style.top = `${y}px`;
+    c.root.style.visibility = "visible";
+    placed.push(new DOMRect(x, y, lw, lh));
+
+    // Стрелка от края плашки к краю кнопки
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    const fromX = vertical ? (c.side === "left" ? x + lw : x) : cx;
+    const fromY = vertical ? y + lh / 2 : c.side === "above" ? y + lh : y;
+    const toX = vertical ? (c.side === "left" ? br.left : br.right) : cx;
+    const toY = vertical ? cy : c.side === "above" ? br.top : br.bottom;
+    line.setAttribute("x1", String(fromX));
+    line.setAttribute("y1", String(fromY));
+    line.setAttribute("x2", String(toX));
+    line.setAttribute("y2", String(toY));
+    line.setAttribute("stroke", "rgba(241,250,238,0.55)");
+    line.setAttribute("stroke-width", "1.2");
+    line.setAttribute("stroke-dasharray", "3 3");
+    arrows.appendChild(line);
+  }
 }
 
 /** Скрыть подписи кнопок: начальная загрузка завершена (результат или ошибка) */
 function hideButtonCaptions(): void {
   if (!captionsVisible) return;
   captionsVisible = false;
-  for (const c of captions) c.span.style.display = "none";
+  if (captionLayer) captionLayer.style.display = "none";
 }
 
 /** Перевести подписи интерфейса после смены языка */
@@ -1340,7 +1531,11 @@ function relabelUi(): void {
     el.title = title;
     el.setAttribute("aria-label", title);
   }
-  for (const c of captions) c.span.textContent = t(c.key);
+  for (const c of captionEntries) {
+    c.label.textContent = t(c.key);
+    c.root.style.visibility = "hidden"; // ширина изменилась — раскладка заново
+  }
+  layoutCaptions();
   // У кнопки офлайна подпись зависит ещё и от состояния региона
   applyDownloadState();
 }
@@ -1395,8 +1590,11 @@ function setupNavPad(): void {
       "cursor:pointer;min-width:0;min-height:0;display:flex;" +
       "align-items:center;justify-content:center";
     // Подпись на время загрузки — только GPS-кнопке: навипад у нижнего края,
-    // а стрелки креста подписывать нечего — направление видно по самой иконке
-    if (d.gps) addCaption(btn, d.label, "above");
+    // а стрелки креста подписывать нечего — направление видно по самой иконке.
+    // Сторона "left": кнопка — центр креста, окружённого стрелками со всех
+    // сторон; сдвигом по одной оси плашку из креста не вывести, а влево от
+    // навипада — свободно
+    if (d.gps) addCaption(btn, d.label, "left");
     if (d.gps) {
       btn.onclick = () => {
         // «К моему положению» — явная просьба о СВЕЖЕМ фиксе. getPosition()
@@ -1750,10 +1948,10 @@ function setupOrientationButton(): void {
   const sync = (): void => {
     setTitle(btn, nextKey());
     btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
-    const cap = captions.find((c) => c.btn === btn);
+    const cap = captionEntries.find((c) => c.btn === btn);
     if (cap) {
       cap.key = nextKey();
-      cap.span.textContent = t(cap.key);
+      cap.label.textContent = t(cap.key);
     }
   };
   btn.onclick = async () => {
