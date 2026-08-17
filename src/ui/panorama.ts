@@ -76,6 +76,16 @@ const HIDDEN_LABEL_BUDGET = 6;
  */
 export const HORIZON_FRAC = 0.62;
 
+/** Какие части оверлея рисовать */
+export interface OverlayOptions {
+  /**
+   * Контуры гребней и шкала азимутов. false — только подписи вершин:
+   * так выглядит снимок из AR, где нарисованный силуэт конфликтовал бы
+   * с настоящими горами в кадре (core/photo-caption.ts, галочка «Контуры»).
+   */
+  ridges?: boolean;
+}
+
 /**
  * Рендер одного кадра панорамы: небо + оверлей.
  *
@@ -88,6 +98,7 @@ export function renderPanorama(
   state: PanoramaState,
   view: ViewState,
   uiScale?: number,
+  overlay?: OverlayOptions,
 ): void {
   const { width, height } = ctx.canvas;
   const horizonY = height * HORIZON_FRAC; // линия горизонта чуть ниже центра
@@ -100,7 +111,7 @@ export function renderPanorama(
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, width, height);
 
-  drawOverlay(ctx, state, view, uiScale);
+  drawOverlay(ctx, state, view, uiScale, overlay);
 }
 
 /**
@@ -116,9 +127,11 @@ export function drawOverlay(
   state: PanoramaState,
   view: ViewState,
   uiScaleOverride?: number,
+  overlay: OverlayOptions = {},
 ): void {
   const { width, height } = ctx.canvas;
   const horizonY = height * HORIZON_FRAC;
+  const drawRidges = overlay.ridges !== false;
 
   const azToX = (az: number): number =>
     (wrapAngle(az - view.centerAzRad) / view.fovRad) * width + width / 2;
@@ -143,7 +156,7 @@ export function drawOverlay(
     for (const layer of layers) if (layer) profiles.push(layer);
   }
 
-  if (profiles.length) {
+  if (drawRidges && profiles.length) {
     const rayCount = profiles[0].length;
     const ridgeWidth = RIDGE_WIDTH_CSS * uiScale;
     const ridgeOffset = RIDGE_OFFSET_CSS * uiScale;
@@ -165,12 +178,14 @@ export function drawOverlay(
     }
   }
 
-  // Шкала азимутов: каждые 15°, подписи сторон света
-  ctx.font = `${12 * uiScale}px system-ui, sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.lineJoin = 'round';
-  const stepDeg = 15;
-  for (let deg = 0; deg < 360; deg += stepDeg) {
+  // Шкала азимутов: каждые 15°, подписи сторон света. Без гребней шкала
+  // бессмысленна — рисовать риски посреди фотографии нечему
+  if (drawRidges) {
+    ctx.font = `${12 * uiScale}px system-ui, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.lineJoin = 'round';
+    const stepDeg = 15;
+    for (let deg = 0; deg < 360; deg += stepDeg) {
     const az = (deg * Math.PI) / 180;
     const x = azToX(az);
     if (x < 0 || x > width) continue;
@@ -191,6 +206,7 @@ export function drawOverlay(
       ctx.strokeText(cardinal(deg), x, ty);
       ctx.fillStyle = INK_LIGHT;
       ctx.fillText(cardinal(deg), x, ty);
+    }
     }
   }
 

@@ -128,6 +128,8 @@ beforeEach(() => {
 
 describe('снимок панорамы', () => {
   it('подписи и линии крупнее ровно во столько, во сколько крупнее кадр', async () => {
+    // Контуры включены явно: по умолчанию на снимке их нет (см. ниже)
+    setPhotoCaption({ ridges: true });
     // Экран 800 CSS-пикселей, снимок 3840 → всё должно вырасти в 4.8 раза
     await capturePhoto(STATE, VIEW, {
       origin: { lat: 43.3, lon: 42.4 },
@@ -142,6 +144,38 @@ describe('снимок панорамы', () => {
     expect(lineWidths).toContain(3 * expectedScale);
     // Ничего не осталось нарисованным «по одному пикселю»
     expect(Math.min(...fontSizes)).toBeGreaterThan(12);
+  });
+
+  it('снимок из AR: по умолчанию контуров и шкалы нет, только подписи', async () => {
+    // Настройка сброшена в beforeEach: ridges = false. В AR кадр содержит
+    // настоящие горы, и нарисованный силуэт конфликтовал бы с ними
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(800, 450),
+      fromCamera: true,
+    });
+
+    const expectedScale = 3840 / 800;
+    // Шкала азимутов (кегль 12) и засечки (толщина 3) не рисовались
+    expect(fontSizes).not.toContain(12 * expectedScale);
+    expect(lineWidths).not.toContain(3 * expectedScale);
+    // Подпись снимка (кегль 13) на месте — кадр не пустой
+    expect(fontSizes).toContain(13 * expectedScale);
+  });
+
+  it('снимок без камеры: контуры рисуются при любом положении переключателя', async () => {
+    // ridges = false (сброшено в beforeEach), но конфликтовать силуэту не с
+    // чем — настройка действует только на кадр с камерой
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(800, 450),
+    });
+
+    const expectedScale = 3840 / 800;
+    expect(fontSizes).toContain(12 * expectedScale); // шкала азимутов
+    expect(lineWidths).toContain(3 * expectedScale); // засечки
   });
 
   it('кадр повторяет форму экрана, а не фиксированные 16:9', async () => {
