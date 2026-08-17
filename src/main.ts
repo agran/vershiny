@@ -548,8 +548,6 @@ interface CaptionEntry {
   label: HTMLElement;
   key: TitleKey;
   side: "left" | "right" | "above" | "below";
-  offset: number;
-  base: { x: number; y: number; w: number; h: number } | null;
 }
 const captionEntries: CaptionEntry[] = [];
 let captionLayer: HTMLElement | null = null;
@@ -1385,7 +1383,7 @@ function addCaption(
   root.appendChild(label);
   root.style.display = captionsVisible ? "" : "none";
   layer.appendChild(root);
-  captionEntries.push({ btn, root, label, key, side, offset: 0, base: null });
+  captionEntries.push({ btn, root, label, key, side });
 }
 
 /** Положение кнопки на экране */
@@ -1432,6 +1430,54 @@ function circleBorderPoint(
   return { x: cx + (dx / dist) * radius, y: cy + (dy / dist) * radius };
 }
 
+// --- Геометрия отрезков для коллизий стрелок ---
+
+interface Pt {
+  x: number;
+  y: number;
+}
+
+/** Отрезок пересекает прямоугольник (включая касание) */
+function segIntersectsRect(
+  a: Pt,
+  b: Pt,
+  r: { left: number; top: number; right: number; bottom: number },
+): boolean {
+  // Оба конца по одну сторону — точно мимо
+  if (
+    (a.x < r.left && b.x < r.left) ||
+    (a.x > r.right && b.x > r.right) ||
+    (a.y < r.top && b.y < r.top) ||
+    (a.y > r.bottom && b.y > r.bottom)
+  )
+    return false;
+  // Конец внутри
+  const inside = (p: Pt) =>
+    p.x >= r.left && p.x <= r.right && p.y >= r.top && p.y <= r.bottom;
+  if (inside(a) || inside(b)) return true;
+  // Пересечение с любой из четырёх сторон
+  const tl = { x: r.left, y: r.top };
+  const tr = { x: r.right, y: r.top };
+  const bl = { x: r.left, y: r.bottom };
+  const br = { x: r.right, y: r.bottom };
+  return (
+    segSeg(a, b, tl, tr) ||
+    segSeg(a, b, tr, br) ||
+    segSeg(a, b, br, bl) ||
+    segSeg(a, b, bl, tl)
+  );
+}
+
+/** Пересечение двух отрезков (включая касание) */
+function segSeg(p1: Pt, p2: Pt, p3: Pt, p4: Pt): boolean {
+  const d = (a: Pt, b: Pt, c: Pt) => (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+  const d1 = d(p3, p4, p1);
+  const d2 = d(p3, p4, p2);
+  const d3 = d(p1, p2, p3);
+  const d4 = d(p1, p2, p4);
+  return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0));
+}
+
 /**
  * Раскладка плашек: базовая точка в стороне от кнопки, затем раздвижка
  * вдоль оси, пока плашка не перестанет пересекаться с кнопками и другими
@@ -1450,6 +1496,13 @@ function layoutCaptions(): void {
   arrows.replaceChildren();
   const buttons = captionEntries.map((c) => c.btn);
   const placed: DOMRect[] = [];
+  // Концы стрелок на окружностях кнопок — нужны для проверки стрелка↔кнопка
+  const btnCenters = new Map<HTMLElement, { cx: number; cy: number; r: number }>();
+  for (const b of buttons) {
+    const r = btnRect(b);
+    if (r.width) btnCenters.set(b, { cx: r.left + r.width / 2, cy: r.top + r.height / 2, r: r.width / 2 });
+  }
+  const placedArrows: [Pt, Pt][] = [];
 
   for (const c of captionEntries) {
     const br = btnRect(c.btn);
@@ -1495,7 +1548,31 @@ function layoutCaptions(): void {
       const hits = (r: { left: number; right: number; top: number; bottom: number }) =>
         self.left < r.right && self.right > r.left && self.top < r.bottom && self.bottom > r.top;
       if (obstacles.some(hits)) return true;
-      return placed.some(hits);
+      if (placed.some(hits)) return true;
+      // Стрелка этой плашки не должна резать чужие плашки, кнопки и стрелки.
+      // Геометрия стрелки зависит от позиции плашки, поэтому проверяем здесь.
+      const from = rectBorderPoint(rx, ry, lw, lh, cx, cy);
+      const bc = btnCenters.get(c.btn);
+      if (!bc) return false;
+      const to = circleBorderPoint(bc.cx, bc.cy, bc.r, rx + lw / 2, ry + lh / 2);
+      for (const p of placed)
+        if (segIntersectsRect(from, to, { left: p.x, top: p.y, right: p.x + p.width, bottom: p.y + p.height }))
+          return true;
+      for (const [b, o] of btnCenters) {
+        if (b === c.btn) continue;
+        // Отрезок до окружности чужой кнопки: дальше её центра не идём
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const len = Math.hypot(dx, dy);
+        const distTo = Math.hypot(o.cx - from.x, o.cy - from.y);
+        if (distTo - o.r < len && segIntersectsRect(from, to, {
+          left: o.cx - o.r, top: o.cy - o.r, right: o.cx + o.r, bottom: o.cy + o.r,
+        }))
+          return true;
+      }
+      for (const [a2, b2] of placedArrows)
+        if (segSeg(from, to, a2, b2)) return true;
+      return false;
     };
     if (c.side === "above" || c.side === "below") {
       // Поднять/опустить, пока плашка в своём ряду не перестанет задевать
@@ -1566,6 +1643,7 @@ function layoutCaptions(): void {
     // указателем, а не кривой через экран.
     const from = rectBorderPoint(x, y, lw, lh, cx, cy);
     const to = circleBorderPoint(cx, cy, br.width / 2, x + lw / 2, y + lh / 2);
+    placedArrows.push([from, to]);
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.setAttribute("x1", String(from.x));
     line.setAttribute("y1", String(from.y));

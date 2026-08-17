@@ -27,8 +27,53 @@ interface Placed {
   h: number;
 }
 
-function layout(caps: Cap[], W: number, H: number): Placed[] {
+interface Pt {
+  x: number;
+  y: number;
+}
+
+// --- Геометрия отрезков (та же, что в main.ts) ---
+function segSeg(p1: Pt, p2: Pt, p3: Pt, p4: Pt): boolean {
+  const d = (a: Pt, b: Pt, c: Pt) => (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+  const d1 = d(p3, p4, p1);
+  const d2 = d(p3, p4, p2);
+  const d3 = d(p1, p2, p3);
+  const d4 = d(p1, p2, p4);
+  return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0));
+}
+function segIntersectsRect(a: Pt, b: Pt, r: { left: number; top: number; right: number; bottom: number }): boolean {
+  if ((a.x < r.left && b.x < r.left) || (a.x > r.right && b.x > r.right) ||
+      (a.y < r.top && b.y < r.top) || (a.y > r.bottom && b.y > r.bottom)) return false;
+  const inside = (p: Pt) => p.x >= r.left && p.x <= r.right && p.y >= r.top && p.y <= r.bottom;
+  if (inside(a) || inside(b)) return true;
+  const tl = { x: r.left, y: r.top }, tr = { x: r.right, y: r.top };
+  const bl = { x: r.left, y: r.bottom }, br = { x: r.right, y: r.bottom };
+  return segSeg(a, b, tl, tr) || segSeg(a, b, tr, br) || segSeg(a, b, br, bl) || segSeg(a, b, bl, tl);
+}
+function rectBorderPoint(rx: number, ry: number, rw: number, rh: number, tx: number, ty: number): Pt {
+  const cx = rx + rw / 2, cy = ry + rh / 2;
+  const dx = tx - cx, dy = ty - cy;
+  if (!dx && !dy) return { x: cx, y: cy };
+  const sx = dx !== 0 ? rw / 2 / Math.abs(dx) : Infinity;
+  const sy = dy !== 0 ? rh / 2 / Math.abs(dy) : Infinity;
+  const s = Math.min(sx, sy);
+  return { x: cx + dx * s, y: cy + dy * s };
+}
+function circleBorderPoint(cx: number, cy: number, r: number, tx: number, ty: number): Pt {
+  const dx = tx - cx, dy = ty - cy;
+  const dist = Math.hypot(dx, dy);
+  if (!dist) return { x: cx, y: cy };
+  return { x: cx + (dx / dist) * r, y: cy + (dy / dist) * r };
+}
+
+interface LaidOut {
+  placed: Placed[];
+  arrows: [Pt, Pt][];
+}
+
+function layout(caps: Cap[], W: number, H: number): LaidOut {
   const placed: Placed[] = [];
+  const arrows: [Pt, Pt][] = [];
   for (const c of caps) {
     const br = c.btn;
     const gap = 6;
@@ -85,9 +130,26 @@ function layout(caps: Cap[], W: number, H: number): Placed[] {
         )
           return true;
       }
-      return placed.some((p) =>
-        hits({ left: p.x, right: p.x + p.w, top: p.y, bottom: p.y + p.h }),
-      );
+      if (placed.some((p) => hits({ left: p.x, right: p.x + p.w, top: p.y, bottom: p.y + p.h })))
+        return true;
+      // Стрелка не должна резать чужие плашки, кнопки и стрелки
+      const from = rectBorderPoint(rx, ry, c.w, c.h, cx, cy);
+      const to = circleBorderPoint(cx, cy, br.width / 2, rx + c.w / 2, ry + c.h / 2);
+      for (const p of placed)
+        if (segIntersectsRect(from, to, { left: p.x, top: p.y, right: p.x + p.w, bottom: p.y + p.h }))
+          return true;
+      for (const o of caps) {
+        if (o === c) continue;
+        const b = o.btn;
+        const ocx = b.left + b.width / 2, ocy = b.top + b.height / 2, orad = b.width / 2;
+        const len = Math.hypot(to.x - from.x, to.y - from.y);
+        if (Math.hypot(ocx - from.x, ocy - from.y) - orad < len &&
+            segIntersectsRect(from, to, { left: ocx - orad, top: ocy - orad, right: ocx + orad, bottom: ocy + orad }))
+          return true;
+      }
+      for (const [a2, b2] of arrows)
+        if (segSeg(from, to, a2, b2)) return true;
+      return false;
     };
     // Ближайший сдвиг без коллизий: боковые — по вертикали, верхние/нижние —
     // по обеим осям (крест навипада: чистый сдвиг вбок задевает боковые стрелки)
@@ -123,8 +185,11 @@ function layout(caps: Cap[], W: number, H: number): Placed[] {
       }
     }
     placed.push({ text: c.text, x, y, w: c.w, h: c.h });
+    const from = rectBorderPoint(x, y, c.w, c.h, cx, cy);
+    const to = circleBorderPoint(cx, cy, br.width / 2, x + c.w / 2, y + c.h / 2);
+    arrows.push([from, to]);
   }
-  return placed;
+  return { placed, arrows };
 }
 
 // --- Проверки ---
@@ -168,13 +233,17 @@ function overlaps(
 }
 
 describe('раскладка плашек подписей', () => {
+  let laid: LaidOut;
   let placed: Placed[];
+  let arrows: [Pt, Pt][];
   const caps = typicalCaps();
   const W = 800;
   const H = 360;
 
   beforeAll(() => {
-    placed = layout(caps.filter((c) => c.text), W, H);
+    laid = layout(caps.filter((c) => c.text), W, H);
+    placed = laid.placed;
+    arrows = laid.arrows;
   });
 
   it('плашки не налезают друг на друга', () => {
@@ -218,5 +287,46 @@ describe('раскладка плашек подписей', () => {
       if (cap.side === 'above') expect(p.y + p.h, p.text).toBeLessThanOrEqual(b.top);
       if (cap.side === 'below') expect(p.y, p.text).toBeGreaterThanOrEqual(b.top + b.height);
     }
+  });
+
+  it('стрелки не режут чужие плашки', () => {
+    placed.forEach((p, i) => {
+      const [a, b] = arrows[i];
+      placed.forEach((q, j) => {
+        if (i === j) return; // своя плашка — начало стрелки
+        expect(
+          segIntersectsRect(a, b, { left: q.x, top: q.y, right: q.x + q.w, bottom: q.y + q.h }),
+          `стрелка «${p.text}» режет плашку «${q.text}»`,
+        ).toBe(false);
+      });
+    });
+  });
+
+  it('стрелки не режут чужие кнопки', () => {
+    const textCaps = caps.filter((c) => c.text);
+    placed.forEach((p, i) => {
+      const own = textCaps[i].btn;
+      const [a, b] = arrows[i];
+      const len = Math.hypot(b.x - a.x, b.y - a.y);
+      for (const btn of caps.map((c) => c.btn)) {
+        if (btn === own) continue;
+        const ocx = btn.left + btn.width / 2, ocy = btn.top + btn.height / 2, orad = btn.width / 2;
+        if (Math.hypot(ocx - a.x, ocy - a.y) - orad >= len) continue; // кнопка дальше конца стрелки
+        expect(
+          segIntersectsRect(a, b, { left: ocx - orad, top: ocy - orad, right: ocx + orad, bottom: ocy + orad }),
+          `стрелка «${p.text}» режет чужую кнопку`,
+        ).toBe(false);
+      }
+    });
+  });
+
+  it('стрелки не пересекаются между собой', () => {
+    for (let i = 0; i < arrows.length; i++)
+      for (let j = i + 1; j < arrows.length; j++) {
+        expect(
+          segSeg(arrows[i][0], arrows[i][1], arrows[j][0], arrows[j][1]),
+          `стрелка «${placed[i].text}» × стрелка «${placed[j].text}»`,
+        ).toBe(false);
+      }
   });
 });
