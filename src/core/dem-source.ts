@@ -147,6 +147,22 @@ export class DemSource {
     return sampler ? sampler.lodForDistance(distM) : 0;
   }
 
+  /**
+   * Верхняя граница высоты среди всех источников с загруженными тайлами.
+   * Используется обрывом луча (№4): если даже эта граница не даёт наклона
+   * выше текущего максимума на всём оставшемся хвосте луча, дальше только
+   * NaN или более низкий рельеф — профиль не изменится, шаги можно пропустить.
+   * Источник без загруженных тайлов границу не занижает: по нему всё равно NaN.
+   */
+  loadedMaxHeight(): number {
+    let max = this.terrarium.loadedMaxHeight;
+    for (const p of this.patches) {
+      const m = p.sampler.loadedMaxHeight;
+      if (m > max) max = m;
+    }
+    return max;
+  }
+
   /** Последний источник, давший высоту (см. sample) */
   private lastHit: Patch | TerrariumSampler | null = null;
 

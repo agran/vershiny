@@ -258,10 +258,22 @@ export class TerrariumSampler {
     bitmap.close();
     const img = ctx.getImageData(0, 0, TILE_PX, TILE_PX).data;
     const tile = new Float32Array(TILE_PX * TILE_PX);
+    let max = -Infinity;
     for (let i = 0; i < tile.length; i++) {
-      tile[i] = decodeTerrarium(img[i * 4], img[i * 4 + 1], img[i * 4 + 2]);
+      const h = decodeTerrarium(img[i * 4], img[i * 4 + 1], img[i * 4 + 2]);
+      tile[i] = h;
+      if (h > max) max = h;
     }
+    if (max > this.maxDecodedHeight) this.maxDecodedHeight = max;
     return tile;
+  }
+
+  /** Максимум высоты среди декодированных тайлов (−Infinity, пока ни одного) */
+  private maxDecodedHeight = -Infinity;
+
+  /** Верхняя граница высоты по загруженным тайлам — для обрыва луча (№4) */
+  get loadedMaxHeight(): number {
+    return this.maxDecodedHeight;
   }
 
   // Кеш последнего запрошенного тайла: четыре чтения билинейной

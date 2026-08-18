@@ -580,8 +580,19 @@ export class DemSampler {
     }
     if (Number.isFinite(max)) {
       this.tileMax.set(`${lodIndex}/${keyTail}`, max * quant);
+      if (max * quant > this.maxDecodedHeight) {
+        this.maxDecodedHeight = max * quant;
+      }
     }
     return values;
+  }
+
+  /** Максимум высоты среди декодированных тайлов (−Infinity, пока ни одного) */
+  private maxDecodedHeight = -Infinity;
+
+  /** Верхняя граница высоты по загруженным тайлам — для обрыва луча (№4) */
+  get loadedMaxHeight(): number {
+    return this.maxDecodedHeight;
   }
 
   /**
