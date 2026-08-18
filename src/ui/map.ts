@@ -513,10 +513,13 @@ export function openMap(options: MapOptions): () => void {
       let el = peakEls[used];
       if (!el) {
         el = document.createElement("div");
+        // Без cursor:pointer: метка не кликабельна, и обманчивый аффорданс
+        // обещал действие, которого нет. pointer-events оставлены — события
+        // всплывают к корню карты, и drag с метки работает как с фона
         el.style.cssText =
           "position:absolute;transform:translate(-50%,-100%);display:flex;" +
           "flex-direction:column;align-items:center;pointer-events:auto;" +
-          "cursor:pointer;z-index:1";
+          "z-index:1";
         const markerEl = document.createElement("div");
         markerEl.style.cssText =
           "width:0;height:0;border-left:5px solid transparent;" +

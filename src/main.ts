@@ -1507,6 +1507,9 @@ function segIntersectsRect(
   );
 }
 
+/** Допуск «касания» отрезков, px — см. segSeg */
+const TOUCH_EPS_PX = 0.75;
+
 /** Пересечение двух отрезков (включая касание) */
 function segSeg(p1: Pt, p2: Pt, p3: Pt, p4: Pt): boolean {
   const d = (a: Pt, b: Pt, c: Pt) => (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
@@ -1521,7 +1524,11 @@ function segSeg(p1: Pt, p2: Pt, p3: Pt, p4: Pt): boolean {
   // Раньше неравенства были строгими при комментарии «включая касание», и
   // точно касающиеся стрелки/плашки не считались коллизией
   const on = (a: Pt, b: Pt, c: Pt): boolean =>
-    d(a, b, c) === 0 &&
+    // Коллинеарность — с допуском, а не точным === 0: координаты из
+    // getBoundingClientRect дробные, и касание в долях пикселя — тоже
+    // касание. |d| = |ab| × дистанция до прямой, поэтому порог масштабируем
+    // длиной отрезка
+    Math.abs(d(a, b, c)) <= TOUCH_EPS_PX * Math.hypot(b.x - a.x, b.y - a.y) &&
     c.x >= Math.min(a.x, b.x) && c.x <= Math.max(a.x, b.x) &&
     c.y >= Math.min(a.y, b.y) && c.y <= Math.max(a.y, b.y);
   return on(p3, p4, p1) || on(p3, p4, p2) || on(p1, p2, p3) || on(p1, p2, p4);
