@@ -119,9 +119,31 @@ if (!import.meta.env.DEV) {
   );
 }
 
-function setStatus(text: string): void {
+function setStatus(
+  text: string,
+  timeoutMs?: number,
+  action?: { label: string; onClick: () => void },
+): void {
   statusEl.textContent = text;
   statusEl.style.display = text ? "block" : "none";
+  // Кнопка действия внутри тоста: «Перекачать» рядом с текстом, а не где-то
+  // в настройках — иначе человек не найдёт, что именно предлагается обновить
+  if (action) {
+    const btn = document.createElement("button");
+    btn.textContent = action.label;
+    btn.style.cssText =
+      "margin-left:12px;padding:4px 12px;border:none;border-radius:6px;" +
+      "background:#e63946;color:#fff;font-size:13px;cursor:pointer;" +
+      "pointer-events:auto"; // statusEl сам pointer-events:none
+    btn.onclick = (ev) => {
+      ev.stopPropagation();
+      action.onClick();
+    };
+    statusEl.appendChild(btn);
+  }
+  if (timeoutMs) {
+    setTimeout(() => setStatus(""), timeoutMs);
+  }
 }
 
 const canvas = document.createElement("canvas");
@@ -1313,6 +1335,10 @@ let regionDownloaded = false;
 let regionOutdated = false;
 /** Тост об устаревшем рельефе показываем один раз за сессию */
 let outdatedToastShown = false;
+/** localStorage-ключ: когда последний раз показывали тост об устаревании */
+const OUTDATED_TOAST_AT_KEY = "vershiny-outdated-toast-at";
+/** Не чаще раза в сутки: привыкание к ежедневному предупреждению = его игнор */
+const OUTDATED_TOAST_MIN_INTERVAL_MS = 24 * 60 * 60 * 1000;
 
 /** Перечитать из хранилища, лежит ли текущий регион офлайн */
 async function refreshDownloadState(): Promise<void> {
@@ -1324,11 +1350,29 @@ async function refreshDownloadState(): Promise<void> {
     regionOutdated =
       regionDownloaded && (await isRegionOutdated(currentRegion));
     // Человек не должен узнать в горах без связи, что его офлайн-рельеф
-    // давно вычищен при пересборке пирамиды — предупреждаем заранее
-    if (regionOutdated && !outdatedToastShown) {
-      outdatedToastShown = true;
-      setStatus(t("demOutdatedToast"));
-      setTimeout(() => setStatus(""), 12_000);
+    // давно вычищен при пересборке пирамиды — предупреждаем заранее.
+    // Но не в офлайне: перекачать всё равно нельзя, а панорама нужнее.
+    // И не чаще раза в сутки: привыкание к ежедневному тосту = его игнор.
+    if (regionOutdated && !outdatedToastShown && navigator.onLine) {
+      const lastAt = Number(localStorage.getItem(OUTDATED_TOAST_AT_KEY) ?? 0);
+      if (Date.now() - lastAt > OUTDATED_TOAST_MIN_INTERVAL_MS) {
+        outdatedToastShown = true;
+        localStorage.setItem(OUTDATED_TOAST_AT_KEY, String(Date.now()));
+        setStatus(t("demOutdatedToast"), 20_000, {
+          label: t("settings"),
+          onClick: () => {
+            // Открываем настройки — там кнопка «Обновить» у каждого региона
+            void import("./ui/settings").then(({ openSettings }) =>
+              openSettings(currentRegion, lastOrigin, {
+                onRegionChange: (region) => void switchRegion(region, true),
+                onLocaleChange: () => {},
+                onClose: () => {},
+                onCalibrationChange: () => {},
+              }),
+            );
+          },
+        });
+      }
     }
   } catch {
     regionDownloaded = false; // приватный режим: считаем, что не скачано
