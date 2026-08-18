@@ -116,7 +116,12 @@ export function selectMapPeaks(
       if (p.lat > latTop || p.lat < latBottom) return false;
       // Долгота с заворотом: кадр у антимеридиана пересекает ±180
       if (lonLeft < -180 || lonRight > 180) {
-        const lon = p.lon > 0 && lonLeft < -180 ? p.lon - 360 : p.lon < 0 && lonRight > 180 ? p.lon + 360 : p.lon;
+        const lon =
+          p.lon > 0 && lonLeft < -180
+            ? p.lon - 360
+            : p.lon < 0 && lonRight > 180
+              ? p.lon + 360
+              : p.lon;
         return lon >= lonLeft && lon <= lonRight;
       }
       return p.lon >= lonLeft && p.lon <= lonRight;
@@ -187,7 +192,9 @@ function measureLabelWidth(text: string): number {
       measureCtx = null;
     }
   }
-  const raw = measureCtx ? measureCtx.measureText(text).width : text.length * 6.5;
+  const raw = measureCtx
+    ? measureCtx.measureText(text).width
+    : text.length * 6.5;
   // max-width:140px + padding 2×4px из стилей метки
   w = Math.min(148, raw + 8);
   if (widthCache.size > 4000) widthCache.clear();
@@ -256,7 +263,12 @@ export function placeMapPeakLabels(
 
   const hits = (x0: number, y0: number, x1: number, y1: number): boolean => {
     for (let i = 0; i < placed.length; i += 4) {
-      if (x0 < placed[i + 2] && x1 > placed[i] && y0 < placed[i + 3] && y1 > placed[i + 1]) {
+      if (
+        x0 < placed[i + 2] &&
+        x1 > placed[i] &&
+        y0 < placed[i + 3] &&
+        y1 > placed[i + 1]
+      ) {
         return true;
       }
     }
@@ -277,7 +289,9 @@ export function placeMapPeakLabels(
       const prev = state.anchor.get(it.key);
       // Прошлый якорь пробуем первым: подпись не должна прыгать вокруг точки
       const order =
-        prev === undefined ? [0, 1, 2] : [prev, ...[0, 1, 2].filter((i) => i !== prev)];
+        prev === undefined
+          ? [0, 1, 2]
+          : [prev, ...[0, 1, 2].filter((i) => i !== prev)];
 
       let done = false;
       for (const ai of order) {
@@ -348,7 +362,12 @@ export function projectPeaks(
     else if (dxWorld < -worldPx / 2) px += worldPx;
     const x = px - left;
     const y = pt.y - top;
-    if (x < -margin || x > width + margin || y < -margin || y > height + margin) {
+    if (
+      x < -margin ||
+      x > width + margin ||
+      y < -margin ||
+      y > height + margin
+    ) {
       continue;
     }
     out.push({ peak, x, y });
@@ -523,7 +542,7 @@ export function openMap(options: MapOptions): () => void {
       let el = peakEls[used];
       if (!el) {
         el = document.createElement("div");
-        // Без cursor:pointer: метка не кликабельна, и обманчивый аффорданс
+        // Без cursor:pointer: метка не кликабельна, а обманчивый аффорданс
         // обещал действие, которого нет. pointer-events оставлены — события
         // всплывают к корню карты, и drag с метки работает как с фона
         el.style.cssText =
@@ -582,7 +601,8 @@ export function openMap(options: MapOptions): () => void {
       el.style.display = "flex";
       used++;
     }
-    for (let i = used; i < peakEls.length; i++) peakEls[i].style.display = "none";
+    for (let i = used; i < peakEls.length; i++)
+      peakEls[i].style.display = "none";
   };
 
   /** Перерисовка слоя под текущий центр и зум */

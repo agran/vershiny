@@ -186,7 +186,10 @@ if (typeof ResizeObserver === "function") {
 // EventTarget: addEventListener там отсутствует, и вызов бросал TypeError при
 // загрузке модуля — то же вечное «Загрузка…». Поэтому проверяем сам метод.
 const screenOrientation = screen.orientation;
-if (screenOrientation && typeof screenOrientation.addEventListener === "function") {
+if (
+  screenOrientation &&
+  typeof screenOrientation.addEventListener === "function"
+) {
   screenOrientation.addEventListener("change", () => setTimeout(resize, 50));
 } else {
   window.addEventListener("orientationchange", () => setTimeout(resize, 50));
@@ -501,7 +504,6 @@ window.addEventListener("keydown", (ev) => {
 
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
 import { rememberArMode, shouldAutoStartAr } from "./core/ar-mode";
-import * as screenOrientationModule from "./core/screen-orientation";
 import {
   DEFAULT_CAMERA_FOV_DEG,
   getCalibration,
@@ -509,6 +511,7 @@ import {
 } from "./core/calibration";
 import { destination } from "./core/geo";
 import { orientationTracker } from "./core/orientation";
+import * as screenOrientationModule from "./core/screen-orientation";
 
 /**
  * Кнопка «Включить компас» — только для iOS.
@@ -736,7 +739,8 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   lastObserverH = r.observerH;
   // Обновляем индикатор высоты
   const heightEl = document.getElementById("height-indicator");
-  if (heightEl) heightEl.textContent = `${Math.round(r.observerH)} ${t("unitM")}`;
+  if (heightEl)
+    heightEl.textContent = `${Math.round(r.observerH)} ${t("unitM")}`;
   if (autoTiltPending) {
     autoTiltPending = false;
     applyAutoTilt(r);
@@ -1002,18 +1006,16 @@ async function goToHit(
  */
 async function initDemForRegion(region: string): Promise<void> {
   const base = import.meta.env.BASE_URL;
-  const {
-    hiDemCandidates,
-    globalDemCandidates,
-    pickDemBase,
-  } = await import("./core/dem-config");
+  const { hiDemCandidates, globalDemCandidates, pickDemBase } =
+    await import("./core/dem-config");
   const { getDemIndex } = await import("./core/db");
   const probes = {
     online: async (url: string) => {
       const probe = await fetch(`${url}/index.json`).catch(() => null);
       return !!probe && isJson(probe);
     },
-    cached: async (url: string) => !!(await getDemIndex(url).catch(() => undefined)),
+    cached: async (url: string) =>
+      !!(await getDemIndex(url).catch(() => undefined)),
   };
   const patchBaseUrls = (
     await Promise.all([
@@ -1294,7 +1296,8 @@ async function refreshDownloadState(): Promise<void> {
     const { getDownloadedRegions } = await import("./core/db");
     const { isRegionOutdated } = await import("./ui/download");
     regionDownloaded = (await getDownloadedRegions()).includes(currentRegion);
-    regionOutdated = regionDownloaded && (await isRegionOutdated(currentRegion));
+    regionOutdated =
+      regionDownloaded && (await isRegionOutdated(currentRegion));
     // Человек не должен узнать в горах без связи, что его офлайн-рельеф
     // давно вычищен при пересборке пирамиды — предупреждаем заранее
     if (regionOutdated && !outdatedToastShown) {
@@ -1360,7 +1363,11 @@ function makeButton(
   // справа мешает навипад — её подпись явно "above").
   const place =
     captionPlace ??
-    (pos.includes("right:") ? "left" : pos.includes("left:") ? "right" : "below");
+    (pos.includes("right:")
+      ? "left"
+      : pos.includes("left:")
+        ? "right"
+        : "below");
   addCaption(btn, titleKey, place);
   document.body.appendChild(btn);
   // Раскладка плашек — после вставки кнопки в DOM, когда у неё есть размеры
@@ -1397,8 +1404,14 @@ function ensureCaptionLayer(): { layer: HTMLElement; arrows: SVGSVGElement } {
     captionLayer = document.createElement("div");
     captionLayer.style.cssText =
       "position:fixed;inset:0;z-index:11;pointer-events:none;overflow:hidden";
-    captionArrowLayer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    captionArrowLayer.setAttribute("style", "position:absolute;inset:0;width:100%;height:100%");
+    captionArrowLayer = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg",
+    );
+    captionArrowLayer.setAttribute(
+      "style",
+      "position:absolute;inset:0;width:100%;height:100%",
+    );
     captionLayer.appendChild(captionArrowLayer);
     document.body.appendChild(captionLayer);
   }
@@ -1512,13 +1525,17 @@ const TOUCH_EPS_PX = 0.75;
 
 /** Пересечение двух отрезков (включая касание) */
 function segSeg(p1: Pt, p2: Pt, p3: Pt, p4: Pt): boolean {
-  const d = (a: Pt, b: Pt, c: Pt) => (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+  const d = (a: Pt, b: Pt, c: Pt) =>
+    (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
   const d1 = d(p3, p4, p1);
   const d2 = d(p3, p4, p2);
   const d3 = d(p1, p2, p3);
   const d4 = d(p1, p2, p4);
   // Строгое пересечение: концы каждого отрезка по разные стороны другого
-  if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
+  if (
+    ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+    ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
+  )
     return true;
   // Касание: конец одного отрезка коллинеарен другому и лежит в его спане.
   // Раньше неравенства были строгими при комментарии «включая касание», и
@@ -1529,8 +1546,10 @@ function segSeg(p1: Pt, p2: Pt, p3: Pt, p4: Pt): boolean {
     // касание. |d| = |ab| × дистанция до прямой, поэтому порог масштабируем
     // длиной отрезка
     Math.abs(d(a, b, c)) <= TOUCH_EPS_PX * Math.hypot(b.x - a.x, b.y - a.y) &&
-    c.x >= Math.min(a.x, b.x) && c.x <= Math.max(a.x, b.x) &&
-    c.y >= Math.min(a.y, b.y) && c.y <= Math.max(a.y, b.y);
+    c.x >= Math.min(a.x, b.x) &&
+    c.x <= Math.max(a.x, b.x) &&
+    c.y >= Math.min(a.y, b.y) &&
+    c.y <= Math.max(a.y, b.y);
   return on(p3, p4, p1) || on(p3, p4, p2) || on(p1, p2, p3) || on(p1, p2, p4);
 }
 
@@ -1553,10 +1572,18 @@ function layoutCaptions(): void {
   const buttons = captionEntries.map((c) => c.btn);
   const placed: DOMRect[] = [];
   // Концы стрелок на окружностях кнопок — нужны для проверки стрелка↔кнопка
-  const btnCenters = new Map<HTMLElement, { cx: number; cy: number; r: number }>();
+  const btnCenters = new Map<
+    HTMLElement,
+    { cx: number; cy: number; r: number }
+  >();
   for (const b of buttons) {
     const r = btnRect(b);
-    if (r.width) btnCenters.set(b, { cx: r.left + r.width / 2, cy: r.top + r.height / 2, r: r.width / 2 });
+    if (r.width)
+      btnCenters.set(b, {
+        cx: r.left + r.width / 2,
+        cy: r.top + r.height / 2,
+        r: r.width / 2,
+      });
   }
   const placedArrows: [Pt, Pt][] = [];
 
@@ -1598,11 +1625,24 @@ function layoutCaptions(): void {
       .filter((b) => b !== c.btn)
       .map((b) => btnRect(b))
       .filter((r) => r.width)
-      .map((r) => ({ left: r.left, right: r.right, top: r.top, bottom: r.bottom }));
+      .map((r) => ({
+        left: r.left,
+        right: r.right,
+        top: r.top,
+        bottom: r.bottom,
+      }));
     const rectHits = (rx: number, ry: number): boolean => {
       const self = { left: rx, right: rx + lw, top: ry, bottom: ry + lh };
-      const hits = (r: { left: number; right: number; top: number; bottom: number }) =>
-        self.left < r.right && self.right > r.left && self.top < r.bottom && self.bottom > r.top;
+      const hits = (r: {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+      }) =>
+        self.left < r.right &&
+        self.right > r.left &&
+        self.top < r.bottom &&
+        self.bottom > r.top;
       return obstacles.some(hits) || placed.some(hits);
     };
     /** Пересекает ли СТРЕЛКА этой плашки чужие плашки, кнопки или стрелки */
@@ -1610,18 +1650,37 @@ function layoutCaptions(): void {
       const from = rectBorderPoint(rx, ry, lw, lh, cx, cy);
       const bc = btnCenters.get(c.btn);
       if (!bc) return false;
-      const to = circleBorderPoint(bc.cx, bc.cy, bc.r, rx + lw / 2, ry + lh / 2);
+      const to = circleBorderPoint(
+        bc.cx,
+        bc.cy,
+        bc.r,
+        rx + lw / 2,
+        ry + lh / 2,
+      );
       for (const p of placed)
-        if (segIntersectsRect(from, to, { left: p.x, top: p.y, right: p.x + p.width, bottom: p.y + p.height }))
+        if (
+          segIntersectsRect(from, to, {
+            left: p.x,
+            top: p.y,
+            right: p.x + p.width,
+            bottom: p.y + p.height,
+          })
+        )
           return true;
       for (const [b, o] of btnCenters) {
         if (b === c.btn) continue;
         // Отрезок до окружности чужой кнопки: дальше её центра не идём
         const len = Math.hypot(to.x - from.x, to.y - from.y);
         const distTo = Math.hypot(o.cx - from.x, o.cy - from.y);
-        if (distTo - o.r < len && segIntersectsRect(from, to, {
-          left: o.cx - o.r, top: o.cy - o.r, right: o.cx + o.r, bottom: o.cy + o.r,
-        }))
+        if (
+          distTo - o.r < len &&
+          segIntersectsRect(from, to, {
+            left: o.cx - o.r,
+            top: o.cy - o.r,
+            right: o.cx + o.r,
+            bottom: o.cy + o.r,
+          })
+        )
           return true;
       }
       for (const [a2, b2] of placedArrows)
@@ -1663,13 +1722,24 @@ function layoutCaptions(): void {
     const overlapArea = (rx: number, ry: number): number => {
       const self = { left: rx, right: rx + lw, top: ry, bottom: ry + lh };
       let area = 0;
-      const add = (r: { left: number; right: number; top: number; bottom: number }) => {
+      const add = (r: {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+      }) => {
         const w = Math.min(self.right, r.right) - Math.max(self.left, r.left);
         const h = Math.min(self.bottom, r.bottom) - Math.max(self.top, r.top);
         if (w > 0 && h > 0) area += w * h;
       };
       for (const r of obstacles) add(r);
-      for (const p of placed) add({ left: p.x, right: p.x + p.width, top: p.y, bottom: p.y + p.height });
+      for (const p of placed)
+        add({
+          left: p.x,
+          right: p.x + p.width,
+          top: p.y,
+          bottom: p.y + p.height,
+        });
       return area;
     };
     const consider = (tx: number, ty: number): boolean => {
@@ -1702,7 +1772,8 @@ function layoutCaptions(): void {
             if (Math.max(Math.abs(dx), Math.abs(dy)) !== radius) continue;
             const tx = x + dx * 14;
             const ty = y + dy * 14;
-            if (tx < 4 || tx > W - lw - 4 || ty < 4 || ty > H - lh - 4) continue;
+            if (tx < 4 || tx > W - lw - 4 || ty < 4 || ty > H - lh - 4)
+              continue;
             if (consider(tx, ty)) break outer;
           }
         }
@@ -1956,7 +2027,9 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   // сенсора и отбрасывают колонки, где линия ползёт (облака над гребнем,
   // блики) — они уходят в NaN и не тянут совмещение
   const tracker = new SkylineTracker(8);
-  let stab = tracker.push(extractSkyline(frame.rgba, frame.width, frame.height));
+  let stab = tracker.push(
+    extractSkyline(frame.rgba, frame.width, frame.height),
+  );
   for (let k = 1; k < 8; k++) {
     await new Promise((resolve) => setTimeout(resolve, 110));
     const next = arSession.grabFrame();
@@ -2206,7 +2279,12 @@ function setupOrientationButton(): void {
     btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
   };
   btn.onclick = async () => {
-    pref = pref === "auto" ? "landscape" : pref === "landscape" ? "portrait" : "auto";
+    pref =
+      pref === "auto"
+        ? "landscape"
+        : pref === "landscape"
+          ? "portrait"
+          : "auto";
     rememberOrientation(pref);
     sync();
     await applyOrientation(pref);

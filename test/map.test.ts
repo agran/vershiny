@@ -318,64 +318,6 @@ describe("выбор вершины из поиска", () => {
   });
 });
 
-describe("направление взгляда на карте", () => {
-  it("поворот ручки задаёт азимут: вправо от точки — восток", () => {
-    // Экранные оси: x вправо, y вниз, север на карте вверху. jsdom не считает
-    // раскладку, поэтому маркер стоит в начале координат
-    const { onHeading } = open();
-    dragHeading(100, 0);
-
-    expect(onHeading).toHaveBeenCalled();
-    expect(onHeading.mock.lastCall![0]).toBeCloseTo(Math.PI / 2, 3);
-  });
-
-  it("вверх — север, вниз — юг", () => {
-    const { onHeading } = open();
-    dragHeading(0, -100);
-    expect(onHeading.mock.lastCall![0]).toBeCloseTo(0, 3);
-
-    dragHeading(0, 100);
-    expect(onHeading.mock.lastCall![0]).toBeCloseTo(Math.PI, 3);
-  });
-
-  it("азимут отдаётся в [0, 2π): запад — это 3π/2, а не −π/2", () => {
-    // Отрицательный азимут на панораме считался бы не тем сектором
-    const { onHeading } = open();
-    dragHeading(-100, 0);
-    expect(onHeading.mock.lastCall![0]).toBeCloseTo((3 * Math.PI) / 2, 3);
-  });
-
-  it("у самой точки наблюдателя направление не дёргается", () => {
-    // Проход пальца через центр иначе крутил бы сектор на 180° рывком
-    const { onHeading } = open();
-    dragHeading(2, -3);
-    expect(onHeading).not.toHaveBeenCalled();
-  });
-
-  it("поворот ручки не двигает карту", () => {
-    // Ручка лежит на слое тайлов, и событие всплывает до корня карты: без
-    // остановки та приняла бы нажатие за начало перетаскивания и уехала
-    // вбок вместе с точкой наблюдателя
-    open();
-    dragHeading(100, 0);
-    expect(document.body.textContent ?? "").toContain("43.3000, 42.4000");
-  });
-});
-
-describe("подписи карты", () => {
-  const tileSources = (): string[] => {
-    const root = document.body.lastElementChild as HTMLElement;
-    return Array.from(root.querySelectorAll("img")).map((i) => i.src);
-  };
-
-  it("одна карта OpenTopoMap с рельефом и вершинами", () => {
-    open({ origin: { lat: 55.75, lon: 37.6 } }); // Москва
-    const srcs = tileSources();
-    expect(srcs.length).toBeGreaterThan(0);
-    expect(srcs.every((s) => s.includes("opentopomap.org"))).toBe(true);
-  });
-});
-
 describe("слой вершин и тайлы", () => {
   const PEAKS = [{ name: "Эльбрус", ele: 5642, lat: 43.35, lon: 42.44 }];
 
@@ -468,5 +410,63 @@ describe("слой вершин и тайлы", () => {
     vi.advanceTimersByTime(300);
 
     expect(peaksLayer().style.display).toBe("block");
+  });
+});
+
+describe("направление взгляда на карте", () => {
+  it("поворот ручки задаёт азимут: вправо от точки — восток", () => {
+    // Экранные оси: x вправо, y вниз, север на карте вверху. jsdom не считает
+    // раскладку, поэтому маркер стоит в начале координат
+    const { onHeading } = open();
+    dragHeading(100, 0);
+
+    expect(onHeading).toHaveBeenCalled();
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo(Math.PI / 2, 3);
+  });
+
+  it("вверх — север, вниз — юг", () => {
+    const { onHeading } = open();
+    dragHeading(0, -100);
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo(0, 3);
+
+    dragHeading(0, 100);
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo(Math.PI, 3);
+  });
+
+  it("азимут отдаётся в [0, 2π): запад — это 3π/2, а не −π/2", () => {
+    // Отрицательный азимут на панораме считался бы не тем сектором
+    const { onHeading } = open();
+    dragHeading(-100, 0);
+    expect(onHeading.mock.lastCall![0]).toBeCloseTo((3 * Math.PI) / 2, 3);
+  });
+
+  it("у самой точки наблюдателя направление не дёргается", () => {
+    // Проход пальца через центр иначе крутил бы сектор на 180° рывком
+    const { onHeading } = open();
+    dragHeading(2, -3);
+    expect(onHeading).not.toHaveBeenCalled();
+  });
+
+  it("поворот ручки не двигает карту", () => {
+    // Ручка лежит на слое тайлов, и событие всплывает до корня карты: без
+    // остановки та приняла бы нажатие за начало перетаскивания и уехала
+    // вбок вместе с точкой наблюдателя
+    open();
+    dragHeading(100, 0);
+    expect(document.body.textContent ?? "").toContain("43.3000, 42.4000");
+  });
+});
+
+describe("подписи карты", () => {
+  const tileSources = (): string[] => {
+    const root = document.body.lastElementChild as HTMLElement;
+    return Array.from(root.querySelectorAll("img")).map((i) => i.src);
+  };
+
+  it("одна карта OpenTopoMap с рельефом и вершинами", () => {
+    open({ origin: { lat: 55.75, lon: 37.6 } }); // Москва
+    const srcs = tileSources();
+    expect(srcs.length).toBeGreaterThan(0);
+    expect(srcs.every((s) => s.includes("opentopomap.org"))).toBe(true);
   });
 });
