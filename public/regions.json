@@ -310,16 +310,30 @@
     "group": "Кавказ"
   },
   "caucasus-west": {
-    "title_ru": "Западный Кавказ",
-    "title_en": "Western Caucasus",
+    "title_ru": "Западный Кавказ и Предгорья",
+    "title_en": "Western Caucasus and Foothills",
     "bbox": [
-      38.0,
+      37.5,
       42.5,
       42.5,
-      44.5
+      45.2
     ],
-    "core_ru": "Фишт, Оштен, Красная Поляна, Абхазия",
-    "core_en": "Fisht, Oshten, Krasnaya Polyana, Abkhazia",
+    "core_ru": "Фишт, Оштен, Красная Поляна, Собер-Баш, Абхазия",
+    "core_en": "Fisht, Oshten, Krasnaya Polyana, Sober-Bash, Abkhazia",
+    "priority": 2,
+    "group": "Кавказ"
+  },
+  "crimea": {
+    "title_ru": "Крымские горы",
+    "title_en": "Crimean Mountains",
+    "bbox": [
+      32.5,
+      44.0,
+      36.5,
+      46.0
+    ],
+    "core_ru": "Роман-Кош (1545м), Бабуган-яйла, Демерджи, Ай-Петри",
+    "core_en": "Roman-Kosh (1545m), Babugan Yayla, Demerdzhi, Ai-Petri",
     "priority": 2,
     "group": "Кавказ"
   },
