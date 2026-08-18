@@ -131,10 +131,71 @@ export async function getPeaks(region: string): Promise<unknown[] | undefined> {
 }
 
 /** Отметить регион как скачанный */
-export async function markRegionDownloaded(region: string): Promise<void> {
+export async function markRegionDownloaded(
+  region: string,
+  demVersion?: string,
+): Promise<void> {
   await set(STORE_META, `region:${region}`, {
     downloadedAt: new Date().toISOString(),
+    // Версия базовой пирамиды на момент скачивания: по ней UI отличает
+    // регионы с устаревшим рельефом (см. isRegionOutdated в ui/download.ts)
+    demVersion,
   });
+}
+
+/** Метаданные скачанного региона */
+export async function getRegionMeta(
+  region: string,
+): Promise<{ downloadedAt: string; demVersion?: string } | undefined> {
+  return get(STORE_META, `region:${region}`);
+}
+
+// --- Версионирование источников DEM ---
+
+/**
+ * Тайлы пирамиды хранятся как есть (gzip), а квант высоты клиент берёт из
+ * index.json при распаковке. Пересборка пирамиды с другим квантом делает
+ * старые тайлы несовместимыми молча: те же байты дали бы вдвое большие
+ * высоты. Поэтому DemSampler при получении свежего index.json сверяет его
+ * версию с сохранённой и при смене вычищает тайлы источника.
+ */
+export async function saveDemVersion(prefix: string, version: string): Promise<void> {
+  await set(STORE_META, `dem-version:${prefix}`, version);
+}
+
+export async function getDemVersion(prefix: string): Promise<string | undefined> {
+  return get(STORE_META, `dem-version:${prefix}`);
+}
+
+/** Отметка «тайлы источника удалены при переходе на эту версию» */
+export async function saveDemPurged(prefix: string, version: string): Promise<void> {
+  await set(STORE_META, `dem-purged:${prefix}`, version);
+}
+
+export async function getDemPurged(prefix: string): Promise<string | undefined> {
+  return get(STORE_META, `dem-purged:${prefix}`);
+}
+
+/**
+ * Удалить все тайлы источника. Префикс глобальной пирамиды пустой —
+ * её ключи «lod/x/y» начинаются с цифры, у остальных источников есть
+ * именной префикс («hi/…», «{регион}/…»), их трогать нельзя.
+ */
+export async function deleteDemTilesByPrefix(prefix: string): Promise<number> {
+  const all = await keys(STORE_TILES);
+  const doomed = all.filter((k) =>
+    prefix ? k.startsWith(prefix) : /^\d/.test(k),
+  );
+  if (doomed.length === 0) return 0;
+  const db = await openDb();
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE_TILES, 'readwrite');
+    const store = tx.objectStore(STORE_TILES);
+    for (const key of doomed) store.delete(key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+  return doomed.length;
 }
 
 /** Список скачанных регионов (из метаданных) */

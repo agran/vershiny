@@ -282,8 +282,30 @@ export async function downloadRegion(
   }
 
   onProgress({ done: total, total, phase: 'done' });
-  await markRegionDownloaded(region);
+  await markRegionDownloaded(region, dem.version);
   return saved;
+}
+
+/**
+ * Устарел ли рельеф скачанного региона: базовая пирамида пересобрана после
+ * того, как регион качали (версия в метаданных не совпадает с текущей), либо
+ * регион скачан до появления версий, а его тайлы уже вычищены при переходе
+ * (dem-purged). Офлайн или без индекса честно отвечаем «не знаем» → false:
+ * ложная тревога хуже отложенной.
+ */
+export async function isRegionOutdated(region: string): Promise<boolean> {
+  try {
+    const { getRegionMeta, getDemPurged } = await import('../core/db');
+    const meta = await getRegionMeta(region);
+    if (!meta) return false;
+    const dem = await sharedPyramid();
+    const current = dem.version;
+    if (!current) return false;
+    if (meta.demVersion) return meta.demVersion !== current;
+    return (await getDemPurged('')) === current;
+  } catch {
+    return false;
+  }
 }
 
 /**

@@ -110,7 +110,7 @@ describe('Service Worker', () => {
       'vershiny-app-oldver',
       'vershiny-data-oldver',
       'vershiny-data-v1',
-      'vershiny-tiles-v1',
+      'vershiny-tiles-v2',
       'other-app',
     ]);
     let done: Promise<unknown> = Promise.resolve();
@@ -120,12 +120,22 @@ describe('Service Worker', () => {
     expect(env.deleted).toContain('vershiny-app-oldver');
     // Тайлы и данные не привязаны к версии оболочки: после обновления
     // приложения офлайн-запас должен остаться на месте
-    expect(env.deleted).not.toContain('vershiny-tiles-v1');
+    expect(env.deleted).not.toContain('vershiny-tiles-v2');
     expect(env.deleted).not.toContain('vershiny-data-v1');
     expect(env.deleted).not.toContain('other-app');
     // Кеш данных из старой схемы имён (с версией) больше не нужен
     expect(env.deleted).toContain('vershiny-data-oldver');
     expect(env.claimed()).toBe(true);
+  });
+
+  it('сносит тайловый кеш v1: пересборка пирамиды сменила байты по тем же URL', async () => {
+    const env = runSw(['vershiny-tiles-v1', 'vershiny-tiles-v2']);
+    let done: Promise<unknown> = Promise.resolve();
+    env.handlers.activate({ waitUntil: (p: Promise<unknown>) => (done = p) });
+    await done;
+
+    expect(env.deleted).toContain('vershiny-tiles-v1');
+    expect(env.deleted).not.toContain('vershiny-tiles-v2');
   });
 
   it('версию меняет только по команде страницы', () => {

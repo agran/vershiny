@@ -1262,6 +1262,7 @@ function setupDownloadButton(): void {
         }
       });
       regionDownloaded = true;
+      regionOutdated = false;
       applyDownloadState();
     } catch (err) {
       setStatus(`${t("error")}: ${err instanceof Error ? err.message : err}`);
@@ -1277,15 +1278,29 @@ function setupDownloadButton(): void {
 /** Кнопка скачивания и состояние текущего региона на устройстве */
 let downloadButton: HTMLButtonElement | null = null;
 let regionDownloaded = false;
+/** Рельеф региона устарел: пирамида пересобрана после скачивания */
+let regionOutdated = false;
+/** Тост об устаревшем рельефе показываем один раз за сессию */
+let outdatedToastShown = false;
 
 /** Перечитать из хранилища, лежит ли текущий регион офлайн */
 async function refreshDownloadState(): Promise<void> {
   if (!downloadButton) return;
   try {
     const { getDownloadedRegions } = await import("./core/db");
+    const { isRegionOutdated } = await import("./ui/download");
     regionDownloaded = (await getDownloadedRegions()).includes(currentRegion);
+    regionOutdated = regionDownloaded && (await isRegionOutdated(currentRegion));
+    // Человек не должен узнать в горах без связи, что его офлайн-рельеф
+    // давно вычищен при пересборке пирамиды — предупреждаем заранее
+    if (regionOutdated && !outdatedToastShown) {
+      outdatedToastShown = true;
+      setStatus(t("demOutdatedToast"));
+      setTimeout(() => setStatus(""), 12_000);
+    }
   } catch {
     regionDownloaded = false; // приватный режим: считаем, что не скачано
+    regionOutdated = false;
   }
   applyDownloadState();
 }
@@ -1296,8 +1311,16 @@ function applyDownloadState(): void {
   // Плашка-подпись живёт в общем слое (не внутри кнопки) — innerHTML ей
   // не страшен
   btn.innerHTML = regionDownloaded ? ICON_DOWNLOADED : ICON_DOWNLOAD;
-  btn.style.background = regionDownloaded ? "#2d6a4f" : "#415a77";
-  const title = regionDownloaded ? t("regionDownloaded") : t("downloadRegion");
+  btn.style.background = regionDownloaded
+    ? regionOutdated
+      ? "#8c2d18"
+      : "#2d6a4f"
+    : "#415a77";
+  const title = regionOutdated
+    ? t("demOutdated")
+    : regionDownloaded
+      ? t("regionDownloaded")
+      : t("downloadRegion");
   btn.title = title;
   btn.setAttribute("aria-label", title);
 }

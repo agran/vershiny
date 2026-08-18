@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { DemSampler, TILE_SIZE, type DemIndex } from '../src/core/dem';
+import { DemSampler, TILE_SIZE, indexVersion, type DemIndex } from '../src/core/dem';
 
 /** gzip средствами платформы — как и распаковка в dem.ts */
 async function gzip(bytes: Uint8Array): Promise<Uint8Array> {
@@ -104,7 +104,7 @@ function samplerWith(
         headers: { 'content-type': 'application/json' },
       });
     }
-    const key = path.replace('tiles/global/', '');
+    const key = path.replace('tiles/global/', '').split('?')[0];
     const body = tiles[key];
     if (!body) return new Response('', { status: 404 });
     return new Response(body as unknown as BodyInit);
@@ -192,6 +192,39 @@ describe('DemSampler: тайлы для офлайн-загрузки', () => { 
     index.lods[1].avgTileBytes = 18_000;
 
     expect(sampler.bboxDownloadBytes([42, 42.5, 43, 44])).toBe(58_000);
+  });
+
+  it('версия индекса реагирует на квант и вес тайлов — слепок пересборки', async () => {
+    const sampler = samplerWith({});
+    const index = await sampler.loadIndex();
+    const v0 = indexVersion(index);
+    expect(sampler.version).toBe(v0);
+
+    // Пересборка с другим квантом (2 м → 4 м) обязана сменить версию:
+    // иначе старые офлайн-тайлы молча распакуются с чужим квантом
+    const requant: DemIndex = {
+      ...index,
+      lods: index.lods.map((l) => ({ ...l, quantM: (l.quantM ?? 1) * 2 })),
+    };
+    expect(indexVersion(requant)).not.toBe(v0);
+
+    // И на средний вес тайлов (он меняется при любом пересчёте покрытия)
+    const reweighted: DemIndex = {
+      ...index,
+      lods: index.lods.map((l) => ({ ...l, avgTileBytes: (l.avgTileBytes ?? 0) + 1 })),
+    };
+    expect(indexVersion(reweighted)).not.toBe(v0);
+  });
+
+  it('адрес тайла несёт версию пирамиды — антикеш против cache-first SW', async () => {
+    const requested: string[] = [];
+    const sampler = samplerWith({ '0/444/92.bin.gz': await encodeTile(slopeTile(), 2) }, requested);
+    await sampler.loadIndex();
+    await sampler.loadTile(0, 444, 92);
+
+    const tileReq = requested.find((p) => p.includes('.bin.gz'));
+    expect(tileReq).toBeDefined();
+    expect(tileReq).toContain('?v=');
   });
 });
 

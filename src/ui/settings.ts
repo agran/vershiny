@@ -18,6 +18,7 @@ import { getPhotoCaption, setPhotoCaption } from "../core/photo-caption";
 import {
   estimateRegionBytes,
   hasHiDetail,
+  isRegionOutdated,
   loadRegions,
   regionCore,
   regionLabel,
@@ -281,19 +282,24 @@ export function openSettings(
             }
           };
           if (isDownloaded) {
-            // Скачан до появления детального hi-слоя — предлагаем докачать
-            // его отдельной кнопкой, а не стоять мёртвой «Скачан»
+            // Скачан до появления детального hi-слоя или до пересборки
+            // пирамиды — предлагаем докачать отдельной кнопкой, а не стоять
+            // мёртвой «Скачан»: иначе человек уедет в горы с устаревшим
+            // (или уже вычищенным при смене версии) рельефом
             btn.textContent = t("downloaded");
             btn.style.background = "#2d6a4f";
             btn.style.color = "#d8f3dc";
             btn.disabled = true;
-            void hasHiDetail(regionInfo).then((ok) => {
-              if (ok) return;
+            void Promise.all([
+              hasHiDetail(regionInfo),
+              isRegionOutdated(key),
+            ]).then(([hiOk, outdated]) => {
+              if (hiOk && !outdated) return;
               btn.textContent = t("refresh");
-              btn.style.background = "#7a5c18";
+              btn.style.background = outdated ? "#8c2d18" : "#7a5c18";
               btn.style.color = "#ffe9b8";
               btn.disabled = false;
-              btn.title = t("hiDetailAvailable");
+              btn.title = outdated ? t("demOutdated") : t("hiDetailAvailable");
               btn.onclick = (ev) => {
                 ev.stopPropagation();
                 void runDownload();

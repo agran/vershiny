@@ -159,6 +159,14 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     ru: 'Доступен детальный слой рельефа (~90 м) — докачать',
     en: 'Detailed terrain layer (~90 m) available — tap to fetch',
   },
+  demOutdated: {
+    ru: 'Рельеф пересобран и стал точнее — перекачайте регион',
+    en: 'Terrain was rebuilt with better detail — re-download the region',
+  },
+  demOutdatedToast: {
+    ru: 'Рельеф обновлён и стал точнее — перекачайте скачанные регионы в настройках',
+    en: 'Terrain data improved — re-download your saved regions in Settings',
+  },
   close: { ru: 'Закрыть', en: 'Close' },
   searchPeak: { ru: 'Поиск вершины', en: 'Search peak' },
   searchPrompt: { ru: 'Название вершины', en: 'Peak name' },

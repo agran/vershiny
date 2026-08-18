@@ -88,6 +88,24 @@ export interface DemSamplerOptions {
  * Сэмплер рельефа региона. Тайлы подгружаются лениво и кешируются в памяти;
  * постоянное хранение — IndexedDB (см. `db.ts`): сжатые байты как есть.
  */
+/**
+ * Версия содержимого пирамиды: меняется при любой пересборке, влияющей на
+ * байты тайлов (квант, покрытие, сетка). Поля схемы (cellDeg, tilesX/Y) +
+ * квант + средний вес — детерминированный слепок без лишнего поля в формате.
+ *
+ * Нужна для инвалидации офлайн-тайлов: они хранятся сжатыми, а квант
+ * подставляется при распаковке — тайл от прошлой пересборки с новым
+ * index.json молча дал бы неверные высоты (квант 2 м → 4 м = высоты ×2).
+ */
+export function indexVersion(index: DemIndex): string {
+  return index.lods
+    .map(
+      (l) =>
+        `${l.cellDeg}:${l.quantM ?? 1}:${l.avgTileBytes ?? 0}:${l.tilesX}x${l.tilesY}`,
+    )
+    .join("|");
+}
+
 export class DemSampler {
   private index: DemIndex | null = null;
   /** Кеш тайлов: 'lod/x/y' → Int16Array (null = тайл отсутствует/море) */
@@ -116,6 +134,24 @@ export class DemSampler {
     return `${this.storePrefix}${key}`;
   }
 
+  /** Версия содержимого пирамиды (после loadIndex) — свежесть офлайн-регионов */
+  get version(): string | undefined {
+    return this.index ? indexVersion(this.index) : undefined;
+  }
+
+  /**
+   * URL тайла с версией пирамиды: пересборка меняет байты по тем же адресам,
+   * а старый Service Worker держит их в cache-first без срока годности —
+   * без суффикса повторное скачивание после чистки втащило бы протухшие
+   * байты обратно. Pages query игнорирует, старый SW такой URL под паттерн
+   * тайла (якорь `$`) не подхватывает и отдаёт сеть напрямую
+   */
+  private tileUrl(key: string): string {
+    const ext = this.index?.tileExt ?? ".bin";
+    const v = this.version;
+    return `${this.baseUrl}/${key}${ext}${v ? `?v=${encodeURIComponent(v)}` : ""}`;
+  }
+
   /** Ленивая загрузка db.ts (в тестах IndexedDB может не быть) */
   private async db() {
     if (this.dbCache === undefined) {
@@ -135,13 +171,49 @@ export class DemSampler {
       const res = await this.fetchFn(`${this.baseUrl}/index.json`);
       if (!res.ok) throw new Error(`index.json: HTTP ${res.status}`);
       this.index = (await res.json()) as DemIndex;
-      if (db) void db.saveDemIndex(this.baseUrl, this.index).catch(() => {});
+      if (db) {
+        // Пересборка пирамиды = другие байты тайлов: старые из офлайн-
+        // хранилища несовместимы (см. indexVersion) — вычищаем источник.
+        // Порядок важен: кешированный прошлый индекс читаем ДО его
+        // перезаписи — по нему отличаем «первая версия фичи, пересборки
+        // не было» (тайлы совместимы, чистить нельзя) от настоящей смены
+        // содержимого
+        const current = indexVersion(this.index);
+        const stored = await db.getDemVersion(this.storePrefix).catch(() => undefined);
+        if (stored !== current) {
+          const previous = stored
+            ? undefined
+            : ((await db.getDemIndex(this.baseUrl).catch(() => undefined)) as
+                | DemIndex
+                | undefined);
+          const compatibleLegacy =
+            !stored && previous && indexVersion(previous) === current;
+          if (!compatibleLegacy) {
+            const removed = await db
+              .deleteDemTilesByPrefix(this.storePrefix)
+              .catch(() => 0);
+            if (removed > 0) {
+              await db.saveDemPurged(this.storePrefix, current).catch(() => {});
+            }
+          }
+          await db.saveDemVersion(this.storePrefix, current).catch(() => {});
+        }
+        void db.saveDemIndex(this.baseUrl, this.index).catch(() => {});
+      }
     } catch (err) {
       // Офлайн: индекс из прошлой загрузки — без него не стартует даже то,
       // что уже лежит в хранилище
       const cached = db ? await db.getDemIndex(this.baseUrl) : undefined;
       if (!cached) throw err;
       this.index = cached as DemIndex;
+      // Наследие без версии: тайлы согласованы с этим (старым) индексом,
+      // чистить их офлайн нельзя — просто фиксируем базовую версию; реальная
+      // сверка и чистка случатся при первом онлайне
+      if (db) {
+        const v = indexVersion(this.index);
+        const stored = await db.getDemVersion(this.storePrefix).catch(() => undefined);
+        if (!stored) await db.saveDemVersion(this.storePrefix, v).catch(() => {});
+      }
     }
     this.coverage = this.index.lods.map((lod) =>
       lod.coverage ? base64ToBytes(lod.coverage) : null,
@@ -265,7 +337,6 @@ export class DemSampler {
       return null;
     }
 
-    const ext = this.index?.tileExt ?? ".bin";
     const promise = (async () => {
       // Любой отказ (обрыв сети, CORS, запрет IndexedDB, битый тайл) — это
       // «сейчас нет», а не «пусто здесь»: возвращаем null, дыру не запоминаем
@@ -292,9 +363,7 @@ export class DemSampler {
           }
         }
 
-        const res = await this.fetchFn(
-          `${this.baseUrl}/${lodIndex}/${tx}/${ty}${ext}`,
-        );
+        const res = await this.fetchFn(this.tileUrl(key));
         let tile: Int16Array | null = null;
         if (res.ok) {
           tile = await this.decodeTile(await res.arrayBuffer(), lodIndex);
@@ -385,7 +454,6 @@ export class DemSampler {
     concurrency = 6,
   ): Promise<{ bytes: number; ok: number; failed: number }> {
     const db = await this.db();
-    const ext = this.index?.tileExt ?? ".bin";
     let done = 0;
     let bytes = 0;
     let ok = 0;
@@ -399,7 +467,7 @@ export class DemSampler {
               ok++; // уже скачан
               return;
             }
-            const res = await this.fetchFn(`${this.baseUrl}/${key}${ext}`);
+            const res = await this.fetchFn(this.tileUrl(key));
             if (!res.ok) return;
             const raw = new Uint8Array(await res.arrayBuffer());
             bytes += raw.byteLength;
