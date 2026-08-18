@@ -94,6 +94,11 @@ export function mapPeakLimit(zoom: number): number {
  * Сортировка важна не только для отбора: подписи накладываются в порядке
  * DOM, и ранняя вершина перекрывает позднюю — поэтому рисуем от хвоста к
  * голове (см. render), и главная гора остаётся читаемой в толпе.
+ *
+ * Здесь же, до лимита, выкидываются одноимённые дубли (зум < 14): иначе
+ * пачка «Пик №3» съедала квоту подписей, а при дедупе после лимита (как
+ * было раньше, в renderPeaks) экран оставался полупустым, а из одноимённых
+ * пропадала как раз главная — обход в renderPeaks идёт с хвоста.
  */
 export function selectMapPeaks(
   peaks: Peak[],
@@ -131,8 +136,29 @@ export function selectMapPeaks(
     (a, b) => peakScore(b, 0) - peakScore(a, 0) || (b.ele ?? 0) - (a.ele ?? 0),
   );
   const limit = mapPeakLimit(zoom);
-  if (!Number.isFinite(limit) && limit > 0) return sorted; // «все», но в порядке значимости
-  return sorted.slice(0, limit);
+  // Одноимённые вершины не плодим: в горах «Пик №3» идут пачками и на
+  // мелком зуме наезжают друг на друга одним пятном. Дедупликация — ДО
+  // лимита, иначе пачка однофамильцев съедала квоту и на экране оставалось
+  // меньше подписей, чем позволяет зум. Список уже отсортирован по
+  // значимости, поэтому из одноимённых выживает главная. Безымянные
+  // ('—') не трогаем: это разные вершины, иначе весь кадр схлопывался
+  // бы в одну метку-заглушку.
+  const picked: Peak[] = [];
+  const seen = new Set<string>();
+  for (const p of sorted) {
+    if (zoom < 14) {
+      const name = peakName(p);
+      // Пустое имя и заглушка '—' — «безымянная»: такие не дедуплицируем,
+      // это разные вершины
+      if (name && name !== "—") {
+        if (seen.has(name)) continue;
+        seen.add(name);
+      }
+    }
+    picked.push(p);
+    if (picked.length >= limit) break;
+  }
+  return picked;
 }
 
 export interface ProjectedMapPeak {
@@ -162,14 +188,15 @@ export function projectPeaks(
   const margin = 80;
   const out: ProjectedMapPeak[] = [];
   for (const peak of peaks) {
-    let px = project(peak, zoom).x;
+    const pt = project(peak, zoom);
+    let px = pt.x;
     // Кратчайший путь по долготе: центр −179°, вершина +179° — соседи,
     // а без заворота между ними «весь мир»
     const dxWorld = px - c.x;
     if (dxWorld > worldPx / 2) px -= worldPx;
     else if (dxWorld < -worldPx / 2) px += worldPx;
     const x = px - left;
-    const y = project(peak, zoom).y - top;
+    const y = pt.y - top;
     if (x < -margin || x > width + margin || y < -margin || y > height + margin) {
       continue;
     }
@@ -273,7 +300,7 @@ export function openMap(options: MapOptions): () => void {
     let anyFailed = false;
     for (const img of tiles.values()) {
       if (img.dataset.ok) anyOk = true;
-      else if (img.style.visibility === "hidden") anyFailed = true;
+      else if (img.dataset.failed) anyFailed = true;
     }
     const needed = !(anyOk && !anyFailed);
     if (needed !== peaksLayerNeeded) {
@@ -294,17 +321,14 @@ export function openMap(options: MapOptions): () => void {
     const selected = selectMapPeaks(mapPeaks, zoom, center, w, h);
     const projected = projectPeaks(selected, center, zoom, w, h);
 
-    // Метки одноимённых вершин не плодим: в горах «Пик №3» встречается
-    // пачками, и на мелком зуме они наезжают друг на друга одним пятном
-    const shown = new Set<string>();
+    // Одноимённые уже отфильтрованы в selectMapPeaks (до лимита): здесь
+    // только раскладка
     let used = 0;
     // Главные рисуем последними (выше в DOM): selectMapPeaks отсортировал
     // по убыванию значимости, поэтому идём с хвоста
     for (let i = projected.length - 1; i >= 0; i--) {
       const { peak, x, y } = projected[i];
       const name = peakName(peak);
-      if (zoom < 14 && shown.has(name)) continue;
-      shown.add(name);
 
       let el = peakEls[used];
       if (!el) {
@@ -377,6 +401,7 @@ export function openMap(options: MapOptions): () => void {
           // Не загрузился (офлайн, лимит OSM) — прячем: «битая картинка»
           // поверх карты хуже, чем просто пустая клетка
           img.onerror = () => {
+            img!.dataset.failed = "1";
             img!.style.visibility = "hidden";
             updatePeaksLayerNeed();
           };
