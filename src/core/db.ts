@@ -137,6 +137,21 @@ export async function getPeaks(region: string): Promise<unknown[] | undefined> {
   return get<unknown[]>(STORE_PEAKS, region);
 }
 
+/** Сохранить массив изоляции вершин региона (по индексу, см. restoreIsolation) */
+export async function saveIsolation(
+  region: string,
+  isoM: number[],
+): Promise<void> {
+  await set(STORE_META, `iso:${region}`, isoM);
+}
+
+/** Получить сохранённую изоляцию региона */
+export async function getIsolation(
+  region: string,
+): Promise<number[] | undefined> {
+  return get<number[]>(STORE_META, `iso:${region}`);
+}
+
 /** Отметить регион как скачанный */
 export async function markRegionDownloaded(
   region: string,

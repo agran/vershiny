@@ -125,6 +125,32 @@ export function annotateIsolation(peaks: Peak[]): void {
 }
 
 /**
+ * Изоляция уже посчитана (или только что восстановлена из кеша) — не считать
+ * заново. Изоляция — функция набора вершин, к origin не привязана; гарантия
+ * свежести — peaks-file целиком перегенерируется, и isoM едет в нём же.
+ */
+export function ensureIsolation(peaks: Peak[]): void {
+  if (!peaks.length) return;
+  if (peaks.every((p) => typeof p.isoM === "number")) return;
+  annotateIsolation(peaks);
+}
+
+/**
+ * Восстановить изоляцию из сохранённого массива isoM (IndexedDB).
+ * Числа подставляются по индексу — порядок вершин в файле стабилен;
+ * при рассинхроне (файл перегенерирован, а кеш от старого) считаем заново.
+ */
+export function restoreIsolation(peaks: Peak[], iso: unknown): boolean {
+  if (!Array.isArray(iso) || iso.length !== peaks.length) return false;
+  for (let i = 0; i < peaks.length; i++) {
+    const v = iso[i];
+    if (typeof v !== "number") return false;
+    peaks[i].isoM = v;
+  }
+  return true;
+}
+
+/**
  * Значимость вершины по изоляции: 0.55 у побочного пика в группе → 1.0
  * у самостоятельной горы. Шкала логарифмическая: изоляция меняется на три
  * порядка (сотни метров у жандарма на гребне — десятки километров у

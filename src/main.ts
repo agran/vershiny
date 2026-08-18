@@ -885,41 +885,83 @@ async function main(): Promise<void> {
     }
   }
 
-  // Пики: сеть → офлайн-кеш (IndexedDB). Без них панорама всё равно строится.
-  // Vite на 404 отдаёт index.html (SPA-fallback) — проверяем Content-Type.
-  // Таймаут: мёртвая сеть не должна держать «Загрузка региона…» минуту
-  let peaks: PeaksFile["peaks"] = [];
+  // Пики: сеть → офлайн-кеш (IndexedDB). Панорама их не ждёт: compute
+  // уходит сразу с пустым списком, вершины докидываются вторым compute,
+  // когда загружены (и изоляция посчитана/восстановлена из кеша). На
+  // больших регионах (iberia: 4.8 МБ, 49 тыс. вершин) JSON.parse + изоляция
+  // блокировали первый кадр на ~0.6–1 с на телефоне
   const { fetchWithTimeout } = await import("./core/fetch-timeout");
-  const peaksRes = await fetchWithTimeout(
-    `${base}peaks/${currentRegion}.json`,
-  ).catch(() => null);
-  if (peaksRes && isJson(peaksRes)) {
-    peaks = ((await peaksRes.json()) as PeaksFile).peaks;
-  } else {
+  const peaksPromise = (async (): Promise<PeaksFile["peaks"]> => {
+    const peaksRes = await fetchWithTimeout(
+      `${base}peaks/${currentRegion}.json`,
+    ).catch(() => null);
+    if (peaksRes && isJson(peaksRes)) {
+      return ((await peaksRes.json()) as PeaksFile).peaks;
+    }
     const { getPeaks } = await import("./core/db");
-    peaks = ((await getPeaks(currentRegion)) ?? []) as PeaksFile["peaks"];
-  }
+    return ((await getPeaks(currentRegion)) ?? []) as PeaksFile["peaks"];
+  })();
   // Изоляция вершин (расстояние до ближайшей более высокой) — основа
   // приоритета подписей. Считается один раз на регион, не на кадр.
-  const { annotateIsolation } = await import("./core/peaks");
-  const isoT0 = performance.now();
-  annotateIsolation(peaks);
-  console.info(
-    `Изоляция: ${peaks.length} вершин за ${(performance.now() - isoT0).toFixed(0)} мс`,
-  );
-  currentPeaks = peaks; // сохраняем для навигации
+  // Порядок: сначала кеш из IndexedDB (saveIsolation при прошлом заходе),
+  // потом расчёт. На больших регионах (iberia, 49 тыс.) это разница между
+  // ~5 мс чтением и ~300–400 мс вычисления, блокирующего главный поток
+  const annotatePeaks = async (list: PeaksFile["peaks"]): Promise<void> => {
+    if (!list.length) return;
+    const { ensureIsolation, restoreIsolation } = await import(
+      "./core/peaks"
+    );
+    const { getIsolation, saveIsolation } = await import("./core/db");
+    const isoT0 = performance.now();
+    const cachedIso = await getIsolation(currentRegion).catch(() => undefined);
+    const fromCache = cachedIso ? restoreIsolation(list, cachedIso) : false;
+    if (!fromCache) {
+      ensureIsolation(list);
+      // Запоминаем для следующего запуска: изоляция — функция набора вершин,
+      // к точке наблюдателя не привязана
+      const isoSnapshot = list.map((p) => p.isoM ?? 0);
+      void saveIsolation(currentRegion, isoSnapshot).catch(() => {});
+    }
+    console.info(
+      `Изоляция: ${list.length} вершин за ${(performance.now() - isoT0).toFixed(0)} мс` +
+        (fromCache ? " (кеш)" : ""),
+    );
+  };
 
   // DEM: детальный патч региона → локальная пирамида → внешняя пирамида
   // (agran/vershiny-dem). Промах всех — только Terrarium; офлайн — кеш.
+  // Идёт параллельно с загрузкой вершин: им обоим нужен только origin
   await initDemForRegion(currentRegion);
 
   setStatus(t("computing"));
-  // Через requestCompute, а не прямым postMessage: иначе стартовая точка —
-  // единственная, для которой не проверялось соответствие региона, и плашка
-  // «вы в другом районе» появлялась только после первого перемещения.
-  // По ненадёжной точке район не предлагаем: сказать «Вы в районе X»
-  // человеку, которому не дали геолокацию, — это выдумка, а не подсказка
+  // Первая фаза: панорама без вершин — она появляется на ~0.5–1 с раньше
+  // на больших регионах. Через requestCompute, а не прямым postMessage:
+  // иначе стартовая точка — единственная, для которой не проверялось
+  // соответствие региона, и плашка «вы в другом районе» появлялась только
+  // после первого перемещения
+  currentPeaks = [];
   requestCompute(origin, fix.trusted);
+  const startOrigin = origin;
+  const startRegion = currentRegion;
+
+  // Вторая фаза: вершины докидываются, когда готовы, но только если за это
+  // время не сменились ни регион, ни точка (чужой результат не применяем)
+  void peaksPromise
+    .then(async (loaded) => {
+      if (currentRegion !== startRegion) return;
+      await annotatePeaks(loaded);
+      if (currentRegion !== startRegion) return;
+      currentPeaks = loaded;
+      if (
+        lastOrigin.lat === startOrigin.lat &&
+        lastOrigin.lon === startOrigin.lon &&
+        loaded.length
+      ) {
+        // Та же точка — досчитываем только подписи, рельеф уже есть
+        requestCompute(startOrigin, false);
+      }
+    })
+    .catch(() => {});
 
   if (fix.trusted) {
     rememberPosition(origin);
@@ -1178,8 +1220,18 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   // Пока грузили, регион могли сменить повторно: чужой результат не применяем
   if (switchSeq !== regionSwitchSeq) return;
   if (peaks) {
-    const { annotateIsolation } = await import("./core/peaks");
-    annotateIsolation(peaks);
+    // Изоляция: сначала кеш (см. main), потом расчёт — и запомнить
+    const { ensureIsolation, restoreIsolation } = await import(
+      "./core/peaks"
+    );
+    const { getIsolation, saveIsolation } = await import("./core/db");
+    const cachedIso = await getIsolation(region).catch(() => undefined);
+    const fromCache = cachedIso ? restoreIsolation(peaks, cachedIso) : false;
+    if (!fromCache) {
+      ensureIsolation(peaks);
+      const isoSnapshot = peaks.map((p) => p.isoM ?? 0);
+      void saveIsolation(region, isoSnapshot).catch(() => {});
+    }
     currentPeaks = peaks;
   } else {
     // Офлайн и регион не скачан: вершины прежнего региона оставлять нельзя —
