@@ -84,6 +84,12 @@ export interface OverlayOptions {
    * с настоящими горами в кадре (core/photo-caption.ts, галочка «Контуры»).
    */
   ridges?: boolean;
+  /**
+   * Подписи вершин. false — только контуры и шкала: AR рисует линии
+   * полупрозрачными, а подписи затем вторым проходом и непрозрачно
+   * (ui/ar.ts, drawArFrame).
+   */
+  labels?: boolean;
 }
 
 /**
@@ -218,8 +224,11 @@ export function drawOverlay(
     }
   }
 
-  // Подписи пиков с кластеризацией
-  drawLabels(ctx, state.peaks, azToX, elevToY, view, state, uiScale);
+  // Подписи пиков с кластеризацией. Отдельным флагом: AR рисует их вторым
+  // проходом без полупрозрачности (labels:false у прохода с контурами)
+  if (overlay.labels !== false) {
+    drawLabels(ctx, state.peaks, azToX, elevToY, view, state, uiScale);
+  }
 }
 
 /**

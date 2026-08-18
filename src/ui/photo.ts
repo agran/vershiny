@@ -113,12 +113,11 @@ export async function capturePhoto(
       fovRad: visible.h,
       fovVRad: visible.v,
     };
-    // Полупрозрачность как на экране в AR (дефолт opacity в startAr):
-    // сквозь линии видны настоящие горы, и снимок похож на то, что видели
-    ctx.save();
-    ctx.globalAlpha = 0.55;
+    // Полная непрозрачность: на ЭКРАНЕ в AR оверлей полупрозрачный (дефолт
+    // opacity в startAr), чтобы сквозь линии было видно живую камеру, но на
+    // запечённом фото полупрозрачный текст выглядит выцветшим и плохо
+    // читается — снимок не интерактивен, просвечивать там нечему
     drawOverlay(ctx, state, overlayView, uiScale, { ridges });
-    ctx.restore();
   } else {
     renderPanorama(ctx, state, view, uiScale, { ridges });
   }
