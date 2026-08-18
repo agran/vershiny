@@ -25,9 +25,9 @@
  *    почти никогда не угадает ещё и позицию Эльбруса.
  */
 
-import { fft } from './fft';
-import { wrapAngle } from './geo';
-import type { VisiblePeak } from './horizon';
+import { fft } from "./fft";
+import { wrapAngle } from "./geo";
+import type { VisiblePeak } from "./horizon";
 
 /** Гипотеза совмещения: куда на самом деле смотрит камера */
 export interface CoarseHypothesis {
@@ -90,7 +90,9 @@ const ANCHOR_ELEV_TOL_RAD = (0.5 * Math.PI) / 180;
  * Грубое совмещение по полному кругу. Пустой массив — кадр неинформативен
  * (равнина, туман, стена): честный отказ лучше уверенного мусора.
  */
-export function matchSkylineCoarse(options: CoarseMatchOptions): CoarseHypothesis[] {
+export function matchSkylineCoarse(
+  options: CoarseMatchOptions,
+): CoarseHypothesis[] {
   const { horizon, stepRad, frameElev, fovRad, topK = 5 } = options;
   const n = horizon.length;
   if (!n || stepRad <= 0) return [];
@@ -132,9 +134,13 @@ export function matchSkylineCoarse(options: CoarseMatchOptions): CoarseHypothesi
   if (cCount < raysInFrame * MIN_VALID_FRAC) return [];
   // Нормировка окна кадра (ZNCC сама вычитает среднее — значит, инвариантна
   // к постоянному сдвигу наклона)
-  const cMean = frameVals.reduce((s, v, i) => s + (frameMask[i] ? v : 0), 0) / cCount;
+  const cMean =
+    frameVals.reduce((s, v, i) => s + (frameMask[i] ? v : 0), 0) / cCount;
   const cStd = Math.sqrt(
-    frameVals.reduce((s, v, i) => s + (frameMask[i] ? (v - cMean) ** 2 : 0), 0) / cCount,
+    frameVals.reduce(
+      (s, v, i) => s + (frameMask[i] ? (v - cMean) ** 2 : 0),
+      0,
+    ) / cCount,
   );
   if (cStd < MIN_PROFILE_STD) return []; // профиль плоский
   const c = new Float64Array(raysInFrame);
@@ -171,7 +177,10 @@ export function matchSkylineCoarse(options: CoarseMatchOptions): CoarseHypothesi
   let n2 = 1;
   while (n2 < 2 * n + raysInFrame) n2 *= 2;
 
-  const pack = (vals: Float64Array, mask: Float64Array): [Float64Array, Float64Array] => {
+  const pack = (
+    vals: Float64Array,
+    mask: Float64Array,
+  ): [Float64Array, Float64Array] => {
     const re = new Float64Array(n2);
     const im = new Float64Array(n2);
     for (let i = 0; i < 2 * n; i++) re[i] = vals[i % n] * mask[i % n];
@@ -318,7 +327,7 @@ function anchorScore(centerAzRad: number, options: CoarseMatchOptions): number {
   // Вершины, которые должны попасть в кадр при этой гипотезе
   const inFrame = peaks.filter((p) => {
     const d = Math.abs(wrapAngle(p.azimuthRad - centerAzRad));
-    return p.visibility === 'visible' && d < fovRad / 2;
+    return p.visibility === "visible" && d < fovRad / 2;
   });
   if (inFrame.length < 2) return -1; // одна вершина ничего не доказывает
 
@@ -330,11 +339,17 @@ function anchorScore(centerAzRad: number, options: CoarseMatchOptions): number {
     // Колонка кадра под азимутом вершины
     const frac = wrapAngle(p.azimuthRad - leftAzRad) / fovRad;
     const x0 = frac * frameElev.length;
-    const winCols = Math.max(1, Math.round((ANCHOR_WINDOW_RAD / fovRad) * frameElev.length));
+    const winCols = Math.max(
+      1,
+      Math.round((ANCHOR_WINDOW_RAD / fovRad) * frameElev.length),
+    );
     // Ищем локальный максимум профиля рядом с этой колонкой
     let best = NaN;
     for (let x = Math.round(x0) - winCols; x <= Math.round(x0) + winCols; x++) {
-      const v = frameElev[((x % frameElev.length) + frameElev.length) % frameElev.length];
+      const v =
+        frameElev[
+          ((x % frameElev.length) + frameElev.length) % frameElev.length
+        ];
       if (Number.isFinite(v) && (!Number.isFinite(best) || v > best)) best = v;
     }
     if (!Number.isFinite(best)) continue;

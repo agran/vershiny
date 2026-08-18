@@ -14,14 +14,14 @@
  * Такая загрузка не могла завершиться в принципе — упиралась в квоту браузера.
  */
 
-import { TerrariumSampler } from '../core/terrarium';
-import { DemSampler } from '../core/dem';
-import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from '../core/dem-config';
-import { PEAK_VISIBILITY_RADIUS_M } from '../core/peaks';
-import { bboxContains, destination, type LatLon } from '../core/geo';
-import { savePeaks, markRegionDownloaded, getDemTile } from '../core/db';
-import { root } from '../core/globals';
-import { getLocale } from '../core/i18n';
+import { TerrariumSampler } from "../core/terrarium";
+import { DemSampler } from "../core/dem";
+import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from "../core/dem-config";
+import { PEAK_VISIBILITY_RADIUS_M } from "../core/peaks";
+import { bboxContains, destination, type LatLon } from "../core/geo";
+import { savePeaks, markRegionDownloaded, getDemTile } from "../core/db";
+import { root } from "../core/globals";
+import { getLocale } from "../core/i18n";
 
 /** Радиус детальной зоны (Terrarium 90 м) вокруг точки наблюдения */
 export const DETAIL_RADIUS_M = 30_000;
@@ -55,13 +55,16 @@ export interface DownloadProgress {
   /** Всего тайлов */
   total: number;
   /** Текущая фаза */
-  phase: 'peaks' | 'tiles' | 'done' | 'error';
+  phase: "peaks" | "tiles" | "done" | "error";
   /** Текст ошибки */
   error?: string;
 }
 
 /** Точка внутри bbox (с учётом перехода через антимеридиан) */
-export function inBBox(pos: LatLon, bbox: [number, number, number, number]): boolean {
+export function inBBox(
+  pos: LatLon,
+  bbox: [number, number, number, number],
+): boolean {
   return bboxContains(pos, bbox);
 }
 
@@ -91,7 +94,9 @@ function detailTileKeys(center: LatLon, radiusM: number): string[] {
     const clamp = (lat: number) => Math.max(-85.05, Math.min(85.05, lat));
     const tileY = (lat: number) => {
       const rad = (clamp(lat) * Math.PI) / 180;
-      return ((1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2) * n;
+      return (
+        ((1 - Math.log(Math.tan(rad) + 1 / Math.cos(rad)) / Math.PI) / 2) * n
+      );
     };
     const y0 = Math.floor(tileY(north));
     const y1 = Math.ceil(tileY(south));
@@ -207,11 +212,11 @@ export async function downloadRegion(
   const base = import.meta.env.BASE_URL;
 
   // 1. Пики
-  onProgress({ done: 0, total: 0, phase: 'peaks' });
+  onProgress({ done: 0, total: 0, phase: "peaks" });
   const peaksRes = await fetch(`${base}peaks/${region}.json`);
   if (
     peaksRes.ok &&
-    (peaksRes.headers.get('content-type') ?? '').includes('application/json')
+    (peaksRes.headers.get("content-type") ?? "").includes("application/json")
   ) {
     const data = await peaksRes.json();
     await savePeaks(region, data.peaks ?? []);
@@ -240,15 +245,15 @@ export async function downloadRegion(
   const total = pyramidKeys.length + hiKeys.length + detailKeys.length;
 
   let done = 0;
-  onProgress({ done, total, phase: 'tiles' });
+  onProgress({ done, total, phase: "tiles" });
   const pyramidStats = await dem.downloadTiles(pyramidKeys, (n) => {
     done = n;
-    onProgress({ done, total, phase: 'tiles' });
+    onProgress({ done, total, phase: "tiles" });
   });
   const hiStats = demHi
     ? await demHi.downloadTiles(hiKeys, (n) => {
         done = pyramidKeys.length + n;
-        onProgress({ done, total, phase: 'tiles' });
+        onProgress({ done, total, phase: "tiles" });
       })
     : { bytes: 0, ok: 0, failed: 0 };
 
@@ -259,18 +264,18 @@ export async function downloadRegion(
     const batch = detailKeys.slice(i, i + CONCURRENCY);
     await Promise.all(
       batch.map(async (key) => {
-        const [z, x, y] = key.split('/').map(Number);
+        const [z, x, y] = key.split("/").map(Number);
         // Именно saveTileOffline: loadTile молча превращает в null и обрыв
         // сети, и 503 офлайнового Service Worker'а, поэтому счётчик успехов
         // по нему всегда сходился — регион «скачивался», не сохранив ничего
         const status = await sampler.saveTileOffline(z, x, y);
         // Дыра в покрытии Terrarium (океан, полярная шапка) — не отказ:
         // требовать её невозможно, а упереться в неё значит не дать скачать
-        if (status !== 'failed') detailOk++;
+        if (status !== "failed") detailOk++;
       }),
     );
     done += batch.length;
-    onProgress({ done, total, phase: 'tiles' });
+    onProgress({ done, total, phase: "tiles" });
   }
 
   // Регион считается скачанным только если рельеф действительно лёг на
@@ -281,7 +286,7 @@ export async function downloadRegion(
     throw new Error(`Скачано ${saved} тайлов из ${total} — регион не сохранён`);
   }
 
-  onProgress({ done: total, total, phase: 'done' });
+  onProgress({ done: total, total, phase: "done" });
   await markRegionDownloaded(region, dem.version);
   return saved;
 }
@@ -295,14 +300,14 @@ export async function downloadRegion(
  */
 export async function isRegionOutdated(region: string): Promise<boolean> {
   try {
-    const { getRegionMeta, getDemPurged } = await import('../core/db');
+    const { getRegionMeta, getDemPurged } = await import("../core/db");
     const meta = await getRegionMeta(region);
     if (!meta) return false;
     const dem = await sharedPyramid();
     const current = dem.version;
     if (!current) return false;
     if (meta.demVersion) return meta.demVersion !== current;
-    return (await getDemPurged('')) === current;
+    return (await getDemPurged("")) === current;
   } catch {
     return false;
   }
@@ -325,7 +330,7 @@ export async function hasHiDetail(region: RegionInfo): Promise<boolean> {
     const hi = await sharedPyramidHi();
     const keys = hi
       .tileKeysInBBox(region.bbox)
-      .filter((k) => k.startsWith('0/'));
+      .filter((k) => k.startsWith("0/"));
     if (keys.length === 0) return true; // вне покрытия hi (p4) — нечего качать
     for (const key of keys) {
       if (await getDemTile(`hi/${key}`)) return true;
@@ -360,13 +365,14 @@ export function resetRegionsCache(): void {
 const idbRegionsStore: RegionsStore = {
   async save(regions) {
     if (!root.indexedDB) return;
-    const { saveRegionsRegistry } = await import('../core/db');
+    const { saveRegionsRegistry } = await import("../core/db");
     await saveRegionsRegistry(regions);
   },
   async load() {
     if (!root.indexedDB) return undefined;
-    const { getRegionsRegistry } = await import('../core/db');
-    return (await getRegionsRegistry()) as Record<string, RegionInfo> | undefined;
+    const { getRegionsRegistry } = await import("../core/db");
+    return (await getRegionsRegistry()) as
+      Record<string, RegionInfo> | undefined;
   },
 };
 
@@ -403,8 +409,8 @@ async function readRegistry(options: {
     const res = await fetchFn(`${base}regions.json`);
     if (!res.ok) throw new Error(`regions.json: HTTP ${res.status}`);
     // Vite и GitHub Pages на 404 отдают index.html — проверяем тип
-    if (!(res.headers.get('content-type') ?? '').includes('json')) {
-      throw new Error('regions.json: не JSON');
+    if (!(res.headers.get("content-type") ?? "").includes("json")) {
+      throw new Error("regions.json: не JSON");
     }
     const regions = (await res.json()) as Record<string, RegionInfo>;
     void store.save(regions).catch(() => {});
@@ -412,7 +418,7 @@ async function readRegistry(options: {
   } catch (err) {
     const cached = await store.load().catch(() => undefined);
     if (cached && Object.keys(cached).length > 0) return cached;
-    console.warn('Реестр регионов недоступен:', err);
+    console.warn("Реестр регионов недоступен:", err);
     return {};
   }
 }
@@ -426,9 +432,10 @@ export function findRegionForPosition(
   let best: string | null = null;
   let bestPriority = Infinity;
   for (const [key, info] of Object.entries(regions)) {
-    if (key.startsWith('$') || typeof info !== 'object' || !info.bbox) continue;
+    if (key.startsWith("$") || typeof info !== "object" || !info.bbox) continue;
     if (inBBox(pos, info.bbox)) {
-      const priority = (info as RegionInfo & { priority?: number }).priority ?? 9;
+      const priority =
+        (info as RegionInfo & { priority?: number }).priority ?? 9;
       if (priority < bestPriority) {
         best = key;
         bestPriority = priority;
@@ -444,14 +451,22 @@ export function distanceToBBox(
   bbox: [number, number, number, number],
 ): number {
   const [minLon, minLat, maxLon, maxLat] = bbox;
-  const dLat = pos.lat < minLat ? minLat - pos.lat : pos.lat > maxLat ? pos.lat - maxLat : 0;
+  const dLat =
+    pos.lat < minLat
+      ? minLat - pos.lat
+      : pos.lat > maxLat
+        ? pos.lat - maxLat
+        : 0;
   // По долготе мир замкнут: до края считаем кратчайший зазор, а не разность
-  const gapDeg = (a: number, b: number): number => Math.abs((((a - b) % 360) + 540) % 360 - 180);
+  const gapDeg = (a: number, b: number): number =>
+    Math.abs(((((a - b) % 360) + 540) % 360) - 180);
   const insideLon =
     minLon <= maxLon
       ? pos.lon >= minLon && pos.lon <= maxLon
       : pos.lon >= minLon || pos.lon <= maxLon;
-  const dLon = insideLon ? 0 : Math.min(gapDeg(pos.lon, minLon), gapDeg(pos.lon, maxLon));
+  const dLon = insideLon
+    ? 0
+    : Math.min(gapDeg(pos.lon, minLon), gapDeg(pos.lon, maxLon));
   return Math.hypot(
     dLat * M_PER_DEG_LAT,
     dLon * M_PER_DEG_LAT * Math.cos((pos.lat * Math.PI) / 180),
@@ -478,7 +493,7 @@ export function nearestRegionForPosition(
   let bestDist = Infinity;
   let bestPriority = Infinity;
   for (const [key, info] of Object.entries(regions)) {
-    if (key.startsWith('$') || typeof info !== 'object' || !info.bbox) continue;
+    if (key.startsWith("$") || typeof info !== "object" || !info.bbox) continue;
     const dist = distanceToBBox(pos, info.bbox);
     if (dist > maxDistM) continue;
     const priority = info.priority ?? 9;
@@ -501,14 +516,17 @@ export function regionForPosition(
   pos: LatLon,
   regions: Record<string, RegionInfo>,
 ): string | null {
-  return findRegionForPosition(pos, regions) ?? nearestRegionForPosition(pos, regions);
+  return (
+    findRegionForPosition(pos, regions) ??
+    nearestRegionForPosition(pos, regions)
+  );
 }
 
 /** Имя региона для UI с учётом локали */
 export function regionLabel(info: RegionInfo): string {
-  return getLocale() === 'ru'
-    ? (info.title_ru ?? info.title_en ?? '')
-    : (info.title_en ?? info.title_ru ?? '');
+  return getLocale() === "ru"
+    ? (info.title_ru ?? info.title_en ?? "")
+    : (info.title_en ?? info.title_ru ?? "");
 }
 
 /**
@@ -537,7 +555,7 @@ export function suggestRegionForPosition(
 
 /** Ключевые вершины региона для UI с учётом локали */
 export function regionCore(info: RegionInfo): string {
-  return getLocale() === 'ru'
-    ? (info.core_ru ?? info.core_en ?? '')
-    : (info.core_en ?? info.core_ru ?? '');
+  return getLocale() === "ru"
+    ? (info.core_ru ?? info.core_en ?? "")
+    : (info.core_en ?? info.core_ru ?? "");
 }

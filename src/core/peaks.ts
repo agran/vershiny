@@ -94,7 +94,8 @@ export function annotateIsolation(peaks: Peak[]): void {
       // Точки кольца r лежат не ближе (r−1) ячеек: если уже нашли что-то ближе,
       // дальше искать нечего. Тот же предел обрывает поиск у одиноких вершин.
       const reach = Math.max(0, r - 1) * ISO_CELL_M;
-      if (r > 0 && reach * reach > Math.min(best2, ISO_SEARCH_LIMIT_M ** 2)) break;
+      if (r > 0 && reach * reach > Math.min(best2, ISO_SEARCH_LIMIT_M ** 2))
+        break;
       for (let cx = gx - r; cx <= gx + r; cx++) {
         for (let cy = gy - r; cy <= gy + r; cy++) {
           // Только внешнее кольцо: внутренние уже просмотрены
@@ -134,7 +135,8 @@ export function isolationWeight(isoM: number | undefined): number {
   if (isoM <= ISO_SUBORDINATE_M) return ISO_MIN_WEIGHT;
   const t = Math.min(
     1,
-    Math.log(isoM / ISO_SUBORDINATE_M) / Math.log(ISO_DOMINANT_M / ISO_SUBORDINATE_M),
+    Math.log(isoM / ISO_SUBORDINATE_M) /
+      Math.log(ISO_DOMINANT_M / ISO_SUBORDINATE_M),
   );
   return ISO_MIN_WEIGHT + (1 - ISO_MIN_WEIGHT) * t;
 }

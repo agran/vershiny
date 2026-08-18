@@ -5,9 +5,9 @@
  *           y = horizonY − elevationAngle/fovV · height (ARCHITECTURE.md).
  */
 
-import { toDeg, wrapAngle } from '../core/geo';
-import type { VisiblePeak } from '../core/horizon';
-import { getLocale, peakName, t } from '../core/i18n';
+import { toDeg, wrapAngle } from "../core/geo";
+import type { VisiblePeak } from "../core/horizon";
+import { getLocale, peakName, t } from "../core/i18n";
 
 export interface PanoramaState {
   /** Углы горизонта по лучам, рад (0 = север) — верхний слой */
@@ -21,7 +21,7 @@ export interface PanoramaState {
   /** Дистанция до точки горизонта по лучам (для классификации пиков) */
   distanceToHorizonM?: Float32Array;
   /** Фронты видимости по лучам (для точных маркеров) */
-  fronts?: import('../core/horizon').VisibleFront[][];
+  fronts?: import("../core/horizon").VisibleFront[][];
   /** Гребни силуэта по корзинам дистанций [корзина][луч] */
   crests?: Float32Array[];
 }
@@ -37,12 +37,12 @@ export interface ViewState {
   fovVRad: number;
 }
 
-const SKY_TOP = '#0d1b2a';
-const SKY_HORIZON = '#415a77';
-const SKY_BOTTOM = '#16202c';
+const SKY_TOP = "#0d1b2a";
+const SKY_HORIZON = "#415a77";
+const SKY_BOTTOM = "#16202c";
 /** Контур гребня: чёрная линия сверху, белая снизу (для наложения на кадр камеры) */
-const RIDGE_DARK = 'rgba(0,0,0,0.85)';
-const RIDGE_LIGHT = 'rgba(255,255,255,0.95)';
+const RIDGE_DARK = "rgba(0,0,0,0.85)";
+const RIDGE_LIGHT = "rgba(255,255,255,0.95)";
 /** Толщина/сдвиг контура в CSS-пикселях (масштабируются по devicePixelRatio) */
 const RIDGE_WIDTH_CSS = 1.4;
 const RIDGE_OFFSET_CSS = 1.1;
@@ -51,9 +51,9 @@ const RIDGE_OFFSET_CSS = 1.1;
  * Экспортируются: снимок подписывает координаты теми же красками, иначе его
  * подпись жила бы своей жизнью и разъезжалась с оверлеем при любой правке.
  */
-export const INK_DARK = 'rgba(0,0,0,0.85)';
-export const INK_LIGHT = 'rgba(255,255,255,0.98)';
-const INK_LIGHT_DIM = 'rgba(255,255,255,0.55)';
+export const INK_DARK = "rgba(0,0,0,0.85)";
+export const INK_LIGHT = "rgba(255,255,255,0.98)";
+const INK_LIGHT_DIM = "rgba(255,255,255,0.55)";
 /** Наклон подписей вершин: все под одним углом, вправо-вверх от вершины */
 const LABEL_ANGLE_DEG = 60;
 /**
@@ -145,7 +145,8 @@ export function drawOverlay(
   // У холста вне DOM геометрия нулевая — там масштаб приходит параметром:
   // иначе на снимке шириной 3840 px подписи рисовались кеглем 12 px
   const uiScale =
-    uiScaleOverride ?? (ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1);
+    uiScaleOverride ??
+    (ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1);
 
   // Профили силуэта: видимые гребни по возрастанию дистанции.
   // Гребень = локальный максимум угла вдоль луча (то, что реально видно как линия).
@@ -166,7 +167,14 @@ export function drawOverlay(
 
     for (const prof of profiles) {
       const segments = buildRidgeSegments(
-        prof, runningMax, EPS, stepRad, azToX, elevToY, width, height,
+        prof,
+        runningMax,
+        EPS,
+        stepRad,
+        azToX,
+        elevToY,
+        width,
+        height,
       );
       if (segments.length) {
         strokeRidge(ctx, segments, -ridgeOffset, RIDGE_DARK, ridgeWidth);
@@ -182,31 +190,31 @@ export function drawOverlay(
   // бессмысленна — рисовать риски посреди фотографии нечему
   if (drawRidges) {
     ctx.font = `${12 * uiScale}px system-ui, sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.lineJoin = 'round';
+    ctx.textAlign = "center";
+    ctx.lineJoin = "round";
     const stepDeg = 15;
     for (let deg = 0; deg < 360; deg += stepDeg) {
-    const az = (deg * Math.PI) / 180;
-    const x = azToX(az);
-    if (x < 0 || x > width) continue;
-    const tickLen = (deg % 45 === 0 ? 14 : 7) * uiScale;
-    ctx.beginPath();
-    ctx.moveTo(x, horizonY);
-    ctx.lineTo(x, horizonY + tickLen);
-    ctx.strokeStyle = INK_DARK;
-    ctx.lineWidth = 3 * uiScale;
-    ctx.stroke();
-    ctx.strokeStyle = INK_LIGHT_DIM;
-    ctx.lineWidth = 1.2 * uiScale;
-    ctx.stroke();
-    if (deg % 45 === 0) {
-      const ty = horizonY + 28 * uiScale;
-      ctx.lineWidth = 3 * uiScale;
+      const az = (deg * Math.PI) / 180;
+      const x = azToX(az);
+      if (x < 0 || x > width) continue;
+      const tickLen = (deg % 45 === 0 ? 14 : 7) * uiScale;
+      ctx.beginPath();
+      ctx.moveTo(x, horizonY);
+      ctx.lineTo(x, horizonY + tickLen);
       ctx.strokeStyle = INK_DARK;
-      ctx.strokeText(cardinal(deg), x, ty);
-      ctx.fillStyle = INK_LIGHT;
-      ctx.fillText(cardinal(deg), x, ty);
-    }
+      ctx.lineWidth = 3 * uiScale;
+      ctx.stroke();
+      ctx.strokeStyle = INK_LIGHT_DIM;
+      ctx.lineWidth = 1.2 * uiScale;
+      ctx.stroke();
+      if (deg % 45 === 0) {
+        const ty = horizonY + 28 * uiScale;
+        ctx.lineWidth = 3 * uiScale;
+        ctx.strokeStyle = INK_DARK;
+        ctx.strokeText(cardinal(deg), x, ty);
+        ctx.fillStyle = INK_LIGHT;
+        ctx.fillText(cardinal(deg), x, ty);
+      }
     }
   }
 
@@ -293,8 +301,8 @@ function strokeRidge(
   }
   ctx.strokeStyle = style;
   ctx.lineWidth = lineWidth;
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
   ctx.stroke();
 }
 
@@ -365,14 +373,14 @@ function drawLabels(
   // Все подписи под одним углом: так они не пересекают друг друга,
   // их помещается больше, а выноска не режет соседние надписи.
   const theta = (LABEL_ANGLE_DEG * Math.PI) / 180;
-  const ux = Math.cos(theta);   // ось вдоль текста (вправо-вверх)
+  const ux = Math.cos(theta); // ось вдоль текста (вправо-вверх)
   const uy = -Math.sin(theta);
-  const vx = Math.sin(theta);   // ось поперёк текста
+  const vx = Math.sin(theta); // ось поперёк текста
   const vy = Math.cos(theta);
 
-  const LINE_H = 15 * uiScale;  // зазор между параллельными «дорожками»
-  const LEAD = 7 * uiScale;     // отступ от вершины до первой буквы
-  const PAD_U = 8 * uiScale;    // зазор между подписями вдоль строки
+  const LINE_H = 15 * uiScale; // зазор между параллельными «дорожками»
+  const LEAD = 7 * uiScale; // отступ от вершины до первой буквы
+  const PAD_U = 8 * uiScale; // зазор между подписями вдоль строки
 
   // Список отсортирован по приоритету (высота + бонус за близость), поэтому
   // при нехватке места остаётся более высокая (и более близкая) вершина.
@@ -397,7 +405,10 @@ function drawLabels(
         const x = ax + ux * w * s;
         const y = ay + uy * w * s;
         if (x < 0 || x > width) continue;
-        if (y > horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY) - CLEAR) {
+        if (
+          y >
+          horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY) - CLEAR
+        ) {
           clear = false;
           break;
         }
@@ -409,13 +420,20 @@ function drawLabels(
 
   /** Попытка занять место под подпись. false — не поместилась */
   const tryPlace = (peak: VisiblePeak): boolean => {
-    const marker = findPeakMarkerPosition(peak, state, silhouette, azToX, elevToY);
+    const marker = findPeakMarkerPosition(
+      peak,
+      state,
+      silhouette,
+      azToX,
+      elevToY,
+    );
     if (!marker) return false;
     const { x: mx, y: my } = marker;
-    const hidden = peak.visibility === 'hidden';
+    const hidden = peak.visibility === "hidden";
     // Точка скрытой вершины лежит ниже силуэта — она и должна уходить
     // за нижний край, важно лишь чтобы сама подпись попала в кадр
-    if (mx < 0 || mx > width || my < 0 || (!hidden && my > height)) return false;
+    if (mx < 0 || mx > width || my < 0 || (!hidden && my > height))
+      return false;
 
     const text = labelText(peak);
     const w = ctx.measureText(text).width;
@@ -437,7 +455,8 @@ function drawLabels(
     // не подписывается: счётчик «+N» рядом с соседней подписью ничего не
     // сообщал (что именно за N — не узнать), но забирал место в кадре
     const conflict = placed.some(
-      (p) => Math.abs(p.v - v) < LINE_H && u0 < p.u1 + PAD_U && u1 > p.u0 - PAD_U,
+      (p) =>
+        Math.abs(p.v - v) < LINE_H && u0 < p.u1 + PAD_U && u1 > p.u0 - PAD_U,
     );
     if (conflict) return false;
 
@@ -448,7 +467,7 @@ function drawLabels(
   // Проход 1: видимые вершины разбирают места первыми — подпись того, что
   // реально видно, всегда важнее подписи того, что за склоном
   for (const peak of peaks) {
-    if (peak.visibility !== 'hidden') tryPlace(peak);
+    if (peak.visibility !== "hidden") tryPlace(peak);
   }
 
   // Проход 2: скрытые добираются по остаточному бюджету. Чем пустее кадр, тем
@@ -457,7 +476,7 @@ function drawLabels(
   let budget = Math.max(0, HIDDEN_LABEL_BUDGET - placed.length);
   for (const peak of peaks) {
     if (budget <= 0) break;
-    if (peak.visibility === 'hidden' && tryPlace(peak)) budget--;
+    if (peak.visibility === "hidden" && tryPlace(peak)) budget--;
   }
 
   // Рендер: подпись вершины, для которой нашлось место
@@ -465,8 +484,17 @@ function drawLabels(
     const text = labelText(p.peak);
     // Скрытая вершина: выноска обрывается о склон, маркера вершины нет
     const end =
-      p.peak.visibility === 'hidden'
-        ? clipToSilhouette(p.ax, p.ay, p.mx, p.my, silhouette, stepRad, xToAz, elevToY)
+      p.peak.visibility === "hidden"
+        ? clipToSilhouette(
+            p.ax,
+            p.ay,
+            p.mx,
+            p.my,
+            silhouette,
+            stepRad,
+            xToAz,
+            elevToY,
+          )
         : { x: p.mx, y: p.my };
     drawPeakAnchor(ctx, end.x, end.y, p.ax, p.ay, p.peak.visibility, uiScale);
     drawRotatedLabel(ctx, p.ax, p.ay, theta, text, p.peak.visibility, uiScale);
@@ -475,10 +503,10 @@ function drawLabels(
 
 function labelText(peak: VisiblePeak): string {
   const km = (peak.distanceM / 1000).toFixed(peak.distanceM < 10_000 ? 1 : 0);
-  const unit = getLocale() === 'ru' ? 'м' : 'm';
-  const kmUnit = getLocale() === 'ru' ? 'км' : 'km';
-  const ele = peak.ele !== undefined ? `${Math.round(peak.ele)} ${unit}` : '';
-  return `${peakName(peak)}${ele ? ' · ' + ele : ''} · ${km} ${kmUnit}`;
+  const unit = getLocale() === "ru" ? "м" : "m";
+  const kmUnit = getLocale() === "ru" ? "км" : "km";
+  const ele = peak.ele !== undefined ? `${Math.round(peak.ele)} ${unit}` : "";
+  return `${peakName(peak)}${ele ? " · " + ele : ""} · ${km} ${kmUnit}`;
 }
 
 /**
@@ -491,20 +519,20 @@ function drawRotatedLabel(
   ay: number,
   theta: number,
   text: string,
-  visibility: 'visible' | 'onSlope' | 'hidden',
+  visibility: "visible" | "onSlope" | "hidden",
   uiScale: number,
 ): void {
   ctx.save();
   ctx.translate(ax, ay);
   ctx.rotate(-theta);
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'middle';
-  ctx.lineJoin = 'round';
+  ctx.textAlign = "left";
+  ctx.textBaseline = "middle";
+  ctx.lineJoin = "round";
   ctx.miterLimit = 2;
   ctx.lineWidth = 3.5 * uiScale;
   ctx.strokeStyle = INK_DARK;
   ctx.strokeText(text, 0, 0);
-  ctx.fillStyle = visibility === 'hidden' ? INK_LIGHT_DIM : INK_LIGHT;
+  ctx.fillStyle = visibility === "hidden" ? INK_LIGHT_DIM : INK_LIGHT;
   ctx.fillText(text, 0, 0);
   ctx.restore();
 }
@@ -516,11 +544,11 @@ function drawPeakAnchor(
   my: number,
   ax: number,
   ay: number,
-  visibility: 'visible' | 'onSlope' | 'hidden',
+  visibility: "visible" | "onSlope" | "hidden",
   uiScale: number,
 ): void {
-  const hidden = visibility === 'hidden';
-  ctx.lineCap = 'round';
+  const hidden = visibility === "hidden";
+  ctx.lineCap = "round";
   ctx.setLineDash(hidden ? [3 * uiScale, 3 * uiScale] : []);
   ctx.beginPath();
   ctx.moveTo(mx, my);
@@ -534,7 +562,7 @@ function drawPeakAnchor(
   ctx.setLineDash([]);
 
   // Точка-якорь на вершине (только для видимых)
-  if (visibility === 'visible') {
+  if (visibility === "visible") {
     ctx.beginPath();
     ctx.arc(mx, my, 3.4 * uiScale, 0, Math.PI * 2);
     ctx.fillStyle = INK_DARK;
@@ -560,7 +588,9 @@ function horizonAtAzimuth(
   // Азимут приходит и отрицательным (обратная проекция экрана) — нормализуем,
   // иначе индекс уходит в минус и высота силуэта становится NaN
   const idx = azRad / stepRad;
-  const i0 = ((Math.floor(idx) % silhouette.length) + silhouette.length) % silhouette.length;
+  const i0 =
+    ((Math.floor(idx) % silhouette.length) + silhouette.length) %
+    silhouette.length;
   const i1 = (i0 + 1) % silhouette.length;
   const frac = idx - Math.floor(idx);
   const a0 = silhouette[i0];
@@ -615,14 +645,19 @@ function findPeakMarkerPosition(
   // Скрытая вершина: ставим точку в её истинное положение — оно ниже силуэта,
   // а выноска обрежется о склон (clipToSilhouette). Матчинг по фронтам тут
   // не годится: фронта на этой дистанции нет, он и перекрыл вершину.
-  if (peak.visibility === 'hidden') {
+  if (peak.visibility === "hidden") {
     return { x: azToX(peak.azimuthRad), y: elevToY(peak.elevationRad) };
   }
 
   // Запасное место маркера: линия силуэта на азимуте вершины. Рельефа на
   // азимуте может не быть вовсе — тогда маркеру взяться неоткуда
   const onSilhouette = (): { x: number; y: number } | null => {
-    const y = horizonAtAzimuth(silhouette, state.stepRad, peak.azimuthRad, elevToY);
+    const y = horizonAtAzimuth(
+      silhouette,
+      state.stepRad,
+      peak.azimuthRad,
+      elevToY,
+    );
     return Number.isFinite(y) ? { x: azToX(peak.azimuthRad), y } : null;
   };
 
@@ -631,7 +666,10 @@ function findPeakMarkerPosition(
   }
 
   // Окно азимутов: ширина зависит от дистанции (ближние горы шире)
-  const windowRad = Math.max(0.009, Math.min(0.052, Math.atan2(1500, peak.distanceM)));
+  const windowRad = Math.max(
+    0.009,
+    Math.min(0.052, Math.atan2(1500, peak.distanceM)),
+  );
   const stepRad = state.stepRad;
   const centerIdx = Math.round(peak.azimuthRad / stepRad);
   const windowRays = Math.ceil(windowRad / stepRad);
@@ -640,24 +678,29 @@ function findPeakMarkerPosition(
   const distTolerance = Math.max(2000, peak.distanceM * 0.15);
   let best: { az: number; elev: number; score: number } | null = null;
 
-  for (let i = Math.max(0, centerIdx - windowRays); i <= Math.min(state.fronts.length - 1, centerIdx + windowRays); i++) {
+  for (
+    let i = Math.max(0, centerIdx - windowRays);
+    i <= Math.min(state.fronts.length - 1, centerIdx + windowRays);
+    i++
+  ) {
     const az = i * stepRad;
     const rayFronts = state.fronts[i];
     if (!rayFronts) continue;
 
     for (const front of rayFronts) {
-      const dDist = peak.distanceM < front.distM
-        ? front.distM - peak.distanceM
-        : peak.distanceM > front.distEndM
-          ? peak.distanceM - front.distEndM
-          : 0;
+      const dDist =
+        peak.distanceM < front.distM
+          ? front.distM - peak.distanceM
+          : peak.distanceM > front.distEndM
+            ? peak.distanceM - front.distEndM
+            : 0;
       if (dDist > distTolerance) continue;
 
       const dAz = Math.abs(wrapAngle(az - peak.azimuthRad));
       const score =
-        -(dDist / distTolerance) * 0.4
-        - (dAz / windowRad) * 0.3
-        + (front.elevMaxRad / 0.3) * 0.3;
+        -(dDist / distTolerance) * 0.4 -
+        (dAz / windowRad) * 0.3 +
+        (front.elevMaxRad / 0.3) * 0.3;
 
       if (!best || score > best.score) {
         best = { az, elev: front.elevMaxRad, score };
@@ -674,7 +717,7 @@ function findPeakMarkerPosition(
 }
 
 function cardinal(deg: number): string {
-  const names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] as const;
+  const names = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"] as const;
   return `${t(names[deg / 45])} ${deg}°`;
 }
 

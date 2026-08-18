@@ -6,8 +6,11 @@
  * синтетический, по тому же профилю рельефа — настоящая камера не нужна.
  */
 
-import { describe, it, expect } from 'vitest';
-import { matchSkylineCoarse, type CoarseMatchOptions } from '../src/core/skyline-match';
+import { describe, it, expect } from "vitest";
+import {
+  matchSkylineCoarse,
+  type CoarseMatchOptions,
+} from "../src/core/skyline-match";
 
 const deg = (d: number): number => (d * Math.PI) / 180;
 const RAYS = 3600;
@@ -60,8 +63,8 @@ function opts(azGuess: number, frameElev: number[]): CoarseMatchOptions {
   };
 }
 
-describe('грубое совмещение по полному кругу', () => {
-  it('компас врёт на 180°: лучшая гипотеза — всё равно истинное окно', () => {
+describe("грубое совмещение по полному кругу", () => {
+  it("компас врёт на 180°: лучшая гипотеза — всё равно истинное окно", () => {
     // Ответ модуля — азимут в координатах ДОГАДКИ (leftAzRad компаса):
     // поправка = ответ − догадка. Компас врёт на 180° → ждём поправку −180°.
     const azTrue = deg(60);
@@ -73,12 +76,12 @@ describe('грубое совмещение по полному кругу', () 
     // от догадки компаса: именно в этом смысл поиска по полному кругу
     const gotDeg = ((hyps[0].centerAzRad * 180) / Math.PI + 360) % 360;
     const azTrueDeg = (azTrue * 180) / Math.PI;
-    const errDeg = Math.abs(((gotDeg - (azTrueDeg) + 540) % 360) - 180);
+    const errDeg = Math.abs(((gotDeg - azTrueDeg + 540) % 360) - 180);
     expect(errDeg).toBeLessThan(2);
     expect(hyps[0].score).toBeGreaterThan(0.9);
   });
 
-  it('находит кадр при ошибке компаса в 90°', () => {
+  it("находит кадр при ошибке компаса в 90°", () => {
     const azTrue = deg(200);
     const frame = frameProfile(azTrue, 0);
     const hyps = matchSkylineCoarse(opts(azTrue + deg(90), frame));
@@ -94,7 +97,7 @@ describe('грубое совмещение по полному кругу', () 
     expect(found).toBe(true);
   });
 
-  it('ошибка наклона не мешает: коррелируется форма, а не высоты', () => {
+  it("ошибка наклона не мешает: коррелируется форма, а не высоты", () => {
     const azTrue = deg(120);
     // Камера наклонена на 3° вверх относительно того, что думает приложение
     const frame = frameProfile(azTrue, deg(3));
@@ -102,23 +105,23 @@ describe('грубое совмещение по полному кругу', () 
 
     const gotDeg = ((hyps[0].centerAzRad * 180) / Math.PI + 360) % 360;
     const azTrueDeg = (azTrue * 180) / Math.PI;
-    const errDeg = Math.abs(((gotDeg - (azTrueDeg) + 540) % 360) - 180);
+    const errDeg = Math.abs(((gotDeg - azTrueDeg + 540) % 360) - 180);
     expect(errDeg).toBeLessThan(2);
   });
 
-  it('плоский кадр (равнина/туман) — честный отказ, а не мусор', () => {
+  it("плоский кадр (равнина/туман) — честный отказ, а не мусор", () => {
     const flat = Array.from({ length: 160 }, () => deg(1));
     expect(matchSkylineCoarse(opts(0, flat))).toEqual([]);
   });
 
-  it('почти все колонки без границы — отказ', () => {
+  it("почти все колонки без границы — отказ", () => {
     const mostlyNaN = Array.from({ length: 160 }, (_, i) =>
       i < 20 ? deg(2) + Math.sin(i) * deg(1) : NaN,
     );
     expect(matchSkylineCoarse(opts(0, mostlyNaN))).toEqual([]);
   });
 
-  it('рождает гипотезы с мерой однозначности против второго разного пика', () => {
+  it("рождает гипотезы с мерой однозначности против второго разного пика", () => {
     const frame = frameProfile(deg(60), 0);
     const hyps = matchSkylineCoarse(opts(deg(100), frame));
     expect(hyps.length).toBeGreaterThan(0);

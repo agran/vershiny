@@ -17,7 +17,7 @@
  * где бы он ни был. Отсюда флаг `trusted`.
  */
 
-import { distanceM, isValidLatLon, type LatLon } from './geo';
+import { distanceM, isValidLatLon, type LatLon } from "./geo";
 
 /** Приют 11 (4130 м) — сверено с Terrarium: отметка ~4134 м */
 export const FALLBACK_POSITION: LatLon = { lat: 43.318, lon: 42.458 };
@@ -33,7 +33,7 @@ export const ACCURATE_TIMEOUT_MS = 60_000;
 /** Ближе этого уточнение картины не меняет — пересчитывать незачем */
 export const REFINE_MIN_MOVE_M = 500;
 
-const STORAGE_KEY = 'vershiny-position';
+const STORAGE_KEY = "vershiny-position";
 
 export interface PositionFix {
   pos: LatLon;
@@ -60,7 +60,10 @@ export interface PositionDeps {
  */
 export function rememberPosition(pos: LatLon): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ lat: pos.lat, lon: pos.lon }));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ lat: pos.lat, lon: pos.lon }),
+    );
   } catch {
     // Без хранилища не будет быстрого старта — на этом всё, работать можно
   }
@@ -81,7 +84,7 @@ export function lastKnownPosition(): LatLon | null {
 
 function geolocationOf(deps: Partial<PositionDeps>): Geolocation | null {
   if (deps.geolocation !== undefined) return deps.geolocation;
-  return 'geolocation' in navigator ? navigator.geolocation : null;
+  return "geolocation" in navigator ? navigator.geolocation : null;
 }
 
 /**
@@ -119,16 +122,18 @@ function requestFix(
  * Порядок: ссылка → готовый фикс системы → точка прошлого запуска →
  * ожидание спутников (только если показать больше нечего) → запасная точка.
  */
-export async function getPosition(deps: Partial<PositionDeps> = {}): Promise<PositionFix> {
+export async function getPosition(
+  deps: Partial<PositionDeps> = {},
+): Promise<PositionFix> {
   const search = deps.search ?? location.search;
   const geolocation = geolocationOf(deps);
 
   // Отладка и обмен ссылками: ?lat=43.318&lon=42.458 (Приют 11).
   // Диапазон проверяем: ?lat=999 иначе молча ломает весь ray-marching
   const q = new URLSearchParams(search);
-  const lat = Number(q.get('lat'));
-  const lon = Number(q.get('lon'));
-  if (q.get('lat') && q.get('lon') && isValidLatLon({ lat, lon })) {
+  const lat = Number(q.get("lat"));
+  const lon = Number(q.get("lon"));
+  if (q.get("lat") && q.get("lon") && isValidLatLon({ lat, lon })) {
     // Точку задал человек — она настоящая не меньше спутниковой
     return { pos: { lat, lon }, trusted: true };
   }
@@ -148,7 +153,11 @@ export async function getPosition(deps: Partial<PositionDeps> = {}): Promise<Pos
   // именно она и заставляет ждать спутники
   const quick = await requestFix(
     geolocation,
-    { enableHighAccuracy: false, maximumAge: CACHE_MAX_AGE_MS, timeout: QUICK_TIMEOUT_MS },
+    {
+      enableHighAccuracy: false,
+      maximumAge: CACHE_MAX_AGE_MS,
+      timeout: QUICK_TIMEOUT_MS,
+    },
     QUICK_TIMEOUT_MS,
   );
   if (quick) return { pos: quick, trusted: true };
@@ -188,7 +197,11 @@ export async function getFreshPosition(
   // Готовый фикс — как в getPosition(): мгновенно и достаточно точен
   const quick = await requestFix(
     geolocation,
-    { enableHighAccuracy: false, maximumAge: CACHE_MAX_AGE_MS, timeout: QUICK_TIMEOUT_MS },
+    {
+      enableHighAccuracy: false,
+      maximumAge: CACHE_MAX_AGE_MS,
+      timeout: QUICK_TIMEOUT_MS,
+    },
     QUICK_TIMEOUT_MS,
   );
   if (quick) return quick;

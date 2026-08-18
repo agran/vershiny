@@ -71,7 +71,9 @@ describe("shareUrl", () => {
 
   it("без Web Share и Clipboard копирует через execCommand", async () => {
     stubClipboard(undefined);
-    document.execCommand = vi.fn().mockReturnValue(true) as typeof document.execCommand;
+    document.execCommand = vi
+      .fn()
+      .mockReturnValue(true) as typeof document.execCommand;
 
     await expect(shareUrl({ title: "Вершины", url: URL })).resolves.toBe(
       "copied",
@@ -80,7 +82,9 @@ describe("shareUrl", () => {
 
   it("ничего недоступно — failed", async () => {
     stubClipboard(undefined);
-    document.execCommand = vi.fn().mockReturnValue(false) as typeof document.execCommand;
+    document.execCommand = vi
+      .fn()
+      .mockReturnValue(false) as typeof document.execCommand;
 
     await expect(shareUrl({ title: "Вершины", url: URL })).resolves.toBe(
       "failed",

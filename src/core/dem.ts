@@ -179,13 +179,14 @@ export class DemSampler {
         // не было» (тайлы совместимы, чистить нельзя) от настоящей смены
         // содержимого
         const current = indexVersion(this.index);
-        const stored = await db.getDemVersion(this.storePrefix).catch(() => undefined);
+        const stored = await db
+          .getDemVersion(this.storePrefix)
+          .catch(() => undefined);
         if (stored !== current) {
           const previous = stored
             ? undefined
             : ((await db.getDemIndex(this.baseUrl).catch(() => undefined)) as
-                | DemIndex
-                | undefined);
+                DemIndex | undefined);
           const compatibleLegacy =
             !stored && previous && indexVersion(previous) === current;
           if (!compatibleLegacy) {
@@ -211,8 +212,11 @@ export class DemSampler {
       // сверка и чистка случатся при первом онлайне
       if (db) {
         const v = indexVersion(this.index);
-        const stored = await db.getDemVersion(this.storePrefix).catch(() => undefined);
-        if (!stored) await db.saveDemVersion(this.storePrefix, v).catch(() => {});
+        const stored = await db
+          .getDemVersion(this.storePrefix)
+          .catch(() => undefined);
+        if (!stored)
+          await db.saveDemVersion(this.storePrefix, v).catch(() => {});
       }
     }
     this.coverage = this.index.lods.map((lod) =>

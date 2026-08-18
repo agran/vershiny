@@ -12,9 +12,9 @@
  * Если экстрактор улучшается, пороги надо ужимать следом.
  */
 
-import { describe, it, expect } from 'vitest';
-import { extractSkyline } from '../src/core/skyline';
-import { SkylineTracker } from '../src/core/skyline-track';
+import { describe, it, expect } from "vitest";
+import { extractSkyline } from "../src/core/skyline";
+import { SkylineTracker } from "../src/core/skyline-track";
 
 const GRID_W = 160;
 const GRID_H = 120;
@@ -201,8 +201,10 @@ function renderWeatherFrame(
     const idx = az / step;
     const i0 = Math.floor(idx);
     const f = idx - i0;
-    const a = horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
-    const b = horizon[((i0 + 1) % horizon.length + horizon.length) % horizon.length];
+    const a =
+      horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
+    const b =
+      horizon[(((i0 + 1) % horizon.length) + horizon.length) % horizon.length];
     const elev = a + (b - a) * f;
     const yFrac = VIEW.horizonFrac - (elev - tiltTrue) / VIEW.fovVRad;
     const boundary = yFrac * FRAME_H;
@@ -216,7 +218,10 @@ function renderWeatherFrame(
     // Снежное поле в этой колонке: интервал строк ниже гребня
     const snow =
       !!weather.snowFields && hash2(gx, 777) < 0.35
-        ? { from: boundary + 6 + 30 * hash2(gx, 778), to: boundary + 26 + 40 * hash2(gx, 779) }
+        ? {
+            from: boundary + 6 + 30 * hash2(gx, 778),
+            to: boundary + 26 + 40 * hash2(gx, 779),
+          }
         : null;
 
     for (let y = 0; y < FRAME_H; y++) {
@@ -232,9 +237,12 @@ function renderWeatherFrame(
         b = weather.skyTop[2] + (weather.skyBottom[2] - weather.skyTop[2]) * t;
       } else {
         // Земля, замешанная в цвет неба у горизонта (дымка)
-        r = weather.ground[0] + (weather.skyBottom[0] - weather.ground[0]) * haze;
-        g = weather.ground[1] + (weather.skyBottom[1] - weather.ground[1]) * haze;
-        b = weather.ground[2] + (weather.skyBottom[2] - weather.ground[2]) * haze;
+        r =
+          weather.ground[0] + (weather.skyBottom[0] - weather.ground[0]) * haze;
+        g =
+          weather.ground[1] + (weather.skyBottom[1] - weather.ground[1]) * haze;
+        b =
+          weather.ground[2] + (weather.skyBottom[2] - weather.ground[2]) * haze;
         // Пятнистая текстура леса/скал
         const tex = (hash2(x >> 2, y >> 2) - 0.5) * 2 * groundTex;
         r += tex;
@@ -316,7 +324,9 @@ function evaluate(profile: Float32Array, truth: Float32Array): Metrics {
   errs.sort((a, b) => a - b);
   return {
     median: errs.length ? errs[errs.length >> 1] : Infinity,
-    p95: errs.length ? errs[Math.min(errs.length - 1, Math.floor(errs.length * 0.95))] : Infinity,
+    p95: errs.length
+      ? errs[Math.min(errs.length - 1, Math.floor(errs.length * 0.95))]
+      : Infinity,
     falseNaN: nTrue ? falseNaN / nTrue : 0,
     falsePos: nVoid ? falsePos / nVoid : 0,
   };
@@ -336,18 +346,43 @@ interface Expectation {
 // кроме сумерек на крутом рельефе — p95 ≈ 10 из-за колонок на склонах пиков
 // у края кадра) и ужаты с запасом ~×2. Улучшил экстрактор — ужми пороги.
 const CASES: { name: string; weather: Weather; expect: Expectation }[] = [
-  { name: 'ясно', weather: WEATHER.clear, expect: { median: 1.5, p95: 2.5, falseNaN: 0.05 } },
-  { name: 'дымка', weather: WEATHER.haze, expect: { median: 1.5, p95: 2.5, falseNaN: 0.3 } },
-  { name: 'закат', weather: WEATHER.sunset, expect: { median: 1.5, p95: 2.5, falseNaN: 0.1 } },
-  { name: 'пасмурно со снежными полями', weather: WEATHER.overcast, expect: { median: 1.5, p95: 5, falseNaN: 0.4 } },
-  { name: 'сумерки с фонарями', weather: WEATHER.twilight, expect: { median: 1.5, p95: 12, falseNaN: 0.2 } },
+  {
+    name: "ясно",
+    weather: WEATHER.clear,
+    expect: { median: 1.5, p95: 2.5, falseNaN: 0.05 },
+  },
+  {
+    name: "дымка",
+    weather: WEATHER.haze,
+    expect: { median: 1.5, p95: 2.5, falseNaN: 0.3 },
+  },
+  {
+    name: "закат",
+    weather: WEATHER.sunset,
+    expect: { median: 1.5, p95: 2.5, falseNaN: 0.1 },
+  },
+  {
+    name: "пасмурно со снежными полями",
+    weather: WEATHER.overcast,
+    expect: { median: 1.5, p95: 5, falseNaN: 0.4 },
+  },
+  {
+    name: "сумерки с фонарями",
+    weather: WEATHER.twilight,
+    expect: { median: 1.5, p95: 12, falseNaN: 0.2 },
+  },
 ];
 
-describe('экстрактор линии неба: погодная матрица', () => {
+describe("экстрактор линии неба: погодная матрица", () => {
   for (const c of CASES) {
     for (const [reliefName, horizon] of Object.entries(RELIEFS)) {
       it(`${c.name} / ${reliefName}`, () => {
-        const { rgba, truth } = renderWeatherFrame(horizon, deg(60), 0, c.weather);
+        const { rgba, truth } = renderWeatherFrame(
+          horizon,
+          deg(60),
+          0,
+          c.weather,
+        );
         const profile = extractSkyline(rgba, FRAME_W, FRAME_H);
         const m = evaluate(profile, truth);
         expect(m.median).toBeLessThanOrEqual(c.expect.median);
@@ -357,8 +392,13 @@ describe('экстрактор линии неба: погодная матри�
     }
   }
 
-  it('против солнца: засвеченная половина — NaN, теневая — точная', () => {
-    const { rgba, truth } = renderWeatherFrame(RELIEFS.base, deg(60), 0, WEATHER.againstSun);
+  it("против солнца: засвеченная половина — NaN, теневая — точная", () => {
+    const { rgba, truth } = renderWeatherFrame(
+      RELIEFS.base,
+      deg(60),
+      0,
+      WEATHER.againstSun,
+    );
     const profile = extractSkyline(rgba, FRAME_W, FRAME_H);
     const m = evaluate(profile, truth);
     // Засвеченная половина: мусора (ложных не-NaN) почти нет
@@ -369,8 +409,8 @@ describe('экстрактор линии неба: погодная матри�
   });
 });
 
-describe('облако над гребнем: временна́я стабилизация', () => {
-  it('ползущее облако уходит в NaN, гребень сходится за 8 кадров', () => {
+describe("облако над гребнем: временна́я стабилизация", () => {
+  it("ползущее облако уходит в NaN, гребень сходится за 8 кадров", () => {
     const horizon = RELIEFS.base;
     const step = (2 * Math.PI) / horizon.length;
     const azTrue = deg(60);
@@ -384,24 +424,37 @@ describe('облако над гребнем: временна́я стабил�
       const idx = az / step;
       const i0 = Math.floor(idx);
       const f = idx - i0;
-      const a = horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
-      const b = horizon[((i0 + 1) % horizon.length + horizon.length) % horizon.length];
+      const a =
+        horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
+      const b =
+        horizon[
+          (((i0 + 1) % horizon.length) + horizon.length) % horizon.length
+        ];
       truth[gx] = VIEW.horizonFrac - (a + (b - a) * f) / VIEW.fovVRad;
       if (gx < GRID_W * 0.4) truth[gx] = NaN; // гребень закрыт облаком
     }
 
-    let out: ReturnType<SkylineTracker['push']> | null = null;
+    let out: ReturnType<SkylineTracker["push"]> | null = null;
     for (let k = 0; k < 8; k++) {
       // Кадр: как clear, но в левой трети гребень закрыт облаком; нижний край
       // облака ползёт по высоте от кадра к кадру — его и ловит покадровый
       // экстрактор, и только временна́я дисперсия его отбрасывает
-      const { rgba } = renderWeatherFrame(horizon, azTrue, 0, WEATHER.clear, 100 + k);
+      const { rgba } = renderWeatherFrame(
+        horizon,
+        azTrue,
+        0,
+        WEATHER.clear,
+        100 + k,
+      );
       // Облачный слой: выше истинного гребня, край ползёт
       const cloudShift = 0.05 * Math.sin((2 * Math.PI * k) / 8);
       for (let gx = 0; gx < GRID_W * 0.4; gx++) {
         for (let px = gx * 2; px < gx * 2 + 2; px++) {
           // нижний край облака: на 0.1 доли кадра выше истинного гребня + ползание
-          const elev = elevAt(horizon, azTrue + ((px + 0.5) / FRAME_W - 0.5) * VIEW.fovRad);
+          const elev = elevAt(
+            horizon,
+            azTrue + ((px + 0.5) / FRAME_W - 0.5) * VIEW.fovRad,
+          );
           const trueY = (VIEW.horizonFrac - elev / VIEW.fovVRad) * FRAME_H;
           const edge = trueY - (0.1 - cloudShift) * FRAME_H;
           for (let y = 0; y < FRAME_H; y++) {

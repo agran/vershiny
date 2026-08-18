@@ -964,8 +964,7 @@ function setupMapButton(): void {
         const listener = mapOptions.onPeaksAdded;
         if (!listener) return; // карта уже закрыта — докладывать некому
         const peaks = (await getPeaks(region).catch(() => undefined)) as
-          | PeaksFile["peaks"]
-          | undefined;
+          PeaksFile["peaks"] | undefined;
         if (peaks?.length) {
           annotateIsolation(peaks); // значимость вершин нужна отбору слоя
           listener(peaks);
@@ -1205,8 +1204,7 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
   const offline = await Promise.all(
     downloaded.map(async (region) => {
       const peaks = (await getPeaks(region).catch(() => undefined)) as
-        | PeaksFile["peaks"]
-        | undefined;
+        PeaksFile["peaks"] | undefined;
       return peaks ? searchPeaks(query, peaks, region) : [];
     }),
   );
@@ -1226,8 +1224,7 @@ async function findPeaks(query: string): Promise<SearchHit[]> {
   ];
   for (let i = 0; i < downloaded.length; i++) {
     const peaks = (await getPeaks(downloaded[i]).catch(() => undefined)) as
-      | PeaksFile["peaks"]
-      | undefined;
+      PeaksFile["peaks"] | undefined;
     if (peaks) fuzzy.push(searchFuzzy(query, peaks, downloaded[i]));
   }
   if (index.length) fuzzy.push(searchFuzzy(query, index, null));

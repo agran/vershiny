@@ -8,16 +8,16 @@
  * стрелки на ползунках настроек не работали по той же причине.
  */
 
-import { describe, it, expect } from 'vitest';
-import { isTypingTarget } from '../src/ui/keys';
+import { describe, it, expect } from "vitest";
+import { isTypingTarget } from "../src/ui/keys";
 
-describe('ввод текста против горячих клавиш', () => {
-  it('поле поиска и ползунок настроек — это ввод', () => {
-    const input = document.createElement('input');
-    const range = document.createElement('input');
-    range.type = 'range';
-    const area = document.createElement('textarea');
-    const select = document.createElement('select');
+describe("ввод текста против горячих клавиш", () => {
+  it("поле поиска и ползунок настроек — это ввод", () => {
+    const input = document.createElement("input");
+    const range = document.createElement("input");
+    range.type = "range";
+    const area = document.createElement("textarea");
+    const select = document.createElement("select");
 
     expect(isTypingTarget(input)).toBe(true);
     expect(isTypingTarget(range)).toBe(true);
@@ -25,15 +25,15 @@ describe('ввод текста против горячих клавиш', () =>
     expect(isTypingTarget(select)).toBe(true);
   });
 
-  it('холст панорамы и пустая цель — не ввод', () => {
-    expect(isTypingTarget(document.createElement('canvas'))).toBe(false);
+  it("холст панорамы и пустая цель — не ввод", () => {
+    expect(isTypingTarget(document.createElement("canvas"))).toBe(false);
     expect(isTypingTarget(document.body)).toBe(false);
     expect(isTypingTarget(null)).toBe(false);
   });
 
-  it('contenteditable тоже считается вводом', () => {
-    const div = document.createElement('div');
-    Object.defineProperty(div, 'isContentEditable', { value: true });
+  it("contenteditable тоже считается вводом", () => {
+    const div = document.createElement("div");
+    Object.defineProperty(div, "isContentEditable", { value: true });
     expect(isTypingTarget(div)).toBe(true);
   });
 });

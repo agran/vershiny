@@ -111,7 +111,11 @@ function countDefined(profile: Float32Array): number {
  * по колонкам, где оба значения есть. Дрожание рук — единицы колонок,
  * поэтому прямой перебор малого окна вместо БПФ.
  */
-function estimateShift(raw: Float32Array, ref: Float32Array, maxShift: number): number {
+function estimateShift(
+  raw: Float32Array,
+  ref: Float32Array,
+  maxShift: number,
+): number {
   let bestS = 0;
   let bestErr = Infinity;
   for (let s = -maxShift; s <= maxShift; s++) {

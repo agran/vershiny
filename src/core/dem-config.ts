@@ -7,14 +7,16 @@
  */
 
 /** Внешнее хранилище пирамиды: agran/vershiny-dem → GitHub Pages */
-export const GLOBAL_DEM_URL = 'https://agran.github.io/vershiny-dem/tiles/global';
+export const GLOBAL_DEM_URL =
+  "https://agran.github.io/vershiny-dem/tiles/global";
 
 /**
  * Детальный слой (~87 м, квант 1 м) для регионов приоритета 1–2:
  * agran/vershiny-dem-hi → GitHub Pages. Разреженный: вне их bbox тайлов нет,
  * клиент не тратит запросы (битсет coverage) и уходит на базовую пирамиду.
  */
-export const GLOBAL_DEM_HI_URL = 'https://agran.github.io/vershiny-dem-hi/tiles/hi';
+export const GLOBAL_DEM_HI_URL =
+  "https://agran.github.io/vershiny-dem-hi/tiles/hi";
 
 /**
  * Кандидаты на роль локального патча, в порядке убывания детализации:
@@ -49,8 +51,8 @@ export function globalDemCandidates(base: string): string[] {
  * и смена её ключей обнулила бы всё уже скачанное на устройствах.
  */
 export function demStorePrefix(baseUrl: string): string {
-  const name = baseUrl.replace(/\/+$/, '').split('/').pop() ?? '';
-  return name && name !== 'global' ? `${name}/` : '';
+  const name = baseUrl.replace(/\/+$/, "").split("/").pop() ?? "";
+  return name && name !== "global" ? `${name}/` : "";
 }
 
 /**

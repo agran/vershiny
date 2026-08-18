@@ -10,5 +10,7 @@
 
 export const root: typeof globalThis = (() => {
   if (typeof globalThis !== "undefined") return globalThis;
-  return (typeof self !== "undefined" ? self : window) as unknown as typeof globalThis;
+  return (typeof self !== "undefined"
+    ? self
+    : window) as unknown as typeof globalThis;
 })();

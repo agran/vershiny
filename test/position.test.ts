@@ -9,7 +9,7 @@
  * держать человека всё это время на заставке нельзя.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   getPosition,
   getFreshPosition,
@@ -22,7 +22,7 @@ import {
   GPS_TIMEOUT_MS,
   ACCURATE_TIMEOUT_MS,
   REFINE_MIN_MOVE_M,
-} from '../src/core/position';
+} from "../src/core/position";
 
 const ALPS = { latitude: 46.5, longitude: 8.0 };
 
@@ -41,12 +41,14 @@ function geo(behaviour: {
     getCurrentPosition: (ok, fail, options) => {
       const wantsFresh = options?.enableHighAccuracy === true;
       if (!wantsFresh) {
-        if (behaviour.cached) ok({ coords: behaviour.cached } as GeolocationPosition);
+        if (behaviour.cached)
+          ok({ coords: behaviour.cached } as GeolocationPosition);
         else fail?.({ code: 2 } as GeolocationPositionError);
         return;
       }
       if (behaviour.preciseSilent) return;
-      if (behaviour.precise) ok({ coords: behaviour.precise } as GeolocationPosition);
+      if (behaviour.precise)
+        ok({ coords: behaviour.precise } as GeolocationPosition);
       else fail?.({ code: 1 } as GeolocationPositionError);
     },
     watchPosition: () => 0,
@@ -62,10 +64,10 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe('положение наблюдателя', () => {
-  it('координаты из ссылки — настоящие: их задал человек', async () => {
+describe("положение наблюдателя", () => {
+  it("координаты из ссылки — настоящие: их задал человек", async () => {
     const fix = await getPosition({
-      search: '?lat=43.35&lon=42.44',
+      search: "?lat=43.35&lon=42.44",
       geolocation: geo({ cached: ALPS }),
     });
 
@@ -73,10 +75,10 @@ describe('положение наблюдателя', () => {
     expect(fix.trusted).toBe(true);
   });
 
-  it('мусор в ссылке не принимается за положение', async () => {
+  it("мусор в ссылке не принимается за положение", async () => {
     // ?lat=999 иначе молча ломает весь ray-marching
     const fix = await getPosition({
-      search: '?lat=999&lon=42.44',
+      search: "?lat=999&lon=42.44",
       geolocation: geo({ cached: ALPS }),
     });
 
@@ -84,14 +86,17 @@ describe('положение наблюдателя', () => {
     expect(fix.trusted).toBe(true);
   });
 
-  it('готовый фикс системы принимается сразу и считается настоящим', async () => {
-    const fix = await getPosition({ search: '', geolocation: geo({ cached: ALPS }) });
+  it("готовый фикс системы принимается сразу и считается настоящим", async () => {
+    const fix = await getPosition({
+      search: "",
+      geolocation: geo({ cached: ALPS }),
+    });
 
     expect(fix.pos).toEqual({ lat: 46.5, lon: 8.0 });
     expect(fix.trusted).toBe(true);
   });
 
-  it('с точкой прошлого запуска старт мгновенный: спутников не ждём вовсе', async () => {
+  it("с точкой прошлого запуска старт мгновенный: спутников не ждём вовсе", async () => {
     // Ровно случай «запустил в горах без сети»: A-GPS недоступен, холодный
     // фикс — это минуты, и всё это время висела заставка. Ждать нечего:
     // вид с прошлой стоянки уже есть, а настоящее положение подставит
@@ -102,7 +107,7 @@ describe('положение наблюдателя', () => {
     // Время заморожено и ни разу не сдвинуто: если бы старт ждал ответа
     // геолокации, промис не разрешился бы вовсе и тест повис
     const fix = await getPosition({
-      search: '',
+      search: "",
       geolocation: geo({ cached: null, preciseSilent: true }),
     });
 
@@ -111,10 +116,10 @@ describe('положение наблюдателя', () => {
     expect(fix.trusted).toBe(false);
   });
 
-  it('на первом запуске показывать нечего — ждём спутники', async () => {
+  it("на первом запуске показывать нечего — ждём спутники", async () => {
     vi.useFakeTimers();
     const pending = getPosition({
-      search: '',
+      search: "",
       geolocation: geo({ cached: null, precise: ALPS }),
     });
 
@@ -125,10 +130,10 @@ describe('положение наблюдателя', () => {
     expect(fix.trusted).toBe(true);
   });
 
-  it('первый запуск без спутников вовсе — запасная точка без доверия', async () => {
+  it("первый запуск без спутников вовсе — запасная точка без доверия", async () => {
     vi.useFakeTimers();
     const pending = getPosition({
-      search: '',
+      search: "",
       geolocation: geo({ cached: null, preciseSilent: true }),
     });
 
@@ -139,24 +144,24 @@ describe('положение наблюдателя', () => {
     expect(fix.trusted).toBe(false);
   });
 
-  it('без самой геолокации берётся прошлая точка, а не Приют 11', async () => {
+  it("без самой геолокации берётся прошлая точка, а не Приют 11", async () => {
     rememberPosition({ lat: 49.8, lon: 86.6 });
-    const fix = await getPosition({ search: '', geolocation: null });
+    const fix = await getPosition({ search: "", geolocation: null });
 
     expect(fix.pos).toEqual({ lat: 49.8, lon: 86.6 });
     expect(fix.trusted).toBe(false);
   });
 
-  it('без геолокации и без прошлой точки — Приют 11', async () => {
-    const fix = await getPosition({ search: '', geolocation: null });
+  it("без геолокации и без прошлой точки — Приют 11", async () => {
+    const fix = await getPosition({ search: "", geolocation: null });
 
     expect(fix.pos).toEqual(FALLBACK_POSITION);
     expect(fix.trusted).toBe(false);
   });
 });
 
-describe('свежий фикс по кнопке «К моему положению»', () => {
-  it('точка прошлого запуска НЕ подставляется: идём к спутникам', async () => {
+describe("свежий фикс по кнопке «К моему положению»", () => {
+  it("точка прошлого запуска НЕ подставляется: идём к спутникам", async () => {
     // Регресс: getPosition() при наличии запомненной точки возвращал её с
     // trusted=false, не спросив GPS вовсе, — и кнопка «К моему положению»
     // кричала об ошибке при полностью рабочей геолокации после каждого
@@ -167,14 +172,14 @@ describe('свежий фикс по кнопке «К моему положен
     expect(pos).toEqual({ lat: 46.5, lon: 8.0 }); // Альпы, а не вчерашний Приют
   });
 
-  it('готовый фикс системы годится: кнопка отвечает мгновенно', async () => {
+  it("готовый фикс системы годится: кнопка отвечает мгновенно", async () => {
     vi.useFakeTimers();
     const pending = getFreshPosition({ geolocation: geo({ cached: ALPS }) });
     // Таймеры не сдвигались: промис разрешился синхронно, спутников не ждали
     await expect(pending).resolves.toEqual({ lat: 46.5, lon: 8.0 });
   });
 
-  it('без готового фикса дожидается спутников', async () => {
+  it("без готового фикса дожидается спутников", async () => {
     vi.useFakeTimers();
     const pending = getFreshPosition({
       geolocation: geo({ cached: null, precise: ALPS }),
@@ -183,7 +188,7 @@ describe('свежий фикс по кнопке «К моему положен
     await expect(pending).resolves.toEqual({ lat: 46.5, lon: 8.0 });
   });
 
-  it('спутники молчат — честный null, а не вчерашняя точка', async () => {
+  it("спутники молчат — честный null, а не вчерашняя точка", async () => {
     vi.useFakeTimers();
     rememberPosition({ lat: 43.35, lon: 42.44 });
     const pending = getFreshPosition({
@@ -193,14 +198,14 @@ describe('свежий фикс по кнопке «К моему положен
     await expect(pending).resolves.toBeNull();
   });
 
-  it('без геолокации вовсе — null, запасной точки нет', async () => {
+  it("без геолокации вовсе — null, запасной точки нет", async () => {
     rememberPosition({ lat: 49.8, lon: 86.6 });
     await expect(getFreshPosition({ geolocation: null })).resolves.toBeNull();
   });
 });
 
-describe('уточнение по спутникам', () => {
-  it('дожидается настоящего положения дольше, чем стартовый запрос', async () => {
+describe("уточнение по спутникам", () => {
+  it("дожидается настоящего положения дольше, чем стартовый запрос", async () => {
     vi.useFakeTimers();
     // Держим обработчик в объекте: иначе анализ потока считает, что в
     // переменной всё ещё null — присваивание происходит внутри колбэка
@@ -221,7 +226,7 @@ describe('уточнение по спутникам', () => {
     await expect(pending).resolves.toEqual({ lat: 46.5, lon: 8.0 });
   });
 
-  it('молчание спутников не оставляет висеть навсегда', async () => {
+  it("молчание спутников не оставляет висеть навсегда", async () => {
     vi.useFakeTimers();
     const pending = awaitAccuratePosition({
       geolocation: geo({ cached: null, preciseSilent: true }),
@@ -231,11 +236,13 @@ describe('уточнение по спутникам', () => {
     await expect(pending).resolves.toBeNull();
   });
 
-  it('без геолокации уточнять нечем', async () => {
-    await expect(awaitAccuratePosition({ geolocation: null })).resolves.toBeNull();
+  it("без геолокации уточнять нечем", async () => {
+    await expect(
+      awaitAccuratePosition({ geolocation: null }),
+    ).resolves.toBeNull();
   });
 
-  it('пересчёт только при заметном сдвиге', () => {
+  it("пересчёт только при заметном сдвиге", () => {
     const here = { lat: 43.35, lon: 42.44 };
     const nearby = { lat: 43.3505, lon: 42.44 }; // ~55 м
     const far = { lat: 43.36, lon: 42.44 }; // ~1.1 км
@@ -246,21 +253,21 @@ describe('уточнение по спутникам', () => {
   });
 });
 
-describe('память о последней точке', () => {
-  it('переживает перезапуск', () => {
+describe("память о последней точке", () => {
+  it("переживает перезапуск", () => {
     rememberPosition({ lat: 43.35, lon: 42.44 });
     expect(lastKnownPosition()).toEqual({ lat: 43.35, lon: 42.44 });
   });
 
-  it('мусор в хранилище не принимается за положение', () => {
-    localStorage.setItem('vershiny-position', '{"lat":999,"lon":"нет"}');
+  it("мусор в хранилище не принимается за положение", () => {
+    localStorage.setItem("vershiny-position", '{"lat":999,"lon":"нет"}');
     expect(lastKnownPosition()).toBeNull();
 
-    localStorage.setItem('vershiny-position', 'не json');
+    localStorage.setItem("vershiny-position", "не json");
     expect(lastKnownPosition()).toBeNull();
   });
 
-  it('пустое хранилище — просто нет точки', () => {
+  it("пустое хранилище — просто нет точки", () => {
     expect(lastKnownPosition()).toBeNull();
   });
 });

@@ -1,26 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-  <meta name="theme-color" content="#1a1a2e" />
-  <meta name="description" content="Панорама горизонта с подписями вершин: что видно с того места, где вы стоите. Работает офлайн." />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="icon" href="./favicon.png" type="image/png" />
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
-  <!-- Полноэкранный запуск с домашнего экрана. Apple-вариант оставлен для
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="theme-color" content="#1a1a2e" />
+    <meta
+      name="description"
+      content="Панорама горизонта с подписями вершин: что видно с того места, где вы стоите. Работает офлайн."
+    />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <!-- Полноэкранный запуск с домашнего экрана. Apple-вариант оставлен для
        старых iOS: там понимают только его, а Chrome на него ругается в
        консоли как на устаревший — поэтому рядом стоит стандартный -->
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Вершины" />
-  <title>Вершины — панорама гор / Vershiny — Mountain Panorama</title>
-  <style>
-    html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #1a1a2e; }
-    #app { position: fixed; inset: 0; }
-    #app canvas { display: block; width: 100%; height: 100%; touch-action: none; }
-    /*
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Вершины" />
+    <title>Вершины — панорама гор / Vershiny — Mountain Panorama</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #1a1a2e;
+      }
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+      #app canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+      /*
       Сообщения посреди экрана («Расчёт панорамы…», ошибки, результат
       совмещения с камерой). Плашка обязательна: текст ложится на что угодно —
       на снежный склон в кадре камеры, на гущу подписей вершин, на светлое
@@ -30,21 +54,32 @@
       плотная. pointer-events: none — сообщение не должно перехватывать
       нажатия по панораме под ним.
     */
-    #status {
-      position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      max-width: min(420px, calc(100vw - 48px));
-      padding: 10px 14px; border-radius: 12px;
-      background: rgba(13, 27, 42, 0.9); border: 1px solid #415a77;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-      color: #f1faee; font: 14px/1.45 system-ui, sans-serif; text-align: center;
-      pointer-events: none; white-space: pre-line;
-    }
-  </style>
-</head>
-<body>
-  <div id="app"></div>
-  <div id="status">Загрузка…</div>
-  <script type="module" src="/src/main.ts"></script>
-</body>
+      #status {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        max-width: min(420px, calc(100vw - 48px));
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(13, 27, 42, 0.9);
+        border: 1px solid #415a77;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        color: #f1faee;
+        font:
+          14px/1.45 system-ui,
+          sans-serif;
+        text-align: center;
+        pointer-events: none;
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="status">Загрузка…</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

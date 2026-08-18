@@ -50,7 +50,8 @@ export function azimuthRad(a: LatLon, b: LatLon): number {
   const dLon = toRad(b.lon - a.lon);
   const az = Math.atan2(
     Math.sin(dLon) * Math.cos(lat2),
-    Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon),
+    Math.cos(lat1) * Math.sin(lat2) -
+      Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon),
   );
   return az < 0 ? az + 2 * Math.PI : az;
 }
@@ -73,12 +74,17 @@ export function normalizeLon(deg: number): number {
  * Точка назначения: из origin по азимуту azRad на дистанцию distM.
  * Используется ray-marching'ом для выборки DEM вдоль луча.
  */
-export function destination(origin: LatLon, azRad: number, distM: number): LatLon {
+export function destination(
+  origin: LatLon,
+  azRad: number,
+  distM: number,
+): LatLon {
   const d = distM / EARTH_RADIUS_M;
   const lat1 = toRad(origin.lat);
   const lon1 = toRad(origin.lon);
   const lat2 = Math.asin(
-    Math.sin(lat1) * Math.cos(d) + Math.cos(lat1) * Math.sin(d) * Math.cos(azRad),
+    Math.sin(lat1) * Math.cos(d) +
+      Math.cos(lat1) * Math.sin(d) * Math.cos(azRad),
   );
   const lon2 =
     lon1 +

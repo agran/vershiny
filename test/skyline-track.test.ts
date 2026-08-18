@@ -7,8 +7,8 @@
  * NaN — то, чего покадровый экстрактор не умеет в принципе.
  */
 
-import { describe, it, expect } from 'vitest';
-import { SkylineTracker } from '../src/core/skyline-track';
+import { describe, it, expect } from "vitest";
+import { SkylineTracker } from "../src/core/skyline-track";
 
 const W = 160;
 
@@ -47,8 +47,8 @@ function medianErr(est: Float32Array, truth: Float32Array): number {
   return errs[errs.length >> 1] ?? Infinity;
 }
 
-describe('временна́я стабилизация профиля неба', () => {
-  it('одиночный кадр проходит как есть', () => {
+describe("временна́я стабилизация профиля неба", () => {
+  it("одиночный кадр проходит как есть", () => {
     const p = trueProfile();
     p[10] = NaN; // дыра должна сохраниться дырой
     const tracker = new SkylineTracker(8);
@@ -59,7 +59,7 @@ describe('временна́я стабилизация профиля неба'
     }
   });
 
-  it('выравнивает дрожание камеры на ±2 колонки', () => {
+  it("выравнивает дрожание камеры на ±2 колонки", () => {
     const p = trueProfile();
     const tracker = new SkylineTracker(8);
     const shakes = [0, 2, -1, 2, -2, 1, 0, -1];
@@ -74,7 +74,7 @@ describe('временна́я стабилизация профиля неба'
     expect(medianErr(est, truth)).toBeLessThan(0.01);
   });
 
-  it('ползущее облако над гребнем уходит в NaN, гребень остаётся', () => {
+  it("ползущее облако над гребнем уходит в NaN, гребень остаётся", () => {
     const p = trueProfile();
     const tracker = new SkylineTracker(8);
     const cloudFrom = 40;
@@ -98,7 +98,7 @@ describe('временна́я стабилизация профиля неба'
     }
   });
 
-  it('после reset выравнивание начинается заново', () => {
+  it("после reset выравнивание начинается заново", () => {
     const p = trueProfile();
     const tracker = new SkylineTracker(8);
     for (const s of [0, 2, -2]) tracker.push(shifted(p, s));

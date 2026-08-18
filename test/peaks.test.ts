@@ -3,11 +3,16 @@
  * высокой) как заменитель prominence, которого в OSM практически нет.
  */
 
-import { describe, it, expect } from 'vitest';
-import { annotateIsolation, isolationWeight, peakScore, type Peak } from '../src/core/peaks';
+import { describe, it, expect } from "vitest";
+import {
+  annotateIsolation,
+  isolationWeight,
+  peakScore,
+  type Peak,
+} from "../src/core/peaks";
 
 /** Вершина по смещению в километрах от условного центра */
-function at(kmEast: number, kmNorth: number, ele: number, name = 'X'): Peak {
+function at(kmEast: number, kmNorth: number, ele: number, name = "X"): Peak {
   return {
     lat: 43 + kmNorth / 111.32,
     lon: 42 + kmEast / (111.32 * Math.cos((43 * Math.PI) / 180)),
@@ -16,13 +21,13 @@ function at(kmEast: number, kmNorth: number, ele: number, name = 'X'): Peak {
   };
 }
 
-describe('изоляция вершин', () => {
-  it('в тесной группе главной становится самая высокая', () => {
+describe("изоляция вершин", () => {
+  it("в тесной группе главной становится самая высокая", () => {
     // Три вершины в пределах километра: 4700, 4690, 4680
     const peaks = [
-      at(0, 0, 4700, 'Главная'),
-      at(0.6, 0, 4690, 'Побочная A'),
-      at(0, 0.8, 4680, 'Побочная B'),
+      at(0, 0, 4700, "Главная"),
+      at(0.6, 0, 4690, "Побочная A"),
+      at(0, 0.8, 4680, "Побочная B"),
     ];
     annotateIsolation(peaks);
 
@@ -37,11 +42,11 @@ describe('изоляция вершин', () => {
     expect(scores[0]).toBeGreaterThan(scores[2]);
   });
 
-  it('одиноко стоящая вершина обгоняет более высокий побочный пик', () => {
+  it("одиноко стоящая вершина обгоняет более высокий побочный пик", () => {
     const peaks = [
-      at(0, 0, 4000, 'Массив главная'),
-      at(0.5, 0, 3900, 'Массив побочная'),
-      at(60, 0, 3600, 'Одинокая'),
+      at(0, 0, 4000, "Массив главная"),
+      at(0.5, 0, 3900, "Массив побочная"),
+      at(60, 0, 3600, "Одинокая"),
     ];
     annotateIsolation(peaks);
 
@@ -57,7 +62,7 @@ describe('изоляция вершин', () => {
     expect(peakScore(peaks[0], 20_000)).toBeGreaterThan(lonely);
   });
 
-  it('вес изоляции растёт логарифмически и насыщается', () => {
+  it("вес изоляции растёт логарифмически и насыщается", () => {
     expect(isolationWeight(100)).toBeCloseTo(0.55, 2);
     expect(isolationWeight(300)).toBeCloseTo(0.55, 2);
     expect(isolationWeight(30_000)).toBeCloseTo(1, 2);
@@ -69,7 +74,7 @@ describe('изоляция вершин', () => {
     expect(isolationWeight(undefined)).toBe(1);
   });
 
-  it('справляется с крупным регионом за разумное время', () => {
+  it("справляется с крупным регионом за разумное время", () => {
     // 50 тыс. вершин на 600×600 км — как iberia.json
     const peaks: Peak[] = [];
     let seed = 1;

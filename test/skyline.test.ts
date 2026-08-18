@@ -6,13 +6,13 @@
  * по тому же профилю рельефа, поэтому настоящая камера для теста не нужна.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 import {
   extractSkyline,
   matchSkyline,
   MIN_CONFIDENCE,
   type SkylineMatchOptions,
-} from '../src/core/skyline';
+} from "../src/core/skyline";
 
 const deg = (d: number): number => (d * Math.PI) / 180;
 
@@ -32,7 +32,7 @@ function makeHorizon(rays = 3600): Float32Array {
 const HORIZON = makeHorizon();
 const STEP = (2 * Math.PI) / HORIZON.length;
 
-const VIEW: Omit<SkylineMatchOptions, 'centerAzRad' | 'tiltRad'> = {
+const VIEW: Omit<SkylineMatchOptions, "centerAzRad" | "tiltRad"> = {
   fovRad: deg(70),
   fovVRad: deg(40),
   horizonFrac: 0.62,
@@ -56,8 +56,10 @@ function renderFrame(
     const idx = az / STEP;
     const i0 = Math.floor(idx);
     const f = idx - i0;
-    const a = HORIZON[((i0 % HORIZON.length) + HORIZON.length) % HORIZON.length];
-    const b = HORIZON[(((i0 + 1) % HORIZON.length) + HORIZON.length) % HORIZON.length];
+    const a =
+      HORIZON[((i0 % HORIZON.length) + HORIZON.length) % HORIZON.length];
+    const b =
+      HORIZON[(((i0 + 1) % HORIZON.length) + HORIZON.length) % HORIZON.length];
     const elev = a + (b - a) * f;
     const yFrac = VIEW.horizonFrac - (elev - tiltTrue) / VIEW.fovVRad;
     const boundary = Math.round(yFrac * height);
@@ -74,8 +76,8 @@ function renderFrame(
   return rgba;
 }
 
-describe('линия неба из кадра', () => {
-  it('находит границу неба и земли', () => {
+describe("линия неба из кадра", () => {
+  it("находит границу неба и земли", () => {
     const frame = renderFrame(deg(60), 0);
     const profile = extractSkyline(frame, 320, 240);
     const defined = [...profile].filter((v) => !Number.isNaN(v));
@@ -87,7 +89,7 @@ describe('линия неба из кадра', () => {
     }
   });
 
-  it('на однородном кадре честно говорит «не знаю»', () => {
+  it("на однородном кадре честно говорит «не знаю»", () => {
     const flat = new Uint8ClampedArray(320 * 240 * 4).fill(120);
     const profile = extractSkyline(flat, 320, 240);
     const defined = [...profile].filter((v) => !Number.isNaN(v));
@@ -95,8 +97,8 @@ describe('линия неба из кадра', () => {
   });
 });
 
-describe('совмещение кадра с рельефом', () => {
-  it('возвращает поправку, на которую врал компас', () => {
+describe("совмещение кадра с рельефом", () => {
+  it("возвращает поправку, на которую врал компас", () => {
     const azTrue = deg(60);
     const compassError = deg(8); // компас показывает на 8° меньше правды
     const frame = renderFrame(azTrue, 0);
@@ -112,7 +114,7 @@ describe('совмещение кадра с рельефом', () => {
     expect((match.azimuthRad * 180) / Math.PI).toBeCloseTo(8, 0);
   });
 
-  it('ловит и наклон, и азимут разом', () => {
+  it("ловит и наклон, и азимут разом", () => {
     const azTrue = deg(75);
     const frame = renderFrame(azTrue, deg(3));
     const profile = extractSkyline(frame, 320, 240);
@@ -130,7 +132,7 @@ describe('совмещение кадра с рельефом', () => {
     expect((match.tiltRad * 180) / Math.PI).toBeCloseTo(3, 0);
   });
 
-  it('компас врёт на 90°: правда входит в гипотезы грубого поиска', () => {
+  it("компас врёт на 90°: правда входит в гипотезы грубого поиска", () => {
     // Раньше поиск ограничивался окном ±25° вокруг показаний компаса — при
     // такой ошибке совмещение в принципе не могло сойтись. Синтетический
     // горизонт имеет гармонику sin(3·az) с периодом 120°: грубый этап законно
@@ -156,7 +158,7 @@ describe('совмещение кадра с рельефом', () => {
     expect(hit).toBe(true);
   });
 
-  it('не верит ровному горизонту: там совпадает любой азимут', () => {
+  it("не верит ровному горизонту: там совпадает любой азимут", () => {
     const flatHorizon = new Float32Array(HORIZON.length); // море до края света
     const frame = renderFrame(deg(60), 0);
     const profile = extractSkyline(frame, 320, 240);
@@ -171,7 +173,7 @@ describe('совмещение кадра с рельефом', () => {
     expect(match.confidence).toBeLessThan(MIN_CONFIDENCE);
   });
 
-  it('переживает облако на половину кадра', () => {
+  it("переживает облако на половину кадра", () => {
     const azTrue = deg(60);
     const width = 320;
     const height = 240;
@@ -194,7 +196,7 @@ describe('совмещение кадра с рельефом', () => {
     expect((match.azimuthRad * 180) / Math.PI).toBeCloseTo(6, 0);
   });
 
-  it('дыры в горизонте не портят ни поправку, ни доверие', () => {
+  it("дыры в горизонте не портят ни поправку, ни доверие", () => {
     // Лучи без рельефа помечены −Infinity. Интерполяция по ним давала NaN,
     // а NaN ломал сортировку: «медианой» становилось случайное число, и
     // неверная поправка (ошибка 6°) получала confidence 0.99997
@@ -205,8 +207,12 @@ describe('совмещение кадра с рельефом', () => {
 
     for (const holeDeg of [6, 12, 24]) {
       const holed = Float32Array.from(HORIZON);
-      const from = Math.round((deg(60 - holeDeg / 2) / (2 * Math.PI)) * HORIZON.length);
-      const to = Math.round((deg(60 + holeDeg / 2) / (2 * Math.PI)) * HORIZON.length);
+      const from = Math.round(
+        (deg(60 - holeDeg / 2) / (2 * Math.PI)) * HORIZON.length,
+      );
+      const to = Math.round(
+        (deg(60 + holeDeg / 2) / (2 * Math.PI)) * HORIZON.length,
+      );
       for (let i = from; i < to; i++) holed[i] = -Infinity;
 
       const match = matchSkyline(profile, {
@@ -221,7 +227,7 @@ describe('совмещение кадра с рельефом', () => {
     }
   });
 
-  it('рельефа под кадром почти нет — доверия нет тоже', () => {
+  it("рельефа под кадром почти нет — доверия нет тоже", () => {
     // Дыра в 40° при кадре в 70°: совмещать не с чем, и ответ (какой бы он
     // ни был) не должен пройти порог применения
     const azTrue = deg(60);
@@ -241,7 +247,7 @@ describe('совмещение кадра с рельефом', () => {
     expect(match.confidence).toBeLessThan(MIN_CONFIDENCE);
   });
 
-  it('сплошная дыра в горизонте — честный отказ, а не уверенный мусор', () => {
+  it("сплошная дыра в горизонте — честный отказ, а не уверенный мусор", () => {
     const empty = new Float32Array(HORIZON.length).fill(-Infinity);
     const frame = renderFrame(deg(60), 0);
     const profile = extractSkyline(frame, 320, 240);

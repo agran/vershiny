@@ -15,18 +15,18 @@
  * запрос ответа не будет, и main узнаёт актуальный результат по reqId.
  */
 
-import { DemSource } from '../core/dem-source';
+import { DemSource } from "../core/dem-source";
 import {
   checkPeakVisibility,
   computeLayeredHorizon,
   filterVisiblePeaks,
   type VisiblePeak,
-} from '../core/horizon';
-import { azimuthRad, destination, type LatLon } from '../core/geo';
-import type { Peak } from '../core/peaks';
+} from "../core/horizon";
+import { azimuthRad, destination, type LatLon } from "../core/geo";
+import type { Peak } from "../core/peaks";
 
 export interface InitMessage {
-  type: 'init';
+  type: "init";
   /**
    * URL локальных источников рельефа по убыванию детализации
    * (tiles/{region} | tiles/hi + tiles/global); пустой — только Terrarium
@@ -36,7 +36,7 @@ export interface InitMessage {
 }
 
 export interface ComputeMessage {
-  type: 'compute';
+  type: "compute";
   origin: LatLon;
   peaks: Peak[];
   /** Переопределение высоты наблюдателя (для навигации вверх/вниз) */
@@ -46,7 +46,7 @@ export interface ComputeMessage {
 
 /** Подобрать точку, с которой вершина действительно видна */
 export interface ViewpointMessage {
-  type: 'viewpoint';
+  type: "viewpoint";
   peak: Peak;
   /** Желаемое удаление от вершины, м */
   distM?: number;
@@ -54,7 +54,7 @@ export interface ViewpointMessage {
 }
 
 export interface ViewpointResult {
-  type: 'viewpoint';
+  type: "viewpoint";
   origin: LatLon;
   /** Азимут с точки на вершину, рад */
   azimuthRad: number;
@@ -62,7 +62,7 @@ export interface ViewpointResult {
 }
 
 export interface ResultMessage {
-  type: 'result';
+  type: "result";
   /** Углы горизонта по лучам, рад (верхний слой) */
   horizon: Float32Array;
   /** Шаг между лучами, рад */
@@ -72,7 +72,7 @@ export interface ResultMessage {
   /** Дистанция до точки горизонта по лучам */
   distanceToHorizonM: Float32Array;
   /** Фронты видимости по лучам (для точных маркеров) */
-  fronts: import('../core/horizon').VisibleFront[][];
+  fronts: import("../core/horizon").VisibleFront[][];
   /** Гребни силуэта по корзинам дистанций [корзина][луч] */
   crests: Float32Array[];
   /** Видимые пики */
@@ -84,7 +84,7 @@ export interface ResultMessage {
 }
 
 export interface ErrorMessage {
-  type: 'error';
+  type: "error";
   message: string;
   reqId?: number;
 }
@@ -111,9 +111,13 @@ let initPromise: Promise<void> = Promise.resolve();
 /** Максимальная дальность луча — синхронизирована с computeHorizon */
 const MAX_DIST_M = 200_000;
 
-async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): Promise<ResultMessage> {
+async function compute(
+  origin: LatLon,
+  peaks: Peak[],
+  heightOverride?: number,
+): Promise<ResultMessage> {
   const source = dem;
-  if (!source) throw new Error('Worker не инициализирован (init)');
+  if (!source) throw new Error("Worker не инициализирован (init)");
   const t0 = performance.now();
 
   // Высота наблюдателя: max по окрестности 3×3 (не ниже поверхности)
@@ -135,13 +139,14 @@ async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): 
   // Именно `source`, а не живая переменная `dem`: смена региона могла прийти
   // прямо посреди расчёта, и тогда выборка пошла бы из нового источника с
   // пустым кешем тайлов — по уже предзагруженной панораме, но без данных
-  const sample = (pos: LatLon, distM: number): number => source.sample(pos, distM);
+  const sample = (pos: LatLon, distM: number): number =>
+    source.sample(pos, distM);
 
   const layered = computeLayeredHorizon(origin, observerH, sample);
   const visible = filterVisiblePeaks(origin, observerH, peaks, sample, layered);
 
   return {
-    type: 'result',
+    type: "result",
     horizon: layered.layers[0], // ближний слой = основной горизонт
     stepRad: layered.stepRad,
     layers: layered.layers,
@@ -164,22 +169,42 @@ async function compute(origin: LatLon, peaks: Peak[], heightOverride?: number): 
  * Пробуем 12 азимутов вокруг вершины и берём тот, откуда она действительно
  * видна, а из таких — самый низкий (открытая долина, гора возвышается целиком).
  */
-async function pickViewpoint(peak: Peak, distM: number): Promise<ViewpointResult> {
+async function pickViewpoint(
+  peak: Peak,
+  distM: number,
+): Promise<ViewpointResult> {
   const source = dem;
-  if (!source) throw new Error('Worker не инициализирован (init)');
+  if (!source) throw new Error("Worker не инициализирован (init)");
   const summit: LatLon = { lat: peak.lat, lon: peak.lon };
-  const candidates: { origin: LatLon; observerH: number; visible: boolean }[] = [];
+  const candidates: { origin: LatLon; observerH: number; visible: boolean }[] =
+    [];
 
   for (let i = 0; i < 12; i++) {
     const az = (i * 2 * Math.PI) / 12;
     const origin = destination(summit, az, distM);
     const toPeak = azimuthRad(origin, summit);
     try {
-      await source.prefetchAlongRay(origin, toPeak, distM * 1.2, 200, destination);
+      await source.prefetchAlongRay(
+        origin,
+        toPeak,
+        distM * 1.2,
+        200,
+        destination,
+      );
       const observerH = await source.observerHeightSafe(origin);
       const sample = (pos: LatLon, d: number): number => source.sample(pos, d);
-      const check = checkPeakVisibility(origin, observerH, peak, sample, Infinity);
-      candidates.push({ origin, observerH, visible: check?.visibility === 'visible' });
+      const check = checkPeakVisibility(
+        origin,
+        observerH,
+        peak,
+        sample,
+        Infinity,
+      );
+      candidates.push({
+        origin,
+        observerH,
+        visible: check?.visibility === "visible",
+      });
     } catch {
       /* нет данных в этой точке — пропускаем */
     }
@@ -188,12 +213,12 @@ async function pickViewpoint(peak: Peak, distM: number): Promise<ViewpointResult
   const visible = candidates.filter((c) => c.visible);
   const pool = visible.length ? visible : candidates;
   if (!pool.length) {
-    return { type: 'viewpoint', origin: summit, azimuthRad: 0 };
+    return { type: "viewpoint", origin: summit, azimuthRad: 0 };
   }
   // Из точек с видимой вершиной — самая низкая: оттуда гора видна целиком
   const best = pool.reduce((a, b) => (b.observerH < a.observerH ? b : a));
   return {
-    type: 'viewpoint',
+    type: "viewpoint",
     origin: best.origin,
     azimuthRad: azimuthRad(best.origin, summit),
   };
@@ -215,8 +240,8 @@ let pumping = false;
 
 self.onmessage = (ev: MessageEvent<WorkerInMessage>) => {
   const msg = ev.data;
-  if (msg.type === 'compute') {
-    jobQueue = jobQueue.filter((j) => j.type !== 'compute');
+  if (msg.type === "compute") {
+    jobQueue = jobQueue.filter((j) => j.type !== "compute");
   }
   jobQueue.push(msg);
   void pump();
@@ -238,7 +263,7 @@ async function pump(): Promise<void> {
 async function handle(msg: WorkerInMessage): Promise<void> {
   const reqId = msg.reqId;
   try {
-    if (msg.type === 'init') {
+    if (msg.type === "init") {
       initPromise = (async () => {
         const next = new DemSource({ patchBaseUrls: msg.patchBaseUrls });
         try {
@@ -249,7 +274,7 @@ async function handle(msg: WorkerInMessage): Promise<void> {
           // Terrarium. Раньше отклонённый промис оставался в переменной, и
           // каждый следующий расчёт падал на нём же — до перезагрузки
           // страницы, даже когда сеть возвращалась
-          console.warn('DEM-патч недоступен, работаем по Terrarium:', err);
+          console.warn("DEM-патч недоступен, работаем по Terrarium:", err);
         }
         dem = next;
       })();
@@ -259,20 +284,24 @@ async function handle(msg: WorkerInMessage): Promise<void> {
     // Расчёты ждут инициализацию: иначе патч рельефа подключится уже после
     // того, как панорама посчитана по грубым данным
     await initPromise;
-    if (msg.type === 'viewpoint') {
+    if (msg.type === "viewpoint") {
       const out = await pickViewpoint(msg.peak, msg.distM ?? 6_000);
       self.postMessage({ ...out, reqId });
       return;
     }
-    if (msg.type === 'compute') {
-      const result = await compute(msg.origin, msg.peaks, msg.observerHeightOverride);
+    if (msg.type === "compute") {
+      const result = await compute(
+        msg.origin,
+        msg.peaks,
+        msg.observerHeightOverride,
+      );
       result.reqId = reqId;
       // Передаём буфер горизонта без копирования
       (self as unknown as Worker).postMessage(result, [result.horizon.buffer]);
     }
   } catch (err) {
     const out: ErrorMessage = {
-      type: 'error',
+      type: "error",
       message: err instanceof Error ? err.message : String(err),
       reqId,
     };

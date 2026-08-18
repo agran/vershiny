@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { startAr } from '../src/ui/ar';
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { startAr } from "../src/ui/ar";
 
-function createStream(readyState: 'live' | 'ended' = 'live'): MediaStream {
+function createStream(readyState: "live" | "ended" = "live"): MediaStream {
   const track = {
     readyState,
     addEventListener: vi.fn(),
@@ -30,50 +30,69 @@ function createVideoEl(options: { frozen: boolean }): {
   play: ReturnType<typeof vi.fn>;
   pause: ReturnType<typeof vi.fn>;
 } {
-  const videoEl = document.createElement('video');
+  const videoEl = document.createElement("video");
   let time = 0;
   const pause = vi.fn();
-  Object.defineProperty(videoEl, 'srcObject', { configurable: true, writable: true, value: null });
-  Object.defineProperty(videoEl, 'playsInline', {
+  Object.defineProperty(videoEl, "srcObject", {
+    configurable: true,
+    writable: true,
+    value: null,
+  });
+  Object.defineProperty(videoEl, "playsInline", {
     configurable: true,
     writable: true,
     value: false,
   });
-  Object.defineProperty(videoEl, 'readyState', { configurable: true, get: () => 2 });
-  Object.defineProperty(videoEl, 'videoWidth', { configurable: true, get: () => 640 });
-  Object.defineProperty(videoEl, 'videoHeight', { configurable: true, get: () => 480 });
-  Object.defineProperty(videoEl, 'paused', { configurable: true, get: () => false });
-  Object.defineProperty(videoEl, 'currentTime', {
+  Object.defineProperty(videoEl, "readyState", {
+    configurable: true,
+    get: () => 2,
+  });
+  Object.defineProperty(videoEl, "videoWidth", {
+    configurable: true,
+    get: () => 640,
+  });
+  Object.defineProperty(videoEl, "videoHeight", {
+    configurable: true,
+    get: () => 480,
+  });
+  Object.defineProperty(videoEl, "paused", {
+    configurable: true,
+    get: () => false,
+  });
+  Object.defineProperty(videoEl, "currentTime", {
     configurable: true,
     // pause.mock.calls.length > 1: было переприсоединение сверх начального
     // attachStream в startAr — считаем, что оно «вылечило» заморозку
     get: () => (options.frozen && pause.mock.calls.length <= 1 ? 0 : ++time),
   });
   const play = vi.fn().mockResolvedValue(undefined);
-  Object.defineProperty(videoEl, 'play', { configurable: true, value: play });
-  Object.defineProperty(videoEl, 'pause', { configurable: true, value: pause });
+  Object.defineProperty(videoEl, "play", { configurable: true, value: play });
+  Object.defineProperty(videoEl, "pause", { configurable: true, value: pause });
   return { videoEl, play, pause };
 }
 
-describe('AR camera resume', () => {
+describe("AR camera resume", () => {
   beforeEach(() => {
-    Object.defineProperty(document, 'hidden', {
+    Object.defineProperty(document, "hidden", {
       configurable: true,
       value: false,
     });
-    vi.stubGlobal('requestAnimationFrame', vi.fn(() => 1));
-    vi.stubGlobal('cancelAnimationFrame', vi.fn());
-    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (
-      this: HTMLCanvasElement,
-    ) {
-      return {
-        canvas: this,
-        drawImage: vi.fn(),
-        fillRect: vi.fn(),
-        save: vi.fn(),
-        restore: vi.fn(),
-      } as unknown as CanvasRenderingContext2D;
-    });
+    vi.stubGlobal(
+      "requestAnimationFrame",
+      vi.fn(() => 1),
+    );
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockImplementation(
+      function (this: HTMLCanvasElement) {
+        return {
+          canvas: this,
+          drawImage: vi.fn(),
+          fillRect: vi.fn(),
+          save: vi.fn(),
+          restore: vi.fn(),
+        } as unknown as CanvasRenderingContext2D;
+      },
+    );
   });
 
   afterEach(() => {
@@ -81,20 +100,20 @@ describe('AR camera resume', () => {
     vi.restoreAllMocks();
   });
 
-  it('не трогает живой поток, если кадр приходит вовремя', async () => {
-    const stream = createStream('live');
+  it("не трогает живой поток, если кадр приходит вовремя", async () => {
+    const stream = createStream("live");
     const getUserMedia = vi.fn().mockResolvedValue(stream);
-    Object.defineProperty(navigator, 'mediaDevices', {
+    Object.defineProperty(navigator, "mediaDevices", {
       configurable: true,
       value: { getUserMedia },
     });
     const { videoEl, play } = createVideoEl({ frozen: false });
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     const session = await startAr(videoEl, canvas, {} as never, {} as never);
     expect(play).toHaveBeenCalledTimes(1);
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new Event("visibilitychange"));
     await new Promise((resolve) => setTimeout(resolve, 400));
 
     // Кадр «шёл» всё это время — переприсоединения (второй play/pause) не было
@@ -103,20 +122,20 @@ describe('AR camera resume', () => {
     session.stop();
   });
 
-  it('жёстко переприсоединяет поток, если кадр застыл', async () => {
-    const stream = createStream('live');
+  it("жёстко переприсоединяет поток, если кадр застыл", async () => {
+    const stream = createStream("live");
     const getUserMedia = vi.fn().mockResolvedValue(stream);
-    Object.defineProperty(navigator, 'mediaDevices', {
+    Object.defineProperty(navigator, "mediaDevices", {
       configurable: true,
       value: { getUserMedia },
     });
     const { videoEl, play, pause } = createVideoEl({ frozen: true });
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     const session = await startAr(videoEl, canvas, {} as never, {} as never);
     expect(play).toHaveBeenCalledTimes(1);
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new Event("visibilitychange"));
     await new Promise((resolve) => setTimeout(resolve, 400));
 
     // currentTime не менялся — детектор счёл кадр застывшим и переподключил
@@ -129,23 +148,23 @@ describe('AR camera resume', () => {
     session.stop();
   });
 
-  it('не переприсоединяет поток дважды при одновременных visibilitychange/focus/pageshow', async () => {
-    const stream = createStream('live');
+  it("не переприсоединяет поток дважды при одновременных visibilitychange/focus/pageshow", async () => {
+    const stream = createStream("live");
     const getUserMedia = vi.fn().mockResolvedValue(stream);
-    Object.defineProperty(navigator, 'mediaDevices', {
+    Object.defineProperty(navigator, "mediaDevices", {
       configurable: true,
       value: { getUserMedia },
     });
     const { videoEl, play } = createVideoEl({ frozen: true });
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     const session = await startAr(videoEl, canvas, {} as never, {} as never);
     expect(play).toHaveBeenCalledTimes(1);
 
     // Три сигнала одной и той же разблокировки почти одновременно
-    document.dispatchEvent(new Event('visibilitychange'));
-    window.dispatchEvent(new Event('focus'));
-    window.dispatchEvent(new Event('pageshow'));
+    document.dispatchEvent(new Event("visibilitychange"));
+    window.dispatchEvent(new Event("focus"));
+    window.dispatchEvent(new Event("pageshow"));
     await new Promise((resolve) => setTimeout(resolve, 400));
 
     // Без защиты от гонок было бы три переприсоединения — с ней ровно одно

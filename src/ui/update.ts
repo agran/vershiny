@@ -10,7 +10,7 @@
  * worker'а. Плюс страховка по таймауту — «нажал и ничего» быть не должно.
  */
 
-import { t } from '../core/i18n';
+import { t } from "../core/i18n";
 
 /** Как часто спрашивать сервер о новой версии (мс) */
 const UPDATE_CHECK_MS = 60 * 60 * 1000;
@@ -39,18 +39,21 @@ export function setupUpdates(registration: ServiceWorkerRegistration): void {
     showUpdateBanner(registration, registration.waiting, reload);
   }
 
-  registration.addEventListener('updatefound', () => {
+  registration.addEventListener("updatefound", () => {
     const installing = registration.installing;
     if (!installing) return;
-    installing.addEventListener('statechange', () => {
+    installing.addEventListener("statechange", () => {
       // controller есть — значит это обновление, а не первая установка
-      if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+      if (
+        installing.state === "installed" &&
+        navigator.serviceWorker.controller
+      ) {
         showUpdateBanner(registration, installing, reload);
       }
     });
   });
 
-  navigator.serviceWorker.addEventListener('controllerchange', reload);
+  navigator.serviceWorker.addEventListener("controllerchange", reload);
 
   // Проверяем обновления при возвращении на вкладку и раз в час: у PWA
   // на телефоне вкладка живёт неделями, перезагрузки может не случиться
@@ -60,8 +63,8 @@ export function setupUpdates(registration: ServiceWorkerRegistration): void {
     });
   };
   setInterval(check, UPDATE_CHECK_MS);
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') check();
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") check();
   });
 }
 
@@ -70,25 +73,25 @@ function showUpdateBanner(
   worker: ServiceWorker,
   reload: () => void,
 ): void {
-  if (document.getElementById('update-banner')) return;
+  if (document.getElementById("update-banner")) return;
 
-  const banner = document.createElement('div');
-  banner.id = 'update-banner';
+  const banner = document.createElement("div");
+  banner.id = "update-banner";
   banner.style.cssText =
-    'position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));' +
-    'transform:translateX(-50%);z-index:1000;display:flex;align-items:center;gap:12px;' +
-    'background:#1a1a2e;border:1px solid #415a77;border-radius:12px;' +
-    'padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.5);' +
-    'font:14px/1.3 system-ui,sans-serif;color:#f1faee;max-width:calc(100vw - 32px)';
+    "position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));" +
+    "transform:translateX(-50%);z-index:1000;display:flex;align-items:center;gap:12px;" +
+    "background:#1a1a2e;border:1px solid #415a77;border-radius:12px;" +
+    "padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.5);" +
+    "font:14px/1.3 system-ui,sans-serif;color:#f1faee;max-width:calc(100vw - 32px)";
 
-  const text = document.createElement('span');
-  text.textContent = t('updateAvailable');
+  const text = document.createElement("span");
+  text.textContent = t("updateAvailable");
 
-  const apply = document.createElement('button');
-  apply.textContent = t('updateApply');
+  const apply = document.createElement("button");
+  apply.textContent = t("updateApply");
   apply.style.cssText =
-    'background:#4cc9f0;color:#1a1a2e;border:none;border-radius:8px;' +
-    'padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap';
+    "background:#4cc9f0;color:#1a1a2e;border:none;border-radius:8px;" +
+    "padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap";
   apply.onclick = () => {
     apply.disabled = true;
     // На момент клика берём свежего waiting'а: за время показа плашки
@@ -97,20 +100,20 @@ function showUpdateBanner(
     // Как только новый worker активировался — версия сменилась. Полагаться
     // только на controllerchange нельзя: на старых Safari он приходил не
     // всегда, и кнопка выглядела «мёртвой»
-    target.addEventListener('statechange', () => {
-      if (target.state === 'activated') reload();
+    target.addEventListener("statechange", () => {
+      if (target.state === "activated") reload();
     });
     // Страховка от «нажал и ничего»: если ни одно событие не пришло,
     // перезагружаемся сами — ждущий worker возьмёт управление при старте
     setTimeout(reload, 5000);
-    target.postMessage({ type: 'SKIP_WAITING' });
+    target.postMessage({ type: "SKIP_WAITING" });
   };
 
-  const dismiss = document.createElement('button');
-  dismiss.textContent = '✕';
-  dismiss.title = t('close');
+  const dismiss = document.createElement("button");
+  dismiss.textContent = "✕";
+  dismiss.title = t("close");
   dismiss.style.cssText =
-    'background:none;color:#f1faee;border:none;font-size:16px;cursor:pointer;opacity:.7';
+    "background:none;color:#f1faee;border:none;font-size:16px;cursor:pointer;opacity:.7";
   dismiss.onclick = () => banner.remove();
 
   banner.append(text, apply, dismiss);

@@ -16,7 +16,7 @@
  * контуры обратно.
  */
 
-const STORAGE_KEY = 'vershiny-photo';
+const STORAGE_KEY = "vershiny-photo";
 
 export interface PhotoCaption {
   /** Район, координаты и высота наблюдателя */
@@ -34,7 +34,9 @@ export const DEFAULT_PHOTO_CAPTION: PhotoCaption = {
 };
 
 /** Приведение к булевым: в хранилище мог остаться мусор из другой версии */
-export function normalizePhotoCaption(raw: Partial<PhotoCaption> | null): PhotoCaption {
+export function normalizePhotoCaption(
+  raw: Partial<PhotoCaption> | null,
+): PhotoCaption {
   if (!raw) return { ...DEFAULT_PHOTO_CAPTION };
   return {
     place: raw.place === true,

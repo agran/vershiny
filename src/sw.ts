@@ -19,7 +19,8 @@ declare const self: ServiceWorkerGlobalScope;
  * подставляется хеш содержимого, иначе браузер не увидит разницы в sw.js
  * и обновление никогда не приедет.
  */
-const VERSION = (self as unknown as { __SW_VERSION__?: string }).__SW_VERSION__ ?? 'dev';
+const VERSION =
+  (self as unknown as { __SW_VERSION__?: string }).__SW_VERSION__ ?? "dev";
 
 /**
  * Чанки приложения на предзагрузку (подставляются сборкой, см.
@@ -27,7 +28,8 @@ const VERSION = (self as unknown as { __SW_VERSION__?: string }).__SW_VERSION__ 
  * региона — иначе попадали в кеш только после того, как человек их открыл
  * онлайн. В горах без связи кнопка настроек просто ничего не делала.
  */
-const PRECACHE = (self as unknown as { __SW_ASSETS__?: string[] }).__SW_ASSETS__ ?? [];
+const PRECACHE =
+  (self as unknown as { __SW_ASSETS__?: string[] }).__SW_ASSETS__ ?? [];
 
 /**
  * Оболочка приложения: без неё офлайн-запуск сразу после установки упирался
@@ -36,16 +38,16 @@ const PRECACHE = (self as unknown as { __SW_ASSETS__?: string[] }).__SW_ASSETS__
  * ушёл в горы, ни разу не перезагрузив страницу» кончалось белым экраном.
  */
 const SHELL = [
-  './',
-  './index.html',
-  './install.html',
-  './manifest.webmanifest',
-  './favicon.png',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/maskable-192.png',
-  './icons/maskable-512.png',
-  './icons/apple-touch-icon.png',
+  "./",
+  "./index.html",
+  "./install.html",
+  "./manifest.webmanifest",
+  "./favicon.png",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/maskable-192.png",
+  "./icons/maskable-512.png",
+  "./icons/apple-touch-icon.png",
 ];
 
 /**
@@ -58,14 +60,14 @@ const SHELL = [
  * v1 у уже обновлённых клиентов (такие URL под паттерн не попадают — сеть
  * напрямую, что и нужно при пересборке).
  */
-const TILE_CACHE = 'vershiny-tiles-v2';
+const TILE_CACHE = "vershiny-tiles-v2";
 /**
  * Данные (peaks, index.json, regions.json) тоже не привязаны к версии
  * оболочки: стратегия network-first обновляет их сама, как только есть сеть.
  * Раньше имя кеша содержало версию — после каждого обновления приложения
  * человек офлайн терял и список регионов, и вершины.
  */
-const DATA_CACHE = 'vershiny-data-v1';
+const DATA_CACHE = "vershiny-data-v1";
 const APP_CACHE = `vershiny-app-${VERSION}`;
 /** Кеши, которые не удаляем при активации новой версии */
 const KEEP = new Set([TILE_CACHE, DATA_CACHE, APP_CACHE]);
@@ -91,7 +93,7 @@ function isData(url: string): boolean {
   return DATA_PATTERNS.some((re) => re.test(url));
 }
 
-self.addEventListener('install', (ev) => {
+self.addEventListener("install", (ev) => {
   // Ждём в состоянии waiting: решение об обновлении принимает пользователь.
   // Но чанки складываем в кеш сразу — иначе офлайн доступно только то,
   // что успели открыть при живой сети
@@ -108,14 +110,14 @@ self.addEventListener('install', (ev) => {
   );
 });
 
-self.addEventListener('activate', (ev) => {
+self.addEventListener("activate", (ev) => {
   ev.waitUntil(
     (async () => {
       // Чистим кеши прошлых версий, иначе они копятся навсегда
       const names = await caches.keys();
       await Promise.all(
         names
-          .filter((name) => name.startsWith('vershiny-') && !KEEP.has(name))
+          .filter((name) => name.startsWith("vershiny-") && !KEEP.has(name))
           .map((name) => caches.delete(name)),
       );
       await self.clients.claim();
@@ -123,32 +125,37 @@ self.addEventListener('activate', (ev) => {
   );
 });
 
-self.addEventListener('message', (ev) => {
-  if ((ev.data as { type?: string } | undefined)?.type === 'SKIP_WAITING') {
+self.addEventListener("message", (ev) => {
+  if ((ev.data as { type?: string } | undefined)?.type === "SKIP_WAITING") {
     void self.skipWaiting();
   }
 });
 
-self.addEventListener('fetch', (ev) => {
+self.addEventListener("fetch", (ev) => {
   const url = ev.request.url;
 
   // Кешируем только GET: остальное (если появится) ломает Cache API
-  if (ev.request.method !== 'GET') return;
+  if (ev.request.method !== "GET") return;
 
   if (isTile(url)) {
     ev.respondWith(cacheFirst(ev.request, TILE_CACHE, ev));
   } else if (isData(url)) {
     ev.respondWith(networkFirst(ev.request, DATA_CACHE, ev));
-  } else if (ev.request.mode === 'navigate') {
+  } else if (ev.request.mode === "navigate") {
     // Оболочка: сеть впереди, кеш — офлайн-запас. Так свежий index.html
     // с новыми хешами чанков приезжает сразу, а не через раз.
     // Запасной адрес обязателен: ссылкой делятся с координатами
     // (?lat=43.318&lon=42.458), а в кеше оболочка лежит без параметров —
     // офлайн такая ссылка упиралась в 503 вместо панорамы
     ev.respondWith(
-      networkFirst(ev.request, APP_CACHE, ev, new URL('./', self.location.href).href),
+      networkFirst(
+        ev.request,
+        APP_CACHE,
+        ev,
+        new URL("./", self.location.href).href,
+      ),
     );
-  } else if (url.includes('/assets/') || url.includes('/icons/')) {
+  } else if (url.includes("/assets/") || url.includes("/icons/")) {
     ev.respondWith(staleWhileRevalidate(ev.request, APP_CACHE, ev));
   }
 });
@@ -177,7 +184,7 @@ async function cacheFirst(
     }
     return response;
   } catch {
-    return new Response('Offline', { status: 503, statusText: 'Offline' });
+    return new Response("Offline", { status: 503, statusText: "Offline" });
   }
 }
 
@@ -203,7 +210,8 @@ async function networkFirst(
     return (await offline()) ?? response;
   } catch {
     return (
-      (await offline()) ?? new Response('Offline', { status: 503, statusText: 'Offline' })
+      (await offline()) ??
+      new Response("Offline", { status: 503, statusText: "Offline" })
     );
   }
 }
@@ -239,7 +247,7 @@ async function staleWhileRevalidate(
   // В кеше пусто — ждать нечего, отдаём сеть. Отказ превращаем в 503, как в
   // остальных стратегиях: необработанных отклонений в worker'е быть не должно
   return fetched.catch(
-    () => new Response('Offline', { status: 503, statusText: 'Offline' }),
+    () => new Response("Offline", { status: 503, statusText: "Offline" }),
   );
 }
 

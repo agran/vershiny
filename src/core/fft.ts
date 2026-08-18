@@ -24,11 +24,7 @@ const revCache = new Map<number, Uint32Array>();
  * Комплексное БПФ. re/im — действительная и мнимая части, длина — степень 2.
  * inverse=true — обратное преобразование (без деления на n: вызывающий делит).
  */
-export function fft(
-  re: Float64Array,
-  im: Float64Array,
-  inverse = false,
-): void {
+export function fft(re: Float64Array, im: Float64Array, inverse = false): void {
   const n = re.length;
   let rev = revCache.get(n);
   if (!rev) {

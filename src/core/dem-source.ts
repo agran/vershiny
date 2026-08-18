@@ -5,9 +5,9 @@
  * Ray-marching знает только синхронный sample() после prefetch.
  */
 
-import { bboxContains, type LatLon } from './geo';
-import { DemSampler } from './dem';
-import { TerrariumSampler, ZOOM_RULES, zoomForDistance } from './terrarium';
+import { bboxContains, type LatLon } from "./geo";
+import { DemSampler } from "./dem";
+import { TerrariumSampler, ZOOM_RULES, zoomForDistance } from "./terrarium";
 
 export interface DemSourceOptions {
   /**
@@ -74,7 +74,7 @@ export class DemSource {
             coarse: sampler.finestResM() > FINE_RES_M,
           };
         } catch (err) {
-          console.warn('DEM-источник недоступен, пропускаем:', err);
+          console.warn("DEM-источник недоступен, пропускаем:", err);
           return null;
         }
       }),
@@ -89,7 +89,9 @@ export class DemSource {
 
   /** Источники, чей bbox покрывает точку, по классу детализации */
   private covering(pos: LatLon, coarse: boolean): Patch[] {
-    return this.patches.filter((p) => p.coarse === coarse && bboxContains(pos, p.bbox));
+    return this.patches.filter(
+      (p) => p.coarse === coarse && bboxContains(pos, p.bbox),
+    );
   }
 
   /**
@@ -128,7 +130,13 @@ export class DemSource {
     destinationFn: (o: LatLon, az: number, d: number) => LatLon,
   ): Promise<void> {
     const tasks: Promise<void>[] = [
-      this.terrarium.prefetchAlongRay(origin, azRad, maxDistM, stepM, destinationFn),
+      this.terrarium.prefetchAlongRay(
+        origin,
+        azRad,
+        maxDistM,
+        stepM,
+        destinationFn,
+      ),
     ];
     // Грубую пирамиду не тянем там, где точку наблюдателя уже покрывает
     // детальный слой: лучи отсюда прочитают hi-тайлы, а global-тайлы того же
@@ -137,7 +145,13 @@ export class DemSource {
     for (const p of this.patches) {
       if (p.coarse && fineAtOrigin) continue;
       tasks.push(
-        p.sampler.prefetchAlongRay(origin, azRad, maxDistM, stepM, destinationFn),
+        p.sampler.prefetchAlongRay(
+          origin,
+          azRad,
+          maxDistM,
+          stepM,
+          destinationFn,
+        ),
       );
     }
     await Promise.all(tasks);
@@ -152,7 +166,9 @@ export class DemSource {
    */
   async prefetchNear(origin: LatLon): Promise<void> {
     const zooms = new Set(
-      ZOOM_RULES.filter((rule) => Number.isFinite(rule.upToDistM)).map((r) => r.zoom),
+      ZOOM_RULES.filter((rule) => Number.isFinite(rule.upToDistM)).map(
+        (r) => r.zoom,
+      ),
     );
     await Promise.all(
       [...zooms].map((zoom) => this.terrarium.prefetchAround(origin, zoom)),

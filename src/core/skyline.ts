@@ -17,8 +17,8 @@
  * тестах на синтетическом рельефе, не поднимая камеру.
  */
 
-import { wrapAngle } from './geo';
-import { matchSkylineCoarse } from './skyline-match';
+import { wrapAngle } from "./geo";
+import { matchSkylineCoarse } from "./skyline-match";
 
 /** Ширина рабочей сетки: больше не нужно, гребень — крупная форма */
 const GRID_W = 160;
@@ -128,7 +128,13 @@ export function extractSkyline(
     for (let x = 1; x < W - 1; x++) {
       const i = y * W + x;
       tex[i] =
-        Math.abs(4 * smooth[i] - smooth[i - 1] - smooth[i + 1] - smooth[i - W] - smooth[i + W]) / 4;
+        Math.abs(
+          4 * smooth[i] -
+            smooth[i - 1] -
+            smooth[i + 1] -
+            smooth[i - W] -
+            smooth[i + W],
+        ) / 4;
     }
   }
 
@@ -215,7 +221,8 @@ export function extractSkyline(
       // строка y−1 несёт «тень» самого кандидата (центральная разность
       // размазывает перепад на две строки).
       const above = prefMaxEdge[(y - 1) * W + x];
-      if (above > Math.max(EDGE_ABOVE_MIN, EDGE_ABOVE_RATIO * edgeAll[i])) continue;
+      if (above > Math.max(EDGE_ABOVE_MIN, EDGE_ABOVE_RATIO * edgeAll[i]))
+        continue;
       // «Небо сверху»: от верха кадра до кандидата — гладко и однородно.
       // При y < 8 данных мало, чтобы карать, — проверку пропускаем.
       if (y >= 8) {
@@ -228,9 +235,11 @@ export function extractSkyline(
       // Скачок текстуры: ниже кандидата шершаво (лес/скалы), выше гладко
       // (небо). Ключ к «лес в тени vs небо в дымке»: яркости равны,
       // а текстура — нет.
-      const tBelow = (prefT[(y + 1 + TEX_WIN) * W + x] - prefT[(y + 1) * W + x]) / TEX_WIN;
+      const tBelow =
+        (prefT[(y + 1 + TEX_WIN) * W + x] - prefT[(y + 1) * W + x]) / TEX_WIN;
       const a0 = Math.max(0, y - TEX_WIN);
-      const tAbove = (prefT[y * W + x] - prefT[a0 * W + x]) / Math.max(1, y - a0);
+      const tAbove =
+        (prefT[y * W + x] - prefT[a0 * W + x]) / Math.max(1, y - a0);
       const jump = Math.max(0, tBelow - tAbove - TEX_JUMP_MIN);
       strength[i] = edgeAll[i] + W_TEX * Math.min(jump, TEX_CAP);
     }
@@ -416,7 +425,7 @@ export interface SkylineMatchOptions {
    * проверка гипотез грубого поиска по полному кругу. Без них грубый поиск
    * работает, но ложные совпадения на периодичных гребнях фильтруются слабее.
    */
-  peaks?: import('./horizon').VisiblePeak[];
+  peaks?: import("./horizon").VisiblePeak[];
 }
 
 export interface SkylineMatch {
@@ -481,8 +490,10 @@ export function matchSkyline(
     const idx = az / stepRad;
     const i0 = Math.floor(idx);
     const f = idx - i0;
-    const a = horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
-    const b = horizon[((i0 + 1) % horizon.length + horizon.length) % horizon.length];
+    const a =
+      horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
+    const b =
+      horizon[(((i0 + 1) % horizon.length) + horizon.length) % horizon.length];
     // Луч без рельефа помечен −Infinity, и интерполяция по нему даёт NaN даже
     // при f = 0 (−Inf + Inf·0). Такое значение надо возвращать явно, чтобы
     // вызывающий его отбросил, а не подмешал в статистику
@@ -557,13 +568,19 @@ export function matchSkyline(
     let tiltStep = (1 * Math.PI) / 180;
     // Окно первого прохода: для компаса — прежние пределы, для гипотез грубого
     // поиска ±3°/±1.5° достаточно (точность ZNCC — доли градуса)
-    let azRange = seed.az === 0 && seed.tilt === 0 ? maxAzRad : (3 * Math.PI) / 180;
-    let tiltRange = seed.az === 0 && seed.tilt === 0 ? maxTiltRad : (1.5 * Math.PI) / 180;
+    let azRange =
+      seed.az === 0 && seed.tilt === 0 ? maxAzRad : (3 * Math.PI) / 180;
+    let tiltRange =
+      seed.az === 0 && seed.tilt === 0 ? maxTiltRad : (1.5 * Math.PI) / 180;
     let azCenter = seed.az;
     let tiltCenter = seed.tilt;
 
     for (let pass = 0; pass < 3; pass++) {
-      for (let az = azCenter - azRange; az <= azCenter + azRange + 1e-9; az += azStep) {
+      for (
+        let az = azCenter - azRange;
+        az <= azCenter + azRange + 1e-9;
+        az += azStep
+      ) {
         for (
           let tilt = tiltCenter - tiltRange;
           tilt <= tiltCenter + tiltRange + 1e-9;
@@ -596,11 +613,19 @@ export function matchSkyline(
   // (разрыв с вторым разным пиком ZNCC) и вершины-якоря входят в доверие:
   // без них «похожий соседний гребень» неотличим от истины
   const coarseBest = coarse[0];
-  if (coarseBest && Math.abs(wrapAngle(best.az - wrapAngle(coarseBest.centerAzRad - centerAzRad))) < (1 * Math.PI) / 180) {
+  if (
+    coarseBest &&
+    Math.abs(
+      wrapAngle(best.az - wrapAngle(coarseBest.centerAzRad - centerAzRad)),
+    ) <
+      (1 * Math.PI) / 180
+  ) {
     // Ответ совпал с гипотезой грубого поиска — учитываем её качество
     confidence *= Math.min(1, coarseBest.uniqueness / 1.5);
-    if (coarseBest.anchorScore >= 0.6) confidence = Math.min(1, confidence + 0.2);
-    else if (coarseBest.anchorScore === 0 && options.peaks?.length) confidence *= 0.5;
+    if (coarseBest.anchorScore >= 0.6)
+      confidence = Math.min(1, confidence + 0.2);
+    else if (coarseBest.anchorScore === 0 && options.peaks?.length)
+      confidence *= 0.5;
   }
 
   return {

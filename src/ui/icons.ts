@@ -130,7 +130,9 @@ export const ICON_MAP = svg(
 );
 
 /** Поиск */
-export const ICON_SEARCH = svg('<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 4.5 4.5"/>');
+export const ICON_SEARCH = svg(
+  '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 4.5 4.5"/>',
+);
 
 /**
  * Настройки: ползунки.
@@ -159,7 +161,10 @@ export function iconArrow(rotateDeg: number): string {
 
 /** Подъём и спуск наблюдателя */
 export const ICON_UP = svg('<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/>', 20);
-export const ICON_DOWN = svg('<path d="M12 5v14"/><path d="m6 13 6 6 6-6"/>', 20);
+export const ICON_DOWN = svg(
+  '<path d="M12 5v14"/><path d="m6 13 6 6 6-6"/>',
+  20,
+);
 
 /** Закрыть */
 export const ICON_CLOSE = svg('<path d="M6 6l12 12M18 6 6 18"/>');

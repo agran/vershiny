@@ -7,10 +7,10 @@
  * возможна только от арифметики с плавающей точкой.
  */
 
-import { describe, it, expect } from 'vitest';
-import { decimalYear, magneticDeclinationDeg } from '../src/core/declination';
+import { describe, it, expect } from "vitest";
+import { decimalYear, magneticDeclinationDeg } from "../src/core/declination";
 
-describe('магнитное склонение (WMM-2025)', () => {
+describe("магнитное склонение (WMM-2025)", () => {
   const cases = [
     { lat: 43.318, lon: 42.458, year: 2026.63, expect: 7.4751 }, // Эльбрус
     { lat: 61.5, lon: 159.0, year: 2026.63, expect: -9.2282 }, // Камчатка
@@ -32,13 +32,13 @@ describe('магнитное склонение (WMM-2025)', () => {
     });
   }
 
-  it('дату за пределами срока модели прижимает, а не экстраполирует', () => {
+  it("дату за пределами срока модели прижимает, а не экстраполирует", () => {
     const clamped = magneticDeclinationDeg(43.318, 42.458, 2099.0);
     const atEdge = magneticDeclinationDeg(43.318, 42.458, 2031.0);
     expect(clamped).toBeCloseTo(atEdge, 6);
   });
 
-  it('десятичный год считается от доли года', () => {
+  it("десятичный год считается от доли года", () => {
     const mid = decimalYear(new Date(Date.UTC(2026, 6, 2, 12)));
     expect(mid).toBeGreaterThan(2026.4);
     expect(mid).toBeLessThan(2026.6);

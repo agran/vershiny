@@ -24,8 +24,8 @@
  * WebKit и спецификации WebKit DOM Additions, 2026-08).
  */
 
-import { getCalibration, setCalibration } from './calibration';
-import { decimalYear, magneticDeclinationDeg } from './declination';
+import { getCalibration, setCalibration } from "./calibration";
+import { decimalYear, magneticDeclinationDeg } from "./declination";
 
 export interface OrientationState {
   /** Азимут (истинный север), рад [0, 2π) */
@@ -40,7 +40,7 @@ export interface OrientationState {
    */
   accuracyDeg: number;
   /** Откуда данные: 'sensor' | 'manual' | 'none' */
-  source: 'sensor' | 'manual' | 'none';
+  source: "sensor" | "manual" | "none";
 }
 
 type OrientationCallback = (state: OrientationState) => void;
@@ -119,7 +119,7 @@ export function isAbsoluteReading(
   isAbsoluteFlag: boolean,
   seenAbsolute: boolean,
 ): boolean {
-  if (eventType === 'deviceorientationabsolute') return true;
+  if (eventType === "deviceorientationabsolute") return true;
   if (hasCompassHeading || isAbsoluteFlag) return true;
   // Относительное показание годится, только если абсолютного нет вовсе
   return !seenAbsolute;
@@ -137,7 +137,8 @@ export function followAzimuth(prevRad: number, targetRad: number): number {
   // Один NaN от датчика (Firefox for Android и часть WebView кладут его в
   // webkitCompassHeading, когда абсолютного азимута нет) иначе прилипал
   // навсегда: diff от NaN — NaN, и вся отрисовка получала NaN-координаты
-  if (!Number.isFinite(targetRad)) return Number.isFinite(prevRad) ? normalizeAngle(prevRad) : 0;
+  if (!Number.isFinite(targetRad))
+    return Number.isFinite(prevRad) ? normalizeAngle(prevRad) : 0;
   if (!Number.isFinite(prevRad)) return normalizeAngle(targetRad);
   const diff = shortestAngle(targetRad - prevRad);
   const k = Math.min(1, Math.max(MIN_FOLLOW, Math.abs(diff) / MOTION_RAD));
@@ -171,7 +172,9 @@ export function verticalRateFromGyro(
   const wg = (rateGammaDps * Math.PI) / 180;
   // Третья строка R: проекция осей устройства на вертикаль Земли
   const wzEarth =
-    -Math.cos(b) * Math.sin(g) * wb + Math.sin(b) * wg + Math.cos(b) * Math.cos(g) * wa;
+    -Math.cos(b) * Math.sin(g) * wb +
+    Math.sin(b) * wg +
+    Math.cos(b) * Math.cos(g) * wa;
   return -wzEarth;
 }
 
@@ -195,7 +198,8 @@ export function correctDrift(
   if (!Number.isFinite(compassRad)) return normalizeAngle(prevRad);
   if (!Number.isFinite(prevRad)) return normalizeAngle(compassRad);
   const diff = shortestAngle(compassRad - prevRad);
-  if (allowSnap && Math.abs(diff) > GYRO_SNAP_RAD) return normalizeAngle(compassRad);
+  if (allowSnap && Math.abs(diff) > GYRO_SNAP_RAD)
+    return normalizeAngle(compassRad);
   const k = 1 - Math.exp(-Math.max(0, dtS) / GYRO_TAU_S);
   return normalizeAngle(prevRad + diff * k);
 }
@@ -217,7 +221,8 @@ export function confirmSnap(
   prevDir: number,
   diffRad: number,
 ): { run: number; dir: number; confirmed: boolean } {
-  if (Math.abs(diffRad) <= GYRO_SNAP_RAD) return { run: 0, dir: 0, confirmed: false };
+  if (Math.abs(diffRad) <= GYRO_SNAP_RAD)
+    return { run: 0, dir: 0, confirmed: false };
   const dir = Math.sign(diffRad);
   const run = dir === prevDir ? prevRun + 1 : 1;
   return { run, dir, confirmed: run >= SNAP_CONFIRM_SAMPLES };
@@ -274,7 +279,7 @@ class OrientationTracker {
     azimuthRad: 0,
     tiltRad: 0,
     accuracyDeg: -1,
-    source: 'none',
+    source: "none",
   };
   private callback: OrientationCallback | null = null;
   private lastEmitted = 0;
@@ -373,7 +378,7 @@ class OrientationTracker {
   get needsCalibration(): boolean {
     return (
       this.calibrationRequested ||
-      (this.state.source === 'sensor' && this.state.accuracyDeg < 0)
+      (this.state.source === "sensor" && this.state.accuracyDeg < 0)
     );
   }
 
@@ -394,7 +399,7 @@ class OrientationTracker {
     // iOS 13+: доступ к датчикам даётся только из обработчика жеста
     if (needsUserGesture()) {
       this.permissionPending = true;
-      this.state.source = 'manual';
+      this.state.source = "manual";
       this.callback(this.state);
       return;
     }
@@ -425,8 +430,10 @@ class OrientationTracker {
       requestPermission?: () => Promise<string>;
     };
     const DME =
-      typeof DeviceMotionEvent !== 'undefined'
-        ? (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> })
+      typeof DeviceMotionEvent !== "undefined"
+        ? (DeviceMotionEvent as unknown as {
+            requestPermission?: () => Promise<string>;
+          })
         : null;
     // Оба запроса — параллельно из одного жеста: после await первого
     // транзиентная активация жеста может быть уже израсходована, и iOS
@@ -436,13 +443,13 @@ class OrientationTracker {
       DOE.requestPermission?.(),
       DME?.requestPermission?.(),
     ]);
-    if (orientation.status === 'fulfilled' && orientation.value === 'granted') {
+    if (orientation.status === "fulfilled" && orientation.value === "granted") {
       this.permissionPending = false;
       this.listen();
       return true;
     }
     // Отказ или вызов вне жеста — остаёмся на ручной подстройке
-    this.state.source = 'manual';
+    this.state.source = "manual";
     this.callback?.(this.state);
     return false;
   }
@@ -454,18 +461,23 @@ class OrientationTracker {
 
     // Оба события ведут в один обработчик, но относительное (произвольный
     // ноль) используется только пока нет абсолютного — см. isAbsoluteReading
-    const handler = (ev: Event) => this.onOrientation(ev as DeviceOrientationEvent, ev.type);
+    const handler = (ev: Event) =>
+      this.onOrientation(ev as DeviceOrientationEvent, ev.type);
     this.handler = handler;
-    if ('ondeviceorientationabsolute' in window) {
-      window.addEventListener('deviceorientationabsolute', handler, true);
+    if ("ondeviceorientationabsolute" in window) {
+      window.addEventListener("deviceorientationabsolute", handler, true);
     }
-    window.addEventListener('deviceorientation', handler, true);
+    window.addEventListener("deviceorientation", handler, true);
     // Гироскоп — быстрая составляющая комплементарного фильтра. Там, где
     // rotationRate не приходит вовсе (десктоп), обработчик просто молчит
-    window.addEventListener('devicemotion', this.onMotion, true);
+    window.addEventListener("devicemotion", this.onMotion, true);
     // iOS сама просит калибровку: событие приходит, когда магнитометр
     // раскалиброван или рядом источник помех
-    window.addEventListener('compassneedscalibration', this.onCalibrationNeeded, true);
+    window.addEventListener(
+      "compassneedscalibration",
+      this.onCalibrationNeeded,
+      true,
+    );
   }
 
   private onCalibrationNeeded = (): void => {
@@ -490,7 +502,8 @@ class OrientationTracker {
     if (!rate) return;
     const { alpha: ra, beta: rb, gamma: rg } = rate;
     if (ra == null || rb == null || rg == null) return;
-    if (!Number.isFinite(ra) || !Number.isFinite(rb) || !Number.isFinite(rg)) return;
+    if (!Number.isFinite(ra) || !Number.isFinite(rb) || !Number.isFinite(rg))
+      return;
 
     const now = performance.now();
     const rawDtS = (now - this.lastGyroMs) / 1000;
@@ -534,13 +547,13 @@ class OrientationTracker {
       azimuthRad: finalAz,
       tiltRad: patch?.tiltRad ?? prev.tiltRad,
       accuracyDeg: patch?.accuracyDeg ?? prev.accuracyDeg,
-      source: 'sensor',
+      source: "sensor",
     };
 
     // Отправляем только при значимом изменении (>0.1°) или раз в 100 мс:
     // сравнивать нужно со временем прошлой отправки, а не с текущим.
     // Смена флага калибровки — тоже повод сообщить: UI показывает подсказку
-    const wasUncalibrated = prev.source === 'sensor' && prev.accuracyDeg < 0;
+    const wasUncalibrated = prev.source === "sensor" && prev.accuracyDeg < 0;
     const isUncalibrated = this.state.accuracyDeg < 0;
     const diff = Math.abs(shortestAngle(finalAz - prev.azimuthRad));
     if (
@@ -582,25 +595,42 @@ class OrientationTracker {
       this.seenAbsolute = false;
     }
 
-    if (!isAbsoluteReading(eventType, hasCompass, ev.absolute === true, this.seenAbsolute)) {
+    if (
+      !isAbsoluteReading(
+        eventType,
+        hasCompass,
+        ev.absolute === true,
+        this.seenAbsolute,
+      )
+    ) {
       return;
     }
 
     const alphaDeg = hasCompass ? 360 - (heading as number) : (ev.alpha ?? 0);
     const betaDeg = ev.beta ?? 0;
     const gammaDeg = ev.gamma ?? 0;
-    if (!Number.isFinite(alphaDeg) || !Number.isFinite(betaDeg) || !Number.isFinite(gammaDeg)) {
+    if (
+      !Number.isFinite(alphaDeg) ||
+      !Number.isFinite(betaDeg) ||
+      !Number.isFinite(gammaDeg)
+    ) {
       return;
     }
 
     const look = lookFromDeviceOrientation(alphaDeg, betaDeg, gammaDeg);
-    if (!Number.isFinite(look.azimuthRad) || !Number.isFinite(look.elevationRad)) return;
+    if (
+      !Number.isFinite(look.azimuthRad) ||
+      !Number.isFinite(look.elevationRad)
+    )
+      return;
 
     // Флаг «абсолютное показание уже видели» ставим только по годным данным:
     // иначе одно битое событие закрывало дорогу относительным показаниям,
     // которые в этот момент — единственный рабочий источник
     const absolute =
-      eventType === 'deviceorientationabsolute' || hasCompass || ev.absolute === true;
+      eventType === "deviceorientationabsolute" ||
+      hasCompass ||
+      ev.absolute === true;
     if (absolute) {
       this.seenAbsolute = true;
       this.lastAbsoluteMs = performance.now();
@@ -625,7 +655,9 @@ class OrientationTracker {
     this.lastEulerDeg = { beta: betaDeg, gamma: gammaDeg };
 
     const gyroAlive =
-      !this.gyroMuted && this.lastGyroMs > 0 && now - this.lastGyroMs < GYRO_ALIVE_MS;
+      !this.gyroMuted &&
+      this.lastGyroMs > 0 &&
+      now - this.lastGyroMs < GYRO_ALIVE_MS;
     if (gyroAlive) {
       // Комплементарный фильтр: азимут интегрируется гироскопом (onMotion),
       // компас здесь — только медленный якорь против дрейфа. Запасную
@@ -634,7 +666,8 @@ class OrientationTracker {
       const dtS = this.lastOrientMs > 0 ? (now - this.lastOrientMs) / 1000 : 0;
       if (dtS > 0) {
         const hz = 1 / dtS;
-        this.orientHz = this.orientHz === 0 ? hz : 0.95 * this.orientHz + 0.05 * hz;
+        this.orientHz =
+          this.orientHz === 0 ? hz : 0.95 * this.orientHz + 0.05 * hz;
       }
       if (this.fusedRad === null) {
         this.fusedRad = azimuthRad;
@@ -651,7 +684,9 @@ class OrientationTracker {
         this.snapRun = snap.confirmed ? 0 : snap.run;
         this.snapDir = snap.confirmed ? 0 : snap.dir;
         if (snap.confirmed) {
-          this.snapTimes = this.snapTimes.filter((t) => now - t < GYRO_SNAP_WINDOW_MS);
+          this.snapTimes = this.snapTimes.filter(
+            (t) => now - t < GYRO_SNAP_WINDOW_MS,
+          );
           this.snapTimes.push(now);
           if (this.snapTimes.length >= GYRO_SNAP_MUTE_COUNT) {
             // Перекалибровка «восьмёркой» даёт одиночный snap. Серия —
@@ -660,14 +695,19 @@ class OrientationTracker {
             // гироскопу верить нельзя, уходим в сглаживание компаса
             this.gyroMuted = true;
             console.warn(
-              'Гироскоп отключён: интеграл систематически расходится с компасом. ' +
-                'Диагностика: ' +
+              "Гироскоп отключён: интеграл систематически расходится с компасом. " +
+                "Диагностика: " +
                 `gyro ${this.gyroHz.toFixed(0)} Гц, compass ${this.orientHz.toFixed(0)} Гц, ` +
                 `${this.snapTimes.length} snap за ${GYRO_SNAP_WINDOW_MS / 1000} с`,
             );
           }
         }
-        this.fusedRad = correctDrift(this.fusedRad, azimuthRad, dtS, snap.confirmed);
+        this.fusedRad = correctDrift(
+          this.fusedRad,
+          azimuthRad,
+          dtS,
+          snap.confirmed,
+        );
       }
       this.followedRad = null;
       this.gyroSamples.length = 0;
@@ -684,14 +724,19 @@ class OrientationTracker {
       }
       const smoothed = circularMean(this.gyroSamples);
       this.followedRad =
-        this.followedRad === null ? smoothed : followAzimuth(this.followedRad, smoothed);
+        this.followedRad === null
+          ? smoothed
+          : followAzimuth(this.followedRad, smoothed);
     }
     this.lastOrientMs = now;
 
     // Точность вернулась в норму — системная просьба о калибровке отработана
     if (accuracy >= 0) this.calibrationRequested = false;
 
-    this.emitSensorState(now, { tiltRad: look.elevationRad, accuracyDeg: accuracy });
+    this.emitSensorState(now, {
+      tiltRad: look.elevationRad,
+      accuracyDeg: accuracy,
+    });
   }
 
   /** Ручная подстройка (свайп): добавляет оффсет к сенсорному азимуту */
@@ -720,12 +765,20 @@ class OrientationTracker {
     // Слушатели снимаем вместе с флагом: иначе повторный start() навешивал бы
     // второй комплект обработчиков поверх живого первого
     if (this.handler) {
-      window.removeEventListener('deviceorientationabsolute', this.handler, true);
-      window.removeEventListener('deviceorientation', this.handler, true);
+      window.removeEventListener(
+        "deviceorientationabsolute",
+        this.handler,
+        true,
+      );
+      window.removeEventListener("deviceorientation", this.handler, true);
       this.handler = null;
     }
-    window.removeEventListener('devicemotion', this.onMotion, true);
-    window.removeEventListener('compassneedscalibration', this.onCalibrationNeeded, true);
+    window.removeEventListener("devicemotion", this.onMotion, true);
+    window.removeEventListener(
+      "compassneedscalibration",
+      this.onCalibrationNeeded,
+      true,
+    );
     if (this.calibrationTimer) {
       clearTimeout(this.calibrationTimer);
       this.calibrationTimer = null;
@@ -749,9 +802,10 @@ class OrientationTracker {
  */
 export function needsUserGesture(): boolean {
   return (
-    typeof DeviceOrientationEvent !== 'undefined' &&
-    typeof (DeviceOrientationEvent as unknown as { requestPermission?: unknown })
-      .requestPermission === 'function'
+    typeof DeviceOrientationEvent !== "undefined" &&
+    typeof (
+      DeviceOrientationEvent as unknown as { requestPermission?: unknown }
+    ).requestPermission === "function"
   );
 }
 

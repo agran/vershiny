@@ -66,7 +66,9 @@ export function effectiveOrientation(): "landscape" | "portrait" {
  * (отказ ОС, уход из fullscreen) — глотаем: хуже уже не станет, экран
  * просто останется свободным.
  */
-export async function applyOrientation(pref: ScreenOrientationPref): Promise<void> {
+export async function applyOrientation(
+  pref: ScreenOrientationPref,
+): Promise<void> {
   if (!canLockOrientation()) return;
   const api = orientationApi();
   if (!api) return;

@@ -75,8 +75,9 @@ function browserDeps(): AnalyticsDeps {
     isOnline: () => navigator.onLine !== false,
 
     whenIdle: (task) => {
-      const idle = (root as { requestIdleCallback?: (cb: () => void, o?: object) => void })
-        .requestIdleCallback;
+      const idle = (
+        root as { requestIdleCallback?: (cb: () => void, o?: object) => void }
+      ).requestIdleCallback;
       // Таймаут обязателен: без него в занятой вкладке простоя можно ждать
       // сколько угодно, и визит не засчитается вовсе
       if (idle) idle(task, { timeout: 5_000 });
@@ -95,17 +96,17 @@ function browserDeps(): AnalyticsDeps {
       ym.l = Date.now();
       w.ym = ym;
 
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.async = true; // разметку не блокирует и падение переживает молча
       script.src = TAG_URL;
       document.head.appendChild(script);
 
-      ym(METRIKA_ID, 'init', {
+      ym(METRIKA_ID, "init", {
         // Карта кликов выключена сознательно: она пишет координаты каждого
         // нажатия, а нужно знать только, сколько людей пользуется. Собирать
         // больше, чем нужно для ответа на вопрос, — плохая сделка
         clickmap: false,
-        ecommerce: 'dataLayer',
+        ecommerce: "dataLayer",
         accurateTrackBounce: true,
         trackLinks: true,
         referrer: document.referrer,
@@ -115,14 +116,14 @@ function browserDeps(): AnalyticsDeps {
 
     sendHit: () => {
       const w = window as unknown as { ym?: Ym };
-      w.ym?.(METRIKA_ID, 'hit', pageUrlForCounter(location.href), {
+      w.ym?.(METRIKA_ID, "hit", pageUrlForCounter(location.href), {
         referer: document.referrer,
       });
     },
 
     onVisible: (handler) => {
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') handler();
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") handler();
       });
     },
 

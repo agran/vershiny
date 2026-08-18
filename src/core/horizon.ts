@@ -11,9 +11,9 @@ import {
   distanceM,
   azimuthRad,
   type LatLon,
-} from './geo';
-import type { Peak } from './peaks';
-import { PEAK_VISIBILITY_RADIUS_M, peakScore } from './peaks';
+} from "./geo";
+import type { Peak } from "./peaks";
+import { PEAK_VISIBILITY_RADIUS_M, peakScore } from "./peaks";
 
 /** Синхронная выборка высоты: (pos, дистанция от наблюдателя) → метры | NaN */
 export type SampleFn = (pos: LatLon, distM: number) => number;
@@ -33,7 +33,9 @@ export interface HorizonOptions {
 export const OBSERVER_EYE_M = 1.7;
 
 /** Дистанционные корзины для слоёв (метры) */
-export const LAYER_BOUNDS = [0, 5_000, 15_000, 40_000, 100_000, 200_000] as const;
+export const LAYER_BOUNDS = [
+  0, 5_000, 15_000, 40_000, 100_000, 200_000,
+] as const;
 export const LAYER_COUNT = LAYER_BOUNDS.length - 1;
 
 /**
@@ -41,7 +43,9 @@ export const LAYER_COUNT = LAYER_BOUNDS.length - 1;
  * Гребень = точка, где угол возвышения вдоль луча достиг локального максимума
  * и дальше падает: именно такие точки видны в кадре как линия силуэта.
  */
-export const CREST_BOUNDS = [0, 800, 2_000, 5_000, 12_000, 30_000, 70_000, 200_001] as const;
+export const CREST_BOUNDS = [
+  0, 800, 2_000, 5_000, 12_000, 30_000, 70_000, 200_001,
+] as const;
 export const CREST_COUNT = CREST_BOUNDS.length - 1;
 /** Насколько угол должен упасть после максимума, чтобы это считалось гребнем, рад (~0.09°) */
 const CREST_DROP_RAD = 0.0015;
@@ -95,7 +99,7 @@ export interface VisiblePeak extends Peak {
   /** Расстояние, м */
   distanceM: number;
   /** Видимость: выше горизонта / на склоне / скрыт хребтом */
-  visibility: 'visible' | 'onSlope' | 'hidden';
+  visibility: "visible" | "onSlope" | "hidden";
   /** Для скрытых: сколько метров не хватило до линии гребня */
   hiddenDeficitM?: number;
 }
@@ -170,11 +174,15 @@ export function computeLayeredHorizon(
   const hO = observerH + (options.observerElevationM ?? OBSERVER_EYE_M);
 
   const rayCount = Math.ceil(TWO_PI / stepRad);
-  const layers = Array.from({ length: LAYER_COUNT }, () => new Float32Array(rayCount).fill(-Infinity));
+  const layers = Array.from({ length: LAYER_COUNT }, () =>
+    new Float32Array(rayCount).fill(-Infinity),
+  );
   const distanceToHorizonM = new Float32Array(rayCount).fill(Infinity);
   const fronts: VisibleFront[][] = Array.from({ length: rayCount }, () => []);
   // Гребни: видимые перегибы силуэта по корзинам дистанций
-  const crests = Array.from({ length: CREST_COUNT }, () => new Float32Array(rayCount).fill(-Infinity));
+  const crests = Array.from({ length: CREST_COUNT }, () =>
+    new Float32Array(rayCount).fill(-Infinity),
+  );
 
   // Марш начинаем с 1.5 ячейки DEM (численная стабильность atan2)
   const marchStart = minDist * 1.5; // ~135 м для 90 м DEM
@@ -251,7 +259,10 @@ export function computeLayeredHorizon(
       // никогда: дальний хребет прилипал к ближнему, и один фронт тянулся
       // от 3 до 25 км — маркеры вершин выбирали его для чего угодно.
       if (angle > currentMax && d >= nearSkip) {
-        if (rayFronts.length === 0 || d - rayFronts[rayFronts.length - 1].distEndM > 2000) {
+        if (
+          rayFronts.length === 0 ||
+          d - rayFronts[rayFronts.length - 1].distEndM > 2000
+        ) {
           // Новый фронт (после провала >2 км)
           rayFronts.push({
             distM: d,
@@ -269,7 +280,8 @@ export function computeLayeredHorizon(
       }
 
       // Ранний выход
-      if (d > 60_000 && angle < binMax[bin] - 0.02 && binMax[bin] < -0.005) break;
+      if (d > 60_000 && angle < binMax[bin] - 0.02 && binMax[bin] < -0.005)
+        break;
     }
 
     // Последний максимум по лучу — это линия неба (skyline)
@@ -321,7 +333,7 @@ function smoothLayers(
       const cellSizeM = Math.max(90, dist / 150);
       const halfWin = Math.min(
         8,
-        Math.max(0, Math.round((cellSizeM / 2 / dist) / stepRad)),
+        Math.max(0, Math.round(cellSizeM / 2 / dist / stepRad)),
       );
 
       let sum = 0;
@@ -383,7 +395,7 @@ export function checkPeakVisibility(
         azimuthRad: az,
         elevationRad: peakAngle,
         distanceM: dist,
-        visibility: 'onSlope',
+        visibility: "onSlope",
       };
     }
     // За хребтом. Подписываем «чуть-чуть» скрытые: вершине не хватило десятков
@@ -391,13 +403,16 @@ export function checkPeakVisibility(
     // подписей показать, решает раскладка по бюджету кадра.
     const depthRad = maxAngle - peakAngle;
     const deficitM = (Math.tan(maxAngle) - Math.tan(peakAngle)) * dist;
-    if (depthRad <= HIDDEN_LABEL_DEPTH_RAD && deficitM <= HIDDEN_LABEL_DEFICIT_M) {
+    if (
+      depthRad <= HIDDEN_LABEL_DEPTH_RAD &&
+      deficitM <= HIDDEN_LABEL_DEFICIT_M
+    ) {
       return {
         ...peak,
         azimuthRad: az,
         elevationRad: peakAngle,
         distanceM: dist,
-        visibility: 'hidden',
+        visibility: "hidden",
         hiddenDeficitM: deficitM,
       };
     }
@@ -409,7 +424,7 @@ export function checkPeakVisibility(
     azimuthRad: az,
     elevationRad: peakAngle,
     distanceM: dist,
-    visibility: 'visible',
+    visibility: "visible",
   };
 }
 
@@ -424,9 +439,18 @@ export function filterVisiblePeaks(
   const result: VisiblePeak[] = [];
   for (const peak of peaks) {
     const distToHorizon = layered
-      ? layered.distanceToHorizonM[Math.round(azimuthRad(origin, peak) / layered.stepRad) % layered.distanceToHorizonM.length]
+      ? layered.distanceToHorizonM[
+          Math.round(azimuthRad(origin, peak) / layered.stepRad) %
+            layered.distanceToHorizonM.length
+        ]
       : Infinity;
-    const visible = checkPeakVisibility(origin, observerH, peak, sample, distToHorizon);
+    const visible = checkPeakVisibility(
+      origin,
+      observerH,
+      peak,
+      sample,
+      distToHorizon,
+    );
     if (visible) result.push(visible);
   }
   // Сортировка: видимые → на склоне → скрытые; внутри — по приоритету подписи

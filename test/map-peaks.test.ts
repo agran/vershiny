@@ -59,7 +59,12 @@ describe("selectMapPeaks", () => {
     // отрисовку (projectPeaks)
     const count = 500;
     const many = Array.from({ length: count }, (_, i) =>
-      peak(`V${i}`, 1000 + ((i * 7919) % 3000), 42 + (i % 25) * 0.05, 41 + ((i / 25) | 0) * 0.07),
+      peak(
+        `V${i}`,
+        1000 + ((i * 7919) % 3000),
+        42 + (i % 25) * 0.05,
+        41 + ((i / 25) | 0) * 0.07,
+      ),
     );
     const a = selectMapPeaks(many, 9).map((p) => p.name);
     const b = selectMapPeaks(many, 9).map((p) => p.name);
@@ -125,7 +130,10 @@ describe("selectMapPeaks", () => {
   });
 
   it("на крупном зуме одноимённые показываются все", () => {
-    const twins = [peak("Двойня", 3000, 43.0, 42.0), peak("Двойня", 2900, 43.001, 42.001)];
+    const twins = [
+      peak("Двойня", 3000, 43.0, 42.0),
+      peak("Двойня", 2900, 43.001, 42.001),
+    ];
     expect(selectMapPeaks(twins, 14)).toHaveLength(2);
   });
 
@@ -161,7 +169,13 @@ describe("selectMapPeaks с кадром карты", () => {
       peak("Пшеха-Су", 2744, 43.99, 39.83),
     ];
     // Кадр: Фишт-Оштеновский массив (как из Краснодара, но придвинутый на запад)
-    const selected = selectMapPeaks(many, 11, { lat: 44.0, lon: 39.87 }, 800, 600);
+    const selected = selectMapPeaks(
+      many,
+      11,
+      { lat: 44.0, lon: 39.87 },
+      800,
+      600,
+    );
     const names = selected.map((p) => p.name);
     expect(names).toContain("Оштен");
     expect(names).toContain("Фишт");
@@ -170,7 +184,12 @@ describe("selectMapPeaks с кадром карты", () => {
 
   it("без кадра отдаёт весь набор (до страховочного потолка)", () => {
     const many = Array.from({ length: 30 }, (_, i) =>
-      peak(`V${i}`, 1000 + i * 100, 42 + (i % 6) * 0.05, 41 + ((i / 6) | 0) * 0.07),
+      peak(
+        `V${i}`,
+        1000 + i * 100,
+        42 + (i % 6) * 0.05,
+        41 + ((i / 6) | 0) * 0.07,
+      ),
     );
     const selected = selectMapPeaks(many, 9);
     expect(selected).toHaveLength(30);
@@ -188,7 +207,13 @@ describe("projectPeaks", () => {
   const center = { lat: 43, lon: 42 };
 
   it("вершина в центре — в центре экрана", () => {
-    const [p] = projectPeaks([peak("Центр", 1000, 43, 42)], center, 11, 800, 600);
+    const [p] = projectPeaks(
+      [peak("Центр", 1000, 43, 42)],
+      center,
+      11,
+      800,
+      600,
+    );
     expect(p.x).toBeCloseTo(400, 5);
     expect(p.y).toBeCloseTo(300, 5);
   });
@@ -291,7 +316,10 @@ describe("placeMapPeakLabels", () => {
       state,
     );
     // Кадр 2: «a» ушла, у «b» центр свободен — но якорь липкий, не дёргаемся
-    const placed = placeMapPeakLabels([item("b", 130, 100, "оченьдлинноеимя 9999")], state);
+    const placed = placeMapPeakLabels(
+      [item("b", 130, 100, "оченьдлинноеимя 9999")],
+      state,
+    );
     expect(placed[0].shift).not.toBe(0);
   });
 });

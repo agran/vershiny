@@ -15,10 +15,10 @@ import {
   fovForFrame,
   horizonFracInFrame,
   type FrameFov,
-} from '../core/camera-fov';
-import { DEFAULT_CAMERA_FOV_DEG, getCalibration } from '../core/calibration';
-import type { PanoramaState, ViewState } from './panorama';
-import { HORIZON_FRAC, drawOverlay } from './panorama';
+} from "../core/camera-fov";
+import { DEFAULT_CAMERA_FOV_DEG, getCalibration } from "../core/calibration";
+import type { PanoramaState, ViewState } from "./panorama";
+import { HORIZON_FRAC, drawOverlay } from "./panorama";
 
 export interface ArOptions {
   /** Прозрачность оверлея 0–1 */
@@ -32,7 +32,11 @@ export interface ArSession {
    * Кадр камеры как пиксели — для автокалибровки (core/skyline.ts).
    * null, пока камера не отдала первый кадр.
    */
-  grabFrame: () => { rgba: Uint8ClampedArray; width: number; height: number } | null;
+  grabFrame: () => {
+    rgba: Uint8ClampedArray;
+    width: number;
+    height: number;
+  } | null;
   /**
    * Углы обзора ПОЛНОГО кадра камеры (с учётом зума, без cover-кропа), рад.
    * Именно они нужны автокалибровке: grabFrame отдаёт кадр целиком.
@@ -47,20 +51,25 @@ export interface ArSession {
 
 /** Базовый угол обзора по длинной стороне кадра камеры (калибровка), рад */
 function baseFovRad(): number {
-  return ((getCalibration().cameraFovDeg ?? DEFAULT_CAMERA_FOV_DEG) * Math.PI) / 180;
+  return (
+    ((getCalibration().cameraFovDeg ?? DEFAULT_CAMERA_FOV_DEG) * Math.PI) / 180
+  );
 }
 
 /** Параметры запроса камеры — вынесены: понадобятся при перезапуске трека */
 const CAMERA_CONSTRAINTS: MediaStreamConstraints = {
   video: {
-    facingMode: 'environment', // задняя камера
+    facingMode: "environment", // задняя камера
     width: { ideal: 1920 },
     height: { ideal: 1080 },
   },
   audio: false,
 };
 
-async function attachStream(videoEl: HTMLVideoElement, stream: MediaStream): Promise<void> {
+async function attachStream(
+  videoEl: HTMLVideoElement,
+  stream: MediaStream,
+): Promise<void> {
   videoEl.pause();
   videoEl.srcObject = null;
   videoEl.srcObject = stream;
@@ -81,8 +90,11 @@ const FREEZE_CHECK_MS = 300;
  * нет (Safari < 15.4), сверяем `currentTime` — не так надёжно для
  * MediaStream (время может идти и без смены кадра), но лучше, чем ничего.
  */
-function waitForFrame(videoEl: HTMLVideoElement, timeoutMs: number): Promise<boolean> {
-  if (typeof videoEl.requestVideoFrameCallback === 'function') {
+function waitForFrame(
+  videoEl: HTMLVideoElement,
+  timeoutMs: number,
+): Promise<boolean> {
+  if (typeof videoEl.requestVideoFrameCallback === "function") {
     return new Promise((resolve) => {
       let settled = false;
       const id = videoEl.requestVideoFrameCallback(() => {
@@ -116,7 +128,8 @@ async function attachStreamAndVerify(
 ): Promise<void> {
   await attachStream(videoEl, stream);
   void waitForFrame(videoEl, FREEZE_CHECK_MS).then((ok) => {
-    if (!ok) console.warn('Камера: кадр не пошёл даже после переприсоединения потока');
+    if (!ok)
+      console.warn("Камера: кадр не пошёл даже после переприсоединения потока");
   });
 }
 
@@ -167,14 +180,15 @@ export async function startAr(
     resuming = true;
     try {
       const track = stream.getVideoTracks()[0];
-      if (track && track.readyState === 'ended') {
+      if (track && track.readyState === "ended") {
         stream.getTracks().forEach((t) => t.stop());
         try {
-          stream = await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
+          stream =
+            await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
           readZoom();
           rebindTrackEnded();
         } catch (err) {
-          console.warn('Камера после сворачивания не перезапустилась:', err);
+          console.warn("Камера после сворачивания не перезапустилась:", err);
           return;
         }
         // Новый MediaStream кадра ещё не отдавал — переприсоединение неизбежно
@@ -211,9 +225,9 @@ export async function startAr(
   const onVisible = (): void => {
     if (!document.hidden) void resume();
   };
-  document.addEventListener('visibilitychange', onVisible);
-  window.addEventListener('focus', onVisible);
-  window.addEventListener('pageshow', onVisible);
+  document.addEventListener("visibilitychange", onVisible);
+  window.addEventListener("focus", onVisible);
+  window.addEventListener("pageshow", onVisible);
 
   // Трек может завершиться и в видимой вкладке (камеру отобрало другое
   // приложение) — пытаемся перезапустить сразу, не дожидаясь сворачивания.
@@ -222,13 +236,13 @@ export async function startAr(
   const onTrackEnded = (): void => void resume();
   let endedTrack: MediaStreamTrack | undefined;
   function rebindTrackEnded(): void {
-    endedTrack?.removeEventListener('ended', onTrackEnded);
+    endedTrack?.removeEventListener("ended", onTrackEnded);
     endedTrack = stream.getVideoTracks()[0];
-    endedTrack?.addEventListener('ended', onTrackEnded);
+    endedTrack?.addEventListener("ended", onTrackEnded);
   }
   rebindTrackEnded();
 
-  const ctx = canvas.getContext('2d')!;
+  const ctx = canvas.getContext("2d")!;
   const opacity = options.opacity ?? 0.55;
 
   // Зум камеры, если браузер его сообщает (Android Chrome; на iOS поля нет).
@@ -237,9 +251,12 @@ export async function startAr(
   function readZoom(): void {
     try {
       const settings = stream.getVideoTracks()[0]?.getSettings() as
-        | { zoom?: number }
-        | undefined;
-      if (settings && Number.isFinite(settings.zoom) && (settings.zoom as number) > 0) {
+        { zoom?: number } | undefined;
+      if (
+        settings &&
+        Number.isFinite(settings.zoom) &&
+        (settings.zoom as number) > 0
+      ) {
         zoomFactor = settings.zoom as number;
       }
     } catch {
@@ -265,16 +282,16 @@ export async function startAr(
 
   // Отдельный маленький холст для анализа: снимать пиксели с экранного
   // дорого и бессмысленно — на нём поверх кадра уже нарисованы наши контуры
-  const probe = document.createElement('canvas');
-  const probeCtx = probe.getContext('2d', { willReadFrequently: true });
+  const probe = document.createElement("canvas");
+  const probeCtx = probe.getContext("2d", { willReadFrequently: true });
 
   return {
     stop: () => {
       stopped = true;
-      document.removeEventListener('visibilitychange', onVisible);
-      window.removeEventListener('focus', onVisible);
-      window.removeEventListener('pageshow', onVisible);
-      endedTrack?.removeEventListener('ended', onTrackEnded);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
+      window.removeEventListener("pageshow", onVisible);
+      endedTrack?.removeEventListener("ended", onTrackEnded);
       cancelAnimationFrame(raf);
       stream.getTracks().forEach((t) => t.stop());
       videoEl.srcObject = null;
@@ -298,7 +315,11 @@ export async function startAr(
       probe.width = width;
       probe.height = height;
       probeCtx.drawImage(videoEl, 0, 0, width, height);
-      return { rgba: probeCtx.getImageData(0, 0, width, height).data, width, height };
+      return {
+        rgba: probeCtx.getImageData(0, 0, width, height).data,
+        width,
+        height,
+      };
     },
   };
 }
@@ -330,7 +351,7 @@ function drawArFrame(
     const visible = applyCoverCrop(full, vw, vh, width, height);
     overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
   } else {
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, width, height);
   }
 

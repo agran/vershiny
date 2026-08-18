@@ -1,13 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from "vitest";
 import {
   checkPeakVisibility,
   computeHorizon,
   computeLayeredHorizon,
   nextRayStep,
   type SampleFn,
-} from '../src/core/horizon';
-import { destination, type LatLon } from '../src/core/geo';
-import type { Peak } from '../src/core/peaks';
+} from "../src/core/horizon";
+import { destination, type LatLon } from "../src/core/geo";
+import type { Peak } from "../src/core/peaks";
 
 /** Синтетический рельеф: один конус высотой peakH на дистанции coneDist по азимуту coneAz */
 function conicSampler(
@@ -25,15 +25,15 @@ function conicSampler(
 
 const ORIGIN: LatLon = { lat: 43, lon: 42 };
 
-describe('ray-marching горизонта', () => {
-  it('адаптивный шаг растёт с дистанцией', () => {
+describe("ray-marching горизонта", () => {
+  it("адаптивный шаг растёт с дистанцией", () => {
     expect(nextRayStep(1_000)).toBe(90);
     expect(nextRayStep(10_000)).toBe(180);
     expect(nextRayStep(50_000)).toBe(350);
     expect(nextRayStep(150_000)).toBe(700);
   });
 
-  it('конус виден на горизонте под своим азимутом', () => {
+  it("конус виден на горизонте под своим азимутом", () => {
     const coneAz = Math.PI / 3;
     const sample = conicSampler(ORIGIN, coneAz, 20_000, 3000);
     const { angles, stepRad } = computeHorizon(ORIGIN, 0, sample, {
@@ -48,8 +48,8 @@ describe('ray-marching горизонта', () => {
     expect(angles[flatIdx]).toBeLessThan(0.005);
   });
 
-  it('пик за высоким хребтом невидим, без хребта — виден', () => {
-    const far: Peak = { lat: 0, lon: 0, name: 'Дальняя', ele: 5000 };
+  it("пик за высоким хребтом невидим, без хребта — виден", () => {
+    const far: Peak = { lat: 0, lon: 0, name: "Дальняя", ele: 5000 };
     // Разместим дальний пик через destination на 80 км на восток
     const farPos = destination(ORIGIN, Math.PI / 2, 80_000);
     far.lat = farPos.lat;
@@ -66,7 +66,7 @@ describe('ray-marching горизонта', () => {
     expect(visible!.distanceM).toBeCloseTo(80_000, -3);
   });
 
-  it('пик, которому чуть не хватило до гребня, подписывается как hidden', () => {
+  it("пик, которому чуть не хватило до гребня, подписывается как hidden", () => {
     // Хребет 4000 м на 30 км; за ним, на 35 км, вершина
     const ridge = conicSampler(ORIGIN, Math.PI / 2, 30_000, 4000);
     const pos = destination(ORIGIN, Math.PI / 2, 35_000);
@@ -75,12 +75,12 @@ describe('ray-marching горизонта', () => {
     const barely = checkPeakVisibility(
       ORIGIN,
       1000,
-      { ...pos, name: 'Почти видна', ele: 4350 },
+      { ...pos, name: "Почти видна", ele: 4350 },
       ridge,
       30_000,
     );
     expect(barely).not.toBeNull();
-    expect(barely!.visibility).toBe('hidden');
+    expect(barely!.visibility).toBe("hidden");
     // Недобор до гребня измерен и доступен раскладке подписей
     expect(barely!.hiddenDeficitM).toBeGreaterThan(0);
     expect(barely!.hiddenDeficitM).toBeLessThan(400);
@@ -89,7 +89,7 @@ describe('ray-marching горизонта', () => {
     const buried = checkPeakVisibility(
       ORIGIN,
       1000,
-      { ...pos, name: 'Погребённая', ele: 4000 },
+      { ...pos, name: "Погребённая", ele: 4000 },
       ridge,
       30_000,
     );
@@ -97,28 +97,34 @@ describe('ray-marching горизонта', () => {
 
     // 3000 м — погребена под хребтом на полтора километра
     expect(
-      checkPeakVisibility(ORIGIN, 1000, { ...pos, name: 'Глубоко', ele: 3000 }, ridge, 30_000),
+      checkPeakVisibility(
+        ORIGIN,
+        1000,
+        { ...pos, name: "Глубоко", ele: 3000 },
+        ridge,
+        30_000,
+      ),
     ).toBeNull();
 
     // 4600 м — выше гребня, обычная видимая вершина с маркером
     const above = checkPeakVisibility(
       ORIGIN,
       1000,
-      { ...pos, name: 'Над гребнем', ele: 4600 },
+      { ...pos, name: "Над гребнем", ele: 4600 },
       ridge,
       30_000,
     );
-    expect(above!.visibility).toBe('visible');
+    expect(above!.visibility).toBe("visible");
   });
 
-  it('пик вне 200 км отбрасывается', () => {
+  it("пик вне 200 км отбрасывается", () => {
     const flat: SampleFn = () => 0;
     const farPos = destination(ORIGIN, 0, 250_000);
-    const peak: Peak = { ...farPos, name: 'Очень дальняя', ele: 8000 };
+    const peak: Peak = { ...farPos, name: "Очень дальняя", ele: 8000 };
     expect(checkPeakVisibility(ORIGIN, 1000, peak, flat, Infinity)).toBeNull();
   });
 
-  it('ближний и дальний хребты дают разные фронты', () => {
+  it("ближний и дальний хребты дают разные фронты", () => {
     // Раньше ветка «провал — закрываем фронт» на каждой точке ниже максимума
     // растягивала distEndM до текущей дистанции. Разрыв между фронтами не
     // возникал никогда: дальний хребет прилипал к ближнему, один фронт тянулся
@@ -128,7 +134,8 @@ describe('ray-marching горизонта', () => {
     // скрыт за ним и своего фронта не получает
     const near = conicSampler(ORIGIN, az, 5_000, 600);
     const far = conicSampler(ORIGIN, az, 40_000, 8_000);
-    const sample: SampleFn = (pos, dist) => Math.max(near(pos, dist), far(pos, dist));
+    const sample: SampleFn = (pos, dist) =>
+      Math.max(near(pos, dist), far(pos, dist));
 
     const { fronts, stepRad } = computeLayeredHorizon(ORIGIN, 0, sample, {
       maxDistM: 60_000,

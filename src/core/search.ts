@@ -24,9 +24,9 @@
  * оставляем человеку, показывая регион каждого варианта.
  */
 
-import type { Peak } from './peaks';
-import { translitToLatin } from './transliterate';
-import { root } from './globals';
+import type { Peak } from "./peaks";
+import { translitToLatin } from "./transliterate";
+import { root } from "./globals";
 
 /** Запись индекса: [имя, lat, lon, ele, регион, имя_en?, имя_ru?] */
 export type IndexEntry = [
@@ -60,13 +60,16 @@ export const SEARCH_RESULT_LIMIT = 12;
 export function normalizeName(name: string): string {
   return translitToLatin(name)
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '');
+    .replace(/[^a-z0-9]+/g, "");
 }
 
 /**
  * Качество совпадения: true — точное, false — вхождение, null — мимо.
  */
-function matchQuality(names: (string | undefined)[], q: string): boolean | null {
+function matchQuality(
+  names: (string | undefined)[],
+  q: string,
+): boolean | null {
   let partial = false;
   for (const name of names) {
     if (!name) continue;
@@ -78,7 +81,11 @@ function matchQuality(names: (string | undefined)[], q: string): boolean | null 
 }
 
 /** Поиск в списке вершин одного региона */
-export function searchPeaks(query: string, peaks: Peak[], region: string): SearchHit[] {
+export function searchPeaks(
+  query: string,
+  peaks: Peak[],
+  region: string,
+): SearchHit[] {
   const q = normalizeName(query);
   if (!q) return [];
   const hits: SearchHit[] = [];
@@ -109,7 +116,8 @@ export function searchIndex(query: string, entries: IndexEntry[]): SearchHit[] {
   const hits: SearchHit[] = [];
   for (const entry of entries) {
     const exact = matchQuality([entry[0], entry[5], entry[6]], q);
-    if (exact !== null) hits.push({ peak: entryToPeak(entry), region: entry[4], exact });
+    if (exact !== null)
+      hits.push({ peak: entryToPeak(entry), region: entry[4], exact });
   }
   return hits;
 }
@@ -176,7 +184,7 @@ export function editDistance(a: string, b: string, max: number): number {
 
 /** Имя как набрано: нижний регистр без разделителей, без перевода в латиницу */
 function plainName(name: string): string {
-  return name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
+  return name.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
 }
 
 /**
@@ -208,8 +216,11 @@ function typoDistance(
     plain = [];
     for (const name of names) {
       if (!name) continue;
-      const words = name.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
-      plain.push(words.join(''), ...(words.length > 1 ? words : []));
+      const words = name
+        .toLowerCase()
+        .split(/[^\p{L}\p{N}]+/u)
+        .filter(Boolean);
+      plain.push(words.join(""), ...(words.length > 1 ? words : []));
     }
     plainCache.set(item, plain);
   }
@@ -234,7 +245,7 @@ function typoDistance(
         .toLowerCase()
         .split(/[^a-z0-9]+/)
         .filter(Boolean);
-      latin.push(words.join(''), ...(words.length > 1 ? words : []));
+      latin.push(words.join(""), ...(words.length > 1 ? words : []));
     }
     latinCache.set(item, latin);
   }
@@ -280,7 +291,7 @@ export function searchFuzzy(
     if (typos === null) continue;
     hits.push({
       peak: isEntry ? entryToPeak(item) : item,
-      region: isEntry ? item[4] : (region ?? ''),
+      region: isEntry ? item[4] : (region ?? ""),
       exact: false,
       typos,
     });
@@ -301,7 +312,10 @@ function hitKey(hit: SearchHit): string {
 }
 
 /** Насколько «тот самый» результат: высота, точность совпадения, близость */
-function hitScore(hit: SearchHit, origin?: { lat: number; lon: number }): number {
+function hitScore(
+  hit: SearchHit,
+  origin?: { lat: number; lon: number },
+): number {
   const ele = hit.peak.ele ?? 0;
   let score = ele * (hit.exact ? 2 : 1);
   // Каждая правка — вдвое меньше доверия: исправленное написание не должно
@@ -311,7 +325,10 @@ function hitScore(hit: SearchHit, origin?: { lat: number; lon: number }): number
     // Мягкий бонус за близость: ищут обычно то, что рядом. Масштаб большой
     // (500 км), иначе он перевесил бы высоту внутри одного горного узла.
     const dLat = (hit.peak.lat - origin.lat) * 111.32;
-    const dLon = (hit.peak.lon - origin.lon) * 111.32 * Math.cos((origin.lat * Math.PI) / 180);
+    const dLon =
+      (hit.peak.lon - origin.lon) *
+      111.32 *
+      Math.cos((origin.lat * Math.PI) / 180);
     score *= 1 + 0.5 * Math.exp(-Math.hypot(dLat, dLon) / 500);
   }
   return score;
@@ -373,7 +390,10 @@ export async function loadSearchIndex(
   try {
     const res = await fetchFn(`${base}peaks/_index.json`);
     // Vite на 404 отдаёт index.html с HTTP 200 — проверяем тип
-    if (!res.ok || !(res.headers.get('content-type') ?? '').includes('application/json')) {
+    if (
+      !res.ok ||
+      !(res.headers.get("content-type") ?? "").includes("application/json")
+    ) {
       indexFailedAt = Date.now();
       return [];
     }

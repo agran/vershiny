@@ -23,7 +23,7 @@
 /** Угол обзора по длинной стороне кадра по умолчанию — примерно как у камеры телефона */
 export const DEFAULT_CAMERA_FOV_DEG = 70;
 
-const STORAGE_KEY = 'vershiny-calibration';
+const STORAGE_KEY = "vershiny-calibration";
 
 export interface Calibration {
   /** Поправка азимута, градусы (прибавляется к показаниям компаса) */
@@ -55,13 +55,17 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 /** Приведение к допустимым значениям (в хранилище мог остаться мусор) */
-export function normalizeCalibration(raw: Partial<Calibration> | null): Calibration {
+export function normalizeCalibration(
+  raw: Partial<Calibration> | null,
+): Calibration {
   if (!raw) return { ...DEFAULT_CALIBRATION };
   const azimuth = Number(raw.azimuthDeg);
   const tilt = Number(raw.tiltDeg);
   const fov = raw.cameraFovDeg == null ? null : Number(raw.cameraFovDeg);
   return {
-    azimuthDeg: Number.isFinite(azimuth) ? ((azimuth % 360) + 540) % 360 - 180 : 0,
+    azimuthDeg: Number.isFinite(azimuth)
+      ? (((azimuth % 360) + 540) % 360) - 180
+      : 0,
     tiltDeg: Number.isFinite(tilt)
       ? clamp(tilt, -CALIBRATION_LIMITS.tiltDeg, CALIBRATION_LIMITS.tiltDeg)
       : 0,

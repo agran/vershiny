@@ -11,7 +11,7 @@
  * самого API), и её проще проверить тестами, чем кликами.
  */
 
-const STORAGE_KEY = 'vershiny-ar';
+const STORAGE_KEY = "vershiny-ar";
 
 /**
  * Прошлый выбор пользователя:
@@ -19,21 +19,21 @@ const STORAGE_KEY = 'vershiny-ar';
  *   - `off` — выключил камеру сам либо отказал в доступе;
  *   - `unset` — ещё не решал (первый запуск).
  */
-export type ArPreference = 'on' | 'off' | 'unset';
+export type ArPreference = "on" | "off" | "unset";
 
 export function storedArPreference(): ArPreference {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw === 'on' || raw === 'off' ? raw : 'unset';
+    return raw === "on" || raw === "off" ? raw : "unset";
   } catch {
     // Приватный режим: считаем, что человек ещё не решал
-    return 'unset';
+    return "unset";
   }
 }
 
 export function rememberArMode(on: boolean): void {
   try {
-    localStorage.setItem(STORAGE_KEY, on ? 'on' : 'off');
+    localStorage.setItem(STORAGE_KEY, on ? "on" : "off");
   } catch {
     // Без хранилища выбор живёт до перезагрузки — это лучше, чем ничего
   }
@@ -47,7 +47,7 @@ export function rememberArMode(on: boolean): void {
  */
 export function isHandheld(): boolean {
   const coarse =
-    typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
+    typeof matchMedia === "function" && matchMedia("(pointer: coarse)").matches;
   return coarse && (navigator.maxTouchPoints ?? 0) > 0;
 }
 
@@ -63,7 +63,7 @@ export function shouldAutoStartAr(
   handheld: boolean = isHandheld(),
 ): boolean {
   if (!navigator.mediaDevices?.getUserMedia) return false;
-  if (preference === 'off') return false;
-  if (preference === 'on') return true;
+  if (preference === "off") return false;
+  if (preference === "on") return true;
   return handheld;
 }

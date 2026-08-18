@@ -3,19 +3,24 @@
  * + квантование высоты, разреженное покрытие с фолбэком на грубый LOD.
  */
 
-import { describe, it, expect } from 'vitest';
-import { DemSampler, TILE_SIZE, indexVersion, type DemIndex } from '../src/core/dem';
+import { describe, it, expect } from "vitest";
+import {
+  DemSampler,
+  TILE_SIZE,
+  indexVersion,
+  type DemIndex,
+} from "../src/core/dem";
 
 /** gzip средствами платформы — как и распаковка в dem.ts */
 async function gzip(bytes: Uint8Array): Promise<Uint8Array> {
-  const stream = new Blob([bytes as BlobPart]).stream().pipeThrough(
-    new CompressionStream('gzip'),
-  );
+  const stream = new Blob([bytes as BlobPart])
+    .stream()
+    .pipeThrough(new CompressionStream("gzip"));
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
 
 function toBase64(bytes: Uint8Array): string {
-  let binary = '';
+  let binary = "";
   for (const byte of bytes) binary += String.fromCharCode(byte);
   return btoa(binary);
 }
@@ -36,7 +41,11 @@ function encodeTile(heights: Int16Array, quantM: number): Promise<Uint8Array> {
 }
 
 /** Битсет покрытия (ty·tilesX + tx) → base64, как в index.json */
-function coverage(tiles: Array<[number, number]>, tilesX: number, tilesY: number): string {
+function coverage(
+  tiles: Array<[number, number]>,
+  tilesX: number,
+  tilesY: number,
+): string {
   const bits = new Uint8Array(Math.ceil((tilesX * tilesY) / 8));
   for (const [tx, ty] of tiles) {
     const bit = ty * tilesX + tx;
@@ -47,9 +56,9 @@ function coverage(tiles: Array<[number, number]>, tilesX: number, tilesY: number
 
 const INDEX: DemIndex = {
   bbox: [-180, -90, 180, 90],
-  encoding: 'gzip',
-  filter: 'delta-x',
-  tileExt: '.bin.gz',
+  encoding: "gzip",
+  filter: "delta-x",
+  tileExt: ".bin.gz",
   lods: [
     {
       cellDeg: 1 / 512,
@@ -99,22 +108,24 @@ function samplerWith(
   const fetchFn = (async (url: string) => {
     const path = String(url);
     requested.push(path);
-    if (path.endsWith('index.json')) {
+    if (path.endsWith("index.json")) {
       return new Response(JSON.stringify(INDEX), {
-        headers: { 'content-type': 'application/json' },
+        headers: { "content-type": "application/json" },
       });
     }
-    const key = path.replace('tiles/global/', '').split('?')[0];
+    const key = path.replace("tiles/global/", "").split("?")[0];
     const body = tiles[key];
-    if (!body) return new Response('', { status: 404 });
+    if (!body) return new Response("", { status: 404 });
     return new Response(body as unknown as BodyInit);
   }) as unknown as typeof fetch;
-  return new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+  return new DemSampler({ baseUrl: "tiles/global", fetchFn });
 }
 
-describe('DemSampler: формат глобальной пирамиды', () => {
-  it('распаковывает gzip + дельту и возвращает высоты в метрах', async () => {
-    const sampler = samplerWith({ '0/444/92.bin.gz': await encodeTile(slopeTile(), 2) });
+describe("DemSampler: формат глобальной пирамиды", () => {
+  it("распаковывает gzip + дельту и возвращает высоты в метрах", async () => {
+    const sampler = samplerWith({
+      "0/444/92.bin.gz": await encodeTile(slopeTile(), 2),
+    });
     await sampler.loadIndex();
     await sampler.loadTile(0, 444, 92);
 
@@ -124,11 +135,17 @@ describe('DemSampler: формат глобальной пирамиды', () =>
 
     // Шаг по x — 4 м на ячейку, по y — 8 м (квант 2 м погрешности не вносит)
     const cell = 1 / 512;
-    expect(sampler.sample({ lat: 44, lon: 42 + cell * 10 }, 0)).toBeCloseTo(1040, 0);
-    expect(sampler.sample({ lat: 44 - cell * 10, lon: 42 }, 0)).toBeCloseTo(1080, 0);
+    expect(sampler.sample({ lat: 44, lon: 42 + cell * 10 }, 0)).toBeCloseTo(
+      1040,
+      0,
+    );
+    expect(sampler.sample({ lat: 44 - cell * 10, lon: 42 }, 0)).toBeCloseTo(
+      1080,
+      0,
+    );
   });
 
-  it('не запрашивает тайлы, которых нет в карте покрытия', async () => {
+  it("не запрашивает тайлы, которых нет в карте покрытия", async () => {
     const requested: string[] = [];
     const sampler = samplerWith({}, requested);
     await sampler.loadIndex();
@@ -140,9 +157,11 @@ describe('DemSampler: формат глобальной пирамиды', () =>
     expect(sampler.hasTile(0, 100, 100)).toBe(false);
   });
 
-  it('падает на грубый LOD, если детального тайла нет', async () => {
+  it("падает на грубый LOD, если детального тайла нет", async () => {
     const coarse = new Int16Array(TILE_SIZE * TILE_SIZE).fill(2400);
-    const sampler = samplerWith({ '1/55/11.bin.gz': await encodeTile(coarse, 8) });
+    const sampler = samplerWith({
+      "1/55/11.bin.gz": await encodeTile(coarse, 8),
+    });
     await sampler.loadIndex();
     await sampler.loadTile(1, 55, 11);
 
@@ -150,7 +169,7 @@ describe('DemSampler: формат глобальной пирамиды', () =>
     expect(sampler.sample({ lat: 43.5, lon: 42.5 }, 0)).toBeCloseTo(2400, 0);
   });
 
-  it('выбирает LOD по дальности луча', async () => {
+  it("выбирает LOD по дальности луча", async () => {
     const sampler = samplerWith({});
     await sampler.loadIndex();
 
@@ -162,30 +181,31 @@ describe('DemSampler: формат глобальной пирамиды', () =>
   });
 });
 
-describe('DemSampler: тайлы для офлайн-загрузки', () => {  it('собирает существующие тайлы bbox по всем LOD', async () => {
+describe("DemSampler: тайлы для офлайн-загрузки", () => {
+  it("собирает существующие тайлы bbox по всем LOD", async () => {
     const sampler = samplerWith({});
     await sampler.loadIndex();
 
     // bbox вокруг Приэльбрусья: покрыты тайлы 0/444/92 и 1/55/11
     const keys = sampler.tileKeysInBBox([42, 42.5, 43, 44]);
-    expect(keys).toContain('0/444/92');
-    expect(keys).toContain('1/55/11');
+    expect(keys).toContain("0/444/92");
+    expect(keys).toContain("1/55/11");
     // Пустые тайлы в bbox не запрашиваются — иначе счёт размера был бы враньём
     expect(keys).toHaveLength(2);
   });
 
-  it('не теряет тайлы у bbox через антимеридиан', async () => {
+  it("не теряет тайлы у bbox через антимеридиан", async () => {
     const sampler = samplerWith({});
     await sampler.loadIndex();
 
     // Врангель: 177.5°в.д. … −177.5°з.д. Наивное сравнение min<max даёт
     // пустой диапазон, и регион молча скачивался без единого тайла
     const keys = sampler.tileKeysInBBox([177.5, 70.5, -177.5, 72]);
-    expect(keys).toContain('0/716/38'); // восточнее антимеридиана
-    expect(keys).toContain('0/2/38'); // западнее
+    expect(keys).toContain("0/716/38"); // восточнее антимеридиана
+    expect(keys).toContain("0/2/38"); // западнее
   });
 
-  it('считает вес bbox по среднему весу тайла из индекса', async () => {
+  it("считает вес bbox по среднему весу тайла из индекса", async () => {
     const sampler = samplerWith({});
     const index = await sampler.loadIndex();
     index.lods[0].avgTileBytes = 40_000;
@@ -194,7 +214,7 @@ describe('DemSampler: тайлы для офлайн-загрузки', () => { 
     expect(sampler.bboxDownloadBytes([42, 42.5, 43, 44])).toBe(58_000);
   });
 
-  it('версия индекса реагирует на квант и вес тайлов — слепок пересборки', async () => {
+  it("версия индекса реагирует на квант и вес тайлов — слепок пересборки", async () => {
     const sampler = samplerWith({});
     const index = await sampler.loadIndex();
     const v0 = indexVersion(index);
@@ -211,54 +231,60 @@ describe('DemSampler: тайлы для офлайн-загрузки', () => { 
     // И на средний вес тайлов (он меняется при любом пересчёте покрытия)
     const reweighted: DemIndex = {
       ...index,
-      lods: index.lods.map((l) => ({ ...l, avgTileBytes: (l.avgTileBytes ?? 0) + 1 })),
+      lods: index.lods.map((l) => ({
+        ...l,
+        avgTileBytes: (l.avgTileBytes ?? 0) + 1,
+      })),
     };
     expect(indexVersion(reweighted)).not.toBe(v0);
   });
 
-  it('адрес тайла несёт версию пирамиды — антикеш против cache-first SW', async () => {
+  it("адрес тайла несёт версию пирамиды — антикеш против cache-first SW", async () => {
     const requested: string[] = [];
-    const sampler = samplerWith({ '0/444/92.bin.gz': await encodeTile(slopeTile(), 2) }, requested);
+    const sampler = samplerWith(
+      { "0/444/92.bin.gz": await encodeTile(slopeTile(), 2) },
+      requested,
+    );
     await sampler.loadIndex();
     await sampler.loadTile(0, 444, 92);
 
-    const tileReq = requested.find((p) => p.includes('.bin.gz'));
+    const tileReq = requested.find((p) => p.includes(".bin.gz"));
     expect(tileReq).toBeDefined();
-    expect(tileReq).toContain('?v=');
+    expect(tileReq).toContain("?v=");
   });
 });
 
-describe('DemSampler: отказ сети', () => {
-  it('503 от офлайнового Service Worker — это «нет тайла», а не крах', async () => {
+describe("DemSampler: отказ сети", () => {
+  it("503 от офлайнового Service Worker — это «нет тайла», а не крах", async () => {
     // SW отдаёт 503 на всё, чего нет в кеше. Раньше это летело исключением
     // через worker, и вместо панорамы человек видел «Ошибка: HTTP 503»
     const fetchFn = (async (url: string) => {
-      if (String(url).endsWith('index.json')) {
+      if (String(url).endsWith("index.json")) {
         return new Response(JSON.stringify(INDEX), {
-          headers: { 'content-type': 'application/json' },
+          headers: { "content-type": "application/json" },
         });
       }
-      return new Response('Offline', { status: 503 });
+      return new Response("Offline", { status: 503 });
     }) as unknown as typeof fetch;
-    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
     await sampler.loadIndex();
 
     await expect(sampler.loadTile(0, 444, 92)).resolves.toBeNull();
   });
 
-  it('не запоминает временную дыру: с сетью тайл догружается', async () => {
+  it("не запоминает временную дыру: с сетью тайл догружается", async () => {
     let offline = true;
     const body = await encodeTile(slopeTile(), 2);
     const fetchFn = (async (url: string) => {
-      if (String(url).endsWith('index.json')) {
+      if (String(url).endsWith("index.json")) {
         return new Response(JSON.stringify(INDEX), {
-          headers: { 'content-type': 'application/json' },
+          headers: { "content-type": "application/json" },
         });
       }
-      if (offline) return new Response('Offline', { status: 503 });
+      if (offline) return new Response("Offline", { status: 503 });
       return new Response(body as unknown as BodyInit);
     }) as unknown as typeof fetch;
-    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
     await sampler.loadIndex();
 
     expect(await sampler.loadTile(0, 444, 92)).toBeNull();
@@ -266,22 +292,22 @@ describe('DemSampler: отказ сети', () => {
     expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
   });
 
-  it('обрыв соединения не залипает в pending навсегда', async () => {
+  it("обрыв соединения не залипает в pending навсегда", async () => {
     // Обрыв приходит исключением, а не статусом: раньше отклонённый промис
     // оставался в карте параллельных запросов, и каждый следующий расчёт
     // панорамы падал на нём же — до перезагрузки страницы, даже с сетью
     let broken = true;
     const body = await encodeTile(slopeTile(), 2);
     const fetchFn = (async (url: string) => {
-      if (String(url).endsWith('index.json')) {
+      if (String(url).endsWith("index.json")) {
         return new Response(JSON.stringify(INDEX), {
-          headers: { 'content-type': 'application/json' },
+          headers: { "content-type": "application/json" },
         });
       }
-      if (broken) throw new TypeError('Failed to fetch');
+      if (broken) throw new TypeError("Failed to fetch");
       return new Response(body as unknown as BodyInit);
     }) as unknown as typeof fetch;
-    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
     await sampler.loadIndex();
 
     await expect(sampler.loadTile(0, 444, 92)).resolves.toBeNull();
@@ -289,24 +315,26 @@ describe('DemSampler: отказ сети', () => {
     expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
   });
 
-  it('битый тайл не роняет расчёт и не запоминается дырой', async () => {
+  it("битый тайл не роняет расчёт и не запоминается дырой", async () => {
     let corrupt = true;
     const body = await encodeTile(slopeTile(), 2);
     const fetchFn = (async (url: string) => {
-      if (String(url).endsWith('index.json')) {
+      if (String(url).endsWith("index.json")) {
         return new Response(JSON.stringify(INDEX), {
-          headers: { 'content-type': 'application/json' },
+          headers: { "content-type": "application/json" },
         });
       }
       // Заголовок gzip есть, а тело — мусор: DecompressionStream бросит
       if (corrupt) {
         return new Response(
-          new Uint8Array([0x1f, 0x8b, 8, 0, 0, 0, 0, 0, 0, 3, 9, 9, 9, 9]) as unknown as BodyInit,
+          new Uint8Array([
+            0x1f, 0x8b, 8, 0, 0, 0, 0, 0, 0, 3, 9, 9, 9, 9,
+          ]) as unknown as BodyInit,
         );
       }
       return new Response(body as unknown as BodyInit);
     }) as unknown as typeof fetch;
-    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
     await sampler.loadIndex();
 
     await expect(sampler.loadTile(0, 444, 92)).resolves.toBeNull();
@@ -314,22 +342,22 @@ describe('DemSampler: отказ сети', () => {
     expect(await sampler.loadTile(0, 444, 92)).not.toBeNull();
   });
 
-  it('downloadTiles честно считает, сколько тайлов легло на устройство', async () => {
+  it("downloadTiles честно считает, сколько тайлов легло на устройство", async () => {
     // Офлайн Service Worker отвечает 503 — это ответ, а не исключение.
     // Раньше цикл «успешно» завершался с нулём сохранённых тайлов, и регион
     // получал галочку «скачано»: в горах это худший вид обмана
     const fetchFn = (async (url: string) => {
-      if (String(url).endsWith('index.json')) {
+      if (String(url).endsWith("index.json")) {
         return new Response(JSON.stringify(INDEX), {
-          headers: { 'content-type': 'application/json' },
+          headers: { "content-type": "application/json" },
         });
       }
-      return new Response('Offline', { status: 503 });
+      return new Response("Offline", { status: 503 });
     }) as unknown as typeof fetch;
-    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
     await sampler.loadIndex();
 
-    const keys = ['0/444/92', '0/445/92'];
+    const keys = ["0/444/92", "0/445/92"];
     let progress = 0;
     const stats = await sampler.downloadTiles(keys, (n) => (progress = n));
     expect(stats.ok).toBe(0);
@@ -337,22 +365,25 @@ describe('DemSampler: отказ сети', () => {
     expect(progress).toBe(2); // прогресс идёт, но успехом это не считается
   });
 
-  it('обрыв на одном тайле не прерывает всю загрузку', async () => {
+  it("обрыв на одном тайле не прерывает всю загрузку", async () => {
     const body = await encodeTile(slopeTile(), 2);
     const fetchFn = (async (url: string) => {
       const path = String(url);
-      if (path.endsWith('index.json')) {
+      if (path.endsWith("index.json")) {
         return new Response(JSON.stringify(INDEX), {
-          headers: { 'content-type': 'application/json' },
+          headers: { "content-type": "application/json" },
         });
       }
-      if (path.includes('445')) throw new TypeError('Failed to fetch');
+      if (path.includes("445")) throw new TypeError("Failed to fetch");
       return new Response(body as unknown as BodyInit);
     }) as unknown as typeof fetch;
-    const sampler = new DemSampler({ baseUrl: 'tiles/global', fetchFn });
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
     await sampler.loadIndex();
 
-    const stats = await sampler.downloadTiles(['0/444/92', '0/445/92'], () => {});
+    const stats = await sampler.downloadTiles(
+      ["0/444/92", "0/445/92"],
+      () => {},
+    );
     expect(stats.ok).toBe(1);
     expect(stats.failed).toBe(1);
   });

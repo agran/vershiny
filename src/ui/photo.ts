@@ -9,11 +9,11 @@ import {
   INK_LIGHT,
   type PanoramaState,
   type ViewState,
-} from './panorama';
-import type { LatLon } from '../core/geo';
-import { getLocale } from '../core/i18n';
-import { getPhotoCaption } from '../core/photo-caption';
-import { translitToLatin } from '../core/transliterate';
+} from "./panorama";
+import type { LatLon } from "../core/geo";
+import { getLocale } from "../core/i18n";
+import { getPhotoCaption } from "../core/photo-caption";
+import { translitToLatin } from "../core/transliterate";
 
 export interface PhotoOptions {
   /** Позиция наблюдателя (для подписи на фото) */
@@ -57,10 +57,10 @@ export async function capturePhoto(
   const cssHeight = options.source?.clientHeight ?? 0;
   const aspect = cssWidth > 0 && cssHeight > 0 ? cssWidth / cssHeight : 16 / 9;
 
-  const canvas = document.createElement('canvas');
+  const canvas = document.createElement("canvas");
   canvas.width = aspect >= 1 ? LONG_SIDE : Math.round(LONG_SIDE * aspect);
   canvas.height = aspect >= 1 ? Math.round(LONG_SIDE / aspect) : LONG_SIDE;
-  const ctx = canvas.getContext('2d')!;
+  const ctx = canvas.getContext("2d")!;
 
   // Во сколько раз снимок крупнее экрана: подписи и контуры занимают на нём ту
   // же долю кадра, что человек видел. Вывести это из DOM нельзя — холст в
@@ -86,11 +86,11 @@ export async function capturePhoto(
   const parts = buildMetaParts(options);
   // Адрес без схемы и хвостового слэша: на снимке это подпись авторства, а не
   // ссылка для копирования, а ширина в портретном кадре на счету
-  const site = 'agran.github.io/vershiny';
+  const site = "agran.github.io/vershiny";
 
   ctx.font = `${fontSize}px system-ui, sans-serif`;
-  ctx.textBaseline = 'alphabetic';
-  ctx.lineJoin = 'round';
+  ctx.textBaseline = "alphabetic";
+  ctx.lineJoin = "round";
   ctx.miterLimit = 2;
   ctx.lineWidth = 3.5 * uiScale;
 
@@ -112,19 +112,19 @@ export async function capturePhoto(
   // НАД координатами, поэтому и оказывался заметно дальше от нижнего края —
   // тем дальше, чем выше плашка координат
   const baseline = canvas.height - pad;
-  ctx.textAlign = 'left';
+  ctx.textAlign = "left";
   lines.forEach((line, i) => {
     inkText(line, pad, baseline - (lines.length - 1 - i) * lineH);
   });
-  ctx.textAlign = 'right';
+  ctx.textAlign = "right";
   inkText(site, canvas.width - pad, baseline);
-  ctx.textAlign = 'left';
+  ctx.textAlign = "left";
 
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob);
-      else reject(new Error('toBlob failed'));
-    }, 'image/png');
+      else reject(new Error("toBlob failed"));
+    }, "image/png");
   });
 }
 
@@ -140,7 +140,7 @@ function wrapParts(
   maxWidth: number,
 ): string[] {
   const lines: string[] = [];
-  let current = '';
+  let current = "";
   for (const part of parts) {
     const candidate = current ? `${current} · ${part}` : part;
     if (current && ctx.measureText(candidate).width > maxWidth) {
@@ -170,21 +170,24 @@ function buildMetaParts(options: PhotoOptions): string[] {
     const lon = origin.lon.toFixed(5);
     if (region) parts.push(region);
     parts.push(
-      `${Math.abs(Number(lat))}°${Number(lat) >= 0 ? 'N' : 'S'}`,
-      `${Math.abs(Number(lon))}°${Number(lon) >= 0 ? 'E' : 'W'}`,
-      `${Math.round(observerH)} ${getLocale() === 'ru' ? 'м' : 'm'}`,
+      `${Math.abs(Number(lat))}°${Number(lat) >= 0 ? "N" : "S"}`,
+      `${Math.abs(Number(lon))}°${Number(lon) >= 0 ? "E" : "W"}`,
+      `${Math.round(observerH)} ${getLocale() === "ru" ? "м" : "m"}`,
     );
   }
 
   if (caption.time) {
     const now = new Date();
-    const locale = getLocale() === 'ru' ? 'ru-RU' : 'en-US';
+    const locale = getLocale() === "ru" ? "ru-RU" : "en-US";
     const date = now.toLocaleDateString(locale, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
-    const time = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+    const time = now.toLocaleTimeString(locale, {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     parts.push(`${date} ${time}`);
   }
 
@@ -198,13 +201,13 @@ function buildMetaParts(options: PhotoOptions): string[] {
  * «Поделиться», из которого до файла ещё нужно добраться, — а от кнопки
  * «Фото с подписями» ждут ровно одного, готовой картинки на диске.
  */
-export function savePhoto(blob: Blob, filename = 'vershiny.png'): void {
+export function savePhoto(blob: Blob, filename = "vershiny.png"): void {
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = filename;
   // Ссылка должна быть в документе: иначе часть браузеров игнорирует click()
-  a.style.display = 'none';
+  a.style.display = "none";
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -225,14 +228,14 @@ export function savePhoto(blob: Blob, filename = 'vershiny.png'): void {
  * не добавляет. Он нужен, только когда подписывать нечем.
  */
 export function photoFilename(options: PhotoOptions, at = new Date()): string {
-  const pad = (n: number): string => String(n).padStart(2, '0');
+  const pad = (n: number): string => String(n).padStart(2, "0");
   const stamp =
     `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}` +
     `-${pad(at.getHours())}${pad(at.getMinutes())}`;
 
-  const peak = options.peakName ? slug(translitToLatin(options.peakName)) : '';
-  const place = peak || (options.region ? slug(options.region) : '');
-  return ['vershiny', place, stamp].filter(Boolean).join('-') + '.png';
+  const peak = options.peakName ? slug(translitToLatin(options.peakName)) : "";
+  const place = peak || (options.region ? slug(options.region) : "");
+  return ["vershiny", place, stamp].filter(Boolean).join("-") + ".png";
 }
 
 /**
@@ -245,7 +248,7 @@ export function photoFilename(options: PhotoOptions, at = new Date()): string {
 function slug(raw: string): string {
   return raw
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
     .slice(0, 40);
 }
