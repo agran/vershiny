@@ -33,13 +33,13 @@
     "title_ru": "Регион Аннапурна",
     "title_en": "Annapurna Region",
     "bbox": [
-      83.0,
-      28.0,
+      82.0,
+      27.8,
       85.5,
-      29.5
+      29.8
     ],
-    "core_ru": "Аннапурна I (8091м), Мачапучаре, Пун-Хилл, трек ABC и Circuit",
-    "core_en": "Annapurna I (8091m), Machapuchare, Poon Hill, ABC Trek",
+    "core_ru": "Аннапурна I (8091м), Дхаулагири (8167м), Мачапучаре, Пун-Хилл",
+    "core_en": "Annapurna I (8091m), Dhaulagiri (8167m), Machapuchare, Poon Hill",
     "priority": 1,
     "group": "Гималаи"
   },
@@ -47,13 +47,13 @@
     "title_ru": "Кордильера-Бланка",
     "title_en": "Cordillera Blanca",
     "bbox": [
-      -78.0,
-      -10.5,
-      -76.5,
+      -78.5,
+      -10.8,
+      -76.0,
       -8.0
     ],
-    "core_ru": "Уаскаран (6768м), Альпамайо, трек Санта-Крус, Уарас",
-    "core_en": "Huascarán (6768m), Alpamayo, Santa Cruz trek, Huaraz",
+    "core_ru": "Уаскаран (6768м), Альпамайо, трек Санта-Крус, Уарас, Сиула-Гранде",
+    "core_en": "Huascarán (6768m), Alpamayo, Santa Cruz trek, Huaraz, Siula Grande",
     "priority": 1,
     "group": "Анды"
   },
@@ -75,13 +75,13 @@
     "title_ru": "Доломиты",
     "title_en": "Dolomites",
     "bbox": [
-      10.5,
+      10.0,
       45.5,
-      12.5,
-      47.0
+      13.0,
+      47.5
     ],
-    "core_ru": "Мармолада (3343м), Тре-Чиме-ди-Лаваредо, Сассолунго, Чима-Гранде",
-    "core_en": "Marmolada (3343m), Tre Cime, Sassolungo",
+    "core_ru": "Мармолада (3343м), Тре-Чиме-ди-Лаваредо, Сассолунго, Ортлер",
+    "core_en": "Marmolada (3343m), Tre Cime, Sassolungo, Ortler",
     "priority": 1,
     "group": "Альпы"
   },
@@ -128,16 +128,16 @@
     "group": "Кавказ"
   },
   "everest-region": {
-    "title_ru": "Кхумбу — регион Эверест",
+    "title_ru": "Кхумбу — регион Эвереста",
     "title_en": "Everest Region / Khumbu",
     "bbox": [
-      85.5,
-      27.5,
-      87.5,
-      28.5
+      85.0,
+      27.0,
+      88.5,
+      29.0
     ],
-    "core_ru": "Эверест (8849м), Лхоцзе, Ама-Даблам, Намче-Базар, EBC trek",
-    "core_en": "Everest (8849m), Lhotse, Ama Dablam, Namche Bazaar",
+    "core_ru": "Эверест (8849м), Лхоцзе, Ама-Даблам, Намче-Базар, Гокио, Канченджанга",
+    "core_en": "Everest (8849m), Lhotse, Ama Dablam, Namche Bazaar, Gokyo, Kangchenjunga",
     "priority": 1,
     "group": "Гималаи"
   },
@@ -187,13 +187,13 @@
     "title_ru": "Гавайи",
     "title_en": "Hawaii",
     "bbox": [
-      -156.5,
+      -160.5,
       18.5,
       -154.5,
-      20.5
+      22.5
     ],
-    "core_ru": "Мауна-Кеа (4207м), Мауна-Лоа (4169м), Халеакала (3055м)",
-    "core_en": "Mauna Kea (4207m), Mauna Loa (4169m), Haleakalā (3055m)",
+    "core_ru": "Мауна-Кеа (4207м), Мауна-Лоа (4169м), Халеакала (3055м), Оаху",
+    "core_en": "Mauna Kea (4207m), Mauna Loa (4169m), Haleakalā (3055m), Oahu",
     "priority": 1,
     "group": "Гавайи"
   },
@@ -257,13 +257,13 @@
     "title_ru": "Татры",
     "title_en": "Tatra Mountains",
     "bbox": [
-      19.0,
-      49.0,
-      20.5,
-      49.7
+      18.0,
+      48.5,
+      21.0,
+      50.0
     ],
-    "core_ru": "Герлаховски-Штит (2655м), Рысы, Закопане",
-    "core_en": "Gerlachovský štít (2655m), Rysy, Lomnický",
+    "core_ru": "Герлаховски-Штит (2655м), Рысы, Закопане, Морское Око",
+    "core_en": "Gerlachovský štít (2655m), Rysy, Zakopane, Morskie Oko",
     "priority": 1,
     "group": "Карпаты"
   },
@@ -330,12 +330,12 @@
       32.5,
       44.0,
       36.5,
-      46.0
+      45.5
     ],
     "core_ru": "Роман-Кош (1545м), Бабуган-яйла, Демерджи, Ай-Петри",
     "core_en": "Roman-Kosh (1545m), Babugan Yayla, Demerdzhi, Ai-Petri",
     "priority": 2,
-    "group": "Кавказ"
+    "group": "Причерноморье"
   },
   "central-america-volcanoes": {
     "title_ru": "Вулканы Гватемалы и Коста-Рики",
@@ -957,13 +957,13 @@
     "title_ru": "Балканы",
     "title_en": "Balkans",
     "bbox": [
-      18.5,
+      13.5,
       39.0,
       24.5,
-      44.5
+      46.5
     ],
-    "core_ru": "Мусала, Олимп, Триглав",
-    "core_en": "Musala, Olympus, Triglav",
+    "core_ru": "Мусала, Олимп, Триглав, Дурмитор",
+    "core_en": "Musala, Olympus, Triglav, Durmitor",
     "priority": 4,
     "group": "Балканы"
   },
@@ -1358,6 +1358,118 @@
     "core_en": "Damavand, Ararat, Aragats, Taurus, Zagros",
     "priority": 4,
     "group": "Ближний Восток"
+  },
+  "mont-blanc": {
+    "title_ru": "Монблан и Шамони",
+    "title_en": "Mont Blanc and Chamonix",
+    "bbox": [
+      5.5,
+      45.0,
+      8.5,
+      46.5
+    ],
+    "core_ru": "Монблан (4808м), Эгюий-дю-Миди, Шамони, Монтенвер",
+    "core_en": "Mont Blanc (4808m), Aiguille du Midi, Chamonix, Montenvers",
+    "priority": 1,
+    "group": "Альпы"
+  },
+  "valais-zermatt": {
+    "title_ru": "Вале и Церматт",
+    "title_en": "Valais and Zermatt",
+    "bbox": [
+      6.5,
+      45.5,
+      9.5,
+      47.0
+    ],
+    "core_ru": "Маттерхорн (4478м), Дом, Вейсхорн, Церматт, Саас-Фе",
+    "core_en": "Matterhorn (4478m), Dom, Weisshorn, Zermatt, Saas-Fee",
+    "priority": 1,
+    "group": "Альпы"
+  },
+  "southern-alps-nz": {
+    "title_ru": "Южные Альпы (НЗ)",
+    "title_en": "Southern Alps (New Zealand)",
+    "bbox": [
+      166.5,
+      -45.5,
+      172.5,
+      -42.5
+    ],
+    "core_ru": "Кука (3724м), Тасман, Маунт-Аспайринг, Уанака, Куинстаун",
+    "core_en": "Cook (3724m), Tasman, Mount Aspiring, Wanaka, Queenstown",
+    "priority": 2,
+    "group": "Новая Зеландия"
+  },
+  "kilimanjaro": {
+    "title_ru": "Килиманджаро и Меру",
+    "title_en": "Kilimanjaro and Meru",
+    "bbox": [
+      36.5,
+      -4.5,
+      38.5,
+      -2.0
+    ],
+    "core_ru": "Килиманджаро (5895м), Меру (4562м), Амбосели, Моши",
+    "core_en": "Kilimanjaro (5895m), Meru (4562m), Amboseli, Moshi",
+    "priority": 1,
+    "group": "Африка"
+  },
+  "patagonia-south": {
+    "title_ru": "Южная Патагония",
+    "title_en": "Southern Patagonia",
+    "bbox": [
+      -74.0,
+      -51.5,
+      -70.5,
+      -48.0
+    ],
+    "core_ru": "Фицрой (3405м), Серро-Торре, Торрес-дель-Пайне, Эль-Чальтен",
+    "core_en": "Fitz Roy (3405m), Cerro Torre, Torres del Paine, El Chaltén",
+    "priority": 2,
+    "group": "Патагония"
+  },
+  "fuji": {
+    "title_ru": "Фудзи и Пять озёр",
+    "title_en": "Fuji and Five Lakes",
+    "bbox": [
+      138.0,
+      35.0,
+      139.5,
+      36.0
+    ],
+    "core_ru": "Фудзи (3776м), Хаконе, Пять озёр, Кавагутико",
+    "core_en": "Fuji (3776m), Hakone, Five Lakes, Kawaguchiko",
+    "priority": 1,
+    "group": "Япония"
+  },
+  "toubkal": {
+    "title_ru": "Атлас и Тубкаль",
+    "title_en": "Atlas and Toubkal",
+    "bbox": [
+      -8.5,
+      30.0,
+      -5.5,
+      32.5
+    ],
+    "core_ru": "Тубкаль (4167м), Имлил, Укаймеден",
+    "core_en": "Toubkal (4167m), Imlil, Oukaïmeden",
+    "priority": 2,
+    "group": "Африка"
+  },
+  "svaneti-kazbegi": {
+    "title_ru": "Сванетия и Казбеги",
+    "title_en": "Svaneti and Kazbegi",
+    "bbox": [
+      41.5,
+      42.0,
+      45.0,
+      43.5
+    ],
+    "core_ru": "Ушба (4710м), Шхара (5193м), Местия, Степанцминда, Казбеги",
+    "core_en": "Ushba (4710m), Shkhara (5193m), Mestia, Stepantsminda, Kazbegi",
+    "priority": 2,
+    "group": "Кавказ"
   },
   "new-guinea": {
     "title_ru": "Новая Гвинея",
