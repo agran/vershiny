@@ -126,7 +126,8 @@ python tools/peaks-index/build_index.py
 
 ## Лицензии
 
-Код — MIT. Данные:
+Код — dual **MIT / Apache-2.0** ([LICENSE-MIT](LICENSE-MIT),
+[LICENSE-APACHE](LICENSE-APACHE)) на выбор. Данные:
 
 - Рельеф: **© DLR/ESA — Copernicus DEM GLO-90**, свободно с указанием источника
 - Вершины: **© участники OpenStreetMap**, [ODbL](https://opendatacommons.org/licenses/odbl/)
