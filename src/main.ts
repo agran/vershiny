@@ -2550,13 +2550,19 @@ function setupActionButtons(): void {
     if (!panorama) return;
     const { capturePhoto, savePhoto, photoFilename } =
       await import("./ui/photo");
+    // Регион — запасной вариант подписи на случай кадра без видимых вершин
+    // (ui/photo.ts): туда идёт название на языке интерфейса
+    // («Приэльбрусье»), а не ключ реестра («elbrus») — ID людям ни о чём
+    // не говорит. Реестр к этому моменту уже в памяти (allRegions кеширует),
+    // обращения к сети здесь нет
+    const regionInfo = (await allRegions())[currentRegion];
     const options = {
       // Именно актуальные, а не аргументы функции: кнопки создаются один раз,
       // и замыкание держало бы точку первого расчёта — после перелёта к
       // вершине подпись врала бы координатами и высотой старта
       origin: lastOrigin,
       observerH: lastObserverH,
-      region: currentRegion,
+      region: regionInfo ? regionLabelSync(regionInfo) : currentRegion,
       peakName: mainPeakInView(),
       source: canvas,
       // В AR кадр содержит настоящие горы — там действует галочка «Контуры
