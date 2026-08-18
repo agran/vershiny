@@ -60,6 +60,14 @@ const CAMERA_CONSTRAINTS: MediaStreamConstraints = {
   audio: false,
 };
 
+async function attachStream(videoEl: HTMLVideoElement, stream: MediaStream): Promise<void> {
+  videoEl.pause();
+  videoEl.srcObject = null;
+  videoEl.srcObject = stream;
+  videoEl.playsInline = true;
+  await videoEl.play();
+}
+
 /** Запуск камеры и привязка к canvas */
 export async function startAr(
   videoEl: HTMLVideoElement,
@@ -74,9 +82,7 @@ export async function startAr(
   // запущен: без явной остановки камера продолжала гореть, вызывающий видел
   // только исключение и убирал <video> — из которого поток и не выключается
   try {
-    videoEl.srcObject = stream;
-    videoEl.playsInline = true;
-    await videoEl.play();
+    await attachStream(videoEl, stream);
   } catch (err) {
     stream.getTracks().forEach((track) => track.stop());
     videoEl.srcObject = null;
@@ -91,8 +97,10 @@ export async function startAr(
    * Пока страница была фоном, браузер приостанавливает камеру, а часть
    * платформ (Android Chrome) трек завершает совсем: после разблокировки
    * <video> показывает последний кадр, хотя requestAnimationFrame рисует
-   * исправно. Живой трек достаточно снова play(), завершённый приходится
-   * запрашивать заново — разрешение на камеру уже дано, диалога не будет.
+   * исправно. Живой трек тоже полезно заново присоединить к <video>, чтобы
+   * браузер перезапустил поток вместо показа последнего кадра; завершённый
+   * приходится запрашивать заново — разрешение на камеру уже дано, диалога
+   * не будет.
    */
   const resume = async (): Promise<void> => {
     if (stopped) return;
@@ -101,7 +109,6 @@ export async function startAr(
       stream.getTracks().forEach((t) => t.stop());
       try {
         stream = await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
-        videoEl.srcObject = stream;
         readZoom();
       } catch (err) {
         console.warn('Камера после сворачивания не перезапустилась:', err);
@@ -109,7 +116,8 @@ export async function startAr(
       }
     }
     try {
-      await videoEl.play();
+      await attachStream(videoEl, stream);
+      readZoom();
     } catch {
       // Повторный play при живом воспроизведении безвреден; отказ — только в лог
     }
@@ -119,6 +127,8 @@ export async function startAr(
     if (!document.hidden) void resume();
   };
   document.addEventListener('visibilitychange', onVisible);
+  window.addEventListener('focus', onVisible);
+  window.addEventListener('pageshow', onVisible);
   // Трек может завершиться и в видимой вкладке (камеру отобрало другое
   // приложение) — пытаемся перезапустить сразу, не дожидаясь сворачивания
   const onTrackEnded = (): void => void resume();
@@ -165,14 +175,16 @@ export async function startAr(
   const probeCtx = probe.getContext('2d', { willReadFrequently: true });
 
   return {
-    stop: () => {
+     stop: () => {
       stopped = true;
       document.removeEventListener('visibilitychange', onVisible);
-      stream.getVideoTracks()[0]?.removeEventListener('ended', onTrackEnded);
-      cancelAnimationFrame(raf);
-      stream.getTracks().forEach((t) => t.stop());
-      videoEl.srcObject = null;
-    },
+       window.removeEventListener('focus', onVisible);
+       window.removeEventListener('pageshow', onVisible);
+       stream.getVideoTracks()[0]?.removeEventListener('ended', onTrackEnded);
+       cancelAnimationFrame(raf);
+       stream.getTracks().forEach((t) => t.stop());
+       videoEl.srcObject = null;
+     },
     fullFrameFov,
     frameHorizonFrac: () =>
       horizonFracInFrame(
