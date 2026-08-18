@@ -101,6 +101,26 @@ export function elevationAngleRad(
   return Math.atan2(targetH - observerH - earthDrop(distM), distM);
 }
 
+/**
+ * Точка внутри bbox, с учётом перехода через антимеридиан (minLon > maxLon).
+ *
+ * Регион Врангеля в реестре — 177.5…−177.5; наивное сравнение
+ * `minLon <= lon <= maxLon` для такого bbox не вернёт true никогда, и
+ * детальный слой рельефа молча не подхватывался бы (DemSource до починки
+ * считал именно так, хотя ui/download.ts знал про антимеридиан всегда).
+ */
+export function bboxContains(
+  pos: LatLon,
+  bbox: [number, number, number, number],
+): boolean {
+  const [minLon, minLat, maxLon, maxLat] = bbox;
+  const lonOk =
+    minLon <= maxLon
+      ? pos.lon >= minLon && pos.lon <= maxLon
+      : pos.lon >= minLon || pos.lon <= maxLon;
+  return lonOk && pos.lat >= minLat && pos.lat <= maxLat;
+}
+
 /** Нормализация угла в диапазон (−π, π] — для разностей азимутов */
 export function wrapAngle(rad: number): number {
   let a = rad % (2 * Math.PI);

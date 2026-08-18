@@ -18,7 +18,7 @@ import { TerrariumSampler } from '../core/terrarium';
 import { DemSampler } from '../core/dem';
 import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from '../core/dem-config';
 import { PEAK_VISIBILITY_RADIUS_M } from '../core/peaks';
-import { destination, type LatLon } from '../core/geo';
+import { bboxContains, destination, type LatLon } from '../core/geo';
 import { savePeaks, markRegionDownloaded, getDemTile } from '../core/db';
 import { root } from '../core/globals';
 import { getLocale } from '../core/i18n';
@@ -62,12 +62,7 @@ export interface DownloadProgress {
 
 /** Точка внутри bbox (с учётом перехода через антимеридиан) */
 export function inBBox(pos: LatLon, bbox: [number, number, number, number]): boolean {
-  const [minLon, minLat, maxLon, maxLat] = bbox;
-  const lonOk =
-    minLon <= maxLon
-      ? pos.lon >= minLon && pos.lon <= maxLon
-      : pos.lon >= minLon || pos.lon <= maxLon;
-  return lonOk && pos.lat >= minLat && pos.lat <= maxLat;
+  return bboxContains(pos, bbox);
 }
 
 /**

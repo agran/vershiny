@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   azimuthRad,
+  bboxContains,
   destination,
   distanceM,
   earthDrop,
@@ -88,6 +89,19 @@ describe('geo', () => {
     }
     // Точка та же самая: расстояние до неё честные 30 км
     expect(distanceM({ lat: 71.2, lon: 180 }, east)).toBeCloseTo(30_000, 0);
+  });
+
+  it('bboxContains: bbox через антимеридиан (Врангель, 177.5…−177.5)', () => {
+    const wrangel: [number, number, number, number] = [177.5, 70.5, -177.5, 72];
+    expect(bboxContains({ lat: 71.2, lon: 179.9 }, wrangel)).toBe(true);
+    expect(bboxContains({ lat: 71.2, lon: -179.9 }, wrangel)).toBe(true);
+    expect(bboxContains({ lat: 71.2, lon: 0 }, wrangel)).toBe(false);
+    expect(bboxContains({ lat: 71.2, lon: 170 }, wrangel)).toBe(false);
+    expect(bboxContains({ lat: 73, lon: 179 }, wrangel)).toBe(false); // шире по широте
+    // Обычный bbox без перехода
+    const elbrus: [number, number, number, number] = [42, 42.8, 44.5, 43.8];
+    expect(bboxContains({ lat: 43.35, lon: 42.44 }, elbrus)).toBe(true);
+    expect(bboxContains({ lat: 43.35, lon: 45 }, elbrus)).toBe(false);
   });
 
   it('normalizeLon: край диапазона и многократные обороты', () => {

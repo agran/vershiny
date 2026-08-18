@@ -5,7 +5,7 @@
  * Ray-marching знает только синхронный sample() после prefetch.
  */
 
-import type { LatLon } from './geo';
+import { bboxContains, type LatLon } from './geo';
 import { DemSampler } from './dem';
 import { TerrariumSampler, ZOOM_RULES, zoomForDistance } from './terrarium';
 
@@ -84,19 +84,12 @@ export class DemSource {
 
   /** Точка внутри bbox хотя бы одного локального источника? */
   inPatch(pos: LatLon): boolean {
-    return this.patches.some((p) => this.inBBox(p, pos));
-  }
-
-  private inBBox(p: Patch, pos: LatLon): boolean {
-    const [minLon, minLat, maxLon, maxLat] = p.bbox;
-    return (
-      pos.lon >= minLon && pos.lon <= maxLon && pos.lat >= minLat && pos.lat <= maxLat
-    );
+    return this.patches.some((p) => bboxContains(pos, p.bbox));
   }
 
   /** Источники, чей bbox покрывает точку, по классу детализации */
   private covering(pos: LatLon, coarse: boolean): Patch[] {
-    return this.patches.filter((p) => p.coarse === coarse && this.inBBox(p, pos));
+    return this.patches.filter((p) => p.coarse === coarse && bboxContains(pos, p.bbox));
   }
 
   /**
