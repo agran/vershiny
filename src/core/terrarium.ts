@@ -10,6 +10,7 @@
  * декодируем чистым JS (src/core/png.ts).
  */
 
+import { fetchWithTimeout } from "./fetch-timeout";
 import { normalizeLon, type LatLon } from "./geo";
 import { root } from "./globals";
 import { decodePngToRgba } from "./png";
@@ -126,7 +127,7 @@ export class TerrariumSampler {
 
   constructor(options: TerrariumOptions = {}) {
     this.baseUrl = (options.baseUrl ?? TERRARIUM_BASE_URL).replace(/\/$/, "");
-    this.fetchFn = options.fetchFn ?? fetch.bind(root);
+    this.fetchFn = options.fetchFn ?? fetchWithTimeout;
   }
 
   /** Ленивая загрузка db.ts (в тестах и приватном режиме IndexedDB может не быть) */

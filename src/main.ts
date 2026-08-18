@@ -814,10 +814,12 @@ async function main(): Promise<void> {
 
   // Пики: сеть → офлайн-кеш (IndexedDB). Без них панорама всё равно строится.
   // Vite на 404 отдаёт index.html (SPA-fallback) — проверяем Content-Type.
+  // Таймаут: мёртвая сеть не должна держать «Загрузка региона…» минуту
   let peaks: PeaksFile["peaks"] = [];
-  const peaksRes = await fetch(`${base}peaks/${currentRegion}.json`).catch(
-    () => null,
-  );
+  const { fetchWithTimeout } = await import("./core/fetch-timeout");
+  const peaksRes = await fetchWithTimeout(
+    `${base}peaks/${currentRegion}.json`,
+  ).catch(() => null);
   if (peaksRes && isJson(peaksRes)) {
     peaks = ((await peaksRes.json()) as PeaksFile).peaks;
   } else {
@@ -1010,9 +1012,14 @@ async function initDemForRegion(region: string): Promise<void> {
   const { hiDemCandidates, globalDemCandidates, pickDemBase } =
     await import("./core/dem-config");
   const { getDemIndex } = await import("./core/db");
+  const { fetchWithTimeout } = await import("./core/fetch-timeout");
   const probes = {
     online: async (url: string) => {
-      const probe = await fetch(`${url}/index.json`).catch(() => null);
+      // Мёртвая сеть: проба index.json без таймаута ждёт до минуты,
+      // а дальше всё равно идёт кеш — лучше уйти туда за секунды
+      const probe = await fetchWithTimeout(`${url}/index.json`).catch(
+        () => null,
+      );
       return !!probe && isJson(probe);
     },
     cached: async (url: string) =>
@@ -1078,7 +1085,10 @@ async function switchRegion(region: string, manual = false): Promise<void> {
 
   const base = import.meta.env.BASE_URL;
   let peaks: PeaksFile["peaks"] | null = null;
-  const res = await fetch(`${base}peaks/${region}.json`).catch(() => null);
+  const { fetchWithTimeout } = await import("./core/fetch-timeout");
+  const res = await fetchWithTimeout(`${base}peaks/${region}.json`).catch(
+    () => null,
+  );
   if (res && isJson(res)) {
     peaks = ((await res.json()) as PeaksFile).peaks;
   } else {

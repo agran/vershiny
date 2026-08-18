@@ -15,6 +15,7 @@
 
 import { gunzipSync } from "fflate";
 import { demStorePrefix } from "./dem-config";
+import { fetchWithTimeout } from "./fetch-timeout";
 import type { LatLon } from "./geo";
 import { distanceM } from "./geo";
 import { root } from "./globals";
@@ -125,7 +126,10 @@ export class DemSampler {
 
   constructor(options: DemSamplerOptions) {
     this.baseUrl = options.baseUrl.replace(/\/$/, "");
-    this.fetchFn = options.fetchFn ?? fetch.bind(root);
+    // Мёртвая сеть (GitHub недоступен, но TCP не отказывает) иначе держит
+    // каждый запрос до TCP-таймаута ОС — «Загрузка региона…» висела минутой,
+    // хотя в IndexedDB лежали и индекс, и тайлы
+    this.fetchFn = options.fetchFn ?? fetchWithTimeout;
     this.storePrefix = demStorePrefix(this.baseUrl);
   }
 

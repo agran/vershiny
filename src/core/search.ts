@@ -24,9 +24,9 @@
  * оставляем человеку, показывая регион каждого варианта.
  */
 
+import { fetchWithTimeout } from "./fetch-timeout";
 import type { Peak } from "./peaks";
 import { translitToLatin } from "./transliterate";
-import { root } from "./globals";
 
 /** Запись индекса: [имя, lat, lon, ele, регион, имя_en?, имя_ru?] */
 export type IndexEntry = [
@@ -383,13 +383,13 @@ const INDEX_RETRY_MS = 60_000;
 /** Загрузка глобального индекса (один раз за сессию; дальше — кеш SW) */
 export async function loadSearchIndex(
   base: string,
-  fetchFn: typeof fetch = fetch.bind(root),
+  fetchFn: typeof fetch = fetchWithTimeout,
 ): Promise<IndexEntry[]> {
   if (indexCache) return indexCache;
   if (indexFailedAt && Date.now() - indexFailedAt < INDEX_RETRY_MS) return [];
   try {
     const res = await fetchFn(`${base}peaks/_index.json`);
-    // Vite на 404 отдаёт index.html с HTTP 200 — проверяем тип
+    // Vite и GitHub Pages на 404 отдают index.html — проверяем тип
     if (
       !res.ok ||
       !(res.headers.get("content-type") ?? "").includes("application/json")

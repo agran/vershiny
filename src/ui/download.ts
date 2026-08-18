@@ -19,6 +19,7 @@ import { DemSampler } from "../core/dem";
 import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from "../core/dem-config";
 import { PEAK_VISIBILITY_RADIUS_M } from "../core/peaks";
 import { bboxContains, destination, type LatLon } from "../core/geo";
+import { fetchWithTimeout } from "../core/fetch-timeout";
 import {
   getDemTile,
   getTerrariumTile,
@@ -216,9 +217,10 @@ export async function downloadRegion(
 ): Promise<number> {
   const base = import.meta.env.BASE_URL;
 
-  // 1. Пики
+  // 1. Пики. Мёртвая сеть без таймаута держала бы кнопку «Скачать»
+  // минуту, хотя вершины уже лежат в IndexedDB
   onProgress({ done: 0, total: 0, phase: "peaks" });
-  const peaksRes = await fetch(`${base}peaks/${region}.json`);
+  const peaksRes = await fetchWithTimeout(`${base}peaks/${region}.json`);
   if (
     peaksRes.ok &&
     (peaksRes.headers.get("content-type") ?? "").includes("application/json")
@@ -452,7 +454,10 @@ async function readRegistry(options: {
   fetchFn?: typeof fetch;
   store?: RegionsStore;
 }): Promise<Record<string, RegionInfo>> {
-  const fetchFn = options.fetchFn ?? fetch;
+  // Таймаут важнее точного fetchFn: при мёртвой сети (GitHub недоступен,
+  // но TCP не отказывает) fetch без таймаута ждёт 30–60 с, а реестр давно
+  // лежит в IndexedDB — человек смотрит на «Загрузка региона…» напрасно
+  const fetchFn = options.fetchFn ?? fetchWithTimeout;
   const store = options.store ?? idbRegionsStore;
   const base = import.meta.env.BASE_URL;
 
