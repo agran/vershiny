@@ -22,6 +22,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import multiprocessing as mp
+import os
 import struct
 import sys
 import time
@@ -183,6 +185,31 @@ def in_bbox(lat: float, lon: float, bbox: tuple[float, float, float, float]) -> 
     return lon_ok and min_lat <= lat <= max_lat
 
 
+#: Размер ячейки сетки для предвыбора регионов, градусы.
+#: Ячейка 2°: в неё попадает ~10 регионов вместо 115, остальные отсекаются.
+REGION_GRID_DEG = 2.0
+
+
+def _region_grid(
+    region_bboxes: dict[str, tuple[float, float, float, float]],
+) -> dict[tuple[int, int], list[str]]:
+    """Сетка регионов: (gx, gy) → имена регионов, чей bbox пересекает ячейку.
+
+    Без неё каждая вершина проверяла все 115 регионов — на 600K вершинах
+    это 70 млн вызовов in_bbox и главная причина замедления с ростом данных.
+    """
+    grid: dict[tuple[int, int], list[str]] = {}
+    for name, (min_lon, min_lat, max_lon, max_lat) in region_bboxes.items():
+        gx0 = int(min_lon // REGION_GRID_DEG)
+        gx1 = int(max_lon // REGION_GRID_DEG)
+        gy0 = int(min_lat // REGION_GRID_DEG)
+        gy1 = int(max_lat // REGION_GRID_DEG)
+        for gx in range(gx0, gx1 + 1):
+            for gy in range(gy0, gy1 + 1):
+                grid.setdefault((gx, gy), []).append(name)
+    return grid
+
+
 def emit_peak(
     out,
     lat: float,
@@ -191,6 +218,7 @@ def emit_peak(
     bbox: tuple[float, float, float, float] | None,
     stats: dict,
     region_writers: dict | None = None,
+    region_grid: dict[tuple[int, int], list[str]] | None = None,
 ) -> None:
     stats["peaks"] += 1
     # Фильтр по bbox: раньше счётчик «вне bbox» увеличивался, но точка всё
@@ -223,9 +251,12 @@ def emit_peak(
     out.write(line)
     stats["written"] += 1
 
-    # Региональные выжимки (все регионы из regions.json за один проход)
-    if region_writers:
-        for region_name, (rbbox, fh) in region_writers.items():
+    # Региональные выжимки: только регионы своей ячейки сетки, не все 115
+    if region_writers and region_grid:
+        gx = int(lon // REGION_GRID_DEG)
+        gy = int(lat // REGION_GRID_DEG)
+        for region_name in region_grid.get((gx, gy), ()):
+            rbbox, fh = region_writers[region_name]
             if in_bbox(lat, lon, rbbox):
                 fh.write(line)
                 stats[f"region:{region_name}"] = stats.get(f"region:{region_name}", 0) + 1
@@ -241,6 +272,7 @@ def parse_dense_nodes(
     bbox,
     stats: dict,
     region_writers: dict | None = None,
+    region_grid: dict[tuple[int, int], list[str]] | None = None,
 ) -> None:
     r = PBReader(data)
     ids: list[int] = []
@@ -301,15 +333,22 @@ def parse_dense_nodes(
             if k in WANTED_KEYS:
                 tags[k] = v
             kv_pos += 2
-        kv_pos += 1  # разделитель 0
+        # Разделитель 0 есть только после ноды С тегами; у пустой ноды его
+        # нет. Без проверки пустая нода сдвигала kv_pos в середину списка
+        # соседа — та получала чужие теги, а сам сосед оставался без них.
+        # Именно так терялся Собер-Баш (OSM 498480291): natural=peak уехал
+        # предыдущей ноде, а он сам остался без natural и был отброшен
+        if kv_pos < len(kvs) and kvs[kv_pos] == 0:
+            kv_pos += 1
 
         if tags.get("natural") in SUMMIT_TAGS:
-            emit_peak(out, lat, lon, tags, bbox, stats, region_writers)
+            emit_peak(out, lat, lon, tags, bbox, stats, region_writers, region_grid)
 
 
 def parse_node(
     data: bytes, strings: list[bytes], granularity: int, lat_offset: int, lon_offset: int,
     out, bbox, stats: dict, region_writers: dict | None = None,
+    region_grid: dict[tuple[int, int], list[str]] | None = None,
 ) -> None:
     r = PBReader(data)
     lat = lon = 0
@@ -347,12 +386,20 @@ def parse_node(
             bbox,
             stats,
             region_writers,
+            region_grid,
         )
 
 
 def parse_primitive_block(
     data: bytes, out, bbox, stats: dict, region_writers: dict | None = None,
+    region_grid: dict[tuple[int, int], list[str]] | None = None,
 ) -> None:
+    """Один блок PBF → вершины в out (и по регионам, если заданы).
+
+    В многопроцессном режиме вызывается в воркерах: `out` и `region_writers`
+    — локальные файлы процесса, а не общие. Статистика собирается через
+    возвращаемый словарь, а не изменение аргумента.
+    """
     r = PBReader(data)
     strings: list[bytes] = []
     granularity = GRANULARITY
@@ -386,16 +433,74 @@ def parse_primitive_block(
                     break
                 continue
             if gfield == 1:  # nodes (редко в планете)
-                parse_node(gr.bytes(), strings, granularity, lat_offset, lon_offset, out, bbox, stats, region_writers)
+                parse_node(gr.bytes(), strings, granularity, lat_offset, lon_offset, out, bbox, stats, region_writers, region_grid)
             elif gfield == 2:  # dense
                 data = gr.bytes()
                 # Защита от битых/пустых dense (встречаются в планете)
                 if len(data) >= 16:
                     parse_dense_nodes(
-                        data, strings, granularity, lat_offset, lon_offset, out, bbox, stats, region_writers
+                        data, strings, granularity, lat_offset, lon_offset, out, bbox, stats, region_writers, region_grid
                     )
             else:  # ways (3), relations (4) и прочее — пропускаем
                 gr.bytes()
+
+
+# ---------------------------------------------------------------------------
+# Многопроцессность: читатель → воркеры (пишут напрямую) → merge в конце
+# ---------------------------------------------------------------------------
+
+# Глобальные файлы воркера: открыты один раз при старте процесса, не per-блок.
+# Без этого open/close на каждый блок × 115 регионов × 40K блоков — квадратичная
+# деградация скорости (главная причина падения с 80 до 32 МБ/с).
+# Каждый воркер пишет в СВОЙ файл ({pid}.jsonl): иначе append из 8 процессов
+# в один файл дал бы кашу из обрезанных строк
+_worker_out = None
+_worker_region_fhs: dict[str, object] = {}
+_worker_region_grid: dict[tuple[int, int], list[str]] | None = None
+_worker_bbox: tuple[float, float, float, float] | None = None
+_worker_pid: int = 0
+
+
+def _worker_init(out_path: Path, region_bboxes: dict[str, tuple] | None, regions_dir: Path | None) -> None:
+    """Initializer воркера: открывает файлы один раз на процесс."""
+    global _worker_out, _worker_region_fhs, _worker_region_grid, _worker_bbox, _worker_pid
+    _worker_pid = os.getpid()
+    _worker_out = out_path.with_suffix(f".{_worker_pid}.jsonl").open("w", encoding="utf-8", buffering=8192)
+    _worker_bbox = None  # не используется в воркере, bbox фильтрация в emit_peak
+    if region_bboxes and regions_dir:
+        _worker_region_grid = _region_grid(region_bboxes)
+        for name, rbbox in region_bboxes.items():
+            fh = (regions_dir / f"{name}.{_worker_pid}.jsonl").open("w", encoding="utf-8", buffering=8192)
+            _worker_region_fhs[name] = (rbbox, fh)
+
+
+def _worker_parse_block(raw: bytes) -> dict:
+    """Воркер: декодирует блок и пишет вершины в свои файлы.
+
+    Возвращает только статистику (крошечный pickle) — данные уже на диске.
+    Порядок блоков не сохраняется: JSONL можно сортировать потом, а скорость
+    не деградирует от ожидания next_write.
+    """
+    stats = {"peaks": 0, "volcanoes": 0, "outside": 0, "no_name": 0, "no_ele": 0, "written": 0}
+    # Первые 4 байта — служебный префикс (индекс блока), не часть PBF
+    pbf_data = raw[4:]
+    parse_primitive_block(
+        pbf_data, _worker_out, _worker_bbox, stats,
+        _worker_region_fhs if _worker_region_fhs else None,
+        _worker_region_grid,
+    )
+    # Флашим на каждый блок: иначе merge читает пустые файлы — процессы
+    # не закрываются до конца пула. 8192 байт буфера хватает на ~80 строк,
+    # так что flush срабатывает не чаще, чем раз в несколько блоков.
+    _worker_out.flush()
+    for _, fh in _worker_region_fhs.values():
+        fh.flush()
+    return stats
+
+
+def _merge_stats(dst: dict, src: dict) -> None:
+    for k, v in src.items():
+        dst[k] = dst.get(k, 0) + v
 
 
 def main() -> None:
@@ -413,6 +518,13 @@ def main() -> None:
         type=Path,
         help="Каталог: для КАЖДОГО региона из tools/regions.json писать {dir}/{name}.jsonl",
     )
+    parser.add_argument(
+        "-j",
+        "--jobs",
+        type=int,
+        default=max(1, (os.cpu_count() or 2) - 1),
+        help="Число процессов (по умолчанию: CPU−1)",
+    )
     args = parser.parse_args()
 
     bbox = None
@@ -421,18 +533,16 @@ def main() -> None:
         if len(bbox) != 4:
             sys.exit("bbox: minLon,minLat,maxLon,maxLat")
 
-    # Региональные writer'ы: открываем все файлы сразу, пишем на лету
-    region_writers: dict[str, tuple] = {}
+    # Региональные bbox для воркеров (сами файлы пишутся в главном процессе)
+    region_bboxes: dict[str, tuple[float, float, float, float]] = {}
     if args.regions_dir:
         registry = Path(__file__).parent.parent / "regions.json"
         regions = json.loads(registry.read_text(encoding="utf-8"))
-        args.regions_dir.mkdir(parents=True, exist_ok=True)
         for name, entry in regions.items():
             if not isinstance(entry, dict) or "bbox" not in entry:
                 continue
-            fh = (args.regions_dir / f"{name}.jsonl").open("w", encoding="utf-8")
-            region_writers[name] = (tuple(entry["bbox"]), fh)
-        print(f"Регионов открыто: {len(region_writers)} → {args.regions_dir}")
+            region_bboxes[name] = tuple(entry["bbox"])
+        print(f"Регионов для воркеров: {len(region_bboxes)}")
 
     stats = {
         "peaks": 0,
@@ -447,44 +557,95 @@ def main() -> None:
     file_size = args.input.stat().st_size
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    with args.input.open("rb") as f, args.out.open("w", encoding="utf-8") as out:
-        while True:
-            header = read_blob_header(f)
-            if header is None:
-                break
-            blob_type, datasize = header
-            if blob_type == "OSMData":
-                raw = read_blob(f, datasize)
-                parse_primitive_block(raw, out, bbox, stats, region_writers)
-                blocks += 1
-                if blocks % 50 == 0:
-                    # Сброс буферов — виден прогресс в файлах, защита от потери
-                    out.flush()
-                    for _, fh in region_writers.values():
-                        fh.flush()
-                    elapsed = time.time() - t0
-                    pos = f.tell()
-                    pct = 100 * pos / file_size
-                    speed = pos / max(elapsed, 1) / 1e6
-                    eta_min = (file_size - pos) / max(pos / elapsed, 1) / 60
-                    print(
-                        f"  {pct:5.1f}% | {blocks} блоков | "
-                        f"{stats['peaks']} пиков, записано {stats['written']}"
-                        + (
-                            f" | регионов с пиками: "
-                            f"{sum(1 for k in stats if k.startswith('region:'))}"
-                            if region_writers
-                            else ""
-                        )
-                        + f" | {speed:.1f} МБ/с | прошло {elapsed / 60:.1f} мин, "
-                        f"осталось ~{eta_min:.1f} мин",
-                        flush=True,
-                    )
-            else:  # OSMHeader — пропускаем
-                f.seek(datasize, 1)
+    if args.regions_dir:
+        args.regions_dir.mkdir(parents=True, exist_ok=True)
 
-    for _, fh in region_writers.values():
-        fh.close()
+    with args.input.open("rb") as f:
+        # Воркеры пишут напрямую в свои файлы (открыты один раз на процесс).
+        # Порядок блоков не сохраняем: JSONL можно сортировать потом, зато
+        # нет ни квадратичного сбора tmp-файлов, ни пузырей от ожидания
+        # next_write. Статистика — крошечный pickle на блок, не данные.
+        with mp.Pool(
+            args.jobs,
+            initializer=_worker_init,
+            initargs=(args.out, region_bboxes, args.regions_dir),
+        ) as pool:
+            async_results = []
+            while True:
+                header = read_blob_header(f)
+                if header is None:
+                    break
+                blob_type, datasize = header
+                if blob_type == "OSMData":
+                    # Ждём, если очередь переполнена: inqueue — это память,
+                    # а не скорость. Воркеры всё равно не успеют больше
+                    while pool._taskqueue.qsize() > args.jobs * 2:
+                        time.sleep(0.01)
+                    raw = read_blob(f, datasize)
+                    block_id = blocks.to_bytes(4, "little") + raw
+                    blocks += 1
+                    async_results.append(pool.apply_async(_worker_parse_block, (block_id,)))
+
+                    # Периодический сбор статистики: без данных, только счётчики.
+                    # Баг: del async_results[:ready] резал с начала, хотя готовые
+                    # разбросаны по списку — не готовые в начале затыкали удаление,
+                    # список рос квадратично, и каждые 50 блоков мы сканировали
+                    # тысячи AsyncResult. Исправление: новый список без готовых
+                    if blocks % 50 == 0:
+                        still_pending = []
+                        for ar in async_results:
+                            if ar.ready():
+                                _merge_stats(stats, ar.get())
+                            else:
+                                still_pending.append(ar)
+                        async_results = still_pending
+                        elapsed = time.time() - t0
+                        pos = f.tell()
+                        pct = 100 * pos / file_size
+                        speed = pos / max(elapsed, 1) / 1e6
+                        eta_min = (file_size - pos) / max(pos / elapsed, 1) / 60
+                        print(
+                            f"  {pct:5.1f}% | {blocks} блоков | "
+                            f"{stats['peaks']} пиков, записано {stats['written']}"
+                            + (
+                                f" | регионов с пиками: "
+                                f"{sum(1 for k in stats if k.startswith('region:'))}"
+                                if region_bboxes
+                                else ""
+                            )
+                            + f" | {speed:.1f} МБ/с | прошло {elapsed / 60:.1f} мин, "
+                            f"осталось ~{eta_min:.1f} мин",
+                            flush=True,
+                        )
+                else:  # OSMHeader — пропускаем
+                    f.seek(datasize, 1)
+
+            # Досбор статистики
+            for ar in async_results:
+                _merge_stats(stats, ar.get())
+
+    # Merge: все воркеры писали в свои {pid}.jsonl — конкатенируем в финальные
+    # файлы. Это секунды: последовательное чтение/запись без парсинга.
+    # Регионы ищем в regions_dir, а не в out.parent — каталоги разные
+    import glob
+    import shutil
+
+    for pattern, target_dir, target_name in [
+        (f"{args.out.stem}.*.jsonl", args.out.parent, args.out.name),
+        *(
+            (f"{name}.*.jsonl", args.regions_dir, f"{name}.jsonl")
+            for name in region_bboxes
+        ),
+    ]:
+        parts = sorted(glob.glob(str(target_dir / pattern)))
+        if not parts:
+            continue
+        with (target_dir / target_name).open("wb") as out_f:
+            for p in parts:
+                with open(p, "rb") as in_f:
+                    shutil.copyfileobj(in_f, out_f)
+        for p in parts:
+            Path(p).unlink()
 
     elapsed = time.time() - t0
     print(
@@ -492,9 +653,9 @@ def main() -> None:
         f"  найдено peak/volcano: {stats['peaks']} (вулканов: {stats['volcanoes']}), "
         f"без имени: {stats['no_name']}, без ele: {stats['no_ele']}"
     )
-    if region_writers:
+    if region_bboxes:
         print("  По регионам:")
-        for name in sorted(region_writers):
+        for name in sorted(region_bboxes):
             n = stats.get(f"region:{name}", 0)
             if n:
                 print(f"    {name}: {n}")
