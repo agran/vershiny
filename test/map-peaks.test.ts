@@ -6,7 +6,8 @@
 
 import { describe, it, expect } from "vitest";
 import {
-  mapPeakLimit,
+  MAP_PEAK_CANDIDATE_CAP,
+  mapPeakLabelSize,
   selectMapPeaks,
   projectPeaks,
 } from "../src/ui/map";
@@ -19,16 +20,21 @@ const peak = (name: string, ele: number, lat = 43, lon = 42): Peak => ({
   lon,
 });
 
-describe("mapPeakLimit", () => {
-  it("на мелком зуме подписываем всё", () => {
-    expect(mapPeakLimit(14)).toBe(Infinity);
-    expect(mapPeakLimit(17)).toBe(Infinity);
+describe("потолки слоя вершин", () => {
+  it("кадр не отдаёт больше страховочного потолка кандидатов", () => {
+    // Реальный предел подписей — размещение без перекрытий в renderPeaks;
+    // здесь лишь защита от плотного кадра (сортировка/проекция/DOM)
+    const many = Array.from({ length: 300 }, (_, i) =>
+      peak(`V${i}`, 1000 + i, 42 + (i % 30) * 0.02, 41 + ((i / 30) | 0) * 0.02),
+    );
+    const selected = selectMapPeaks(many, 11);
+    expect(selected).toHaveLength(MAP_PEAK_CANDIDATE_CAP);
+    expect(selected[0].name).toBe("V299"); // самая высокая — первой
   });
 
-  it("чем дальше, тем меньше подписей", () => {
-    expect(mapPeakLimit(11)).toBe(24);
-    expect(mapPeakLimit(9)).toBe(12);
-    expect(mapPeakLimit(2)).toBe(6);
+  it("оценка подписи ограничена max-width из стилей метки", () => {
+    expect(mapPeakLabelSize("Фишт 2854").w).toBeLessThan(148);
+    expect(mapPeakLabelSize(`${"О".repeat(100)} 5000`).w).toBe(148);
   });
 });
 
@@ -55,17 +61,23 @@ describe("selectMapPeaks", () => {
     const a = selectMapPeaks(many, 9).map((p) => p.name);
     const b = selectMapPeaks(many, 9).map((p) => p.name);
     expect(a).toEqual(b);
-    expect(a).toHaveLength(12); // лимит зума 9
+    expect(a).toHaveLength(MAP_PEAK_CANDIDATE_CAP);
     // Верхушка высоты обязана попасть: при незаданной изоляции счёт = ele
-    const top12 = [...many].sort((x, y) => (y.ele ?? 0) - (x.ele ?? 0)).slice(0, 12);
-    for (const p of top12) expect(a).toContain(p.name);
+    const top = [...many]
+      .sort((x, y) => (y.ele ?? 0) - (x.ele ?? 0))
+      .slice(0, MAP_PEAK_CANDIDATE_CAP);
+    for (const p of top) expect(a).toContain(p.name);
   });
 
-  it("берёт N самых высоких на мелком зуме", () => {
-    const selected = selectMapPeaks(peaks, 8); // лимит 6
-    expect(selected).toHaveLength(6);
-    expect(selected.map((p) => p.name)).toContain("Эльбрус");
-    expect(selected.map((p) => p.name)).not.toContain("Холм");
+  it("кандидаты не режутся по счёту: все вершины кадра, в порядке значимости", () => {
+    // Регрессия: фиксированный «топ-N на зум» вытеснял вершину из подписей,
+    // когда в кадр входили более значимые соседи, даже при свободном месте
+    // на экране. Теперь счёт ограничен только страховочным потолком, а
+    // перекрытия разрешает renderPeaks
+    const selected = selectMapPeaks(peaks, 8);
+    expect(selected).toHaveLength(peaks.length);
+    expect(selected[0].name).toBe("Эльбрус");
+    expect(selected[selected.length - 1].name).toBe("Холм");
   });
 
   it("на крупном зуме отдаёт всех, но отсортированных по значимости", () => {
@@ -74,7 +86,7 @@ describe("selectMapPeaks", () => {
     expect(selected[0].name).toBe("Эльбрус"); // главная — первой (в DOM — последней)
   });
 
-  it("одноимённые дедуплицируются до лимита: выживает главная, квота добирается", () => {
+  it("одноимённые дедуплицируются при отборе: выживает главная", () => {
     // Регрессия: раньше дедуп был в renderPeaks ПОСЛЕ лимита и шёл с хвоста —
     // пачка однофамильцев съедала квоту, на экране оставалось меньше
     // подписей, чем позволяет зум, а главную из одноимённых выкидывало
@@ -88,9 +100,9 @@ describe("selectMapPeaks", () => {
       peak("Дельта", 2200, 43.06, 42.06),
       peak("Эпсилон", 2100, 43.07, 42.07),
     ];
-    const selected = selectMapPeaks(many, 2); // лимит 6
+    const selected = selectMapPeaks(many, 2);
     const names = selected.map((p) => p.name);
-    expect(selected).toHaveLength(6); // квота добрана соседями
+    expect(selected).toHaveLength(6); // 8 минус два одноимённых дубля
     expect(names.filter((n) => n === "Пик №3")).toHaveLength(1);
     expect(selected.find((p) => p.name === "Пик №3")?.ele).toBe(3000); // главная
     expect(names).toContain("Эпсилон"); // слабая, но уникальная — влезла
@@ -153,12 +165,13 @@ describe("selectMapPeaks с кадром карты", () => {
     expect(names).not.toContain("Эльбрус");
   });
 
-  it("без кадра поведение прежнее: топ-N по всему набору", () => {
+  it("без кадра отдаёт весь набор (до страховочного потолка)", () => {
     const many = Array.from({ length: 30 }, (_, i) =>
       peak(`V${i}`, 1000 + i * 100, 42 + (i % 6) * 0.05, 41 + ((i / 6) | 0) * 0.07),
     );
     const selected = selectMapPeaks(many, 9);
-    expect(selected).toHaveLength(12);
+    expect(selected).toHaveLength(30);
+    expect(selected[0].name).toBe("V29"); // порядок — по значимости
   });
 
   it("кадр у антимеридиана не теряет вершины за ±180°", () => {
