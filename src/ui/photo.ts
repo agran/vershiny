@@ -22,7 +22,11 @@ export interface PhotoOptions {
   origin: LatLon;
   /** Высота наблюдателя из DEM */
   observerH: number;
-  /** Имя региона (для подписи) */
+  /**
+   * Название региона на языке интерфейса («Приэльбрусье»): рисуется в
+   * подписи как есть. Не ID реестра («elbrus») — он для людей ничего не
+   * значит. В имя файла уходит транслитерированным (photoFilename).
+   */
   region?: string;
   /** Главная вершина в кадре: попадает в имя файла */
   peakName?: string;
@@ -216,7 +220,12 @@ function buildMetaParts(options: PhotoOptions): string[] {
   if (caption.place) {
     const lat = origin.lat.toFixed(5);
     const lon = origin.lon.toFixed(5);
-    if (region) parts.push(region);
+    // Та же логика, что у имени файла: подпись ведёт с главной вершины в
+    // кадре — снимок делают ради горы, и «Эльбрус Западный» говорит о кадре
+    // больше, чем «Приэльбрусье». Район — запасной вариант на случай, когда
+    // видимых вершин в кадре нет вовсе
+    const where = options.peakName ?? region;
+    if (where) parts.push(where);
     parts.push(
       `${Math.abs(Number(lat))}°${Number(lat) >= 0 ? "N" : "S"}`,
       `${Math.abs(Number(lon))}°${Number(lon) >= 0 ? "E" : "W"}`,
@@ -286,7 +295,11 @@ export function photoFilename(options: PhotoOptions, at = new Date()): string {
     `-${pad(at.getHours())}${pad(at.getMinutes())}`;
 
   const peak = options.peakName ? slug(translitToLatin(options.peakName)) : "";
-  const place = peak || (options.region ? slug(options.region) : "");
+  // Регион приходит локализованным («Приэльбрусье») — в имя файла, как и
+  // вершина, уходит латиницей; кириллический slug без транслитерации
+  // стерилизовался бы в пустую строку, и место из имени пропадало вовсе
+  const place =
+    peak || (options.region ? slug(translitToLatin(options.region)) : "");
   return ["vershiny", place, stamp].filter(Boolean).join("-") + ".png";
 }
 

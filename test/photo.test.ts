@@ -494,6 +494,27 @@ describe("снимок панорамы", () => {
     expect(time).not.toContain("°N");
     expect(time).not.toContain("elbrus");
   });
+
+  it("место подписывается главной вершиной в кадре, а не районом", async () => {
+    // Как и имя файла: снимок делают ради горы, и «Эльбрус Западный» о кадре
+    // говорит больше, чем «Приэльбрусье» — район вытесняется, а не
+    // дописывается
+    setPhotoCaption({ place: true, time: false });
+    draws = [];
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      region: "Приэльбрусье",
+      peakName: "Эльбрус Западный",
+      source: screenCanvas(1600, 900),
+    });
+    const place = captionLines()
+      .map((d) => d.text)
+      .join(" ");
+    expect(place).toContain("Эльбрус Западный");
+    expect(place).not.toContain("Приэльбрусье");
+    expect(place).toContain("43.3°N");
+  });
 });
 
 describe("имя файла снимка", () => {
@@ -521,6 +542,22 @@ describe("имя файла снимка", () => {
         AT,
       ),
     ).toBe("vershiny-alps-2026-08-13-2238.png");
+  });
+
+  it("локализованное название региона транслитерируется, а не стирается", () => {
+    // В подпись снимка уходит название на языке интерфейса (main.ts): без
+    // транслитерации кириллический slug вырождался в пустую строку, и место
+    // из имени файла пропадало вовсе
+    expect(
+      photoFilename(
+        {
+          origin: { lat: 43.3, lon: 42.4 },
+          observerH: 4100,
+          region: "Приэльбрусье",
+        },
+        AT,
+      ),
+    ).toBe("vershiny-prielbruse-2026-08-13-2238.png");
   });
 
   it("в имени нет ничего, кроме латиницы, цифр и дефисов", () => {
