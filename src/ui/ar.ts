@@ -12,6 +12,7 @@
  * центру и расходились у краёв.
  */
 
+import { DEFAULT_CAMERA_FOV_DEG, getCalibration } from "../core/calibration";
 import {
   applyCoverCrop,
   applyZoom,
@@ -19,7 +20,6 @@ import {
   horizonFracInFrame,
   type FrameFov,
 } from "../core/camera-fov";
-import { DEFAULT_CAMERA_FOV_DEG, getCalibration } from "../core/calibration";
 import type { PanoramaState, ViewState } from "./panorama";
 import { HORIZON_FRAC, drawOverlay } from "./panorama";
 

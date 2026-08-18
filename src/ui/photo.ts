@@ -9,12 +9,12 @@ import { getLocale } from "../core/i18n";
 import { getPhotoCaption } from "../core/photo-caption";
 import { translitToLatin } from "../core/transliterate";
 import {
-    drawOverlay,
-    INK_DARK,
-    INK_LIGHT,
-    renderPanorama,
-    type PanoramaState,
-    type ViewState,
+  drawOverlay,
+  INK_DARK,
+  INK_LIGHT,
+  renderPanorama,
+  type PanoramaState,
+  type ViewState,
 } from "./panorama";
 
 export interface PhotoOptions {
@@ -107,10 +107,15 @@ export async function capturePhoto(
     const dh = vh * scale;
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(video, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
+    ctx.drawImage(
+      video,
+      (canvas.width - dw) / 2,
+      (canvas.height - dh) / 2,
+      dw,
+      dh,
+    );
 
-    const full =
-      options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
+    const full = options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
     const visible = applyCoverCrop(full, vw, vh, canvas.width, canvas.height);
     const overlayView: ViewState = {
       ...view,

@@ -14,20 +14,20 @@
  * Такая загрузка не могла завершиться в принципе — упиралась в квоту браузера.
  */
 
-import { TerrariumSampler } from "../core/terrarium";
-import { DemSampler } from "../core/dem";
-import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from "../core/dem-config";
-import { PEAK_VISIBILITY_RADIUS_M } from "../core/peaks";
-import { bboxContains, destination, type LatLon } from "../core/geo";
-import { fetchWithTimeout } from "../core/fetch-timeout";
 import {
   getDemTile,
   getTerrariumTile,
   markRegionDownloaded,
   savePeaks,
 } from "../core/db";
+import { DemSampler } from "../core/dem";
+import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from "../core/dem-config";
+import { fetchWithTimeout } from "../core/fetch-timeout";
+import { bboxContains, destination, type LatLon } from "../core/geo";
 import { root } from "../core/globals";
 import { getLocale } from "../core/i18n";
+import { PEAK_VISIBILITY_RADIUS_M } from "../core/peaks";
+import { TerrariumSampler } from "../core/terrarium";
 
 /** Радиус детальной зоны (Terrarium 90 м) вокруг точки наблюдения */
 export const DETAIL_RADIUS_M = 30_000;
