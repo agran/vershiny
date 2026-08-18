@@ -448,12 +448,11 @@ export function openMap(options: MapOptions): () => void {
    * Нужен ли слой вершин: только когда тайлов нет. Кадр считается покрытым,
    * если хотя бы один видимый тайл загрузился И НИ ОДИН видимый не упал с
    * ошибкой — половинчатая картина (часть тайлов отвалилась по 429/обрыву)
-   * дырявее с закрытым слоем, чем с двойными подписями.
+   * дырявее с закрытым слоем, чем с двойными подписями. Плюс не должно
+   * остаться летящих: иначе при панорамировании въезжающие незагруженные
+   * тайлы включали и выключали слой по несколько раз в секунду.
    */
-  const updatePeaksLayerNeed = (): void => {
-    // Кадр считается покрытым, когда есть загрузившиеся тайлы, ни один не
-    // упал и не осталось летящих: иначе при панорамировании въезжающие
-    // незагруженные тайлы включали и выключали слой по несколько раз в секунду
+  const computePeaksLayerNeeded = (): boolean => {
     let okCount = 0;
     let failedCount = 0;
     let pendingCount = 0;
@@ -462,8 +461,11 @@ export function openMap(options: MapOptions): () => void {
       else if (img.dataset.failed) failedCount++;
       else pendingCount++;
     }
-    const needed = !(okCount > 0 && failedCount === 0 && pendingCount === 0);
-    if (needed === peaksLayerNeeded) {
+    return !(okCount > 0 && failedCount === 0 && pendingCount === 0);
+  };
+
+  const updatePeaksLayerNeed = (): void => {
+    if (computePeaksLayerNeeded() === peaksLayerNeeded) {
       // Состояние снова согласовано — отложенное переключение не нужно
       if (layerFlipTimer !== undefined) {
         clearTimeout(layerFlipTimer);
@@ -476,7 +478,15 @@ export function openMap(options: MapOptions): () => void {
     if (layerFlipTimer !== undefined) return;
     layerFlipTimer = setTimeout(() => {
       layerFlipTimer = undefined;
-      updatePeaksLayerNeed();
+      // За окно дебаунса состояние могло вернуться к прежнему — тогда слой
+      // не трогаем. Иначе переключаем и перерисовываем: без присваивания
+      // (так и было до исправления) таймер лишь перепланировал сам себя,
+      // и слой вершин навсегда оставался поверх загрузившейся карты
+      const needed = computePeaksLayerNeeded();
+      if (needed !== peaksLayerNeeded) {
+        peaksLayerNeeded = needed;
+        renderPeaks();
+      }
     }, 250);
   };
 

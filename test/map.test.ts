@@ -10,7 +10,7 @@
  * отсюда и ощущение «срабатывает через раз».
  */
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { setLocale, t } from "../src/core/i18n";
 import { openMap, type MapOptions } from "../src/ui/map";
 import { resetOverlayHistory } from "../src/ui/overlay-history";
@@ -373,5 +373,100 @@ describe("подписи карты", () => {
     const srcs = tileSources();
     expect(srcs.length).toBeGreaterThan(0);
     expect(srcs.every((s) => s.includes("opentopomap.org"))).toBe(true);
+  });
+});
+
+describe("слой вершин и тайлы", () => {
+  const PEAKS = [{ name: "Эльбрус", ele: 5642, lat: 43.35, lon: 42.44 }];
+
+  // jsdom отдаёт нулевые размеры элементов: без стаба render() видит кадр
+  // 0×0 и слой вершин прячется раньше, чем мы успеваем что-то проверить.
+  // Стабы — на прототипе: корень карты создаётся внутри openMap, до того,
+  // как мы получаем к нему доступ
+  beforeEach(() => {
+    Object.defineProperties(HTMLElement.prototype, {
+      clientWidth: { configurable: true, get: () => 800 },
+      clientHeight: { configurable: true, get: () => 600 },
+    });
+    vi.useFakeTimers(); // дебаунс переключения слоя — 250 мс
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    delete (HTMLElement.prototype as unknown as Record<string, unknown>)
+      .clientWidth;
+    delete (HTMLElement.prototype as unknown as Record<string, unknown>)
+      .clientHeight;
+  });
+
+  /** Слой вершин — первый ребёнок слоя тайлов (раньше img, маркера, цели) */
+  const peaksLayer = (): HTMLElement =>
+    document.body.lastElementChild!.firstElementChild!
+      .firstElementChild as HTMLElement;
+
+  /** Все тайлы кадра «загрузились»: jsdom сам событий загрузки не шлёт */
+  const loadAllTiles = (): void => {
+    for (const img of Array.from(document.querySelectorAll("img")))
+      img.dispatchEvent(new Event("load"));
+  };
+
+  it("пока тайлы летят, слой вершин виден — это всё, что есть офлайн", () => {
+    open({ peaks: PEAKS });
+    vi.advanceTimersByTime(1000); // никаких событий тайлов — состояние стабильно
+
+    expect(peaksLayer().style.display).toBe("block");
+    expect(peaksLayer().textContent).toContain("Эльбрус");
+  });
+
+  it("загрузившаяся онлайн-карта закрывает слой вершин", () => {
+    // Регресс: флаг видимости слоя никогда не переключался — дебаунс-таймер
+    // лишь перепланировал сам себя, и вершины вечно висели поверх тайлов
+    open({ peaks: PEAKS });
+    expect(peaksLayer().style.display).toBe("block");
+
+    loadAllTiles();
+    vi.advanceTimersByTime(300);
+
+    expect(peaksLayer().style.display).toBe("none");
+  });
+
+  it("упавший тайл не даёт закрыть слой вершин", () => {
+    // Половинчатая картина (часть тайлов отвалилась по 429/обрыву) дырявее
+    // с закрытым слоем, чем с двойными подписями
+    open({ peaks: PEAKS });
+    const imgs = Array.from(document.querySelectorAll("img"));
+    imgs[0].dispatchEvent(new Event("error"));
+    for (const img of imgs.slice(1)) img.dispatchEvent(new Event("load"));
+
+    vi.advanceTimersByTime(600);
+
+    expect(peaksLayer().style.display).toBe("block");
+  });
+
+  it("панорамирование на незагруженные тайлы возвращает слой", () => {
+    open({ peaks: PEAKS });
+    loadAllTiles();
+    vi.advanceTimersByTime(300);
+    expect(peaksLayer().style.display).toBe("none");
+
+    // Тянем карту: в кадр въезжают новые тайлы, которые ещё летят
+    const root = document.body.lastElementChild as HTMLElement;
+    root.dispatchEvent(
+      new MouseEvent("pointerdown", {
+        bubbles: true,
+        clientX: 400,
+        clientY: 300,
+      }),
+    );
+    root.dispatchEvent(
+      new MouseEvent("pointermove", {
+        bubbles: true,
+        clientX: 700,
+        clientY: 300,
+      }),
+    );
+    vi.advanceTimersByTime(300);
+
+    expect(peaksLayer().style.display).toBe("block");
   });
 });
