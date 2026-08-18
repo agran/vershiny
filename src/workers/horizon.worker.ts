@@ -74,6 +74,12 @@ export interface ResultMessage {
   distanceToHorizonM: Float32Array;
   /** Фронты видимости по лучам (для точных маркеров) */
   fronts: import("../core/horizon").VisibleFront[][];
+  /** Фронты в плоском виде (SoA): по 4 значения на фронт —
+   * distM, distEndM, elevStartRad, elevMaxRad. Передаётся трансфером —
+   * structuredClone тысяч объектов VisibleFront стоил заметных миллисекунд */
+  frontsFlat: Float32Array;
+  /** Оффсеты: у луча i фронты frontsFlat[frontsOffsets[i] .. frontsOffsets[i+1]] */
+  frontsOffsets: Uint32Array;
   /** Гребни силуэта по корзинам дистанций [корзина][луч] */
   crests: Float32Array[];
   /** Видимые пики */
@@ -161,6 +167,23 @@ async function compute(
     marchDeps,
   );
 
+  // Фронты — в плоский SoA для трансфера (объекты соберёт main-поток)
+  const rayCount = layered.fronts.length;
+  const frontsOffsets = new Uint32Array(rayCount + 1);
+  for (let i = 0; i < rayCount; i++) {
+    frontsOffsets[i + 1] = frontsOffsets[i] + layered.fronts[i].length * 4;
+  }
+  const frontsFlat = new Float32Array(frontsOffsets[rayCount]);
+  for (let i = 0; i < rayCount; i++) {
+    let o = frontsOffsets[i];
+    for (const f of layered.fronts[i]) {
+      frontsFlat[o++] = f.distM;
+      frontsFlat[o++] = f.distEndM;
+      frontsFlat[o++] = f.elevStartRad;
+      frontsFlat[o++] = f.elevMaxRad;
+    }
+  }
+
   return {
     type: "result",
     horizon: layered.layers[0], // ближний слой = основной горизонт
@@ -168,6 +191,8 @@ async function compute(
     layers: layered.layers,
     distanceToHorizonM: layered.distanceToHorizonM,
     fronts: layered.fronts,
+    frontsFlat,
+    frontsOffsets,
     crests: layered.crests,
     peaks: visible,
     observerH,
@@ -312,8 +337,16 @@ async function handle(msg: WorkerInMessage): Promise<void> {
         msg.observerHeightOverride,
       );
       result.reqId = reqId;
-      // Передаём буфер горизонта без копирования
-      (self as unknown as Worker).postMessage(result, [result.horizon.buffer]);
+      // Все типизированные буферы уходят без копирования (transfer):
+      // horizon + 5 слоёв + дистанции + гребни + плоские фронты
+      (self as unknown as Worker).postMessage(result, [
+        result.horizon.buffer,
+        ...result.layers.map((a) => a.buffer),
+        result.distanceToHorizonM.buffer,
+        ...result.crests.map((a) => a.buffer),
+        result.frontsFlat.buffer,
+        result.frontsOffsets.buffer,
+      ]);
     }
   } catch (err) {
     const out: ErrorMessage = {

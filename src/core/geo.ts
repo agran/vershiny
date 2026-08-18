@@ -130,6 +130,10 @@ export function makeRayMarcher(
     const cosD = table.cosD[stepIdx];
     const sinD = table.sinD[stepIdx];
     const lat2 = Math.asin(sinLat1 * cosD + cosLat1 * sinD * cosAz);
+    // Важно: normalizeLon(toDeg(lon2)) НЕ тождественна toDeg(lon2) даже внутри
+    // диапазона [−180, 180) — цепочка остатков даёт 1-ulp сдвиг (проверено
+    // воспроизведением), поэтому пропускать её «для скорости» нельзя без
+    // потери побитовости с destination(). Оставляем выражение как у оригинала.
     const lon2 =
       lon1 +
       Math.atan2(sinAz * sinD * cosLat1, cosD - sinLat1 * Math.sin(lat2));

@@ -150,6 +150,8 @@ export interface MarchTable {
   drop: Float64Array;
   /** Подсказки LOD-выборки: lod пирамиды и zoom Terrarium по дальности шага */
   hints: SampleHint[];
+  /** Корзина слоя (LAYER_BOUNDS) — функция только от дистанции */
+  bin: Uint8Array;
   /** Число шагов */
   count: number;
 }
@@ -176,6 +178,7 @@ export function buildMarchTable(
   const cosD = new Float64Array(n);
   const drop = new Float64Array(n);
   const hints = new Array<SampleHint>(n);
+  const bin = new Uint8Array(n);
   for (let i = 0; i < n; i++) {
     const a = d[i] / EARTH_RADIUS_M;
     sinD[i] = Math.sin(a);
@@ -185,8 +188,18 @@ export function buildMarchTable(
       lod: deps.lodForDistance ? deps.lodForDistance(d[i]) : 0,
       zoom: zoomForDistance(d[i]),
     };
+    // Тот же перебор границ, что был в цикле марша, — один раз на таблицу
+    let b = 0;
+    for (let k = 0; k < LAYER_COUNT; k++) {
+      if (d[i] >= LAYER_BOUNDS[k] && d[i] < LAYER_BOUNDS[k + 1]) {
+        b = k;
+        break;
+      }
+      if (d[i] >= LAYER_BOUNDS[LAYER_COUNT]) b = LAYER_COUNT - 1;
+    }
+    bin[i] = b;
   }
-  return { d, sinD, cosD, drop, hints, count: n };
+  return { d, sinD, cosD, drop, hints, bin, count: n };
 }
 
 /**
@@ -282,6 +295,13 @@ export function computeLayeredHorizon(
   const fStartRad = new Float64Array(FRONT_CAP);
   const fMaxRad = new Float64Array(FRONT_CAP);
 
+  // Буферы состояния луча переиспользуются: 3600 лучей × 4 массива
+  // Float64Array(5) — это 14.4 тыс. короткоживущих аллокаций на расчёт
+  const binMaxSlope = new Float64Array(LAYER_COUNT);
+  const binDist = new Float64Array(LAYER_COUNT);
+  const binMaxAngle = new Float64Array(LAYER_COUNT);
+  const binExitSlope = new Float64Array(LAYER_COUNT);
+
   for (let i = 0; i < rayCount; i++) {
     const pointAt = makeRayMarcher(origin, i * stepRad, march);
     // Максимумы храним как наклоны (возвышение/дистанция): atan2 монотонна,
@@ -290,10 +310,10 @@ export function computeLayeredHorizon(
     // убирает ~2 млн вызовов atan2 из горячего цикла. Угловые пороги
     // (ранний выход, CREST_DROP_RAD) переводятся в наклоны через tan
     // при каждом обновлении соответствующего максимума
-    const binMaxSlope = new Float64Array(LAYER_COUNT).fill(-Infinity);
-    const binDist = new Float64Array(LAYER_COUNT).fill(Infinity);
-    const binMaxAngle = new Float64Array(LAYER_COUNT).fill(-Infinity);
-    const binExitSlope = new Float64Array(LAYER_COUNT).fill(-Infinity);
+    binMaxSlope.fill(-Infinity);
+    binDist.fill(Infinity);
+    binMaxAngle.fill(-Infinity);
+    binExitSlope.fill(-Infinity);
 
     // Фронты: точки, где рельеф пробивает текущий максимум
     let frontCount = 0;
@@ -327,14 +347,7 @@ export function computeLayeredHorizon(
       const h = sample(pointAt(s), d, march.hints[s]);
       if (h !== h) continue;
       const slope = (h - march.drop[s] - hO) / d;
-      let bin = 0;
-      for (let b = 0; b < LAYER_COUNT; b++) {
-        if (d >= LAYER_BOUNDS[b] && d < LAYER_BOUNDS[b + 1]) {
-          bin = b;
-          break;
-        }
-        if (d >= LAYER_BOUNDS[LAYER_COUNT]) bin = LAYER_COUNT - 1;
-      }
+      const bin = march.bin[s];
 
       if (slope > binMaxSlope[bin]) {
         binMaxSlope[bin] = slope;

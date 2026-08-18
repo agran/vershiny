@@ -154,15 +154,17 @@ describe("ray-marching горизонта", () => {
 
   it("маркирующая функция луча совпадает с destination побитово", () => {
     // Таблица шагов общая для всех лучей панорамы; точки из неё должны
-    // совпадать бит-в-бит с прямым вызовом destination() на каждом шаге
-    const az = 1.234;
+    // совпадать бит-в-бит с прямым вызовом destination() на каждом шаге.
+    // Проверяем несколько азимутов из рабочего диапазона марша [0, 2π)
     const march = buildMarchTable(100, 50_000);
-    const pointAt = makeRayMarcher(ORIGIN, az, march);
-    for (let s = 0; s < march.count; s += 17) {
-      const ref = destination(ORIGIN, az, march.d[s]);
-      const p = pointAt(s);
-      expect(p.lat).toBe(ref.lat);
-      expect(p.lon).toBe(ref.lon);
+    for (const az of [0.0001, 1.234, 3.5, 5.9]) {
+      const pointAt = makeRayMarcher(ORIGIN, az, march);
+      for (let s = 0; s < march.count; s += 17) {
+        const ref = destination(ORIGIN, az, march.d[s]);
+        const p = pointAt(s);
+        expect(p.lat).toBe(ref.lat);
+        expect(p.lon).toBe(ref.lon);
+      }
     }
   });
 });

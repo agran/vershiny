@@ -770,13 +770,31 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   // Расчёт старой точки, обогнавший свежий: применить его — значит показать
   // панораму не оттуда, где стоит наблюдатель
   if (r.reqId !== undefined && r.reqId !== activeComputeId) return;
+  // Фронты приехали плоскими (трансфер без клонирования объектов) —
+  // собираем обратно; если поля нет (старый воркер), берём как есть
+  let fronts = r.fronts;
+  if (r.frontsFlat && r.frontsOffsets) {
+    fronts = [];
+    for (let i = 0; i + 1 < r.frontsOffsets.length; i++) {
+      const rayFronts = [];
+      for (let o = r.frontsOffsets[i]; o < r.frontsOffsets[i + 1]; o += 4) {
+        rayFronts.push({
+          distM: r.frontsFlat[o],
+          distEndM: r.frontsFlat[o + 1],
+          elevStartRad: r.frontsFlat[o + 2],
+          elevMaxRad: r.frontsFlat[o + 3],
+        });
+      }
+      fronts.push(rayFronts);
+    }
+  }
   const next = {
     horizon: r.horizon,
     stepRad: r.stepRad,
     peaks: r.peaks,
     layers: r.layers,
     distanceToHorizonM: r.distanceToHorizonM,
-    fronts: r.fronts,
+    fronts,
     crests: r.crests,
   };
   // Мутируем существующий объект, а не подменяем ссылку: AR-оверлей захватил
