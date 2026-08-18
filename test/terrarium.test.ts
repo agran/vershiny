@@ -140,6 +140,28 @@ describe('terrarium', () => {
     expect(asked).toContain('4/0/3.png');
   });
 
+  it('heightAt на шве ±180° подгружает тайл 0 как правого соседа', async () => {
+    // Правый сосед последнего тайла мира (x = n−1) лежит за антимеридианом.
+    // Раньше условие `x + 1 < n` его не грузило, и интерполяция на шве молча
+    // откатывалась на краевой пиксель вместо честного соседа из тайла 0
+    const asked: string[] = [];
+    const fetchFn = (async (url: string) => {
+      asked.push(String(url).split('/terrarium/')[1]);
+      return new Response('nope', { status: 404 });
+    }) as unknown as typeof fetch;
+    const sampler = new TerrariumSampler({ fetchFn });
+
+    // z12: ширина тайла 360/4096 ≈ 0.088°; lon 179.9999 — последние сотые
+    // долей градуса тайла x=4095, пиксель px > 254.5 → нужен правый сосед.
+    // 404 → loadTile отдаёт null → heightAt бросает «вне покрытия» — это
+    // ожидаемо, проверяем именно набор запрошенных тайлов
+    const pos = { lat: 43.35, lon: 179.9999 };
+    await expect(sampler.heightAt(pos)).rejects.toThrow();
+    const y = lonLatToTile(pos, 12).y;
+    expect(asked).toContain(`12/4095/${y}.png`);
+    expect(asked).toContain(`12/0/${y}.png`);
+  });
+
   it('prefetchAround не выходит за полюс', async () => {
     const asked: string[] = [];
     const fetchFn = (async (url: string) => {

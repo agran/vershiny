@@ -373,13 +373,16 @@ export class TerrariumSampler {
     const z = ZOOM_RULES[0].zoom;
     const { x, y } = lonLatToTile(pos, z);
     await this.loadTile(z, x, y);
-    // Соседи для интерполяции на границах тайлов
+    // Соседи для интерполяции на границах тайлов. По долготе мир замкнут:
+    // правый сосед крайнего тайла — тайл 0 (как в prefetchAround), иначе
+    // на шве ±180° интерполяция молча откатывалась на краевой пиксель
     const { px, py } = lonLatToPixel(pos, z);
     const n = 2 ** z;
+    const nx = (x + 1) % n;
     const neighbors: Array<[number, number]> = [];
-    if (px > TILE_PX - 1.5 && x + 1 < n) neighbors.push([x + 1, y]);
+    if (px > TILE_PX - 1.5) neighbors.push([nx, y]);
     if (py > TILE_PX - 1.5 && y + 1 < n) neighbors.push([x, y + 1]);
-    if (neighbors.length === 2) neighbors.push([x + 1, y + 1]);
+    if (neighbors.length === 2) neighbors.push([nx, y + 1]);
     await Promise.all(neighbors.map(([nx, ny]) => this.loadTile(z, nx, ny)));
     const h = this.sample(pos, z);
     if (Number.isNaN(h)) throw new Error("Точка вне покрытия Terrarium");
