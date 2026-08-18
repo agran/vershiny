@@ -83,6 +83,17 @@ const GYRO_SNAP_RAD = 0.35;
  */
 const SNAP_CONFIRM_SAMPLES = 3;
 /**
+ * Snap'и, случающиеся чаще этого, — не перекалибровки, а систематическое
+ * расхождение gyro-интеграла с компасом (кривой rotationRate: знак,
+ * единицы, редкие события с зажатым dt). Наблюдалось в поле на Samsung
+ * S25 Ultra: «пила» — панорама дёргалась скачком примерно раз в секунду.
+ * Детектор отключает гироскоп до конца сессии — на таком устройстве
+ * прежнее сглаживание компаса лучше.
+ */
+const GYRO_SNAP_MUTE_COUNT = 3;
+/** Окно подсчёта серии snap'ов, мс */
+const GYRO_SNAP_WINDOW_MS = 10_000;
+/**
  * Absolute-показания молчат дольше этого — компас потерян (ушёл магнитометр
  * в WebView, webkitCompassHeading стал NaN): снова принимаем относительные
  * события. Стабильный якорь с постоянным офсетом (закрывается свайпом)
@@ -294,6 +305,13 @@ class OrientationTracker {
   /** Серия подряд идущих показаний за snap-порогом (confirmSnap) */
   private snapRun = 0;
   private snapDir = 0;
+  /** Времена недавних snap'ов — детектор систематического расхождения gyro/компас */
+  private snapTimes: number[] = [];
+  /** Гироскоп отключён детектором «пилы» — до конца сессии работает сглаживание */
+  private gyroMuted = false;
+  /** Сглаженные частоты событий, Гц — для полевой диагностики в console.warn */
+  private gyroHz = 0;
+  private orientHz = 0;
   /** Физическое положение устройства (GPS) — для склонения по WMM */
   private locationDeg: { lat: number; lon: number } | null = null;
   /** Кэш склонения: WMM-суммирование — ~90 гармоник, на каждое событие незачем */
@@ -475,9 +493,15 @@ class OrientationTracker {
     if (!Number.isFinite(ra) || !Number.isFinite(rb) || !Number.isFinite(rg)) return;
 
     const now = performance.now();
-    const dtS = Math.min((now - this.lastGyroMs) / 1000, GYRO_MAX_DT_S);
+    const rawDtS = (now - this.lastGyroMs) / 1000;
+    // Частоту считаем до зажима dt — иначе редкие события выглядят как 10 Гц
+    if (rawDtS > 0) {
+      const hz = 1 / rawDtS;
+      this.gyroHz = this.gyroHz === 0 ? hz : 0.95 * this.gyroHz + 0.05 * hz;
+    }
+    const dtS = Math.min(rawDtS, GYRO_MAX_DT_S);
     this.lastGyroMs = now;
-    if (dtS <= 0 || !this.lastEulerDeg) return;
+    if (this.gyroMuted || dtS <= 0 || !this.lastEulerDeg) return;
 
     // Фильтр ещё пуст (события ориентации ещё не было или гироскоп ожил
     // после перерыва): начинаем интегрировать от текущей оценки — скачка нет
@@ -600,18 +624,23 @@ class OrientationTracker {
     // rotationRate в систему Земли — запоминаем из этого же события
     this.lastEulerDeg = { beta: betaDeg, gamma: gammaDeg };
 
-    const gyroAlive = this.lastGyroMs > 0 && now - this.lastGyroMs < GYRO_ALIVE_MS;
+    const gyroAlive =
+      !this.gyroMuted && this.lastGyroMs > 0 && now - this.lastGyroMs < GYRO_ALIVE_MS;
     if (gyroAlive) {
       // Комплементарный фильтр: азимут интегрируется гироскопом (onMotion),
       // компас здесь — только медленный якорь против дрейфа. Запасную
       // оценку followAzimuth не ведём: если гироскоп умолкнет, fallback
       // продолжит от fusedRad без скачка
+      const dtS = this.lastOrientMs > 0 ? (now - this.lastOrientMs) / 1000 : 0;
+      if (dtS > 0) {
+        const hz = 1 / dtS;
+        this.orientHz = this.orientHz === 0 ? hz : 0.95 * this.orientHz + 0.05 * hz;
+      }
       if (this.fusedRad === null) {
         this.fusedRad = azimuthRad;
         this.snapRun = 0;
         this.snapDir = 0;
       } else {
-        const dtS = this.lastOrientMs > 0 ? (now - this.lastOrientMs) / 1000 : 0;
         // Мгновенный приём большого расхождения — только подтверждённого:
         // одиночный выброс возле металла уходит обычной экспонентой
         const snap = confirmSnap(
@@ -621,6 +650,23 @@ class OrientationTracker {
         );
         this.snapRun = snap.confirmed ? 0 : snap.run;
         this.snapDir = snap.confirmed ? 0 : snap.dir;
+        if (snap.confirmed) {
+          this.snapTimes = this.snapTimes.filter((t) => now - t < GYRO_SNAP_WINDOW_MS);
+          this.snapTimes.push(now);
+          if (this.snapTimes.length >= GYRO_SNAP_MUTE_COUNT) {
+            // Перекалибровка «восьмёркой» даёт одиночный snap. Серия —
+            // gyro-интеграл систематически разъезжается с компасом (знак,
+            // единицы или редкие события rotationRate): на таком устройстве
+            // гироскопу верить нельзя, уходим в сглаживание компаса
+            this.gyroMuted = true;
+            console.warn(
+              'Гироскоп отключён: интеграл систематически расходится с компасом. ' +
+                'Диагностика: ' +
+                `gyro ${this.gyroHz.toFixed(0)} Гц, compass ${this.orientHz.toFixed(0)} Гц, ` +
+                `${this.snapTimes.length} snap за ${GYRO_SNAP_WINDOW_MS / 1000} с`,
+            );
+          }
+        }
         this.fusedRad = correctDrift(this.fusedRad, azimuthRad, dtS, snap.confirmed);
       }
       this.followedRad = null;
