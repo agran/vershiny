@@ -4,7 +4,7 @@
  * запоминается, lock вызывается только когда API доступен, отказы глотаются.
  */
 
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // Модуль читает localStorage/screen при вызове, так что окружение можно
 // настраивать до импорта на каждый тест через vi.resetModules.
@@ -85,7 +85,7 @@ describe("screen-orientation", () => {
     document.documentElement.requestFullscreen = requestFullscreen;
     setOrientation({ type: "landscape-primary", lock, unlock });
     const m = await fresh();
-    await m.applyOrientation("auto");
+    expect(await m.applyOrientation("auto")).toBe(true);
     expect(unlock).toHaveBeenCalled();
     expect(lock).not.toHaveBeenCalled();
     expect(requestFullscreen).not.toHaveBeenCalled();
@@ -97,22 +97,33 @@ describe("screen-orientation", () => {
     document.documentElement.requestFullscreen = requestFullscreen;
     setOrientation({ type: "portrait-primary", lock, unlock: vi.fn() });
     const m = await fresh();
-    await m.applyOrientation("landscape");
+    expect(await m.applyOrientation("landscape")).toBe(true);
     expect(requestFullscreen).toHaveBeenCalled();
     expect(lock).toHaveBeenCalledWith("landscape");
   });
 
-  it("отказ fullscreen/lock глотается: экран остаётся как есть", async () => {
+  it("отказ fullscreen не мешает lock: в установленном PWA он не нужен", async () => {
+    const lock = vi.fn().mockResolvedValue(undefined);
     document.documentElement.requestFullscreen = vi
       .fn()
-      .mockRejectedValue(new Error("denied"));
+      .mockRejectedValue(new Error("gesture required"));
+    setOrientation({ type: "portrait-primary", lock, unlock: vi.fn() });
+    const m = await fresh();
+    expect(await m.applyOrientation("landscape")).toBe(true);
+    expect(lock).toHaveBeenCalledWith("landscape");
+  });
+
+  it("lock отклонён — сообщаем неуспех: иконка не должна врать про запрет", async () => {
+    document.documentElement.requestFullscreen = vi
+      .fn()
+      .mockRejectedValue(new Error("gesture required"));
     setOrientation({
       type: "portrait-primary",
-      lock: vi.fn(),
+      lock: vi.fn().mockRejectedValue(new Error("denied")),
       unlock: vi.fn(),
     });
     const m = await fresh();
-    await expect(m.applyOrientation("landscape")).resolves.toBeUndefined();
+    expect(await m.applyOrientation("landscape")).toBe(false);
   });
 
   it("effectiveOrientation читает type, без type — форму окна", async () => {

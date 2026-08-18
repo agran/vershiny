@@ -2458,15 +2458,22 @@ function setupOrientationButton(): void {
     btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
   };
   btn.onclick = async () => {
+    const prev = pref;
     pref =
       pref === "auto"
         ? "landscape"
         : pref === "landscape"
           ? "portrait"
           : "auto";
+    if (!(await applyOrientation(pref))) {
+      // Не заперлось (отказ ОС/браузера): честный откат, иначе иконка
+      // нарисует замок на свободном экране
+      pref = prev;
+      sync();
+      return;
+    }
     rememberOrientation(pref);
     sync();
-    await applyOrientation(pref);
     // Подтверждение режима: title кнопки говорит, что БУДЕТ по нажатию,
     // поэтому само нажатие без отклика выглядело молчаливой подменой
     if (statusTimer) clearTimeout(statusTimer);
@@ -2477,6 +2484,26 @@ function setupOrientationButton(): void {
     }, 2500);
   };
   sync();
+  // Сохранённый запрет применяем сразу при запуске: в установленном PWA это
+  // работает без жеста. Во вкладке браузера fullscreen требует жеста, запрет
+  // не встанет — тогда иконка показывает «авто», а не замок на свободном
+  // экране (раньше запускалась с иконкой «ландшафт» на портретном экране)
+  if (pref !== "auto") {
+    void applyOrientation(pref).then((applied) => {
+      if (!applied) {
+        pref = "auto";
+        sync();
+      }
+    });
+  }
+  // Выход из fullscreen (жест «назад», свайп) снимает запрет ориентации —
+  // без этого слушателя иконка продолжала рисовать замок на свободном экране
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement && pref !== "auto") {
+      pref = "auto";
+      sync();
+    }
+  });
 }
 
 /** Кнопки ⚙/AR/фото: создаются при старте, видны уже во время загрузки */

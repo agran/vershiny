@@ -62,27 +62,35 @@ export function effectiveOrientation(): "landscape" | "portrait" {
 
 /**
  * Применить предпочтение. `auto` снимает запрет; фиксированная ориентация
- * запирает экран (нужен полноэкранный режим). Ошибки — не пользовательские
- * (отказ ОС, уход из fullscreen) — глотаем: хуже уже не станет, экран
- * просто останется свободным.
+ * запирает экран (во вкладке браузера нужен полноэкранный режим, в
+ * установленном PWA lock работает и без него). Возвращает, получилось ли
+ * применить: вызывающий обязан это знать — иконка не имеет права рисовать
+ * замок на свободном экране.
  */
 export async function applyOrientation(
   pref: ScreenOrientationPref,
-): Promise<void> {
-  if (!canLockOrientation()) return;
+): Promise<boolean> {
+  if (!canLockOrientation()) return false;
   const api = orientationApi();
-  if (!api) return;
+  if (!api) return false;
+  if (pref === "auto") {
+    api.unlock?.();
+    return true;
+  }
   try {
-    if (pref === "auto") {
-      api.unlock?.();
-      return;
-    }
     if (!document.fullscreenElement) {
       await document.documentElement.requestFullscreen();
     }
-    await api.lock?.(pref);
   } catch {
-    // Отказали (политика браузера, вышел из fullscreen) — оставляем как есть
+    // Нет жеста (запуск приложения) или отказ политики: в установленном PWA
+    // lock работает и без fullscreen — попытку не отменяем
+  }
+  try {
+    await api.lock?.(pref);
+    return true;
+  } catch {
+    // Отказали (нет fullscreen, политика браузера) — экран остался свободным
+    return false;
   }
 }
 
