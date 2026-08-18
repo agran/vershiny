@@ -95,6 +95,50 @@ export function destination(
   return { lat: toDeg(lat2), lon: normalizeLon(toDeg(lon2)) };
 }
 
+/** Таблица шагов луча: дистанции и предвычисленные sin/cos(d/R) */
+export interface RayStepTable {
+  readonly d: ArrayLike<number>;
+  readonly sinD: ArrayLike<number>;
+  readonly cosD: ArrayLike<number>;
+}
+
+/**
+ * Маркирующая функция точек луча: то же, что `destination(origin, az, d)`,
+ * но константы наблюдателя и азимута (sin/cos широты, sin/cos азимута)
+ * вынесены из цикла, а sin/cos(d/R) берутся из таблицы — последовательность
+ * дистанций общая для всех лучей панорамы, поэтому тригонометрия дистанции
+ * считается один раз (ALGORITHMS.md §1). Выражения и порядок операций
+ * повторяют `destination`, результаты совпадают побитово.
+ *
+ * Возвращаемый объект переиспользуется между вызовами: сэмплеры читают
+ * координаты синхронно и не удерживают ссылку, а ~2 млн короткоживущих
+ * объектов на панораму — лишнее давление на GC в worker.
+ */
+export function makeRayMarcher(
+  origin: LatLon,
+  azRad: number,
+  table: RayStepTable,
+): (stepIdx: number) => LatLon {
+  const lat1 = toRad(origin.lat);
+  const lon1 = toRad(origin.lon);
+  const sinLat1 = Math.sin(lat1);
+  const cosLat1 = Math.cos(lat1);
+  const sinAz = Math.sin(azRad);
+  const cosAz = Math.cos(azRad);
+  const out: LatLon = { lat: 0, lon: 0 };
+  return (stepIdx: number): LatLon => {
+    const cosD = table.cosD[stepIdx];
+    const sinD = table.sinD[stepIdx];
+    const lat2 = Math.asin(sinLat1 * cosD + cosLat1 * sinD * cosAz);
+    const lon2 =
+      lon1 +
+      Math.atan2(sinAz * sinD * cosLat1, cosD - sinLat1 * Math.sin(lat2));
+    out.lat = toDeg(lat2);
+    out.lon = normalizeLon(toDeg(lon2));
+    return out;
+  };
+}
+
 /**
  * Угол возвышения цели над наблюдателем, радианы.
  * Учитывает кривизну Земли: видимая высота цели уменьшается на drop(d).

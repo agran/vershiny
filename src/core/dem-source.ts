@@ -5,8 +5,9 @@
  * Ray-marching знает только синхронный sample() после prefetch.
  */
 
-import { bboxContains, type LatLon } from "./geo";
 import { DemSampler } from "./dem";
+import { bboxContains, type LatLon } from "./geo";
+import type { SampleHint } from "./horizon";
 import { TerrariumSampler, ZOOM_RULES, zoomForDistance } from "./terrarium";
 
 export interface DemSourceOptions {
@@ -100,7 +101,21 @@ export class DemSource {
    * грубая глобальная пирамида — только вдали или там, где Terrarium не
    * загружен (офлайн). NaN — нет данных нигде.
    */
-  sample(pos: LatLon, distM: number): number {
+  sample(pos: LatLon, distM: number, hint?: SampleHint): number {
+    // Кеш последнего успешного источника: луч идёт внутри одного патча
+    // тысячи шагов, а covering() (filter по bbox всех источников) звучал
+    // на каждую выборку. Порядок опроса источников не меняется: кеш — это
+    // тот же первый подошедший источник прошлой выборки
+    const last = this.lastHit;
+    if (last) {
+      let h: number;
+      if (last === this.terrarium) {
+        h = this.terrarium.sample(pos, zoomForDistance(distM), hint?.zoom);
+      } else {
+        h = (last as Patch).sampler.sample(pos, 0, hint);
+      }
+      if (h === h) return h;
+    }
     const fine = this.covering(pos, false);
     const coarse = this.covering(pos, true);
     // Вдали патч важнее сети (офлайн-запас), вблизи грубый — после неё
@@ -114,12 +129,26 @@ export class DemSource {
       // «вся суша», а уже потом к следующему источнику
       const h =
         src instanceof TerrariumSampler
-          ? src.sample(pos, zoomForDistance(distM))
-          : src.sampler.sample(pos, 0);
-      if (!Number.isNaN(h)) return h;
+          ? src.sample(pos, zoomForDistance(distM), hint?.zoom)
+          : src.sampler.sample(pos, 0, hint);
+      if (h === h) {
+        this.lastHit = src;
+        return h;
+      }
     }
+    this.lastHit = null;
     return NaN;
   }
+
+  /** lodForDistance самого детального источника — для таблицы марша (подсказки) */
+  lodForDistance(distM: number): number {
+    const fine = this.patches.find((p) => !p.coarse);
+    const sampler = fine?.sampler ?? this.patches[0]?.sampler;
+    return sampler ? sampler.lodForDistance(distM) : 0;
+  }
+
+  /** Последний источник, давший высоту (см. sample) */
+  private lastHit: Patch | TerrariumSampler | null = null;
 
   /** Предзагрузка вдоль луча всеми слоями */
   async prefetchAlongRay(

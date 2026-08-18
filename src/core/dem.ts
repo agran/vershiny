@@ -19,6 +19,7 @@ import { fetchWithTimeout } from "./fetch-timeout";
 import type { LatLon } from "./geo";
 import { distanceM } from "./geo";
 import { root } from "./globals";
+import type { SampleHint } from "./horizon";
 
 export const TILE_SIZE = 256;
 /** Метры в одном градусе широты (для перевода размера ячейки в метры) */
@@ -277,11 +278,13 @@ export class DemSampler {
    * (prefetchAlongRay / prefetchPoint); синхронная — для использования в worker.
    * Если на запрошенном LOD данных нет (разреженная пирамида) — пробуем грубее.
    */
-  sample(pos: LatLon, lodIndex: number): number {
+  sample(pos: LatLon, lodIndex: number, hint?: SampleHint): number {
     if (!this.index) throw new Error("loadIndex() не вызван");
-    for (let lod = lodIndex; lod < this.index.lods.length; lod++) {
+    // Подсказка таблицы марша: стартовый LOD для этой дальности уже выбран
+    // (порядок операций внутри lodForDistance сохранён — тот же старт)
+    for (let lod = hint?.lod ?? lodIndex; lod < this.index.lods.length; lod++) {
       const h = this.sampleLod(pos, lod);
-      if (!Number.isNaN(h)) return h;
+      if (h === h) return h;
     }
     return NaN;
   }
@@ -318,11 +321,42 @@ export class DemSampler {
     return top + (bottom - top) * fy;
   }
 
+  // Кеш последнего запрошенного тайла: четыре чтения билинейной
+  // интерполяции и десятки шагов луча подряд попадают в один тайл, а строка
+  // ключа и lookup в Map строились на каждое чтение ячейки
+  private lastLod = -1;
+  private lastTx = -1;
+  private lastTy = -1;
+  private lastTile: Int16Array | null = null;
+
+  /** Максимум высоты по тайлам (ключ 'lod/x/y') — считается при декодировании.
+   * Задел для точных верхних границ ray-marching (отсечение луча) */
+  readonly tileMax = new Map<string, number>();
+
+  /** Запись тайла с инвалидацией кеша последнего (null мог обновиться данными) */
+  private setTile(key: string, tile: Int16Array | null): void {
+    this.tiles.set(key, tile);
+    this.lastLod = -1;
+  }
+
   private cell(lodIndex: number, gx: number, gy: number): number | null {
     const tx = Math.floor(gx / TILE_SIZE);
     const ty = Math.floor(gy / TILE_SIZE);
-    const tile = this.tiles.get(`${lodIndex}/${tx}/${ty}`);
-    if (tile === undefined || tile === null) return null;
+    let tile: Int16Array | null;
+    if (
+      lodIndex === this.lastLod &&
+      tx === this.lastTx &&
+      ty === this.lastTy
+    ) {
+      tile = this.lastTile;
+    } else {
+      tile = this.tiles.get(`${lodIndex}/${tx}/${ty}`) ?? null;
+      this.lastLod = lodIndex;
+      this.lastTx = tx;
+      this.lastTy = ty;
+      this.lastTile = tile;
+    }
+    if (tile === null) return null;
     const cx = gx - tx * TILE_SIZE;
     const cy = gy - ty * TILE_SIZE;
     return tile[cy * TILE_SIZE + cx];
@@ -341,7 +375,7 @@ export class DemSampler {
     if (inflight) return inflight;
     // Карта покрытия известна — не тратим запрос на заведомо пустой тайл
     if (this.index && !this.hasTile(lodIndex, tx, ty)) {
-      this.tiles.set(key, null);
+      this.setTile(key, null);
       return null;
     }
 
@@ -365,8 +399,9 @@ export class DemSampler {
                 stored.byteOffset + stored.byteLength,
               ) as ArrayBuffer,
               lodIndex,
+              `${tx}/${ty}`,
             );
-            this.tiles.set(key, tile);
+            this.setTile(key, tile);
             return tile;
           }
         }
@@ -374,7 +409,11 @@ export class DemSampler {
         const res = await this.fetchFn(this.tileUrl(key));
         let tile: Int16Array | null = null;
         if (res.ok) {
-          tile = await this.decodeTile(await res.arrayBuffer(), lodIndex);
+          tile = await this.decodeTile(
+            await res.arrayBuffer(),
+            lodIndex,
+            `${tx}/${ty}`,
+          );
         } else if (res.status === 404) {
           tile = null; // вне покрытия (море, край региона, не попал в бюджет)
         } else {
@@ -383,7 +422,7 @@ export class DemSampler {
           // и не запоминаем «дыру»: с возвратом сети тайл догрузится
           return null;
         }
-        this.tiles.set(key, tile);
+        this.setTile(key, tile);
         return tile;
       } catch {
         return null;
@@ -493,10 +532,12 @@ export class DemSampler {
     return { bytes, ok, failed: keys.length - ok };
   }
 
-  /** Распаковка тайла: gzip → дельта по строкам → квант высоты */
+  /** Распаковка тайла: gzip → дельта по строкам → квант высоты.
+   *  keyTail — 'tx/ty' для записи tileMax */
   private async decodeTile(
     buffer: ArrayBuffer,
     lodIndex: number,
+    keyTail: string,
   ): Promise<Int16Array> {
     let bytes = new Uint8Array(buffer);
     // Сигнатура gzip: сервер (или SW) мог распаковать ответ за нас
@@ -515,6 +556,7 @@ export class DemSampler {
       aligned.byteLength >> 1,
     );
 
+    let max = -32768;
     if (this.index?.filter === "delta-x") {
       for (let y = 0; y < TILE_SIZE; y++) {
         const row = y * TILE_SIZE;
@@ -523,13 +565,21 @@ export class DemSampler {
           // Накопление с переполнением int16 — так же, как кодировал Python
           acc = ((acc + values[row + x]) << 16) >> 16;
           values[row + x] = acc;
+          if (acc > max) max = acc;
         }
+      }
+    } else {
+      for (let i = 0; i < values.length; i++) {
+        if (values[i] > max) max = values[i];
       }
     }
 
     const quant = this.index?.lods[lodIndex]?.quantM ?? 1;
     if (quant !== 1) {
       for (let i = 0; i < values.length; i++) values[i] *= quant;
+    }
+    if (Number.isFinite(max)) {
+      this.tileMax.set(`${lodIndex}/${keyTail}`, max * quant);
     }
     return values;
   }

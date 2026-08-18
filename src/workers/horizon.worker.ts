@@ -16,13 +16,14 @@
  */
 
 import { DemSource } from "../core/dem-source";
-import {
-  checkPeakVisibility,
-  computeLayeredHorizon,
-  filterVisiblePeaks,
-  type VisiblePeak,
-} from "../core/horizon";
 import { azimuthRad, destination, type LatLon } from "../core/geo";
+import {
+    checkPeakVisibility,
+    computeLayeredHorizon,
+    filterVisiblePeaks,
+    type SampleHint,
+    type VisiblePeak,
+} from "../core/horizon";
 import type { Peak } from "../core/peaks";
 
 export interface InitMessage {
@@ -138,12 +139,27 @@ async function compute(
 
   // Именно `source`, а не живая переменная `dem`: смена региона могла прийти
   // прямо посреди расчёта, и тогда выборка пошла бы из нового источника с
-  // пустым кешем тайлов — по уже предзагруженной панораме, но без данных
-  const sample = (pos: LatLon, distM: number): number =>
-    source.sample(pos, distM);
+  // пустым кешем тайлов — по уже предзагруженной панораме, но без данных.
+  // Подсказки таблицы марша: LOD пирамиды и зум Terrarium предвычислены по
+  // дальности шага — из горячего цикла уходит и логарифм lodForDistance, и
+  // перебор ZOOM_RULES
+  const sample = (pos: LatLon, distM: number, hint?: SampleHint): number =>
+    source.sample(pos, distM, hint);
+  const marchDeps = {
+    lodForDistance: (distM: number) => source.lodForDistance(distM),
+  };
 
-  const layered = computeLayeredHorizon(origin, observerH, sample);
-  const visible = filterVisiblePeaks(origin, observerH, peaks, sample, layered);
+  const layered = computeLayeredHorizon(origin, observerH, sample, {
+    marchDeps,
+  });
+  const visible = filterVisiblePeaks(
+    origin,
+    observerH,
+    peaks,
+    sample,
+    layered,
+    marchDeps,
+  );
 
   return {
     type: "result",

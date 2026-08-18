@@ -3,7 +3,7 @@
  * + квантование высоты, разреженное покрытие с фолбэком на грубый LOD.
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   DemSampler,
   TILE_SIZE,

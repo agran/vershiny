@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
+import { destination, makeRayMarcher, type LatLon } from "../src/core/geo";
 import {
-  checkPeakVisibility,
-  computeHorizon,
-  computeLayeredHorizon,
-  nextRayStep,
-  type SampleFn,
+    buildMarchTable,
+    checkPeakVisibility,
+    computeHorizon,
+    computeLayeredHorizon,
+    nextRayStep,
+    type SampleFn,
 } from "../src/core/horizon";
-import { destination, type LatLon } from "../src/core/geo";
 import type { Peak } from "../src/core/peaks";
 
 /** Синтетический рельеф: один конус высотой peakH на дистанции coneDist по азимуту coneAz */
@@ -149,5 +150,19 @@ describe("ray-marching горизонта", () => {
     // Ближний фронт заканчивается на своём гребне, а не тянется до дальнего
     expect(nearFront.distEndM).toBeLessThan(10_000);
     expect(farFront.distM).toBeGreaterThan(20_000);
+  });
+
+  it("маркирующая функция луча совпадает с destination побитово", () => {
+    // Таблица шагов общая для всех лучей панорамы; точки из неё должны
+    // совпадать бит-в-бит с прямым вызовом destination() на каждом шаге
+    const az = 1.234;
+    const march = buildMarchTable(100, 50_000);
+    const pointAt = makeRayMarcher(ORIGIN, az, march);
+    for (let s = 0; s < march.count; s += 17) {
+      const ref = destination(ORIGIN, az, march.d[s]);
+      const p = pointAt(s);
+      expect(p.lat).toBe(ref.lat);
+      expect(p.lon).toBe(ref.lon);
+    }
   });
 });

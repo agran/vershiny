@@ -5,18 +5,32 @@
  */
 
 import {
-  destination,
-  earthDrop,
-  elevationAngleRad,
-  distanceM,
-  azimuthRad,
-  type LatLon,
+    azimuthRad,
+    distanceM,
+    EARTH_RADIUS_M,
+    earthDrop,
+    elevationAngleRad,
+    makeRayMarcher,
+    type LatLon,
 } from "./geo";
 import type { Peak } from "./peaks";
 import { PEAK_VISIBILITY_RADIUS_M, peakScore } from "./peaks";
+import { zoomForDistance } from "./terrarium";
 
-/** Синхронная выборка высоты: (pos, дистанция от наблюдателя) → метры | NaN */
-export type SampleFn = (pos: LatLon, distM: number) => number;
+/** Синхронная выборка высоты: (pos, дистанция, подсказки шага) → метры | NaN.
+ * Подсказки (LOD пирамиды, зум Terrarium) предвычислены таблицей марша;
+ * простейшие сэмплеры могут их игнорировать. */
+export type SampleFn = (
+  pos: LatLon,
+  distM: number,
+  hint?: SampleHint,
+) => number;
+
+/** Подсказки шага луча: LOD-выборка зависит только от дистанции (таблица марша) */
+export interface SampleHint {
+  lod: number;
+  zoom: number;
+}
 
 export interface HorizonOptions {
   /** Шаг по азимуту, рад. 0.1° → 3600 лучей */
@@ -27,6 +41,8 @@ export interface HorizonOptions {
   minDistM?: number;
   /** Высота глаз/телефона над землёй, м */
   observerElevationM?: number;
+  /** Зависимости таблицы марша (LOD-выборка по дальности) */
+  marchDeps?: MarchDeps;
 }
 
 /** Насколько выше земли глаз наблюдателя (телефон в руках), м */
@@ -118,6 +134,62 @@ export function nextRayStep(distM: number): number {
 }
 
 /**
+ * Таблица шагов марша: дистанции и предвычисленные sin/cos(d/R).
+ * Последовательность дистанций зависит только от старта и `nextRayStep`,
+ * поэтому общая для всех 3600 лучей — тригонометрия дистанции внутри
+ * `destination()` считается один раз на всю панораму.
+ */
+export interface MarchTable {
+  /** Дистанции шагов, м */
+  d: Float64Array;
+  /** sin(d / R) */
+  sinD: Float64Array;
+  /** cos(d / R) */
+  cosD: Float64Array;
+  /** earthDrop(d) — формула та же, входы те же, значения тождественны */
+  drop: Float64Array;
+  /** Подсказки LOD-выборки: lod пирамиды и zoom Terrarium по дальности шага */
+  hints: SampleHint[];
+  /** Число шагов */
+  count: number;
+}
+
+/** Зависимости таблицы марша: выборка LOD по дальности */
+export interface MarchDeps {
+  /** lodForDistance самого детального источника (выборка патчей — всегда LOD 0) */
+  lodForDistance?: (distM: number) => number;
+}
+
+/** Дистанции марша и всё, что зависит только от дистанции — раз на пучок лучей */
+export function buildMarchTable(
+  startM: number,
+  maxDistM: number,
+  deps: MarchDeps = {},
+): MarchTable {
+  const dists: number[] = [];
+  for (let dist = startM; dist <= maxDistM; dist += nextRayStep(dist)) {
+    dists.push(dist);
+  }
+  const n = dists.length;
+  const d = new Float64Array(dists);
+  const sinD = new Float64Array(n);
+  const cosD = new Float64Array(n);
+  const drop = new Float64Array(n);
+  const hints = new Array<SampleHint>(n);
+  for (let i = 0; i < n; i++) {
+    const a = d[i] / EARTH_RADIUS_M;
+    sinD[i] = Math.sin(a);
+    cosD[i] = Math.cos(a);
+    drop[i] = earthDrop(d[i]);
+    hints[i] = {
+      lod: deps.lodForDistance ? deps.lodForDistance(d[i]) : 0,
+      zoom: zoomForDistance(d[i]),
+    };
+  }
+  return { d, sinD, cosD, drop, hints, count: n };
+}
+
+/**
  * Профиль горизонта: для каждого азимута — максимальный угол возвышения
  * видимого рельефа. Возвращает Float32Array длиной ceil(2π/step).
  */
@@ -134,24 +206,36 @@ export function computeHorizon(
 
   const rayCount = Math.ceil(TWO_PI / stepRad);
   const angles = new Float32Array(rayCount).fill(-Infinity);
+  const march = buildMarchTable(minDist, maxDist, options.marchDeps);
 
   for (let i = 0; i < rayCount; i++) {
-    const az = i * stepRad;
-    let maxAngle = -Infinity;
-    // Локальный «фронт»: как только земля ушла за горизонт с запасом,
-    // дальше можно шагать крупнее — реализовано в nextRayStep
-    for (let d = minDist; d <= maxDist; d += nextRayStep(d)) {
-      const p = destination(origin, az, d);
-      const h = sample(p, d);
-      if (Number.isNaN(h)) continue;
-      const apparentH = h - earthDrop(d);
-      const angle = Math.atan2(apparentH - hO, d);
-      if (angle > maxAngle) maxAngle = angle;
+    const pointAt = makeRayMarcher(origin, i * stepRad, march);
+    // Сравниваем наклоны (возвышение/дистанция), а не углы: atan2 монотонна,
+    // порядок сравнений тот же, а трансцендентная функция нужна только при
+    // обновлении максимума и при записи результата (подробно — в
+    // computeLayeredHorizon)
+    let maxSlope = -Infinity;
+    // Пороги раннего выхода — пересчёт при каждом обновлении максимума
+    let exitSlope = -Infinity;
+    let exitAllowed = false;
+    for (let s = 0; s < march.count; s++) {
+      const d = march.d[s];
+      const h = sample(pointAt(s), d, march.hints[s]);
+      if (h !== h) continue;
+      const slope = (h - march.drop[s] - hO) / d;
+
+      // Корзина по дистанции
+      if (slope > maxSlope) {
+        maxSlope = slope;
+        const maxAngle = Math.atan(slope);
+        exitSlope = Math.tan(maxAngle - 0.02);
+        exitAllowed = maxAngle < -0.005;
+      }
       // Ранний выход: рельеф опустился ниже −0.5° и мы далеко —
       // выше уже не поднимется (кривизна давит квадратично)
-      if (d > 60_000 && angle < maxAngle - 0.02 && maxAngle < -0.005) break;
+      if (d > 60_000 && slope < exitSlope && exitAllowed) break;
     }
-    angles[i] = maxAngle;
+    if (maxSlope > -Infinity) angles[i] = Math.atan(maxSlope);
   }
   return { angles, stepRad };
 }
@@ -186,22 +270,43 @@ export function computeLayeredHorizon(
 
   // Марш начинаем с 1.5 ячейки DEM (численная стабильность atan2)
   const marchStart = minDist * 1.5; // ~135 м для 90 м DEM
+  // Таблица шагов общая для всех лучей: sin/cos(d/R) и drop считаются один раз
+  const march = buildMarchTable(marchStart, maxDist, options.marchDeps);
+  const steps = march.count;
+
+  // Фронты в плоских массивах (SoA): объекты VisibleFront аллоцируются один
+  // раз на луч при сборе, а не на каждый обнаруженный фронт
+  const FRONT_CAP = 32;
+  const fDist = new Float64Array(FRONT_CAP);
+  const fEnd = new Float64Array(FRONT_CAP);
+  const fStartRad = new Float64Array(FRONT_CAP);
+  const fMaxRad = new Float64Array(FRONT_CAP);
 
   for (let i = 0; i < rayCount; i++) {
-    const az = i * stepRad;
-    // Для каждой корзины — свой максимум
-    const binMax = new Float64Array(LAYER_COUNT).fill(-Infinity);
+    const pointAt = makeRayMarcher(origin, i * stepRad, march);
+    // Максимумы храним как наклоны (возвышение/дистанция): atan2 монотонна,
+    // поэтому все сравнения эквивалентны, а трансцендентные функции нужны
+    // лишь при обновлении максимума (редко) и при записи результата — это
+    // убирает ~2 млн вызовов atan2 из горячего цикла. Угловые пороги
+    // (ранний выход, CREST_DROP_RAD) переводятся в наклоны через tan
+    // при каждом обновлении соответствующего максимума
+    const binMaxSlope = new Float64Array(LAYER_COUNT).fill(-Infinity);
     const binDist = new Float64Array(LAYER_COUNT).fill(Infinity);
+    const binMaxAngle = new Float64Array(LAYER_COUNT).fill(-Infinity);
+    const binExitSlope = new Float64Array(LAYER_COUNT).fill(-Infinity);
 
     // Фронты: точки, где рельеф пробивает текущий максимум
-    const rayFronts: VisibleFront[] = [];
-    let currentMax = -Infinity;
+    let frontCount = 0;
+    let currentMaxSlope = -Infinity;
 
     // Пропускаем ближнюю зону для фронтов (0–500 м): мы на этом склоне
     const nearSkip = 500;
 
-    // Гребни: отслеживаем текущий максимум угла и дистанцию, на которой он достигнут
-    let crestMax = -Infinity;
+    // Гребни: отслеживаем текущий максимум наклона и дистанцию, на которой он достигнут
+    let crestMaxSlope = -Infinity;
+    let crestMaxAngle = -Infinity;
+    // Порог фиксации перегиба, в наклонах: tan(crestMaxAngle − CREST_DROP_RAD)
+    let crestDropSlope = -Infinity;
     let crestDist = 0;
     let crestPending = false;
     const recordCrest = (): void => {
@@ -213,18 +318,15 @@ export function computeLayeredHorizon(
           break;
         }
       }
-      if (crestMax > crests[b][i]) crests[b][i] = crestMax;
+      if (crestMaxAngle > crests[b][i]) crests[b][i] = crestMaxAngle;
       crestPending = false;
     };
 
-    for (let d = marchStart; d <= maxDist; d += nextRayStep(d)) {
-      const p = destination(origin, az, d);
-      const h = sample(p, d);
-      if (Number.isNaN(h)) continue;
-      const apparentH = h - earthDrop(d);
-      const angle = Math.atan2(apparentH - hO, d);
-
-      // Корзина по дистанции
+    for (let s = 0; s < steps; s++) {
+      const d = march.d[s];
+      const h = sample(pointAt(s), d, march.hints[s]);
+      if (h !== h) continue;
+      const slope = (h - march.drop[s] - hO) / d;
       let bin = 0;
       for (let b = 0; b < LAYER_COUNT; b++) {
         if (d >= LAYER_BOUNDS[b] && d < LAYER_BOUNDS[b + 1]) {
@@ -234,18 +336,23 @@ export function computeLayeredHorizon(
         if (d >= LAYER_BOUNDS[LAYER_COUNT]) bin = LAYER_COUNT - 1;
       }
 
-      if (angle > binMax[bin]) {
-        binMax[bin] = angle;
+      if (slope > binMaxSlope[bin]) {
+        binMaxSlope[bin] = slope;
         binDist[bin] = d;
+        const a = Math.atan(slope);
+        binMaxAngle[bin] = a;
+        binExitSlope[bin] = Math.tan(a - 0.02);
       }
 
       // Гребни: фиксируем локальный максимум угла вдоль луча.
       // Растёт — запоминаем; заметно упал — значит проехали перегиб (видимый гребень).
-      if (angle > crestMax) {
-        crestMax = angle;
+      if (slope > crestMaxSlope) {
+        crestMaxSlope = slope;
+        crestMaxAngle = Math.atan(slope);
+        crestDropSlope = Math.tan(crestMaxAngle - CREST_DROP_RAD);
         crestDist = d;
         crestPending = true;
-      } else if (crestPending && angle < crestMax - CREST_DROP_RAD) {
+      } else if (crestPending && slope < crestDropSlope) {
         recordCrest();
       }
 
@@ -258,29 +365,31 @@ export function computeLayeredHorizon(
       // до текущей дистанции. Тогда разрыва между фронтами не возникало
       // никогда: дальний хребет прилипал к ближнему, и один фронт тянулся
       // от 3 до 25 км — маркеры вершин выбирали его для чего угодно.
-      if (angle > currentMax && d >= nearSkip) {
-        if (
-          rayFronts.length === 0 ||
-          d - rayFronts[rayFronts.length - 1].distEndM > 2000
-        ) {
+      if (slope > currentMaxSlope && d >= nearSkip) {
+        const angle = Math.atan(slope);
+        if (frontCount === 0 || d - fEnd[frontCount - 1] > 2000) {
           // Новый фронт (после провала >2 км)
-          rayFronts.push({
-            distM: d,
-            distEndM: d,
-            elevStartRad: angle,
-            elevMaxRad: angle,
-          });
+          if (frontCount < FRONT_CAP) {
+            fDist[frontCount] = d;
+            fEnd[frontCount] = d;
+            fStartRad[frontCount] = angle;
+            fMaxRad[frontCount] = angle;
+            frontCount++;
+          }
         } else {
           // Продолжение текущего фронта
-          const front = rayFronts[rayFronts.length - 1];
-          front.distEndM = d;
-          if (angle > front.elevMaxRad) front.elevMaxRad = angle;
+          fEnd[frontCount - 1] = d;
+          if (angle > fMaxRad[frontCount - 1]) fMaxRad[frontCount - 1] = angle;
         }
-        currentMax = angle;
+        currentMaxSlope = slope;
       }
 
       // Ранний выход
-      if (d > 60_000 && angle < binMax[bin] - 0.02 && binMax[bin] < -0.005)
+      if (
+        d > 60_000 &&
+        slope < binExitSlope[bin] &&
+        binMaxAngle[bin] < -0.005
+      )
         break;
     }
 
@@ -289,14 +398,24 @@ export function computeLayeredHorizon(
 
     // Слои
     for (let b = 0; b < LAYER_COUNT; b++) {
-      if (binMax[b] > -Infinity) {
-        layers[b][i] = binMax[b];
+      if (binMaxAngle[b] > -Infinity) {
+        layers[b][i] = binMaxAngle[b];
         if (b === 0 || binDist[b] < distanceToHorizonM[i]) {
           distanceToHorizonM[i] = binDist[b];
         }
       }
     }
 
+    // Сборка фронтов луча в объекты — один раз на луч
+    const rayFronts = new Array<VisibleFront>(frontCount);
+    for (let f = 0; f < frontCount; f++) {
+      rayFronts[f] = {
+        distM: fDist[f],
+        distEndM: fEnd[f],
+        elevStartRad: fStartRad[f],
+        elevMaxRad: fMaxRad[f],
+      };
+    }
     fronts[i] = rayFronts;
   }
 
@@ -365,6 +484,7 @@ export function checkPeakVisibility(
   sample: SampleFn,
   distanceToHorizonM: number,
   epsilonRad = 0.0009, // ~0.05°
+  march?: MarchTable,
 ): VisiblePeak | null {
   const target: LatLon = { lat: peak.lat, lon: peak.lon };
   const dist = distanceM(origin, target);
@@ -373,18 +493,32 @@ export function checkPeakVisibility(
 
   const az = azimuthRad(origin, target);
   const hO = observerH + OBSERVER_EYE_M;
-
-  // Марш луча до пика: ищем максимальный угол рельефа строго до пика
-  let maxAngle = -Infinity;
-  for (let d = 100; d < dist - 100; d += nextRayStep(d)) {
-    const p = destination(origin, az, d);
-    const h = sample(p, d);
-    if (Number.isNaN(h)) continue;
-    const angle = Math.atan2(h - earthDrop(d) - hO, d);
-    if (angle > maxAngle) maxAngle = angle;
-  }
+  const table = march ?? buildMarchTable(100, dist);
+  const pointAt = makeRayMarcher(origin, az, table);
 
   const peakAngle = elevationAngleRad(hO, peak.ele, dist);
+  // Наклон пика — та же величина, что tan(peakAngle), без лишней тригонометрии
+  const peakSlope = (peak.ele - hO - earthDrop(dist)) / dist;
+  // Максимум вдоль луча растёт монотонно: как только глубина пика под
+  // профилем превысила порог подписи скрытых, вердикт от дальнейшего марша
+  // уже не зависит («onSlope» не использует величину максимума, «hidden»
+  // исключён глубиной) — выходим досрочно, не теряя точности вердикта
+  const hiddenLimitSlope = Math.tan(peakAngle + HIDDEN_LABEL_DEPTH_RAD);
+
+  // Марш луча до пика: ищем максимальный угол рельефа строго до пика.
+  // Сравниваем наклоны: atan2 монотонна, порядок тот же (см. выше)
+  let maxSlope = -Infinity;
+  for (let s = 0; s < table.count; s++) {
+    const d = table.d[s];
+    if (d >= dist - 100) break;
+    const h = sample(pointAt(s), d, table.hints[s]);
+    if (h !== h) continue;
+    const slope = (h - table.drop[s] - hO) / d;
+    if (slope > maxSlope) maxSlope = slope;
+    if (maxSlope > hiddenLimitSlope) break;
+  }
+
+  const maxAngle = maxSlope === -Infinity ? -Infinity : Math.atan(maxSlope);
 
   // Классификация по углу и дистанции до горизонта
   if (peakAngle < maxAngle - epsilonRad) {
@@ -402,7 +536,8 @@ export function checkPeakVisibility(
     // метров до гребня — это полезно («она вон там, за склоном»). Сколько таких
     // подписей показать, решает раскладка по бюджету кадра.
     const depthRad = maxAngle - peakAngle;
-    const deficitM = (Math.tan(maxAngle) - Math.tan(peakAngle)) * dist;
+    // tan(угол) — это и есть наклон (atan2/tan взаимно обратны), считаем разность наклонов напрямую
+    const deficitM = (maxSlope - peakSlope) * dist;
     if (
       depthRad <= HIDDEN_LABEL_DEPTH_RAD &&
       deficitM <= HIDDEN_LABEL_DEFICIT_M
@@ -435,8 +570,11 @@ export function filterVisiblePeaks(
   peaks: Peak[],
   sample: SampleFn,
   layered?: LayeredHorizon,
+  marchDeps?: MarchDeps,
 ): VisiblePeak[] {
   const result: VisiblePeak[] = [];
+  // Таблица шагов общая для всех пиков: луч каждого пика — её префикс
+  const march = buildMarchTable(100, PEAK_VISIBILITY_RADIUS_M, marchDeps);
   for (const peak of peaks) {
     const distToHorizon = layered
       ? layered.distanceToHorizonM[
@@ -450,6 +588,8 @@ export function filterVisiblePeaks(
       peak,
       sample,
       distToHorizon,
+      undefined,
+      march,
     );
     if (visible) result.push(visible);
   }

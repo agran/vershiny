@@ -176,7 +176,7 @@ export class TerrariumSampler {
           const offline = await db.getTerrariumTile(key).catch(() => undefined);
           if (offline) {
             const tile = await this.decodePng(offline);
-            this.tiles.set(key, tile);
+            this.setTile(key, tile);
             return tile;
           }
         }
@@ -197,7 +197,7 @@ export class TerrariumSampler {
           // видел «Ошибка: HTTP 503» — при том что рельеф лежал в хранилище
           return null;
         }
-        this.tiles.set(key, tile);
+        this.setTile(key, tile);
         return tile;
       } catch {
         return null;
@@ -264,6 +264,37 @@ export class TerrariumSampler {
     return tile;
   }
 
+  // Кеш последнего запрошенного тайла: четыре чтения билинейной
+  // интерполяции и десятки шагов луча подряд попадают в один тайл, а строка
+  // ключа и lookup в Map строились на каждый читаемый пиксель
+  private lastPixZ = -1;
+  private lastPixX = -1;
+  private lastPixY = -1;
+  private lastPixTile: Float32Array | null = null;
+
+  /** Запись тайла с инвалидацией кеша последнего (null мог обновиться данными) */
+  private setTile(key: string, tile: Float32Array | null): void {
+    this.tiles.set(key, tile);
+    this.lastPixZ = -1;
+  }
+
+  /** Тайл по индексам (null — не загружен или вне покрытия), с кешем последнего */
+  private tileAt(zoom: number, tx: number, ty: number): Float32Array | null {
+    if (
+      zoom === this.lastPixZ &&
+      tx === this.lastPixX &&
+      ty === this.lastPixY
+    ) {
+      return this.lastPixTile;
+    }
+    const tile = this.tiles.get(`${zoom}/${tx}/${ty}`) ?? null;
+    this.lastPixZ = zoom;
+    this.lastPixX = tx;
+    this.lastPixY = ty;
+    this.lastPixTile = tile;
+    return tile;
+  }
+
   /**
    * Значение пикселя по глобальным координатам зума (не внутри одного тайла).
    *
@@ -280,22 +311,26 @@ export class TerrariumSampler {
     let x = gx % world;
     if (x < 0) x += world;
     const y = Math.min(world - 1, Math.max(0, gy));
-    const tile = this.tiles.get(
-      `${zoom}/${Math.floor(x / TILE_PX)}/${Math.floor(y / TILE_PX)}`,
+    const tile = this.tileAt(
+      zoom,
+      Math.floor(x / TILE_PX),
+      Math.floor(y / TILE_PX),
     );
-    if (tile === undefined || tile === null) return NaN;
+    if (tile === null) return NaN;
     return tile[(y % TILE_PX) * TILE_PX + (x % TILE_PX)];
   }
 
   /**
    * Синхронная выборка высоты (после prefetch).
    * Билинейная интерполяция; NaN — тайл не загружен или вне покрытия.
+   * zoomHint — зум по дальности из таблицы марша (тождествен zoomForDistance).
    */
-  sample(pos: LatLon, zoom: number): number {
-    const { x, y } = lonLatToTile(pos, zoom);
-    const { px, py } = lonLatToPixel(pos, zoom);
-    const tile = this.tiles.get(`${zoom}/${x}/${y}`);
-    if (tile === undefined || tile === null) return NaN;
+  sample(pos: LatLon, zoom: number, zoomHint?: number): number {
+    const z = zoomHint ?? zoom;
+    const { x, y } = lonLatToTile(pos, z);
+    const { px, py } = lonLatToPixel(pos, z);
+    const tile = this.tileAt(z, x, y);
+    if (tile === null) return NaN;
 
     const gx = x * TILE_PX + px;
     const gy = y * TILE_PX + py;
@@ -304,11 +339,11 @@ export class TerrariumSampler {
     const fx = gx - gx0;
     const fy = gy - gy0;
 
-    const h00 = this.pixelAt(gx0, gy0, zoom);
+    const h00 = this.pixelAt(gx0, gy0, z);
     // Соседний тайл может быть не загружен — тогда ведём себя как раньше
     // и повторяем свой краевой пиксель, а не отдаём NaN на весь луч
     const at = (ax: number, ay: number): number => {
-      const v = this.pixelAt(ax, ay, zoom);
+      const v = this.pixelAt(ax, ay, z);
       return Number.isNaN(v) ? h00 : v;
     };
     const h10 = at(gx0 + 1, gy0);
