@@ -2508,6 +2508,11 @@ function setupActionButtons(): void {
       // В AR кадр содержит настоящие горы — там действует галочка «Контуры
       // склонов». Без камеры силуэту не с чем конфликтовать: рисуем всегда
       fromCamera: arSession !== null,
+      // Живой кадр камеры — фон снимка; без него «фото» содержало только
+      // контуры поверх градиента неба. FOV полного кадра нужен, чтобы оверлей
+      // подогнать под видимую часть после cover-кропа, как в drawArFrame
+      cameraVideo: arVideo,
+      cameraFov: arSession?.fullFrameFov,
     };
     const blob = await capturePhoto(panorama, view, options);
     savePhoto(blob, photoFilename(options));

@@ -9,14 +9,14 @@
  * форму экрана: на портретном телефоне снимок кадрировал не то.
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { capturePhoto, photoFilename } from "../src/ui/photo";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  setPhotoCaption,
-  DEFAULT_PHOTO_CAPTION,
-  type PhotoCaption,
+    DEFAULT_PHOTO_CAPTION,
+    setPhotoCaption,
+    type PhotoCaption,
 } from "../src/core/photo-caption";
 import type { PanoramaState, ViewState } from "../src/ui/panorama";
+import { capturePhoto, photoFilename } from "../src/ui/photo";
 
 const STATE: PanoramaState = {
   horizon: Float32Array.from(
@@ -54,6 +54,10 @@ let draws: { text: string; x: number; y: number; align: string }[] = [];
 let fillRects: { x: number; y: number; w: number; h: number }[] = [];
 /** Размер холста, на котором рисовали */
 let captured: { width: number; height: number } | null = null;
+/** Вызовы drawImage: кадр камеры на снимке */
+let imageDraws: { img: unknown; x: number; y: number; w: number; h: number }[] = [];
+/** Сколько раз создали градиент (заливка неба) */
+let gradients = 0;
 
 /** Ширина текста, как её вернула бы заглушка холста (моноширинное приближение) */
 const textWidth = (text: string, fontSize: number): number =>
@@ -65,6 +69,8 @@ beforeEach(() => {
   draws = [];
   fillRects = [];
   captured = null;
+  imageDraws = [];
+  gradients = 0;
   // Состав подписи живёт в localStorage: без сброса выбор одного теста
   // протекал бы в следующий
   setPhotoCaption(DEFAULT_PHOTO_CAPTION);
@@ -99,7 +105,12 @@ beforeEach(() => {
       lineJoin: "round",
       fillStyle: "",
       strokeStyle: "",
-      createLinearGradient: () => ({ addColorStop: () => {} }),
+      createLinearGradient: () => {
+        gradients++;
+        return { addColorStop: () => {} };
+      },
+      drawImage: (img: unknown, x: number, y: number, w: number, h: number) =>
+        imageDraws.push({ img, x, y, w, h }),
       // Ширина зависит от текста и кегля: с фиксированным числом не проверить
       // ни перенос длинной строки, ни то, что подпись влезла в кадр
       measureText: (text: string) => ({ width: textWidth(text, fontSize) }),
@@ -170,8 +181,86 @@ describe("снимок панорамы", () => {
     expect(fontSizes).toContain(13 * expectedScale);
   });
 
-  it("снимок без камеры: контуры рисуются при любом положении переключателя", async () => {
-    // ridges = false (сброшено в beforeEach), но конфликтовать силуэту не с
+  /** Видео камеры-заглушка: то немногое, что читает capturePhoto */
+  const fakeVideo = (
+    vw: number,
+    vh: number,
+    readyState = 2,
+  ): HTMLVideoElement =>
+    ({ readyState, videoWidth: vw, videoHeight: vh }) as HTMLVideoElement;
+
+  it("снимок из AR: фон — кадр камеры с cover-кропом, а не градиент неба", async () => {
+    // Регресс на Samsung S25: видео на снимок не передавалось, и «фото с
+    // камеры» сохраняло нарисованное небо с контурами вместо снимка гор
+    const video = fakeVideo(1920, 1080);
+    // Портретный телефон: кадр уже видео — бока обрежутся
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(390, 844),
+      fromCamera: true,
+      cameraVideo: video,
+      cameraFov: () => ({ h: VIEW.fovRad, v: VIEW.fovVRad }),
+    });
+
+    expect(imageDraws).toHaveLength(1);
+    const d = imageDraws[0];
+    expect(d.img).toBe(video);
+    const shot = captured!;
+    // Cover: высота заполнена вся, ширина вылезает за края и центрирована
+    expect(d.h).toBeCloseTo(shot.height, 0);
+    expect(d.w).toBeGreaterThan(shot.width);
+    expect(d.x).toBeLessThan(0);
+    expect(d.x + d.w).toBeCloseTo(shot.width - d.x, 0);
+    expect(d.y).toBe(0);
+    // Небо под кадром камеры не рисуется — это не панорама
+    expect(gradients).toBe(0);
+  });
+
+  it("оверлей на кадре камеры подогнан под cover-кроп", async () => {
+    // Без подгонки оверлей считался по FOV экрана: контуры совпадали с горами
+    // в центре кадра и расходились к краям (та же геометрия, что drawArFrame).
+    // Маркер — засечки шкалы азимутов: при сжатом видимом FOV засечки ±15°
+    // уходят за край портретного кадра
+    setPhotoCaption({ ridges: true });
+    const video = fakeVideo(1920, 1080);
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(390, 844),
+      fromCamera: true,
+      cameraVideo: video,
+      cameraFov: () => ({ h: VIEW.fovRad, v: VIEW.fovVRad }),
+    });
+
+    const shot = captured!;
+    const uiScale = shot.width / 390;
+    // 1920×1080 cover в портретный кадр: видимая доля по горизонтали ~0.26,
+    // FOV сжимается с 60° до ~17° — в кадре остаётся только засечка 0°.
+    // Толщину 3·uiScale ставят и засечки, и обводка подписи «N»: без
+    // подгонки (FOV 60°) таких записей было бы 4 (засечки ±15° тоже в кадре)
+    const ticks = lineWidths.filter((w) => Math.abs(w - 3 * uiScale) < 0.01);
+    expect(ticks).toHaveLength(2);
+  });
+
+  it("снимок из AR без готового кадра: фолбэк на небо и контуры", async () => {
+    // Камера ещё не отдала первый кадр (readyState 0) — видео рисовать нечего,
+    // снимок не должен быть чёрным квадратом: рисуем обычную панораму
+    const video = fakeVideo(1920, 1080, 0);
+    await capturePhoto(STATE, VIEW, {
+      origin: { lat: 43.3, lon: 42.4 },
+      observerH: 4100,
+      source: screenCanvas(800, 450),
+      fromCamera: true,
+      cameraVideo: video,
+      cameraFov: () => ({ h: VIEW.fovRad, v: VIEW.fovVRad }),
+    });
+
+    expect(imageDraws).toEqual([]);
+    expect(gradients).toBe(1); // небо на месте
+  });
+
+  it("снимок без камеры: контуры рисуются при любом положении переключателя", async () => {    // ridges = false (сброшено в beforeEach), но конфликтовать силуэту не с
     // чем — настройка действует только на кадр с камерой
     await capturePhoto(STATE, VIEW, {
       origin: { lat: 43.3, lon: 42.4 },

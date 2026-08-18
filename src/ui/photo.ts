@@ -3,17 +3,19 @@
  * (подписи, координаты, дата) → Web Share API или скачивание.
  */
 
-import {
-  renderPanorama,
-  INK_DARK,
-  INK_LIGHT,
-  type PanoramaState,
-  type ViewState,
-} from "./panorama";
+import { applyCoverCrop, type FrameFov } from "../core/camera-fov";
 import type { LatLon } from "../core/geo";
 import { getLocale } from "../core/i18n";
 import { getPhotoCaption } from "../core/photo-caption";
 import { translitToLatin } from "../core/transliterate";
+import {
+    drawOverlay,
+    INK_DARK,
+    INK_LIGHT,
+    renderPanorama,
+    type PanoramaState,
+    type ViewState,
+} from "./panorama";
 
 export interface PhotoOptions {
   /** Позиция наблюдателя (для подписи на фото) */
@@ -34,6 +36,20 @@ export interface PhotoOptions {
    * Без камеры конфликтовать не с чем — контуры рисуются всегда.
    */
   fromCamera?: boolean;
+  /**
+   * Видео камеры AR-режима: его текущий кадр — фон снимка.
+   * Без него снимок «из камеры» содержал только контуры и подписи:
+   * видео рисуется лишь на экранный холст (drawArFrame в ui/ar.ts),
+   * и в offscreen-кадр попадало небо-градиент вместо настоящих гор.
+   */
+  cameraVideo?: HTMLVideoElement | null;
+  /**
+   * Углы обзора полного кадра камеры с учётом зума (ArSession.fullFrameFov).
+   * Нужны, чтобы подогнать оверлей под видимую часть кадра после
+   * cover-кропа — иначе контуры совпали бы с горами в центре и разошлись
+   * к краям (та же геометрия, что в drawArFrame).
+   */
+  cameraFov?: () => FrameFov;
 }
 
 /** Длинная сторона снимка, px: 4K хватает и для печати, и для мессенджера */
@@ -72,7 +88,40 @@ export async function capturePhoto(
   // расходясь на величину неточности DEM и калибровки). Без камеры конфликта
   // нет — контуры рисуются при любом положении переключателя
   const ridges = !options.fromCamera || getPhotoCaption().ridges;
-  renderPanorama(ctx, state, view, uiScale, { ridges });
+
+  // Фон кадра. Из AR — живой кадр камеры с тем же cover-кропом, что на
+  // экране (drawArFrame): раньше сюда видео вообще не передавалось, и
+  // «фото с камеры» сохраняло градиент неба с контурами вместо снимка гор.
+  // Оверлей пересчитывается под видимую часть кадра, чтобы подписи вершин
+  // легли на те же горы, что человек видел на экране.
+  const video = options.cameraVideo;
+  if (video && video.readyState >= 2 && video.videoWidth > 0) {
+    const vw = video.videoWidth;
+    const vh = video.videoHeight;
+    const scale = Math.max(canvas.width / vw, canvas.height / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh);
+
+    const full =
+      options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
+    const visible = applyCoverCrop(full, vw, vh, canvas.width, canvas.height);
+    const overlayView: ViewState = {
+      ...view,
+      fovRad: visible.h,
+      fovVRad: visible.v,
+    };
+    // Полупрозрачность как на экране в AR (дефолт opacity в startAr):
+    // сквозь линии видны настоящие горы, и снимок похож на то, что видели
+    ctx.save();
+    ctx.globalAlpha = 0.55;
+    drawOverlay(ctx, state, overlayView, uiScale, { ridges });
+    ctx.restore();
+  } else {
+    renderPanorama(ctx, state, view, uiScale, { ridges });
+  }
 
   // Подпись снимка — тем же приёмом, что подписи вершин: светлый текст с
   // тёмной обводкой, без плашек. Прямоугольная подложка выглядела наклейкой
@@ -210,10 +259,14 @@ export function savePhoto(blob: Blob, filename = "vershiny.png"): void {
   a.style.display = "none";
   document.body.appendChild(a);
   a.click();
-  a.remove();
-  // Отзывать ссылку сразу нельзя: часть браузеров не успевает начать
-  // скачивание, и файл не сохраняется вовсе
-  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  // И отзывать ссылку, и удалять anchor сразу нельзя: Android Chrome начинает
+  // скачивание асинхронно, и к моменту старта элемент уже вне DOM — файл
+  // терялся молча, при этом «Снимок сохранён» показывался (Samsung S25).
+  // Невидимый anchor никому не мешает — убираем его вместе с revokeObjectURL
+  setTimeout(() => {
+    a.remove();
+    URL.revokeObjectURL(url);
+  }, 60_000);
 }
 
 /**
