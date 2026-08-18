@@ -10,10 +10,9 @@
  *   ← { type: 'viewpoint', origin, azimuthRad, reqId? }
  *   ← { type: 'error', message, reqId? }
  *
- * `reqId` эхом возвращается в ответе. Заданий может быть несколько в полёте
- * (быстрые нажатия навипада, перелёт поверх идущего расчёта), а ответы
- * приходят в произвольном порядке — без идентификатора старый результат
- * перетирал свежий, и панорама расходилась с положением наблюдателя.
+ * `reqId` эхом возвращается в ответе. Compute-запросы, ещё не взятые в
+ * работу, вытесняются свежим (latest-only, см. jobQueue): на вытесненный
+ * запрос ответа не будет, и main узнаёт актуальный результат по reqId.
  */
 
 import { DemSource } from '../core/dem-source';
@@ -200,10 +199,45 @@ async function pickViewpoint(peak: Peak, distM: number): Promise<ViewpointResult
   };
 }
 
-self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
-  const reqId = ev.data.reqId;
+/**
+ * Очередь заданий. `onmessage = async` обработчики в очередь не выстраивает,
+ * поэтому её ведём сами: сообщения обрабатываются строго по порядку прихода
+ * (в частности, расчёты ждут завершения `init`).
+ *
+ * Compute-запросы схлопываются до последнего необработанного: при drag'е
+ * main шлёт пересчёт почти на каждый pointermove, и очередь устаревших
+ * задач росла быстрее, чем считалась, — каждая тратила CPU и prefetch-
+ * запросы, а main всё равно отбрасывал их ответы по reqId. Свежий compute
+ * вытесняет ещё не начатые; текущий расчёт досчитывается.
+ */
+let jobQueue: WorkerInMessage[] = [];
+let pumping = false;
+
+self.onmessage = (ev: MessageEvent<WorkerInMessage>) => {
+  const msg = ev.data;
+  if (msg.type === 'compute') {
+    jobQueue = jobQueue.filter((j) => j.type !== 'compute');
+  }
+  jobQueue.push(msg);
+  void pump();
+};
+
+async function pump(): Promise<void> {
+  if (pumping) return;
+  pumping = true;
   try {
-    const msg = ev.data;
+    let msg: WorkerInMessage | undefined;
+    while ((msg = jobQueue.shift()) !== undefined) {
+      await handle(msg);
+    }
+  } finally {
+    pumping = false;
+  }
+}
+
+async function handle(msg: WorkerInMessage): Promise<void> {
+  const reqId = msg.reqId;
+  try {
     if (msg.type === 'init') {
       initPromise = (async () => {
         const next = new DemSource({ patchBaseUrls: msg.patchBaseUrls });
@@ -244,4 +278,4 @@ self.onmessage = async (ev: MessageEvent<WorkerInMessage>) => {
     };
     self.postMessage(out);
   }
-};
+}
