@@ -18,6 +18,8 @@ import type { SearchHit } from "./core/search";
 import {
   downloadRegion,
   inBBox,
+  isRegionIncomplete,
+  loadRegions,
   suggestRegionForPosition,
   type DownloadProgress,
   type RegionInfo,
@@ -1255,6 +1257,22 @@ function setupDownloadButton(): void {
     busy = true;
     btn.disabled = true;
     try {
+      // Всё уже на устройстве: прогонять тысячи ключей загрузки незачем —
+      // человек видит секундный прогресс при нуле трафика. Проверка полноты
+      // тоже недешёвая (по одному чтению IndexedDB на тайл), но в разы
+      // быстрее сетевой загрузки и не зависит от связи.
+      const regions = await loadRegions();
+      const info = regions[currentRegion];
+      if (
+        regionDownloaded &&
+        !regionOutdated &&
+        info &&
+        !(await isRegionIncomplete(info, lastOrigin))
+      ) {
+        setStatus(t("downloadUpToDate"));
+        setTimeout(() => setStatus(""), 2500);
+        return;
+      }
       await downloadRegion(currentRegion, lastOrigin, (p: DownloadProgress) => {
         if (p.phase === "peaks") {
           setStatus(t("downloadPeaks"));

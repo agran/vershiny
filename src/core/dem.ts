@@ -130,7 +130,7 @@ export class DemSampler {
   }
 
   /** Ключ тайла в офлайн-хранилище (см. demStorePrefix) */
-  private storeKey(key: string): string {
+  storeKey(key: string): string {
     return `${this.storePrefix}${key}`;
   }
 

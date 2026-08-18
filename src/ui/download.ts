@@ -4,8 +4,8 @@
  * Качаются три слоя, каждый под свою задачу:
  *   - вся площадь региона из глобальной пирамиды (217 м) — далёкие хребты,
  *     ~1–3 МБ сжатыми байтами;
- *   - детальный слой p1–p2 (~87 м) из vershiny-dem-hi — вне его покрытия
- *     (прочие регионы) ключей ноль, ничего не добавляет;
+ *   - детальный слой (~87 м) из vershiny-dem-hi — все p1–p3 и часть p4;
+ *     вне его покрытия ключей ноль, ничего не добавляет;
  *   - круг DETAIL_RADIUS_M вокруг точки из Terrarium (90 м) — ближняя зона,
  *     где разница в разрешении видна на панораме.
  *
@@ -19,7 +19,12 @@ import { DemSampler } from "../core/dem";
 import { GLOBAL_DEM_HI_URL, GLOBAL_DEM_URL } from "../core/dem-config";
 import { PEAK_VISIBILITY_RADIUS_M } from "../core/peaks";
 import { bboxContains, destination, type LatLon } from "../core/geo";
-import { savePeaks, markRegionDownloaded, getDemTile } from "../core/db";
+import {
+  getDemTile,
+  getTerrariumTile,
+  markRegionDownloaded,
+  savePeaks,
+} from "../core/db";
 import { root } from "../core/globals";
 import { getLocale } from "../core/i18n";
 
@@ -289,6 +294,52 @@ export async function downloadRegion(
   onProgress({ done: total, total, phase: "done" });
   await markRegionDownloaded(region, dem.version);
   return saved;
+}
+
+/**
+ * Хотя бы одного тайла не хватает в хранилище — значит, повторное нажатие
+ * «Скачать» имеет смысл: что-то докачается или обновится.
+ *
+ * Без этой проверки кнопка на главном экране запускала полный прогон по
+ * тысячам ключей (peaks + пирамида + hi + Terrarium), когда всё уже лежит
+ * на устройстве: человек ждал перед «Загрузка тайлов: 3200/3200», хотя по
+ * сети не ушло ни байта.
+ *
+ * Несовпадение версии пирамиды не считается «неполнотой»: устаревание
+ * показывается своей кнопкой («Устарело»), а под авто-обновление через
+ * общую кнопку его подкладывать нельзя — тотальное удаление тайлов при
+ * смене версии сделало бы все скачанные регионы вечно неполными и стёрло
+ * бы смысл отдельного предупреждения.
+ */
+export async function isRegionIncomplete(
+  info: RegionInfo,
+  origin: LatLon,
+): Promise<boolean> {
+  try {
+    const dem = await sharedPyramid();
+    const demHi = await sharedPyramidHi().catch(() => null);
+    const allPyramidKeys = dem.tileKeysInBBox(info.bbox);
+    const hiKeys = demHi?.tileKeysInBBox(info.bbox) ?? [];
+    const pyramidKeys = demHi
+      ? allPyramidKeys.filter(keepBaseTileKey(demHi))
+      : allPyramidKeys;
+    const center = inBBox(origin, info.bbox) ? origin : bboxCenter(info.bbox);
+    const detailKeys = detailTileKeys(center, DETAIL_RADIUS_M);
+    for (const key of pyramidKeys) {
+      if (!(await getDemTile(dem.storeKey(key)))) return true;
+    }
+    for (const key of hiKeys) {
+      if (!(await getDemTile(demHi!.storeKey(key)))) return true;
+    }
+    for (const key of detailKeys) {
+      if (!(await getTerrariumTile(key))) return true;
+    }
+    return false;
+  } catch {
+    // Индекс пирамиды недоступен (офлайн, нет кеша) — безопаснее считать,
+    // что докачивать нечего, чем молча запрещать действие
+    return false;
+  }
 }
 
 /**

@@ -74,6 +74,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   regionSwitch: { ru: "Переключить", en: "Switch" },
   downloadPeaks: { ru: "Загрузка вершин…", en: "Downloading peaks…" },
   downloadTiles: { ru: "Загрузка тайлов", en: "Downloading tiles" },
+  downloadUpToDate: {
+    ru: "Всё уже скачано — обновлений нет",
+    en: "Already downloaded — nothing new",
+  },
   appTitle: {
     ru: "Вершины — панорама гор",
     en: "Vershiny — Mountain Panorama",

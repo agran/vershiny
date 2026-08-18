@@ -11,8 +11,9 @@ export const GLOBAL_DEM_URL =
   "https://agran.github.io/vershiny-dem/tiles/global";
 
 /**
- * Детальный слой (~87 м, квант 1 м) для регионов приоритета 1–2:
- * agran/vershiny-dem-hi → GitHub Pages. Разреженный: вне их bbox тайлов нет,
+ * Детальный слой (~87 м, квант 1 м) для горных регионов реестра:
+ * agran/vershiny-dem-hi → GitHub Pages. Разреженный: покрывает все p1–p3
+ * и часть p4 (Япония, Анды, Тибет, Hindu Kush…); вне покрытия тайлов нет,
  * клиент не тратит запросы (битсет coverage) и уходит на базовую пирамиду.
  */
 export const GLOBAL_DEM_HI_URL =
