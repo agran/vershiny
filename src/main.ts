@@ -1060,7 +1060,11 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   if (region !== currentRegion) {
     currentPeaks = [];
     if (panorama) {
-      panorama = { ...panorama, peaks: [] };
+      // Мутируем на месте, не подменяя ссылку — тот же контракт, что в
+      // worker.onmessage: AR-сессия захватывает объект панорамы при входе
+      // в режим камеры и рисует его каждый кадр. Подмена объекта здесь
+      // оставляла оверлей навсегда на вершинах прежнего региона
+      panorama.peaks = [];
       draw();
     }
   }
