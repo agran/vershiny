@@ -1,6 +1,6 @@
 {
  "region": "svalbard",
- "generated": "2026-08-13T09:16:27+00:00",
+ "generated": "2026-08-18T20:47:35+00:00",
  "peaks": [
   {
    "lat": 79.010561,
@@ -151,15 +151,15 @@
    "ele": 1034
   },
   {
-   "lat": 78.140839,
-   "lon": 15.401802,
-   "name": "Håbergnuten",
-   "ele": 1031
-  },
-  {
    "lat": 77.887065,
    "lon": 16.063213,
    "name": "Greinhøgdene",
+   "ele": 1031
+  },
+  {
+   "lat": 78.140839,
+   "lon": 15.401802,
+   "name": "Håbergnuten",
    "ele": 1031
   },
   {
@@ -182,15 +182,15 @@
    "ele": 1028
   },
   {
-   "lat": 78.088572,
-   "lon": 16.650156,
-   "name": "Steintaket",
-   "ele": 1023
-  },
-  {
    "lat": 78.515366,
    "lon": 17.769313,
    "name": "Flaska",
+   "ele": 1023
+  },
+  {
+   "lat": 78.088572,
+   "lon": 16.650156,
+   "name": "Steintaket",
    "ele": 1023
   },
   {
@@ -380,15 +380,15 @@
    "ele": 947
   },
   {
-   "lat": 78.123659,
-   "lon": 15.920439,
-   "name": "Carl Lundhfjellet",
-   "ele": 942
-  },
-  {
    "lat": 77.90544,
    "lon": 16.607981,
    "name": "Liljevalchfjellet",
+   "ele": 942
+  },
+  {
+   "lat": 78.123659,
+   "lon": 15.920439,
+   "name": "Carl Lundhfjellet",
    "ele": 942
   },
   {
@@ -447,15 +447,15 @@
    "ele": 924
   },
   {
-   "lat": 78.047933,
-   "lon": 15.972244,
-   "name": "Hillestadfjellet",
-   "ele": 923
-  },
-  {
    "lat": 78.29021,
    "lon": 16.033859,
    "name": "Telgefjellet",
+   "ele": 923
+  },
+  {
+   "lat": 78.047933,
+   "lon": 15.972244,
+   "name": "Hillestadfjellet",
    "ele": 923
   },
   {
@@ -503,15 +503,15 @@
    "wikidata": "Q31533291"
   },
   {
-   "lat": 78.124549,
-   "lon": 15.591412,
-   "name": "Bingtoppen",
-   "ele": 913
-  },
-  {
    "lat": 77.797517,
    "lon": 17.284974,
    "name": "Tverregga",
+   "ele": 913
+  },
+  {
+   "lat": 78.124549,
+   "lon": 15.591412,
+   "name": "Bingtoppen",
    "ele": 913
   },
   {
@@ -614,15 +614,15 @@
    "ele": 873
   },
   {
-   "lat": 78.11129,
-   "lon": 17.248921,
-   "name": "Islysa",
-   "ele": 872
-  },
-  {
    "lat": 77.862519,
    "lon": 17.196736,
    "name": "Bringen",
+   "ele": 872
+  },
+  {
+   "lat": 78.11129,
+   "lon": 17.248921,
+   "name": "Islysa",
    "ele": 872
   },
   {
@@ -630,6 +630,12 @@
    "lon": 13.819935,
    "name": "Frösöfjellet",
    "ele": 871
+  },
+  {
+   "lat": 77.88067,
+   "lon": 17.237806,
+   "name": "Firmfjellet",
+   "ele": 868
   },
   {
    "lat": 77.896274,
@@ -653,12 +659,6 @@
    "lat": 77.887426,
    "lon": 16.133509,
    "name": "Krokryggen",
-   "ele": 868
-  },
-  {
-   "lat": 77.88067,
-   "lon": 17.237806,
-   "name": "Firmfjellet",
    "ele": 868
   },
   {
@@ -692,15 +692,15 @@
    "ele": 863
   },
   {
-   "lat": 77.936235,
-   "lon": 16.637721,
-   "name": "Stigaren",
-   "ele": 862
-  },
-  {
    "lat": 78.363053,
    "lon": 18.222958,
    "name": "Hilgardfjellet",
+   "ele": 862
+  },
+  {
+   "lat": 77.936235,
+   "lon": 16.637721,
+   "name": "Stigaren",
    "ele": 862
   },
   {
@@ -722,15 +722,15 @@
    "ele": 855
   },
   {
-   "lat": 77.802468,
-   "lon": 17.485428,
-   "name": "Olainuten",
-   "ele": 854
-  },
-  {
    "lat": 78.474408,
    "lon": 13.199043,
    "name": "Gunnar Knudsenfjella",
+   "ele": 854
+  },
+  {
+   "lat": 77.802468,
+   "lon": 17.485428,
+   "name": "Olainuten",
    "ele": 854
   },
   {
@@ -777,15 +777,15 @@
    "ele": 846
   },
   {
-   "lat": 77.82517,
-   "lon": 17.465858,
-   "name": "Framkammen",
-   "ele": 845
-  },
-  {
    "lat": 78.240967,
    "lon": 16.760416,
    "name": "Duboistoppen",
+   "ele": 845
+  },
+  {
+   "lat": 77.82517,
+   "lon": 17.465858,
+   "name": "Framkammen",
    "ele": 845
   },
   {
@@ -832,15 +832,15 @@
    "ele": 837
   },
   {
-   "lat": 77.906061,
-   "lon": 16.404862,
-   "name": "Rekstentoppen",
-   "ele": 836
-  },
-  {
    "lat": 77.813294,
    "lon": 17.46824,
    "name": "Karlnuten",
+   "ele": 836
+  },
+  {
+   "lat": 77.906061,
+   "lon": 16.404862,
+   "name": "Rekstentoppen",
    "ele": 836
   },
   {
@@ -863,12 +863,6 @@
    "wikidata": "Q16896584"
   },
   {
-   "lat": 78.682055,
-   "lon": 16.037487,
-   "name": "Odinfjellet",
-   "ele": 826
-  },
-  {
    "lat": 77.909648,
    "lon": 17.543879,
    "name": "Taggnuten",
@@ -878,6 +872,12 @@
    "lat": 78.258193,
    "lon": 16.701751,
    "name": "Roulletegga",
+   "ele": 826
+  },
+  {
+   "lat": 78.682055,
+   "lon": 16.037487,
+   "name": "Odinfjellet",
    "ele": 826
   },
   {
@@ -974,12 +974,6 @@
    "wikidata": "Q6740795"
   },
   {
-   "lat": 78.882068,
-   "lon": 11.973069,
-   "name": "Berteltoppen",
-   "ele": 787
-  },
-  {
    "lat": 78.442991,
    "lon": 13.143468,
    "name": "Huldrehatten",
@@ -987,15 +981,21 @@
    "wikidata": "Q16892543"
   },
   {
-   "lat": 78.270135,
-   "lon": 15.717393,
-   "name": "Adventtoppen",
-   "ele": 786
+   "lat": 78.882068,
+   "lon": 11.973069,
+   "name": "Berteltoppen",
+   "ele": 787
   },
   {
    "lat": 78.649679,
    "lon": 15.972078,
    "name": "Torfjellet",
+   "ele": 786
+  },
+  {
+   "lat": 78.270135,
+   "lon": 15.717393,
+   "name": "Adventtoppen",
    "ele": 786
   },
   {
@@ -1286,6 +1286,12 @@
    "ele": 706
   },
   {
+   "lat": 78.48567,
+   "lon": 13.436451,
+   "name": "Robertsonfjellet",
+   "ele": 703
+  },
+  {
    "lat": 78.310347,
    "lon": 13.551807,
    "name": "Krokfjellet",
@@ -1298,12 +1304,6 @@
    "ele": 703
   },
   {
-   "lat": 78.48567,
-   "lon": 13.436451,
-   "name": "Robertsonfjellet",
-   "ele": 703
-  },
-  {
    "lat": 78.466568,
    "lon": 11.419477,
    "name": "Johansenfjellet",
@@ -1311,15 +1311,15 @@
    "wikidata": "Q31543466"
   },
   {
-   "lat": 77.957563,
-   "lon": 17.821069,
-   "name": "Sørbullen",
-   "ele": 700
-  },
-  {
    "lat": 78.257598,
    "lon": 16.948927,
    "name": "Sticky Keep",
+   "ele": 700
+  },
+  {
+   "lat": 77.957563,
+   "lon": 17.821069,
+   "name": "Sørbullen",
    "ele": 700
   },
   {
@@ -1342,15 +1342,15 @@
    "ele": 688
   },
   {
-   "lat": 78.413774,
-   "lon": 18.558058,
-   "name": "Aagaardfjellet",
-   "ele": 683
-  },
-  {
    "lat": 78.250243,
    "lon": 16.794362,
    "name": "Grusryggen",
+   "ele": 683
+  },
+  {
+   "lat": 78.413774,
+   "lon": 18.558058,
+   "name": "Aagaardfjellet",
    "ele": 683
   },
   {
@@ -1361,10 +1361,11 @@
    "wikidata": "Q31543820"
   },
   {
-   "lat": 78.178172,
-   "lon": 18.322945,
-   "name": "Iskaka",
-   "ele": 681
+   "lat": 78.424138,
+   "lon": 12.619257,
+   "name": "Jørgenfjellet",
+   "ele": 681,
+   "wikidata": "Q12715950"
   },
   {
    "lat": 78.304433,
@@ -1373,11 +1374,10 @@
    "ele": 681
   },
   {
-   "lat": 78.424138,
-   "lon": 12.619257,
-   "name": "Jørgenfjellet",
-   "ele": 681,
-   "wikidata": "Q12715950"
+   "lat": 78.178172,
+   "lon": 18.322945,
+   "name": "Iskaka",
+   "ele": 681
   },
   {
    "lat": 78.445502,
@@ -1462,15 +1462,15 @@
    "ele": 665
   },
   {
-   "lat": 78.304024,
-   "lon": 13.262386,
-   "name": "Ommafjellet",
-   "ele": 663
-  },
-  {
    "lat": 78.480477,
    "lon": 12.877951,
    "name": "Holmesletfjella",
+   "ele": 663
+  },
+  {
+   "lat": 78.304024,
+   "lon": 13.262386,
+   "name": "Ommafjellet",
    "ele": 663
   },
   {
@@ -1619,6 +1619,12 @@
    "ele": 609
   },
   {
+   "lat": 78.430053,
+   "lon": 13.214321,
+   "name": "Bytingen",
+   "ele": 607
+  },
+  {
    "lat": 79.160493,
    "lon": 11.356773,
    "name": "Scoresbyfjellet",
@@ -1626,21 +1632,15 @@
    "wikidata": "Q31537510"
   },
   {
-   "lat": 78.430053,
-   "lon": 13.214321,
-   "name": "Bytingen",
-   "ele": 607
+   "lat": 78.016075,
+   "lon": 17.803162,
+   "name": "Passnuten",
+   "ele": 606
   },
   {
    "lat": 78.352625,
    "lon": 18.47216,
    "name": "Jebensfjellet",
-   "ele": 606
-  },
-  {
-   "lat": 78.016075,
-   "lon": 17.803162,
-   "name": "Passnuten",
    "ele": 606
   },
   {
@@ -1702,17 +1702,17 @@
    "wikidata": "Q6644972"
   },
   {
-   "lat": 78.386048,
-   "lon": 13.736644,
-   "name": "Kjeksen",
-   "ele": 584
-  },
-  {
    "lat": 78.882782,
    "lon": 10.520353,
    "name": "Fuglehukfjellet",
    "ele": 584,
    "wikidata": "Q6644962"
+  },
+  {
+   "lat": 78.386048,
+   "lon": 13.736644,
+   "name": "Kjeksen",
+   "ele": 584
   },
   {
    "lat": 78.319812,
@@ -1816,15 +1816,15 @@
    "wikidata": "Q31537493"
   },
   {
-   "lat": 79.145569,
-   "lon": 11.426124,
-   "name": "Willeberget",
-   "ele": 541
-  },
-  {
    "lat": 78.475403,
    "lon": 12.51214,
    "name": "Thorkelsenfjellet",
+   "ele": 541
+  },
+  {
+   "lat": 79.145569,
+   "lon": 11.426124,
+   "name": "Willeberget",
    "ele": 541
   },
   {
@@ -1894,17 +1894,17 @@
    "ele": 506
   },
   {
+   "lat": 78.46202,
+   "lon": 13.950041,
+   "name": "Iskletten",
+   "ele": 503
+  },
+  {
    "lat": 78.522995,
    "lon": 11.366304,
    "name": "Ferrierpiggen",
    "ele": 503,
    "wikidata": "Q31546598"
-  },
-  {
-   "lat": 78.46202,
-   "lon": 13.950041,
-   "name": "Iskletten",
-   "ele": 503
   },
   {
    "lat": 78.753629,
@@ -2147,6 +2147,16 @@
    "name": "877 м"
   },
   {
+   "lat": 80.003241,
+   "lon": 18.865761,
+   "name": "Celsiusberget"
+  },
+  {
+   "lat": 79.052265,
+   "lon": 19.572974,
+   "name": "Knekten"
+  },
+  {
    "lat": 78.256901,
    "lon": 15.829159,
    "name": "Hiorthfjellet"
@@ -2155,16 +2165,6 @@
    "lat": 78.273083,
    "lon": 16.295302,
    "name": "Ottofjellet"
-  },
-  {
-   "lat": 79.052265,
-   "lon": 19.572974,
-   "name": "Knekten"
-  },
-  {
-   "lat": 80.003241,
-   "lon": 18.865761,
-   "name": "Celsiusberget"
   }
  ]
 }

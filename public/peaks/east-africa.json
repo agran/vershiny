@@ -1,28 +1,28 @@
 {
  "region": "east-africa",
- "generated": "2026-08-13T09:16:19+00:00",
+ "generated": "2026-08-18T20:47:26+00:00",
  "peaks": [
-  {
-   "lat": -3.076408,
-   "lon": 37.353999,
-   "name": "Uhuru Peak",
-   "name_ru": "Ухуру",
-   "name_en": "Uhuru Peak",
-   "ele": 5895
-  },
   {
    "lat": -3.064623,
    "lon": 37.358579,
-   "name": "Kibo",
+   "name": "Кибо",
    "name_ru": "Кибо",
    "ele": 5895,
    "wikidata": "Q1394606",
    "volcano": true
   },
   {
+   "lat": -3.076408,
+   "lon": 37.353999,
+   "name": "Ухуру",
+   "name_ru": "Ухуру",
+   "name_en": "Uhuru Peak",
+   "ele": 5895
+  },
+  {
    "lat": -0.152707,
    "lon": 37.309214,
-   "name": "Batian",
+   "name": "Кения",
    "name_ru": "Кения",
    "name_en": "Mount Kenya",
    "ele": 5199,
@@ -111,7 +111,7 @@
   {
    "lat": 1.118335,
    "lon": 34.52667,
-   "name": "Mount Elgon",
+   "name": "Элгон",
    "name_ru": "Элгон",
    "name_en": "Mount Elgon",
    "ele": 4321,
@@ -263,7 +263,7 @@
   {
    "lat": 3.946111,
    "lon": 32.910278,
-   "name": "Mount Kinyeti",
+   "name": "Киньети",
    "name_ru": "Киньети",
    "ele": 3187,
    "wikidata": "Q948298"
@@ -285,7 +285,7 @@
   {
    "lat": 1.7625,
    "lon": 34.709167,
-   "name": "Mount Kadam",
+   "name": "Кадам",
    "name_ru": "Кадам",
    "ele": 3063,
    "wikidata": "Q3321899",
@@ -317,18 +317,18 @@
    "ele": 2878
   },
   {
+   "lat": -0.648926,
+   "lon": 36.187124,
+   "name": "Mount Eburru Summit",
+   "ele": 2856
+  },
+  {
    "lat": -0.653839,
    "lon": 36.199465,
    "name": "Ol Doinyo Eburru",
    "ele": 2856,
    "wikidata": "Q4179179",
    "volcano": true
-  },
-  {
-   "lat": -0.648926,
-   "lon": 36.187124,
-   "name": "Mount Eburru Summit",
-   "ele": 2856
   },
   {
    "lat": 2.172794,
@@ -513,15 +513,15 @@
    "ele": 2260
   },
   {
-   "lat": -3.321033,
-   "lon": 38.454334,
-   "name": "Mbololo",
-   "ele": 2220
-  },
-  {
    "lat": 0.23093,
    "lon": 37.124496,
    "name": "Cairn",
+   "ele": 2220
+  },
+  {
+   "lat": -3.321033,
+   "lon": 38.454334,
+   "name": "Mbololo",
    "ele": 2220
   },
   {
@@ -702,17 +702,17 @@
    "ele": 1854
   },
   {
-   "lat": -4.770589,
-   "lon": 38.281143,
-   "name": "magamba",
-   "ele": 1850
-  },
-  {
    "lat": -0.496515,
    "lon": 37.079199,
    "name": "Tũmũtũmũ Hill",
    "ele": 1850,
    "wikidata": "Q27190608"
+  },
+  {
+   "lat": -4.770589,
+   "lon": 38.281143,
+   "name": "magamba",
+   "ele": 1850
   },
   {
    "lat": -3.16755,
@@ -753,15 +753,15 @@
    "ele": 1793
   },
   {
-   "lat": 4.136204,
-   "lon": 33.877461,
-   "name": "Lopalamoi",
-   "ele": 1790
-  },
-  {
    "lat": 1.211519,
    "lon": 37.254282,
    "name": "Lolocheni",
+   "ele": 1790
+  },
+  {
+   "lat": 4.136204,
+   "lon": 33.877461,
+   "name": "Lopalamoi",
    "ele": 1790
   },
   {
@@ -918,15 +918,15 @@
    "ele": 1690
   },
   {
-   "lat": -1.848693,
-   "lon": 33.809555,
-   "name": "Kihuzu Hill",
-   "ele": 1684
-  },
-  {
    "lat": 4.317406,
    "lon": 33.336791,
    "name": "KILINGIR",
+   "ele": 1684
+  },
+  {
+   "lat": -1.848693,
+   "lon": 33.809555,
+   "name": "Kihuzu Hill",
    "ele": 1684
   },
   {
@@ -1140,15 +1140,15 @@
    "wikidata": "Q7826698"
   },
   {
-   "lat": 3.778396,
-   "lon": 37.999145,
-   "name": "Maheir",
-   "ele": 1470
-  },
-  {
    "lat": 3.1517,
    "lon": 33.2225,
    "name": "Mora",
+   "ele": 1470
+  },
+  {
+   "lat": 3.778396,
+   "lon": 37.999145,
+   "name": "Maheir",
    "ele": 1470
   },
   {
@@ -1206,15 +1206,15 @@
    "ele": 1423
   },
   {
-   "lat": 4.33041,
-   "lon": 33.749581,
-   "name": "BOHORORA NORTH",
-   "ele": 1420
-  },
-  {
    "lat": 0.71679,
    "lon": 37.795702,
    "name": "Bodish",
+   "ele": 1420
+  },
+  {
+   "lat": 4.33041,
+   "lon": 33.749581,
+   "name": "BOHORORA NORTH",
    "ele": 1420
   },
   {
@@ -1254,15 +1254,15 @@
    "ele": 1393
   },
   {
-   "lat": 3.331183,
-   "lon": 37.7018,
-   "name": "Salla Karabara Diqa",
-   "ele": 1380
-  },
-  {
    "lat": 4.368342,
    "lon": 36.955089,
    "name": "Sullsull Mudde",
+   "ele": 1380
+  },
+  {
+   "lat": 3.331183,
+   "lon": 37.7018,
+   "name": "Salla Karabara Diqa",
    "ele": 1380
   },
   {
@@ -1290,15 +1290,15 @@
    "ele": 1356
   },
   {
-   "lat": -1.848697,
-   "lon": 33.775792,
-   "name": "Mwibegi Hill",
-   "ele": 1350
-  },
-  {
    "lat": 0.70617,
    "lon": 36.262465,
    "name": "Katakun",
+   "ele": 1350
+  },
+  {
+   "lat": -1.848697,
+   "lon": 33.775792,
+   "name": "Mwibegi Hill",
    "ele": 1350
   },
   {
@@ -1402,15 +1402,15 @@
    "wikidata": "Q6959082"
   },
   {
-   "lat": 0.716138,
-   "lon": 37.54513,
-   "name": "Kalama",
-   "ele": 1296
-  },
-  {
    "lat": 0.165707,
    "lon": 32.299665,
    "name": "Nseke",
+   "ele": 1296
+  },
+  {
+   "lat": 0.716138,
+   "lon": 37.54513,
+   "name": "Kalama",
    "ele": 1296
   },
   {
@@ -1510,15 +1510,15 @@
    "ele": 1264
   },
   {
-   "lat": 0.066339,
-   "lon": 32.464817,
-   "name": "Nsamizi Hill",
-   "ele": 1263
-  },
-  {
    "lat": -0.009248,
    "lon": 32.283304,
    "name": "Nunda Hill",
+   "ele": 1263
+  },
+  {
+   "lat": 0.066339,
+   "lon": 32.464817,
+   "name": "Nsamizi Hill",
    "ele": 1263
   },
   {
@@ -1534,15 +1534,15 @@
    "ele": 1260
   },
   {
-   "lat": 0.303121,
-   "lon": 32.557263,
-   "name": "Lubaga hill",
-   "ele": 1258
-  },
-  {
    "lat": 0.247278,
    "lon": 32.576265,
    "name": "Ndegi hill",
+   "ele": 1258
+  },
+  {
+   "lat": 0.303121,
+   "lon": 32.557263,
+   "name": "Lubaga hill",
    "ele": 1258
   },
   {
@@ -1552,15 +1552,15 @@
    "ele": 1253
   },
   {
-   "lat": 0.147792,
-   "lon": 32.515329,
-   "name": "Lutaba hill",
-   "ele": 1252
-  },
-  {
    "lat": -0.048623,
    "lon": 32.133765,
    "name": "Buzami Hill",
+   "ele": 1252
+  },
+  {
+   "lat": 0.147792,
+   "lon": 32.515329,
+   "name": "Lutaba hill",
    "ele": 1252
   },
   {
@@ -1576,17 +1576,17 @@
    "ele": 1251
   },
   {
+   "lat": 0.134507,
+   "lon": 32.299236,
+   "name": "Tonda",
+   "ele": 1250
+  },
+  {
    "lat": 0.222773,
    "lon": 32.655187,
    "name": "Kisinsi hill",
    "ele": 1250,
    "wikidata": "Q31396724"
-  },
-  {
-   "lat": 0.134507,
-   "lon": 32.299236,
-   "name": "Tonda",
-   "ele": 1250
   },
   {
    "lat": 4.624517,
@@ -1699,15 +1699,15 @@
    "ele": 1201
   },
   {
-   "lat": 0.127357,
-   "lon": 32.551837,
-   "name": "Buwaga hill",
-   "ele": 1200
-  },
-  {
    "lat": 0.154452,
    "lon": 32.449965,
    "name": "Sakabasolo hill",
+   "ele": 1200
+  },
+  {
+   "lat": 0.127357,
+   "lon": 32.551837,
+   "name": "Buwaga hill",
    "ele": 1200
   },
   {
@@ -1772,15 +1772,15 @@
    "ele": 1150
   },
   {
-   "lat": 4.284628,
-   "lon": 33.312846,
-   "name": "MATHEDE",
-   "ele": 1130
-  },
-  {
    "lat": -3.255676,
    "lon": 37.093021,
    "name": "Oldonyo Muruok Hill",
+   "ele": 1130
+  },
+  {
+   "lat": 4.284628,
+   "lon": 33.312846,
+   "name": "MATHEDE",
    "ele": 1130
   },
   {
@@ -1882,7 +1882,7 @@
   {
    "lat": 2.322757,
    "lon": 36.586747,
-   "name": "Barrier Volcano",
+   "name": "Барриер",
    "name_ru": "Барриер",
    "ele": 1032,
    "wikidata": "Q808918",
@@ -1907,15 +1907,15 @@
    "ele": 1020
   },
   {
-   "lat": -3.49665,
-   "lon": 37.637259,
-   "name": "Mokinni Hill",
-   "ele": 1010
-  },
-  {
    "lat": -3.236922,
    "lon": 38.122697,
    "name": "Fussilier Kopje Hill",
+   "ele": 1010
+  },
+  {
+   "lat": -3.49665,
+   "lon": 37.637259,
+   "name": "Mokinni Hill",
    "ele": 1010
   },
   {
@@ -2000,15 +2000,15 @@
    "ele": 908
   },
   {
-   "lat": -3.363364,
-   "lon": 37.732542,
-   "name": "Kidong'u Hill",
-   "ele": 900
-  },
-  {
    "lat": 3.271689,
    "lon": 37.594171,
    "name": "Qubi Boqe",
+   "ele": 900
+  },
+  {
+   "lat": -3.363364,
+   "lon": 37.732542,
+   "name": "Kidong'u Hill",
    "ele": 900
   },
   {
@@ -2058,17 +2058,17 @@
    "wikidata": "Q27198776"
   },
   {
+   "lat": 4.675121,
+   "lon": 32.812113,
+   "name": "Igurre Mountain",
+   "ele": 880
+  },
+  {
    "lat": -3.63616,
    "lon": 38.457727,
    "name": "Pusa",
    "ele": 880,
    "wikidata": "Q27191967"
-  },
-  {
-   "lat": 4.675121,
-   "lon": 32.812113,
-   "name": "Igurre Mountain",
-   "ele": 880
   },
   {
    "lat": -3.650846,
@@ -2120,15 +2120,15 @@
    "ele": 821
   },
   {
-   "lat": -3.693476,
-   "lon": 38.635445,
-   "name": "Kidodongoni",
-   "ele": 820
-  },
-  {
    "lat": 4.622682,
    "lon": 36.455305,
    "name": "Mount Loia",
+   "ele": 820
+  },
+  {
+   "lat": -3.693476,
+   "lon": 38.635445,
+   "name": "Kidodongoni",
    "ele": 820
   },
   {
@@ -2178,15 +2178,15 @@
    "wikidata": "Q27196371"
   },
   {
-   "lat": -3.262569,
-   "lon": 38.412571,
-   "name": "Kisau",
-   "ele": 720
-  },
-  {
    "lat": 4.934977,
    "lon": 35.158664,
    "name": "Nabolibol",
+   "ele": 720
+  },
+  {
+   "lat": -3.262569,
+   "lon": 38.412571,
+   "name": "Kisau",
    "ele": 720
   },
   {
@@ -2480,523 +2480,36 @@
    "ele": 8
   },
   {
-   "lat": 4.053879,
-   "lon": 33.812657,
-   "name": "Urungo",
-   "wikidata": "Q20909546"
+   "lat": 0.275705,
+   "lon": 32.596462,
+   "name": "Makindye Hill"
   },
   {
-   "lat": -2.759545,
-   "lon": 35.914089,
-   "name": "Ol Doinyo Lengai",
-   "wikidata": "Q746787",
-   "volcano": true
+   "lat": 0.236677,
+   "lon": 32.535084,
+   "name": "Prayer Mountain"
   },
   {
-   "lat": 1.160373,
-   "lon": 36.223481,
-   "name": "Silali",
-   "volcano": true
+   "lat": -1.774351,
+   "lon": 34.584494,
+   "name": "Mountain Itunu",
+   "name_en": "Mountain Itunu"
   },
   {
-   "lat": -2.803493,
-   "lon": 35.979146,
-   "name": "Loolmurwak Crater",
-   "volcano": true
+   "lat": 1.013322,
+   "lon": 34.185201,
+   "name": "Budeko Rock Querry",
+   "ele": 0
   },
   {
-   "lat": -2.869673,
-   "lon": 35.948761,
-   "name": "Kerimasi",
-   "volcano": true
-  },
-  {
-   "lat": -2.893675,
-   "lon": 36.211918,
-   "name": "Mt Kitumbeine",
-   "volcano": true
-  },
-  {
-   "lat": 3.934861,
-   "lon": 37.326402,
-   "name": "Garra Gallaan",
-   "volcano": true
-  },
-  {
-   "lat": 3.857106,
-   "lon": 37.345113,
-   "name": "Garra Did Golan Gutha",
-   "volcano": true
-  },
-  {
-   "lat": 3.984181,
-   "lon": 37.344426,
-   "name": "Garra Sorra",
-   "volcano": true
-  },
-  {
-   "lat": 0.822885,
-   "lon": 37.206845,
-   "name": "Nanteddu"
-  },
-  {
-   "lat": -0.859533,
-   "lon": 36.362511,
-   "name": "Fisher's Tower"
-  },
-  {
-   "lat": -0.914438,
-   "lon": 36.456458,
-   "name": "Longonot",
-   "wikidata": "Q1520750",
-   "volcano": true
-  },
-  {
-   "lat": 3.445838,
-   "lon": 37.639208,
-   "name": "Chisa Ela nadehani",
-   "volcano": true
-  },
-  {
-   "lat": 3.421241,
-   "lon": 37.66995,
-   "name": "Chisa",
-   "volcano": true
-  },
-  {
-   "lat": 3.461166,
-   "lon": 37.565409,
-   "name": "Kalesa mata gongo",
-   "volcano": true
-  },
-  {
-   "lat": 3.470237,
-   "lon": 37.765777,
-   "name": "Gara Nyecha",
-   "volcano": true
-  },
-  {
-   "lat": 3.429295,
-   "lon": 37.758356,
-   "name": "Gara worsesa",
-   "volcano": true
-  },
-  {
-   "lat": 3.430152,
-   "lon": 37.763849,
-   "name": "Gara worsesa",
-   "volcano": true
-  },
-  {
-   "lat": -2.205582,
-   "lon": 38.402926,
-   "name": "Ithumba"
-  },
-  {
-   "lat": -3.867742,
-   "lon": 36.146701,
-   "name": "Boundary Hill"
-  },
-  {
-   "lat": -3.390781,
-   "lon": 36.699541,
-   "name": "Themi Hill"
-  },
-  {
-   "lat": -1.174848,
-   "lon": 36.348525,
-   "name": "Mt. Suswa",
-   "name_en": "Mount Suswa",
-   "wikidata": "Q3622751"
-  },
-  {
-   "lat": -3.34788,
-   "lon": 36.712421,
-   "name": "Oldoinyo Sabuk"
-  },
-  {
-   "lat": -3.328413,
-   "lon": 36.727597,
-   "name": "Kivesi Hill"
-  },
-  {
-   "lat": -3.345785,
-   "lon": 36.734685,
-   "name": "Kivutu"
-  },
-  {
-   "lat": -2.691339,
-   "lon": 37.15154,
-   "name": "Kitirua Hill"
-  },
-  {
-   "lat": -2.703686,
-   "lon": 37.155165,
-   "name": "Ositet Hill"
-  },
-  {
-   "lat": -2.996389,
-   "lon": 39.263555,
-   "name": "Lali Hills"
-  },
-  {
-   "lat": 5.100513,
-   "lon": 35.883587,
-   "name": "Monte Naqua"
-  },
-  {
-   "lat": -2.833075,
-   "lon": 34.997913,
-   "name": "Naabi Hill"
-  },
-  {
-   "lat": 2.769,
-   "lon": 41.9618,
-   "name": "Buuraha Dhehle"
-  },
-  {
-   "lat": 2.7611,
-   "lon": 42.1328,
-   "name": "Qaw Qaw Saare"
-  },
-  {
-   "lat": 3.368939,
-   "lon": 42.145936,
-   "name": "Buuraha Jabane"
-  },
-  {
-   "lat": 3.412249,
-   "lon": 42.235492,
-   "name": "Buuraha Laamaloosh"
-  },
-  {
-   "lat": 3.186347,
-   "lon": 41.998562,
-   "name": "Jirta Tixay"
-  },
-  {
-   "lat": 2.766667,
-   "lon": 42.083333,
-   "name": "Raamo Shabeel"
-  },
-  {
-   "lat": 3.373172,
-   "lon": 41.801776,
-   "name": "Buuraha Jirta Galdeys"
-  },
-  {
-   "lat": 2.4223,
-   "lon": 41.6272,
-   "name": "Aadan Birkaan"
-  },
-  {
-   "lat": 3.0055,
-   "lon": 41.9332,
-   "name": "Buuraha Bahale"
-  },
-  {
-   "lat": 2.9861,
-   "lon": 42.3133,
-   "name": "God Waraabe"
-  },
-  {
-   "lat": 2.55,
-   "lon": 41.65,
-   "name": "Qulquul Shubal"
-  },
-  {
-   "lat": 3.295572,
-   "lon": 42.21886,
-   "name": "Buuraha Singalay"
-  },
-  {
-   "lat": 3.468609,
-   "lon": 41.799656,
-   "name": "Xamurka"
-  },
-  {
-   "lat": 2.542,
-   "lon": 42.2035,
-   "name": "Waamo Yarey"
-  },
-  {
-   "lat": 2.5626,
-   "lon": 41.7639,
-   "name": "Dhudhu"
-  },
-  {
-   "lat": 2.9322,
-   "lon": 42.2396,
-   "name": "Faan Weyn"
-  },
-  {
-   "lat": 2.8317,
-   "lon": 42.0261,
-   "name": "Haar Cad"
-  },
-  {
-   "lat": 3.447476,
-   "lon": 41.779269,
-   "name": "Jaaldeyso"
-  },
-  {
-   "lat": 2.6143,
-   "lon": 41.6833,
-   "name": "Xamaroy"
-  },
-  {
-   "lat": 2.7993,
-   "lon": 41.9374,
-   "name": "Buuraha Jirta Boorya Gooryaale"
-  },
-  {
-   "lat": 2.733333,
-   "lon": 41.8,
-   "name": "Buuraha Waraabaale"
-  },
-  {
-   "lat": 3.745465,
-   "lon": 33.84869,
-   "name": "Kocholo"
-  },
-  {
-   "lat": 3.567271,
-   "lon": 33.922322,
-   "name": "Mount Lowakut"
-  },
-  {
-   "lat": -2.232755,
-   "lon": 34.30001,
-   "name": "Peak",
-   "name_en": "Peak"
-  },
-  {
-   "lat": -2.238587,
-   "lon": 34.305847,
-   "name": "Peak",
-   "name_en": "Peak"
-  },
-  {
-   "lat": 4.514606,
-   "lon": 33.366605,
-   "name": "Irum"
-  },
-  {
-   "lat": 4.41336,
-   "lon": 33.366523,
-   "name": "JURI"
-  },
-  {
-   "lat": 1.730412,
-   "lon": 37.303493,
-   "name": "Kilabunyo"
-  },
-  {
-   "lat": 1.719476,
-   "lon": 37.370743,
-   "name": "Lonyeri Pesho"
-  },
-  {
-   "lat": 1.76666,
-   "lon": 37.542595,
-   "name": "Baio",
-   "wikidata": "Q27198942"
-  },
-  {
-   "lat": 1.8156,
-   "lon": 37.638915,
-   "name": "Ilim",
-   "wikidata": "Q27197667"
-  },
-  {
-   "lat": 1.709157,
-   "lon": 37.717252,
-   "name": "Lodermurt"
-  },
-  {
-   "lat": 1.837869,
-   "lon": 37.918342,
-   "name": "Kaisut"
-  },
-  {
-   "lat": -0.136071,
-   "lon": 35.743521,
-   "name": "Mount Londiani"
-  },
-  {
-   "lat": 1.241526,
-   "lon": 36.684654,
-   "name": "Poror Peak"
-  },
-  {
-   "lat": -0.202029,
-   "lon": 36.070337,
-   "name": "Menengai Crater",
-   "wikidata": "Q1672337",
-   "volcano": true
-  },
-  {
-   "lat": -0.885987,
-   "lon": 36.269553,
-   "name": "Olkaria",
-   "wikidata": "Q4179169",
-   "volcano": true
-  },
-  {
-   "lat": 1.982211,
-   "lon": 36.429294,
-   "name": "Namarunu",
-   "wikidata": "Q6961318"
-  },
-  {
-   "lat": 1.520627,
-   "lon": 37.737067,
-   "name": "Moile",
-   "wikidata": "Q27194180"
-  },
-  {
-   "lat": 1.511432,
-   "lon": 37.761611,
-   "name": "Naluwuru",
-   "wikidata": "Q27192940"
-  },
-  {
-   "lat": 2.221884,
-   "lon": 37.901102,
-   "name": "Gar Ilkaria"
-  },
-  {
-   "lat": 1.992034,
-   "lon": 38.087331,
-   "name": "Gudas"
-  },
-  {
-   "lat": 2.152211,
-   "lon": 37.855005,
-   "name": "Karare",
-   "wikidata": "Q27196303"
-  },
-  {
-   "lat": 2.140339,
-   "lon": 37.829071,
-   "name": "Lawen",
-   "wikidata": "Q27195289"
-  },
-  {
-   "lat": 2.124905,
-   "lon": 37.757906,
-   "name": "Lolajonga",
-   "wikidata": "Q27195456"
-  },
-  {
-   "lat": 2.107733,
-   "lon": 37.89228,
-   "name": "Ret",
-   "wikidata": "Q27192009"
-  },
-  {
-   "lat": -0.693797,
-   "lon": 37.221678,
-   "name": "Mt. Kanbicho"
-  },
-  {
-   "lat": 1.278054,
-   "lon": 35.434545,
-   "name": "Cherangani Hills"
-  },
-  {
-   "lat": -2.682528,
-   "lon": 37.893083,
-   "name": "Chyulu Hills",
-   "wikidata": "Q5118629"
-  },
-  {
-   "lat": 0.672978,
-   "lon": 35.84076,
-   "name": "Tugen Hills"
+   "lat": 4.001194,
+   "lon": 33.442698,
+   "name": "Latome"
   },
   {
    "lat": -0.895133,
    "lon": 36.3227,
    "name": "Central Tower"
-  },
-  {
-   "lat": -3.52413,
-   "lon": 36.603868,
-   "name": "Mungu Crater",
-   "volcano": true
-  },
-  {
-   "lat": 0.254752,
-   "lon": 32.615023,
-   "name": "Buziga Hill"
-  },
-  {
-   "lat": -2.482659,
-   "lon": 38.099901,
-   "name": "Kalimakoi",
-   "wikidata": "Q27197863"
-  },
-  {
-   "lat": -3.446023,
-   "lon": 36.651943,
-   "name": "Lalgorite Hill"
-  },
-  {
-   "lat": -0.149603,
-   "lon": 37.298737,
-   "name": "Arthur's Seat",
-   "wikidata": "Q27198913"
-  },
-  {
-   "lat": -0.150278,
-   "lon": 37.302732,
-   "name": "Point Piggott"
-  },
-  {
-   "lat": -4.208744,
-   "lon": 35.017772,
-   "name": "Injuru Hill"
-  },
-  {
-   "lat": -4.180953,
-   "lon": 35.219313,
-   "name": "Ghateros Hill"
-  },
-  {
-   "lat": -4.250371,
-   "lon": 35.110388,
-   "name": "Gijedamohok Hill"
-  },
-  {
-   "lat": -4.207525,
-   "lon": 35.303484,
-   "name": "Dilojig Hill"
-  },
-  {
-   "lat": -4.21607,
-   "lon": 35.323929,
-   "name": "Donya Hill"
-  },
-  {
-   "lat": -4.153572,
-   "lon": 35.404518,
-   "name": "Gagara Hill"
-  },
-  {
-   "lat": -4.201386,
-   "lon": 35.329097,
-   "name": "Marambojig"
-  },
-  {
-   "lat": -4.1886,
-   "lon": 35.340043,
-   "name": "Sabbo Hill"
-  },
-  {
-   "lat": -4.172462,
-   "lon": 35.237375,
-   "name": "Maretadu Hills"
   },
   {
    "lat": -4.15644,
@@ -3019,105 +2532,32 @@
    "name": "Mara"
   },
   {
-   "lat": 1.897396,
-   "lon": 35.346604,
-   "name": "Tsonguru"
+   "lat": -1.346103,
+   "lon": 33.866303,
+   "name": "Nyashushe"
   },
   {
-   "lat": -3.876369,
-   "lon": 38.76126,
-   "name": "Manjuga"
+   "lat": -3.237767,
+   "lon": 36.762464,
+   "name": "Mount Meru Ashcone",
+   "wikidata": "Q309098",
+   "volcano": true
   },
   {
-   "lat": -3.835281,
-   "lon": 38.750129,
-   "name": "Mwakasi"
+   "lat": -3.354325,
+   "lon": 37.9292,
+   "name": "1060"
   },
   {
-   "lat": -3.860415,
-   "lon": 38.757131,
-   "name": "Rukinga"
+   "lat": -0.117731,
+   "lon": 34.540728,
+   "name": "Kit-Mikayi",
+   "wikidata": "Q1707574"
   },
   {
-   "lat": 3.042556,
-   "lon": 33.364954,
-   "name": "Kalongo Rock"
-  },
-  {
-   "lat": 3.763602,
-   "lon": 33.825323,
-   "name": "Lomej"
-  },
-  {
-   "lat": -2.511521,
-   "lon": 34.884955,
-   "name": "Massai Kopjes"
-  },
-  {
-   "lat": 2.973082,
-   "lon": 40.27459,
-   "name": "Bur Mayo Hills"
-  },
-  {
-   "lat": 2.552027,
-   "lon": 40.221471,
-   "name": "Mansa Hill"
-  },
-  {
-   "lat": 2.169505,
-   "lon": 40.140126,
-   "name": "Tarbaj Hill"
-  },
-  {
-   "lat": 2.68798,
-   "lon": 40.23803,
-   "name": "Qabot Go'one Hill"
-  },
-  {
-   "lat": 2.65871,
-   "lon": 40.245612,
-   "name": "Qabot Hills"
-  },
-  {
-   "lat": 1.709726,
-   "lon": 33.620581,
-   "name": "Soroti Rock"
-  },
-  {
-   "lat": 1.21846,
-   "lon": 33.329608,
-   "name": "Kagulu Rock",
-   "wikidata": "Q60753937"
-  },
-  {
-   "lat": 1.382833,
-   "lon": 34.386695,
-   "name": "Kyema Hill"
-  },
-  {
-   "lat": 0.265006,
-   "lon": 32.821767,
-   "name": "Banda Kyandaaza"
-  },
-  {
-   "lat": 0.275705,
-   "lon": 32.596462,
-   "name": "Makindye Hill"
-  },
-  {
-   "lat": 0.236677,
-   "lon": 32.535084,
-   "name": "Prayer Mountain"
-  },
-  {
-   "lat": -1.020505,
-   "lon": 34.125005,
-   "name": "Bay Zone Hill Muhuru Bay"
-  },
-  {
-   "lat": 0.649258,
-   "lon": 34.560155,
-   "name": "Sabwino Hill"
+   "lat": -3.390781,
+   "lon": 36.699541,
+   "name": "Themi Hill"
   },
   {
    "lat": 0.351094,
@@ -3125,59 +2565,49 @@
    "name": "Bethany Hill"
   },
   {
-   "lat": 0.149915,
-   "lon": 34.66339,
-   "name": "Misango Hill"
+   "lat": -0.454145,
+   "lon": 34.559788,
+   "name": "God Samanga"
   },
   {
-   "lat": -4.795425,
-   "lon": 38.323986,
-   "name": "Kivuga Peak"
+   "lat": -0.316518,
+   "lon": 38.227532,
+   "name": "Kalimani Rock"
   },
   {
-   "lat": -1.346103,
-   "lon": 33.866303,
-   "name": "Nyashushe"
+   "lat": 1.200207,
+   "lon": 37.240053,
+   "name": "Lowua Werikoi"
   },
   {
-   "lat": 1.071218,
-   "lon": 37.844983,
-   "name": "Donyo Leuwa Mara"
+   "lat": 4.184283,
+   "lon": 33.541642,
+   "name": "Dhuluha"
   },
   {
-   "lat": 1.053562,
-   "lon": 37.850862,
-   "name": "Leuwa Mara"
+   "lat": 4.187513,
+   "lon": 33.57272,
+   "name": "Loiro"
   },
   {
-   "lat": 0.240677,
-   "lon": 34.755589,
-   "name": "Crying Stone (Ikhonga Murwi)"
+   "lat": 4.14695,
+   "lon": 33.578091,
+   "name": "Beeti-Holi"
   },
   {
-   "lat": 0.862943,
-   "lon": 37.588055,
-   "name": "Nkadoru Murto (Cat and mouse)"
+   "lat": -0.366573,
+   "lon": 34.706764,
+   "name": "God Bim"
   },
   {
-   "lat": 3.624584,
-   "lon": 33.74931,
-   "name": "Kikis-Loitanit hill"
+   "lat": -0.376873,
+   "lon": 34.723285,
+   "name": "Amuoro"
   },
   {
-   "lat": 1.177005,
-   "lon": 37.368482,
-   "name": "Sheeps Head Rock"
-  },
-  {
-   "lat": -4.032133,
-   "lon": 35.856617,
-   "name": "Sangaiwe Hills"
-  },
-  {
-   "lat": -0.411531,
-   "lon": 34.172025,
-   "name": "Lunene"
+   "lat": 1.730412,
+   "lon": 37.303493,
+   "name": "Kilabunyo"
   },
   {
    "lat": 0.162984,
@@ -3190,68 +2620,74 @@
    "name": "Busuwa hill"
   },
   {
-   "lat": 0.447926,
-   "lon": 36.860027,
-   "name": "Sotingiro Rock"
+   "lat": -0.80901,
+   "lon": 37.184366,
+   "name": "Karua Hill"
   },
   {
-   "lat": 1.165242,
-   "lon": 36.343799,
-   "name": "Steam Vent Mt. Suswa",
+   "lat": -2.49053,
+   "lon": 34.767878,
+   "name": "Makoma Hill"
+  },
+  {
+   "lat": -1.731809,
+   "lon": 34.611378,
+   "name": "Mlima Kwanina",
+   "name_en": "Kwanina Mountain"
+  },
+  {
+   "lat": 1.719476,
+   "lon": 37.370743,
+   "name": "Lonyeri Pesho"
+  },
+  {
+   "lat": -4.172462,
+   "lon": 35.237375,
+   "name": "Maretadu Hills"
+  },
+  {
+   "lat": 2.604583,
+   "lon": 32.443585,
+   "name": "Got Omoro"
+  },
+  {
+   "lat": -2.67468,
+   "lon": 34.912273,
+   "name": "Simba Kopjes"
+  },
+  {
+   "lat": 3.520625,
+   "lon": 37.780689,
+   "name": "Burarata",
    "volcano": true
   },
   {
-   "lat": 0.219012,
-   "lon": 32.458917,
-   "name": "Lamba hill"
+   "lat": 0.300449,
+   "lon": 32.46387,
+   "name": "Nakitokaro hill"
   },
   {
-   "lat": 0.264694,
-   "lon": 32.474818,
-   "name": "Mukono hill"
+   "lat": -2.962227,
+   "lon": 37.976668,
+   "name": "Poachers Lookout",
+   "wikidata": "Q27191953"
   },
   {
-   "lat": 0.223668,
-   "lon": 32.506854,
-   "name": "Munkabira hill"
-  },
-  {
-   "lat": 0.182839,
-   "lon": 32.457898,
-   "name": "Katwe hill"
-  },
-  {
-   "lat": -3.237767,
-   "lon": 36.762464,
-   "name": "Mount Meru Ashcone",
-   "wikidata": "Q309098",
+   "lat": -2.759545,
+   "lon": 35.914089,
+   "name": "Ol Doinyo Lengai",
+   "wikidata": "Q746787",
    "volcano": true
   },
   {
-   "lat": -3.46825,
-   "lon": 37.667523,
-   "name": "Python Hill"
+   "lat": 0.254752,
+   "lon": 32.615023,
+   "name": "Buziga Hill"
   },
   {
-   "lat": -3.440513,
-   "lon": 37.585388,
-   "name": "Lemrika Hill"
-  },
-  {
-   "lat": -3.4101,
-   "lon": 37.623931,
-   "name": "Latema"
-  },
-  {
-   "lat": -3.408821,
-   "lon": 38.238116,
-   "name": "Mashile",
-   "wikidata": "Q27194026"
-  },
-  {
-   "lat": -3.521039,
-   "lon": 38.411487,
-   "name": "Sembe"
+   "lat": 0.149915,
+   "lon": 34.66339,
+   "name": "Misango Hill"
   },
   {
    "lat": -3.40338,
@@ -3265,177 +2701,9 @@
    "wikidata": "Q27190722"
   },
   {
-   "lat": -1.776091,
-   "lon": 37.24878,
-   "name": "Kilima Kiu Hill"
-  },
-  {
-   "lat": 0.302499,
-   "lon": 32.552017,
-   "name": "Rubaga Hill"
-  },
-  {
-   "lat": 0.324042,
-   "lon": 32.578828,
-   "name": "Nakasero Hill"
-  },
-  {
-   "lat": 0.329874,
-   "lon": 32.545487,
-   "name": "Lubya Hill",
-   "wikidata": "Q31396692"
-  },
-  {
-   "lat": 0.331097,
-   "lon": 32.568404,
-   "name": "Makerere Hill"
-  },
-  {
-   "lat": 0.326377,
-   "lon": 32.629022,
-   "name": "Mbuya Hill"
-  },
-  {
-   "lat": 0.293826,
-   "lon": 32.610912,
-   "name": "Muyenga Tank Hill"
-  },
-  {
-   "lat": 0.296964,
-   "lon": 32.495962,
-   "name": "Nkokonjeru hill"
-  },
-  {
    "lat": -0.712603,
    "lon": 34.713215,
    "name": "Nsaria"
-  },
-  {
-   "lat": -1.774351,
-   "lon": 34.584494,
-   "name": "Mountain Itunu",
-   "name_en": "Mountain Itunu"
-  },
-  {
-   "lat": -2.146403,
-   "lon": 34.700352,
-   "name": "Robanda Mountain",
-   "name_en": "Robanda Mountain"
-  },
-  {
-   "lat": -2.085673,
-   "lon": 34.633418,
-   "name": "Fort Ikoma Peak Ground"
-  },
-  {
-   "lat": -3.502058,
-   "lon": 38.259229,
-   "name": "Mititatu Hill"
-  },
-  {
-   "lat": -3.354325,
-   "lon": 37.9292,
-   "name": "1060"
-  },
-  {
-   "lat": -3.449271,
-   "lon": 37.740854,
-   "name": "Girigan Hills",
-   "wikidata": "Q27197512"
-  },
-  {
-   "lat": -3.394946,
-   "lon": 38.402304,
-   "name": "Ron'ge"
-  },
-  {
-   "lat": -3.548157,
-   "lon": 38.412976,
-   "name": "Zongoloni"
-  },
-  {
-   "lat": -3.545458,
-   "lon": 38.363251,
-   "name": "Naoni"
-  },
-  {
-   "lat": -3.573795,
-   "lon": 38.36807,
-   "name": "Tasha"
-  },
-  {
-   "lat": -3.583872,
-   "lon": 38.369143,
-   "name": "Mkengeren",
-   "wikidata": "Q27194158"
-  },
-  {
-   "lat": -3.520176,
-   "lon": 38.285757,
-   "name": "Mukiaio Hill"
-  },
-  {
-   "lat": -3.543712,
-   "lon": 38.33078,
-   "name": "Tarama Hill"
-  },
-  {
-   "lat": -3.547787,
-   "lon": 38.304287,
-   "name": "Mgama Hill"
-  },
-  {
-   "lat": -3.624524,
-   "lon": 38.321296,
-   "name": "Lilani Hill"
-  },
-  {
-   "lat": -3.590113,
-   "lon": 38.282843,
-   "name": "Alia Hill"
-  },
-  {
-   "lat": -3.63175,
-   "lon": 38.297148,
-   "name": "Kide"
-  },
-  {
-   "lat": -3.615131,
-   "lon": 38.2497,
-   "name": "Mtongore"
-  },
-  {
-   "lat": -3.685164,
-   "lon": 38.355348,
-   "name": "Mwairimba hill",
-   "wikidata": "Q27193913"
-  },
-  {
-   "lat": -3.645995,
-   "lon": 38.260462,
-   "name": "Kasindano"
-  },
-  {
-   "lat": -3.667328,
-   "lon": 38.306463,
-   "name": "Mikeli",
-   "wikidata": "Q27194139"
-  },
-  {
-   "lat": -3.685843,
-   "lon": 38.410319,
-   "name": "Kore Hill",
-   "wikidata": "Q27195137"
-  },
-  {
-   "lat": -3.381455,
-   "lon": 38.556928,
-   "name": "Mwange"
-  },
-  {
-   "lat": -3.513862,
-   "lon": 38.497005,
-   "name": "Mugeno"
   },
   {
    "lat": 0.285743,
@@ -3448,463 +2716,14 @@
    "name": "Observation Hill"
   },
   {
-   "lat": 0.147091,
-   "lon": 37.08308,
-   "name": "Mlima Nchorai"
-  },
-  {
-   "lat": 0.171633,
-   "lon": 37.090874,
-   "name": "Mlima ya Kihara"
-  },
-  {
-   "lat": 0.33873,
-   "lon": 37.111508,
-   "name": "Ngainitu"
-  },
-  {
-   "lat": 0.111964,
-   "lon": 32.542469,
-   "name": "Kisubi Semitary Hill"
-  },
-  {
-   "lat": 0.153113,
-   "lon": 32.485245,
-   "name": "Nongolo hill"
-  },
-  {
    "lat": -0.283889,
    "lon": 36.611052,
    "name": "Dragon's Teeth"
   },
   {
-   "lat": -0.80901,
-   "lon": 37.184366,
-   "name": "Karua Hill"
-  },
-  {
-   "lat": -0.029891,
-   "lon": 34.923879,
-   "name": "Monkey Rock"
-  },
-  {
-   "lat": 0.243782,
-   "lon": 37.239497,
-   "name": "Soimoko"
-  },
-  {
-   "lat": -0.58052,
-   "lon": 37.204274,
-   "name": "Kamigungu Hill"
-  },
-  {
-   "lat": -0.521668,
-   "lon": 37.19737,
-   "name": "Kairungu Hill"
-  },
-  {
-   "lat": -0.536779,
-   "lon": 36.969775,
-   "name": "Karĩma Hill",
-   "wikidata": "Q27196314"
-  },
-  {
-   "lat": -0.433081,
-   "lon": 37.139601,
-   "name": "Kargena HIll"
-  },
-  {
-   "lat": -0.418696,
-   "lon": 37.118541,
-   "name": "Kamisieru Hill"
-  },
-  {
-   "lat": -0.416646,
-   "lon": 37.107411,
-   "name": "Geitiati Hill"
-  },
-  {
-   "lat": -0.370656,
-   "lon": 37.108337,
-   "name": "Niana Hill"
-  },
-  {
-   "lat": 0.69626,
-   "lon": 37.791798,
-   "name": "Kolua Hills"
-  },
-  {
-   "lat": -0.442769,
-   "lon": 36.007391,
-   "name": "Mt Clara"
-  },
-  {
-   "lat": 2.604583,
-   "lon": 32.443585,
-   "name": "Got Omoro"
-  },
-  {
-   "lat": 1.332336,
-   "lon": 36.441772,
-   "name": "Nataruk"
-  },
-  {
-   "lat": 0.606173,
-   "lon": 37.560109,
-   "name": "Kiotogorr"
-  },
-  {
-   "lat": 0.646409,
-   "lon": 37.551778,
-   "name": "Lowa Mara"
-  },
-  {
-   "lat": 0.293249,
-   "lon": 32.47147,
-   "name": "Namagoma hill"
-  },
-  {
-   "lat": 0.301838,
-   "lon": 32.441497,
-   "name": "Manja hill"
-  },
-  {
-   "lat": -2.602158,
-   "lon": 32.38743,
-   "name": "mountain1"
-  },
-  {
-   "lat": 0.684929,
-   "lon": 37.783634,
-   "name": "Mount Shaba"
-  },
-  {
-   "lat": 1.013322,
-   "lon": 34.185201,
-   "name": "Budeko Rock Querry",
-   "ele": 0
-  },
-  {
-   "lat": -1.136462,
-   "lon": 36.340505,
-   "name": "Mount Suswa",
-   "volcano": true
-  },
-  {
-   "lat": -2.727843,
-   "lon": 37.535192,
-   "name": "Giraffe Hill"
-  },
-  {
-   "lat": -2.721862,
-   "lon": 37.5488,
-   "name": "Sundowner Hill"
-  },
-  {
-   "lat": -2.49053,
-   "lon": 34.767878,
-   "name": "Makoma Hill"
-  },
-  {
-   "lat": -2.67468,
-   "lon": 34.912273,
-   "name": "Simba Kopjes"
-  },
-  {
-   "lat": -0.172591,
-   "lon": 37.981386,
-   "name": "Ruau Hill"
-  },
-  {
-   "lat": -0.499338,
-   "lon": 36.242574,
-   "name": "Sleeping Warrior Nose"
-  },
-  {
-   "lat": -0.499265,
-   "lon": 36.244445,
-   "name": "Seeping Warrior Forehead"
-  },
-  {
    "lat": -0.644213,
    "lon": 35.005432,
    "name": "Kipkebe Top"
-  },
-  {
-   "lat": -3.394372,
-   "lon": 36.079881,
-   "name": "Losimingur"
-  },
-  {
-   "lat": -0.454145,
-   "lon": 34.559788,
-   "name": "God Samanga"
-  },
-  {
-   "lat": -1.731809,
-   "lon": 34.611378,
-   "name": "Mlima Kwanina",
-   "name_en": "Kwanina Mountain"
-  },
-  {
-   "lat": -2.145308,
-   "lon": 33.507911,
-   "name": "Mlima Nyeruma"
-  },
-  {
-   "lat": 4.779293,
-   "lon": 35.503742,
-   "name": "Nawakaiya"
-  },
-  {
-   "lat": -0.665448,
-   "lon": 36.71004,
-   "name": "Elephant Hill Summit"
-  },
-  {
-   "lat": 3.800949,
-   "lon": 33.872906,
-   "name": "2140"
-  },
-  {
-   "lat": 3.520625,
-   "lon": 37.780689,
-   "name": "Burarata",
-   "volcano": true
-  },
-  {
-   "lat": 3.363297,
-   "lon": 37.713404,
-   "name": "Gathaa",
-   "volcano": true
-  },
-  {
-   "lat": 4.137454,
-   "lon": 33.72106,
-   "name": "Lotiathe Peak"
-  },
-  {
-   "lat": 4.186894,
-   "lon": 32.296494,
-   "name": "Iro"
-  },
-  {
-   "lat": 4.899403,
-   "lon": 33.93994,
-   "name": "Nachua Hills"
-  },
-  {
-   "lat": 0.05565,
-   "lon": 32.510798,
-   "name": "Luwama hill"
-  },
-  {
-   "lat": 0.044686,
-   "lon": 32.556477,
-   "name": "Tende hill"
-  },
-  {
-   "lat": 0.300449,
-   "lon": 32.46387,
-   "name": "Nakitokaro hill"
-  },
-  {
-   "lat": 1.911438,
-   "lon": 36.428951,
-   "name": "Aruba Rock"
-  },
-  {
-   "lat": 3.34965,
-   "lon": 37.716153,
-   "name": "Did keesa"
-  },
-  {
-   "lat": 3.318492,
-   "lon": 37.644473,
-   "name": "Tuluu Galaa"
-  },
-  {
-   "lat": 3.321009,
-   "lon": 37.698021,
-   "name": "Qubi mata dhaka"
-  },
-  {
-   "lat": 3.18367,
-   "lon": 37.526112,
-   "name": "Afkab"
-  },
-  {
-   "lat": 3.172442,
-   "lon": 37.582372,
-   "name": "Tuluu Dimtu"
-  },
-  {
-   "lat": 3.165937,
-   "lon": 37.647196,
-   "name": "Wara"
-  },
-  {
-   "lat": 3.361045,
-   "lon": 37.722709,
-   "name": "Qubi Bubiftu"
-  },
-  {
-   "lat": 3.357705,
-   "lon": 37.721261,
-   "name": "Qubi Bubiftu"
-  },
-  {
-   "lat": -0.117731,
-   "lon": 34.540728,
-   "name": "Kit-Mikayi",
-   "wikidata": "Q1707574"
-  },
-  {
-   "lat": 2.359913,
-   "lon": 36.591339,
-   "name": "Teleki volcano",
-   "wikidata": "Q27191011",
-   "volcano": true
-  },
-  {
-   "lat": 2.315854,
-   "lon": 36.524219,
-   "name": "Kalolenyang",
-   "volcano": true
-  },
-  {
-   "lat": 3.466207,
-   "lon": 37.671933,
-   "name": "Qubi gara ano"
-  },
-  {
-   "lat": 3.496361,
-   "lon": 37.49097,
-   "name": "Tumtich"
-  },
-  {
-   "lat": 4.140516,
-   "lon": 34.016256,
-   "name": "Lotholia"
-  },
-  {
-   "lat": 4.151244,
-   "lon": 33.73621,
-   "name": "Lochilir"
-  },
-  {
-   "lat": 3.531268,
-   "lon": 32.099494,
-   "name": "Jabal Ebijo",
-   "name_en": "Jabal Ebijo"
-  },
-  {
-   "lat": 4.566667,
-   "lon": 34.316667,
-   "name": "Narokon",
-   "name_en": "Narokon"
-  },
-  {
-   "lat": 3.749975,
-   "lon": 33.512772,
-   "name": "Lonyili",
-   "name_en": "Lonyili"
-  },
-  {
-   "lat": 3.765934,
-   "lon": 32.720199,
-   "name": "Aggu",
-   "name_en": "Aggu"
-  },
-  {
-   "lat": 3.890955,
-   "lon": 33.02726,
-   "name": "Modole",
-   "name_en": "Modole"
-  },
-  {
-   "lat": 3.840682,
-   "lon": 32.938989,
-   "name": "Agorro Mountains",
-   "name_en": "Agorro Mountains"
-  },
-  {
-   "lat": 3.496049,
-   "lon": 37.552177,
-   "name": "Kalesa Mata Jala"
-  },
-  {
-   "lat": 3.391684,
-   "lon": 37.73962,
-   "name": "Dibu lonlubo"
-  },
-  {
-   "lat": 3.363423,
-   "lon": 37.746986,
-   "name": "Qubi Mabartafi"
-  },
-  {
-   "lat": 3.438576,
-   "lon": 37.749608,
-   "name": "Boqore"
-  },
-  {
-   "lat": 3.369253,
-   "lon": 37.744822,
-   "name": "Qubi gara dolola"
-  },
-  {
-   "lat": 3.388173,
-   "lon": 37.799495,
-   "name": "Jaldesa Diqa"
-  },
-  {
-   "lat": 3.378304,
-   "lon": 37.801798,
-   "name": "Jaldesa Guda"
-  },
-  {
-   "lat": 3.449764,
-   "lon": 37.766623,
-   "name": "Gara Mboga"
-  },
-  {
-   "lat": 3.433299,
-   "lon": 37.711828,
-   "name": "Gof Lon elema"
-  },
-  {
-   "lat": 3.26562,
-   "lon": 37.696877,
-   "name": "Golinacha",
-   "wikidata": "Q27197532"
-  },
-  {
-   "lat": 3.218856,
-   "lon": 37.678689,
-   "name": "Buta",
-   "wikidata": "Q27198559"
-  },
-  {
-   "lat": 3.291235,
-   "lon": 37.678813,
-   "name": "Salla Dakara"
-  },
-  {
-   "lat": 3.309283,
-   "lon": 37.664589,
-   "name": "Qubi Bulto Algi"
-  },
-  {
-   "lat": 3.159927,
-   "lon": 35.586991,
-   "name": "Lodwar Cone",
-   "wikidata": "Q27195406"
-  },
-  {
-   "lat": 0.08564,
-   "lon": 32.513571,
-   "name": "Nkumba Hill"
   },
   {
    "lat": -3.097563,
@@ -4037,49 +2856,343 @@
    "name": "Edonyo Dapash"
   },
   {
-   "lat": 4.001194,
-   "lon": 33.442698,
-   "name": "Latome"
-  },
-  {
-   "lat": 1.014808,
-   "lon": 34.18377,
-   "name": "Bwalula Rock"
-  },
-  {
    "lat": -2.748741,
    "lon": 35.270993,
    "name": "Cloud"
   },
   {
-   "lat": 3.489357,
-   "lon": 37.813452,
-   "name": "Gara Gadamsa"
+   "lat": 4.173775,
+   "lon": 34.115768,
+   "name": "Mur-choorok"
   },
   {
-   "lat": 3.429063,
-   "lon": 37.69944,
-   "name": "Qubi Bora"
+   "lat": -3.867742,
+   "lon": 36.146701,
+   "name": "Boundary Hill"
   },
   {
-   "lat": 3.305579,
-   "lon": 37.688119,
-   "name": "Salla Dakara"
+   "lat": -1.174848,
+   "lon": 36.348525,
+   "name": "Mt. Suswa",
+   "name_en": "Mount Suswa",
+   "wikidata": "Q3622751"
   },
   {
-   "lat": 3.429984,
-   "lon": 37.790219,
-   "name": "Gara Dao"
+   "lat": -2.691339,
+   "lon": 37.15154,
+   "name": "Kitirua Hill"
   },
   {
-   "lat": 3.418191,
-   "lon": 37.696648,
-   "name": "Shanqera Mountain"
+   "lat": -2.703686,
+   "lon": 37.155165,
+   "name": "Ositet Hill"
   },
   {
-   "lat": 3.307736,
-   "lon": 37.733775,
-   "name": "Salla Ree Tore"
+   "lat": -2.996389,
+   "lon": 39.263555,
+   "name": "Lali Hills"
+  },
+  {
+   "lat": -0.136071,
+   "lon": 35.743521,
+   "name": "Mount Londiani"
+  },
+  {
+   "lat": 1.241526,
+   "lon": 36.684654,
+   "name": "Poror Peak"
+  },
+  {
+   "lat": -0.202029,
+   "lon": 36.070337,
+   "name": "Menengai Crater",
+   "wikidata": "Q1672337",
+   "volcano": true
+  },
+  {
+   "lat": -3.52413,
+   "lon": 36.603868,
+   "name": "Mungu Crater",
+   "volcano": true
+  },
+  {
+   "lat": -4.032133,
+   "lon": 35.856617,
+   "name": "Sangaiwe Hills"
+  },
+  {
+   "lat": -0.536779,
+   "lon": 36.969775,
+   "name": "Karĩma Hill",
+   "wikidata": "Q27196314"
+  },
+  {
+   "lat": -0.433081,
+   "lon": 37.139601,
+   "name": "Kargena HIll"
+  },
+  {
+   "lat": -0.418696,
+   "lon": 37.118541,
+   "name": "Kamisieru Hill"
+  },
+  {
+   "lat": -0.416646,
+   "lon": 37.107411,
+   "name": "Geitiati Hill"
+  },
+  {
+   "lat": -0.370656,
+   "lon": 37.108337,
+   "name": "Niana Hill"
+  },
+  {
+   "lat": 4.899403,
+   "lon": 33.93994,
+   "name": "Nachua Hills"
+  },
+  {
+   "lat": 0.539813,
+   "lon": 34.11786,
+   "name": "1241"
+  },
+  {
+   "lat": 0.352984,
+   "lon": 32.74384,
+   "name": "BESANIYA PRAYER MOUNTAIN"
+  },
+  {
+   "lat": 1.709157,
+   "lon": 37.717252,
+   "name": "Lodermurt"
+  },
+  {
+   "lat": 0.265006,
+   "lon": 32.821767,
+   "name": "Banda Kyandaaza"
+  },
+  {
+   "lat": 0.243782,
+   "lon": 37.239497,
+   "name": "Soimoko"
+  },
+  {
+   "lat": -0.58052,
+   "lon": 37.204274,
+   "name": "Kamigungu Hill"
+  },
+  {
+   "lat": -0.521668,
+   "lon": 37.19737,
+   "name": "Kairungu Hill"
+  },
+  {
+   "lat": 0.7222,
+   "lon": 35.452947,
+   "name": "Karonai"
+  },
+  {
+   "lat": 3.745465,
+   "lon": 33.84869,
+   "name": "Kocholo"
+  },
+  {
+   "lat": 4.514606,
+   "lon": 33.366605,
+   "name": "Irum"
+  },
+  {
+   "lat": 4.41336,
+   "lon": 33.366523,
+   "name": "JURI"
+  },
+  {
+   "lat": -2.511521,
+   "lon": 34.884955,
+   "name": "Massai Kopjes"
+  },
+  {
+   "lat": 1.709726,
+   "lon": 33.620581,
+   "name": "Soroti Rock"
+  },
+  {
+   "lat": 0.219012,
+   "lon": 32.458917,
+   "name": "Lamba hill"
+  },
+  {
+   "lat": 0.264694,
+   "lon": 32.474818,
+   "name": "Mukono hill"
+  },
+  {
+   "lat": 0.223668,
+   "lon": 32.506854,
+   "name": "Munkabira hill"
+  },
+  {
+   "lat": 0.182839,
+   "lon": 32.457898,
+   "name": "Katwe hill"
+  },
+  {
+   "lat": -1.776091,
+   "lon": 37.24878,
+   "name": "Kilima Kiu Hill"
+  },
+  {
+   "lat": -3.502058,
+   "lon": 38.259229,
+   "name": "Mititatu Hill"
+  },
+  {
+   "lat": 4.140516,
+   "lon": 34.016256,
+   "name": "Lotholia"
+  },
+  {
+   "lat": 1.76666,
+   "lon": 37.542595,
+   "name": "Baio",
+   "wikidata": "Q27198942"
+  },
+  {
+   "lat": 1.8156,
+   "lon": 37.638915,
+   "name": "Ilim",
+   "wikidata": "Q27197667"
+  },
+  {
+   "lat": -3.46825,
+   "lon": 37.667523,
+   "name": "Python Hill"
+  },
+  {
+   "lat": -3.394946,
+   "lon": 38.402304,
+   "name": "Ron'ge"
+  },
+  {
+   "lat": -3.548157,
+   "lon": 38.412976,
+   "name": "Zongoloni"
+  },
+  {
+   "lat": -3.545458,
+   "lon": 38.363251,
+   "name": "Naoni"
+  },
+  {
+   "lat": -3.573795,
+   "lon": 38.36807,
+   "name": "Tasha"
+  },
+  {
+   "lat": -3.583872,
+   "lon": 38.369143,
+   "name": "Mkengeren",
+   "wikidata": "Q27194158"
+  },
+  {
+   "lat": -3.520176,
+   "lon": 38.285757,
+   "name": "Mukiaio Hill"
+  },
+  {
+   "lat": -3.543712,
+   "lon": 38.33078,
+   "name": "Tarama Hill"
+  },
+  {
+   "lat": -3.547787,
+   "lon": 38.304287,
+   "name": "Mgama Hill"
+  },
+  {
+   "lat": -3.624524,
+   "lon": 38.321296,
+   "name": "Lilani Hill"
+  },
+  {
+   "lat": -3.590113,
+   "lon": 38.282843,
+   "name": "Alia Hill"
+  },
+  {
+   "lat": -3.63175,
+   "lon": 38.297148,
+   "name": "Kide"
+  },
+  {
+   "lat": -3.615131,
+   "lon": 38.2497,
+   "name": "Mtongore"
+  },
+  {
+   "lat": -3.685164,
+   "lon": 38.355348,
+   "name": "Mwairimba hill",
+   "wikidata": "Q27193913"
+  },
+  {
+   "lat": -3.645995,
+   "lon": 38.260462,
+   "name": "Kasindano"
+  },
+  {
+   "lat": -3.667328,
+   "lon": 38.306463,
+   "name": "Mikeli",
+   "wikidata": "Q27194139"
+  },
+  {
+   "lat": -3.685843,
+   "lon": 38.410319,
+   "name": "Kore Hill",
+   "wikidata": "Q27195137"
+  },
+  {
+   "lat": 0.147091,
+   "lon": 37.08308,
+   "name": "Mlima Nchorai"
+  },
+  {
+   "lat": 0.171633,
+   "lon": 37.090874,
+   "name": "Mlima ya Kihara"
+  },
+  {
+   "lat": 0.684929,
+   "lon": 37.783634,
+   "name": "Mount Shaba"
+  },
+  {
+   "lat": -0.391025,
+   "lon": 36.959041,
+   "name": "TREE"
+  },
+  {
+   "lat": -0.859533,
+   "lon": 36.362511,
+   "name": "Fisher's Tower"
+  },
+  {
+   "lat": -0.914438,
+   "lon": 36.456458,
+   "name": "Longonot",
+   "wikidata": "Q1520750",
+   "volcano": true
+  },
+  {
+   "lat": 1.071218,
+   "lon": 37.844983,
+   "name": "Donyo Leuwa Mara"
+  },
+  {
+   "lat": 1.053562,
+   "lon": 37.850862,
+   "name": "Leuwa Mara"
   },
   {
    "lat": 0.710295,
@@ -4107,39 +3220,124 @@
    "name": "1308"
   },
   {
-   "lat": 0.540838,
-   "lon": 34.030237,
-   "name": "1200"
+   "lat": 2.769,
+   "lon": 41.9618,
+   "name": "Buuraha Dhehle"
   },
   {
-   "lat": 0.541873,
-   "lon": 34.019106,
-   "name": "1214"
+   "lat": 2.7611,
+   "lon": 42.1328,
+   "name": "Qaw Qaw Saare"
   },
   {
-   "lat": 0.505815,
-   "lon": 33.938549,
-   "name": "1253"
+   "lat": 3.368939,
+   "lon": 42.145936,
+   "name": "Buuraha Jabane"
   },
   {
-   "lat": 0.508985,
-   "lon": 33.951606,
-   "name": "1262"
+   "lat": 3.412249,
+   "lon": 42.235492,
+   "name": "Buuraha Laamaloosh"
   },
   {
-   "lat": 0.518453,
-   "lon": 33.961208,
-   "name": "1236"
+   "lat": 3.186347,
+   "lon": 41.998562,
+   "name": "Jirta Tixay"
   },
   {
-   "lat": 0.539813,
-   "lon": 34.11786,
-   "name": "1241"
+   "lat": 2.766667,
+   "lon": 42.083333,
+   "name": "Raamo Shabeel"
   },
   {
-   "lat": -0.382518,
-   "lon": 36.624813,
-   "name": "Mountain gate"
+   "lat": 3.373172,
+   "lon": 41.801776,
+   "name": "Buuraha Jirta Galdeys"
+  },
+  {
+   "lat": 2.4223,
+   "lon": 41.6272,
+   "name": "Aadan Birkaan"
+  },
+  {
+   "lat": 3.0055,
+   "lon": 41.9332,
+   "name": "Buuraha Bahale"
+  },
+  {
+   "lat": 2.9861,
+   "lon": 42.3133,
+   "name": "God Waraabe"
+  },
+  {
+   "lat": 2.55,
+   "lon": 41.65,
+   "name": "Qulquul Shubal"
+  },
+  {
+   "lat": 3.295572,
+   "lon": 42.21886,
+   "name": "Buuraha Singalay"
+  },
+  {
+   "lat": 3.468609,
+   "lon": 41.799656,
+   "name": "Xamurka"
+  },
+  {
+   "lat": 2.542,
+   "lon": 42.2035,
+   "name": "Waamo Yarey"
+  },
+  {
+   "lat": 2.5626,
+   "lon": 41.7639,
+   "name": "Dhudhu"
+  },
+  {
+   "lat": 2.9322,
+   "lon": 42.2396,
+   "name": "Faan Weyn"
+  },
+  {
+   "lat": 2.8317,
+   "lon": 42.0261,
+   "name": "Haar Cad"
+  },
+  {
+   "lat": 3.447476,
+   "lon": 41.779269,
+   "name": "Jaaldeyso"
+  },
+  {
+   "lat": 2.6143,
+   "lon": 41.6833,
+   "name": "Xamaroy"
+  },
+  {
+   "lat": 2.7993,
+   "lon": 41.9374,
+   "name": "Buuraha Jirta Boorya Gooryaale"
+  },
+  {
+   "lat": 2.733333,
+   "lon": 41.8,
+   "name": "Buuraha Waraabaale"
+  },
+  {
+   "lat": -0.499338,
+   "lon": 36.242574,
+   "name": "Sleeping Warrior Nose"
+  },
+  {
+   "lat": -0.499265,
+   "lon": 36.244445,
+   "name": "Seeping Warrior Forehead"
+  },
+  {
+   "lat": -2.145308,
+   "lon": 33.507911,
+   "name": "Mlima Nyeruma"
   },
   {
    "lat": 0.734476,
@@ -4167,22 +3365,329 @@
    "name": "Komilo"
   },
   {
-   "lat": -1.947534,
-   "lon": 37.324713,
-   "name": "Kiou"
+   "lat": 4.907755,
+   "lon": 32.626513,
+   "name": "Ingeshe Mt. peak"
   },
   {
-   "lat": -2.962227,
-   "lon": 37.976668,
-   "name": "Poachers Lookout",
-   "wikidata": "Q27191953"
+   "lat": 1.333666,
+   "lon": 37.902459,
+   "name": "Lepusi"
   },
   {
-   "lat": 2.413636,
-   "lon": 36.622353,
-   "name": "Nabiyotum Cone",
-   "wikidata": "Q27192887",
+   "lat": 1.388951,
+   "lon": 37.814316,
+   "name": "Sasani"
+  },
+  {
+   "lat": -3.34788,
+   "lon": 36.712421,
+   "name": "Oldoinyo Sabuk"
+  },
+  {
+   "lat": -3.328413,
+   "lon": 36.727597,
+   "name": "Kivesi Hill"
+  },
+  {
+   "lat": -3.345785,
+   "lon": 36.734685,
+   "name": "Kivutu"
+  },
+  {
+   "lat": 3.567271,
+   "lon": 33.922322,
+   "name": "Mount Lowakut"
+  },
+  {
+   "lat": 2.169505,
+   "lon": 40.140126,
+   "name": "Tarbaj Hill"
+  },
+  {
+   "lat": 2.68798,
+   "lon": 40.23803,
+   "name": "Qabot Go'one Hill"
+  },
+  {
+   "lat": 2.65871,
+   "lon": 40.245612,
+   "name": "Qabot Hills"
+  },
+  {
+   "lat": 0.447926,
+   "lon": 36.860027,
+   "name": "Sotingiro Rock"
+  },
+  {
+   "lat": 1.165242,
+   "lon": 36.343799,
+   "name": "Steam Vent Mt. Suswa",
    "volcano": true
+  },
+  {
+   "lat": -2.721862,
+   "lon": 37.5488,
+   "name": "Sundowner Hill"
+  },
+  {
+   "lat": 4.130207,
+   "lon": 33.803021,
+   "name": "Caar"
+  },
+  {
+   "lat": -3.876369,
+   "lon": 38.76126,
+   "name": "Manjuga"
+  },
+  {
+   "lat": -3.835281,
+   "lon": 38.750129,
+   "name": "Mwakasi"
+  },
+  {
+   "lat": -3.860415,
+   "lon": 38.757131,
+   "name": "Rukinga"
+  },
+  {
+   "lat": 0.33873,
+   "lon": 37.111508,
+   "name": "Ngainitu"
+  },
+  {
+   "lat": -2.727843,
+   "lon": 37.535192,
+   "name": "Giraffe Hill"
+  },
+  {
+   "lat": 0.05565,
+   "lon": 32.510798,
+   "name": "Luwama hill"
+  },
+  {
+   "lat": 0.044686,
+   "lon": 32.556477,
+   "name": "Tende hill"
+  },
+  {
+   "lat": 3.159927,
+   "lon": 35.586991,
+   "name": "Lodwar Cone",
+   "wikidata": "Q27195406"
+  },
+  {
+   "lat": 0.672978,
+   "lon": 35.84076,
+   "name": "Tugen Hills"
+  },
+  {
+   "lat": -2.482659,
+   "lon": 38.099901,
+   "name": "Kalimakoi",
+   "wikidata": "Q27197863"
+  },
+  {
+   "lat": -3.440513,
+   "lon": 37.585388,
+   "name": "Lemrika Hill"
+  },
+  {
+   "lat": -3.4101,
+   "lon": 37.623931,
+   "name": "Latema"
+  },
+  {
+   "lat": -3.408821,
+   "lon": 38.238116,
+   "name": "Mashile",
+   "wikidata": "Q27194026"
+  },
+  {
+   "lat": -3.521039,
+   "lon": 38.411487,
+   "name": "Sembe"
+  },
+  {
+   "lat": -3.381455,
+   "lon": 38.556928,
+   "name": "Mwange"
+  },
+  {
+   "lat": -3.513862,
+   "lon": 38.497005,
+   "name": "Mugeno"
+  },
+  {
+   "lat": 1.332336,
+   "lon": 36.441772,
+   "name": "Nataruk"
+  },
+  {
+   "lat": 0.606173,
+   "lon": 37.560109,
+   "name": "Kiotogorr"
+  },
+  {
+   "lat": 0.646409,
+   "lon": 37.551778,
+   "name": "Lowa Mara"
+  },
+  {
+   "lat": 3.34965,
+   "lon": 37.716153,
+   "name": "Did keesa"
+  },
+  {
+   "lat": 3.318492,
+   "lon": 37.644473,
+   "name": "Tuluu Galaa"
+  },
+  {
+   "lat": 3.321009,
+   "lon": 37.698021,
+   "name": "Qubi mata dhaka"
+  },
+  {
+   "lat": 3.18367,
+   "lon": 37.526112,
+   "name": "Afkab"
+  },
+  {
+   "lat": 3.172442,
+   "lon": 37.582372,
+   "name": "Tuluu Dimtu"
+  },
+  {
+   "lat": 3.165937,
+   "lon": 37.647196,
+   "name": "Wara"
+  },
+  {
+   "lat": 3.361045,
+   "lon": 37.722709,
+   "name": "Qubi Bubiftu"
+  },
+  {
+   "lat": 3.357705,
+   "lon": 37.721261,
+   "name": "Qubi Bubiftu"
+  },
+  {
+   "lat": 3.433299,
+   "lon": 37.711828,
+   "name": "Gof Lon elema"
+  },
+  {
+   "lat": 1.014808,
+   "lon": 34.18377,
+   "name": "Bwalula Rock"
+  },
+  {
+   "lat": 0.859544,
+   "lon": 37.76738,
+   "name": "Loolkanjao"
+  },
+  {
+   "lat": 0.761786,
+   "lon": 37.899312,
+   "name": "Kamanga"
+  },
+  {
+   "lat": 0.729795,
+   "lon": 37.921711,
+   "name": "Malkagala"
+  },
+  {
+   "lat": 1.091412,
+   "lon": 37.787664,
+   "name": "Loontopi"
+  },
+  {
+   "lat": 0.887248,
+   "lon": 37.414919,
+   "name": "Lekat"
+  },
+  {
+   "lat": 0.902869,
+   "lon": 37.442406,
+   "name": "Loolera"
+  },
+  {
+   "lat": 0.90665,
+   "lon": 37.476648,
+   "name": "Loidikidiko"
+  },
+  {
+   "lat": 0.560214,
+   "lon": 37.826984,
+   "name": "Kolwua (Shap)"
+  },
+  {
+   "lat": 0.593418,
+   "lon": 37.815496,
+   "name": "Shaba Mountain"
+  },
+  {
+   "lat": 1.837869,
+   "lon": 37.918342,
+   "name": "Kaisut"
+  },
+  {
+   "lat": -0.149603,
+   "lon": 37.298737,
+   "name": "Arthur's Seat",
+   "wikidata": "Q27198913"
+  },
+  {
+   "lat": -0.150278,
+   "lon": 37.302732,
+   "name": "Point Piggott"
+  },
+  {
+   "lat": 2.973082,
+   "lon": 40.27459,
+   "name": "Bur Mayo Hills"
+  },
+  {
+   "lat": 2.552027,
+   "lon": 40.221471,
+   "name": "Mansa Hill"
+  },
+  {
+   "lat": -0.411531,
+   "lon": 34.172025,
+   "name": "Lunene"
+  },
+  {
+   "lat": 0.111964,
+   "lon": 32.542469,
+   "name": "Kisubi Semitary Hill"
+  },
+  {
+   "lat": 0.153113,
+   "lon": 32.485245,
+   "name": "Nongolo hill"
+  },
+  {
+   "lat": -0.029891,
+   "lon": 34.923879,
+   "name": "Monkey Rock"
+  },
+  {
+   "lat": -0.172591,
+   "lon": 37.981386,
+   "name": "Ruau Hill"
+  },
+  {
+   "lat": 4.779293,
+   "lon": 35.503742,
+   "name": "Nawakaiya"
+  },
+  {
+   "lat": 0.08564,
+   "lon": 32.513571,
+   "name": "Nkumba Hill"
   },
   {
    "lat": -0.315364,
@@ -4190,14 +3695,42 @@
    "name": "Muuna rock"
   },
   {
-   "lat": 2.956232,
-   "lon": 36.506112,
-   "name": "Porr"
+   "lat": 1.160373,
+   "lon": 36.223481,
+   "name": "Silali",
+   "volcano": true
   },
   {
-   "lat": -0.316518,
-   "lon": 38.227532,
-   "name": "Kalimani Rock"
+   "lat": 1.278054,
+   "lon": 35.434545,
+   "name": "Cherangani Hills"
+  },
+  {
+   "lat": -2.682528,
+   "lon": 37.893083,
+   "name": "Chyulu Hills",
+   "wikidata": "Q5118629"
+  },
+  {
+   "lat": 0.862943,
+   "lon": 37.588055,
+   "name": "Nkadoru Murto (Cat and mouse)"
+  },
+  {
+   "lat": -1.136462,
+   "lon": 36.340505,
+   "name": "Mount Suswa",
+   "volcano": true
+  },
+  {
+   "lat": 4.137454,
+   "lon": 33.72106,
+   "name": "Lotiathe Peak"
+  },
+  {
+   "lat": 4.186894,
+   "lon": 32.296494,
+   "name": "Iro"
   },
   {
    "lat": -0.294986,
@@ -4275,19 +3808,29 @@
    "name": "THIGORA"
   },
   {
-   "lat": 4.173775,
-   "lon": 34.115768,
-   "name": "Mur-choorok"
+   "lat": -3.446023,
+   "lon": 36.651943,
+   "name": "Lalgorite Hill"
   },
   {
-   "lat": 0.251969,
-   "lon": 34.533653,
-   "name": "cliff of forest"
+   "lat": 3.042556,
+   "lon": 33.364954,
+   "name": "Kalongo Rock"
   },
   {
-   "lat": 4.047196,
-   "lon": 33.518893,
-   "name": "Muuhula"
+   "lat": 3.763602,
+   "lon": 33.825323,
+   "name": "Lomej"
+  },
+  {
+   "lat": 1.177005,
+   "lon": 37.368482,
+   "name": "Sheeps Head Rock"
+  },
+  {
+   "lat": 0.69626,
+   "lon": 37.791798,
+   "name": "Kolua Hills"
   },
   {
    "lat": 0.630288,
@@ -4298,71 +3841,6 @@
    "lat": 0.664931,
    "lon": 37.402244,
    "name": "Ndonyio Elosai"
-  },
-  {
-   "lat": 1.200207,
-   "lon": 37.240053,
-   "name": "Lowua Werikoi"
-  },
-  {
-   "lat": 0.859544,
-   "lon": 37.76738,
-   "name": "Loolkanjao"
-  },
-  {
-   "lat": 0.761786,
-   "lon": 37.899312,
-   "name": "Kamanga"
-  },
-  {
-   "lat": 0.729795,
-   "lon": 37.921711,
-   "name": "Malkagala"
-  },
-  {
-   "lat": 1.091412,
-   "lon": 37.787664,
-   "name": "Loontopi"
-  },
-  {
-   "lat": 0.887248,
-   "lon": 37.414919,
-   "name": "Lekat"
-  },
-  {
-   "lat": 0.902869,
-   "lon": 37.442406,
-   "name": "Loolera"
-  },
-  {
-   "lat": 0.90665,
-   "lon": 37.476648,
-   "name": "Loidikidiko"
-  },
-  {
-   "lat": 0.560214,
-   "lon": 37.826984,
-   "name": "Kolwua (Shap)"
-  },
-  {
-   "lat": 0.593418,
-   "lon": 37.815496,
-   "name": "Shaba Mountain"
-  },
-  {
-   "lat": 4.184283,
-   "lon": 33.541642,
-   "name": "Dhuluha"
-  },
-  {
-   "lat": 4.187513,
-   "lon": 33.57272,
-   "name": "Loiro"
-  },
-  {
-   "lat": 4.14695,
-   "lon": 33.578091,
-   "name": "Beeti-Holi"
   },
   {
    "lat": 4.437444,
@@ -4385,24 +3863,9 @@
    "name": "Nauwi"
   },
   {
-   "lat": -0.391025,
-   "lon": 36.959041,
-   "name": "TREE"
-  },
-  {
    "lat": -0.409036,
    "lon": 37.007801,
    "name": "TREE"
-  },
-  {
-   "lat": 4.907755,
-   "lon": 32.626513,
-   "name": "Ingeshe Mt. peak"
-  },
-  {
-   "lat": 0.7222,
-   "lon": 35.452947,
-   "name": "Karonai"
   },
   {
    "lat": -1.929132,
@@ -4410,39 +3873,576 @@
    "name": "mlima mtiro"
   },
   {
-   "lat": 4.130207,
-   "lon": 33.803021,
-   "name": "Caar"
+   "lat": -4.208744,
+   "lon": 35.017772,
+   "name": "Injuru Hill"
   },
   {
-   "lat": 1.333666,
-   "lon": 37.902459,
-   "name": "Lepusi"
+   "lat": -4.180953,
+   "lon": 35.219313,
+   "name": "Ghateros Hill"
   },
   {
-   "lat": 1.388951,
-   "lon": 37.814316,
-   "name": "Sasani"
+   "lat": -4.250371,
+   "lon": 35.110388,
+   "name": "Gijedamohok Hill"
   },
   {
-   "lat": 0.352984,
-   "lon": 32.74384,
-   "name": "BESANIYA PRAYER MOUNTAIN"
+   "lat": 0.302499,
+   "lon": 32.552017,
+   "name": "Rubaga Hill"
   },
   {
-   "lat": -0.366573,
-   "lon": 34.706764,
-   "name": "God Bim"
+   "lat": 0.324042,
+   "lon": 32.578828,
+   "name": "Nakasero Hill"
   },
   {
-   "lat": -0.376873,
-   "lon": 34.723285,
-   "name": "Amuoro"
+   "lat": 0.329874,
+   "lon": 32.545487,
+   "name": "Lubya Hill",
+   "wikidata": "Q31396692"
+  },
+  {
+   "lat": 0.331097,
+   "lon": 32.568404,
+   "name": "Makerere Hill"
+  },
+  {
+   "lat": 0.326377,
+   "lon": 32.629022,
+   "name": "Mbuya Hill"
+  },
+  {
+   "lat": 0.293826,
+   "lon": 32.610912,
+   "name": "Muyenga Tank Hill"
+  },
+  {
+   "lat": 0.296964,
+   "lon": 32.495962,
+   "name": "Nkokonjeru hill"
+  },
+  {
+   "lat": -0.442769,
+   "lon": 36.007391,
+   "name": "Mt Clara"
+  },
+  {
+   "lat": -3.394372,
+   "lon": 36.079881,
+   "name": "Losimingur"
+  },
+  {
+   "lat": -0.665448,
+   "lon": 36.71004,
+   "name": "Elephant Hill Summit"
+  },
+  {
+   "lat": 2.359913,
+   "lon": 36.591339,
+   "name": "Teleki volcano",
+   "wikidata": "Q27191011",
+   "volcano": true
+  },
+  {
+   "lat": 2.315854,
+   "lon": 36.524219,
+   "name": "Kalolenyang",
+   "volcano": true
+  },
+  {
+   "lat": 0.251969,
+   "lon": 34.533653,
+   "name": "cliff of forest"
   },
   {
    "lat": -3.863017,
    "lon": 37.899277,
    "name": "Ndea"
+  },
+  {
+   "lat": 1.520627,
+   "lon": 37.737067,
+   "name": "Moile",
+   "wikidata": "Q27194180"
+  },
+  {
+   "lat": 1.511432,
+   "lon": 37.761611,
+   "name": "Naluwuru",
+   "wikidata": "Q27192940"
+  },
+  {
+   "lat": 2.221884,
+   "lon": 37.901102,
+   "name": "Gar Ilkaria"
+  },
+  {
+   "lat": 1.992034,
+   "lon": 38.087331,
+   "name": "Gudas"
+  },
+  {
+   "lat": 2.152211,
+   "lon": 37.855005,
+   "name": "Karare",
+   "wikidata": "Q27196303"
+  },
+  {
+   "lat": 2.140339,
+   "lon": 37.829071,
+   "name": "Lawen",
+   "wikidata": "Q27195289"
+  },
+  {
+   "lat": 2.124905,
+   "lon": 37.757906,
+   "name": "Lolajonga",
+   "wikidata": "Q27195456"
+  },
+  {
+   "lat": 2.107733,
+   "lon": 37.89228,
+   "name": "Ret",
+   "wikidata": "Q27192009"
+  },
+  {
+   "lat": -0.693797,
+   "lon": 37.221678,
+   "name": "Mt. Kanbicho"
+  },
+  {
+   "lat": 1.897396,
+   "lon": 35.346604,
+   "name": "Tsonguru"
+  },
+  {
+   "lat": -1.020505,
+   "lon": 34.125005,
+   "name": "Bay Zone Hill Muhuru Bay"
+  },
+  {
+   "lat": -3.449271,
+   "lon": 37.740854,
+   "name": "Girigan Hills",
+   "wikidata": "Q27197512"
+  },
+  {
+   "lat": -2.803493,
+   "lon": 35.979146,
+   "name": "Loolmurwak Crater",
+   "volcano": true
+  },
+  {
+   "lat": -2.869673,
+   "lon": 35.948761,
+   "name": "Kerimasi",
+   "volcano": true
+  },
+  {
+   "lat": -2.893675,
+   "lon": 36.211918,
+   "name": "Mt Kitumbeine",
+   "volcano": true
+  },
+  {
+   "lat": 3.934861,
+   "lon": 37.326402,
+   "name": "Garra Gallaan",
+   "volcano": true
+  },
+  {
+   "lat": 3.857106,
+   "lon": 37.345113,
+   "name": "Garra Did Golan Gutha",
+   "volcano": true
+  },
+  {
+   "lat": 3.984181,
+   "lon": 37.344426,
+   "name": "Garra Sorra",
+   "volcano": true
+  },
+  {
+   "lat": -2.833075,
+   "lon": 34.997913,
+   "name": "Naabi Hill"
+  },
+  {
+   "lat": -2.232755,
+   "lon": 34.30001,
+   "name": "Peak",
+   "name_en": "Peak"
+  },
+  {
+   "lat": -2.238587,
+   "lon": 34.305847,
+   "name": "Peak",
+   "name_en": "Peak"
+  },
+  {
+   "lat": -0.885987,
+   "lon": 36.269553,
+   "name": "Olkaria",
+   "wikidata": "Q4179169",
+   "volcano": true
+  },
+  {
+   "lat": 1.982211,
+   "lon": 36.429294,
+   "name": "Namarunu",
+   "wikidata": "Q6961318"
+  },
+  {
+   "lat": 1.21846,
+   "lon": 33.329608,
+   "name": "Kagulu Rock",
+   "wikidata": "Q60753937"
+  },
+  {
+   "lat": 0.649258,
+   "lon": 34.560155,
+   "name": "Sabwino Hill"
+  },
+  {
+   "lat": -4.795425,
+   "lon": 38.323986,
+   "name": "Kivuga Peak"
+  },
+  {
+   "lat": -2.146403,
+   "lon": 34.700352,
+   "name": "Robanda Mountain",
+   "name_en": "Robanda Mountain"
+  },
+  {
+   "lat": -2.085673,
+   "lon": 34.633418,
+   "name": "Fort Ikoma Peak Ground"
+  },
+  {
+   "lat": 0.293249,
+   "lon": 32.47147,
+   "name": "Namagoma hill"
+  },
+  {
+   "lat": 0.301838,
+   "lon": 32.441497,
+   "name": "Manja hill"
+  },
+  {
+   "lat": -2.602158,
+   "lon": 32.38743,
+   "name": "mountain1"
+  },
+  {
+   "lat": 3.800949,
+   "lon": 33.872906,
+   "name": "2140"
+  },
+  {
+   "lat": 3.363297,
+   "lon": 37.713404,
+   "name": "Gathaa",
+   "volcano": true
+  },
+  {
+   "lat": 4.151244,
+   "lon": 33.73621,
+   "name": "Lochilir"
+  },
+  {
+   "lat": 3.531268,
+   "lon": 32.099494,
+   "name": "Jabal Ebijo",
+   "name_en": "Jabal Ebijo"
+  },
+  {
+   "lat": 4.566667,
+   "lon": 34.316667,
+   "name": "Narokon",
+   "name_en": "Narokon"
+  },
+  {
+   "lat": 3.749975,
+   "lon": 33.512772,
+   "name": "Lonyili",
+   "name_en": "Lonyili"
+  },
+  {
+   "lat": 3.765934,
+   "lon": 32.720199,
+   "name": "Aggu",
+   "name_en": "Aggu"
+  },
+  {
+   "lat": 3.890955,
+   "lon": 33.02726,
+   "name": "Modole",
+   "name_en": "Modole"
+  },
+  {
+   "lat": 3.840682,
+   "lon": 32.938989,
+   "name": "Agorro Mountains",
+   "name_en": "Agorro Mountains"
+  },
+  {
+   "lat": 3.496049,
+   "lon": 37.552177,
+   "name": "Kalesa Mata Jala"
+  },
+  {
+   "lat": 3.489357,
+   "lon": 37.813452,
+   "name": "Gara Gadamsa"
+  },
+  {
+   "lat": 3.429063,
+   "lon": 37.69944,
+   "name": "Qubi Bora"
+  },
+  {
+   "lat": 3.305579,
+   "lon": 37.688119,
+   "name": "Salla Dakara"
+  },
+  {
+   "lat": 3.429984,
+   "lon": 37.790219,
+   "name": "Gara Dao"
+  },
+  {
+   "lat": 3.418191,
+   "lon": 37.696648,
+   "name": "Shanqera Mountain"
+  },
+  {
+   "lat": 3.307736,
+   "lon": 37.733775,
+   "name": "Salla Ree Tore"
+  },
+  {
+   "lat": 0.540838,
+   "lon": 34.030237,
+   "name": "1200"
+  },
+  {
+   "lat": 0.541873,
+   "lon": 34.019106,
+   "name": "1214"
+  },
+  {
+   "lat": 0.505815,
+   "lon": 33.938549,
+   "name": "1253"
+  },
+  {
+   "lat": 0.508985,
+   "lon": 33.951606,
+   "name": "1262"
+  },
+  {
+   "lat": 0.518453,
+   "lon": 33.961208,
+   "name": "1236"
+  },
+  {
+   "lat": -0.382518,
+   "lon": 36.624813,
+   "name": "Mountain gate"
+  },
+  {
+   "lat": -1.947534,
+   "lon": 37.324713,
+   "name": "Kiou"
+  },
+  {
+   "lat": 2.956232,
+   "lon": 36.506112,
+   "name": "Porr"
+  },
+  {
+   "lat": 3.445838,
+   "lon": 37.639208,
+   "name": "Chisa Ela nadehani",
+   "volcano": true
+  },
+  {
+   "lat": 3.421241,
+   "lon": 37.66995,
+   "name": "Chisa",
+   "volcano": true
+  },
+  {
+   "lat": 3.461166,
+   "lon": 37.565409,
+   "name": "Kalesa mata gongo",
+   "volcano": true
+  },
+  {
+   "lat": 3.470237,
+   "lon": 37.765777,
+   "name": "Gara Nyecha",
+   "volcano": true
+  },
+  {
+   "lat": 3.429295,
+   "lon": 37.758356,
+   "name": "Gara worsesa",
+   "volcano": true
+  },
+  {
+   "lat": 3.430152,
+   "lon": 37.763849,
+   "name": "Gara worsesa",
+   "volcano": true
+  },
+  {
+   "lat": -2.205582,
+   "lon": 38.402926,
+   "name": "Ithumba"
+  },
+  {
+   "lat": 1.382833,
+   "lon": 34.386695,
+   "name": "Kyema Hill"
+  },
+  {
+   "lat": 0.240677,
+   "lon": 34.755589,
+   "name": "Crying Stone (Ikhonga Murwi)"
+  },
+  {
+   "lat": 1.911438,
+   "lon": 36.428951,
+   "name": "Aruba Rock"
+  },
+  {
+   "lat": 3.466207,
+   "lon": 37.671933,
+   "name": "Qubi gara ano"
+  },
+  {
+   "lat": 3.496361,
+   "lon": 37.49097,
+   "name": "Tumtich"
+  },
+  {
+   "lat": 3.391684,
+   "lon": 37.73962,
+   "name": "Dibu lonlubo"
+  },
+  {
+   "lat": 3.363423,
+   "lon": 37.746986,
+   "name": "Qubi Mabartafi"
+  },
+  {
+   "lat": 3.438576,
+   "lon": 37.749608,
+   "name": "Boqore"
+  },
+  {
+   "lat": 3.369253,
+   "lon": 37.744822,
+   "name": "Qubi gara dolola"
+  },
+  {
+   "lat": 3.388173,
+   "lon": 37.799495,
+   "name": "Jaldesa Diqa"
+  },
+  {
+   "lat": 3.378304,
+   "lon": 37.801798,
+   "name": "Jaldesa Guda"
+  },
+  {
+   "lat": 3.449764,
+   "lon": 37.766623,
+   "name": "Gara Mboga"
+  },
+  {
+   "lat": 4.053879,
+   "lon": 33.812657,
+   "name": "Urungo",
+   "wikidata": "Q20909546"
+  },
+  {
+   "lat": 0.822885,
+   "lon": 37.206845,
+   "name": "Nanteddu"
+  },
+  {
+   "lat": 5.100513,
+   "lon": 35.883587,
+   "name": "Monte Naqua"
+  },
+  {
+   "lat": -4.207525,
+   "lon": 35.303484,
+   "name": "Dilojig Hill"
+  },
+  {
+   "lat": -4.21607,
+   "lon": 35.323929,
+   "name": "Donya Hill"
+  },
+  {
+   "lat": -4.153572,
+   "lon": 35.404518,
+   "name": "Gagara Hill"
+  },
+  {
+   "lat": -4.201386,
+   "lon": 35.329097,
+   "name": "Marambojig"
+  },
+  {
+   "lat": -4.1886,
+   "lon": 35.340043,
+   "name": "Sabbo Hill"
+  },
+  {
+   "lat": 3.624584,
+   "lon": 33.74931,
+   "name": "Kikis-Loitanit hill"
+  },
+  {
+   "lat": 3.26562,
+   "lon": 37.696877,
+   "name": "Golinacha",
+   "wikidata": "Q27197532"
+  },
+  {
+   "lat": 3.218856,
+   "lon": 37.678689,
+   "name": "Buta",
+   "wikidata": "Q27198559"
+  },
+  {
+   "lat": 3.291235,
+   "lon": 37.678813,
+   "name": "Salla Dakara"
+  },
+  {
+   "lat": 3.309283,
+   "lon": 37.664589,
+   "name": "Qubi Bulto Algi"
+  },
+  {
+   "lat": 2.413636,
+   "lon": 36.622353,
+   "name": "Nabiyotum Cone",
+   "wikidata": "Q27192887",
+   "volcano": true
+  },
+  {
+   "lat": 4.047196,
+   "lon": 33.518893,
+   "name": "Muuhula"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "region": "cordillera-blanca",
- "generated": "2026-08-13T09:16:19+00:00",
+ "generated": "2026-08-18T20:47:25+00:00",
  "peaks": [
   {
    "lat": -9.101734,
@@ -23,18 +23,18 @@
    "wikidata": "Q529797"
   },
   {
-   "lat": -9.027074,
-   "lon": -77.663085,
-   "name": "Huandoy",
-   "ele": 6395,
-   "wikidata": "Q1632785"
-  },
-  {
    "lat": -9.514773,
    "lon": -77.31057,
    "name": "Huantsan",
    "ele": 6395,
    "wikidata": "Q529872"
+  },
+  {
+   "lat": -9.027074,
+   "lon": -77.663085,
+   "name": "Huandoy",
+   "ele": 6395,
+   "wikidata": "Q1632785"
   },
   {
    "lat": -9.035001,
@@ -187,18 +187,18 @@
    "wikidata": "Q1843007"
   },
   {
-   "lat": -8.96826,
-   "lon": -77.671627,
-   "name": "Caraz",
-   "ele": 6025,
-   "wikidata": "Q587242"
-  },
-  {
    "lat": -8.952111,
    "lon": -77.632748,
    "name": "Artesonraju",
    "ele": 6025,
    "wikidata": "Q707934"
+  },
+  {
+   "lat": -8.96826,
+   "lon": -77.671627,
+   "name": "Caraz",
+   "ele": 6025,
+   "wikidata": "Q587242"
   },
   {
    "lat": -10.274962,
@@ -358,15 +358,15 @@
    "wikidata": "Q14366691"
   },
   {
-   "lat": -9.421238,
-   "lon": -77.45643,
-   "name": "Vallunareju Norte",
-   "ele": 5686
-  },
-  {
    "lat": -9.560046,
    "lon": -77.370446,
    "name": "Cashan Oeste",
+   "ele": 5686
+  },
+  {
+   "lat": -9.421238,
+   "lon": -77.45643,
+   "name": "Vallunareju Norte",
    "ele": 5686
   },
   {
@@ -541,12 +541,6 @@
    "ele": 5504
   },
   {
-   "lat": -10.221476,
-   "lon": -76.911947,
-   "name": "Rondoy Chico",
-   "ele": 5500
-  },
-  {
    "lat": -10.430543,
    "lon": -76.754093,
    "name": "Torre de Cristal",
@@ -554,10 +548,10 @@
    "wikidata": "Q28163335"
   },
   {
-   "lat": -9.356718,
-   "lon": -77.447799,
-   "name": "Urus Central",
-   "ele": 5495
+   "lat": -10.221476,
+   "lon": -76.911947,
+   "name": "Rondoy Chico",
+   "ele": 5500
   },
   {
    "lat": -9.468799,
@@ -565,6 +559,12 @@
    "name": "Churup",
    "ele": 5495,
    "wikidata": "Q15056366"
+  },
+  {
+   "lat": -9.356718,
+   "lon": -77.447799,
+   "name": "Urus Central",
+   "ele": 5495
   },
   {
    "lat": -9.920641,
@@ -684,6 +684,12 @@
    "wikidata": "Q25053025"
   },
   {
+   "lat": -9.543337,
+   "lon": -77.33512,
+   "name": "Rurec Oeste II",
+   "ele": 5350
+  },
+  {
    "lat": -8.802678,
    "lon": -77.734798,
    "name": "Milluacocha",
@@ -694,12 +700,6 @@
    "lat": -10.295974,
    "lon": -76.980529,
    "name": "Nev. Diablo Mudo",
-   "ele": 5350
-  },
-  {
-   "lat": -9.543337,
-   "lon": -77.33512,
-   "name": "Rurec Oeste II",
    "ele": 5350
   },
   {
@@ -757,17 +757,17 @@
    "ele": 5320
   },
   {
+   "lat": -9.921349,
+   "lon": -77.038751,
+   "name": "Cumbre de los Burros",
+   "ele": 5300
+  },
+  {
    "lat": -10.231058,
    "lon": -76.889325,
    "name": "Alcay",
    "ele": 5300,
    "wikidata": "Q25203227"
-  },
-  {
-   "lat": -9.921349,
-   "lon": -77.038751,
-   "name": "Cumbre de los Burros",
-   "ele": 5300
   },
   {
    "lat": -10.341627,
@@ -857,10 +857,23 @@
    "wikidata": "Q28163332"
   },
   {
+   "lat": -10.749714,
+   "lon": -76.638786,
+   "name": "Nevado Retrochero",
+   "ele": 5200
+  },
+  {
    "lat": -9.664088,
    "lon": -77.259743,
    "name": "Yanamarey Sur",
    "ele": 5192
+  },
+  {
+   "lat": -8.841962,
+   "lon": -78.005834,
+   "name": "Coñocranra",
+   "ele": 5181,
+   "wikidata": "Q5180171"
   },
   {
    "lat": -10.277164,
@@ -876,13 +889,6 @@
    "wikidata": "Q20085573"
   },
   {
-   "lat": -8.828845,
-   "lon": -77.685045,
-   "name": "Pilanco",
-   "ele": 5150,
-   "wikidata": "Q13190278"
-  },
-  {
    "lat": -9.12945,
    "lon": -77.507105,
    "name": "Mateo",
@@ -894,6 +900,13 @@
    "lon": -76.925525,
    "name": "Cerro Gran Vista",
    "ele": 5150
+  },
+  {
+   "lat": -8.828845,
+   "lon": -77.685045,
+   "name": "Pilanco",
+   "ele": 5150,
+   "wikidata": "Q13190278"
   },
   {
    "lat": -8.41505,
@@ -944,6 +957,13 @@
    "wikidata": "Q25053826"
   },
   {
+   "lat": -10.506181,
+   "lon": -76.010394,
+   "name": "Qiwllaqucha",
+   "ele": 5012,
+   "wikidata": "Q13190474"
+  },
+  {
    "lat": -9.054419,
    "lon": -77.919966,
    "name": "Cerro Pampacancha",
@@ -978,10 +998,23 @@
    "wikidata": "Q20085461"
   },
   {
+   "lat": -8.900322,
+   "lon": -78.013926,
+   "name": "Cerro Soco Punta",
+   "ele": 4924
+  },
+  {
    "lat": -10.296141,
    "lon": -76.990452,
    "name": "Tapush",
    "ele": 4900
+  },
+  {
+   "lat": -9.099779,
+   "lon": -77.654999,
+   "name": "Puchkayuq Punta",
+   "ele": 4800,
+   "wikidata": "Q25106379"
   },
   {
    "lat": -10.275651,
@@ -995,13 +1028,6 @@
    "name": "Yana Yaku",
    "ele": 4800,
    "wikidata": "Q25053825"
-  },
-  {
-   "lat": -9.099779,
-   "lon": -77.654999,
-   "name": "Puchkayuq Punta",
-   "ele": 4800,
-   "wikidata": "Q25106379"
   },
   {
    "lat": -9.740411,
@@ -1031,18 +1057,18 @@
    "wikidata": "Q13191346"
   },
   {
-   "lat": -10.07122,
-   "lon": -77.075848,
-   "name": "Yanajirca",
-   "ele": 4600,
-   "wikidata": "Q25209420"
-  },
-  {
    "lat": -10.165586,
    "lon": -77.194527,
    "name": "Rumi Wayin Punta",
    "ele": 4600,
    "wikidata": "Q24897217"
+  },
+  {
+   "lat": -10.07122,
+   "lon": -77.075848,
+   "name": "Yanajirca",
+   "ele": 4600,
+   "wikidata": "Q25209420"
   },
   {
    "lat": -8.546435,
@@ -1084,6 +1110,20 @@
    "wikidata": "Q16893961"
   },
   {
+   "lat": -9.642478,
+   "lon": -76.439592,
+   "name": "Chuskuqucha",
+   "ele": 4271,
+   "wikidata": "Q25103849"
+  },
+  {
+   "lat": -8.474194,
+   "lon": -77.437476,
+   "name": "Pilanku",
+   "ele": 4200,
+   "wikidata": "Q25208890"
+  },
+  {
    "lat": -8.508105,
    "lon": -77.750284,
    "name": "Winchus Hirka",
@@ -1096,13 +1136,6 @@
    "name": "Puka Hirka",
    "ele": 4200,
    "wikidata": "Q25208825"
-  },
-  {
-   "lat": -8.474194,
-   "lon": -77.437476,
-   "name": "Pilanku",
-   "ele": 4200,
-   "wikidata": "Q25208890"
   },
   {
    "lat": -9.827236,
@@ -1118,434 +1151,14 @@
    "ele": 3292
   },
   {
-   "lat": -10.169651,
-   "lon": -77.033304,
-   "name": "Pingaush"
-  },
-  {
-   "lat": -10.087674,
-   "lon": -76.748271,
-   "name": "Cerro Calashpampa"
-  },
-  {
-   "lat": -9.545862,
-   "lon": -77.622442,
-   "name": "Punta Callán"
-  },
-  {
    "lat": -8.931677,
    "lon": -77.289434,
    "name": "Quaka-marka"
   },
   {
-   "lat": -9.350222,
-   "lon": -77.128455,
-   "name": "Llamog"
-  },
-  {
-   "lat": -9.403991,
-   "lon": -77.085144,
-   "name": "Wiñac"
-  },
-  {
-   "lat": -9.170789,
-   "lon": -76.919605,
-   "name": "San Cristobal"
-  },
-  {
-   "lat": -9.183795,
-   "lon": -76.994362,
-   "name": "Cerro Sajri"
-  },
-  {
-   "lat": -10.31369,
-   "lon": -76.649457,
-   "name": "Cerro Wagratacanan"
-  },
-  {
-   "lat": -9.474675,
-   "lon": -77.429268,
-   "name": "Cerro Cachijirca"
-  },
-  {
-   "lat": -10.357354,
-   "lon": -76.900409,
-   "name": "Cerro San Antonio"
-  },
-  {
-   "lat": -8.686471,
-   "lon": -77.054208,
-   "name": "Cerro Cabeza de Gorila"
-  },
-  {
-   "lat": -8.685124,
-   "lon": -77.056354,
-   "name": "Cerro Chonta (separa sierra y selva)"
-  },
-  {
-   "lat": -8.881861,
-   "lon": -77.993156,
-   "name": "Cerro Ichic Huiri"
-  },
-  {
-   "lat": -10.438135,
-   "lon": -76.763722,
-   "name": "Flor de Luto",
-   "wikidata": "Q28163335"
-  },
-  {
-   "lat": -10.488579,
-   "lon": -76.742624,
-   "name": "Condorsenja",
-   "wikidata": "Q16893710"
-  },
-  {
-   "lat": -10.452722,
-   "lon": -76.697788,
-   "name": "Chacraccocha",
-   "wikidata": "Q25053955"
-  },
-  {
-   "lat": -10.469576,
-   "lon": -76.720847,
-   "name": "Puyhuanccocha",
-   "wikidata": "Q15269428"
-  },
-  {
-   "lat": -10.485006,
-   "lon": -76.896508,
-   "name": "Montecocha",
-   "wikidata": "Q25100454"
-  },
-  {
-   "lat": -10.462798,
-   "lon": -76.85356,
-   "name": "Millpu",
-   "wikidata": "Q17779282"
-  },
-  {
-   "lat": -10.454774,
-   "lon": -76.865995,
-   "name": "Waylla Hirka",
-   "wikidata": "Q20085600"
-  },
-  {
-   "lat": -10.434864,
-   "lon": -76.855679,
-   "name": "Puka Qaqa",
-   "wikidata": "Q17779348"
-  },
-  {
-   "lat": -10.429778,
-   "lon": -76.902913,
-   "name": "Yuraq Qaqa",
-   "wikidata": "Q18363564"
-  },
-  {
-   "lat": -10.247819,
-   "lon": -77.313063,
-   "name": "Tuku Wachanan",
-   "wikidata": "Q24897071"
-  },
-  {
-   "lat": -10.449071,
-   "lon": -77.249623,
-   "name": "Uchku",
-   "wikidata": "Q25209440"
-  },
-  {
-   "lat": -10.311623,
-   "lon": -77.322633,
-   "name": "Lukma Punta",
-   "wikidata": "Q24892936"
-  },
-  {
-   "lat": -10.264872,
-   "lon": -77.27489,
-   "name": "Kushuru Punta",
-   "wikidata": "Q24897012"
-  },
-  {
-   "lat": -10.307784,
-   "lon": -77.241233,
-   "name": "Shinuacocha",
-   "wikidata": "Q25053931"
-  },
-  {
-   "lat": -10.428591,
-   "lon": -77.267677,
-   "name": "Wanaku",
-   "wikidata": "Q25209290"
-  },
-  {
-   "lat": -10.36079,
-   "lon": -76.79467,
-   "name": "Yanajirca",
-   "wikidata": "Q18395879"
-  },
-  {
-   "lat": -10.268641,
-   "lon": -77.29083,
-   "name": "Yuraq Punta",
-   "wikidata": "Q25209289"
-  },
-  {
-   "lat": -10.413903,
-   "lon": -76.975437,
-   "name": "Huacshash",
-   "wikidata": "Q13191162"
-  },
-  {
-   "lat": -10.41728,
-   "lon": -76.93441,
-   "name": "Mitopunta",
-   "wikidata": "Q20085455"
-  },
-  {
-   "lat": -10.440285,
-   "lon": -76.966454,
-   "name": "Julcán",
-   "wikidata": "Q3344059"
-  },
-  {
-   "lat": -10.498644,
-   "lon": -77.363899,
-   "name": "Inca Huajanan",
-   "wikidata": "Q24893190"
-  },
-  {
-   "lat": -10.397234,
-   "lon": -76.883684,
-   "name": "Pumarinri",
-   "wikidata": "Q14474080"
-  },
-  {
-   "lat": -10.386482,
-   "lon": -76.856055,
-   "name": "Suerococha",
-   "wikidata": "Q20085569"
-  },
-  {
-   "lat": -10.396687,
-   "lon": -76.988878,
-   "name": "Yanacushman",
-   "wikidata": "Q20085637"
-  },
-  {
-   "lat": -10.385902,
-   "lon": -76.875216,
-   "name": "Cuyoc",
-   "wikidata": "Q13642397"
-  },
-  {
-   "lat": -10.348083,
-   "lon": -76.838476,
-   "name": "Wank'a Marka",
-   "wikidata": "Q25100425"
-  },
-  {
-   "lat": -10.118948,
-   "lon": -76.916402,
-   "name": "Chawpi Hanka",
-   "wikidata": "Q25203645"
-  },
-  {
-   "lat": -10.102507,
-   "lon": -76.950911,
-   "name": "Yanajirca",
-   "wikidata": "Q25209418"
-  },
-  {
-   "lat": -10.108932,
-   "lon": -77.016126,
-   "name": "Puka Qaqa",
-   "wikidata": "Q25203713"
-  },
-  {
-   "lat": -10.297174,
-   "lon": -76.980543,
-   "name": "Rajucollota",
-   "wikidata": "Q13189451"
-  },
-  {
-   "lat": -10.420762,
-   "lon": -76.803489,
-   "name": "Quesillojanca",
-   "wikidata": "Q13189817"
-  },
-  {
-   "lat": -10.298748,
-   "lon": -76.964005,
-   "name": "Huacrish",
-   "wikidata": "Q13191112"
-  },
-  {
-   "lat": -10.2864,
-   "lon": -76.975858,
-   "name": "Suerococha",
-   "wikidata": "Q19898761"
-  },
-  {
-   "lat": -10.325459,
-   "lon": -76.974332,
-   "name": "Jullutahuarco",
-   "wikidata": "Q20085519"
-  },
-  {
-   "lat": -10.016736,
-   "lon": -77.002509,
-   "name": "Chaupijanca",
-   "wikidata": "Q13189342"
-  },
-  {
-   "lat": -10.381438,
-   "lon": -76.730932,
-   "name": "Chuspiccocha",
-   "wikidata": "Q17777685"
-  },
-  {
-   "lat": -10.115673,
-   "lon": -77.024197,
-   "name": "Chawpi Punta",
-   "wikidata": "Q24887280"
-  },
-  {
-   "lat": -8.460309,
-   "lon": -77.815754,
-   "name": "Gaico",
-   "wikidata": "Q25208760"
-  },
-  {
-   "lat": -8.48091,
-   "lon": -77.831106,
-   "name": "Ancaracra",
-   "wikidata": "Q25106294"
-  },
-  {
-   "lat": -10.0686,
-   "lon": -77.015869,
-   "name": "Chancayoc",
-   "wikidata": "Q24887258"
-  },
-  {
-   "lat": -10.163913,
-   "lon": -76.912516,
-   "name": "Gasha",
-   "wikidata": "Q20085392"
-  },
-  {
-   "lat": -10.035816,
-   "lon": -77.008658,
-   "name": "Quntayqucha Punta",
-   "wikidata": "Q25100487"
-  },
-  {
-   "lat": -10.06303,
-   "lon": -77.011328,
-   "name": "Pisqan Punta",
-   "wikidata": "Q25100557"
-  },
-  {
-   "lat": -8.474422,
-   "lon": -77.748522,
-   "name": "Winchus",
-   "wikidata": "Q25248152"
-  },
-  {
-   "lat": -8.668396,
-   "lon": -77.762501,
-   "name": "Collpa Janca",
-   "wikidata": "Q25106317"
-  },
-  {
-   "lat": -10.020875,
-   "lon": -77.025847,
-   "name": "Yana Jaqhi",
-   "wikidata": "Q25100508"
-  },
-  {
-   "lat": -8.755047,
-   "lon": -77.748055,
-   "name": "Kita Raqsa",
-   "wikidata": "Q25106375"
-  },
-  {
-   "lat": -8.631143,
-   "lon": -77.712222,
-   "name": "Kuntur Wasi",
-   "wikidata": "Q25208828"
-  },
-  {
-   "lat": -9.963453,
-   "lon": -77.07311,
-   "name": "Calapo",
-   "wikidata": "Q25100544"
-  },
-  {
-   "lat": -9.919827,
-   "lon": -77.036895,
-   "name": "Huallanca",
-   "wikidata": "Q13191120"
-  },
-  {
-   "lat": -8.682833,
-   "lon": -77.819727,
-   "name": "Quyllurqucha",
-   "wikidata": "Q25208826"
-  },
-  {
-   "lat": -8.804213,
-   "lon": -77.649444,
-   "name": "Collota",
-   "wikidata": "Q25203406"
-  },
-  {
-   "lat": -8.704425,
-   "lon": -77.817203,
-   "name": "Misquicocha",
-   "wikidata": "Q25053866"
-  },
-  {
-   "lat": -9.89614,
-   "lon": -77.054466,
-   "name": "Chuspi",
-   "wikidata": "Q13189295"
-  },
-  {
-   "lat": -9.871966,
-   "lon": -77.061933,
-   "name": "Tankan",
-   "wikidata": "Q19848125"
-  },
-  {
-   "lat": -9.940055,
-   "lon": -77.042519,
-   "name": "Kuntur Wayi",
-   "wikidata": "Q20085435"
-  },
-  {
-   "lat": -9.908619,
-   "lon": -77.053304,
-   "name": "Tancancocha",
-   "wikidata": "Q25100460"
-  },
-  {
-   "lat": -10.002264,
-   "lon": -77.040561,
-   "name": "Yuraq Kallapu",
-   "wikidata": "Q25100495"
-  },
-  {
-   "lat": -8.811177,
-   "lon": -77.580564,
-   "name": "Wira Wira",
-   "wikidata": "Q25247734"
-  },
-  {
-   "lat": -9.983554,
-   "lon": -77.054624,
-   "name": "Jupa Tawqaña",
-   "wikidata": "Q25100499"
+   "lat": -10.470605,
+   "lon": -76.466635,
+   "name": "Cerro Matagara"
   },
   {
    "lat": -9.817551,
@@ -1582,6 +1195,12 @@
    "lon": -77.938894,
    "name": "Putaqa",
    "wikidata": "Q25209076"
+  },
+  {
+   "lat": -9.046161,
+   "lon": -78.015004,
+   "name": "Hatun Hirka",
+   "wikidata": "Q25209115"
   },
   {
    "lat": -8.916979,
@@ -1734,6 +1353,12 @@
    "wikidata": "Q24894952"
   },
   {
+   "lat": -9.587837,
+   "lon": -76.47331,
+   "name": "Puka Hirka",
+   "wikidata": "Q25205673"
+  },
+  {
    "lat": -9.243929,
    "lon": -77.199162,
    "name": "Quisuargaga",
@@ -1788,6 +1413,12 @@
    "wikidata": "Q25209270"
   },
   {
+   "lat": -9.617822,
+   "lon": -76.488615,
+   "name": "Wank'a Ukru Punta",
+   "wikidata": "Q25103810"
+  },
+  {
    "lat": -9.209204,
    "lon": -77.010006,
    "name": "Wayunkayuq",
@@ -1812,6 +1443,12 @@
    "wikidata": "Q25205668"
   },
   {
+   "lat": -9.637283,
+   "lon": -76.400279,
+   "name": "Machay",
+   "wikidata": "Q25247923"
+  },
+  {
    "lat": -9.343116,
    "lon": -76.842225,
    "name": "Puma Wayin",
@@ -1824,6 +1461,42 @@
    "wikidata": "Q25208950"
   },
   {
+   "lat": -9.595604,
+   "lon": -76.492504,
+   "name": "Saqra Waqra",
+   "wikidata": "Q25205667"
+  },
+  {
+   "lat": -9.643104,
+   "lon": -76.421106,
+   "name": "Pampa Wasi",
+   "wikidata": "Q25103851"
+  },
+  {
+   "lat": -9.648957,
+   "lon": -76.398063,
+   "name": "Apujirca Punta",
+   "wikidata": "Q25103861"
+  },
+  {
+   "lat": -9.630052,
+   "lon": -76.475283,
+   "name": "Tikti Punta",
+   "wikidata": "Q25103808"
+  },
+  {
+   "lat": -9.648424,
+   "lon": -76.47344,
+   "name": "Wayta Hirka Punta",
+   "wikidata": "Q25103820"
+  },
+  {
+   "lat": -9.641212,
+   "lon": -76.38332,
+   "name": "Saqsa Punta",
+   "wikidata": "Q25103859"
+  },
+  {
    "lat": -9.99784,
    "lon": -77.366111,
    "name": "Kuntur Wayin",
@@ -1834,6 +1507,12 @@
    "lon": -77.415285,
    "name": "Kuntur Qaqa",
    "wikidata": "Q25203410"
+  },
+  {
+   "lat": -9.658416,
+   "lon": -76.38139,
+   "name": "Sagrahuagra",
+   "wikidata": "Q25103856"
   },
   {
    "lat": -9.88089,
@@ -1858,6 +1537,80 @@
    "lon": -77.523326,
    "name": "T'uquyuq",
    "wikidata": "Q25105247"
+  },
+  {
+   "lat": -10.480823,
+   "lon": -76.391814,
+   "name": "Sansón dormido"
+  },
+  {
+   "lat": -9.350222,
+   "lon": -77.128455,
+   "name": "Llamog"
+  },
+  {
+   "lat": -10.406126,
+   "lon": -76.877423,
+   "name": "Pumarinri"
+  },
+  {
+   "lat": -9.474675,
+   "lon": -77.429268,
+   "name": "Cerro Cachijirca"
+  },
+  {
+   "lat": -10.357354,
+   "lon": -76.900409,
+   "name": "Cerro San Antonio"
+  },
+  {
+   "lat": -8.881861,
+   "lon": -77.993156,
+   "name": "Cerro Ichic Huiri"
+  },
+  {
+   "lat": -9.170789,
+   "lon": -76.919605,
+   "name": "San Cristobal"
+  },
+  {
+   "lat": -10.462798,
+   "lon": -76.85356,
+   "name": "Millpu",
+   "wikidata": "Q17779282"
+  },
+  {
+   "lat": -10.454774,
+   "lon": -76.865995,
+   "name": "Waylla Hirka",
+   "wikidata": "Q20085600"
+  },
+  {
+   "lat": -10.434864,
+   "lon": -76.855679,
+   "name": "Puka Qaqa",
+   "wikidata": "Q17779348"
+  },
+  {
+   "lat": -10.429778,
+   "lon": -76.902913,
+   "name": "Yuraq Qaqa",
+   "wikidata": "Q18363564"
+  },
+  {
+   "lat": -9.403991,
+   "lon": -77.085144,
+   "name": "Wiñac"
+  },
+  {
+   "lat": -9.183795,
+   "lon": -76.994362,
+   "name": "Cerro Sajri"
+  },
+  {
+   "lat": -9.545862,
+   "lon": -77.622442,
+   "name": "Punta Callán"
   },
   {
    "lat": -9.976998,
@@ -2106,6 +1859,24 @@
    "wikidata": "Q25203427"
   },
   {
+   "lat": -9.740353,
+   "lon": -76.483538,
+   "name": "Tuqtuqucha Punta",
+   "wikidata": "Q25103823"
+  },
+  {
+   "lat": -10.449754,
+   "lon": -76.089482,
+   "name": "Pichqa Pukyu",
+   "wikidata": "Q25052540"
+  },
+  {
+   "lat": -10.641178,
+   "lon": -76.611756,
+   "name": "Puka Mach'ay",
+   "wikidata": "Q25203600"
+  },
+  {
    "lat": -10.16105,
    "lon": -77.318055,
    "name": "Inca Huagansa",
@@ -2116,6 +1887,48 @@
    "lon": -76.569973,
    "name": "Atuq Wachanan",
    "wikidata": "Q25103826"
+  },
+  {
+   "lat": -10.645306,
+   "lon": -76.618049,
+   "name": "Saqra Mach'ay",
+   "wikidata": "Q25203599"
+  },
+  {
+   "lat": -10.442524,
+   "lon": -76.031385,
+   "name": "Wamanripayuq",
+   "wikidata": "Q25203219"
+  },
+  {
+   "lat": -10.393695,
+   "lon": -76.015163,
+   "name": "Rikacha Tuna",
+   "wikidata": "Q25100248"
+  },
+  {
+   "lat": -10.477576,
+   "lon": -76.031533,
+   "name": "Puka Uru",
+   "wikidata": "Q25100225"
+  },
+  {
+   "lat": -10.47272,
+   "lon": -76.065661,
+   "name": "Hatun Ukru",
+   "wikidata": "Q25203604"
+  },
+  {
+   "lat": -10.084325,
+   "lon": -76.391932,
+   "name": "Algay",
+   "wikidata": "Q25205631"
+  },
+  {
+   "lat": -9.758463,
+   "lon": -76.285877,
+   "name": "Hatun Hirka",
+   "wikidata": "Q25205707"
   },
   {
    "lat": -9.69921,
@@ -2130,6 +1943,48 @@
    "wikidata": "Q25209005"
   },
   {
+   "lat": -10.452922,
+   "lon": -76.011223,
+   "name": "Saqra Mach'ay",
+   "wikidata": "Q25203601"
+  },
+  {
+   "lat": -10.427246,
+   "lon": -76.029164,
+   "name": "K'uchu Hanka",
+   "wikidata": "Q25100220"
+  },
+  {
+   "lat": -10.020314,
+   "lon": -76.412497,
+   "name": "Wallpa Wasi",
+   "wikidata": "Q25103792"
+  },
+  {
+   "lat": -10.229485,
+   "lon": -76.068612,
+   "name": "P'aqla Tanka",
+   "wikidata": "Q25100246"
+  },
+  {
+   "lat": -9.720611,
+   "lon": -76.49528,
+   "name": "Qullqa Punta",
+   "wikidata": "Q25103821"
+  },
+  {
+   "lat": -10.011039,
+   "lon": -76.367478,
+   "name": "Munti Wasi",
+   "wikidata": "Q25103791"
+  },
+  {
+   "lat": -10.094208,
+   "lon": -76.402221,
+   "name": "Queuluacocha",
+   "wikidata": "Q25205633"
+  },
+  {
    "lat": -9.525048,
    "lon": -77.384999,
    "name": "Huamashraju",
@@ -2142,6 +1997,219 @@
    "wikidata": "Q25208892"
   },
   {
+   "lat": -9.312859,
+   "lon": -76.016387,
+   "name": "La Bella Durmiente",
+   "wikidata": "Q17086534"
+  },
+  {
+   "lat": -9.942014,
+   "lon": -76.251795,
+   "name": "Cerro Visagaga"
+  },
+  {
+   "lat": -10.169651,
+   "lon": -77.033304,
+   "name": "Pingaush"
+  },
+  {
+   "lat": -10.087674,
+   "lon": -76.748271,
+   "name": "Cerro Calashpampa"
+  },
+  {
+   "lat": -10.79521,
+   "lon": -76.624382,
+   "name": "Yana Mach'ay",
+   "wikidata": "Q25052561"
+  },
+  {
+   "lat": -10.757204,
+   "lon": -76.595146,
+   "name": "Kuchpanqa",
+   "wikidata": "Q25100467"
+  },
+  {
+   "lat": -10.614212,
+   "lon": -76.707669,
+   "name": "Isku",
+   "wikidata": "Q25247594"
+  },
+  {
+   "lat": -10.72536,
+   "lon": -76.677993,
+   "name": "Quyllur",
+   "wikidata": "Q25203580"
+  },
+  {
+   "lat": -10.76786,
+   "lon": -76.682543,
+   "name": "Aququcha",
+   "wikidata": "Q25203581"
+  },
+  {
+   "lat": -10.76757,
+   "lon": -76.704596,
+   "name": "Kinwa Ukru",
+   "wikidata": "Q25100139"
+  },
+  {
+   "lat": -10.438135,
+   "lon": -76.763722,
+   "name": "Flor de Luto",
+   "wikidata": "Q28163335"
+  },
+  {
+   "lat": -10.730051,
+   "lon": -76.691077,
+   "name": "Wanquyru",
+   "wikidata": "Q25247791"
+  },
+  {
+   "lat": -10.678874,
+   "lon": -76.671368,
+   "name": "Luliqucha",
+   "wikidata": "Q25052558"
+  },
+  {
+   "lat": -10.556266,
+   "lon": -76.707637,
+   "name": "Yana Uqhu",
+   "wikidata": "Q20085629"
+  },
+  {
+   "lat": -10.648904,
+   "lon": -76.721483,
+   "name": "Kunkush",
+   "wikidata": "Q25203579"
+  },
+  {
+   "lat": -10.606651,
+   "lon": -76.72645,
+   "name": "Yana Uqhu",
+   "wikidata": "Q20085628"
+  },
+  {
+   "lat": -10.517128,
+   "lon": -76.835053,
+   "name": "Isqiraqucha",
+   "wikidata": "Q25100445"
+  },
+  {
+   "lat": -10.555085,
+   "lon": -76.675531,
+   "name": "Challwayuq",
+   "wikidata": "Q25052549"
+  },
+  {
+   "lat": -10.516511,
+   "lon": -76.723886,
+   "name": "Chuspe",
+   "wikidata": "Q25247592"
+  },
+  {
+   "lat": -10.528109,
+   "lon": -76.715882,
+   "name": "Cushuropata",
+   "wikidata": "Q25052553"
+  },
+  {
+   "lat": -10.569292,
+   "lon": -76.673021,
+   "name": "Yana Chaka",
+   "wikidata": "Q25203222"
+  },
+  {
+   "lat": -10.541352,
+   "lon": -76.872942,
+   "name": "Pishtac",
+   "wikidata": "Q25203576"
+  },
+  {
+   "lat": -10.533446,
+   "lon": -76.854494,
+   "name": "Huayllajirca",
+   "wikidata": "Q25247781"
+  },
+  {
+   "lat": -10.488579,
+   "lon": -76.742624,
+   "name": "Condorsenja",
+   "wikidata": "Q16893710"
+  },
+  {
+   "lat": -10.501109,
+   "lon": -76.806997,
+   "name": "Hirka Kancha",
+   "wikidata": "Q25100433"
+  },
+  {
+   "lat": -10.511489,
+   "lon": -76.888053,
+   "name": "Yanajirca",
+   "wikidata": "Q25203575"
+  },
+  {
+   "lat": -10.452722,
+   "lon": -76.697788,
+   "name": "Chacraccocha",
+   "wikidata": "Q25053955"
+  },
+  {
+   "lat": -10.469576,
+   "lon": -76.720847,
+   "name": "Puyhuanccocha",
+   "wikidata": "Q15269428"
+  },
+  {
+   "lat": -10.613685,
+   "lon": -76.865137,
+   "name": "P'ukru",
+   "wikidata": "Q25247789"
+  },
+  {
+   "lat": -10.547417,
+   "lon": -76.855521,
+   "name": "Chalhuacocha",
+   "wikidata": "Q19600693"
+  },
+  {
+   "lat": -10.508251,
+   "lon": -76.858981,
+   "name": "Mishihuajanan",
+   "wikidata": "Q25100140"
+  },
+  {
+   "lat": -10.544701,
+   "lon": -76.880243,
+   "name": "Chhanka",
+   "wikidata": "Q25100133"
+  },
+  {
+   "lat": -10.485006,
+   "lon": -76.896508,
+   "name": "Montecocha",
+   "wikidata": "Q25100454"
+  },
+  {
+   "lat": -10.53025,
+   "lon": -76.91133,
+   "name": "Yana Uqsha",
+   "wikidata": "Q25203578"
+  },
+  {
+   "lat": -10.584421,
+   "lon": -76.866049,
+   "name": "Awkin",
+   "wikidata": "Q19600282"
+  },
+  {
+   "lat": -10.502897,
+   "lon": -76.894555,
+   "name": "Puka Qaqa",
+   "wikidata": "Q25203644"
+  },
+  {
    "lat": -8.46758,
    "lon": -77.315472,
    "name": "Cerro Matca"
@@ -2152,9 +2220,366 @@
    "name": "Garhuash"
   },
   {
-   "lat": -10.406126,
-   "lon": -76.877423,
-   "name": "Pumarinri"
+   "lat": -10.31369,
+   "lon": -76.649457,
+   "name": "Cerro Wagratacanan"
+  },
+  {
+   "lat": -9.205392,
+   "lon": -78.484718,
+   "name": "Cerro el Tunel"
+  },
+  {
+   "lat": -10.247819,
+   "lon": -77.313063,
+   "name": "Tuku Wachanan",
+   "wikidata": "Q24897071"
+  },
+  {
+   "lat": -10.672514,
+   "lon": -77.104722,
+   "name": "Waqra Punta",
+   "wikidata": "Q25100448"
+  },
+  {
+   "lat": -10.449071,
+   "lon": -77.249623,
+   "name": "Uchku",
+   "wikidata": "Q25209440"
+  },
+  {
+   "lat": -10.311623,
+   "lon": -77.322633,
+   "name": "Lukma Punta",
+   "wikidata": "Q24892936"
+  },
+  {
+   "lat": -10.264872,
+   "lon": -77.27489,
+   "name": "Kushuru Punta",
+   "wikidata": "Q24897012"
+  },
+  {
+   "lat": -10.307784,
+   "lon": -77.241233,
+   "name": "Shinuacocha",
+   "wikidata": "Q25053931"
+  },
+  {
+   "lat": -10.428591,
+   "lon": -77.267677,
+   "name": "Wanaku",
+   "wikidata": "Q25209290"
+  },
+  {
+   "lat": -10.36079,
+   "lon": -76.79467,
+   "name": "Yanajirca",
+   "wikidata": "Q18395879"
+  },
+  {
+   "lat": -10.690195,
+   "lon": -77.116562,
+   "name": "Phiri Uya",
+   "wikidata": "Q20085471"
+  },
+  {
+   "lat": -10.268641,
+   "lon": -77.29083,
+   "name": "Yuraq Punta",
+   "wikidata": "Q25209289"
+  },
+  {
+   "lat": -10.413903,
+   "lon": -76.975437,
+   "name": "Huacshash",
+   "wikidata": "Q13191162"
+  },
+  {
+   "lat": -10.669051,
+   "lon": -77.080827,
+   "name": "Ch'ura",
+   "wikidata": "Q19600721"
+  },
+  {
+   "lat": -10.677778,
+   "lon": -77.041068,
+   "name": "Wathiyaqucha",
+   "wikidata": "Q20085599"
+  },
+  {
+   "lat": -10.41728,
+   "lon": -76.93441,
+   "name": "Mitopunta",
+   "wikidata": "Q20085455"
+  },
+  {
+   "lat": -10.695579,
+   "lon": -77.011365,
+   "name": "Mataqucha",
+   "wikidata": "Q20085453"
+  },
+  {
+   "lat": -10.440285,
+   "lon": -76.966454,
+   "name": "Julcán",
+   "wikidata": "Q3344059"
+  },
+  {
+   "lat": -10.498644,
+   "lon": -77.363899,
+   "name": "Inca Huajanan",
+   "wikidata": "Q24893190"
+  },
+  {
+   "lat": -10.678429,
+   "lon": -77.024264,
+   "name": "Puka Parya",
+   "wikidata": "Q20085485"
+  },
+  {
+   "lat": -10.397234,
+   "lon": -76.883684,
+   "name": "Pumarinri",
+   "wikidata": "Q14474080"
+  },
+  {
+   "lat": -10.386482,
+   "lon": -76.856055,
+   "name": "Suerococha",
+   "wikidata": "Q20085569"
+  },
+  {
+   "lat": -10.396687,
+   "lon": -76.988878,
+   "name": "Yanacushman",
+   "wikidata": "Q20085637"
+  },
+  {
+   "lat": -10.385902,
+   "lon": -76.875216,
+   "name": "Cuyoc",
+   "wikidata": "Q13642397"
+  },
+  {
+   "lat": -10.348083,
+   "lon": -76.838476,
+   "name": "Wank'a Marka",
+   "wikidata": "Q25100425"
+  },
+  {
+   "lat": -10.118948,
+   "lon": -76.916402,
+   "name": "Chawpi Hanka",
+   "wikidata": "Q25203645"
+  },
+  {
+   "lat": -10.102507,
+   "lon": -76.950911,
+   "name": "Yanajirca",
+   "wikidata": "Q25209418"
+  },
+  {
+   "lat": -10.108932,
+   "lon": -77.016126,
+   "name": "Puka Qaqa",
+   "wikidata": "Q25203713"
+  },
+  {
+   "lat": -10.297174,
+   "lon": -76.980543,
+   "name": "Rajucollota",
+   "wikidata": "Q13189451"
+  },
+  {
+   "lat": -10.420762,
+   "lon": -76.803489,
+   "name": "Quesillojanca",
+   "wikidata": "Q13189817"
+  },
+  {
+   "lat": -10.298748,
+   "lon": -76.964005,
+   "name": "Huacrish",
+   "wikidata": "Q13191112"
+  },
+  {
+   "lat": -10.2864,
+   "lon": -76.975858,
+   "name": "Suerococha",
+   "wikidata": "Q19898761"
+  },
+  {
+   "lat": -10.325459,
+   "lon": -76.974332,
+   "name": "Jullutahuarco",
+   "wikidata": "Q20085519"
+  },
+  {
+   "lat": -10.016736,
+   "lon": -77.002509,
+   "name": "Chaupijanca",
+   "wikidata": "Q13189342"
+  },
+  {
+   "lat": -10.381438,
+   "lon": -76.730932,
+   "name": "Chuspiccocha",
+   "wikidata": "Q17777685"
+  },
+  {
+   "lat": -10.115673,
+   "lon": -77.024197,
+   "name": "Chawpi Punta",
+   "wikidata": "Q24887280"
+  },
+  {
+   "lat": -8.460309,
+   "lon": -77.815754,
+   "name": "Gaico",
+   "wikidata": "Q25208760"
+  },
+  {
+   "lat": -8.48091,
+   "lon": -77.831106,
+   "name": "Ancaracra",
+   "wikidata": "Q25106294"
+  },
+  {
+   "lat": -10.0686,
+   "lon": -77.015869,
+   "name": "Chancayoc",
+   "wikidata": "Q24887258"
+  },
+  {
+   "lat": -10.163913,
+   "lon": -76.912516,
+   "name": "Gasha",
+   "wikidata": "Q20085392"
+  },
+  {
+   "lat": -10.035816,
+   "lon": -77.008658,
+   "name": "Quntayqucha Punta",
+   "wikidata": "Q25100487"
+  },
+  {
+   "lat": -10.06303,
+   "lon": -77.011328,
+   "name": "Pisqan Punta",
+   "wikidata": "Q25100557"
+  },
+  {
+   "lat": -8.474422,
+   "lon": -77.748522,
+   "name": "Winchus",
+   "wikidata": "Q25248152"
+  },
+  {
+   "lat": -8.668396,
+   "lon": -77.762501,
+   "name": "Collpa Janca",
+   "wikidata": "Q25106317"
+  },
+  {
+   "lat": -10.020875,
+   "lon": -77.025847,
+   "name": "Yana Jaqhi",
+   "wikidata": "Q25100508"
+  },
+  {
+   "lat": -8.755047,
+   "lon": -77.748055,
+   "name": "Kita Raqsa",
+   "wikidata": "Q25106375"
+  },
+  {
+   "lat": -8.631143,
+   "lon": -77.712222,
+   "name": "Kuntur Wasi",
+   "wikidata": "Q25208828"
+  },
+  {
+   "lat": -9.963453,
+   "lon": -77.07311,
+   "name": "Calapo",
+   "wikidata": "Q25100544"
+  },
+  {
+   "lat": -9.919827,
+   "lon": -77.036895,
+   "name": "Huallanca",
+   "wikidata": "Q13191120"
+  },
+  {
+   "lat": -8.682833,
+   "lon": -77.819727,
+   "name": "Quyllurqucha",
+   "wikidata": "Q25208826"
+  },
+  {
+   "lat": -8.804213,
+   "lon": -77.649444,
+   "name": "Collota",
+   "wikidata": "Q25203406"
+  },
+  {
+   "lat": -8.704425,
+   "lon": -77.817203,
+   "name": "Misquicocha",
+   "wikidata": "Q25053866"
+  },
+  {
+   "lat": -9.89614,
+   "lon": -77.054466,
+   "name": "Chuspi",
+   "wikidata": "Q13189295"
+  },
+  {
+   "lat": -9.871966,
+   "lon": -77.061933,
+   "name": "Tankan",
+   "wikidata": "Q19848125"
+  },
+  {
+   "lat": -9.940055,
+   "lon": -77.042519,
+   "name": "Kuntur Wayi",
+   "wikidata": "Q20085435"
+  },
+  {
+   "lat": -9.908619,
+   "lon": -77.053304,
+   "name": "Tancancocha",
+   "wikidata": "Q25100460"
+  },
+  {
+   "lat": -10.002264,
+   "lon": -77.040561,
+   "name": "Yuraq Kallapu",
+   "wikidata": "Q25100495"
+  },
+  {
+   "lat": -8.811177,
+   "lon": -77.580564,
+   "name": "Wira Wira",
+   "wikidata": "Q25247734"
+  },
+  {
+   "lat": -9.983554,
+   "lon": -77.054624,
+   "name": "Jupa Tawqaña",
+   "wikidata": "Q25100499"
+  },
+  {
+   "lat": -8.686471,
+   "lon": -77.054208,
+   "name": "Cerro Cabeza de Gorila"
+  },
+  {
+   "lat": -8.685124,
+   "lon": -77.056354,
+   "name": "Cerro Chonta (separa sierra y selva)"
   }
  ]
 }

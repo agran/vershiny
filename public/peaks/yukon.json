@@ -1,6 +1,6 @@
 {
  "region": "yukon",
- "generated": "2026-08-13T09:16:29+00:00",
+ "generated": "2026-08-18T20:47:37+00:00",
  "peaks": [
   {
    "lat": 60.567846,
@@ -634,15 +634,15 @@
    "ele": 2309
   },
   {
-   "lat": 59.132146,
-   "lon": -134.483878,
-   "name": "Mount Poletica",
-   "ele": 2298
-  },
-  {
    "lat": 59.832836,
    "lon": -136.428363,
    "name": "Mount Kelsall",
+   "ele": 2298
+  },
+  {
+   "lat": 59.132146,
+   "lon": -134.483878,
+   "name": "Mount Poletica",
    "ele": 2298
   },
   {
@@ -695,27 +695,27 @@
    "ele": 2231
   },
   {
-   "lat": 61.092605,
-   "lon": -138.782569,
-   "name": "Right On Mountain",
-   "ele": 2227
-  },
-  {
    "lat": 59.549993,
    "lon": -130.02416,
    "name": "Chromite Mountain",
    "ele": 2227
   },
   {
-   "lat": 60.079697,
-   "lon": -135.308626,
-   "name": "Crozier Peak",
-   "ele": 2225
+   "lat": 61.092605,
+   "lon": -138.782569,
+   "name": "Right On Mountain",
+   "ele": 2227
   },
   {
    "lat": 59.999112,
    "lon": -136.171416,
    "name": "Mount Nevin",
+   "ele": 2225
+  },
+  {
+   "lat": 60.079697,
+   "lon": -135.308626,
+   "name": "Crozier Peak",
    "ele": 2225
   },
   {
@@ -768,15 +768,15 @@
    "ele": 2195
   },
   {
-   "lat": 60.045357,
-   "lon": -134.717643,
-   "name": "Mount Matheson",
-   "ele": 2193
-  },
-  {
    "lat": 59.154731,
    "lon": -134.50371,
    "name": "Mount Steacie",
+   "ele": 2193
+  },
+  {
+   "lat": 60.045357,
+   "lon": -134.717643,
+   "name": "Mount Matheson",
    "ele": 2193
   },
   {
@@ -835,17 +835,17 @@
    "wikidata": "Q22558013"
   },
   {
+   "lat": 59.103607,
+   "lon": -133.525207,
+   "name": "Paradise Peak",
+   "ele": 2165
+  },
+  {
    "lat": 61.329737,
    "lon": -127.165018,
    "name": "Mount Dooshka",
    "ele": 2165,
    "wikidata": "Q22426754"
-  },
-  {
-   "lat": 59.103607,
-   "lon": -133.525207,
-   "name": "Paradise Peak",
-   "ele": 2165
   },
   {
    "lat": 64.405372,
@@ -878,15 +878,15 @@
    "ele": 2146
   },
   {
-   "lat": 61.549124,
-   "lon": -132.318836,
-   "name": "Ketza Peak",
-   "ele": 2145
-  },
-  {
    "lat": 59.177881,
    "lon": -134.246134,
    "name": "Mount Caplice",
+   "ele": 2145
+  },
+  {
+   "lat": 61.549124,
+   "lon": -132.318836,
+   "name": "Ketza Peak",
    "ele": 2145
   },
   {
@@ -1011,17 +1011,17 @@
    "ele": 2095
   },
   {
-   "lat": 60.648296,
-   "lon": -138.204915,
-   "name": "Chalcedony Mountain",
-   "ele": 2095
-  },
-  {
    "lat": 62.556033,
    "lon": -134.034049,
    "name": "Tay Mountain",
    "ele": 2095,
    "wikidata": "Q22467943"
+  },
+  {
+   "lat": 60.648296,
+   "lon": -138.204915,
+   "name": "Chalcedony Mountain",
+   "ele": 2095
   },
   {
    "lat": 61.485608,
@@ -1109,12 +1109,6 @@
    "ele": 2074
   },
   {
-   "lat": 60.936136,
-   "lon": -134.705456,
-   "name": "Joe Mountain",
-   "ele": 2073
-  },
-  {
    "lat": 59.191498,
    "lon": -135.700024,
    "name": "Mount Emmerich",
@@ -1124,6 +1118,12 @@
    "lat": 59.09655,
    "lon": -135.123967,
    "name": "Sinclair Mountain",
+   "ele": 2073
+  },
+  {
+   "lat": 60.936136,
+   "lon": -134.705456,
+   "name": "Joe Mountain",
    "ele": 2073
   },
   {
@@ -1187,15 +1187,15 @@
    "ele": 2057
   },
   {
-   "lat": 59.645201,
-   "lon": -134.792311,
-   "name": "Young Peak",
-   "ele": 2055
-  },
-  {
    "lat": 61.810301,
    "lon": -140.993614,
    "name": "Centre Mountain",
+   "ele": 2055
+  },
+  {
+   "lat": 59.645201,
+   "lon": -134.792311,
+   "name": "Young Peak",
    "ele": 2055
   },
   {
@@ -1211,15 +1211,15 @@
    "ele": 2051
   },
   {
-   "lat": 59.928673,
-   "lon": -135.146775,
-   "name": "Tom Thumb Mountain",
-   "ele": 2045
-  },
-  {
    "lat": 63.149587,
    "lon": -135.841248,
    "name": "Mount MacDonald",
+   "ele": 2045
+  },
+  {
+   "lat": 59.928673,
+   "lon": -135.146775,
+   "name": "Tom Thumb Mountain",
    "ele": 2045
   },
   {
@@ -1277,27 +1277,27 @@
    "ele": 2019
   },
   {
-   "lat": 60.461258,
-   "lon": -134.704038,
-   "name": "Mount Lorne",
-   "ele": 2018
-  },
-  {
    "lat": 59.564667,
    "lon": -135.25056,
    "name": "Mount Carmack-North Peak",
    "ele": 2018
   },
   {
-   "lat": 59.86164,
-   "lon": -134.644356,
-   "name": "Jack Peak",
-   "ele": 2017
+   "lat": 60.461258,
+   "lon": -134.704038,
+   "name": "Mount Lorne",
+   "ele": 2018
   },
   {
    "lat": 61.02599,
    "lon": -135.535609,
    "name": "Pilot Mountain",
+   "ele": 2017
+  },
+  {
+   "lat": 59.86164,
+   "lon": -134.644356,
+   "name": "Jack Peak",
    "ele": 2017
   },
   {
@@ -1313,15 +1313,15 @@
    "ele": 2016
   },
   {
-   "lat": 60.386791,
-   "lon": -137.216821,
-   "name": "Mount Barker",
-   "ele": 2015
-  },
-  {
    "lat": 59.22869,
    "lon": -134.592692,
    "name": "Grizzly Peak",
+   "ele": 2015
+  },
+  {
+   "lat": 60.386791,
+   "lon": -137.216821,
+   "name": "Mount Barker",
    "ele": 2015
   },
   {
@@ -1343,12 +1343,6 @@
    "ele": 2006
   },
   {
-   "lat": 59.805632,
-   "lon": -134.425123,
-   "name": "Mount Brown",
-   "ele": 2001
-  },
-  {
    "lat": 60.704196,
    "lon": -138.23057,
    "name": "Hoodoo Mountain",
@@ -1358,6 +1352,12 @@
    "lat": 59.847877,
    "lon": -137.901506,
    "name": "Mount Blackadar",
+   "ele": 2001
+  },
+  {
+   "lat": 59.805632,
+   "lon": -134.425123,
+   "name": "Mount Brown",
    "ele": 2001
   },
   {
@@ -1403,27 +1403,27 @@
    "ele": 1989
   },
   {
-   "lat": 61.785412,
-   "lon": -140.950205,
-   "name": "Flat Top Mountain",
-   "ele": 1989
-  },
-  {
    "lat": 64.071899,
    "lon": -135.012639,
    "name": "Mount Cameron",
    "ele": 1989
   },
   {
-   "lat": 59.061825,
-   "lon": -125.440281,
-   "name": "Mount McLearn",
-   "ele": 1987
+   "lat": 61.785412,
+   "lon": -140.950205,
+   "name": "Flat Top Mountain",
+   "ele": 1989
   },
   {
    "lat": 63.910321,
    "lon": -135.06506,
    "name": "Mount Berry",
+   "ele": 1987
+  },
+  {
+   "lat": 59.061825,
+   "lon": -125.440281,
+   "name": "Mount McLearn",
    "ele": 1987
   },
   {
@@ -1433,15 +1433,15 @@
    "ele": 1986
   },
   {
-   "lat": 63.818921,
-   "lon": -135.075746,
-   "name": "Mount Albert",
-   "ele": 1985
-  },
-  {
    "lat": 60.311141,
    "lon": -135.084838,
    "name": "Bush Mountain",
+   "ele": 1985
+  },
+  {
+   "lat": 63.818921,
+   "lon": -135.075746,
+   "name": "Mount Albert",
    "ele": 1985
   },
   {
@@ -1542,27 +1542,27 @@
    "ele": 1967
   },
   {
-   "lat": 65.084553,
-   "lon": -133.20616,
-   "name": "Mount Colley",
-   "ele": 1966
-  },
-  {
    "lat": 59.679846,
    "lon": -133.060893,
    "name": "Mount McLay",
    "ele": 1966
   },
   {
-   "lat": 64.316929,
-   "lon": -138.246117,
-   "name": "Mount French",
-   "ele": 1963
+   "lat": 65.084553,
+   "lon": -133.20616,
+   "name": "Mount Colley",
+   "ele": 1966
   },
   {
    "lat": 59.281181,
    "lon": -134.958876,
    "name": "Snowtop Mountain",
+   "ele": 1963
+  },
+  {
+   "lat": 64.316929,
+   "lon": -138.246117,
+   "name": "Mount French",
    "ele": 1963
   },
   {
@@ -1590,21 +1590,21 @@
    "ele": 1958
   },
   {
-   "lat": 61.117824,
-   "lon": -133.226609,
-   "name": "Dropoff Mountain",
-   "ele": 1955
-  },
-  {
    "lat": 59.599541,
    "lon": -136.354349,
    "name": "Seltat Peak",
    "ele": 1955
   },
   {
-   "lat": 60.994124,
-   "lon": -135.375609,
-   "name": "Flat Mountain",
+   "lat": 61.117824,
+   "lon": -133.226609,
+   "name": "Dropoff Mountain",
+   "ele": 1955
+  },
+  {
+   "lat": 62.309562,
+   "lon": -131.935816,
+   "name": "Chechera Mountain",
    "ele": 1954
   },
   {
@@ -1614,9 +1614,9 @@
    "ele": 1954
   },
   {
-   "lat": 62.309562,
-   "lon": -131.935816,
-   "name": "Chechera Mountain",
+   "lat": 60.994124,
+   "lon": -135.375609,
+   "name": "Flat Mountain",
    "ele": 1954
   },
   {
@@ -1650,27 +1650,15 @@
    "ele": 1950
   },
   {
-   "lat": 62.075344,
-   "lon": -140.972639,
-   "name": "Beaver Mountain",
-   "ele": 1948
-  },
-  {
    "lat": 60.293861,
    "lon": -134.914839,
    "name": "Mount Gilliam",
    "ele": 1948
   },
   {
-   "lat": 64.081592,
-   "lon": -133.189388,
-   "name": "Mount Ferrell",
-   "ele": 1948
-  },
-  {
-   "lat": 64.08829,
-   "lon": -132.146685,
-   "name": "Mount Stenbraten",
+   "lat": 62.075344,
+   "lon": -140.972639,
+   "name": "Beaver Mountain",
    "ele": 1948
   },
   {
@@ -1686,15 +1674,27 @@
    "ele": 1948
   },
   {
-   "lat": 61.000187,
-   "lon": -133.592928,
-   "name": "Mount Murphy",
-   "ele": 1946
+   "lat": 64.081592,
+   "lon": -133.189388,
+   "name": "Mount Ferrell",
+   "ele": 1948
+  },
+  {
+   "lat": 64.08829,
+   "lon": -132.146685,
+   "name": "Mount Stenbraten",
+   "ele": 1948
   },
   {
    "lat": 59.176185,
    "lon": -129.467861,
    "name": "Juniper Mountain",
+   "ele": 1946
+  },
+  {
+   "lat": 61.000187,
+   "lon": -133.592928,
+   "name": "Mount Murphy",
    "ele": 1946
   },
   {
@@ -1759,17 +1759,17 @@
    "ele": 1929
   },
   {
-   "lat": 64.131293,
-   "lon": -133.839537,
-   "name": "Mount Mervyn",
-   "ele": 1927
-  },
-  {
    "lat": 59.233059,
    "lon": -133.046362,
    "name": "Chikoida Mountain",
    "ele": 1927,
    "volcano": true
+  },
+  {
+   "lat": 64.131293,
+   "lon": -133.839537,
+   "name": "Mount Mervyn",
+   "ele": 1927
   },
   {
    "lat": 61.078889,
@@ -1856,12 +1856,6 @@
    "ele": 1906
   },
   {
-   "lat": 59.857726,
-   "lon": -134.404868,
-   "name": "Mount Lanning",
-   "ele": 1900
-  },
-  {
    "lat": 63.037491,
    "lon": -135.082248,
    "name": "Clarke Peak",
@@ -1871,6 +1865,12 @@
    "lat": 59.90677,
    "lon": -136.688955,
    "name": "Mount Mansfield",
+   "ele": 1900
+  },
+  {
+   "lat": 59.857726,
+   "lon": -134.404868,
+   "name": "Mount Lanning",
    "ele": 1900
   },
   {
@@ -1892,15 +1892,15 @@
    "ele": 1897
   },
   {
-   "lat": 60.297671,
-   "lon": -135.058862,
-   "name": "Mount Follé",
-   "ele": 1895
-  },
-  {
    "lat": 59.57266,
    "lon": -135.236132,
    "name": "Knee Peak",
+   "ele": 1895
+  },
+  {
+   "lat": 60.297671,
+   "lon": -135.058862,
+   "name": "Mount Follé",
    "ele": 1895
   },
   {
@@ -1946,15 +1946,15 @@
    "ele": 1880
   },
   {
-   "lat": 61.312857,
-   "lon": -132.416449,
-   "name": "McConnell Peak",
-   "ele": 1879
-  },
-  {
    "lat": 59.146358,
    "lon": -134.443937,
    "name": "Sparrow Peak",
+   "ele": 1879
+  },
+  {
+   "lat": 61.312857,
+   "lon": -132.416449,
+   "name": "McConnell Peak",
    "ele": 1879
   },
   {
@@ -2000,12 +2000,6 @@
    "ele": 1862
   },
   {
-   "lat": 59.994149,
-   "lon": -134.46099,
-   "name": "Charlie Peak",
-   "ele": 1861
-  },
-  {
    "lat": 60.094193,
    "lon": -134.661105,
    "name": "Sugarloaf Hill",
@@ -2015,6 +2009,12 @@
    "lat": 59.535659,
    "lon": -133.998842,
    "name": "Mount Fetterly",
+   "ele": 1861
+  },
+  {
+   "lat": 59.994149,
+   "lon": -134.46099,
+   "name": "Charlie Peak",
    "ele": 1861
   },
   {
@@ -2042,15 +2042,15 @@
    "ele": 1857
   },
   {
-   "lat": 60.184702,
-   "lon": -135.243235,
-   "name": "Beeker NW4",
-   "ele": 1854
-  },
-  {
    "lat": 59.60676,
    "lon": -135.225128,
    "name": "Mount Cleveland-Southeast Peak",
+   "ele": 1854
+  },
+  {
+   "lat": 60.184702,
+   "lon": -135.243235,
+   "name": "Beeker NW4",
    "ele": 1854
   },
   {
@@ -2102,9 +2102,9 @@
    "ele": 1835
   },
   {
-   "lat": 60.009197,
-   "lon": -134.485625,
-   "name": "White Mountain",
+   "lat": 64.675416,
+   "lon": -139.871909,
+   "name": "Mount Harper",
    "ele": 1834
   },
   {
@@ -2114,21 +2114,21 @@
    "ele": 1834
   },
   {
-   "lat": 64.675416,
-   "lon": -139.871909,
-   "name": "Mount Harper",
+   "lat": 60.009197,
+   "lon": -134.485625,
+   "name": "White Mountain",
    "ele": 1834
-  },
-  {
-   "lat": 61.188715,
-   "lon": -137.237889,
-   "name": "Mount Aramis",
-   "ele": 1833
   },
   {
    "lat": 60.764461,
    "lon": -134.727819,
    "name": "Cap Mountain",
+   "ele": 1833
+  },
+  {
+   "lat": 61.188715,
+   "lon": -137.237889,
+   "name": "Mount Aramis",
    "ele": 1833
   },
   {
@@ -2150,12 +2150,6 @@
    "ele": 1831
   },
   {
-   "lat": 62.037173,
-   "lon": -133.900387,
-   "name": "Mount Atherton",
-   "ele": 1830
-  },
-  {
    "lat": 63.894492,
    "lon": -135.154002,
    "name": "Bunker Hill",
@@ -2168,9 +2162,27 @@
    "ele": 1830
   },
   {
+   "lat": 62.037173,
+   "lon": -133.900387,
+   "name": "Mount Atherton",
+   "ele": 1830
+  },
+  {
    "lat": 60.499204,
    "lon": -136.017966,
    "name": "Mount Coudert (Southeast Summit)",
+   "ele": 1829
+  },
+  {
+   "lat": 59.519236,
+   "lon": -135.937314,
+   "name": "Klutshah Mountain",
+   "ele": 1829
+  },
+  {
+   "lat": 64.348529,
+   "lon": -138.269806,
+   "name": "Mount Labbe",
    "ele": 1829
   },
   {
@@ -2183,18 +2195,6 @@
    "lat": 64.649614,
    "lon": -138.458805,
    "name": "Rake Mountain",
-   "ele": 1829
-  },
-  {
-   "lat": 64.348529,
-   "lon": -138.269806,
-   "name": "Mount Labbe",
-   "ele": 1829
-  },
-  {
-   "lat": 59.519236,
-   "lon": -135.937314,
-   "name": "Klutshah Mountain",
    "ele": 1829
   },
   {
@@ -2234,15 +2234,15 @@
    "ele": 1814
   },
   {
-   "lat": 61.120078,
-   "lon": -132.522468,
-   "name": "Indian Mountain",
-   "ele": 1812
-  },
-  {
    "lat": 59.100053,
    "lon": -128.995324,
    "name": "Sheep Mountain",
+   "ele": 1812
+  },
+  {
+   "lat": 61.120078,
+   "lon": -132.522468,
+   "name": "Indian Mountain",
    "ele": 1812
   },
   {
@@ -2252,15 +2252,15 @@
    "ele": 1811
   },
   {
-   "lat": 60.196552,
-   "lon": -134.118647,
-   "name": "Jubilee Mountain",
-   "ele": 1810
-  },
-  {
    "lat": 59.662817,
    "lon": -135.951066,
    "name": "Raymond Peak",
+   "ele": 1810
+  },
+  {
+   "lat": 60.196552,
+   "lon": -134.118647,
+   "name": "Jubilee Mountain",
    "ele": 1810
   },
   {
@@ -2276,9 +2276,9 @@
    "ele": 1807
   },
   {
-   "lat": 60.059869,
-   "lon": -134.354974,
-   "name": "Base Mountain",
+   "lat": 60.232713,
+   "lon": -135.359551,
+   "name": "Mount Kopje",
    "ele": 1803
   },
   {
@@ -2288,21 +2288,21 @@
    "ele": 1803
   },
   {
-   "lat": 60.232713,
-   "lon": -135.359551,
-   "name": "Mount Kopje",
+   "lat": 60.059869,
+   "lon": -134.354974,
+   "name": "Base Mountain",
    "ele": 1803
-  },
-  {
-   "lat": 64.58123,
-   "lon": -138.388853,
-   "name": "Mount Boyle",
-   "ele": 1800
   },
   {
    "lat": 60.163787,
    "lon": -135.268561,
    "name": "Carbon Hill",
+   "ele": 1800
+  },
+  {
+   "lat": 64.58123,
+   "lon": -138.388853,
+   "name": "Mount Boyle",
    "ele": 1800
   },
   {
@@ -2312,15 +2312,15 @@
    "ele": 1799
   },
   {
-   "lat": 61.128808,
-   "lon": -133.419971,
-   "name": "Pisa Mountain",
-   "ele": 1798
-  },
-  {
    "lat": 59.072985,
    "lon": -135.141057,
    "name": "Shattered Prayers Picket",
+   "ele": 1798
+  },
+  {
+   "lat": 61.128808,
+   "lon": -133.419971,
+   "name": "Pisa Mountain",
    "ele": 1798
   },
   {
@@ -2336,15 +2336,15 @@
    "ele": 1794
   },
   {
-   "lat": 61.000227,
-   "lon": -133.780022,
-   "name": "Slate Mountain",
-   "ele": 1792
-  },
-  {
    "lat": 59.24201,
    "lon": -133.621645,
    "name": "Mt MacCallum",
+   "ele": 1792
+  },
+  {
+   "lat": 61.000227,
+   "lon": -133.780022,
+   "name": "Slate Mountain",
    "ele": 1792
   },
   {
@@ -2433,15 +2433,15 @@
    "ele": 1773
   },
   {
-   "lat": 62.147102,
-   "lon": -134.815099,
-   "name": "Snowcap Mountain",
-   "ele": 1771
-  },
-  {
    "lat": 60.366869,
    "lon": -134.523046,
    "name": "Mount Lansdowne",
+   "ele": 1771
+  },
+  {
+   "lat": 62.147102,
+   "lon": -134.815099,
+   "name": "Snowcap Mountain",
    "ele": 1771
   },
   {
@@ -2451,15 +2451,21 @@
    "ele": 1770
   },
   {
-   "lat": 60.189546,
-   "lon": -134.589113,
-   "name": "Nares Mountain",
-   "ele": 1770
-  },
-  {
    "lat": 61.856906,
    "lon": -132.579886,
    "name": "Mount Ross",
+   "ele": 1770
+  },
+  {
+   "lat": 60.331424,
+   "lon": -135.231496,
+   "name": "Mineral Hill",
+   "ele": 1770
+  },
+  {
+   "lat": 60.189546,
+   "lon": -134.589113,
+   "name": "Nares Mountain",
    "ele": 1770
   },
   {
@@ -2471,21 +2477,15 @@
    "volcano": true
   },
   {
-   "lat": 60.331424,
-   "lon": -135.231496,
-   "name": "Mineral Hill",
-   "ele": 1770
+   "lat": 60.223969,
+   "lon": -135.053164,
+   "name": "Tally Ho Mountain",
+   "ele": 1769
   },
   {
    "lat": 61.049472,
    "lon": -134.605445,
    "name": "Teslin Mountain",
-   "ele": 1769
-  },
-  {
-   "lat": 60.223969,
-   "lon": -135.053164,
-   "name": "Tally Ho Mountain",
    "ele": 1769
   },
   {
@@ -2525,15 +2525,15 @@
    "ele": 1759
   },
   {
-   "lat": 59.136154,
-   "lon": -136.876736,
-   "name": "Unmarked Boundary Point 159",
-   "ele": 1756
-  },
-  {
    "lat": 59.598124,
    "lon": -136.422107,
    "name": "Three Guardsmen Mountain",
+   "ele": 1756
+  },
+  {
+   "lat": 59.136154,
+   "lon": -136.876736,
+   "name": "Unmarked Boundary Point 159",
    "ele": 1756
   },
   {
@@ -2657,15 +2657,15 @@
    "ele": 1715
   },
   {
-   "lat": 59.952599,
-   "lon": -135.234203,
-   "name": "Tagish Highland",
-   "ele": 1714
-  },
-  {
    "lat": 60.256598,
    "lon": -135.266048,
    "name": "Vesuvius Hill",
+   "ele": 1714
+  },
+  {
+   "lat": 59.952599,
+   "lon": -135.234203,
+   "name": "Tagish Highland",
    "ele": 1714
   },
   {
@@ -2765,9 +2765,9 @@
    "ele": 1687
   },
   {
-   "lat": 60.274543,
-   "lon": -137.858236,
-   "name": "Goatherd Mountain",
+   "lat": 59.612364,
+   "lon": -136.147986,
+   "name": "Hiteshitak Mountain",
    "ele": 1686
   },
   {
@@ -2777,21 +2777,21 @@
    "ele": 1686
   },
   {
-   "lat": 59.612364,
-   "lon": -136.147986,
-   "name": "Hiteshitak Mountain",
+   "lat": 60.274543,
+   "lon": -137.858236,
+   "name": "Goatherd Mountain",
    "ele": 1686
-  },
-  {
-   "lat": 59.550198,
-   "lon": -132.62867,
-   "name": "Peveril Peaks",
-   "ele": 1684
   },
   {
    "lat": 60.432416,
    "lon": -135.275558,
    "name": "Alligator Mountain",
+   "ele": 1684
+  },
+  {
+   "lat": 59.550198,
+   "lon": -132.62867,
+   "name": "Peveril Peaks",
    "ele": 1684
   },
   {
@@ -2802,22 +2802,16 @@
    "wikidata": "Q49054420"
   },
   {
-   "lat": 60.052939,
-   "lon": -134.92298,
-   "name": "Finger Mountain",
-   "ele": 1681
-  },
-  {
    "lat": 60.320184,
    "lon": -135.048102,
    "name": "Idaho Hill",
    "ele": 1681
   },
   {
-   "lat": 64.833563,
-   "lon": -138.227298,
-   "name": "Pilots Peak",
-   "ele": 1680
+   "lat": 60.052939,
+   "lon": -134.92298,
+   "name": "Finger Mountain",
+   "ele": 1681
   },
   {
    "lat": 60.133532,
@@ -2829,6 +2823,12 @@
    "lat": 67.551562,
    "lon": -136.338367,
    "name": "Local H.P. (1680)",
+   "ele": 1680
+  },
+  {
+   "lat": 64.833563,
+   "lon": -138.227298,
+   "name": "Pilots Peak",
    "ele": 1680
   },
   {
@@ -2898,27 +2898,27 @@
    "ele": 1657
   },
   {
-   "lat": 62.041399,
-   "lon": -140.789445,
-   "name": "Chair Mountain",
-   "ele": 1653
-  },
-  {
    "lat": 60.350248,
    "lon": -135.223628,
    "name": "Mule Hill",
    "ele": 1653
   },
   {
-   "lat": 59.587868,
-   "lon": -132.627511,
-   "name": "Goodwin Peak",
-   "ele": 1652
+   "lat": 62.041399,
+   "lon": -140.789445,
+   "name": "Chair Mountain",
+   "ele": 1653
   },
   {
    "lat": 60.205746,
    "lon": -135.011787,
    "name": "Dickson Hill",
+   "ele": 1652
+  },
+  {
+   "lat": 59.587868,
+   "lon": -132.627511,
+   "name": "Goodwin Peak",
    "ele": 1652
   },
   {
@@ -2977,15 +2977,15 @@
    "ele": 1622
   },
   {
-   "lat": 64.44845,
-   "lon": -138.177452,
-   "name": "Outrider Mountain",
-   "ele": 1619
-  },
-  {
    "lat": 59.444178,
    "lon": -133.967938,
    "name": "Section Mountain",
+   "ele": 1619
+  },
+  {
+   "lat": 64.44845,
+   "lon": -138.177452,
+   "name": "Outrider Mountain",
    "ele": 1619
   },
   {
@@ -3001,15 +3001,15 @@
    "ele": 1618
   },
   {
-   "lat": 60.013693,
-   "lon": -134.309579,
-   "name": "Mount Morin",
-   "ele": 1616
-  },
-  {
    "lat": 59.299042,
    "lon": -125.701095,
    "name": "Mount Rothenberg",
+   "ele": 1616
+  },
+  {
+   "lat": 60.013693,
+   "lon": -134.309579,
+   "name": "Mount Morin",
    "ele": 1616
   },
   {
@@ -3019,15 +3019,15 @@
    "ele": 1615
   },
   {
-   "lat": 59.284079,
-   "lon": -136.469246,
-   "name": "Monument 154",
-   "ele": 1613
-  },
-  {
    "lat": 59.771858,
    "lon": -133.506151,
    "name": "Steamboat Mountain",
+   "ele": 1613
+  },
+  {
+   "lat": 59.284079,
+   "lon": -136.469246,
+   "name": "Monument 154",
    "ele": 1613
   },
   {
@@ -3105,15 +3105,15 @@
    "ele": 1591
   },
   {
-   "lat": 60.126999,
-   "lon": -134.394932,
-   "name": "Lime Mountain",
-   "ele": 1589
-  },
-  {
    "lat": 63.388057,
    "lon": -136.364386,
    "name": "Hungy Mountain",
+   "ele": 1589
+  },
+  {
+   "lat": 60.126999,
+   "lon": -134.394932,
+   "name": "Lime Mountain",
    "ele": 1589
   },
   {
@@ -3153,15 +3153,15 @@
    "ele": 1581
   },
   {
-   "lat": 59.962493,
-   "lon": -131.866241,
-   "name": "Mount Hazel",
-   "ele": 1577
-  },
-  {
    "lat": 59.24939,
    "lon": -126.574519,
    "name": "Long Mountain (Peak II)",
+   "ele": 1577
+  },
+  {
+   "lat": 59.962493,
+   "lon": -131.866241,
+   "name": "Mount Hazel",
    "ele": 1577
   },
   {
@@ -3208,6 +3208,12 @@
    "ele": 1560
   },
   {
+   "lat": 64.082077,
+   "lon": -135.254359,
+   "name": "Rambler Hill",
+   "ele": 1557
+  },
+  {
    "lat": 62.091039,
    "lon": -140.870987,
    "name": "Ed Mountain",
@@ -3217,12 +3223,6 @@
    "lat": 60.865676,
    "lon": -137.447021,
    "name": "Paint Mountain",
-   "ele": 1557
-  },
-  {
-   "lat": 64.082077,
-   "lon": -135.254359,
-   "name": "Rambler Hill",
    "ele": 1557
   },
   {
@@ -3310,15 +3310,15 @@
    "ele": 1526
   },
   {
-   "lat": 60.773647,
-   "lon": -135.277436,
-   "name": "Haeckel Hill",
-   "ele": 1526
-  },
-  {
    "lat": 61.378649,
    "lon": -129.257617,
    "name": "Nipple Mountain",
+   "ele": 1526
+  },
+  {
+   "lat": 60.773647,
+   "lon": -135.277436,
+   "name": "Haeckel Hill",
    "ele": 1526
   },
   {
@@ -3358,15 +3358,15 @@
    "ele": 1500
   },
   {
-   "lat": 59.465824,
-   "lon": -136.477156,
-   "name": "Unmarked Boundary Point 150",
-   "ele": 1489
-  },
-  {
    "lat": 60.617721,
    "lon": -135.136396,
    "name": "Mount McIntyre",
+   "ele": 1489
+  },
+  {
+   "lat": 59.465824,
+   "lon": -136.477156,
+   "name": "Unmarked Boundary Point 150",
    "ele": 1489
   },
   {
@@ -3400,15 +3400,15 @@
    "ele": 1479
   },
   {
-   "lat": 62.098465,
-   "lon": -140.967364,
-   "name": "Mount Baultoff",
-   "ele": 1472
-  },
-  {
    "lat": 59.460999,
    "lon": -135.410326,
    "name": "Face Mountain",
+   "ele": 1472
+  },
+  {
+   "lat": 62.098465,
+   "lon": -140.967364,
+   "name": "Mount Baultoff",
    "ele": 1472
   },
   {
@@ -3442,15 +3442,15 @@
    "ele": 1465
   },
   {
-   "lat": 60.00909,
-   "lon": -131.866104,
-   "name": "Hazel Ridge",
-   "ele": 1462
-  },
-  {
    "lat": 59.736675,
    "lon": -137.140742,
    "name": "Carmine Mountain",
+   "ele": 1462
+  },
+  {
+   "lat": 60.00909,
+   "lon": -131.866104,
+   "name": "Hazel Ridge",
    "ele": 1462
   },
   {
@@ -3490,15 +3490,15 @@
    "ele": 1438
   },
   {
-   "lat": 62.008322,
-   "lon": -140.664046,
-   "name": "Miles Ridge",
-   "ele": 1437
-  },
-  {
    "lat": 65.402278,
    "lon": -138.39904,
    "name": "Mount Jeckell",
+   "ele": 1437
+  },
+  {
+   "lat": 62.008322,
+   "lon": -140.664046,
+   "name": "Miles Ridge",
    "ele": 1437
   },
   {
@@ -3514,15 +3514,15 @@
    "ele": 1434
   },
   {
-   "lat": 61.711292,
-   "lon": -140.973981,
-   "name": "Kletsan Hill",
-   "ele": 1433
-  },
-  {
    "lat": 60.449736,
    "lon": -135.188192,
    "name": "Beresford Hill",
+   "ele": 1433
+  },
+  {
+   "lat": 61.711292,
+   "lon": -140.973981,
+   "name": "Kletsan Hill",
    "ele": 1433
   },
   {
@@ -3568,15 +3568,15 @@
    "ele": 1416
   },
   {
-   "lat": 60.079889,
-   "lon": -134.796814,
-   "name": "Knob Hill",
-   "ele": 1414
-  },
-  {
    "lat": 59.184646,
    "lon": -126.502263,
    "name": "Long Mountain (Peak III)",
+   "ele": 1414
+  },
+  {
+   "lat": 60.079889,
+   "lon": -134.796814,
+   "name": "Knob Hill",
    "ele": 1414
   },
   {
@@ -3836,6 +3836,12 @@
    "ele": 1260
   },
   {
+   "lat": 61.842692,
+   "lon": -135.958784,
+   "name": "Tanglefoot Mountain",
+   "ele": 1251
+  },
+  {
    "lat": 61.964439,
    "lon": -136.106548,
    "name": "Mount Stutzer",
@@ -3845,12 +3851,6 @@
    "lat": 61.260385,
    "lon": -135.898157,
    "name": "Kingston Mountain",
-   "ele": 1251
-  },
-  {
-   "lat": 61.842692,
-   "lon": -135.958784,
-   "name": "Tanglefoot Mountain",
    "ele": 1251
   },
   {
@@ -3866,15 +3866,15 @@
    "ele": 1246
   },
   {
-   "lat": 59.934087,
-   "lon": -132.507327,
-   "name": "Dawson Peaks",
-   "ele": 1245
-  },
-  {
    "lat": 59.571064,
    "lon": -136.542987,
    "name": "Copper Butte",
+   "ele": 1245
+  },
+  {
+   "lat": 59.934087,
+   "lon": -132.507327,
+   "name": "Dawson Peaks",
    "ele": 1245
   },
   {
@@ -3938,18 +3938,18 @@
    "ele": 1220
   },
   {
-   "lat": 63.412991,
-   "lon": -136.683846,
-   "name": "Tehcho",
-   "name_en": "Ferry Hill",
-   "ele": 1220
-  },
-  {
    "lat": 62.542544,
    "lon": -135.690296,
    "name": "Ess Hill",
    "ele": 1220,
    "wikidata": "Q22424223"
+  },
+  {
+   "lat": 63.412991,
+   "lon": -136.683846,
+   "name": "Tehcho",
+   "name_en": "Ferry Hill",
+   "ele": 1220
   },
   {
    "lat": 61.970551,
@@ -4145,15 +4145,15 @@
    "ele": 1125
   },
   {
-   "lat": 63.87071,
-   "lon": -138.94269,
-   "name": "King Solomon Dome",
-   "ele": 1120
-  },
-  {
    "lat": 59.264147,
    "lon": -135.520128,
    "name": "Mount Ripinski",
+   "ele": 1120
+  },
+  {
+   "lat": 63.87071,
+   "lon": -138.94269,
+   "name": "King Solomon Dome",
    "ele": 1120
   },
   {
@@ -4163,16 +4163,16 @@
    "ele": 1117
   },
   {
-   "lat": 61.994587,
-   "lon": -140.973543,
-   "name": "Tchawsahmon Ridge",
-   "ele": 1115
-  },
-  {
    "lat": 59.137233,
    "lon": -127.240491,
    "name": "Montagnes Rocheuses",
    "name_en": "Rocky Mountains",
+   "ele": 1115
+  },
+  {
+   "lat": 61.994587,
+   "lon": -140.973543,
+   "name": "Tchawsahmon Ridge",
    "ele": 1115
   },
   {
@@ -4200,15 +4200,15 @@
    "ele": 1104
   },
   {
-   "lat": 61.447918,
-   "lon": -135.9957,
-   "name": "Contact Mountain",
-   "ele": 1102
-  },
-  {
    "lat": 66.77754,
    "lon": -136.155625,
    "name": "Mount Cronin",
+   "ele": 1102
+  },
+  {
+   "lat": 61.447918,
+   "lon": -135.9957,
+   "name": "Contact Mountain",
    "ele": 1102
   },
   {
@@ -4272,27 +4272,27 @@
    "ele": 1071
   },
   {
-   "lat": 61.414752,
-   "lon": -135.390484,
-   "name": "Mistake Mountain",
-   "ele": 1070
-  },
-  {
    "lat": 59.395166,
    "lon": -131.951036,
    "name": "Hyland Hill",
    "ele": 1070
   },
   {
-   "lat": 61.474054,
-   "lon": -136.023403,
-   "name": "Contact Mountain",
-   "ele": 1068
+   "lat": 61.414752,
+   "lon": -135.390484,
+   "name": "Mistake Mountain",
+   "ele": 1070
   },
   {
    "lat": 59.044375,
    "lon": -135.445378,
    "name": "Sullivan Mountain",
+   "ele": 1068
+  },
+  {
+   "lat": 61.474054,
+   "lon": -136.023403,
+   "name": "Contact Mountain",
    "ele": 1068
   },
   {
@@ -4483,15 +4483,15 @@
    "ele": 930
   },
   {
-   "lat": 60.22954,
-   "lon": -134.767591,
-   "name": "Watson Ridge",
-   "ele": 922
-  },
-  {
    "lat": 61.70228,
    "lon": -135.82675,
    "name": "Cone Hill",
+   "ele": 922
+  },
+  {
+   "lat": 60.22954,
+   "lon": -134.767591,
+   "name": "Watson Ridge",
    "ele": 922
   },
   {
@@ -4507,15 +4507,15 @@
    "ele": 920
   },
   {
-   "lat": 62.567193,
-   "lon": -140.879167,
-   "name": "Mount Dave",
-   "ele": 918
-  },
-  {
    "lat": 64.387937,
    "lon": -139.007087,
    "name": "Lone Mountain",
+   "ele": 918
+  },
+  {
+   "lat": 62.567193,
+   "lon": -140.879167,
+   "name": "Mount Dave",
    "ele": 918
   },
   {
@@ -4997,14 +4997,10 @@
    "ele": 14
   },
   {
-   "lat": 59.806231,
-   "lon": -139.078234,
-   "name": "Mt. Draper"
-  },
-  {
-   "lat": 59.441661,
-   "lon": -135.994692,
-   "name": "Ski Hill"
+   "lat": 59.432829,
+   "lon": -138.639296,
+   "name": "Mount Reaburn",
+   "wikidata": "Q49054287"
   },
   {
    "lat": 59.008246,
@@ -5012,15 +5008,14 @@
    "name": "Mount Watson"
   },
   {
-   "lat": 59.276396,
-   "lon": -138.473072,
-   "name": "Azimuth Peak"
+   "lat": 61.635323,
+   "lon": -125.732514,
+   "name": "Sunblood Mountain"
   },
   {
-   "lat": 59.432829,
-   "lon": -138.639296,
-   "name": "Mount Reaburn",
-   "wikidata": "Q49054287"
+   "lat": 59.806231,
+   "lon": -139.078234,
+   "name": "Mt. Draper"
   },
   {
    "lat": 59.424912,
@@ -5028,19 +5023,34 @@
    "name": "Iron Mountain"
   },
   {
-   "lat": 59.427275,
-   "lon": -135.100328,
-   "name": "Boundary Peak 109"
-  },
-  {
    "lat": 59.073825,
    "lon": -136.540864,
    "name": "Gable Mountain"
   },
   {
-   "lat": 59.274053,
-   "lon": -136.492304,
-   "name": "Boundary Peak 155"
+   "lat": 59.427275,
+   "lon": -135.100328,
+   "name": "Boundary Peak 109"
+  },
+  {
+   "lat": 63.869757,
+   "lon": -135.129796,
+   "name": "Rock Cairn"
+  },
+  {
+   "lat": 59.441661,
+   "lon": -135.994692,
+   "name": "Ski Hill"
+  },
+  {
+   "lat": 62.807013,
+   "lon": -128.071501,
+   "name": "Tu Ɂulah Shúh"
+  },
+  {
+   "lat": 59.276396,
+   "lon": -138.473072,
+   "name": "Azimuth Peak"
   },
   {
    "lat": 64.538048,
@@ -5063,16 +5073,6 @@
    "name": "Mount Westman"
   },
   {
-   "lat": 61.635323,
-   "lon": -125.732514,
-   "name": "Sunblood Mountain"
-  },
-  {
-   "lat": 62.807013,
-   "lon": -128.071501,
-   "name": "Tu Ɂulah Shúh"
-  },
-  {
    "lat": 61.371091,
    "lon": -134.493687,
    "name": "Mount Peters",
@@ -5085,20 +5085,20 @@
    "wikidata": "Q31568890"
   },
   {
+   "lat": 60.369137,
+   "lon": -130.902513,
+   "name": "Sab Peak"
+  },
+  {
+   "lat": 59.274053,
+   "lon": -136.492304,
+   "name": "Boundary Peak 155"
+  },
+  {
    "lat": 60.836337,
    "lon": -134.066533,
    "name": "Mount M'Clintock",
    "wikidata": "Q22545843"
-  },
-  {
-   "lat": 63.869757,
-   "lon": -135.129796,
-   "name": "Rock Cairn"
-  },
-  {
-   "lat": 60.369137,
-   "lon": -130.902513,
-   "name": "Sab Peak"
   }
  ]
 }

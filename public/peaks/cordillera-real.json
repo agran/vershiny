@@ -1,6 +1,6 @@
 {
  "region": "cordillera-real",
- "generated": "2026-08-13T09:16:19+00:00",
+ "generated": "2026-08-18T20:47:26+00:00",
  "peaks": [
   {
    "lat": -16.654999,
@@ -278,18 +278,18 @@
    "wikidata": "Q18364319"
   },
   {
-   "lat": -16.349529,
-   "lon": -68.127012,
-   "name": "Chacaltaya",
-   "ele": 5421,
-   "wikidata": "Q774941"
-  },
-  {
    "lat": -16.431732,
    "lon": -67.941272,
    "name": "Hati Kkollu",
    "ele": 5421,
    "wikidata": "Q18359089"
+  },
+  {
+   "lat": -16.349529,
+   "lon": -68.127012,
+   "name": "Chacaltaya",
+   "ele": 5421,
+   "wikidata": "Q774941"
   },
   {
    "lat": -16.179187,
@@ -323,12 +323,6 @@
    "ele": 5408
   },
   {
-   "lat": -15.023148,
-   "lon": -69.024989,
-   "name": "Akamani",
-   "ele": 5400
-  },
-  {
    "lat": -17.03266,
    "lon": -67.313818,
    "name": "El Aguila",
@@ -341,10 +335,10 @@
    "ele": 5400
   },
   {
-   "lat": -16.411883,
-   "lon": -67.974747,
-   "name": "Cerro Japo Japani",
-   "ele": 5398
+   "lat": -15.023148,
+   "lon": -69.024989,
+   "name": "Akamani",
+   "ele": 5400
   },
   {
    "lat": -15.909274,
@@ -352,6 +346,12 @@
    "name": "Warawarani",
    "ele": 5398,
    "wikidata": "Q18359721"
+  },
+  {
+   "lat": -16.411883,
+   "lon": -67.974747,
+   "name": "Cerro Japo Japani",
+   "ele": 5398
   },
   {
    "lat": -16.168001,
@@ -463,15 +463,15 @@
    "wikidata": "Q18614624"
   },
   {
-   "lat": -16.190898,
-   "lon": -68.225591,
-   "name": "Aguja Negra",
-   "ele": 5290
-  },
-  {
    "lat": -16.470466,
    "lon": -67.913557,
    "name": "Cerro Taquesi",
+   "ele": 5290
+  },
+  {
+   "lat": -16.190898,
+   "lon": -68.225591,
+   "name": "Aguja Negra",
    "ele": 5290
   },
   {
@@ -493,15 +493,15 @@
    "ele": 5260
   },
   {
-   "lat": -16.183947,
-   "lon": -68.218808,
-   "name": "Ilusioncita",
-   "ele": 5250
-  },
-  {
    "lat": -16.440127,
    "lon": -67.954833,
    "name": "Cerro Tigra Killa",
+   "ele": 5250
+  },
+  {
+   "lat": -16.183947,
+   "lon": -68.218808,
+   "name": "Ilusioncita",
    "ele": 5250
   },
   {
@@ -512,15 +512,15 @@
    "wikidata": "Q406520"
   },
   {
-   "lat": -16.172257,
-   "lon": -68.2165,
-   "name": "Pico Tarija",
-   "ele": 5240
-  },
-  {
    "lat": -16.222096,
    "lon": -68.183405,
    "name": "Cerro Jamol Salio",
+   "ele": 5240
+  },
+  {
+   "lat": -16.172257,
+   "lon": -68.2165,
+   "name": "Pico Tarija",
    "ele": 5240
   },
   {
@@ -542,17 +542,17 @@
    "ele": 5224
   },
   {
-   "lat": -16.209528,
-   "lon": -68.231588,
-   "name": "Pico Mirador Condoriri",
-   "ele": 5224
-  },
-  {
    "lat": -16.443745,
    "lon": -67.937701,
    "name": "Cerro Khasiri",
    "ele": 5224,
    "wikidata": "Q18346155"
+  },
+  {
+   "lat": -16.209528,
+   "lon": -68.231588,
+   "name": "Pico Mirador Condoriri",
+   "ele": 5224
   },
   {
    "lat": -16.076171,
@@ -567,15 +567,15 @@
    "ele": 5210
   },
   {
-   "lat": -16.175452,
-   "lon": -68.217388,
-   "name": "Diente",
-   "ele": 5200
-  },
-  {
    "lat": -16.353947,
    "lon": -67.951403,
    "name": "Nevado Wakani",
+   "ele": 5200
+  },
+  {
+   "lat": -16.175452,
+   "lon": -68.217388,
+   "name": "Diente",
    "ele": 5200
   },
   {
@@ -611,14 +611,14 @@
    "ele": 5127
   },
   {
-   "lat": -16.357275,
-   "lon": -67.875513,
+   "lat": -16.361881,
+   "lon": -67.879244,
    "name": "Cerro Rosario",
    "ele": 5122
   },
   {
-   "lat": -16.361881,
-   "lon": -67.879244,
+   "lat": -16.357275,
+   "lon": -67.875513,
    "name": "Cerro Rosario",
    "ele": 5122
   },
@@ -648,18 +648,18 @@
    "ele": 5072
   },
   {
-   "lat": -16.042763,
-   "lon": -68.243627,
-   "name": "Turini",
-   "ele": 5064,
-   "wikidata": "Q18536458"
-  },
-  {
    "lat": -16.17256,
    "lon": -68.307505,
    "name": "Cerro Nasa Q'ara",
    "ele": 5064,
    "wikidata": "Q18614235"
+  },
+  {
+   "lat": -16.042763,
+   "lon": -68.243627,
+   "name": "Turini",
+   "ele": 5064,
+   "wikidata": "Q18536458"
   },
   {
    "lat": -16.982189,
@@ -897,15 +897,15 @@
    "ele": 4551
   },
   {
-   "lat": -16.297575,
-   "lon": -69.149573,
-   "name": "Cerro Huinchajalla",
-   "ele": 4550
-  },
-  {
    "lat": -16.16761,
    "lon": -68.095284,
    "name": "Cerro Ladrilluni",
+   "ele": 4550
+  },
+  {
+   "lat": -16.297575,
+   "lon": -69.149573,
+   "name": "Cerro Huinchajalla",
    "ele": 4550
   },
   {
@@ -1012,15 +1012,15 @@
    "ele": 4375
   },
   {
-   "lat": -16.516804,
-   "lon": -68.014931,
-   "name": "Cerro Cura Kkollu",
-   "ele": 4365
-  },
-  {
    "lat": -17.332484,
    "lon": -69.294116,
    "name": "Co Jachakollu",
+   "ele": 4365
+  },
+  {
+   "lat": -16.516804,
+   "lon": -68.014931,
+   "name": "Cerro Cura Kkollu",
    "ele": 4365
   },
   {
@@ -1084,15 +1084,15 @@
    "ele": 4284
   },
   {
-   "lat": -17.204414,
-   "lon": -69.149567,
-   "name": "Co Mamaniri",
-   "ele": 4282
-  },
-  {
    "lat": -16.17509,
    "lon": -68.978758,
    "name": "Cerro Tomatomani",
+   "ele": 4282
+  },
+  {
+   "lat": -17.204414,
+   "lon": -69.149567,
+   "name": "Co Mamaniri",
    "ele": 4282
   },
   {
@@ -1150,15 +1150,15 @@
    "ele": 4226
   },
   {
-   "lat": -16.356483,
-   "lon": -68.651696,
-   "name": "Cerro Cohana Pampa",
-   "ele": 4225
-  },
-  {
    "lat": -16.370826,
    "lon": -68.575868,
    "name": "Cerro Callami",
+   "ele": 4225
+  },
+  {
+   "lat": -16.356483,
+   "lon": -68.651696,
+   "name": "Cerro Cohana Pampa",
    "ele": 4225
   },
   {
@@ -1312,15 +1312,15 @@
    "ele": 4104
   },
   {
-   "lat": -16.555917,
-   "lon": -68.035181,
-   "name": "Cerro Pachajaya",
-   "ele": 4095
-  },
-  {
    "lat": -16.346629,
    "lon": -68.612505,
    "name": "Cerro Cakesana",
+   "ele": 4095
+  },
+  {
+   "lat": -16.555917,
+   "lon": -68.035181,
+   "name": "Cerro Pachajaya",
    "ele": 4095
   },
   {
@@ -1403,15 +1403,15 @@
    "ele": 4053
   },
   {
-   "lat": -16.020486,
-   "lon": -69.170595,
-   "name": "Cerro Santa Bárbara",
-   "ele": 4032
-  },
-  {
    "lat": -16.357865,
    "lon": -68.639403,
    "name": "Cerro Jaygachi",
+   "ele": 4032
+  },
+  {
+   "lat": -16.020486,
+   "lon": -69.170595,
+   "name": "Cerro Santa Bárbara",
    "ele": 4032
   },
   {
@@ -1439,27 +1439,27 @@
    "ele": 4021
   },
   {
-   "lat": -16.161688,
-   "lon": -69.091294,
-   "name": "Cerro Calvario",
-   "ele": 4018
-  },
-  {
    "lat": -16.436801,
    "lon": -68.525779,
    "name": "Cerro Kella Kella",
    "ele": 4018
   },
   {
-   "lat": -16.172228,
-   "lon": -69.084579,
-   "name": "Cerro Kesanani (Niño Calvario)",
-   "ele": 4014
+   "lat": -16.161688,
+   "lon": -69.091294,
+   "name": "Cerro Calvario",
+   "ele": 4018
   },
   {
    "lat": -16.062732,
    "lon": -69.120322,
    "name": "Cerro Pucara",
+   "ele": 4014
+  },
+  {
+   "lat": -16.172228,
+   "lon": -69.084579,
+   "name": "Cerro Kesanani (Niño Calvario)",
    "ele": 4014
   },
   {
@@ -1621,15 +1621,15 @@
    "ele": 3922
   },
   {
-   "lat": -16.360301,
-   "lon": -68.620047,
-   "name": "Cerro Jacosa",
-   "ele": 3919
-  },
-  {
    "lat": -16.460827,
    "lon": -68.677409,
    "name": "Cerro Chuanuma",
+   "ele": 3919
+  },
+  {
+   "lat": -16.360301,
+   "lon": -68.620047,
+   "name": "Cerro Jacosa",
    "ele": 3919
   },
   {
@@ -1851,86 +1851,9 @@
    "ele": 1746
   },
   {
-   "lat": -16.132138,
-   "lon": -68.324108,
-   "name": "Apacheta",
-   "wikidata": "Q18352720"
-  },
-  {
-   "lat": -16.0933,
-   "lon": -68.297986,
-   "name": "Cerro Chekapa"
-  },
-  {
-   "lat": -16.518828,
-   "lon": -67.482344,
-   "name": "Cerro Chacahuaya"
-  },
-  {
-   "lat": -17.343125,
-   "lon": -69.361623,
-   "name": "Cerro Anatano"
-  },
-  {
-   "lat": -16.711335,
-   "lon": -68.674397,
-   "name": "Cerro Quimsachata",
-   "wikidata": "Q2750313"
-  },
-  {
-   "lat": -16.814162,
-   "lon": -67.505899,
-   "name": "Nevado Mama Okllo"
-  },
-  {
-   "lat": -17.05893,
-   "lon": -68.375335,
-   "name": "Kelani"
-  },
-  {
-   "lat": -16.847166,
-   "lon": -67.311365,
-   "name": "Cerro Waka Karinia"
-  },
-  {
-   "lat": -16.843551,
-   "lon": -67.309745,
-   "name": "Cerro Jacke Jiwatta"
-  },
-  {
-   "lat": -16.833837,
-   "lon": -67.309777,
-   "name": "Cerro Kelani"
-  },
-  {
-   "lat": -16.838027,
-   "lon": -67.310549,
-   "name": "Cerro Taypi Luma"
-  },
-  {
-   "lat": -15.861154,
-   "lon": -69.003639,
-   "name": "Dragon dormido"
-  },
-  {
-   "lat": -16.533089,
-   "lon": -68.018569,
-   "name": "Cerro Pararani"
-  },
-  {
-   "lat": -16.554141,
-   "lon": -68.123459,
-   "name": "Cerro Hujata"
-  },
-  {
-   "lat": -16.310371,
-   "lon": -68.046069,
-   "name": "Cerro Chuta Pata"
-  },
-  {
-   "lat": -16.561819,
-   "lon": -68.107143,
-   "name": "Cerro Chullpani"
+   "lat": -16.730615,
+   "lon": -67.540738,
+   "name": "Cerro Cumbre"
   },
   {
    "lat": -17.205755,
@@ -1938,101 +1861,19 @@
    "name": "Cerro Kerarani Tijrara"
   },
   {
-   "lat": -17.188833,
-   "lon": -68.437291,
-   "name": "Cerro Leque Lequeni"
+   "lat": -16.442483,
+   "lon": -67.980029,
+   "name": "Cerro Kkotapata"
+  },
+  {
+   "lat": -17.05893,
+   "lon": -68.375335,
+   "name": "Kelani"
   },
   {
    "lat": -16.239398,
    "lon": -68.59596,
    "name": "Cerro Jacha Kkllu"
-  },
-  {
-   "lat": -16.559369,
-   "lon": -68.672844,
-   "name": "Mollu Kontu"
-  },
-  {
-   "lat": -16.580785,
-   "lon": -69.008163,
-   "name": "Cerro Punta Jakara"
-  },
-  {
-   "lat": -15.666285,
-   "lon": -69.129042,
-   "name": "Cerro Escoma"
-  },
-  {
-   "lat": -16.299084,
-   "lon": -68.757818,
-   "name": "Cerro Cochcachi"
-  },
-  {
-   "lat": -16.557041,
-   "lon": -68.052419,
-   "name": "Cerro Zapatuni"
-  },
-  {
-   "lat": -16.559443,
-   "lon": -68.070229,
-   "name": "Cerro Mamari"
-  },
-  {
-   "lat": -16.653801,
-   "lon": -68.317432,
-   "name": "Cerro Sajira"
-  },
-  {
-   "lat": -16.164203,
-   "lon": -69.059561,
-   "name": "Cerro Torre Torrini"
-  },
-  {
-   "lat": -16.15672,
-   "lon": -69.046569,
-   "name": "Cerro Oke Okeña"
-  },
-  {
-   "lat": -16.147669,
-   "lon": -69.061548,
-   "name": "Cerro Huayna Khauri"
-  },
-  {
-   "lat": -15.83035,
-   "lon": -68.210233,
-   "name": "Cerro Alto Canaza"
-  },
-  {
-   "lat": -15.823612,
-   "lon": -68.222181,
-   "name": "Cerro Layuni Chuto"
-  },
-  {
-   "lat": -15.821093,
-   "lon": -68.230549,
-   "name": "Llusca Loma"
-  },
-  {
-   "lat": -16.524526,
-   "lon": -68.026124,
-   "name": "Cerro Centro"
-  },
-  {
-   "lat": -16.520401,
-   "lon": -68.019062,
-   "name": "Cerro Charapaya"
-  },
-  {
-   "lat": -16.267551,
-   "lon": -69.144167,
-   "name": "Asiru Phat'jata",
-   "wikidata": "Q16834583"
-  },
-  {
-   "lat": -15.61088,
-   "lon": -68.588325,
-   "name": "Jichu Quta",
-   "wikidata": "Q25101720"
   },
   {
    "lat": -16.934102,
@@ -2713,6 +2554,140 @@
    "wikidata": "Q13189870"
   },
   {
+   "lat": -16.554141,
+   "lon": -68.123459,
+   "name": "Cerro Hujata"
+  },
+  {
+   "lat": -17.300067,
+   "lon": -68.493378,
+   "name": "Cerro Llallagua"
+  },
+  {
+   "lat": -16.577747,
+   "lon": -69.011587,
+   "name": "Cerro Pantani"
+  },
+  {
+   "lat": -16.598068,
+   "lon": -69.017471,
+   "name": "Cerro Monte Kollu"
+  },
+  {
+   "lat": -16.132138,
+   "lon": -68.324108,
+   "name": "Apacheta",
+   "wikidata": "Q18352720"
+  },
+  {
+   "lat": -16.0933,
+   "lon": -68.297986,
+   "name": "Cerro Chekapa"
+  },
+  {
+   "lat": -16.653801,
+   "lon": -68.317432,
+   "name": "Cerro Sajira"
+  },
+  {
+   "lat": -17.342579,
+   "lon": -69.362816,
+   "name": "Sirk'i",
+   "wikidata": "Q7530452",
+   "volcano": true
+  },
+  {
+   "lat": -16.233567,
+   "lon": -68.85536,
+   "name": "Cerro Pokainani Pata"
+  },
+  {
+   "lat": -16.216212,
+   "lon": -68.903441,
+   "name": "Cerro Kumuquipo"
+  },
+  {
+   "lat": -16.222483,
+   "lon": -68.903344,
+   "name": "Cerro Millani"
+  },
+  {
+   "lat": -16.532163,
+   "lon": -67.899287,
+   "name": "Cerro Altiani"
+  },
+  {
+   "lat": -16.533089,
+   "lon": -68.018569,
+   "name": "Cerro Pararani"
+  },
+  {
+   "lat": -16.155186,
+   "lon": -68.095641,
+   "name": "Cerro Vaquería"
+  },
+  {
+   "lat": -16.151485,
+   "lon": -68.102412,
+   "name": "Cerro Santa Rosa"
+  },
+  {
+   "lat": -17.091428,
+   "lon": -67.299366,
+   "name": "Cerro Huayra Khasa"
+  },
+  {
+   "lat": -16.139283,
+   "lon": -68.164999,
+   "name": "Chankuni"
+  },
+  {
+   "lat": -16.561819,
+   "lon": -68.107143,
+   "name": "Cerro Chullpani"
+  },
+  {
+   "lat": -16.299084,
+   "lon": -68.757818,
+   "name": "Cerro Cochcachi"
+  },
+  {
+   "lat": -16.524526,
+   "lon": -68.026124,
+   "name": "Cerro Centro"
+  },
+  {
+   "lat": -15.61088,
+   "lon": -68.588325,
+   "name": "Jichu Quta",
+   "wikidata": "Q25101720"
+  },
+  {
+   "lat": -16.14536,
+   "lon": -68.153126,
+   "name": "Ullumani"
+  },
+  {
+   "lat": -16.518828,
+   "lon": -67.482344,
+   "name": "Cerro Chacahuaya"
+  },
+  {
+   "lat": -17.343125,
+   "lon": -69.361623,
+   "name": "Cerro Anatano"
+  },
+  {
+   "lat": -16.557041,
+   "lon": -68.052419,
+   "name": "Cerro Zapatuni"
+  },
+  {
+   "lat": -16.559443,
+   "lon": -68.070229,
+   "name": "Cerro Mamari"
+  },
+  {
    "lat": -15.732107,
    "lon": -68.520172,
    "name": "Jach'a Waylla Punta",
@@ -3373,50 +3348,96 @@
    "wikidata": "Q18536464"
   },
   {
-   "lat": -16.156928,
-   "lon": -67.63006,
-   "name": "Kimsa Warmini",
-   "wikidata": "Q25101789"
+   "lat": -16.847166,
+   "lon": -67.311365,
+   "name": "Cerro Waka Karinia"
   },
   {
-   "lat": -15.058919,
-   "lon": -69.033892,
-   "name": "Wila Kunka",
-   "wikidata": "Q18642883"
+   "lat": -16.843551,
+   "lon": -67.309745,
+   "name": "Cerro Jacke Jiwatta"
   },
   {
-   "lat": -15.065001,
-   "lon": -68.935062,
-   "name": "Kunturini",
-   "wikidata": "Q21044257"
+   "lat": -16.833837,
+   "lon": -67.309777,
+   "name": "Cerro Kelani"
   },
   {
-   "lat": -17.342579,
-   "lon": -69.362816,
-   "name": "Sirk'i",
-   "wikidata": "Q7530452",
-   "volcano": true
+   "lat": -16.838027,
+   "lon": -67.310549,
+   "name": "Cerro Taypi Luma"
   },
   {
-   "lat": -16.633352,
-   "lon": -67.790835,
-   "name": "Illimani",
-   "wikidata": "Q148521"
+   "lat": -17.188833,
+   "lon": -68.437291,
+   "name": "Cerro Leque Lequeni"
   },
   {
-   "lat": -16.495602,
-   "lon": -68.127576,
-   "name": "Apacheta Killi Killi"
+   "lat": -17.040989,
+   "lon": -67.306277,
+   "name": "Cerro Tres Cruces"
   },
   {
-   "lat": -16.346078,
-   "lon": -68.636041,
-   "name": "Jake Pata"
+   "lat": -16.908241,
+   "lon": -67.754277,
+   "name": "Cerro Juntada"
   },
   {
-   "lat": -17.300067,
-   "lon": -68.493378,
-   "name": "Cerro Llallagua"
+   "lat": -16.926062,
+   "lon": -67.76473,
+   "name": "Cerro Junthuma"
+  },
+  {
+   "lat": -16.918046,
+   "lon": -67.770021,
+   "name": "Cerro Wila K'ollu"
+  },
+  {
+   "lat": -16.559369,
+   "lon": -68.672844,
+   "name": "Mollu Kontu"
+  },
+  {
+   "lat": -16.979374,
+   "lon": -67.256676,
+   "name": "Cerro Triunfo de Marne"
+  },
+  {
+   "lat": -16.994574,
+   "lon": -67.282793,
+   "name": "Cerro Colque Mina"
+  },
+  {
+   "lat": -16.998638,
+   "lon": -67.266722,
+   "name": "Cerro Chincanani"
+  },
+  {
+   "lat": -16.979739,
+   "lon": -67.296752,
+   "name": "Cerro San Jorge"
+  },
+  {
+   "lat": -16.97468,
+   "lon": -67.314145,
+   "name": "Cerro Isidro"
+  },
+  {
+   "lat": -15.912971,
+   "lon": -67.842649,
+   "name": "Cerro Jesús Pata"
+  },
+  {
+   "lat": -16.711335,
+   "lon": -68.674397,
+   "name": "Cerro Quimsachata",
+   "wikidata": "Q2750313"
+  },
+  {
+   "lat": -16.267551,
+   "lon": -69.144167,
+   "name": "Asiru Phat'jata",
+   "wikidata": "Q16834583"
   },
   {
    "lat": -16.831243,
@@ -3424,9 +3445,94 @@
    "name": "Obelisco"
   },
   {
-   "lat": -16.730615,
-   "lon": -67.540738,
-   "name": "Cerro Cumbre"
+   "lat": -16.997237,
+   "lon": -67.241144,
+   "name": "Cerro Potrera"
+  },
+  {
+   "lat": -16.974809,
+   "lon": -67.222136,
+   "name": "Cerro Cruz Psts"
+  },
+  {
+   "lat": -16.997843,
+   "lon": -67.194131,
+   "name": "Cerro Bateani"
+  },
+  {
+   "lat": -15.572992,
+   "lon": -69.259245,
+   "name": "Cerro Jiska Tata"
+  },
+  {
+   "lat": -15.605369,
+   "lon": -69.298205,
+   "name": "Cerro Tapariya"
+  },
+  {
+   "lat": -15.630948,
+   "lon": -69.265891,
+   "name": "Cerro Kankollu"
+  },
+  {
+   "lat": -15.682829,
+   "lon": -69.147543,
+   "name": "Cerro Ojchi"
+  },
+  {
+   "lat": -15.708665,
+   "lon": -69.122868,
+   "name": "Cerro Sutuchi"
+  },
+  {
+   "lat": -15.731275,
+   "lon": -69.082134,
+   "name": "Cerro Samani"
+  },
+  {
+   "lat": -15.75776,
+   "lon": -69.055848,
+   "name": "Cerro Calvario"
+  },
+  {
+   "lat": -15.680269,
+   "lon": -68.551736,
+   "name": "Cerro Pusayo"
+  },
+  {
+   "lat": -15.685582,
+   "lon": -68.577738,
+   "name": "Cerro Llachasani"
+  },
+  {
+   "lat": -16.318135,
+   "lon": -67.848939,
+   "name": "Perolani Loma"
+  },
+  {
+   "lat": -16.164203,
+   "lon": -69.059561,
+   "name": "Cerro Torre Torrini"
+  },
+  {
+   "lat": -16.15672,
+   "lon": -69.046569,
+   "name": "Cerro Oke Okeña"
+  },
+  {
+   "lat": -16.147669,
+   "lon": -69.061548,
+   "name": "Cerro Huayna Khauri"
+  },
+  {
+   "lat": -15.861154,
+   "lon": -69.003639,
+   "name": "Dragon dormido"
+  },
+  {
+   "lat": -15.598628,
+   "lon": -68.529413,
+   "name": "Cerro Pucara"
   },
   {
    "lat": -16.572193,
@@ -3439,9 +3545,19 @@
    "name": "Cerro Chojña Pata"
   },
   {
-   "lat": -17.189076,
-   "lon": -69.241412,
-   "name": "Cerro Llamkheri"
+   "lat": -17.110647,
+   "lon": -67.296261,
+   "name": "Cerro Huari Pupusani"
+  },
+  {
+   "lat": -15.666285,
+   "lon": -69.129042,
+   "name": "Cerro Escoma"
+  },
+  {
+   "lat": -16.495602,
+   "lon": -68.127576,
+   "name": "Apacheta Killi Killi"
   },
   {
    "lat": -17.35437,
@@ -3558,189 +3674,52 @@
    "ele": 0
   },
   {
-   "lat": -16.997237,
-   "lon": -67.241144,
-   "name": "Cerro Potrera"
+   "lat": -16.165047,
+   "lon": -68.012603,
+   "name": "Cerro Condor Kañuma"
   },
   {
-   "lat": -16.974809,
-   "lon": -67.222136,
-   "name": "Cerro Cruz Psts"
+   "lat": -16.814162,
+   "lon": -67.505899,
+   "name": "Nevado Mama Okllo"
   },
   {
-   "lat": -16.997843,
-   "lon": -67.194131,
-   "name": "Cerro Bateani"
+   "lat": -16.580785,
+   "lon": -69.008163,
+   "name": "Cerro Punta Jakara"
   },
   {
-   "lat": -16.979374,
-   "lon": -67.256676,
-   "name": "Cerro Triunfo de Marne"
+   "lat": -16.520401,
+   "lon": -68.019062,
+   "name": "Cerro Charapaya"
   },
   {
-   "lat": -16.994574,
-   "lon": -67.282793,
-   "name": "Cerro Colque Mina"
+   "lat": -16.346078,
+   "lon": -68.636041,
+   "name": "Jake Pata"
   },
   {
-   "lat": -16.998638,
-   "lon": -67.266722,
-   "name": "Cerro Chincanani"
+   "lat": -16.310371,
+   "lon": -68.046069,
+   "name": "Cerro Chuta Pata"
   },
   {
-   "lat": -16.979739,
-   "lon": -67.296752,
-   "name": "Cerro San Jorge"
+   "lat": -16.156928,
+   "lon": -67.63006,
+   "name": "Kimsa Warmini",
+   "wikidata": "Q25101789"
   },
   {
-   "lat": -16.97468,
-   "lon": -67.314145,
-   "name": "Cerro Isidro"
+   "lat": -15.058919,
+   "lon": -69.033892,
+   "name": "Wila Kunka",
+   "wikidata": "Q18642883"
   },
   {
-   "lat": -16.577747,
-   "lon": -69.011587,
-   "name": "Cerro Pantani"
-  },
-  {
-   "lat": -16.598068,
-   "lon": -69.017471,
-   "name": "Cerro Monte Kollu"
-  },
-  {
-   "lat": -16.233567,
-   "lon": -68.85536,
-   "name": "Cerro Pokainani Pata"
-  },
-  {
-   "lat": -16.216212,
-   "lon": -68.903441,
-   "name": "Cerro Kumuquipo"
-  },
-  {
-   "lat": -16.222483,
-   "lon": -68.903344,
-   "name": "Cerro Millani"
-  },
-  {
-   "lat": -15.572992,
-   "lon": -69.259245,
-   "name": "Cerro Jiska Tata"
-  },
-  {
-   "lat": -15.605369,
-   "lon": -69.298205,
-   "name": "Cerro Tapariya"
-  },
-  {
-   "lat": -15.630948,
-   "lon": -69.265891,
-   "name": "Cerro Kankollu"
-  },
-  {
-   "lat": -15.682829,
-   "lon": -69.147543,
-   "name": "Cerro Ojchi"
-  },
-  {
-   "lat": -15.708665,
-   "lon": -69.122868,
-   "name": "Cerro Sutuchi"
-  },
-  {
-   "lat": -15.731275,
-   "lon": -69.082134,
-   "name": "Cerro Samani"
-  },
-  {
-   "lat": -15.75776,
-   "lon": -69.055848,
-   "name": "Cerro Calvario"
-  },
-  {
-   "lat": -15.912971,
-   "lon": -67.842649,
-   "name": "Cerro Jesús Pata"
-  },
-  {
-   "lat": -16.155186,
-   "lon": -68.095641,
-   "name": "Cerro Vaquería"
-  },
-  {
-   "lat": -16.151485,
-   "lon": -68.102412,
-   "name": "Cerro Santa Rosa"
-  },
-  {
-   "lat": -17.091428,
-   "lon": -67.299366,
-   "name": "Cerro Huayra Khasa"
-  },
-  {
-   "lat": -17.110647,
-   "lon": -67.296261,
-   "name": "Cerro Huari Pupusani"
-  },
-  {
-   "lat": -17.040989,
-   "lon": -67.306277,
-   "name": "Cerro Tres Cruces"
-  },
-  {
-   "lat": -16.908241,
-   "lon": -67.754277,
-   "name": "Cerro Juntada"
-  },
-  {
-   "lat": -16.926062,
-   "lon": -67.76473,
-   "name": "Cerro Junthuma"
-  },
-  {
-   "lat": -16.918046,
-   "lon": -67.770021,
-   "name": "Cerro Wila K'ollu"
-  },
-  {
-   "lat": -15.680269,
-   "lon": -68.551736,
-   "name": "Cerro Pusayo"
-  },
-  {
-   "lat": -15.685582,
-   "lon": -68.577738,
-   "name": "Cerro Llachasani"
-  },
-  {
-   "lat": -16.318135,
-   "lon": -67.848939,
-   "name": "Perolani Loma"
-  },
-  {
-   "lat": -15.598628,
-   "lon": -68.529413,
-   "name": "Cerro Pucara"
-  },
-  {
-   "lat": -16.442483,
-   "lon": -67.980029,
-   "name": "Cerro Kkotapata"
-  },
-  {
-   "lat": -16.532163,
-   "lon": -67.899287,
-   "name": "Cerro Altiani"
-  },
-  {
-   "lat": -16.139283,
-   "lon": -68.164999,
-   "name": "Chankuni"
-  },
-  {
-   "lat": -16.14536,
-   "lon": -68.153126,
-   "name": "Ullumani"
+   "lat": -15.065001,
+   "lon": -68.935062,
+   "name": "Kunturini",
+   "wikidata": "Q21044257"
   },
   {
    "lat": -16.230099,
@@ -3748,9 +3727,30 @@
    "name": "Maman Quta"
   },
   {
-   "lat": -16.165047,
-   "lon": -68.012603,
-   "name": "Cerro Condor Kañuma"
+   "lat": -15.83035,
+   "lon": -68.210233,
+   "name": "Cerro Alto Canaza"
+  },
+  {
+   "lat": -15.823612,
+   "lon": -68.222181,
+   "name": "Cerro Layuni Chuto"
+  },
+  {
+   "lat": -15.821093,
+   "lon": -68.230549,
+   "name": "Llusca Loma"
+  },
+  {
+   "lat": -16.633352,
+   "lon": -67.790835,
+   "name": "Illimani",
+   "wikidata": "Q148521"
+  },
+  {
+   "lat": -17.189076,
+   "lon": -69.241412,
+   "name": "Cerro Llamkheri"
   },
   {
    "lat": -16.506123,

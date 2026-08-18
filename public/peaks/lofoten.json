@@ -1,6 +1,6 @@
 {
  "region": "lofoten",
- "generated": "2026-08-13T09:16:24+00:00",
+ "generated": "2026-08-18T20:47:31+00:00",
  "peaks": [
   {
    "lat": 67.665833,
@@ -100,15 +100,15 @@
    "ele": 1045
   },
   {
-   "lat": 67.55895,
-   "lon": 14.949313,
-   "name": "Eidetinden",
-   "ele": 1020
-  },
-  {
    "lat": 68.603061,
    "lon": 15.629883,
    "name": "Stortinden",
+   "ele": 1020
+  },
+  {
+   "lat": 67.55895,
+   "lon": 14.949313,
+   "name": "Eidetinden",
    "ele": 1020
   },
   {
@@ -246,15 +246,15 @@
    "wikidata": "Q384313"
   },
   {
-   "lat": 68.535038,
-   "lon": 15.378143,
-   "name": "Totinden",
-   "ele": 942
-  },
-  {
    "lat": 68.538896,
    "lon": 15.49068,
    "name": "Rautinden",
+   "ele": 942
+  },
+  {
+   "lat": 68.535038,
+   "lon": 15.378143,
+   "name": "Totinden",
    "ele": 942
   },
   {
@@ -361,15 +361,15 @@
    "ele": 906
   },
   {
-   "lat": 68.051666,
-   "lon": 13.042375,
-   "name": "Ulvstinden",
-   "ele": 902
-  },
-  {
    "lat": 68.494218,
    "lon": 15.490745,
    "name": "Forkledalstindan",
+   "ele": 902
+  },
+  {
+   "lat": 68.051666,
+   "lon": 13.042375,
+   "name": "Ulvstinden",
    "ele": 902
   },
   {
@@ -541,15 +541,15 @@
    "ele": 829
   },
   {
-   "lat": 68.962535,
-   "lon": 16.318807,
-   "name": "Flyndretinden",
-   "ele": 828
-  },
-  {
    "lat": 67.697286,
    "lon": 14.872934,
    "name": "Stortinden",
+   "ele": 828
+  },
+  {
+   "lat": 68.962535,
+   "lon": 16.318807,
+   "name": "Flyndretinden",
    "ele": 828
   },
   {
@@ -631,15 +631,15 @@
    "ele": 778
   },
   {
-   "lat": 68.071223,
-   "lon": 13.269428,
-   "name": "Stabben",
-   "ele": 777
-  },
-  {
    "lat": 68.551636,
    "lon": 16.16811,
    "name": "Taraldsviktinden",
+   "ele": 777
+  },
+  {
+   "lat": 68.071223,
+   "lon": 13.269428,
+   "name": "Stabben",
    "ele": 777
   },
   {
@@ -655,15 +655,15 @@
    "ele": 770
   },
   {
-   "lat": 67.93239,
-   "lon": 13.01917,
-   "name": "Munken nordtopp",
-   "ele": 770
-  },
-  {
    "lat": 68.031131,
    "lon": 13.29166,
    "name": "Tønsåsheia",
+   "ele": 770
+  },
+  {
+   "lat": 67.93239,
+   "lon": 13.01917,
+   "name": "Munken nordtopp",
    "ele": 770
   },
   {
@@ -722,12 +722,6 @@
    "ele": 757
   },
   {
-   "lat": 68.283746,
-   "lon": 14.430756,
-   "name": "Kroktinden",
-   "ele": 755
-  },
-  {
    "lat": 68.337153,
    "lon": 14.604302,
    "name": "Torskmannen",
@@ -737,6 +731,12 @@
    "lat": 68.043451,
    "lon": 13.31118,
    "name": "Sternhauet",
+   "ele": 755
+  },
+  {
+   "lat": 68.283746,
+   "lon": 14.430756,
+   "name": "Kroktinden",
    "ele": 755
   },
   {
@@ -764,6 +764,12 @@
    "ele": 751
   },
   {
+   "lat": 68.03889,
+   "lon": 13.285517,
+   "name": "Masstinden",
+   "ele": 750
+  },
+  {
    "lat": 68.283401,
    "lon": 13.653484,
    "name": "Utdalsheia",
@@ -773,12 +779,6 @@
    "lat": 68.145047,
    "lon": 16.445316,
    "name": "Storfjellet",
-   "ele": 750
-  },
-  {
-   "lat": 68.03889,
-   "lon": 13.285517,
-   "name": "Masstinden",
    "ele": 750
   },
   {
@@ -836,15 +836,15 @@
    "ele": 736
   },
   {
-   "lat": 67.688529,
-   "lon": 14.850125,
-   "name": "Breidskradtinden",
-   "ele": 733
-  },
-  {
    "lat": 68.308958,
    "lon": 14.840067,
    "name": "Gardstinden",
+   "ele": 733
+  },
+  {
+   "lat": 67.688529,
+   "lon": 14.850125,
+   "name": "Breidskradtinden",
    "ele": 733
   },
   {
@@ -878,6 +878,12 @@
    "ele": 713
   },
   {
+   "lat": 68.542648,
+   "lon": 15.336024,
+   "name": "Småvasstinden",
+   "ele": 711
+  },
+  {
    "lat": 68.278512,
    "lon": 14.487244,
    "name": "Botntinden",
@@ -887,12 +893,6 @@
    "lat": 68.402587,
    "lon": 14.731236,
    "name": "Gloksa",
-   "ele": 711
-  },
-  {
-   "lat": 68.542648,
-   "lon": 15.336024,
-   "name": "Småvasstinden",
    "ele": 711
   },
   {
@@ -957,15 +957,15 @@
    "ele": 700
   },
   {
-   "lat": 68.369923,
-   "lon": 14.678543,
-   "name": "Pilan",
-   "ele": 700
-  },
-  {
    "lat": 68.022391,
    "lon": 13.285222,
    "name": "Neslandstind",
+   "ele": 700
+  },
+  {
+   "lat": 68.369923,
+   "lon": 14.678543,
+   "name": "Pilan",
    "ele": 700
   },
   {
@@ -975,9 +975,9 @@
    "ele": 699
   },
   {
-   "lat": 68.266726,
-   "lon": 14.21957,
-   "name": "Svarttinden",
+   "lat": 68.350024,
+   "lon": 14.669344,
+   "name": "Store Kvittind",
    "ele": 696
   },
   {
@@ -987,9 +987,9 @@
    "ele": 696
   },
   {
-   "lat": 68.350024,
-   "lon": 14.669344,
-   "name": "Store Kvittind",
+   "lat": 68.266726,
+   "lon": 14.21957,
+   "name": "Svarttinden",
    "ele": 696
   },
   {
@@ -1042,22 +1042,16 @@
    "wikidata": "Q11885491"
   },
   {
-   "lat": 68.266834,
-   "lon": 14.473013,
-   "name": "Rismålstindan",
-   "ele": 672
-  },
-  {
    "lat": 68.345012,
    "lon": 15.106666,
    "name": "Nordtinden",
    "ele": 672
   },
   {
-   "lat": 68.967064,
-   "lon": 15.081525,
-   "name": "Klotinden",
-   "ele": 671
+   "lat": 68.266834,
+   "lon": 14.473013,
+   "name": "Rismålstindan",
+   "ele": 672
   },
   {
    "lat": 68.081982,
@@ -1065,6 +1059,12 @@
    "name": "Skottinden",
    "ele": 671,
    "wikidata": "Q7536466"
+  },
+  {
+   "lat": 68.967064,
+   "lon": 15.081525,
+   "name": "Klotinden",
+   "ele": 671
   },
   {
    "lat": 68.715944,
@@ -1085,15 +1085,15 @@
    "ele": 668
   },
   {
-   "lat": 68.899607,
-   "lon": 15.461615,
-   "name": "Gavltinden",
-   "ele": 662
-  },
-  {
    "lat": 68.243519,
    "lon": 14.400705,
    "name": "Simitinden",
+   "ele": 662
+  },
+  {
+   "lat": 68.899607,
+   "lon": 15.461615,
+   "name": "Gavltinden",
    "ele": 662
   },
   {
@@ -1181,22 +1181,16 @@
    "ele": 649
   },
   {
-   "lat": 68.357673,
-   "lon": 14.539138,
-   "name": "Maritdalstinden",
-   "ele": 648
-  },
-  {
    "lat": 68.248884,
    "lon": 14.080875,
    "name": "Håtinden",
    "ele": 648
   },
   {
-   "lat": 68.701523,
-   "lon": 15.511283,
-   "name": "Strandheia",
-   "ele": 647
+   "lat": 68.357673,
+   "lon": 14.539138,
+   "name": "Maritdalstinden",
+   "ele": 648
   },
   {
    "lat": 68.866316,
@@ -1208,6 +1202,12 @@
    "lat": 68.636357,
    "lon": 15.058513,
    "name": "Ole Hansa-Tinden",
+   "ele": 647
+  },
+  {
+   "lat": 68.701523,
+   "lon": 15.511283,
+   "name": "Strandheia",
    "ele": 647
   },
   {
@@ -1229,27 +1229,27 @@
    "ele": 640
   },
   {
-   "lat": 68.24116,
-   "lon": 14.402482,
-   "name": "Caritinden",
-   "ele": 639
-  },
-  {
    "lat": 68.922024,
    "lon": 15.50707,
    "name": "Disken",
    "ele": 639
   },
   {
-   "lat": 68.908811,
-   "lon": 14.889056,
-   "name": "Meraftstinden",
-   "ele": 638
+   "lat": 68.24116,
+   "lon": 14.402482,
+   "name": "Caritinden",
+   "ele": 639
   },
   {
    "lat": 68.2219,
    "lon": 14.247567,
    "name": "Lyngværfjellet",
+   "ele": 638
+  },
+  {
+   "lat": 68.908811,
+   "lon": 14.889056,
+   "name": "Meraftstinden",
    "ele": 638
   },
   {
@@ -1355,15 +1355,15 @@
    "ele": 617
   },
   {
-   "lat": 68.334087,
-   "lon": 14.35746,
-   "name": "Festvågtinden",
-   "ele": 617
-  },
-  {
    "lat": 68.716142,
    "lon": 14.478283,
    "name": "Burnestinden vest",
+   "ele": 617
+  },
+  {
+   "lat": 68.334087,
+   "lon": 14.35746,
+   "name": "Festvågtinden",
    "ele": 617
   },
   {
@@ -1451,15 +1451,15 @@
    "ele": 604
   },
   {
-   "lat": 68.565091,
-   "lon": 14.757971,
-   "name": "stålberget",
-   "ele": 602
-  },
-  {
    "lat": 68.708169,
    "lon": 14.452789,
    "name": "Vikanfjellet",
+   "ele": 602
+  },
+  {
+   "lat": 68.565091,
+   "lon": 14.757971,
+   "name": "stålberget",
    "ele": 602
   },
   {
@@ -1487,15 +1487,15 @@
    "ele": 596
   },
   {
-   "lat": 68.115916,
-   "lon": 13.387344,
-   "name": "Store Klauva",
-   "ele": 594
-  },
-  {
    "lat": 68.819335,
    "lon": 16.330821,
    "name": "Nontuva",
+   "ele": 594
+  },
+  {
+   "lat": 68.115916,
+   "lon": 13.387344,
+   "name": "Store Klauva",
    "ele": 594
   },
   {
@@ -1548,27 +1548,27 @@
    "ele": 587
   },
   {
-   "lat": 68.262731,
-   "lon": 14.601572,
-   "name": "Jomfrutindan",
-   "ele": 585
-  },
-  {
    "lat": 68.769987,
    "lon": 14.804914,
    "name": "Skalltinden",
    "ele": 585
   },
   {
-   "lat": 68.262936,
-   "lon": 13.635172,
-   "name": "Skrådalstinden",
-   "ele": 584
+   "lat": 68.262731,
+   "lon": 14.601572,
+   "name": "Jomfrutindan",
+   "ele": 585
   },
   {
    "lat": 68.63048,
    "lon": 15.039267,
    "name": "Dalbotntinden",
+   "ele": 584
+  },
+  {
+   "lat": 68.262936,
+   "lon": 13.635172,
+   "name": "Skrådalstinden",
    "ele": 584
   },
   {
@@ -1578,15 +1578,15 @@
    "ele": 583
   },
   {
-   "lat": 68.249766,
-   "lon": 13.536616,
-   "name": "Høgskolmen",
-   "ele": 582
-  },
-  {
    "lat": 68.658573,
    "lon": 16.021501,
    "name": "Kjengsfjellet",
+   "ele": 582
+  },
+  {
+   "lat": 68.249766,
+   "lon": 13.536616,
+   "name": "Høgskolmen",
    "ele": 582
   },
   {
@@ -1602,15 +1602,15 @@
    "ele": 579
   },
   {
-   "lat": 68.181702,
-   "lon": 16.494472,
-   "name": "Åttetinden",
-   "ele": 578
-  },
-  {
    "lat": 68.761528,
    "lon": 14.83077,
    "name": "Teistpolltinden",
+   "ele": 578
+  },
+  {
+   "lat": 68.181702,
+   "lon": 16.494472,
+   "name": "Åttetinden",
    "ele": 578
   },
   {
@@ -1650,27 +1650,27 @@
    "ele": 574
   },
   {
-   "lat": 68.296498,
-   "lon": 13.686538,
-   "name": "Middagsheia",
-   "ele": 570
-  },
-  {
    "lat": 68.273417,
    "lon": 13.670254,
    "name": "Hunden",
    "ele": 570
   },
   {
-   "lat": 68.156635,
-   "lon": 13.390116,
-   "name": "Slettinden",
-   "ele": 569
+   "lat": 68.296498,
+   "lon": 13.686538,
+   "name": "Middagsheia",
+   "ele": 570
   },
   {
    "lat": 68.724806,
    "lon": 15.001567,
    "name": "Firetinden",
+   "ele": 569
+  },
+  {
+   "lat": 68.156635,
+   "lon": 13.390116,
+   "name": "Slettinden",
    "ele": 569
   },
   {
@@ -1680,15 +1680,15 @@
    "ele": 568
   },
   {
-   "lat": 68.310791,
-   "lon": 14.224092,
-   "name": "Sandsmannen",
-   "ele": 568
-  },
-  {
    "lat": 68.55266,
    "lon": 15.727469,
    "name": "Karitinden",
+   "ele": 568
+  },
+  {
+   "lat": 68.310791,
+   "lon": 14.224092,
+   "name": "Sandsmannen",
    "ele": 568
   },
   {
@@ -1702,12 +1702,6 @@
    "lon": 15.064243,
    "name": "Stortinden",
    "ele": 566
-  },
-  {
-   "lat": 68.958997,
-   "lon": 15.471883,
-   "name": "Norddalsheia",
-   "ele": 565
   },
   {
    "lat": 68.149707,
@@ -1725,6 +1719,12 @@
    "lat": 68.755573,
    "lon": 16.457627,
    "name": "Middagsfjellet",
+   "ele": 565
+  },
+  {
+   "lat": 68.958997,
+   "lon": 15.471883,
+   "name": "Norddalsheia",
    "ele": 565
   },
   {
@@ -1795,15 +1795,15 @@
    "ele": 554
   },
   {
-   "lat": 68.813996,
-   "lon": 15.266282,
-   "name": "Reinen",
-   "ele": 553
-  },
-  {
    "lat": 68.77254,
    "lon": 14.834676,
    "name": "Kakheia",
+   "ele": 553
+  },
+  {
+   "lat": 68.813996,
+   "lon": 15.266282,
+   "name": "Reinen",
    "ele": 553
   },
   {
@@ -1837,16 +1837,23 @@
    "ele": 547
   },
   {
+   "lat": 68.193879,
+   "lon": 13.797885,
+   "name": "Kartstaven",
+   "ele": 544
+  },
+  {
    "lat": 68.27537,
    "lon": 14.191927,
    "name": "Skjolden",
    "ele": 544
   },
   {
-   "lat": 68.193879,
-   "lon": 13.797885,
-   "name": "Kartstaven",
-   "ele": 544
+   "lat": 67.912371,
+   "lon": 13.038806,
+   "name": "Gylttinden",
+   "ele": 543,
+   "wikidata": "Q31224004"
   },
   {
    "lat": 68.089327,
@@ -1859,13 +1866,6 @@
    "lon": 14.755208,
    "name": "Nonstinden",
    "ele": 543
-  },
-  {
-   "lat": 67.912371,
-   "lon": 13.038806,
-   "name": "Gylttinden",
-   "ele": 543,
-   "wikidata": "Q31224004"
   },
   {
    "lat": 68.894601,
@@ -1887,12 +1887,6 @@
    "wikidata": "Q31132889"
   },
   {
-   "lat": 68.896178,
-   "lon": 14.956157,
-   "name": "Steindalstinden",
-   "ele": 540
-  },
-  {
    "lat": 68.226398,
    "lon": 14.308879,
    "name": "Skakktinden",
@@ -1905,16 +1899,16 @@
    "ele": 540
   },
   {
+   "lat": 68.896178,
+   "lon": 14.956157,
+   "name": "Steindalstinden",
+   "ele": 540
+  },
+  {
    "lat": 67.91611,
    "lon": 13.022395,
    "name": "Merraflestinden",
    "ele": 537
-  },
-  {
-   "lat": 68.272919,
-   "lon": 13.6306,
-   "name": "Grytdalstinden",
-   "ele": 536
   },
   {
    "lat": 68.641756,
@@ -1926,6 +1920,12 @@
    "lat": 67.930736,
    "lon": 15.526862,
    "name": "Fløytinden",
+   "ele": 536
+  },
+  {
+   "lat": 68.272919,
+   "lon": 13.6306,
+   "name": "Grytdalstinden",
    "ele": 536
   },
   {
@@ -1941,27 +1941,27 @@
    "ele": 535
   },
   {
-   "lat": 68.632888,
-   "lon": 14.956341,
-   "name": "Litjtinden",
-   "ele": 535
-  },
-  {
    "lat": 68.24301,
    "lon": 14.832868,
    "name": "Slettfjellet",
    "ele": 535
   },
   {
-   "lat": 68.893568,
-   "lon": 16.267192,
-   "name": "Elgen",
-   "ele": 534
+   "lat": 68.632888,
+   "lon": 14.956341,
+   "name": "Litjtinden",
+   "ele": 535
   },
   {
    "lat": 68.268062,
    "lon": 14.311272,
    "name": "Kleppstadheia",
+   "ele": 534
+  },
+  {
+   "lat": 68.893568,
+   "lon": 16.267192,
+   "name": "Elgen",
    "ele": 534
   },
   {
@@ -2001,27 +2001,27 @@
    "ele": 528
   },
   {
-   "lat": 68.29963,
-   "lon": 13.682252,
-   "name": "Middagsheia",
-   "ele": 527
-  },
-  {
    "lat": 68.242157,
    "lon": 14.860474,
    "name": "Sponga",
    "ele": 527
   },
   {
-   "lat": 68.091337,
-   "lon": 13.107064,
-   "name": "Middagstinden",
-   "ele": 526
+   "lat": 68.29963,
+   "lon": 13.682252,
+   "name": "Middagsheia",
+   "ele": 527
   },
   {
    "lat": 68.264185,
    "lon": 14.338807,
    "name": "Kvasstinden",
+   "ele": 526
+  },
+  {
+   "lat": 68.091337,
+   "lon": 13.107064,
+   "name": "Middagstinden",
    "ele": 526
   },
   {
@@ -2037,15 +2037,15 @@
    "ele": 519
   },
   {
-   "lat": 68.984935,
-   "lon": 15.103251,
-   "name": "Sørkulen",
-   "ele": 518
-  },
-  {
    "lat": 68.740679,
    "lon": 14.822702,
    "name": "Ryggedalstinden",
+   "ele": 518
+  },
+  {
+   "lat": 68.984935,
+   "lon": 15.103251,
+   "name": "Sørkulen",
    "ele": 518
   },
   {
@@ -2079,12 +2079,6 @@
    "ele": 513
   },
   {
-   "lat": 68.071831,
-   "lon": 13.299722,
-   "name": "Kollfjellet",
-   "ele": 512
-  },
-  {
    "lat": 67.922778,
    "lon": 13.012211,
    "name": "Djupfjordheia",
@@ -2094,6 +2088,12 @@
    "lat": 68.73064,
    "lon": 16.460481,
    "name": "Blåfjellet",
+   "ele": 512
+  },
+  {
+   "lat": 68.071831,
+   "lon": 13.299722,
+   "name": "Kollfjellet",
    "ele": 512
   },
   {
@@ -2121,15 +2121,15 @@
    "ele": 505
   },
   {
-   "lat": 68.663724,
-   "lon": 14.537151,
-   "name": "Lynghaugtinden",
-   "ele": 504
-  },
-  {
    "lat": 68.544071,
    "lon": 14.868219,
    "name": "Storheia",
+   "ele": 504
+  },
+  {
+   "lat": 68.663724,
+   "lon": 14.537151,
+   "name": "Lynghaugtinden",
    "ele": 504
   },
   {
@@ -2181,15 +2181,15 @@
    "ele": 492
   },
   {
-   "lat": 68.024014,
-   "lon": 13.071242,
-   "name": "Tverrfjellet",
-   "ele": 490
-  },
-  {
    "lat": 68.017485,
    "lon": 13.060427,
    "name": "Nonstinden",
+   "ele": 490
+  },
+  {
+   "lat": 68.024014,
+   "lon": 13.071242,
+   "name": "Tverrfjellet",
    "ele": 490
   },
   {
@@ -2211,21 +2211,21 @@
    "ele": 487
   },
   {
-   "lat": 68.085401,
-   "lon": 13.378371,
-   "name": "Hestræva",
-   "ele": 485
-  },
-  {
    "lat": 68.947309,
    "lon": 15.542438,
    "name": "Høgtinden",
    "ele": 485
   },
   {
-   "lat": 67.92784,
-   "lon": 13.071402,
-   "name": "Reinebringen",
+   "lat": 68.085401,
+   "lon": 13.378371,
+   "name": "Hestræva",
+   "ele": 485
+  },
+  {
+   "lat": 68.286674,
+   "lon": 14.883303,
+   "name": "Steindalstinden",
    "ele": 484
   },
   {
@@ -2236,15 +2236,15 @@
    "wikidata": "Q31113681"
   },
   {
-   "lat": 68.174478,
-   "lon": 16.00111,
-   "name": "Horntinden",
+   "lat": 67.92784,
+   "lon": 13.071402,
+   "name": "Reinebringen",
    "ele": 484
   },
   {
-   "lat": 68.286674,
-   "lon": 14.883303,
-   "name": "Steindalstinden",
+   "lat": 68.174478,
+   "lon": 16.00111,
+   "name": "Horntinden",
    "ele": 484
   },
   {
@@ -2254,15 +2254,15 @@
    "ele": 479
   },
   {
-   "lat": 68.910104,
-   "lon": 15.451726,
-   "name": "Sandnesberget",
-   "ele": 478
-  },
-  {
    "lat": 68.714198,
    "lon": 14.999595,
    "name": "Veten",
+   "ele": 478
+  },
+  {
+   "lat": 68.910104,
+   "lon": 15.451726,
+   "name": "Sandnesberget",
    "ele": 478
   },
   {
@@ -2308,6 +2308,12 @@
    "ele": 462
   },
   {
+   "lat": 68.623328,
+   "lon": 15.027637,
+   "name": "Lauklitinden",
+   "ele": 460
+  },
+  {
    "lat": 68.216687,
    "lon": 13.862906,
    "name": "Brattfloget",
@@ -2317,12 +2323,6 @@
    "lat": 68.178884,
    "lon": 14.251665,
    "name": "Trolldalsheia",
-   "ele": 460
-  },
-  {
-   "lat": 68.623328,
-   "lon": 15.027637,
-   "name": "Lauklitinden",
    "ele": 460
   },
   {
@@ -2338,15 +2338,15 @@
    "ele": 459
   },
   {
-   "lat": 68.069396,
-   "lon": 13.213244,
-   "name": "Volandstinden",
-   "ele": 457
-  },
-  {
    "lat": 68.43234,
    "lon": 15.983322,
    "name": "Kvammetinden",
+   "ele": 457
+  },
+  {
+   "lat": 68.069396,
+   "lon": 13.213244,
+   "name": "Volandstinden",
    "ele": 457
   },
   {
@@ -2446,15 +2446,15 @@
    "ele": 437
   },
   {
-   "lat": 68.135744,
-   "lon": 13.717097,
-   "name": "Smørdalskammen",
-   "ele": 437
-  },
-  {
    "lat": 68.383573,
    "lon": 15.23916,
    "name": "Kvannkjosfjellet",
+   "ele": 437
+  },
+  {
+   "lat": 68.135744,
+   "lon": 13.717097,
+   "name": "Smørdalskammen",
    "ele": 437
   },
   {
@@ -2464,15 +2464,15 @@
    "ele": 436
   },
   {
-   "lat": 68.187506,
-   "lon": 13.562858,
-   "name": "Holandsmælen",
-   "ele": 434
-  },
-  {
    "lat": 68.039244,
    "lon": 13.369037,
    "name": "Nesheia",
+   "ele": 434
+  },
+  {
+   "lat": 68.187506,
+   "lon": 13.562858,
+   "name": "Holandsmælen",
    "ele": 434
   },
   {
@@ -2548,9 +2548,9 @@
    "ele": 408
   },
   {
-   "lat": 68.033835,
-   "lon": 13.228847,
-   "name": "Steiltinden",
+   "lat": 68.637116,
+   "lon": 15.176775,
+   "name": "Rishatten",
    "ele": 403
   },
   {
@@ -2560,9 +2560,9 @@
    "ele": 403
   },
   {
-   "lat": 68.637116,
-   "lon": 15.176775,
-   "name": "Rishatten",
+   "lat": 68.033835,
+   "lon": 13.228847,
+   "name": "Steiltinden",
    "ele": 403
   },
   {
@@ -2632,15 +2632,15 @@
    "ele": 378
   },
   {
-   "lat": 68.076698,
-   "lon": 13.114399,
-   "name": "Torsfjordtinden",
-   "ele": 376
-  },
-  {
    "lat": 68.619538,
    "lon": 15.005229,
    "name": "Torghatten",
+   "ele": 376
+  },
+  {
+   "lat": 68.076698,
+   "lon": 13.114399,
+   "name": "Torsfjordtinden",
    "ele": 376
   },
   {
@@ -2662,6 +2662,12 @@
    "ele": 367
   },
   {
+   "lat": 68.090574,
+   "lon": 13.660297,
+   "name": "Middagstinden",
+   "ele": 363
+  },
+  {
    "lat": 68.314044,
    "lon": 15.014101,
    "name": "Digermulkollen",
@@ -2669,21 +2675,15 @@
    "wikidata": "Q3027754"
   },
   {
-   "lat": 68.090574,
-   "lon": 13.660297,
-   "name": "Middagstinden",
-   "ele": 363
+   "lat": 68.157879,
+   "lon": 16.348269,
+   "name": "Rødtinden",
+   "ele": 362
   },
   {
    "lat": 68.778875,
    "lon": 16.470169,
    "name": "Svartdalsåsen",
-   "ele": 362
-  },
-  {
-   "lat": 68.157879,
-   "lon": 16.348269,
-   "name": "Rødtinden",
    "ele": 362
   },
   {
@@ -3156,15 +3156,15 @@
    "ele": 72
   },
   {
-   "lat": 68.569525,
-   "lon": 14.929482,
-   "name": "Berg",
-   "ele": 52
-  },
-  {
    "lat": 68.23976,
    "lon": 14.50272,
    "name": "Astridhaugen",
+   "ele": 52
+  },
+  {
+   "lat": 68.569525,
+   "lon": 14.929482,
+   "name": "Berg",
    "ele": 52
   },
   {
@@ -3178,6 +3178,253 @@
    "lon": 14.155726,
    "name": "Storvadhaugen",
    "ele": 22
+  },
+  {
+   "lat": 68.91727,
+   "lon": 16.396707,
+   "name": "Sletttoppen"
+  },
+  {
+   "lat": 68.944845,
+   "lon": 16.480136,
+   "name": "Jamnfjellet"
+  },
+  {
+   "lat": 68.904555,
+   "lon": 16.471109,
+   "name": "Storfjellet"
+  },
+  {
+   "lat": 68.692868,
+   "lon": 14.767417,
+   "name": "Breitind 598 moh.",
+   "name_en": "Breitinden, 598 masl"
+  },
+  {
+   "lat": 68.273377,
+   "lon": 16.374084,
+   "name": "Eidtinden"
+  },
+  {
+   "lat": 68.100828,
+   "lon": 13.672357,
+   "name": "Ramntinden"
+  },
+  {
+   "lat": 68.124367,
+   "lon": 13.826768,
+   "name": "Mannfallet"
+  },
+  {
+   "lat": 68.123677,
+   "lon": 13.801406,
+   "name": "Ramntinden"
+  },
+  {
+   "lat": 68.126113,
+   "lon": 13.799105,
+   "name": "Skredkollen"
+  },
+  {
+   "lat": 68.134367,
+   "lon": 13.794101,
+   "name": "Stamsundheia"
+  },
+  {
+   "lat": 68.721351,
+   "lon": 15.002589,
+   "name": "Stortinden"
+  },
+  {
+   "lat": 68.128293,
+   "lon": 13.852808,
+   "name": "Bjørnhalsan"
+  },
+  {
+   "lat": 68.535587,
+   "lon": 14.681135,
+   "name": "Andstadnyken"
+  },
+  {
+   "lat": 68.536856,
+   "lon": 14.68302,
+   "name": "Nyken"
+  },
+  {
+   "lat": 68.53402,
+   "lon": 14.678033,
+   "name": "Lillenyken"
+  },
+  {
+   "lat": 67.938102,
+   "lon": 13.043648,
+   "name": "Navaren",
+   "wikidata": "Q31652009"
+  },
+  {
+   "lat": 68.038711,
+   "lon": 13.005842,
+   "name": "Brasråstindan"
+  },
+  {
+   "lat": 68.783401,
+   "lon": 16.19428,
+   "name": "Falkhågen"
+  },
+  {
+   "lat": 68.783697,
+   "lon": 16.210138,
+   "name": "Heggeberget"
+  },
+  {
+   "lat": 68.788255,
+   "lon": 16.218516,
+   "name": "Surenåsen"
+  },
+  {
+   "lat": 68.788291,
+   "lon": 16.234947,
+   "name": "Avgjørelsens haug"
+  },
+  {
+   "lat": 68.222625,
+   "lon": 16.200073,
+   "name": "Skarbergfloget"
+  },
+  {
+   "lat": 68.221532,
+   "lon": 13.558171,
+   "name": "606"
+  },
+  {
+   "lat": 68.692824,
+   "lon": 14.454869,
+   "name": "Straumberget"
+  },
+  {
+   "lat": 68.214765,
+   "lon": 14.246288,
+   "name": "Nordfjellet"
+  },
+  {
+   "lat": 68.084047,
+   "lon": 13.473133,
+   "name": "Vittingstinden"
+  },
+  {
+   "lat": 68.981469,
+   "lon": 15.076268,
+   "name": "Finngamheia"
+  },
+  {
+   "lat": 68.725499,
+   "lon": 16.203417,
+   "name": "Salfjellet"
+  },
+  {
+   "lat": 68.774626,
+   "lon": 16.08562,
+   "name": "Haugtorvhågen"
+  },
+  {
+   "lat": 67.823406,
+   "lon": 15.199494,
+   "name": "Reinkalvtinden"
+  },
+  {
+   "lat": 67.804117,
+   "lon": 15.149461,
+   "name": "Marhaugtinden"
+  },
+  {
+   "lat": 67.790692,
+   "lon": 15.101914,
+   "name": "Daltinden"
+  },
+  {
+   "lat": 67.881789,
+   "lon": 15.305667,
+   "name": "Motinden"
+  },
+  {
+   "lat": 67.858789,
+   "lon": 15.26125,
+   "name": "Breifjellet"
+  },
+  {
+   "lat": 67.845483,
+   "lon": 15.284892,
+   "name": "Stokkvasstinden"
+  },
+  {
+   "lat": 67.844092,
+   "lon": 15.230267,
+   "name": "Holmåktinden"
+  },
+  {
+   "lat": 67.549601,
+   "lon": 14.898572,
+   "name": "Strandåtinden"
+  },
+  {
+   "lat": 68.827707,
+   "lon": 16.459116,
+   "name": "Merafteshaugen"
+  },
+  {
+   "lat": 68.537866,
+   "lon": 15.769997,
+   "name": "Grisasteinen"
+  },
+  {
+   "lat": 68.539158,
+   "lon": 15.774464,
+   "name": "Ausa"
+  },
+  {
+   "lat": 68.561782,
+   "lon": 15.820791,
+   "name": "Eidklubben"
+  },
+  {
+   "lat": 68.573819,
+   "lon": 15.824378,
+   "name": "Litjeholten"
+  },
+  {
+   "lat": 68.574736,
+   "lon": 15.825337,
+   "name": "Moelvhalsen"
+  },
+  {
+   "lat": 68.580728,
+   "lon": 15.819367,
+   "name": "Storholten"
+  },
+  {
+   "lat": 68.567416,
+   "lon": 15.832293,
+   "name": "Storhågen"
+  },
+  {
+   "lat": 68.555964,
+   "lon": 15.785518,
+   "name": "Båtberget"
+  },
+  {
+   "lat": 68.542939,
+   "lon": 15.755166,
+   "name": "Soppberget"
+  },
+  {
+   "lat": 68.613308,
+   "lon": 15.838051,
+   "name": "Gullhornet"
+  },
+  {
+   "lat": 68.614524,
+   "lon": 15.835717,
+   "name": "Nakketinden"
   },
   {
    "lat": 67.778889,
@@ -3380,159 +3627,9 @@
    "name": "Vinkfjordtinden"
   },
   {
-   "lat": 68.635622,
-   "lon": 14.61393,
-   "name": "Rambergåsen"
-  },
-  {
-   "lat": 68.639177,
-   "lon": 14.542401,
-   "name": "Vetten"
-  },
-  {
-   "lat": 68.23184,
-   "lon": 13.671307,
-   "name": "Eltofttuva"
-  },
-  {
-   "lat": 68.251563,
-   "lon": 14.598232,
-   "name": "Frosken"
-  },
-  {
-   "lat": 68.686156,
-   "lon": 15.666329,
-   "name": "Tverrfjellet"
-  },
-  {
-   "lat": 68.681039,
-   "lon": 15.563152,
-   "name": "Blåheia"
-  },
-  {
-   "lat": 68.697817,
-   "lon": 15.643326,
-   "name": "Trolldalstinden"
-  },
-  {
-   "lat": 68.981469,
-   "lon": 15.076268,
-   "name": "Finngamheia"
-  },
-  {
-   "lat": 68.692824,
-   "lon": 14.454869,
-   "name": "Straumberget"
-  },
-  {
-   "lat": 68.783401,
-   "lon": 16.19428,
-   "name": "Falkhågen"
-  },
-  {
-   "lat": 68.783697,
-   "lon": 16.210138,
-   "name": "Heggeberget"
-  },
-  {
-   "lat": 68.788255,
-   "lon": 16.218516,
-   "name": "Surenåsen"
-  },
-  {
-   "lat": 68.788291,
-   "lon": 16.234947,
-   "name": "Avgjørelsens haug"
-  },
-  {
-   "lat": 68.91727,
-   "lon": 16.396707,
-   "name": "Sletttoppen"
-  },
-  {
-   "lat": 68.944845,
-   "lon": 16.480136,
-   "name": "Jamnfjellet"
-  },
-  {
-   "lat": 68.904555,
-   "lon": 16.471109,
-   "name": "Storfjellet"
-  },
-  {
-   "lat": 68.214765,
-   "lon": 14.246288,
-   "name": "Nordfjellet"
-  },
-  {
-   "lat": 68.128285,
-   "lon": 13.726459,
-   "name": "Finngluntan"
-  },
-  {
-   "lat": 68.125344,
-   "lon": 13.698946,
-   "name": "Bulitinden"
-  },
-  {
-   "lat": 68.26216,
-   "lon": 13.89564,
-   "name": "Tuva"
-  },
-  {
-   "lat": 68.222625,
-   "lon": 16.200073,
-   "name": "Skarbergfloget"
-  },
-  {
    "lat": 68.555756,
    "lon": 14.646191,
    "name": "Tanipa"
-  },
-  {
-   "lat": 68.124367,
-   "lon": 13.826768,
-   "name": "Mannfallet"
-  },
-  {
-   "lat": 68.123677,
-   "lon": 13.801406,
-   "name": "Ramntinden"
-  },
-  {
-   "lat": 68.126113,
-   "lon": 13.799105,
-   "name": "Skredkollen"
-  },
-  {
-   "lat": 68.134367,
-   "lon": 13.794101,
-   "name": "Stamsundheia"
-  },
-  {
-   "lat": 68.721351,
-   "lon": 15.002589,
-   "name": "Stortinden"
-  },
-  {
-   "lat": 68.206345,
-   "lon": 14.457895,
-   "name": "Brurberget"
-  },
-  {
-   "lat": 68.100828,
-   "lon": 13.672357,
-   "name": "Ramntinden"
-  },
-  {
-   "lat": 68.082918,
-   "lon": 13.70538,
-   "name": "Bårdsundtinden"
-  },
-  {
-   "lat": 68.128293,
-   "lon": 13.852808,
-   "name": "Bjørnhalsan"
   },
   {
    "lat": 68.57657,
@@ -3540,89 +3637,55 @@
    "name": "Ørnhaugen"
   },
   {
-   "lat": 68.392454,
-   "lon": 15.913717,
-   "name": "Klokkatohaugen"
-  },
-  {
-   "lat": 68.770123,
-   "lon": 16.226871,
-   "name": "Strandhågen"
-  },
-  {
-   "lat": 68.766242,
-   "lon": 16.235068,
-   "name": "Steinkrysshågen"
-  },
-  {
    "lat": 68.855341,
    "lon": 16.472084,
    "name": "Stornesklubben"
   },
   {
-   "lat": 68.827707,
-   "lon": 16.459116,
-   "name": "Merafteshaugen"
+   "lat": 67.936942,
+   "lon": 15.754392,
+   "name": "Veggfjellan"
   },
   {
-   "lat": 68.084047,
-   "lon": 13.473133,
-   "name": "Vittingstinden"
+   "lat": 67.80675,
+   "lon": 15.323025,
+   "name": "Tinden"
   },
   {
-   "lat": 68.537866,
-   "lon": 15.769997,
-   "name": "Grisasteinen"
+   "lat": 67.832361,
+   "lon": 15.34115,
+   "name": "Sløelvtinden"
   },
   {
-   "lat": 68.539158,
-   "lon": 15.774464,
-   "name": "Ausa"
+   "lat": 67.900011,
+   "lon": 15.396039,
+   "name": "Store Skjolden"
   },
   {
-   "lat": 68.561782,
-   "lon": 15.820791,
-   "name": "Eidklubben"
+   "lat": 67.872819,
+   "lon": 15.478086,
+   "name": "Gongskardtinden"
   },
   {
-   "lat": 68.573819,
-   "lon": 15.824378,
-   "name": "Litjeholten"
+   "lat": 67.893903,
+   "lon": 15.557203,
+   "name": "Malåtinden"
   },
   {
-   "lat": 68.574736,
-   "lon": 15.825337,
-   "name": "Moelvhalsen"
+   "lat": 67.9672,
+   "lon": 13.130911,
+   "name": "Lilandstinden",
+   "wikidata": "Q11875886"
   },
   {
-   "lat": 68.580728,
-   "lon": 15.819367,
-   "name": "Storholten"
+   "lat": 68.295518,
+   "lon": 14.805463,
+   "name": "Trehakkatinden"
   },
   {
-   "lat": 68.567416,
-   "lon": 15.832293,
-   "name": "Storhågen"
-  },
-  {
-   "lat": 68.555964,
-   "lon": 15.785518,
-   "name": "Båtberget"
-  },
-  {
-   "lat": 68.542939,
-   "lon": 15.755166,
-   "name": "Soppberget"
-  },
-  {
-   "lat": 68.613308,
-   "lon": 15.838051,
-   "name": "Gullhornet"
-  },
-  {
-   "lat": 68.614524,
-   "lon": 15.835717,
-   "name": "Nakketinden"
+   "lat": 68.311462,
+   "lon": 14.849953,
+   "name": "Hornet"
   },
   {
    "lat": 68.535325,
@@ -3660,90 +3723,19 @@
    "name": "Hompen"
   },
   {
-   "lat": 68.54735,
-   "lon": 15.816372,
-   "name": "Tverrbakktinden"
-  },
-  {
-   "lat": 68.535587,
-   "lon": 14.681135,
-   "name": "Andstadnyken"
-  },
-  {
-   "lat": 68.536856,
-   "lon": 14.68302,
-   "name": "Nyken"
-  },
-  {
-   "lat": 68.53402,
-   "lon": 14.678033,
-   "name": "Lillenyken"
-  },
-  {
-   "lat": 68.794078,
-   "lon": 14.671195,
-   "name": "Hesthausen"
-  },
-  {
-   "lat": 68.725499,
-   "lon": 16.203417,
-   "name": "Salfjellet"
-  },
-  {
-   "lat": 68.774626,
-   "lon": 16.08562,
-   "name": "Haugtorvhågen"
-  },
-  {
    "lat": 68.185051,
    "lon": 14.251628,
    "name": "Budalstinden"
   },
   {
-   "lat": 68.692868,
-   "lon": 14.767417,
-   "name": "Breitind 598 moh.",
-   "name_en": "Breitinden, 598 masl"
+   "lat": 67.693749,
+   "lon": 15.753581,
+   "name": "Åndtinden"
   },
   {
-   "lat": 68.273377,
-   "lon": 16.374084,
-   "name": "Eidtinden"
-  },
-  {
-   "lat": 68.567532,
-   "lon": 16.457903,
-   "name": "Hårberget"
-  },
-  {
-   "lat": 67.936942,
-   "lon": 15.754392,
-   "name": "Veggfjellan"
-  },
-  {
-   "lat": 67.80675,
-   "lon": 15.323025,
-   "name": "Tinden"
-  },
-  {
-   "lat": 67.832361,
-   "lon": 15.34115,
-   "name": "Sløelvtinden"
-  },
-  {
-   "lat": 67.900011,
-   "lon": 15.396039,
-   "name": "Store Skjolden"
-  },
-  {
-   "lat": 67.872819,
-   "lon": 15.478086,
-   "name": "Gongskardtinden"
-  },
-  {
-   "lat": 67.893903,
-   "lon": 15.557203,
-   "name": "Malåtinden"
+   "lat": 68.23184,
+   "lon": 13.671307,
+   "name": "Eltofttuva"
   },
   {
    "lat": 67.6796,
@@ -3776,6 +3768,11 @@
    "name": "Fløya"
   },
   {
+   "lat": 68.540197,
+   "lon": 16.012028,
+   "name": "Guollevierddčohkka"
+  },
+  {
    "lat": 67.646825,
    "lon": 15.037775,
    "name": "Grønlikollen"
@@ -3796,39 +3793,14 @@
    "name": "Kråktindan"
   },
   {
-   "lat": 67.881789,
-   "lon": 15.305667,
-   "name": "Motinden"
+   "lat": 68.206345,
+   "lon": 14.457895,
+   "name": "Brurberget"
   },
   {
-   "lat": 67.858789,
-   "lon": 15.26125,
-   "name": "Breifjellet"
-  },
-  {
-   "lat": 67.845483,
-   "lon": 15.284892,
-   "name": "Stokkvasstinden"
-  },
-  {
-   "lat": 67.844092,
-   "lon": 15.230267,
-   "name": "Holmåktinden"
-  },
-  {
-   "lat": 67.823406,
-   "lon": 15.199494,
-   "name": "Reinkalvtinden"
-  },
-  {
-   "lat": 67.804117,
-   "lon": 15.149461,
-   "name": "Marhaugtinden"
-  },
-  {
-   "lat": 67.790692,
-   "lon": 15.101914,
-   "name": "Daltinden"
+   "lat": 68.794078,
+   "lon": 14.671195,
+   "name": "Hesthausen"
   },
   {
    "lat": 67.825622,
@@ -3851,26 +3823,19 @@
    "name": "Skotsfjordheia"
   },
   {
-   "lat": 67.938102,
-   "lon": 13.043648,
-   "name": "Navaren",
-   "wikidata": "Q31652009"
-  },
-  {
-   "lat": 68.038711,
-   "lon": 13.005842,
-   "name": "Brasråstindan"
-  },
-  {
-   "lat": 67.9672,
-   "lon": 13.130911,
-   "name": "Lilandstinden",
-   "wikidata": "Q11875886"
-  },
-  {
    "lat": 68.265577,
    "lon": 16.478008,
    "name": "Henriksnesfjellet"
+  },
+  {
+   "lat": 68.251563,
+   "lon": 14.598232,
+   "name": "Frosken"
+  },
+  {
+   "lat": 68.567532,
+   "lon": 16.457903,
+   "name": "Hårberget"
   },
   {
    "lat": 68.324116,
@@ -3878,34 +3843,69 @@
    "name": "Middagstinden"
   },
   {
-   "lat": 68.221532,
-   "lon": 13.558171,
-   "name": "606"
+   "lat": 68.639177,
+   "lon": 14.542401,
+   "name": "Vetten"
   },
   {
-   "lat": 68.540197,
-   "lon": 16.012028,
-   "name": "Guollevierddčohkka"
+   "lat": 68.128285,
+   "lon": 13.726459,
+   "name": "Finngluntan"
   },
   {
-   "lat": 68.295518,
-   "lon": 14.805463,
-   "name": "Trehakkatinden"
+   "lat": 68.125344,
+   "lon": 13.698946,
+   "name": "Bulitinden"
   },
   {
-   "lat": 68.311462,
-   "lon": 14.849953,
-   "name": "Hornet"
+   "lat": 68.26216,
+   "lon": 13.89564,
+   "name": "Tuva"
   },
   {
-   "lat": 67.549601,
-   "lon": 14.898572,
-   "name": "Strandåtinden"
+   "lat": 68.082918,
+   "lon": 13.70538,
+   "name": "Bårdsundtinden"
   },
   {
-   "lat": 67.693749,
-   "lon": 15.753581,
-   "name": "Åndtinden"
+   "lat": 68.635622,
+   "lon": 14.61393,
+   "name": "Rambergåsen"
+  },
+  {
+   "lat": 68.54735,
+   "lon": 15.816372,
+   "name": "Tverrbakktinden"
+  },
+  {
+   "lat": 68.686156,
+   "lon": 15.666329,
+   "name": "Tverrfjellet"
+  },
+  {
+   "lat": 68.681039,
+   "lon": 15.563152,
+   "name": "Blåheia"
+  },
+  {
+   "lat": 68.697817,
+   "lon": 15.643326,
+   "name": "Trolldalstinden"
+  },
+  {
+   "lat": 68.392454,
+   "lon": 15.913717,
+   "name": "Klokkatohaugen"
+  },
+  {
+   "lat": 68.770123,
+   "lon": 16.226871,
+   "name": "Strandhågen"
+  },
+  {
+   "lat": 68.766242,
+   "lon": 16.235068,
+   "name": "Steinkrysshågen"
   }
  ]
 }

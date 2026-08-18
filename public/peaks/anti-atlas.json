@@ -1,6 +1,6 @@
 {
  "region": "anti-atlas",
- "generated": "2026-08-13T09:16:16+00:00",
+ "generated": "2026-08-18T20:47:22+00:00",
  "peaks": [
   {
    "lat": 30.964341,
@@ -286,27 +286,27 @@
    "ele": 1700
   },
   {
-   "lat": 30.812398,
-   "lon": -6.310047,
-   "name": "Tasguilt",
-   "ele": 1660
-  },
-  {
    "lat": 30.78406,
    "lon": -6.119492,
    "name": "Arhoulid n'Tanza",
    "ele": 1660
   },
   {
-   "lat": 29.602534,
-   "lon": -9.006025,
-   "name": "Tighawn",
-   "ele": 1600
+   "lat": 30.812398,
+   "lon": -6.310047,
+   "name": "Tasguilt",
+   "ele": 1660
   },
   {
    "lat": 30.657524,
    "lon": -9.433656,
    "name": "Mont Irhal",
+   "ele": 1600
+  },
+  {
+   "lat": 29.602534,
+   "lon": -9.006025,
+   "name": "Tighawn",
    "ele": 1600
   },
   {
@@ -562,15 +562,15 @@
    "ele": 890
   },
   {
-   "lat": 29.75735,
-   "lon": -7.700715,
-   "name": "Boutguella",
-   "ele": 870
-  },
-  {
    "lat": 30.07706,
    "lon": -7.207332,
    "name": "Mmizagane",
+   "ele": 870
+  },
+  {
+   "lat": 29.75735,
+   "lon": -7.700715,
+   "name": "Boutguella",
    "ele": 870
   },
   {
@@ -611,40 +611,24 @@
    "ele": 20
   },
   {
-   "lat": 29.681495,
-   "lon": -5.995516,
-   "name": "Zahar - Lion Dune",
-   "name_en": "Lion dune"
-  },
-  {
-   "lat": 29.581229,
-   "lon": -8.943971,
-   "name": "Tamzait"
-  },
-  {
    "lat": 30.732792,
    "lon": -5.248777,
    "name": "Djebel Mrhorfi"
   },
   {
-   "lat": 29.911768,
-   "lon": -8.116452,
-   "name": "Ouatzloul"
+   "lat": 29.696887,
+   "lon": -8.966737,
+   "name": "Chapeau Napoleon"
+  },
+  {
+   "lat": 30.810906,
+   "lon": -8.816243,
+   "name": "Adrar N'Dern"
   },
   {
    "lat": 30.784726,
    "lon": -5.577535,
    "name": "Djebel Tabou Oualt"
-  },
-  {
-   "lat": 30.614611,
-   "lon": -7.224065,
-   "name": "Gayyoun"
-  },
-  {
-   "lat": 29.696887,
-   "lon": -8.966737,
-   "name": "Chapeau Napoleon"
   },
   {
    "lat": 29.699179,
@@ -653,19 +637,9 @@
    "wikidata": "Q27529408"
   },
   {
-   "lat": 30.810906,
-   "lon": -8.816243,
-   "name": "Adrar N'Dern"
-  },
-  {
-   "lat": 30.717727,
-   "lon": -5.349304,
-   "name": "foum-Tizza"
-  },
-  {
-   "lat": 29.383783,
-   "lon": -9.028604,
-   "name": "thorion de roche"
+   "lat": 29.911768,
+   "lon": -8.116452,
+   "name": "Ouatzloul"
   },
   {
    "lat": 29.64902,
@@ -691,6 +665,32 @@
    "lat": 29.719365,
    "lon": -6.560844,
    "name": "600"
+  },
+  {
+   "lat": 30.717727,
+   "lon": -5.349304,
+   "name": "foum-Tizza"
+  },
+  {
+   "lat": 29.681495,
+   "lon": -5.995516,
+   "name": "Zahar - Lion Dune",
+   "name_en": "Lion dune"
+  },
+  {
+   "lat": 29.581229,
+   "lon": -8.943971,
+   "name": "Tamzait"
+  },
+  {
+   "lat": 30.614611,
+   "lon": -7.224065,
+   "name": "Gayyoun"
+  },
+  {
+   "lat": 29.383783,
+   "lon": -9.028604,
+   "name": "thorion de roche"
   },
   {
    "lat": 30.130263,

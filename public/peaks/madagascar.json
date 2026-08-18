@@ -1,6 +1,6 @@
 {
  "region": "madagascar",
- "generated": "2026-08-13T09:16:24+00:00",
+ "generated": "2026-08-18T20:47:31+00:00",
  "peaks": [
   {
    "lat": -14.022581,
@@ -71,15 +71,15 @@
    "ele": 2314
   },
   {
-   "lat": -20.10145,
-   "lon": 47.0056,
-   "name": "Ibity",
-   "ele": 2254
-  },
-  {
    "lat": -19.576581,
    "lon": 46.840681,
    "name": "Massif des Vavavato",
+   "ele": 2254
+  },
+  {
+   "lat": -20.10145,
+   "lon": 47.0056,
+   "name": "Ibity",
    "ele": 2254
   },
   {
@@ -162,12 +162,6 @@
    "ele": 1755
   },
   {
-   "lat": -24.104368,
-   "lon": 46.730828,
-   "name": "Sahanasy",
-   "ele": 1750
-  },
-  {
    "lat": -24.077314,
    "lon": 47.002459,
    "name": "Vohipaly",
@@ -177,6 +171,12 @@
    "lat": -19.149883,
    "lon": 47.081554,
    "name": "Tampoketsa",
+   "ele": 1750
+  },
+  {
+   "lat": -24.104368,
+   "lon": 46.730828,
+   "name": "Sahanasy",
    "ele": 1750
   },
   {
@@ -199,15 +199,15 @@
    "ele": 1595
   },
   {
-   "lat": -18.947611,
-   "lon": 47.688584,
-   "name": "Ambohitsileo",
-   "ele": 1590
-  },
-  {
    "lat": -23.629726,
    "lon": 46.490389,
    "name": "Ivohibe",
+   "ele": 1590
+  },
+  {
+   "lat": -18.947611,
+   "lon": 47.688584,
+   "name": "Ambohitsileo",
    "ele": 1590
   },
   {
@@ -326,15 +326,15 @@
    "ele": 1341
   },
   {
-   "lat": -24.795521,
-   "lon": 46.928924,
-   "name": "Isakatelo",
-   "ele": 1295
-  },
-  {
    "lat": -21.477062,
    "lon": 47.129379,
    "name": "Andrainjato",
+   "ele": 1295
+  },
+  {
+   "lat": -24.795521,
+   "lon": 46.928924,
+   "name": "Isakatelo",
    "ele": 1295
   },
   {
@@ -344,15 +344,15 @@
    "ele": 1292
   },
   {
-   "lat": -21.390002,
-   "lon": 47.116644,
-   "name": "Vinaninoro",
-   "ele": 1290
-  },
-  {
    "lat": -21.751907,
    "lon": 47.275868,
    "name": "Vinanitelo",
+   "ele": 1290
+  },
+  {
+   "lat": -21.390002,
+   "lon": 47.116644,
+   "name": "Vinaninoro",
    "ele": 1290
   },
   {
@@ -380,15 +380,15 @@
    "ele": 1241
   },
   {
-   "lat": -24.729936,
-   "lon": 46.547503,
-   "name": "Tsilama",
-   "ele": 1190
-  },
-  {
    "lat": -13.618155,
    "lon": 49.593609,
    "name": "Anjanaharibe",
+   "ele": 1190
+  },
+  {
+   "lat": -24.729936,
+   "lon": 46.547503,
+   "name": "Tsilama",
    "ele": 1190
   },
   {
@@ -810,356 +810,6 @@
    "ele": 29
   },
   {
-   "lat": -18.863149,
-   "lon": 47.659774,
-   "name": "Ambatomanoina"
-  },
-  {
-   "lat": -18.925478,
-   "lon": 47.524865,
-   "name": "Ambohijanahary"
-  },
-  {
-   "lat": -18.915987,
-   "lon": 47.565771,
-   "name": "Ankatso"
-  },
-  {
-   "lat": -18.917225,
-   "lon": 47.550407,
-   "name": "Ambohidempona"
-  },
-  {
-   "lat": -18.923941,
-   "lon": 47.532498,
-   "name": "Manjakamiadana"
-  },
-  {
-   "lat": -24.971002,
-   "lon": 47.099789,
-   "name": "Sommet Evatra Milieu"
-  },
-  {
-   "lat": -24.98303,
-   "lon": 47.099493,
-   "name": "Sommet Evatra Sud"
-  },
-  {
-   "lat": -24.965146,
-   "lon": 47.102986,
-   "name": "Sommet Evatra"
-  },
-  {
-   "lat": -22.558641,
-   "lon": 43.998149,
-   "name": "Ambalatany"
-  },
-  {
-   "lat": -18.843399,
-   "lon": 45.495139,
-   "name": "Ampamarinandoha"
-  },
-  {
-   "lat": -23.227723,
-   "lon": 45.124368,
-   "name": "Ampandraky"
-  },
-  {
-   "lat": -21.608931,
-   "lon": 45.019067,
-   "name": "Ampiketraha"
-  },
-  {
-   "lat": -18.348991,
-   "lon": 45.476155,
-   "name": "Ampitolava"
-  },
-  {
-   "lat": -23.229732,
-   "lon": 46.932902,
-   "name": "Angavo"
-  },
-  {
-   "lat": -22.481721,
-   "lon": 44.478628,
-   "name": "Ankaranga"
-  },
-  {
-   "lat": -22.912512,
-   "lon": 44.988731,
-   "name": "Ankazomanga"
-  },
-  {
-   "lat": -22.371844,
-   "lon": 44.000704,
-   "name": "Ankobaka"
-  },
-  {
-   "lat": -23.147032,
-   "lon": 46.118172,
-   "name": "Anteto"
-  },
-  {
-   "lat": -24.955302,
-   "lon": 46.913199,
-   "name": "Beseva"
-  },
-  {
-   "lat": -23.118746,
-   "lon": 44.976295,
-   "name": "Betrandraky"
-  },
-  {
-   "lat": -24.100543,
-   "lon": 46.036839,
-   "name": "Bevovoka"
-  },
-  {
-   "lat": -18.841292,
-   "lon": 45.006115,
-   "name": "Gadra"
-  },
-  {
-   "lat": -25.046719,
-   "lon": 46.510104,
-   "name": "Ikatefa"
-  },
-  {
-   "lat": -23.623605,
-   "lon": 46.104704,
-   "name": "Isangory"
-  },
-  {
-   "lat": -23.837447,
-   "lon": 46.433373,
-   "name": "Ivakoany"
-  },
-  {
-   "lat": -23.337934,
-   "lon": 45.367664,
-   "name": "Ivohiby"
-  },
-  {
-   "lat": -22.813725,
-   "lon": 45.018634,
-   "name": "Mangaoky"
-  },
-  {
-   "lat": -22.954562,
-   "lon": 46.0205,
-   "name": "Marohary"
-  },
-  {
-   "lat": -18.346158,
-   "lon": 45.295125,
-   "name": "Mavoandro"
-  },
-  {
-   "lat": -22.593561,
-   "lon": 43.962488,
-   "name": "Mikoboka"
-  },
-  {
-   "lat": -22.632049,
-   "lon": 44.164057,
-   "name": "Mitsinjoriaka"
-  },
-  {
-   "lat": -23.072796,
-   "lon": 46.481721,
-   "name": "Rengolika"
-  },
-  {
-   "lat": -22.616269,
-   "lon": 45.990681,
-   "name": "Takodara"
-  },
-  {
-   "lat": -23.841078,
-   "lon": 46.436503,
-   "name": "Tangorombohitr’ Ivakoany"
-  },
-  {
-   "lat": -23.366301,
-   "lon": 46.333566,
-   "name": "Tangorombohitr’ i Kalambatritra"
-  },
-  {
-   "lat": -21.386847,
-   "lon": 45.126658,
-   "name": "Tangorombohitr’ i Makay"
-  },
-  {
-   "lat": -23.93576,
-   "lon": 45.659997,
-   "name": "Tolongoy"
-  },
-  {
-   "lat": -18.465744,
-   "lon": 45.390107,
-   "name": "Tsiabohitra"
-  },
-  {
-   "lat": -23.826639,
-   "lon": 45.635422,
-   "name": "Tsikoriky"
-  },
-  {
-   "lat": -23.260775,
-   "lon": 45.017945,
-   "name": "Tsitakabalala"
-  },
-  {
-   "lat": -24.345356,
-   "lon": 46.943455,
-   "name": "Vohibe"
-  },
-  {
-   "lat": -23.707016,
-   "lon": 45.671486,
-   "name": "Vohibola"
-  },
-  {
-   "lat": -23.657793,
-   "lon": 44.931936,
-   "name": "Vohibory"
-  },
-  {
-   "lat": -22.863279,
-   "lon": 44.923861,
-   "name": "Vohidangory"
-  },
-  {
-   "lat": -24.149337,
-   "lon": 46.248998,
-   "name": "Vohidava"
-  },
-  {
-   "lat": -24.312584,
-   "lon": 46.302321,
-   "name": "Vohidava"
-  },
-  {
-   "lat": -23.122354,
-   "lon": 44.815699,
-   "name": "Vohidolo"
-  },
-  {
-   "lat": -24.926638,
-   "lon": 46.584402,
-   "name": "Vohimainty"
-  },
-  {
-   "lat": -24.052906,
-   "lon": 45.501754,
-   "name": "Vohimanga"
-  },
-  {
-   "lat": -22.72002,
-   "lon": 45.032028,
-   "name": "Vohimarina"
-  },
-  {
-   "lat": -23.260443,
-   "lon": 45.816609,
-   "name": "Vohimary"
-  },
-  {
-   "lat": -24.325589,
-   "lon": 47.136703,
-   "name": "Vohimavo"
-  },
-  {
-   "lat": -20.530803,
-   "lon": 45.533051,
-   "name": "Vohimena"
-  },
-  {
-   "lat": -24.832057,
-   "lon": 45.513989,
-   "name": "Vohimena"
-  },
-  {
-   "lat": -23.053566,
-   "lon": 46.838573,
-   "name": "Vohimora"
-  },
-  {
-   "lat": -23.049968,
-   "lon": 44.855125,
-   "name": "Vohipotsy"
-  },
-  {
-   "lat": -24.85593,
-   "lon": 45.867678,
-   "name": "Vohipotsy"
-  },
-  {
-   "lat": -24.255482,
-   "lon": 46.718276,
-   "name": "Vohitrosy"
-  },
-  {
-   "lat": -19.709831,
-   "lon": 48.076852,
-   "name": "Ambatopirinana"
-  },
-  {
-   "lat": -17.626024,
-   "lon": 49.365255,
-   "name": "Ambatosoa"
-  },
-  {
-   "lat": -16.484204,
-   "lon": 48.496035,
-   "name": "Ambetrandraka"
-  },
-  {
-   "lat": -17.933491,
-   "lon": 48.376924,
-   "name": "Amboavahifotsy"
-  },
-  {
-   "lat": -18.113713,
-   "lon": 48.31574,
-   "name": "Anjiroberonety"
-  },
-  {
-   "lat": -17.31925,
-   "lon": 48.382638,
-   "name": "Ankitsika"
-  },
-  {
-   "lat": -18.234344,
-   "lon": 48.202331,
-   "name": "Antanetikely"
-  },
-  {
-   "lat": -16.953853,
-   "lon": 48.335268,
-   "name": "Mangabe"
-  },
-  {
-   "lat": -17.605204,
-   "lon": 48.9765,
-   "name": "Nanahiana"
-  },
-  {
-   "lat": -16.768954,
-   "lon": 49.648962,
-   "name": "Vohibendra"
-  },
-  {
-   "lat": -17.361122,
-   "lon": 49.329195,
-   "name": "Vohidrazana"
-  },
-  {
-   "lat": -18.769089,
-   "lon": 48.97005,
-   "name": "Vohiposa"
-  },
-  {
    "lat": -24.497513,
    "lon": 46.846505,
    "name": "Akahabe"
@@ -1525,79 +1175,9 @@
    "name": "Vorondolo"
   },
   {
-   "lat": -14.702343,
-   "lon": 50.030901,
-   "name": "Anjiabe"
-  },
-  {
-   "lat": -19.064198,
-   "lon": 46.992399,
-   "name": "Vodivohitra"
-  },
-  {
-   "lat": -19.317488,
-   "lon": 46.956992,
-   "name": "Imanga"
-  },
-  {
-   "lat": -16.258268,
-   "lon": 49.211867,
-   "name": "Kambolaza"
-  },
-  {
-   "lat": -18.630368,
-   "lon": 47.288643,
-   "name": "Lohavohitra"
-  },
-  {
-   "lat": -21.395631,
-   "lon": 45.681003,
-   "name": "Tangorombohitr’ i Mahatsinjoroa"
-  },
-  {
-   "lat": -16.480292,
-   "lon": 49.189348,
-   "name": "Ankavitra"
-  },
-  {
-   "lat": -24.984284,
-   "lon": 46.560705,
-   "name": "Bevilany"
-  },
-  {
-   "lat": -14.92341,
-   "lon": 49.653865,
-   "name": "Tandavan’ i Tsararano"
-  },
-  {
-   "lat": -18.312653,
-   "lon": 47.065194,
-   "name": "Ambatomalaza"
-  },
-  {
-   "lat": -17.365163,
-   "lon": 47.441093,
-   "name": "Ambatomboromahery"
-  },
-  {
-   "lat": -19.929772,
-   "lon": 46.071527,
-   "name": "Bongòlava"
-  },
-  {
-   "lat": -16.580068,
-   "lon": 47.690664,
-   "name": "Analabe"
-  },
-  {
-   "lat": -19.268023,
-   "lon": 47.540197,
-   "name": "Analabe"
-  },
-  {
-   "lat": -17.812971,
-   "lon": 47.325766,
-   "name": "Belambo"
+   "lat": -16.768169,
+   "lon": 48.681986,
+   "name": "1150"
   },
   {
    "lat": -17.647987,
@@ -1608,6 +1188,41 @@
    "lat": -18.185879,
    "lon": 48.006669,
    "name": "Marivolanitra"
+  },
+  {
+   "lat": -18.590542,
+   "lon": 47.649932,
+   "name": "Kaloy"
+  },
+  {
+   "lat": -18.925478,
+   "lon": 47.524865,
+   "name": "Ambohijanahary"
+  },
+  {
+   "lat": -24.971002,
+   "lon": 47.099789,
+   "name": "Sommet Evatra Milieu"
+  },
+  {
+   "lat": -24.98303,
+   "lon": 47.099493,
+   "name": "Sommet Evatra Sud"
+  },
+  {
+   "lat": -24.965146,
+   "lon": 47.102986,
+   "name": "Sommet Evatra"
+  },
+  {
+   "lat": -14.702343,
+   "lon": 50.030901,
+   "name": "Anjiabe"
+  },
+  {
+   "lat": -19.064198,
+   "lon": 46.992399,
+   "name": "Vodivohitra"
   },
   {
    "lat": -14.833389,
@@ -1640,9 +1255,359 @@
    "name": "Manasamody"
   },
   {
+   "lat": -19.780455,
+   "lon": 46.631834,
+   "name": "1345"
+  },
+  {
+   "lat": -18.863149,
+   "lon": 47.659774,
+   "name": "Ambatomanoina"
+  },
+  {
+   "lat": -17.365163,
+   "lon": 47.441093,
+   "name": "Ambatomboromahery"
+  },
+  {
    "lat": -18.71699,
    "lon": 47.570073,
    "name": "Langana"
+  },
+  {
+   "lat": -18.946814,
+   "lon": 47.748486,
+   "name": "Avaratanana Anerindrano"
+  },
+  {
+   "lat": -18.926867,
+   "lon": 47.751434,
+   "name": "Angavobe"
+  },
+  {
+   "lat": -16.580068,
+   "lon": 47.690664,
+   "name": "Analabe"
+  },
+  {
+   "lat": -19.268023,
+   "lon": 47.540197,
+   "name": "Analabe"
+  },
+  {
+   "lat": -17.812971,
+   "lon": 47.325766,
+   "name": "Belambo"
+  },
+  {
+   "lat": -12.661615,
+   "lon": 45.096364,
+   "name": "Mont M'Kadijou - Mlima M'Kadijou"
+  },
+  {
+   "lat": -19.258571,
+   "lon": 47.128248,
+   "name": "Tantetibe"
+  },
+  {
+   "lat": -18.825219,
+   "lon": 47.760461,
+   "name": "Ambohidehilahy Be"
+  },
+  {
+   "lat": -19.929772,
+   "lon": 46.071527,
+   "name": "Bongòlava"
+  },
+  {
+   "lat": -18.854016,
+   "lon": 47.565592,
+   "name": "Ilafy"
+  },
+  {
+   "lat": -18.915987,
+   "lon": 47.565771,
+   "name": "Ankatso"
+  },
+  {
+   "lat": -18.917225,
+   "lon": 47.550407,
+   "name": "Ambohidempona"
+  },
+  {
+   "lat": -18.923941,
+   "lon": 47.532498,
+   "name": "Manjakamiadana"
+  },
+  {
+   "lat": -16.480292,
+   "lon": 49.189348,
+   "name": "Ankavitra"
+  },
+  {
+   "lat": -24.984284,
+   "lon": 46.560705,
+   "name": "Bevilany"
+  },
+  {
+   "lat": -14.92341,
+   "lon": 49.653865,
+   "name": "Tandavan’ i Tsararano"
+  },
+  {
+   "lat": -19.087576,
+   "lon": 46.791705,
+   "name": "Ambohiniazy"
+  },
+  {
+   "lat": -22.558641,
+   "lon": 43.998149,
+   "name": "Ambalatany"
+  },
+  {
+   "lat": -18.843399,
+   "lon": 45.495139,
+   "name": "Ampamarinandoha"
+  },
+  {
+   "lat": -23.227723,
+   "lon": 45.124368,
+   "name": "Ampandraky"
+  },
+  {
+   "lat": -21.608931,
+   "lon": 45.019067,
+   "name": "Ampiketraha"
+  },
+  {
+   "lat": -18.348991,
+   "lon": 45.476155,
+   "name": "Ampitolava"
+  },
+  {
+   "lat": -23.229732,
+   "lon": 46.932902,
+   "name": "Angavo"
+  },
+  {
+   "lat": -22.481721,
+   "lon": 44.478628,
+   "name": "Ankaranga"
+  },
+  {
+   "lat": -22.912512,
+   "lon": 44.988731,
+   "name": "Ankazomanga"
+  },
+  {
+   "lat": -22.371844,
+   "lon": 44.000704,
+   "name": "Ankobaka"
+  },
+  {
+   "lat": -23.147032,
+   "lon": 46.118172,
+   "name": "Anteto"
+  },
+  {
+   "lat": -24.955302,
+   "lon": 46.913199,
+   "name": "Beseva"
+  },
+  {
+   "lat": -23.118746,
+   "lon": 44.976295,
+   "name": "Betrandraky"
+  },
+  {
+   "lat": -24.100543,
+   "lon": 46.036839,
+   "name": "Bevovoka"
+  },
+  {
+   "lat": -18.841292,
+   "lon": 45.006115,
+   "name": "Gadra"
+  },
+  {
+   "lat": -25.046719,
+   "lon": 46.510104,
+   "name": "Ikatefa"
+  },
+  {
+   "lat": -23.623605,
+   "lon": 46.104704,
+   "name": "Isangory"
+  },
+  {
+   "lat": -23.837447,
+   "lon": 46.433373,
+   "name": "Ivakoany"
+  },
+  {
+   "lat": -23.337934,
+   "lon": 45.367664,
+   "name": "Ivohiby"
+  },
+  {
+   "lat": -22.813725,
+   "lon": 45.018634,
+   "name": "Mangaoky"
+  },
+  {
+   "lat": -22.954562,
+   "lon": 46.0205,
+   "name": "Marohary"
+  },
+  {
+   "lat": -18.346158,
+   "lon": 45.295125,
+   "name": "Mavoandro"
+  },
+  {
+   "lat": -22.593561,
+   "lon": 43.962488,
+   "name": "Mikoboka"
+  },
+  {
+   "lat": -22.632049,
+   "lon": 44.164057,
+   "name": "Mitsinjoriaka"
+  },
+  {
+   "lat": -23.072796,
+   "lon": 46.481721,
+   "name": "Rengolika"
+  },
+  {
+   "lat": -22.616269,
+   "lon": 45.990681,
+   "name": "Takodara"
+  },
+  {
+   "lat": -23.841078,
+   "lon": 46.436503,
+   "name": "Tangorombohitr’ Ivakoany"
+  },
+  {
+   "lat": -23.366301,
+   "lon": 46.333566,
+   "name": "Tangorombohitr’ i Kalambatritra"
+  },
+  {
+   "lat": -21.386847,
+   "lon": 45.126658,
+   "name": "Tangorombohitr’ i Makay"
+  },
+  {
+   "lat": -23.93576,
+   "lon": 45.659997,
+   "name": "Tolongoy"
+  },
+  {
+   "lat": -18.465744,
+   "lon": 45.390107,
+   "name": "Tsiabohitra"
+  },
+  {
+   "lat": -23.826639,
+   "lon": 45.635422,
+   "name": "Tsikoriky"
+  },
+  {
+   "lat": -23.260775,
+   "lon": 45.017945,
+   "name": "Tsitakabalala"
+  },
+  {
+   "lat": -24.345356,
+   "lon": 46.943455,
+   "name": "Vohibe"
+  },
+  {
+   "lat": -23.707016,
+   "lon": 45.671486,
+   "name": "Vohibola"
+  },
+  {
+   "lat": -23.657793,
+   "lon": 44.931936,
+   "name": "Vohibory"
+  },
+  {
+   "lat": -22.863279,
+   "lon": 44.923861,
+   "name": "Vohidangory"
+  },
+  {
+   "lat": -24.149337,
+   "lon": 46.248998,
+   "name": "Vohidava"
+  },
+  {
+   "lat": -24.312584,
+   "lon": 46.302321,
+   "name": "Vohidava"
+  },
+  {
+   "lat": -23.122354,
+   "lon": 44.815699,
+   "name": "Vohidolo"
+  },
+  {
+   "lat": -24.926638,
+   "lon": 46.584402,
+   "name": "Vohimainty"
+  },
+  {
+   "lat": -24.052906,
+   "lon": 45.501754,
+   "name": "Vohimanga"
+  },
+  {
+   "lat": -22.72002,
+   "lon": 45.032028,
+   "name": "Vohimarina"
+  },
+  {
+   "lat": -23.260443,
+   "lon": 45.816609,
+   "name": "Vohimary"
+  },
+  {
+   "lat": -24.325589,
+   "lon": 47.136703,
+   "name": "Vohimavo"
+  },
+  {
+   "lat": -20.530803,
+   "lon": 45.533051,
+   "name": "Vohimena"
+  },
+  {
+   "lat": -24.832057,
+   "lon": 45.513989,
+   "name": "Vohimena"
+  },
+  {
+   "lat": -23.053566,
+   "lon": 46.838573,
+   "name": "Vohimora"
+  },
+  {
+   "lat": -23.049968,
+   "lon": 44.855125,
+   "name": "Vohipotsy"
+  },
+  {
+   "lat": -24.85593,
+   "lon": 45.867678,
+   "name": "Vohipotsy"
+  },
+  {
+   "lat": -24.255482,
+   "lon": 46.718276,
+   "name": "Vohitrosy"
   },
   {
    "lat": -12.265491,
@@ -1660,55 +1625,9 @@
    "name": "Mont Carré"
   },
   {
-   "lat": -24.821873,
-   "lon": 46.817315,
-   "name": "895"
-  },
-  {
-   "lat": -18.750059,
-   "lon": 47.550017,
-   "name": "Ambohimanga",
-   "wikidata": "Q458167"
-  },
-  {
-   "lat": -16.768169,
-   "lon": 48.681986,
-   "name": "1150"
-  },
-  {
-   "lat": -18.854016,
-   "lon": 47.565592,
-   "name": "Ilafy"
-  },
-  {
-   "lat": -12.661615,
-   "lon": 45.096364,
-   "name": "Mont M'Kadijou - Mlima M'Kadijou"
-  },
-  {
-   "lat": -12.75533,
-   "lon": 45.148892,
-   "name": "Bandramaji"
-  },
-  {
-   "lat": -18.590542,
-   "lon": 47.649932,
-   "name": "Kaloy"
-  },
-  {
    "lat": -18.912344,
    "lon": 47.545079,
    "name": "Trishoul's House"
-  },
-  {
-   "lat": -18.946814,
-   "lon": 47.748486,
-   "name": "Avaratanana Anerindrano"
-  },
-  {
-   "lat": -18.926867,
-   "lon": 47.751434,
-   "name": "Angavobe"
   },
   {
    "lat": -18.911369,
@@ -1716,24 +1635,9 @@
    "name": "Antsobolo"
   },
   {
-   "lat": -19.780455,
-   "lon": 46.631834,
-   "name": "1345"
-  },
-  {
-   "lat": -20.989289,
-   "lon": 47.087746,
-   "name": "1245"
-  },
-  {
    "lat": -18.948812,
    "lon": 47.619971,
    "name": "Ambohimanambola"
-  },
-  {
-   "lat": -19.087576,
-   "lon": 46.791705,
-   "name": "Ambohiniazy"
   },
   {
    "lat": -12.847996,
@@ -1743,14 +1647,110 @@
    "volcano": true
   },
   {
-   "lat": -19.258571,
-   "lon": 47.128248,
-   "name": "Tantetibe"
+   "lat": -24.821873,
+   "lon": 46.817315,
+   "name": "895"
   },
   {
-   "lat": -18.825219,
-   "lon": 47.760461,
-   "name": "Ambohidehilahy Be"
+   "lat": -19.709831,
+   "lon": 48.076852,
+   "name": "Ambatopirinana"
+  },
+  {
+   "lat": -17.626024,
+   "lon": 49.365255,
+   "name": "Ambatosoa"
+  },
+  {
+   "lat": -16.484204,
+   "lon": 48.496035,
+   "name": "Ambetrandraka"
+  },
+  {
+   "lat": -17.933491,
+   "lon": 48.376924,
+   "name": "Amboavahifotsy"
+  },
+  {
+   "lat": -18.113713,
+   "lon": 48.31574,
+   "name": "Anjiroberonety"
+  },
+  {
+   "lat": -17.31925,
+   "lon": 48.382638,
+   "name": "Ankitsika"
+  },
+  {
+   "lat": -18.234344,
+   "lon": 48.202331,
+   "name": "Antanetikely"
+  },
+  {
+   "lat": -16.953853,
+   "lon": 48.335268,
+   "name": "Mangabe"
+  },
+  {
+   "lat": -17.605204,
+   "lon": 48.9765,
+   "name": "Nanahiana"
+  },
+  {
+   "lat": -16.768954,
+   "lon": 49.648962,
+   "name": "Vohibendra"
+  },
+  {
+   "lat": -17.361122,
+   "lon": 49.329195,
+   "name": "Vohidrazana"
+  },
+  {
+   "lat": -18.769089,
+   "lon": 48.97005,
+   "name": "Vohiposa"
+  },
+  {
+   "lat": -18.312653,
+   "lon": 47.065194,
+   "name": "Ambatomalaza"
+  },
+  {
+   "lat": -18.750059,
+   "lon": 47.550017,
+   "name": "Ambohimanga",
+   "wikidata": "Q458167"
+  },
+  {
+   "lat": -19.317488,
+   "lon": 46.956992,
+   "name": "Imanga"
+  },
+  {
+   "lat": -16.258268,
+   "lon": 49.211867,
+   "name": "Kambolaza"
+  },
+  {
+   "lat": -18.630368,
+   "lon": 47.288643,
+   "name": "Lohavohitra"
+  },
+  {
+   "lat": -21.395631,
+   "lon": 45.681003,
+   "name": "Tangorombohitr’ i Mahatsinjoroa"
+  },
+  {
+   "lat": -12.75533,
+   "lon": 45.148892,
+   "name": "Bandramaji"
+  },
+  {
+   "lat": -20.989289,
+   "lon": 47.087746,
+   "name": "1245"
   }
  ]
 }

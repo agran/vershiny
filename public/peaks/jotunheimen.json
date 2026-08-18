@@ -1,6 +1,6 @@
 {
  "region": "jotunheimen",
- "generated": "2026-08-13T09:16:22+00:00",
+ "generated": "2026-08-18T20:47:29+00:00",
  "peaks": [
   {
    "lat": 61.636472,
@@ -274,15 +274,15 @@
    "wikidata": "Q3443604"
   },
   {
-   "lat": 62.315089,
-   "lon": 9.249287,
-   "name": "Vesttoppen",
-   "ele": 2253
-  },
-  {
    "lat": 61.650031,
    "lon": 8.277273,
    "name": "Fremste Storgrovhøe",
+   "ele": 2253
+  },
+  {
+   "lat": 62.315089,
+   "lon": 9.249287,
+   "name": "Vesttoppen",
    "ele": 2253
   },
   {
@@ -410,17 +410,17 @@
    "wikidata": "Q3443007"
   },
   {
+   "lat": 61.571623,
+   "lon": 8.119192,
+   "name": "Store Smørstabbtinden",
+   "ele": 2208
+  },
+  {
    "lat": 61.39286,
    "lon": 8.620596,
    "name": "Vestre Kalvehøgde",
    "ele": 2208,
    "wikidata": "Q31225816"
-  },
-  {
-   "lat": 61.571623,
-   "lon": 8.119192,
-   "name": "Store Smørstabbtinden",
-   "ele": 2208
   },
   {
    "lat": 61.400646,
@@ -478,18 +478,18 @@
    "wikidata": "Q3443431"
   },
   {
-   "lat": 61.561639,
-   "lon": 8.133486,
-   "name": "Sokse",
-   "ele": 2189,
-   "wikidata": "Q11236176"
-  },
-  {
    "lat": 61.528286,
    "lon": 8.42224,
    "name": "Søre Hellstugutinden",
    "ele": 2189,
    "wikidata": "Q3445542"
+  },
+  {
+   "lat": 61.561639,
+   "lon": 8.133486,
+   "name": "Sokse",
+   "ele": 2189,
+   "wikidata": "Q11236176"
   },
   {
    "lat": 61.434205,
@@ -578,15 +578,15 @@
    "wikidata": "Q11236123"
   },
   {
-   "lat": 61.473159,
-   "lon": 7.865826,
-   "name": "Nordre Skagastølstind",
-   "ele": 2167
-  },
-  {
    "lat": 61.577217,
    "lon": 8.545247,
    "name": "Nørdre Styggehøbreatinden",
+   "ele": 2167
+  },
+  {
+   "lat": 61.473159,
+   "lon": 7.865826,
+   "name": "Nordre Skagastølstind",
    "ele": 2167
   },
   {
@@ -622,11 +622,10 @@
    "wikidata": "Q3443649"
   },
   {
-   "lat": 61.485115,
-   "lon": 8.339542,
-   "name": "Skarddalseggje",
-   "ele": 2161,
-   "wikidata": "Q3443080"
+   "lat": 61.594529,
+   "lon": 8.275909,
+   "name": "Vestre Bukkeholstindan V-3",
+   "ele": 2161
   },
   {
    "lat": 61.575565,
@@ -636,16 +635,17 @@
    "wikidata": "Q3443690"
   },
   {
-   "lat": 61.594529,
-   "lon": 8.275909,
-   "name": "Vestre Bukkeholstindan V-3",
-   "ele": 2161
-  },
-  {
    "lat": 61.692512,
    "lon": 8.580463,
    "name": "Søre Trollsteinhøe",
    "ele": 2161
+  },
+  {
+   "lat": 61.485115,
+   "lon": 8.339542,
+   "name": "Skarddalseggje",
+   "ele": 2161,
+   "wikidata": "Q3443080"
   },
   {
    "lat": 61.740519,
@@ -658,6 +658,12 @@
    "lon": 7.887741,
    "name": "Nørdre Maradalstinden",
    "ele": 2160
+  },
+  {
+   "lat": 61.61014,
+   "lon": 8.113489,
+   "name": "Veslfjelltinden",
+   "ele": 2157
   },
   {
    "lat": 61.494509,
@@ -673,12 +679,6 @@
    "wikidata": "Q3443331"
   },
   {
-   "lat": 61.61014,
-   "lon": 8.113489,
-   "name": "Veslfjelltinden",
-   "ele": 2157
-  },
-  {
    "lat": 61.690178,
    "lon": 8.562019,
    "name": "Gråhøe",
@@ -686,15 +686,15 @@
    "wikidata": "Q3443068"
   },
   {
-   "lat": 61.43653,
-   "lon": 8.599667,
-   "name": "Midtre Skarvflytinden",
-   "ele": 2154
-  },
-  {
    "lat": 61.582102,
    "lon": 8.300211,
    "name": "Midtre Bukkeholstinden øst",
+   "ele": 2154
+  },
+  {
+   "lat": 61.43653,
+   "lon": 8.599667,
+   "name": "Midtre Skarvflytinden",
    "ele": 2154
   },
   {
@@ -776,18 +776,18 @@
    "ele": 2139
   },
   {
-   "lat": 61.891735,
-   "lon": 9.861945,
-   "name": "Storronden",
-   "ele": 2138,
-   "wikidata": "Q2173169"
-  },
-  {
    "lat": 61.459434,
    "lon": 8.250514,
    "name": "Mjølkedalstinden",
    "ele": 2138,
    "wikidata": "Q11236239"
+  },
+  {
+   "lat": 61.891735,
+   "lon": 9.861945,
+   "name": "Storronden",
+   "ele": 2138,
+   "wikidata": "Q2173169"
   },
   {
    "lat": 61.421672,
@@ -834,17 +834,17 @@
    "ele": 2124
   },
   {
-   "lat": 61.5842,
-   "lon": 8.533491,
-   "name": "Nørdre Veotinden",
-   "ele": 2120
-  },
-  {
    "lat": 61.604366,
    "lon": 8.280204,
    "name": "Lindbergtinden",
    "ele": 2120,
    "wikidata": "Q3445563"
+  },
+  {
+   "lat": 61.5842,
+   "lon": 8.533491,
+   "name": "Nørdre Veotinden",
+   "ele": 2120
   },
   {
    "lat": 61.556587,
@@ -905,15 +905,15 @@
    "ele": 2111
   },
   {
-   "lat": 62.320369,
-   "lon": 9.221472,
-   "name": "Larstinden",
-   "ele": 2106
-  },
-  {
    "lat": 61.564152,
    "lon": 8.267545,
    "name": "Midtre Tverrbottinden sør",
+   "ele": 2106
+  },
+  {
+   "lat": 62.320369,
+   "lon": 9.221472,
+   "name": "Larstinden",
    "ele": 2106
   },
   {
@@ -943,17 +943,17 @@
    "wikidata": "Q3442972"
   },
   {
+   "lat": 61.43285,
+   "lon": 7.788805,
+   "name": "Midtre Austanbottstind",
+   "ele": 2100
+  },
+  {
    "lat": 61.489152,
    "lon": 8.320909,
    "name": "Skarddalstinden",
    "ele": 2100,
    "wikidata": "Q3443348"
-  },
-  {
-   "lat": 61.43285,
-   "lon": 7.788805,
-   "name": "Midtre Austanbottstind",
-   "ele": 2100
   },
   {
    "lat": 61.601764,
@@ -981,6 +981,12 @@
    "ele": 2090
   },
   {
+   "lat": 61.638444,
+   "lon": 8.527181,
+   "name": "Glitterrundhøe",
+   "ele": 2089
+  },
+  {
    "lat": 61.742661,
    "lon": 7.686643,
    "name": "Tverrådalskyrkja",
@@ -993,12 +999,6 @@
    "name": "Nautgardsoksle",
    "ele": 2089,
    "wikidata": "Q3445916"
-  },
-  {
-   "lat": 61.638444,
-   "lon": 8.527181,
-   "name": "Glitterrundhøe",
-   "ele": 2089
   },
   {
    "lat": 61.489399,
@@ -1056,15 +1056,15 @@
    "ele": 2073
   },
   {
-   "lat": 61.455391,
-   "lon": 7.844063,
-   "name": "Søre Dyrhaugstinden",
-   "ele": 2072
-  },
-  {
    "lat": 61.574659,
    "lon": 8.427084,
    "name": "Hellstuguhøe",
+   "ele": 2072
+  },
+  {
+   "lat": 61.455391,
+   "lon": 7.844063,
+   "name": "Søre Dyrhaugstinden",
    "ele": 2072
   },
   {
@@ -1074,24 +1074,17 @@
    "ele": 2071
   },
   {
-   "lat": 61.516702,
-   "lon": 7.908907,
-   "name": "Fannaråki",
-   "ele": 2068,
-   "wikidata": "Q2525968"
-  },
-  {
    "lat": 61.819252,
    "lon": 8.366413,
    "name": "Storivilen",
    "ele": 2068
   },
   {
-   "lat": 61.384721,
-   "lon": 8.096651,
-   "name": "Falketind",
-   "ele": 2067,
-   "wikidata": "Q851983"
+   "lat": 61.516702,
+   "lon": 7.908907,
+   "name": "Fannaråki",
+   "ele": 2068,
+   "wikidata": "Q2525968"
   },
   {
    "lat": 61.680798,
@@ -1101,11 +1094,24 @@
    "wikidata": "Q3443284"
   },
   {
+   "lat": 61.384721,
+   "lon": 8.096651,
+   "name": "Falketind",
+   "ele": 2067,
+   "wikidata": "Q851983"
+  },
+  {
    "lat": 61.505158,
    "lon": 8.260682,
    "name": "Midtre Høgvagltind",
    "ele": 2066,
    "wikidata": "Q11235606"
+  },
+  {
+   "lat": 61.408501,
+   "lon": 8.511043,
+   "name": "Midtre Svartdalspiggen",
+   "ele": 2065
   },
   {
    "lat": 61.403085,
@@ -1115,21 +1121,15 @@
    "wikidata": "Q22004913"
   },
   {
-   "lat": 61.408501,
-   "lon": 8.511043,
-   "name": "Midtre Svartdalspiggen",
-   "ele": 2065
+   "lat": 61.598385,
+   "lon": 8.110115,
+   "name": "Hurrbreatinden",
+   "ele": 2064
   },
   {
    "lat": 61.762868,
    "lon": 8.735905,
    "name": "Store Kvitingskjølen",
-   "ele": 2064
-  },
-  {
-   "lat": 61.598385,
-   "lon": 8.110115,
-   "name": "Hurrbreatinden",
    "ele": 2064
   },
   {
@@ -1176,15 +1176,15 @@
    "ele": 2056
   },
   {
-   "lat": 61.636807,
-   "lon": 8.812542,
-   "name": "Aust-Stornubben",
-   "ele": 2049
-  },
-  {
    "lat": 61.4441,
    "lon": 7.792587,
    "name": "Søre Soleibotntind",
+   "ele": 2049
+  },
+  {
+   "lat": 61.636807,
+   "lon": 8.812542,
+   "name": "Aust-Stornubben",
    "ele": 2049
   },
   {
@@ -1200,17 +1200,17 @@
    "ele": 2047
   },
   {
-   "lat": 62.316008,
-   "lon": 9.193402,
-   "name": "Langvasstinden",
-   "ele": 2046
-  },
-  {
    "lat": 61.903745,
    "lon": 9.84824,
    "name": "Vinjeronden",
    "ele": 2046,
    "wikidata": "Q4566416"
+  },
+  {
+   "lat": 62.316008,
+   "lon": 9.193402,
+   "name": "Langvasstinden",
+   "ele": 2046
   },
   {
    "lat": 61.533034,
@@ -1271,18 +1271,18 @@
    "wikidata": "Q3443555"
   },
   {
-   "lat": 61.612794,
-   "lon": 8.438793,
-   "name": "Spiterhøe",
-   "ele": 2033,
-   "wikidata": "Q1808826"
-  },
-  {
    "lat": 61.737274,
    "lon": 7.680776,
    "name": "Søre Tverrådalskyrkja",
    "ele": 2033,
    "wikidata": "Q11237523"
+  },
+  {
+   "lat": 61.612794,
+   "lon": 8.438793,
+   "name": "Spiterhøe",
+   "ele": 2033,
+   "wikidata": "Q1808826"
   },
   {
    "lat": 61.53007,
@@ -1292,22 +1292,9 @@
    "wikidata": "Q19391698"
   },
   {
-   "lat": 61.541367,
-   "lon": 8.292188,
-   "name": "Kyrkja",
-   "ele": 2032,
-   "wikidata": "Q847916"
-  },
-  {
    "lat": 61.541263,
    "lon": 8.386214,
    "name": "Urdadalstinden S-1",
-   "ele": 2032
-  },
-  {
-   "lat": 61.398641,
-   "lon": 8.449784,
-   "name": "Slettmarkkampen",
    "ele": 2032
   },
   {
@@ -1317,11 +1304,17 @@
    "ele": 2032
   },
   {
-   "lat": 61.524491,
-   "lon": 8.322545,
-   "name": "Langvasshøe",
-   "ele": 2030,
-   "wikidata": "Q3443511"
+   "lat": 61.398641,
+   "lon": 8.449784,
+   "name": "Slettmarkkampen",
+   "ele": 2032
+  },
+  {
+   "lat": 61.541367,
+   "lon": 8.292188,
+   "name": "Kyrkja",
+   "ele": 2032,
+   "wikidata": "Q847916"
   },
   {
    "lat": 61.449188,
@@ -1330,10 +1323,24 @@
    "ele": 2030
   },
   {
+   "lat": 61.524491,
+   "lon": 8.322545,
+   "name": "Langvasshøe",
+   "ele": 2030,
+   "wikidata": "Q3443511"
+  },
+  {
    "lat": 61.434806,
    "lon": 8.144077,
    "name": "Slingsytinden",
    "ele": 2028
+  },
+  {
+   "lat": 61.43207,
+   "lon": 7.833016,
+   "name": "Stølsmaradalstinden",
+   "ele": 2025,
+   "wikidata": "Q11233619"
   },
   {
    "lat": 61.5269,
@@ -1348,24 +1355,11 @@
    "ele": 2025
   },
   {
-   "lat": 61.43207,
-   "lon": 7.833016,
-   "name": "Stølsmaradalstinden",
-   "ele": 2025,
-   "wikidata": "Q11233619"
-  },
-  {
    "lat": 61.778114,
    "lon": 8.192105,
    "name": "Hesthøi",
    "ele": 2021,
    "wikidata": "Q3445549"
-  },
-  {
-   "lat": 61.547637,
-   "lon": 8.195461,
-   "name": "Stetinden",
-   "ele": 2020
   },
   {
    "lat": 61.729033,
@@ -1374,11 +1368,24 @@
    "ele": 2020
   },
   {
+   "lat": 61.547637,
+   "lon": 8.195461,
+   "name": "Stetinden",
+   "ele": 2020
+  },
+  {
    "lat": 61.371176,
    "lon": 8.630641,
    "name": "Nørdre Kalvehølotinden",
    "ele": 2019,
    "wikidata": "Q6977037"
+  },
+  {
+   "lat": 61.674684,
+   "lon": 8.577824,
+   "name": "Grjotbreahesten",
+   "ele": 2018,
+   "wikidata": "Q5610678"
   },
   {
    "lat": 61.919179,
@@ -1395,20 +1402,6 @@
    "wikidata": "Q3443526"
   },
   {
-   "lat": 61.674684,
-   "lon": 8.577824,
-   "name": "Grjotbreahesten",
-   "ele": 2018,
-   "wikidata": "Q5610678"
-  },
-  {
-   "lat": 61.909512,
-   "lon": 9.739407,
-   "name": "Storsmeden",
-   "ele": 2016,
-   "wikidata": "Q3443241"
-  },
-  {
    "lat": 61.951259,
    "lon": 9.831271,
    "name": "Digerronden",
@@ -1420,6 +1413,13 @@
    "lon": 8.334035,
    "name": "Midtre Rauddalseggje",
    "ele": 2016
+  },
+  {
+   "lat": 61.909512,
+   "lon": 9.739407,
+   "name": "Storsmeden",
+   "ele": 2016,
+   "wikidata": "Q3443241"
   },
   {
    "lat": 61.909414,
@@ -1466,9 +1466,9 @@
    "ele": 2005
   },
   {
-   "lat": 62.258052,
-   "lon": 9.197828,
-   "name": "Skredahøin",
+   "lat": 61.539366,
+   "lon": 8.347601,
+   "name": "Nørdre Semelholstinden",
    "ele": 2004
   },
   {
@@ -1478,9 +1478,9 @@
    "ele": 2004
   },
   {
-   "lat": 61.539366,
-   "lon": 8.347601,
-   "name": "Nørdre Semelholstinden",
+   "lat": 62.258052,
+   "lon": 9.197828,
+   "name": "Skredahøin",
    "ele": 2004
   },
   {
@@ -1496,15 +1496,15 @@
    "ele": 2002
   },
   {
-   "lat": 61.444899,
-   "lon": 7.839689,
-   "name": "Austre Ringstind",
-   "ele": 2002
-  },
-  {
    "lat": 61.395131,
    "lon": 8.081622,
    "name": "Midtre Stølsnostinden",
+   "ele": 2002
+  },
+  {
+   "lat": 61.444899,
+   "lon": 7.839689,
+   "name": "Austre Ringstind",
    "ele": 2002
   },
   {
@@ -1551,15 +1551,15 @@
    "ele": 1985
   },
   {
-   "lat": 62.184716,
-   "lon": 7.73447,
-   "name": "Karitinden",
-   "ele": 1982
-  },
-  {
    "lat": 61.771841,
    "lon": 7.923093,
    "name": "Gjelhøi",
+   "ele": 1982
+  },
+  {
+   "lat": 62.184716,
+   "lon": 7.73447,
+   "name": "Karitinden",
    "ele": 1982
   },
   {
@@ -1641,18 +1641,18 @@
    "wikidata": "Q3445874"
   },
   {
-   "lat": 61.599991,
-   "lon": 8.690517,
-   "name": "Austre Hestlægerhøe",
-   "ele": 1950,
-   "wikidata": "Q3442924"
-  },
-  {
    "lat": 61.447261,
    "lon": 7.916437,
    "name": "Mannen",
    "ele": 1950,
    "wikidata": "Q19380995"
+  },
+  {
+   "lat": 61.599991,
+   "lon": 8.690517,
+   "name": "Austre Hestlægerhøe",
+   "ele": 1950,
+   "wikidata": "Q3442924"
   },
   {
    "lat": 61.890814,
@@ -1668,17 +1668,17 @@
    "ele": 1945
   },
   {
-   "lat": 62.075858,
-   "lon": 8.071057,
-   "name": "Gråhø",
-   "ele": 1943
-  },
-  {
    "lat": 61.836001,
    "lon": 8.072934,
    "name": "Grjothøi",
    "ele": 1943,
    "wikidata": "Q3443451"
+  },
+  {
+   "lat": 62.170823,
+   "lon": 7.863948,
+   "name": "Benkehøa",
+   "ele": 1943
   },
   {
    "lat": 61.761135,
@@ -1693,21 +1693,21 @@
    "ele": 1943
   },
   {
-   "lat": 62.170823,
-   "lon": 7.863948,
-   "name": "Benkehøa",
+   "lat": 62.075858,
+   "lon": 8.071057,
+   "name": "Gråhø",
    "ele": 1943
-  },
-  {
-   "lat": 62.073502,
-   "lon": 8.141693,
-   "name": "Løyfthøene",
-   "ele": 1941
   },
   {
    "lat": 62.266813,
    "lon": 9.171054,
    "name": "Nordre Skredahøe",
+   "ele": 1941
+  },
+  {
+   "lat": 62.073502,
+   "lon": 8.141693,
+   "name": "Løyfthøene",
    "ele": 1941
   },
   {
@@ -1717,15 +1717,15 @@
    "ele": 1939
   },
   {
-   "lat": 61.36437,
-   "lon": 8.11364,
-   "name": "Koldedalstinden",
-   "ele": 1927
-  },
-  {
    "lat": 61.537958,
    "lon": 8.084804,
    "name": "Storoksle",
+   "ele": 1927
+  },
+  {
+   "lat": 61.36437,
+   "lon": 8.11364,
+   "name": "Koldedalstinden",
    "ele": 1927
   },
   {
@@ -1812,6 +1812,13 @@
    "wikidata": "Q3443113"
   },
   {
+   "lat": 61.588518,
+   "lon": 8.619322,
+   "name": "Styggehøe",
+   "ele": 1883,
+   "wikidata": "Q3443154"
+  },
+  {
    "lat": 62.007943,
    "lon": 8.591369,
    "name": "Skardtind",
@@ -1823,13 +1830,6 @@
    "name": "Svarthøe",
    "ele": 1883,
    "wikidata": "Q3443676"
-  },
-  {
-   "lat": 61.588518,
-   "lon": 8.619322,
-   "name": "Styggehøe",
-   "ele": 1883,
-   "wikidata": "Q3443154"
   },
   {
    "lat": 62.35658,
@@ -1972,18 +1972,18 @@
    "wikidata": "Q3443054"
   },
   {
-   "lat": 61.917433,
-   "lon": 7.514082,
-   "name": "Mårådalsfjellet",
-   "ele": 1849,
-   "wikidata": "Q3442782"
-  },
-  {
    "lat": 61.929376,
    "lon": 9.764603,
    "name": "Austre Smedhamran",
    "ele": 1849,
    "wikidata": "Q28719392"
+  },
+  {
+   "lat": 61.917433,
+   "lon": 7.514082,
+   "name": "Mårådalsfjellet",
+   "ele": 1849,
+   "wikidata": "Q3442782"
   },
   {
    "lat": 62.346631,
@@ -2048,17 +2048,17 @@
    "ele": 1829
   },
   {
+   "lat": 62.315812,
+   "lon": 8.975223,
+   "name": "Lågvasstinden",
+   "ele": 1825
+  },
+  {
    "lat": 61.94665,
    "lon": 8.48071,
    "name": "Leirungshøe",
    "ele": 1825,
    "wikidata": "Q3442844"
-  },
-  {
-   "lat": 62.315812,
-   "lon": 8.975223,
-   "name": "Lågvasstinden",
-   "ele": 1825
   },
   {
    "lat": 61.026264,
@@ -2067,15 +2067,15 @@
    "ele": 1824
   },
   {
-   "lat": 61.572221,
-   "lon": 8.174695,
-   "name": "Rundhøe",
-   "ele": 1822
-  },
-  {
    "lat": 62.40709,
    "lon": 8.9885,
    "name": "Fegervollkollen",
+   "ele": 1822
+  },
+  {
+   "lat": 61.572221,
+   "lon": 8.174695,
+   "name": "Rundhøe",
    "ele": 1822
   },
   {
@@ -2221,15 +2221,15 @@
    "ele": 1783
   },
   {
-   "lat": 62.186339,
-   "lon": 7.782907,
-   "name": "Karihøa",
-   "ele": 1782
-  },
-  {
    "lat": 62.050133,
    "lon": 8.71342,
    "name": "Kjølen",
+   "ele": 1782
+  },
+  {
+   "lat": 62.186339,
+   "lon": 7.782907,
+   "name": "Karihøa",
    "ele": 1782
   },
   {
@@ -2247,15 +2247,15 @@
    "wikidata": "Q3442567"
   },
   {
-   "lat": 61.384042,
-   "lon": 8.98965,
-   "name": "Gråhøe",
-   "ele": 1779
-  },
-  {
    "lat": 61.932923,
    "lon": 9.915023,
    "name": "Søre Oksle",
+   "ele": 1779
+  },
+  {
+   "lat": 61.384042,
+   "lon": 8.98965,
+   "name": "Gråhøe",
    "ele": 1779
   },
   {
@@ -2314,15 +2314,15 @@
    "ele": 1771
   },
   {
-   "lat": 62.46155,
-   "lon": 7.9983,
-   "name": "Rangåhøgda",
-   "ele": 1768
-  },
-  {
    "lat": 62.04687,
    "lon": 8.810581,
    "name": "Søre Kjølhaugen",
+   "ele": 1768
+  },
+  {
+   "lat": 62.46155,
+   "lon": 7.9983,
+   "name": "Rangåhøgda",
    "ele": 1768
   },
   {
@@ -2421,15 +2421,15 @@
    "ele": 1745
   },
   {
-   "lat": 62.494157,
-   "lon": 7.856763,
-   "name": "Kvanndalstindan",
-   "ele": 1744
-  },
-  {
    "lat": 61.881158,
    "lon": 7.606852,
    "name": "Vakkerfjellet",
+   "ele": 1744
+  },
+  {
+   "lat": 62.494157,
+   "lon": 7.856763,
+   "name": "Kvanndalstindan",
    "ele": 1744
   },
   {
@@ -2452,15 +2452,15 @@
    "ele": 1741
   },
   {
-   "lat": 61.071439,
-   "lon": 8.205958,
-   "name": "Knipenborg",
-   "ele": 1740
-  },
-  {
    "lat": 62.37688,
    "lon": 9.42739,
    "name": "Tjønngluptangen",
+   "ele": 1740
+  },
+  {
+   "lat": 61.071439,
+   "lon": 8.205958,
+   "name": "Knipenborg",
    "ele": 1740
   },
   {
@@ -2476,15 +2476,15 @@
    "ele": 1738
   },
   {
-   "lat": 62.218957,
-   "lon": 9.014001,
-   "name": "Hatten",
-   "ele": 1731
-  },
-  {
    "lat": 61.993471,
    "lon": 8.807834,
    "name": "Steinkollen",
+   "ele": 1731
+  },
+  {
+   "lat": 62.218957,
+   "lon": 9.014001,
+   "name": "Hatten",
    "ele": 1731
   },
   {
@@ -2500,15 +2500,15 @@
    "ele": 1728
   },
   {
-   "lat": 62.366884,
-   "lon": 9.460688,
-   "name": "Raudhøa",
-   "ele": 1725
-  },
-  {
    "lat": 62.480317,
    "lon": 7.730513,
    "name": "Trollryggen",
+   "ele": 1725
+  },
+  {
+   "lat": 62.366884,
+   "lon": 9.460688,
+   "name": "Raudhøa",
    "ele": 1725
   },
   {
@@ -2610,17 +2610,23 @@
    "ele": 1702
   },
   {
+   "lat": 61.016624,
+   "lon": 8.263904,
+   "name": "Vesle Jukleeggi",
+   "ele": 1701,
+   "wikidata": "Q3442200"
+  },
+  {
    "lat": 62.486503,
    "lon": 7.709669,
    "name": "Trollklørn",
    "ele": 1701
   },
   {
-   "lat": 61.016624,
-   "lon": 8.263904,
-   "name": "Vesle Jukleeggi",
-   "ele": 1701,
-   "wikidata": "Q3442200"
+   "lat": 62.311605,
+   "lon": 7.877283,
+   "name": "Midthøa",
+   "ele": 1700
   },
   {
    "lat": 62.359978,
@@ -2632,12 +2638,6 @@
    "lat": 61.762051,
    "lon": 7.580437,
    "name": "Syrtbyttnosi",
-   "ele": 1700
-  },
-  {
-   "lat": 62.311605,
-   "lon": 7.877283,
-   "name": "Midthøa",
    "ele": 1700
   },
   {
@@ -2771,17 +2771,17 @@
    "wikidata": "Q3441971"
   },
   {
-   "lat": 62.454949,
-   "lon": 9.737588,
-   "name": "Lertjønnkollen",
-   "ele": 1674
-  },
-  {
    "lat": 61.077461,
    "lon": 8.415738,
    "name": "Øyre",
    "ele": 1674,
    "wikidata": "Q3441967"
+  },
+  {
+   "lat": 62.454949,
+   "lon": 9.737588,
+   "name": "Lertjønnkollen",
+   "ele": 1674
   },
   {
    "lat": 62.447625,
@@ -2808,22 +2808,16 @@
    "ele": 1666
   },
   {
-   "lat": 62.436897,
-   "lon": 7.623634,
-   "name": "Alnestinden",
-   "ele": 1665
-  },
-  {
    "lat": 62.147414,
    "lon": 8.1691,
    "name": "Skarvehøe",
    "ele": 1665
   },
   {
-   "lat": 62.291159,
-   "lon": 7.621015,
-   "name": "Blåtinden",
-   "ele": 1664
+   "lat": 62.436897,
+   "lon": 7.623634,
+   "name": "Alnestinden",
+   "ele": 1665
   },
   {
    "lat": 62.401624,
@@ -2839,21 +2833,27 @@
    "wikidata": "Q11234640"
   },
   {
+   "lat": 62.291159,
+   "lon": 7.621015,
+   "name": "Blåtinden",
+   "ele": 1664
+  },
+  {
    "lat": 62.123168,
    "lon": 9.557434,
    "name": "Gråhøe",
    "ele": 1663
   },
   {
-   "lat": 62.321109,
-   "lon": 7.752075,
-   "name": "Bjørnabottinden",
-   "ele": 1661
-  },
-  {
    "lat": 61.33739,
    "lon": 8.07592,
    "name": "Raudenibba",
+   "ele": 1661
+  },
+  {
+   "lat": 62.321109,
+   "lon": 7.752075,
+   "name": "Bjørnabottinden",
    "ele": 1661
   },
   {
@@ -2875,9 +2875,9 @@
    "ele": 1652
   },
   {
-   "lat": 62.363914,
-   "lon": 7.732065,
-   "name": "Storfjellet Vest",
+   "lat": 61.477326,
+   "lon": 8.49771,
+   "name": "Memurutunga",
    "ele": 1651
   },
   {
@@ -2887,9 +2887,9 @@
    "ele": 1651
   },
   {
-   "lat": 61.477326,
-   "lon": 8.49771,
-   "name": "Memurutunga",
+   "lat": 62.363914,
+   "lon": 7.732065,
+   "name": "Storfjellet Vest",
    "ele": 1651
   },
   {
@@ -2917,15 +2917,15 @@
    "ele": 1648
   },
   {
-   "lat": 61.102714,
-   "lon": 8.252253,
-   "name": "Storeknippa",
-   "ele": 1648
-  },
-  {
    "lat": 61.628968,
    "lon": 7.812417,
    "name": "Tverrdalsnosi",
+   "ele": 1648
+  },
+  {
+   "lat": 61.102714,
+   "lon": 8.252253,
+   "name": "Storeknippa",
    "ele": 1648
   },
   {
@@ -2953,15 +2953,15 @@
    "ele": 1640
   },
   {
-   "lat": 62.394118,
-   "lon": 7.796126,
-   "name": "Salknappen",
-   "ele": 1639
-  },
-  {
    "lat": 62.15545,
    "lon": 8.377985,
    "name": "Søre Skarvhøe",
+   "ele": 1639
+  },
+  {
+   "lat": 62.394118,
+   "lon": 7.796126,
+   "name": "Salknappen",
    "ele": 1639
   },
   {
@@ -2995,12 +2995,6 @@
    "ele": 1634
   },
   {
-   "lat": 61.611334,
-   "lon": 8.019252,
-   "name": "Dumhøe",
-   "ele": 1634
-  },
-  {
    "lat": 61.004172,
    "lon": 8.369026,
    "name": "Mørekvamberget",
@@ -3010,6 +3004,12 @@
    "lat": 62.46161,
    "lon": 8.99845,
    "name": "Kvitådalshøa",
+   "ele": 1634
+  },
+  {
+   "lat": 61.611334,
+   "lon": 8.019252,
+   "name": "Dumhøe",
    "ele": 1634
   },
   {
@@ -3055,6 +3055,12 @@
    "ele": 1624
   },
   {
+   "lat": 62.352115,
+   "lon": 9.124722,
+   "name": "Skulan",
+   "ele": 1623
+  },
+  {
    "lat": 62.288763,
    "lon": 7.566561,
    "name": "Neskopptindane Ø1",
@@ -3064,12 +3070,6 @@
    "lat": 61.032516,
    "lon": 7.878114,
    "name": "Grytingen",
-   "ele": 1623
-  },
-  {
-   "lat": 62.352115,
-   "lon": 9.124722,
-   "name": "Skulan",
    "ele": 1623
   },
   {
@@ -3097,18 +3097,6 @@
    "ele": 1621
   },
   {
-   "lat": 61.897673,
-   "lon": 9.282452,
-   "name": "Blåhøe",
-   "ele": 1617
-  },
-  {
-   "lat": 61.058158,
-   "lon": 7.889138,
-   "name": "Bringe",
-   "ele": 1617
-  },
-  {
    "lat": 61.65468,
    "lon": 7.82243,
    "name": "Vetledalsnosi",
@@ -3121,16 +3109,22 @@
    "ele": 1617
   },
   {
+   "lat": 61.058158,
+   "lon": 7.889138,
+   "name": "Bringe",
+   "ele": 1617
+  },
+  {
+   "lat": 61.897673,
+   "lon": 9.282452,
+   "name": "Blåhøe",
+   "ele": 1617
+  },
+  {
    "lat": 61.208914,
    "lon": 7.960462,
    "name": "Grånosi",
    "ele": 1616
-  },
-  {
-   "lat": 61.64812,
-   "lon": 7.50189,
-   "name": "Leirbotnnosi",
-   "ele": 1615
   },
   {
    "lat": 62.132773,
@@ -3139,15 +3133,21 @@
    "ele": 1615
   },
   {
-   "lat": 62.472698,
-   "lon": 7.638126,
-   "name": "Kongen",
-   "ele": 1614
+   "lat": 61.64812,
+   "lon": 7.50189,
+   "name": "Leirbotnnosi",
+   "ele": 1615
   },
   {
    "lat": 62.48224,
    "lon": 8.650427,
    "name": "Storpurka",
+   "ele": 1614
+  },
+  {
+   "lat": 62.472698,
+   "lon": 7.638126,
+   "name": "Kongen",
    "ele": 1614
   },
   {
@@ -3157,15 +3157,15 @@
    "ele": 1613
   },
   {
-   "lat": 61.580751,
-   "lon": 9.068059,
-   "name": "Refjellet",
-   "ele": 1612
-  },
-  {
    "lat": 61.170499,
    "lon": 7.897444,
    "name": "Loppenosi",
+   "ele": 1612
+  },
+  {
+   "lat": 61.580751,
+   "lon": 9.068059,
+   "name": "Refjellet",
    "ele": 1612
   },
   {
@@ -3194,15 +3194,9 @@
    "wikidata": "Q11255581"
   },
   {
-   "lat": 61.294364,
-   "lon": 8.799426,
-   "name": "Bitihorn",
-   "ele": 1607
-  },
-  {
-   "lat": 61.810458,
-   "lon": 7.793738,
-   "name": "Sotskarvet",
+   "lat": 62.151571,
+   "lon": 8.042667,
+   "name": "Ryggjehøe",
    "ele": 1607
   },
   {
@@ -3218,9 +3212,15 @@
    "ele": 1607
   },
   {
-   "lat": 62.151571,
-   "lon": 8.042667,
-   "name": "Ryggjehøe",
+   "lat": 61.294364,
+   "lon": 8.799426,
+   "name": "Bitihorn",
+   "ele": 1607
+  },
+  {
+   "lat": 61.810458,
+   "lon": 7.793738,
+   "name": "Sotskarvet",
    "ele": 1607
   },
   {
@@ -3248,15 +3248,15 @@
    "ele": 1602
   },
   {
-   "lat": 62.481609,
-   "lon": 8.335318,
-   "name": "Trolltinden",
-   "ele": 1601
-  },
-  {
    "lat": 62.363311,
    "lon": 7.637636,
    "name": "Breifjellet",
+   "ele": 1601
+  },
+  {
+   "lat": 62.481609,
+   "lon": 8.335318,
+   "name": "Trolltinden",
    "ele": 1601
   },
   {
@@ -3296,9 +3296,9 @@
    "ele": 1591
   },
   {
-   "lat": 62.162306,
-   "lon": 8.815292,
-   "name": "Veslhorrungen",
+   "lat": 61.904098,
+   "lon": 8.868114,
+   "name": "Skaihøe",
    "ele": 1590
   },
   {
@@ -3309,9 +3309,9 @@
    "wikidata": "Q11255659"
   },
   {
-   "lat": 61.904098,
-   "lon": 8.868114,
-   "name": "Skaihøe",
+   "lat": 62.162306,
+   "lon": 8.815292,
+   "name": "Veslhorrungen",
    "ele": 1590
   },
   {
@@ -3345,15 +3345,15 @@
    "ele": 1585
   },
   {
-   "lat": 62.449576,
-   "lon": 7.692647,
-   "name": "Vestre Stigbotthornet",
-   "ele": 1583
-  },
-  {
    "lat": 62.275063,
    "lon": 9.794669,
    "name": "Råtåsjøhøe",
+   "ele": 1583
+  },
+  {
+   "lat": 62.449576,
+   "lon": 7.692647,
+   "name": "Vestre Stigbotthornet",
    "ele": 1583
   },
   {
@@ -3393,15 +3393,15 @@
    "ele": 1576
   },
   {
-   "lat": 62.288528,
-   "lon": 7.517296,
-   "name": "Neskopptindane V2",
-   "ele": 1575
-  },
-  {
    "lat": 62.41421,
    "lon": 9.36333,
    "name": "Tjønnglupegga",
+   "ele": 1575
+  },
+  {
+   "lat": 62.288528,
+   "lon": 7.517296,
+   "name": "Neskopptindane V2",
    "ele": 1575
   },
   {
@@ -3409,12 +3409,6 @@
    "lon": 7.63568,
    "name": "Hånosi",
    "ele": 1574
-  },
-  {
-   "lat": 62.359418,
-   "lon": 7.611324,
-   "name": "Breifjellet Vest",
-   "ele": 1573
   },
   {
    "lat": 62.193329,
@@ -3429,15 +3423,21 @@
    "ele": 1573
   },
   {
-   "lat": 62.376905,
-   "lon": 7.698413,
-   "name": "Storfjellet NV2",
-   "ele": 1570
+   "lat": 62.359418,
+   "lon": 7.611324,
+   "name": "Breifjellet Vest",
+   "ele": 1573
   },
   {
    "lat": 62.130522,
    "lon": 8.447542,
    "name": "Brattmannshøe",
+   "ele": 1570
+  },
+  {
+   "lat": 62.376905,
+   "lon": 7.698413,
+   "name": "Storfjellet NV2",
    "ele": 1570
   },
   {
@@ -3519,9 +3519,9 @@
    "ele": 1558
   },
   {
-   "lat": 62.223273,
-   "lon": 9.909696,
-   "name": "Sletthøe",
+   "lat": 62.327623,
+   "lon": 7.840271,
+   "name": "Kløvberget",
    "ele": 1555
   },
   {
@@ -3537,9 +3537,9 @@
    "ele": 1555
   },
   {
-   "lat": 62.327623,
-   "lon": 7.840271,
-   "name": "Kløvberget",
+   "lat": 62.223273,
+   "lon": 9.909696,
+   "name": "Sletthøe",
    "ele": 1555
   },
   {
@@ -3549,15 +3549,15 @@
    "ele": 1554
   },
   {
-   "lat": 62.151067,
-   "lon": 8.248745,
-   "name": "Grønmillom-Knabben",
-   "ele": 1554
-  },
-  {
    "lat": 61.065662,
    "lon": 8.036311,
    "name": "Eikeshorn",
+   "ele": 1554
+  },
+  {
+   "lat": 62.151067,
+   "lon": 8.248745,
+   "name": "Grønmillom-Knabben",
    "ele": 1554
   },
   {
@@ -3579,17 +3579,17 @@
    "ele": 1553
   },
   {
+   "lat": 62.008958,
+   "lon": 8.244603,
+   "name": "Såvårhaugen",
+   "ele": 1550
+  },
+  {
    "lat": 62.491242,
    "lon": 7.786146,
    "name": "Romsdalshornet",
    "ele": 1550,
    "wikidata": "Q3734782"
-  },
-  {
-   "lat": 62.008958,
-   "lon": 8.244603,
-   "name": "Såvårhaugen",
-   "ele": 1550
   },
   {
    "lat": 61.63113,
@@ -3598,22 +3598,16 @@
    "ele": 1549
   },
   {
-   "lat": 62.184647,
-   "lon": 8.999777,
-   "name": "Reindølsnabben",
-   "ele": 1548
-  },
-  {
    "lat": 61.98081,
    "lon": 8.90893,
    "name": "Gravdalshalsen",
    "ele": 1548
   },
   {
-   "lat": 61.352199,
-   "lon": 8.366309,
-   "name": "Hundeknappen",
-   "ele": 1547
+   "lat": 62.184647,
+   "lon": 8.999777,
+   "name": "Reindølsnabben",
+   "ele": 1548
   },
   {
    "lat": 61.70593,
@@ -3628,10 +3622,10 @@
    "ele": 1547
   },
   {
-   "lat": 62.224423,
-   "lon": 9.272902,
-   "name": "Buahøin",
-   "ele": 1546
+   "lat": 61.352199,
+   "lon": 8.366309,
+   "name": "Hundeknappen",
+   "ele": 1547
   },
   {
    "lat": 62.31914,
@@ -3640,15 +3634,21 @@
    "ele": 1546
   },
   {
-   "lat": 62.474761,
-   "lon": 7.636349,
-   "name": "Dronninga",
-   "ele": 1544
+   "lat": 62.224423,
+   "lon": 9.272902,
+   "name": "Buahøin",
+   "ele": 1546
   },
   {
    "lat": 62.002492,
    "lon": 8.218786,
    "name": "Såvårhaugen",
+   "ele": 1544
+  },
+  {
+   "lat": 62.474761,
+   "lon": 7.636349,
+   "name": "Dronninga",
    "ele": 1544
   },
   {
@@ -3688,22 +3688,16 @@
    "ele": 1538
   },
   {
-   "lat": 62.210921,
-   "lon": 8.630175,
-   "name": "Nordre Sæterhøe",
-   "ele": 1537
-  },
-  {
    "lat": 62.07638,
    "lon": 7.86128,
    "name": "Låggøymen",
    "ele": 1537
   },
   {
-   "lat": 62.485226,
-   "lon": 7.802291,
-   "name": "Olaskarstinden",
-   "ele": 1536
+   "lat": 62.210921,
+   "lon": 8.630175,
+   "name": "Nordre Sæterhøe",
+   "ele": 1537
   },
   {
    "lat": 62.05604,
@@ -3715,6 +3709,12 @@
    "lat": 62.16906,
    "lon": 7.53833,
    "name": "Sæterhornet",
+   "ele": 1536
+  },
+  {
+   "lat": 62.485226,
+   "lon": 7.802291,
+   "name": "Olaskarstinden",
    "ele": 1536
   },
   {
@@ -3838,12 +3838,6 @@
    "ele": 1519
   },
   {
-   "lat": 61.468777,
-   "lon": 9.555128,
-   "name": "Ruten",
-   "ele": 1517
-  },
-  {
    "lat": 61.480005,
    "lon": 8.754921,
    "name": "Knutshøe",
@@ -3853,6 +3847,12 @@
    "lat": 62.49186,
    "lon": 7.90373,
    "name": "Kvanndalshøin",
+   "ele": 1517
+  },
+  {
+   "lat": 61.468777,
+   "lon": 9.555128,
+   "name": "Ruten",
    "ele": 1517
   },
   {
@@ -3874,15 +3874,15 @@
    "ele": 1515
   },
   {
-   "lat": 62.326242,
-   "lon": 9.528007,
-   "name": "Vesl-Nystugguhøa",
-   "ele": 1513
-  },
-  {
    "lat": 62.25564,
    "lon": 7.63303,
    "name": "Kollen",
+   "ele": 1513
+  },
+  {
+   "lat": 62.326242,
+   "lon": 9.528007,
+   "name": "Vesl-Nystugguhøa",
    "ele": 1513
   },
   {
@@ -3904,12 +3904,6 @@
    "ele": 1511
   },
   {
-   "lat": 62.139436,
-   "lon": 9.650875,
-   "name": "Pikhetta",
-   "ele": 1510
-  },
-  {
    "lat": 61.12109,
    "lon": 7.61289,
    "name": "Hestehovden",
@@ -3922,6 +3916,18 @@
    "ele": 1510
   },
   {
+   "lat": 62.139436,
+   "lon": 9.650875,
+   "name": "Pikhetta",
+   "ele": 1510
+  },
+  {
+   "lat": 62.379438,
+   "lon": 8.724626,
+   "name": "Bjørnhovda",
+   "ele": 1508
+  },
+  {
    "lat": 62.47286,
    "lon": 7.9452,
    "name": "Salhøa",
@@ -3931,12 +3937,6 @@
    "lat": 61.454262,
    "lon": 7.634396,
    "name": "Nobbafjelli",
-   "ele": 1508
-  },
-  {
-   "lat": 62.379438,
-   "lon": 8.724626,
-   "name": "Bjørnhovda",
    "ele": 1508
   },
   {
@@ -3952,15 +3952,15 @@
    "ele": 1507
   },
   {
-   "lat": 61.690175,
-   "lon": 8.916063,
-   "name": "Veofjellet",
-   "ele": 1505
-  },
-  {
    "lat": 62.019615,
    "lon": 8.302846,
    "name": "Leirhøe",
+   "ele": 1505
+  },
+  {
+   "lat": 61.690175,
+   "lon": 8.916063,
+   "name": "Veofjellet",
    "ele": 1505
   },
   {
@@ -3970,9 +3970,9 @@
    "ele": 1504
   },
   {
-   "lat": 61.429029,
-   "lon": 8.01727,
-   "name": "Friken",
+   "lat": 62.039264,
+   "lon": 8.89973,
+   "name": "Nonshøe",
    "ele": 1503
   },
   {
@@ -3982,16 +3982,10 @@
    "ele": 1503
   },
   {
-   "lat": 62.039264,
-   "lon": 8.89973,
-   "name": "Nonshøe",
+   "lat": 61.429029,
+   "lon": 8.01727,
+   "name": "Friken",
    "ele": 1503
-  },
-  {
-   "lat": 61.801772,
-   "lon": 9.844924,
-   "name": "Skjerrelfjellet",
-   "ele": 1502
   },
   {
    "lat": 61.436271,
@@ -4000,9 +3994,9 @@
    "ele": 1502
   },
   {
-   "lat": 61.275317,
-   "lon": 8.620936,
-   "name": "Store Sendehornet",
+   "lat": 61.801772,
+   "lon": 9.844924,
+   "name": "Skjerrelfjellet",
    "ele": 1502
   },
   {
@@ -4012,16 +4006,16 @@
    "ele": 1502
   },
   {
+   "lat": 61.275317,
+   "lon": 8.620936,
+   "name": "Store Sendehornet",
+   "ele": 1502
+  },
+  {
    "lat": 61.286204,
    "lon": 8.737,
    "name": "Skyrifjellet",
    "ele": 1500
-  },
-  {
-   "lat": 61.007556,
-   "lon": 7.779489,
-   "name": "Nonhaug",
-   "ele": 1499
   },
   {
    "lat": 61.321966,
@@ -4030,15 +4024,21 @@
    "ele": 1499
   },
   {
-   "lat": 61.0255,
-   "lon": 7.92428,
-   "name": "Bubakknosi",
-   "ele": 1498
+   "lat": 61.007556,
+   "lon": 7.779489,
+   "name": "Nonhaug",
+   "ele": 1499
   },
   {
    "lat": 61.301141,
    "lon": 8.449028,
    "name": "Vardeggene",
+   "ele": 1498
+  },
+  {
+   "lat": 61.0255,
+   "lon": 7.92428,
+   "name": "Bubakknosi",
    "ele": 1498
   },
   {
@@ -4048,15 +4048,15 @@
    "ele": 1496
   },
   {
-   "lat": 62.310714,
-   "lon": 7.615434,
-   "name": "Krynkelen",
-   "ele": 1494
-  },
-  {
    "lat": 62.3954,
    "lon": 9.8302,
    "name": "Elgsjøtangen",
+   "ele": 1494
+  },
+  {
+   "lat": 62.310714,
+   "lon": 7.615434,
+   "name": "Krynkelen",
    "ele": 1494
   },
   {
@@ -4090,15 +4090,15 @@
    "ele": 1490
   },
   {
-   "lat": 62.191604,
-   "lon": 9.107837,
-   "name": "Strålsjøhøe",
-   "ele": 1489
-  },
-  {
    "lat": 61.950066,
    "lon": 8.651952,
    "name": "Gråhøe",
+   "ele": 1489
+  },
+  {
+   "lat": 62.191604,
+   "lon": 9.107837,
+   "name": "Strålsjøhøe",
    "ele": 1489
   },
   {
@@ -4120,12 +4120,6 @@
    "ele": 1486
   },
   {
-   "lat": 61.5296,
-   "lon": 7.769436,
-   "name": "Nosafjellet",
-   "ele": 1485
-  },
-  {
    "lat": 61.02527,
    "lon": 8.10394,
    "name": "Ulvehaugnosi",
@@ -4138,21 +4132,27 @@
    "ele": 1485
   },
   {
+   "lat": 61.5296,
+   "lon": 7.769436,
+   "name": "Nosafjellet",
+   "ele": 1485
+  },
+  {
    "lat": 62.24599,
    "lon": 7.50574,
    "name": "Høghornet, heimste",
    "ele": 1484
   },
   {
-   "lat": 62.490216,
-   "lon": 7.725176,
-   "name": "Nordre Trolltinden",
-   "ele": 1482
-  },
-  {
    "lat": 61.298849,
    "lon": 8.316265,
    "name": "Møsaryggene",
+   "ele": 1482
+  },
+  {
+   "lat": 62.490216,
+   "lon": 7.725176,
+   "name": "Nordre Trolltinden",
    "ele": 1482
   },
   {
@@ -4168,18 +4168,6 @@
    "ele": 1480
   },
   {
-   "lat": 61.969912,
-   "lon": 9.09231,
-   "name": "Skardshøe",
-   "ele": 1478
-  },
-  {
-   "lat": 62.290211,
-   "lon": 7.862821,
-   "name": "Skarvskaregga",
-   "ele": 1478
-  },
-  {
    "lat": 62.346308,
    "lon": 8.608708,
    "name": "Aursjøhøe",
@@ -4189,6 +4177,18 @@
    "lat": 61.937502,
    "lon": 7.801923,
    "name": "Framrustehovden",
+   "ele": 1478
+  },
+  {
+   "lat": 61.969912,
+   "lon": 9.09231,
+   "name": "Skardshøe",
+   "ele": 1478
+  },
+  {
+   "lat": 62.290211,
+   "lon": 7.862821,
+   "name": "Skarvskaregga",
    "ele": 1478
   },
   {
@@ -4216,6 +4216,12 @@
    "ele": 1475
   },
   {
+   "lat": 61.712701,
+   "lon": 8.872952,
+   "name": "Rundhøe",
+   "ele": 1475
+  },
+  {
    "lat": 62.168973,
    "lon": 8.084937,
    "name": "Attre Herrahøene",
@@ -4231,12 +4237,6 @@
    "lat": 61.029718,
    "lon": 7.706101,
    "name": "Tingstovnosi",
-   "ele": 1475
-  },
-  {
-   "lat": 61.712701,
-   "lon": 8.872952,
-   "name": "Rundhøe",
    "ele": 1475
   },
   {
@@ -4264,15 +4264,15 @@
    "ele": 1471
   },
   {
-   "lat": 61.423618,
-   "lon": 7.689039,
-   "name": "Korenosi",
-   "ele": 1468
-  },
-  {
    "lat": 62.43214,
    "lon": 9.92224,
    "name": "Nørdre Digerkammen",
+   "ele": 1468
+  },
+  {
+   "lat": 61.423618,
+   "lon": 7.689039,
+   "name": "Korenosi",
    "ele": 1468
   },
   {
@@ -4354,15 +4354,15 @@
    "ele": 1455
   },
   {
-   "lat": 61.22593,
-   "lon": 8.304835,
-   "name": "Horntind",
-   "ele": 1454
-  },
-  {
    "lat": 62.44762,
    "lon": 8.51288,
    "name": "Stortorbuhøa",
+   "ele": 1454
+  },
+  {
+   "lat": 61.22593,
+   "lon": 8.304835,
+   "name": "Horntind",
    "ele": 1454
   },
   {
@@ -4384,15 +4384,15 @@
    "ele": 1451
   },
   {
-   "lat": 61.589155,
-   "lon": 7.602939,
-   "name": "Skurvenosi",
-   "ele": 1450
-  },
-  {
    "lat": 62.386361,
    "lon": 9.748105,
    "name": "Vesle Elgsjøtangen",
+   "ele": 1450
+  },
+  {
+   "lat": 61.589155,
+   "lon": 7.602939,
+   "name": "Skurvenosi",
    "ele": 1450
   },
   {
@@ -4414,15 +4414,15 @@
    "ele": 1446
   },
   {
-   "lat": 62.331904,
-   "lon": 8.204405,
-   "name": "Løyfthøa",
-   "ele": 1444
-  },
-  {
    "lat": 61.275349,
    "lon": 8.289097,
    "name": "Loppebolegge",
+   "ele": 1444
+  },
+  {
+   "lat": 62.331904,
+   "lon": 8.204405,
+   "name": "Løyfthøa",
    "ele": 1444
   },
   {
@@ -4444,27 +4444,27 @@
    "ele": 1441
   },
   {
-   "lat": 62.390732,
-   "lon": 9.663173,
-   "name": "Finnshøa",
-   "ele": 1440
-  },
-  {
    "lat": 61.24198,
    "lon": 8.269206,
    "name": "Målegge",
    "ele": 1440
   },
   {
-   "lat": 62.42366,
-   "lon": 9.715616,
-   "name": "Ryphuskollen",
-   "ele": 1438
+   "lat": 62.390732,
+   "lon": 9.663173,
+   "name": "Finnshøa",
+   "ele": 1440
   },
   {
    "lat": 62.180172,
    "lon": 8.216128,
    "name": "Nonshøe",
+   "ele": 1438
+  },
+  {
+   "lat": 62.42366,
+   "lon": 9.715616,
+   "name": "Ryphuskollen",
    "ele": 1438
   },
   {
@@ -4486,6 +4486,12 @@
    "ele": 1435
   },
   {
+   "lat": 62.2939,
+   "lon": 8.04542,
+   "name": "Svartknarten",
+   "ele": 1434
+  },
+  {
    "lat": 61.4084,
    "lon": 9.3801,
    "name": "Storhøpiggen",
@@ -4495,12 +4501,6 @@
    "lat": 61.251586,
    "lon": 8.361555,
    "name": "Stornakken",
-   "ele": 1434
-  },
-  {
-   "lat": 62.2939,
-   "lon": 8.04542,
-   "name": "Svartknarten",
    "ele": 1434
   },
   {
@@ -4534,15 +4534,15 @@
    "ele": 1429
   },
   {
-   "lat": 61.853867,
-   "lon": 9.56166,
-   "name": "Formokampen",
-   "ele": 1428
-  },
-  {
    "lat": 61.478168,
    "lon": 9.590232,
    "name": "Storslåkampen",
+   "ele": 1428
+  },
+  {
+   "lat": 61.853867,
+   "lon": 9.56166,
+   "name": "Formokampen",
    "ele": 1428
   },
   {
@@ -4558,15 +4558,15 @@
    "ele": 1422
   },
   {
-   "lat": 61.53797,
-   "lon": 8.86163,
-   "name": "Besstrondrundhøe",
-   "ele": 1421
-  },
-  {
    "lat": 61.791339,
    "lon": 8.546756,
    "name": "Raudskryuhøe",
+   "ele": 1421
+  },
+  {
+   "lat": 61.53797,
+   "lon": 8.86163,
+   "name": "Besstrondrundhøe",
    "ele": 1421
   },
   {
@@ -4631,15 +4631,15 @@
    "ele": 1407
   },
   {
-   "lat": 61.379473,
-   "lon": 8.272779,
-   "name": "Sløtafjellet",
-   "ele": 1406
-  },
-  {
    "lat": 61.4916,
    "lon": 7.50671,
    "name": "Kinnfokfjellet",
+   "ele": 1406
+  },
+  {
+   "lat": 61.379473,
+   "lon": 8.272779,
+   "name": "Sløtafjellet",
    "ele": 1406
   },
   {
@@ -4679,15 +4679,15 @@
    "ele": 1394
   },
   {
-   "lat": 62.480074,
-   "lon": 9.612616,
-   "name": "Storhøa",
-   "ele": 1392
-  },
-  {
    "lat": 62.40024,
    "lon": 7.94004,
    "name": "Sæterhøa",
+   "ele": 1392
+  },
+  {
+   "lat": 62.480074,
+   "lon": 9.612616,
+   "name": "Storhøa",
    "ele": 1392
   },
   {
@@ -4703,15 +4703,15 @@
    "ele": 1390
   },
   {
-   "lat": 62.071158,
-   "lon": 9.53004,
-   "name": "Gygerhøe",
-   "ele": 1388
-  },
-  {
    "lat": 61.0289,
    "lon": 7.579917,
    "name": "Råken",
+   "ele": 1388
+  },
+  {
+   "lat": 62.071158,
+   "lon": 9.53004,
+   "name": "Gygerhøe",
    "ele": 1388
   },
   {
@@ -4721,9 +4721,9 @@
    "ele": 1387
   },
   {
-   "lat": 61.352599,
-   "lon": 7.808336,
-   "name": "Botnanosi",
+   "lat": 62.17985,
+   "lon": 9.224014,
+   "name": "Grisunghøe",
    "ele": 1387
   },
   {
@@ -4733,9 +4733,9 @@
    "ele": 1387
   },
   {
-   "lat": 62.17985,
-   "lon": 9.224014,
-   "name": "Grisunghøe",
+   "lat": 61.352599,
+   "lon": 7.808336,
+   "name": "Botnanosi",
    "ele": 1387
   },
   {
@@ -4769,15 +4769,15 @@
    "ele": 1382
   },
   {
-   "lat": 62.224246,
-   "lon": 7.836492,
-   "name": "Rundhaugen",
-   "ele": 1380
-  },
-  {
    "lat": 62.48748,
    "lon": 7.93612,
    "name": "Kleiva",
+   "ele": 1380
+  },
+  {
+   "lat": 62.224246,
+   "lon": 7.836492,
+   "name": "Rundhaugen",
    "ele": 1380
   },
   {
@@ -4817,27 +4817,27 @@
    "ele": 1371
   },
   {
-   "lat": 61.753744,
-   "lon": 9.032995,
-   "name": "Trollhøe",
-   "ele": 1370
-  },
-  {
    "lat": 61.6586,
    "lon": 9.0862,
    "name": "Steinbrukampen",
    "ele": 1370
   },
   {
-   "lat": 61.731521,
-   "lon": 9.453335,
-   "name": "Søre Svartkampen",
-   "ele": 1366
+   "lat": 61.753744,
+   "lon": 9.032995,
+   "name": "Trollhøe",
+   "ele": 1370
   },
   {
    "lat": 62.41726,
    "lon": 7.8841,
    "name": "Skulnebba",
+   "ele": 1366
+  },
+  {
+   "lat": 61.731521,
+   "lon": 9.453335,
+   "name": "Søre Svartkampen",
    "ele": 1366
   },
   {
@@ -4877,15 +4877,15 @@
    "ele": 1359
   },
   {
-   "lat": 62.484225,
-   "lon": 7.632321,
-   "name": "Karitinden / Haugabotntinden",
-   "ele": 1356
-  },
-  {
    "lat": 61.981463,
    "lon": 9.972658,
    "name": "Sandomshøe",
+   "ele": 1356
+  },
+  {
+   "lat": 62.484225,
+   "lon": 7.632321,
+   "name": "Karitinden / Haugabotntinden",
    "ele": 1356
   },
   {
@@ -4913,15 +4913,15 @@
    "ele": 1348
   },
   {
-   "lat": 62.015808,
-   "lon": 9.317646,
-   "name": "Vardhøe",
-   "ele": 1346
-  },
-  {
    "lat": 61.389126,
    "lon": 9.509482,
    "name": "Megrundskampen",
+   "ele": 1346
+  },
+  {
+   "lat": 62.015808,
+   "lon": 9.317646,
+   "name": "Vardhøe",
    "ele": 1346
   },
   {
@@ -4931,15 +4931,15 @@
    "ele": 1345
   },
   {
-   "lat": 61.106945,
-   "lon": 9.250155,
-   "name": "Rundemellen",
-   "ele": 1344
-  },
-  {
    "lat": 62.310105,
    "lon": 9.795138,
    "name": "Gråkollen",
+   "ele": 1344
+  },
+  {
+   "lat": 61.106945,
+   "lon": 9.250155,
+   "name": "Rundemellen",
    "ele": 1344
   },
   {
@@ -4955,6 +4955,12 @@
    "ele": 1342
   },
   {
+   "lat": 62.47201,
+   "lon": 9.60754,
+   "name": "Risberget",
+   "ele": 1340
+  },
+  {
    "lat": 61.366441,
    "lon": 9.559307,
    "name": "Leppkampen",
@@ -4967,10 +4973,10 @@
    "ele": 1340
   },
   {
-   "lat": 62.47201,
-   "lon": 9.60754,
-   "name": "Risberget",
-   "ele": 1340
+   "lat": 62.305179,
+   "lon": 7.923857,
+   "name": "Lågmidthøa",
+   "ele": 1339
   },
   {
    "lat": 62.064491,
@@ -4979,21 +4985,15 @@
    "ele": 1339
   },
   {
-   "lat": 62.305179,
-   "lon": 7.923857,
-   "name": "Lågmidthøa",
-   "ele": 1339
+   "lat": 62.44168,
+   "lon": 9.93843,
+   "name": "Hånåbekktangen",
+   "ele": 1338
   },
   {
    "lat": 62.255971,
    "lon": 7.962706,
    "name": "Kabbetinden",
-   "ele": 1338
-  },
-  {
-   "lat": 62.44168,
-   "lon": 9.93843,
-   "name": "Hånåbekktangen",
    "ele": 1338
   },
   {
@@ -5003,15 +5003,15 @@
    "ele": 1337
   },
   {
-   "lat": 61.546361,
-   "lon": 7.659677,
-   "name": "Skurvenosi",
-   "ele": 1337
-  },
-  {
    "lat": 62.017098,
    "lon": 9.054347,
    "name": "Indre Langhøi",
+   "ele": 1337
+  },
+  {
+   "lat": 61.546361,
+   "lon": 7.659677,
+   "name": "Skurvenosi",
    "ele": 1337
   },
   {
@@ -5057,15 +5057,15 @@
    "ele": 1327
   },
   {
-   "lat": 61.156988,
-   "lon": 9.632031,
-   "name": "Djuptjernkampen",
-   "ele": 1325
-  },
-  {
    "lat": 62.25819,
    "lon": 8.03732,
    "name": "Nørdre Høa",
+   "ele": 1325
+  },
+  {
+   "lat": 61.156988,
+   "lon": 9.632031,
+   "name": "Djuptjernkampen",
    "ele": 1325
   },
   {
@@ -5081,15 +5081,15 @@
    "ele": 1318
   },
   {
-   "lat": 62.446334,
-   "lon": 7.865425,
-   "name": "Mongegjura",
-   "ele": 1317
-  },
-  {
    "lat": 62.480505,
    "lon": 8.962147,
    "name": "Stornebba",
+   "ele": 1317
+  },
+  {
+   "lat": 62.446334,
+   "lon": 7.865425,
+   "name": "Mongegjura",
    "ele": 1317
   },
   {
@@ -5099,27 +5099,27 @@
    "ele": 1316
   },
   {
-   "lat": 62.49634,
-   "lon": 7.727288,
-   "name": "Adelsfjellet",
-   "ele": 1314
-  },
-  {
    "lat": 61.744929,
    "lon": 8.323433,
    "name": "Bakkebergsfjellet",
    "ele": 1314
   },
   {
-   "lat": 61.458346,
-   "lon": 9.210813,
-   "name": "Veslfjellkampen",
-   "ele": 1312
+   "lat": 62.49634,
+   "lon": 7.727288,
+   "name": "Adelsfjellet",
+   "ele": 1314
   },
   {
    "lat": 61.088912,
    "lon": 9.839216,
    "name": "St. Olavskampen",
+   "ele": 1312
+  },
+  {
+   "lat": 61.458346,
+   "lon": 9.210813,
+   "name": "Veslfjellkampen",
    "ele": 1312
   },
   {
@@ -5135,6 +5135,12 @@
    "ele": 1310
   },
   {
+   "lat": 62.45785,
+   "lon": 9.60186,
+   "name": "Kolfatberga",
+   "ele": 1309
+  },
+  {
    "lat": 61.297275,
    "lon": 9.499821,
    "name": "Nonstjønnkampen",
@@ -5144,12 +5150,6 @@
    "lat": 62.355867,
    "lon": 7.940774,
    "name": "Kovåhøa",
-   "ele": 1309
-  },
-  {
-   "lat": 62.45785,
-   "lon": 9.60186,
-   "name": "Kolfatberga",
    "ele": 1309
   },
   {
@@ -5189,15 +5189,15 @@
    "ele": 1294
   },
   {
-   "lat": 61.321283,
-   "lon": 9.234301,
-   "name": "Klanten",
-   "ele": 1294
-  },
-  {
    "lat": 61.927916,
    "lon": 7.941683,
    "name": "Uppnosi",
+   "ele": 1294
+  },
+  {
+   "lat": 61.321283,
+   "lon": 9.234301,
+   "name": "Klanten",
    "ele": 1294
   },
   {
@@ -5207,15 +5207,15 @@
    "ele": 1290
   },
   {
-   "lat": 62.242589,
-   "lon": 9.577757,
-   "name": "Hjerkinnshøe",
-   "ele": 1288
-  },
-  {
    "lat": 61.98912,
    "lon": 9.156806,
    "name": "Nonshøi",
+   "ele": 1288
+  },
+  {
+   "lat": 62.242589,
+   "lon": 9.577757,
+   "name": "Hjerkinnshøe",
    "ele": 1288
   },
   {
@@ -5321,15 +5321,15 @@
    "ele": 1257
   },
   {
-   "lat": 61.657004,
-   "lon": 9.917138,
-   "name": "Krøkla",
-   "ele": 1254
-  },
-  {
    "lat": 62.297318,
    "lon": 8.168724,
    "name": "Toppen",
+   "ele": 1254
+  },
+  {
+   "lat": 61.657004,
+   "lon": 9.917138,
+   "name": "Krøkla",
    "ele": 1254
   },
   {
@@ -5369,27 +5369,27 @@
    "ele": 1234
   },
   {
-   "lat": 61.529385,
-   "lon": 7.674197,
-   "name": "Tussen",
-   "ele": 1232
-  },
-  {
    "lat": 61.355024,
    "lon": 7.934937,
    "name": "Ulsnanosi",
    "ele": 1232
   },
   {
-   "lat": 62.212582,
-   "lon": 9.539442,
-   "name": "Geitberget",
-   "ele": 1231
+   "lat": 61.529385,
+   "lon": 7.674197,
+   "name": "Tussen",
+   "ele": 1232
   },
   {
    "lat": 61.56327,
    "lon": 7.71422,
    "name": "Bjørkanosi",
+   "ele": 1231
+  },
+  {
+   "lat": 62.212582,
+   "lon": 9.539442,
+   "name": "Geitberget",
    "ele": 1231
   },
   {
@@ -5543,6 +5543,12 @@
    "ele": 1161
   },
   {
+   "lat": 62.245965,
+   "lon": 8.163079,
+   "name": "Rånåkollen",
+   "ele": 1160
+  },
+  {
    "lat": 61.006524,
    "lon": 9.430939,
    "name": "Smørlifjellet",
@@ -5552,12 +5558,6 @@
    "lat": 61.545477,
    "lon": 9.635768,
    "name": "Feforkampen",
-   "ele": 1160
-  },
-  {
-   "lat": 62.245965,
-   "lon": 8.163079,
-   "name": "Rånåkollen",
    "ele": 1160
   },
   {
@@ -5591,15 +5591,15 @@
    "ele": 1149
   },
   {
-   "lat": 61.489351,
-   "lon": 9.727122,
-   "name": "Valsfjellet",
-   "ele": 1148
-  },
-  {
    "lat": 62.221913,
    "lon": 8.181616,
    "name": "Brennhø",
+   "ele": 1148
+  },
+  {
+   "lat": 61.489351,
+   "lon": 9.727122,
+   "name": "Valsfjellet",
    "ele": 1148
   },
   {
@@ -5675,15 +5675,15 @@
    "ele": 1126
   },
   {
-   "lat": 61.100415,
-   "lon": 9.192123,
-   "name": "Rognslifjellet",
-   "ele": 1124
-  },
-  {
    "lat": 61.17083,
    "lon": 7.605637,
    "name": "Middagshaugane",
+   "ele": 1124
+  },
+  {
+   "lat": 61.100415,
+   "lon": 9.192123,
+   "name": "Rognslifjellet",
    "ele": 1124
   },
   {
@@ -5735,15 +5735,15 @@
    "ele": 1113
   },
   {
-   "lat": 62.130759,
-   "lon": 8.942053,
-   "name": "Nosi",
-   "ele": 1112
-  },
-  {
    "lat": 61.119957,
    "lon": 9.28673,
    "name": "Kjølafjellet",
+   "ele": 1112
+  },
+  {
+   "lat": 62.130759,
+   "lon": 8.942053,
+   "name": "Nosi",
    "ele": 1112
   },
   {
@@ -5753,15 +5753,15 @@
    "ele": 1098
   },
   {
-   "lat": 61.21521,
-   "lon": 8.990761,
-   "name": "Javnberget",
-   "ele": 1097
-  },
-  {
    "lat": 61.218669,
    "lon": 9.52192,
    "name": "Skruvdalstinden",
+   "ele": 1097
+  },
+  {
+   "lat": 61.21521,
+   "lon": 8.990761,
+   "name": "Javnberget",
    "ele": 1097
   },
   {
@@ -5970,6 +5970,36 @@
    "ele": 724
   },
   {
+   "lat": 62.283016,
+   "lon": 9.505051,
+   "name": "Kollberget"
+  },
+  {
+   "lat": 61.736241,
+   "lon": 8.394283,
+   "name": "Raudberget"
+  },
+  {
+   "lat": 61.910369,
+   "lon": 8.421989,
+   "name": "Hoggeberget"
+  },
+  {
+   "lat": 61.713105,
+   "lon": 9.099792,
+   "name": "Rindhovda"
+  },
+  {
+   "lat": 61.827106,
+   "lon": 9.15835,
+   "name": "Bringsfjellet"
+  },
+  {
+   "lat": 62.353483,
+   "lon": 7.881102,
+   "name": "Nørdre Vermehøa"
+  },
+  {
    "lat": 62.309167,
    "lon": 8.006111,
    "name": "Borga"
@@ -5995,9 +6025,19 @@
    "name": "Nøsa (Noesa)"
   },
   {
-   "lat": 61.099534,
-   "lon": 9.876292,
-   "name": "Svartkampen"
+   "lat": 62.344986,
+   "lon": 9.394204,
+   "name": "Hammarbukinn"
+  },
+  {
+   "lat": 61.460989,
+   "lon": 7.872286,
+   "name": "Halls fortopp"
+  },
+  {
+   "lat": 61.461936,
+   "lon": 7.871636,
+   "name": "Slingsbys fortopp"
   },
   {
    "lat": 61.408439,
@@ -6010,14 +6050,9 @@
    "name": "Litlehornet Øst"
   },
   {
-   "lat": 62.353483,
-   "lon": 7.881102,
-   "name": "Nørdre Vermehøa"
-  },
-  {
-   "lat": 62.344986,
-   "lon": 9.394204,
-   "name": "Hammarbukinn"
+   "lat": 61.099534,
+   "lon": 9.876292,
+   "name": "Svartkampen"
   },
   {
    "lat": 61.072211,
@@ -6038,41 +6073,6 @@
    "lat": 61.669081,
    "lon": 7.502745,
    "name": "Martadalsnosi"
-  },
-  {
-   "lat": 61.713105,
-   "lon": 9.099792,
-   "name": "Rindhovda"
-  },
-  {
-   "lat": 61.827106,
-   "lon": 9.15835,
-   "name": "Bringsfjellet"
-  },
-  {
-   "lat": 61.460989,
-   "lon": 7.872286,
-   "name": "Halls fortopp"
-  },
-  {
-   "lat": 61.461936,
-   "lon": 7.871636,
-   "name": "Slingsbys fortopp"
-  },
-  {
-   "lat": 61.736241,
-   "lon": 8.394283,
-   "name": "Raudberget"
-  },
-  {
-   "lat": 61.910369,
-   "lon": 8.421989,
-   "name": "Hoggeberget"
-  },
-  {
-   "lat": 62.283016,
-   "lon": 9.505051,
-   "name": "Kollberget"
   }
  ]
 }

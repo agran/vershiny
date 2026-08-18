@@ -1,11 +1,11 @@
 {
  "region": "atlas",
- "generated": "2026-08-13T09:16:17+00:00",
+ "generated": "2026-08-18T20:47:23+00:00",
  "peaks": [
   {
    "lat": 31.059832,
    "lon": -7.914944,
-   "name": "Jbel Toubkal جبل توبقال",
+   "name": "Тубкаль",
    "name_ru": "Тубкаль",
    "name_en": "Toubkal",
    "ele": 4167,
@@ -321,15 +321,15 @@
    "ele": 3304
   },
   {
-   "lat": 30.857585,
-   "lon": -8.730021,
-   "name": "Mtdadene",
-   "ele": 3300
-  },
-  {
    "lat": 31.372379,
    "lon": -7.059683,
    "name": "Dj. Ounzel",
+   "ele": 3300
+  },
+  {
+   "lat": 30.857585,
+   "lon": -8.730021,
+   "name": "Mtdadene",
    "ele": 3300
   },
   {
@@ -791,15 +791,15 @@
    "wikidata": "Q29097456"
   },
   {
-   "lat": 31.105442,
-   "lon": -7.918245,
-   "name": "2200 m",
-   "ele": 2200
-  },
-  {
    "lat": 31.757272,
    "lon": -6.512022,
    "name": "Tizi n' Oughbar",
+   "ele": 2200
+  },
+  {
+   "lat": 31.105442,
+   "lon": -7.918245,
+   "name": "2200 m",
    "ele": 2200
   },
   {
@@ -846,13 +846,6 @@
    "ele": 2118
   },
   {
-   "lat": 33.360291,
-   "lon": -5.142982,
-   "name": "Jbel Hebri",
-   "ele": 2104,
-   "wikidata": "Q19286542"
-  },
-  {
    "lat": 33.359377,
    "lon": -5.140612,
    "name": "Jbel Hebri",
@@ -861,17 +854,24 @@
    "volcano": true
   },
   {
-   "lat": 31.011414,
-   "lon": -6.137968,
-   "name": "Oukftant",
-   "ele": 2090,
-   "wikidata": "Q29097390"
+   "lat": 33.360291,
+   "lon": -5.142982,
+   "name": "Jbel Hebri",
+   "ele": 2104,
+   "wikidata": "Q19286542"
   },
   {
    "lat": 30.946034,
    "lon": -6.09995,
    "name": "Jbel Bou Harazene",
    "ele": 2090
+  },
+  {
+   "lat": 31.011414,
+   "lon": -6.137968,
+   "name": "Oukftant",
+   "ele": 2090,
+   "wikidata": "Q29097390"
   },
   {
    "lat": 30.969873,
@@ -904,15 +904,15 @@
    "ele": 2030
   },
   {
-   "lat": 31.055247,
-   "lon": -6.127239,
-   "name": "Bou Iaghzane",
-   "ele": 2020
-  },
-  {
    "lat": 31.073028,
    "lon": -5.937355,
    "name": "Isk 'Abid",
+   "ele": 2020
+  },
+  {
+   "lat": 31.055247,
+   "lon": -6.127239,
+   "name": "Bou Iaghzane",
    "ele": 2020
   },
   {
@@ -954,15 +954,15 @@
    "ele": 1926
   },
   {
-   "lat": 31.04916,
-   "lon": -5.981459,
-   "name": "Tifdassine",
-   "ele": 1920
-  },
-  {
    "lat": 31.001093,
    "lon": -6.123539,
    "name": "Tachbbouft",
+   "ele": 1920
+  },
+  {
+   "lat": 31.04916,
+   "lon": -5.981459,
+   "name": "Tifdassine",
    "ele": 1920
   },
   {
@@ -1127,15 +1127,15 @@
    "ele": 1664
   },
   {
-   "lat": 30.812398,
-   "lon": -6.310047,
-   "name": "Tasguilt",
-   "ele": 1660
-  },
-  {
    "lat": 30.78406,
    "lon": -6.119492,
    "name": "Arhoulid n'Tanza",
+   "ele": 1660
+  },
+  {
+   "lat": 30.812398,
+   "lon": -6.310047,
+   "name": "Tasguilt",
    "ele": 1660
   },
   {
@@ -1187,15 +1187,15 @@
    "ele": 1603
   },
   {
-   "lat": 29.602534,
-   "lon": -9.006025,
-   "name": "Tighawn",
-   "ele": 1600
-  },
-  {
    "lat": 30.657524,
    "lon": -9.433656,
    "name": "Mont Irhal",
+   "ele": 1600
+  },
+  {
+   "lat": 29.602534,
+   "lon": -9.006025,
+   "name": "Tighawn",
    "ele": 1600
   },
   {
@@ -1249,15 +1249,15 @@
    "ele": 1572
   },
   {
-   "lat": 34.345904,
-   "lon": -2.181266,
-   "name": "jbel beni Yala",
-   "ele": 1560
-  },
-  {
    "lat": 34.29401,
    "lon": -2.53878,
    "name": "Jbel Ettiyoula",
+   "ele": 1560
+  },
+  {
+   "lat": 34.345904,
+   "lon": -2.181266,
+   "name": "jbel beni Yala",
    "ele": 1560
   },
   {
@@ -1510,12 +1510,6 @@
    "ele": 1259
   },
   {
-   "lat": 29.256524,
-   "lon": -9.587417,
-   "name": "Jebel Tiguenziouine",
-   "ele": 1240
-  },
-  {
    "lat": 29.313575,
    "lon": -9.219998,
    "name": "أفا نتكاديرت",
@@ -1526,6 +1520,12 @@
    "lat": 34.539841,
    "lon": -2.169475,
    "name": "oum lahsene",
+   "ele": 1240
+  },
+  {
+   "lat": 29.256524,
+   "lon": -9.587417,
+   "name": "Jebel Tiguenziouine",
    "ele": 1240
   },
   {
@@ -1602,15 +1602,15 @@
    "ele": 1167
   },
   {
-   "lat": 30.525278,
-   "lon": -9.538243,
-   "name": "El Gouz",
-   "ele": 1160
-  },
-  {
    "lat": 33.158711,
    "lon": -5.802421,
    "name": "Jbel Mtourzgane",
+   "ele": 1160
+  },
+  {
+   "lat": 30.525278,
+   "lon": -9.538243,
+   "name": "El Gouz",
    "ele": 1160
   },
   {
@@ -1736,15 +1736,15 @@
    "ele": 1050
   },
   {
-   "lat": 30.607577,
-   "lon": -9.487561,
-   "name": "Mont Zena",
-   "ele": 1045
-  },
-  {
    "lat": 31.893976,
    "lon": -3.59696,
    "name": "jbel kriba",
+   "ele": 1045
+  },
+  {
+   "lat": 30.607577,
+   "lon": -9.487561,
+   "name": "Mont Zena",
    "ele": 1045
   },
   {
@@ -1802,15 +1802,15 @@
    "ele": 1016
   },
   {
-   "lat": 34.827236,
-   "lon": -2.320419,
-   "name": "Aghil Nyaala",
-   "ele": 1012
-  },
-  {
    "lat": 34.83642,
    "lon": -2.119418,
    "name": "Jorf Oulad Ben Azza",
+   "ele": 1012
+  },
+  {
+   "lat": 34.827236,
+   "lon": -2.320419,
+   "name": "Aghil Nyaala",
    "ele": 1012
   },
   {
@@ -1838,15 +1838,15 @@
    "ele": 1000
   },
   {
-   "lat": 34.810444,
-   "lon": -2.383105,
-   "name": "Jbel Achaoun",
-   "ele": 991
-  },
-  {
    "lat": 34.859026,
    "lon": -2.301203,
    "name": "Jbel Belaïane جبل بالعيّان",
+   "ele": 991
+  },
+  {
+   "lat": 34.810444,
+   "lon": -2.383105,
+   "name": "Jbel Achaoun",
    "ele": 991
   },
   {
@@ -1904,15 +1904,15 @@
    "ele": 952
   },
   {
-   "lat": 34.459539,
-   "lon": -2.083228,
-   "name": "Jbel Nora",
-   "ele": 950
-  },
-  {
    "lat": 30.587822,
    "lon": -9.49583,
    "name": "mont latte",
+   "ele": 950
+  },
+  {
+   "lat": 34.459539,
+   "lon": -2.083228,
+   "name": "Jbel Nora",
    "ele": 950
   },
   {
@@ -1972,15 +1972,15 @@
    "ele": 902
   },
   {
-   "lat": 35.040345,
-   "lon": -3.565884,
-   "name": "Azrou N'Tfaant",
-   "ele": 900
-  },
-  {
    "lat": 30.05524,
    "lon": -7.246084,
    "name": "Ifrda",
+   "ele": 900
+  },
+  {
+   "lat": 35.040345,
+   "lon": -3.565884,
+   "name": "Azrou N'Tfaant",
    "ele": 900
   },
   {
@@ -1988,6 +1988,12 @@
    "lon": -2.137579,
    "name": "Jbel Aghil جبل اغيل",
    "ele": 892
+  },
+  {
+   "lat": 30.071406,
+   "lon": -7.240334,
+   "name": "Imarfd",
+   "ele": 890
   },
   {
    "lat": 35.220678,
@@ -1998,22 +2004,10 @@
    "wikidata": "Q3111756"
   },
   {
-   "lat": 30.071406,
-   "lon": -7.240334,
-   "name": "Imarfd",
-   "ele": 890
-  },
-  {
    "lat": 35.129245,
    "lon": -1.674834,
    "name": "Tejra",
    "ele": 885
-  },
-  {
-   "lat": 29.75735,
-   "lon": -7.700715,
-   "name": "Boutguella",
-   "ele": 870
   },
   {
    "lat": 30.07706,
@@ -2022,15 +2016,21 @@
    "ele": 870
   },
   {
-   "lat": 34.687677,
-   "lon": -2.706646,
-   "name": "Ahmar Lakhdad احمر الخداد",
-   "ele": 865
+   "lat": 29.75735,
+   "lon": -7.700715,
+   "name": "Boutguella",
+   "ele": 870
   },
   {
    "lat": 34.73234,
    "lon": -2.635214,
    "name": "Jbel Bouifafane جبل بويففان",
+   "ele": 865
+  },
+  {
+   "lat": 34.687677,
+   "lon": -2.706646,
+   "name": "Ahmar Lakhdad احمر الخداد",
    "ele": 865
   },
   {
@@ -2172,15 +2172,15 @@
    "ele": 670
   },
   {
-   "lat": 34.905184,
-   "lon": -2.08865,
-   "name": "Jbel Afras",
-   "ele": 663
-  },
-  {
    "lat": 34.802983,
    "lon": -2.591525,
    "name": "Tizi Islit",
+   "ele": 663
+  },
+  {
+   "lat": 34.905184,
+   "lon": -2.08865,
+   "name": "Jbel Afras",
    "ele": 663
   },
   {
@@ -2222,15 +2222,15 @@
    "ele": 610
   },
   {
-   "lat": 29.386044,
-   "lon": -2.124215,
-   "name": "Jbel Magrona",
-   "ele": 598
-  },
-  {
    "lat": 34.441522,
    "lon": -3.316448,
    "name": "Guilliz Assghir",
+   "ele": 598
+  },
+  {
+   "lat": 29.386044,
+   "lon": -2.124215,
+   "name": "Jbel Magrona",
    "ele": 598
   },
   {
@@ -2352,7 +2352,7 @@
   {
    "lat": 35.17926,
    "lon": -2.442094,
-   "name": "Pico Nido de Águila",
+   "name": "Пик Орлиного Гнезда",
    "name_ru": "Пик Орлиного Гнезда",
    "ele": 137
   },
@@ -2381,107 +2381,9 @@
    "ele": 20
   },
   {
-   "lat": 35.125416,
-   "lon": -1.751138,
-   "name": "Tessa",
-   "name_en": "Tessa"
-  },
-  {
-   "lat": 29.681495,
-   "lon": -5.995516,
-   "name": "Zahar - Lion Dune",
-   "name_en": "Lion dune"
-  },
-  {
-   "lat": 29.581229,
-   "lon": -8.943971,
-   "name": "Tamzait"
-  },
-  {
    "lat": 30.732792,
    "lon": -5.248777,
    "name": "Djebel Mrhorfi"
-  },
-  {
-   "lat": 30.653658,
-   "lon": -4.572004,
-   "name": "Djebel Zereg"
-  },
-  {
-   "lat": 34.898111,
-   "lon": -3.205865,
-   "name": "Adrar Sammar"
-  },
-  {
-   "lat": 34.904231,
-   "lon": -3.329032,
-   "name": "Adrar Naach"
-  },
-  {
-   "lat": 30.623366,
-   "lon": -9.601732,
-   "name": "Jbel Taznakht"
-  },
-  {
-   "lat": 31.032885,
-   "lon": -5.864461,
-   "name": "Imaoun n'Ougounsa"
-  },
-  {
-   "lat": 31.067636,
-   "lon": -5.846845,
-   "name": "Tadaout n'Tablah"
-  },
-  {
-   "lat": 31.019724,
-   "lon": -5.900489,
-   "name": "1722"
-  },
-  {
-   "lat": 34.92044,
-   "lon": -2.383561,
-   "name": "Jaâra"
-  },
-  {
-   "lat": 29.911768,
-   "lon": -8.116452,
-   "name": "Ouatzloul"
-  },
-  {
-   "lat": 31.986857,
-   "lon": -4.476459,
-   "name": "1140"
-  },
-  {
-   "lat": 31.714739,
-   "lon": -4.197035,
-   "name": "الكارة"
-  },
-  {
-   "lat": 30.784726,
-   "lon": -5.577535,
-   "name": "Djebel Tabou Oualt"
-  },
-  {
-   "lat": 30.614611,
-   "lon": -7.224065,
-   "name": "Gayyoun"
-  },
-  {
-   "lat": 35.15751,
-   "lon": -3.014094,
-   "name": "Azrou Hammar ⴰⵥⵔⵡ ⴻⵏ ⵀⴻⵎⵎⴰⵔ أزرو همار",
-   "wikidata": "Q28308891"
-  },
-  {
-   "lat": 31.066908,
-   "lon": -6.124843,
-   "name": "Amalou N'Ouchn"
-  },
-  {
-   "lat": 31.12489,
-   "lon": -6.220025,
-   "name": "Tafaout Boutkribas"
   },
   {
    "lat": 31.06849,
@@ -2494,22 +2396,6 @@
    "name": "Chapeau Napoleon"
   },
   {
-   "lat": 31.904589,
-   "lon": -7.901035,
-   "name": "أوقات"
-  },
-  {
-   "lat": 35.393837,
-   "lon": -3.011382,
-   "name": "La Puntilla رأس الصغير"
-  },
-  {
-   "lat": 31.112042,
-   "lon": -4.005655,
-   "name": "Desert Berber Camp مخيم بربر الصحراء",
-   "name_en": "Desert Berber Camp"
-  },
-  {
    "lat": 31.372637,
    "lon": -6.15847,
    "name": "Metchoug"
@@ -2520,25 +2406,14 @@
    "name": "Igher N´Imich"
   },
   {
-   "lat": 31.927014,
-   "lon": -6.166481,
-   "name": "Taggount"
-  },
-  {
-   "lat": 29.699179,
-   "lon": -8.924348,
-   "name": "جبل أماكور",
-   "wikidata": "Q27529408"
-  },
-  {
    "lat": 30.810906,
    "lon": -8.816243,
    "name": "Adrar N'Dern"
   },
   {
-   "lat": 30.717727,
-   "lon": -5.349304,
-   "name": "foum-Tizza"
+   "lat": 31.077739,
+   "lon": -3.992352,
+   "name": "Grande Dune de Merzouga"
   },
   {
    "lat": 34.478649,
@@ -2547,30 +2422,31 @@
    "wikidata": "Q27539326"
   },
   {
-   "lat": 33.000419,
-   "lon": -4.172777,
-   "name": "Jebel Missour"
+   "lat": 30.784726,
+   "lon": -5.577535,
+   "name": "Djebel Tabou Oualt"
   },
   {
-   "lat": 31.077739,
-   "lon": -3.992352,
-   "name": "Grande Dune de Merzouga"
+   "lat": 35.15751,
+   "lon": -3.014094,
+   "name": "Azrou Hammar ⴰⵥⵔⵡ ⴻⵏ ⵀⴻⵎⵎⴰⵔ أزرو همار",
+   "wikidata": "Q28308891"
   },
   {
-   "lat": 34.73023,
-   "lon": -3.909941,
-   "name": "جبل كاشط",
-   "wikidata": "Q27522606"
+   "lat": 29.699179,
+   "lon": -8.924348,
+   "name": "جبل أماكور",
+   "wikidata": "Q27529408"
   },
   {
-   "lat": 34.622079,
-   "lon": -4.854399,
-   "name": "جبل البهموت "
+   "lat": 31.154503,
+   "lon": -7.895734,
+   "name": "Summit Taoudja 2600M"
   },
   {
-   "lat": 34.622044,
-   "lon": -4.854728,
-   "name": "قمة جبل +800متر"
+   "lat": 31.986857,
+   "lon": -4.476459,
+   "name": "1140"
   },
   {
    "lat": 34.639288,
@@ -2578,14 +2454,26 @@
    "name": "قمة جبل عين الوالي +1000متر"
   },
   {
-   "lat": 30.505894,
-   "lon": -9.506409,
-   "name": "813"
+   "lat": 31.149354,
+   "lon": -8.754057,
+   "name": "سيدي الإمام",
+   "name_en": "Sidi L'imam"
   },
   {
-   "lat": 29.383783,
-   "lon": -9.028604,
-   "name": "thorion de roche"
+   "lat": 31.96651,
+   "lon": -5.157461,
+   "name": "Aourai"
+  },
+  {
+   "lat": 35.125416,
+   "lon": -1.751138,
+   "name": "Tessa",
+   "name_en": "Tessa"
+  },
+  {
+   "lat": 29.911768,
+   "lon": -8.116452,
+   "name": "Ouatzloul"
   },
   {
    "lat": 29.64902,
@@ -2613,6 +2501,211 @@
    "name": "600"
   },
   {
+   "lat": 31.146014,
+   "lon": -8.741839,
+   "name": "جبل الشرقي"
+  },
+  {
+   "lat": 31.904589,
+   "lon": -7.901035,
+   "name": "أوقات"
+  },
+  {
+   "lat": 33.440685,
+   "lon": -4.334284,
+   "name": "جبل بولمسكر",
+   "name_en": "Jbel Boulmasker"
+  },
+  {
+   "lat": 33.461545,
+   "lon": -4.556657,
+   "name": "قمة تيشوكت لهري",
+   "name_en": "Tichoukt lehri peak"
+  },
+  {
+   "lat": 30.653658,
+   "lon": -4.572004,
+   "name": "Djebel Zereg"
+  },
+  {
+   "lat": 34.898111,
+   "lon": -3.205865,
+   "name": "Adrar Sammar"
+  },
+  {
+   "lat": 34.904231,
+   "lon": -3.329032,
+   "name": "Adrar Naach"
+  },
+  {
+   "lat": 31.12489,
+   "lon": -6.220025,
+   "name": "Tafaout Boutkribas"
+  },
+  {
+   "lat": 31.032885,
+   "lon": -5.864461,
+   "name": "Imaoun n'Ougounsa"
+  },
+  {
+   "lat": 31.067636,
+   "lon": -5.846845,
+   "name": "Tadaout n'Tablah"
+  },
+  {
+   "lat": 31.019724,
+   "lon": -5.900489,
+   "name": "1722"
+  },
+  {
+   "lat": 30.717727,
+   "lon": -5.349304,
+   "name": "foum-Tizza"
+  },
+  {
+   "lat": 34.622079,
+   "lon": -4.854399,
+   "name": "جبل البهموت "
+  },
+  {
+   "lat": 34.622044,
+   "lon": -4.854728,
+   "name": "قمة جبل +800متر"
+  },
+  {
+   "lat": 33.000419,
+   "lon": -4.172777,
+   "name": "Jebel Missour"
+  },
+  {
+   "lat": 31.127108,
+   "lon": -7.954012,
+   "name": "Tassgimout"
+  },
+  {
+   "lat": 32.189621,
+   "lon": -5.626845,
+   "name": "Volcan extinct"
+  },
+  {
+   "lat": 32.208307,
+   "lon": -5.513286,
+   "name": "Volcan extinct"
+  },
+  {
+   "lat": 32.210501,
+   "lon": -5.508609,
+   "name": "Volcan extinct"
+  },
+  {
+   "lat": 32.200988,
+   "lon": -5.539309,
+   "name": "Volcan extinct"
+  },
+  {
+   "lat": 32.196698,
+   "lon": -5.544481,
+   "name": "Volcan extinct"
+  },
+  {
+   "lat": 33.535574,
+   "lon": -4.166745,
+   "name": "جبل أحمري بين آيت حسان و آيت الحسن"
+  },
+  {
+   "lat": 31.483946,
+   "lon": -9.626167,
+   "name": "baso"
+  },
+  {
+   "lat": 29.681495,
+   "lon": -5.995516,
+   "name": "Zahar - Lion Dune",
+   "name_en": "Lion dune"
+  },
+  {
+   "lat": 29.581229,
+   "lon": -8.943971,
+   "name": "Tamzait"
+  },
+  {
+   "lat": 30.614611,
+   "lon": -7.224065,
+   "name": "Gayyoun"
+  },
+  {
+   "lat": 31.066908,
+   "lon": -6.124843,
+   "name": "Amalou N'Ouchn"
+  },
+  {
+   "lat": 31.927014,
+   "lon": -6.166481,
+   "name": "Taggount"
+  },
+  {
+   "lat": 35.393837,
+   "lon": -3.011382,
+   "name": "La Puntilla رأس الصغير"
+  },
+  {
+   "lat": 34.646795,
+   "lon": -3.371052,
+   "name": "Oulad Rahou"
+  },
+  {
+   "lat": 30.623366,
+   "lon": -9.601732,
+   "name": "Jbel Taznakht"
+  },
+  {
+   "lat": 31.112042,
+   "lon": -4.005655,
+   "name": "Desert Berber Camp مخيم بربر الصحراء",
+   "name_en": "Desert Berber Camp"
+  },
+  {
+   "lat": 31.191059,
+   "lon": -5.740797,
+   "name": "P1504 zur R108 durchgängig geteert"
+  },
+  {
+   "lat": 30.505894,
+   "lon": -9.506409,
+   "name": "813"
+  },
+  {
+   "lat": 33.977925,
+   "lon": -3.015578,
+   "name": "1658"
+  },
+  {
+   "lat": 34.92044,
+   "lon": -2.383561,
+   "name": "Jaâra"
+  },
+  {
+   "lat": 29.383783,
+   "lon": -9.028604,
+   "name": "thorion de roche"
+  },
+  {
+   "lat": 34.73023,
+   "lon": -3.909941,
+   "name": "جبل كاشط",
+   "wikidata": "Q27522606"
+  },
+  {
+   "lat": 34.715843,
+   "lon": -1.511117,
+   "name": "Qalaa"
+  },
+  {
+   "lat": 31.714739,
+   "lon": -4.197035,
+   "name": "الكارة"
+  },
+  {
    "lat": 30.130263,
    "lon": -5.567099,
    "name": "1000"
@@ -2626,22 +2719,6 @@
    "lat": 30.152159,
    "lon": -5.531616,
    "name": "1020"
-  },
-  {
-   "lat": 31.127108,
-   "lon": -7.954012,
-   "name": "Tassgimout"
-  },
-  {
-   "lat": 31.149354,
-   "lon": -8.754057,
-   "name": "سيدي الإمام",
-   "name_en": "Sidi L'imam"
-  },
-  {
-   "lat": 31.146014,
-   "lon": -8.741839,
-   "name": "جبل الشرقي"
   },
   {
    "lat": 33.084732,
@@ -2695,86 +2772,9 @@
    "name": "ADRAR OU BOUMLAL"
   },
   {
-   "lat": 32.189621,
-   "lon": -5.626845,
-   "name": "Volcan extinct"
-  },
-  {
-   "lat": 32.208307,
-   "lon": -5.513286,
-   "name": "Volcan extinct"
-  },
-  {
-   "lat": 32.210501,
-   "lon": -5.508609,
-   "name": "Volcan extinct"
-  },
-  {
-   "lat": 32.200988,
-   "lon": -5.539309,
-   "name": "Volcan extinct"
-  },
-  {
-   "lat": 32.196698,
-   "lon": -5.544481,
-   "name": "Volcan extinct"
-  },
-  {
-   "lat": 34.715843,
-   "lon": -1.511117,
-   "name": "Qalaa"
-  },
-  {
-   "lat": 33.977925,
-   "lon": -3.015578,
-   "name": "1658"
-  },
-  {
-   "lat": 33.440685,
-   "lon": -4.334284,
-   "name": "جبل بولمسكر",
-   "name_en": "Jbel Boulmasker"
-  },
-  {
-   "lat": 33.461545,
-   "lon": -4.556657,
-   "name": "قمة تيشوكت لهري",
-   "name_en": "Tichoukt lehri peak"
-  },
-  {
-   "lat": 33.535574,
-   "lon": -4.166745,
-   "name": "جبل أحمري بين آيت حسان و آيت الحسن"
-  },
-  {
-   "lat": 34.646795,
-   "lon": -3.371052,
-   "name": "Oulad Rahou"
-  },
-  {
    "lat": 30.661271,
    "lon": -4.649243,
    "name": "Dune Zereg"
-  },
-  {
-   "lat": 31.96651,
-   "lon": -5.157461,
-   "name": "Aourai"
-  },
-  {
-   "lat": 31.191059,
-   "lon": -5.740797,
-   "name": "P1504 zur R108 durchgängig geteert"
-  },
-  {
-   "lat": 31.483946,
-   "lon": -9.626167,
-   "name": "baso"
-  },
-  {
-   "lat": 31.154503,
-   "lon": -7.895734,
-   "name": "Summit Taoudja 2600M"
   },
   {
    "lat": 32.370237,

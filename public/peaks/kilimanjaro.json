@@ -1,0 +1,644 @@
+{
+ "region": "kilimanjaro",
+ "generated": "2026-08-18T20:47:30+00:00",
+ "peaks": [
+  {
+   "lat": -3.064623,
+   "lon": 37.358579,
+   "name": "Кибо",
+   "name_ru": "Кибо",
+   "ele": 5895,
+   "wikidata": "Q1394606",
+   "volcano": true
+  },
+  {
+   "lat": -3.076408,
+   "lon": 37.353999,
+   "name": "Ухуру",
+   "name_ru": "Ухуру",
+   "name_en": "Uhuru Peak",
+   "ele": 5895
+  },
+  {
+   "lat": -3.093346,
+   "lon": 37.456359,
+   "name": "Mawenzi",
+   "ele": 5149,
+   "wikidata": "Q1283494",
+   "volcano": true
+  },
+  {
+   "lat": -3.068443,
+   "lon": 37.32657,
+   "name": "Lava Tower",
+   "ele": 4689
+  },
+  {
+   "lat": -3.243431,
+   "lon": 36.749788,
+   "name": "Mount Meru",
+   "ele": 4562,
+   "volcano": true
+  },
+  {
+   "lat": -3.033717,
+   "lon": 37.237171,
+   "name": "Shira",
+   "ele": 3962,
+   "volcano": true
+  },
+  {
+   "lat": -3.057679,
+   "lon": 37.243721,
+   "name": "Cathedral Point",
+   "ele": 3872
+  },
+  {
+   "lat": -3.212593,
+   "lon": 36.774093,
+   "name": "Little Meru",
+   "ele": 3801
+  },
+  {
+   "lat": -3.223686,
+   "lon": 36.764299,
+   "name": "Rhino Point",
+   "ele": 3800
+  },
+  {
+   "lat": -3.176926,
+   "lon": 37.519327,
+   "name": "Maundi Krater",
+   "ele": 2772
+  },
+  {
+   "lat": -2.996566,
+   "lon": 37.175005,
+   "name": "Mti Mkubwa",
+   "ele": 2750
+  },
+  {
+   "lat": -2.688838,
+   "lon": 36.702773,
+   "name": "Mount Longido",
+   "ele": 2629,
+   "wikidata": "Q25226863"
+  },
+  {
+   "lat": -2.493346,
+   "lon": 36.750706,
+   "name": "Ol Doinyo Orok",
+   "ele": 2548,
+   "wikidata": "Q7082823"
+  },
+  {
+   "lat": -4.267818,
+   "lon": 37.931514,
+   "name": "Shengena Peak",
+   "ele": 2463,
+   "wikidata": "Q31624923"
+  },
+  {
+   "lat": -3.321033,
+   "lon": 38.454334,
+   "name": "Mbololo",
+   "ele": 2220
+  },
+  {
+   "lat": -3.414525,
+   "lon": 38.29156,
+   "name": "Vuria",
+   "ele": 2180
+  },
+  {
+   "lat": -3.281153,
+   "lon": 38.375629,
+   "name": "Funju",
+   "ele": 1640
+  },
+  {
+   "lat": -3.887936,
+   "lon": 37.782818,
+   "name": "Maji Kununua",
+   "ele": 1620
+  },
+  {
+   "lat": -3.953829,
+   "lon": 37.791422,
+   "name": "Kinondo",
+   "ele": 1594
+  },
+  {
+   "lat": -3.443022,
+   "lon": 36.602693,
+   "name": "Loljoro",
+   "ele": 1579
+  },
+  {
+   "lat": -3.303181,
+   "lon": 37.500701,
+   "name": "Ngangu",
+   "ele": 1520
+  },
+  {
+   "lat": -3.933428,
+   "lon": 37.822815,
+   "name": "Magunda",
+   "ele": 1431
+  },
+  {
+   "lat": -3.367409,
+   "lon": 38.139538,
+   "name": "Maktau Hill",
+   "ele": 1410
+  },
+  {
+   "lat": -4.105106,
+   "lon": 38.078886,
+   "name": "Kisima Hill",
+   "ele": 1356
+  },
+  {
+   "lat": -3.253145,
+   "lon": 37.88502,
+   "name": "Loosoito",
+   "ele": 1210,
+   "wikidata": "Q27195519"
+  },
+  {
+   "lat": -2.468177,
+   "lon": 37.538593,
+   "name": "Endonyio Wuarrikon",
+   "ele": 1209
+  },
+  {
+   "lat": -3.486099,
+   "lon": 38.212283,
+   "name": "Mashoti",
+   "ele": 1150,
+   "wikidata": "Q27194028"
+  },
+  {
+   "lat": -3.255676,
+   "lon": 37.093021,
+   "name": "Oldonyo Muruok Hill",
+   "ele": 1130
+  },
+  {
+   "lat": -3.355535,
+   "lon": 37.933805,
+   "name": "Murka",
+   "ele": 1100
+  },
+  {
+   "lat": -3.493422,
+   "lon": 38.26288,
+   "name": "Mlima wa Simba",
+   "ele": 1036
+  },
+  {
+   "lat": -3.456674,
+   "lon": 38.429771,
+   "name": "Majego",
+   "ele": 1030
+  },
+  {
+   "lat": -3.236922,
+   "lon": 38.122697,
+   "name": "Fussilier Kopje Hill",
+   "ele": 1010
+  },
+  {
+   "lat": -3.49665,
+   "lon": 37.637259,
+   "name": "Mokinni Hill",
+   "ele": 1010
+  },
+  {
+   "lat": -3.428828,
+   "lon": 37.646801,
+   "name": "Riata Hill",
+   "ele": 910
+  },
+  {
+   "lat": -3.388197,
+   "lon": 37.788254,
+   "name": "Salaita",
+   "ele": 910
+  },
+  {
+   "lat": -3.363364,
+   "lon": 37.732542,
+   "name": "Kidong'u Hill",
+   "ele": 900
+  },
+  {
+   "lat": -3.578748,
+   "lon": 37.800202,
+   "name": "Vilima Viwili",
+   "ele": 890,
+   "wikidata": "Q27190696"
+  },
+  {
+   "lat": -3.63616,
+   "lon": 38.457727,
+   "name": "Pusa",
+   "ele": 880,
+   "wikidata": "Q27191967"
+  },
+  {
+   "lat": -3.650846,
+   "lon": 38.406397,
+   "name": "Mtonga",
+   "ele": 870
+  },
+  {
+   "lat": -4.325104,
+   "lon": 38.307308,
+   "name": "Milimang´ombe",
+   "ele": 866
+  },
+  {
+   "lat": -4.133464,
+   "lon": 38.439086,
+   "name": "Kavuma",
+   "ele": 853
+  },
+  {
+   "lat": -4.317489,
+   "lon": 38.167893,
+   "name": "Karambatu",
+   "ele": 821
+  },
+  {
+   "lat": -3.262569,
+   "lon": 38.412571,
+   "name": "Kisau",
+   "ele": 720
+  },
+  {
+   "lat": -3.4734,
+   "lon": 37.638721,
+   "name": "Toll HIll",
+   "ele": 700
+  },
+  {
+   "lat": -3.237767,
+   "lon": 36.762464,
+   "name": "Mount Meru Ashcone",
+   "wikidata": "Q309098",
+   "volcano": true
+  },
+  {
+   "lat": -3.354325,
+   "lon": 37.9292,
+   "name": "1060"
+  },
+  {
+   "lat": -3.390781,
+   "lon": 36.699541,
+   "name": "Themi Hill"
+  },
+  {
+   "lat": -2.962227,
+   "lon": 37.976668,
+   "name": "Poachers Lookout",
+   "wikidata": "Q27191953"
+  },
+  {
+   "lat": -3.40338,
+   "lon": 37.619862,
+   "name": "Lotima Hill"
+  },
+  {
+   "lat": -3.230803,
+   "lon": 38.148019,
+   "name": "Wanjala Hill",
+   "wikidata": "Q27190722"
+  },
+  {
+   "lat": -3.097563,
+   "lon": 37.861073,
+   "name": "Ol Marabui"
+  },
+  {
+   "lat": -3.072871,
+   "lon": 37.837057,
+   "name": "Noompompong'"
+  },
+  {
+   "lat": -3.117868,
+   "lon": 37.837575,
+   "name": "Nolpaeki"
+  },
+  {
+   "lat": -3.074278,
+   "lon": 37.782815,
+   "name": "Nasaduku"
+  },
+  {
+   "lat": -3.086234,
+   "lon": 37.779288,
+   "name": "Loolruga"
+  },
+  {
+   "lat": -3.0793,
+   "lon": 37.803348,
+   "name": "Loolpuli"
+  },
+  {
+   "lat": -3.103139,
+   "lon": 37.845469,
+   "name": "Lonkurrlen"
+  },
+  {
+   "lat": -3.084083,
+   "lon": 37.796015,
+   "name": "Lonkanjaoni"
+  },
+  {
+   "lat": -3.079837,
+   "lon": 37.774633,
+   "name": "Lomeuti"
+  },
+  {
+   "lat": -3.093523,
+   "lon": 37.781864,
+   "name": "Lolbilin"
+  },
+  {
+   "lat": -3.078789,
+   "lon": 37.812175,
+   "name": "Lentele"
+  },
+  {
+   "lat": -3.099044,
+   "lon": 37.791704,
+   "name": "Lempuyuk"
+  },
+  {
+   "lat": -3.068802,
+   "lon": 37.816476,
+   "name": "Lekemehera"
+  },
+  {
+   "lat": -3.117691,
+   "lon": 37.818935,
+   "name": "Lekawuya"
+  },
+  {
+   "lat": -3.09123,
+   "lon": 37.804058,
+   "name": "Lekamaika"
+  },
+  {
+   "lat": -3.069924,
+   "lon": 37.786699,
+   "name": "Lediss"
+  },
+  {
+   "lat": -3.09901,
+   "lon": 37.848939,
+   "name": "Lalarasha"
+  },
+  {
+   "lat": -3.137472,
+   "lon": 37.83176,
+   "name": "Kooluaa"
+  },
+  {
+   "lat": -3.07272,
+   "lon": 37.842919,
+   "name": "Kool"
+  },
+  {
+   "lat": -3.124467,
+   "lon": 37.834787,
+   "name": "Ildonyo Okuni"
+  },
+  {
+   "lat": -3.09559,
+   "lon": 37.790704,
+   "name": "Edonyo Ololkurrukurr 2"
+  },
+  {
+   "lat": -3.091361,
+   "lon": 37.784464,
+   "name": "Edonyo Ololkurrukurr 1"
+  },
+  {
+   "lat": -3.113155,
+   "lon": 37.828809,
+   "name": "Edonyo Olkuarry"
+  },
+  {
+   "lat": -3.096094,
+   "lon": 37.785164,
+   "name": "Edonyo Napii"
+  },
+  {
+   "lat": -3.124883,
+   "lon": 37.827993,
+   "name": "Edonyo Enkawuya"
+  },
+  {
+   "lat": -3.095251,
+   "lon": 37.787345,
+   "name": "Edonyo Dapash"
+  },
+  {
+   "lat": -2.691339,
+   "lon": 37.15154,
+   "name": "Kitirua Hill"
+  },
+  {
+   "lat": -2.703686,
+   "lon": 37.155165,
+   "name": "Ositet Hill"
+  },
+  {
+   "lat": -3.52413,
+   "lon": 36.603868,
+   "name": "Mungu Crater",
+   "volcano": true
+  },
+  {
+   "lat": -3.502058,
+   "lon": 38.259229,
+   "name": "Mititatu Hill"
+  },
+  {
+   "lat": -3.46825,
+   "lon": 37.667523,
+   "name": "Python Hill"
+  },
+  {
+   "lat": -3.394946,
+   "lon": 38.402304,
+   "name": "Ron'ge"
+  },
+  {
+   "lat": -3.548157,
+   "lon": 38.412976,
+   "name": "Zongoloni"
+  },
+  {
+   "lat": -3.545458,
+   "lon": 38.363251,
+   "name": "Naoni"
+  },
+  {
+   "lat": -3.573795,
+   "lon": 38.36807,
+   "name": "Tasha"
+  },
+  {
+   "lat": -3.583872,
+   "lon": 38.369143,
+   "name": "Mkengeren",
+   "wikidata": "Q27194158"
+  },
+  {
+   "lat": -3.520176,
+   "lon": 38.285757,
+   "name": "Mukiaio Hill"
+  },
+  {
+   "lat": -3.543712,
+   "lon": 38.33078,
+   "name": "Tarama Hill"
+  },
+  {
+   "lat": -3.547787,
+   "lon": 38.304287,
+   "name": "Mgama Hill"
+  },
+  {
+   "lat": -3.624524,
+   "lon": 38.321296,
+   "name": "Lilani Hill"
+  },
+  {
+   "lat": -3.590113,
+   "lon": 38.282843,
+   "name": "Alia Hill"
+  },
+  {
+   "lat": -3.63175,
+   "lon": 38.297148,
+   "name": "Kide"
+  },
+  {
+   "lat": -3.615131,
+   "lon": 38.2497,
+   "name": "Mtongore"
+  },
+  {
+   "lat": -3.685164,
+   "lon": 38.355348,
+   "name": "Mwairimba hill",
+   "wikidata": "Q27193913"
+  },
+  {
+   "lat": -3.645995,
+   "lon": 38.260462,
+   "name": "Kasindano"
+  },
+  {
+   "lat": -3.667328,
+   "lon": 38.306463,
+   "name": "Mikeli",
+   "wikidata": "Q27194139"
+  },
+  {
+   "lat": -3.685843,
+   "lon": 38.410319,
+   "name": "Kore Hill",
+   "wikidata": "Q27195137"
+  },
+  {
+   "lat": -3.34788,
+   "lon": 36.712421,
+   "name": "Oldoinyo Sabuk"
+  },
+  {
+   "lat": -3.328413,
+   "lon": 36.727597,
+   "name": "Kivesi Hill"
+  },
+  {
+   "lat": -3.345785,
+   "lon": 36.734685,
+   "name": "Kivutu"
+  },
+  {
+   "lat": -2.721862,
+   "lon": 37.5488,
+   "name": "Sundowner Hill"
+  },
+  {
+   "lat": -2.727843,
+   "lon": 37.535192,
+   "name": "Giraffe Hill"
+  },
+  {
+   "lat": -2.482659,
+   "lon": 38.099901,
+   "name": "Kalimakoi",
+   "wikidata": "Q27197863"
+  },
+  {
+   "lat": -3.440513,
+   "lon": 37.585388,
+   "name": "Lemrika Hill"
+  },
+  {
+   "lat": -3.4101,
+   "lon": 37.623931,
+   "name": "Latema"
+  },
+  {
+   "lat": -3.408821,
+   "lon": 38.238116,
+   "name": "Mashile",
+   "wikidata": "Q27194026"
+  },
+  {
+   "lat": -3.521039,
+   "lon": 38.411487,
+   "name": "Sembe"
+  },
+  {
+   "lat": -3.513862,
+   "lon": 38.497005,
+   "name": "Mugeno"
+  },
+  {
+   "lat": -2.682528,
+   "lon": 37.893083,
+   "name": "Chyulu Hills",
+   "wikidata": "Q5118629"
+  },
+  {
+   "lat": -3.446023,
+   "lon": 36.651943,
+   "name": "Lalgorite Hill"
+  },
+  {
+   "lat": -3.863017,
+   "lon": 37.899277,
+   "name": "Ndea"
+  },
+  {
+   "lat": -3.449271,
+   "lon": 37.740854,
+   "name": "Girigan Hills",
+   "wikidata": "Q27197512"
+  },
+  {
+   "lat": -2.205582,
+   "lon": 38.402926,
+   "name": "Ithumba"
+  }
+ ]
+}

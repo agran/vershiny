@@ -1,0 +1,2698 @@
+{
+ "region": "patagonia-south",
+ "generated": "2026-08-18T20:47:32+00:00",
+ "peaks": [
+  {
+   "lat": -49.019455,
+   "lon": -73.505174,
+   "name": "Лаутаро",
+   "name_ru": "Лаутаро",
+   "ele": 3623,
+   "wikidata": "Q3044652",
+   "volcano": true
+  },
+  {
+   "lat": -49.27125,
+   "lon": -73.043211,
+   "name": "Monte Fitz Roy",
+   "name_en": "Monte Fitz Roy",
+   "ele": 3405,
+   "wikidata": "Q215138"
+  },
+  {
+   "lat": -49.320801,
+   "lon": -73.416584,
+   "name": "Cerro Francisco Moreno / Cerro Hernán Merino Correa",
+   "ele": 3393,
+   "wikidata": "Q21847970"
+  },
+  {
+   "lat": -48.554865,
+   "lon": -73.141064,
+   "name": "Cerro Mellizo Sur",
+   "ele": 3300
+  },
+  {
+   "lat": -49.343845,
+   "lon": -73.430058,
+   "name": "Punta Brava",
+   "ele": 3260
+  },
+  {
+   "lat": -49.965691,
+   "lon": -73.503873,
+   "name": "Cerro Roma",
+   "ele": 3240,
+   "wikidata": "Q113664376"
+  },
+  {
+   "lat": -50.01442,
+   "lon": -73.445653,
+   "name": "Cerro Bertrand",
+   "ele": 3180,
+   "wikidata": "Q5762822"
+  },
+  {
+   "lat": -49.291937,
+   "lon": -73.099231,
+   "name": "Cerro Torre",
+   "ele": 3128,
+   "wikidata": "Q1056102"
+  },
+  {
+   "lat": -49.363043,
+   "lon": -73.431099,
+   "name": "Cerro Dos Cuernos",
+   "ele": 3074
+  },
+  {
+   "lat": -49.960549,
+   "lon": -73.451605,
+   "name": "Cerro Agassiz",
+   "ele": 3064,
+   "wikidata": "Q16490727"
+  },
+  {
+   "lat": -50.995113,
+   "lon": -73.086651,
+   "name": "Cerro Paine Grande",
+   "ele": 3050,
+   "wikidata": "Q28554506"
+  },
+  {
+   "lat": -49.286722,
+   "lon": -73.096475,
+   "name": "Cerro Standhardt",
+   "ele": 3050,
+   "wikidata": "Q21847975"
+  },
+  {
+   "lat": -49.393308,
+   "lon": -73.426518,
+   "name": "Cerro Dos Cumbres",
+   "ele": 3049
+  },
+  {
+   "lat": -48.515012,
+   "lon": -73.167873,
+   "name": "Cerro Azul",
+   "ele": 3018
+  },
+  {
+   "lat": -49.526917,
+   "lon": -73.616264,
+   "name": "Cerro Christian Buracchio",
+   "ele": 3018,
+   "wikidata": "Q116038945"
+  },
+  {
+   "lat": -49.280453,
+   "lon": -73.039788,
+   "name": "Aguja Poincenot",
+   "ele": 3002,
+   "wikidata": "Q398478"
+  },
+  {
+   "lat": -50.535069,
+   "lon": -73.357472,
+   "name": "Cerro Pietrobelli",
+   "ele": 2950,
+   "wikidata": "Q13562104"
+  },
+  {
+   "lat": -49.003098,
+   "lon": -73.489776,
+   "name": "Cerro Mimosa",
+   "ele": 2940
+  },
+  {
+   "lat": -49.304879,
+   "lon": -73.102918,
+   "name": "Adela",
+   "ele": 2938
+  },
+  {
+   "lat": -50.053925,
+   "lon": -73.461665,
+   "name": "Cerro Bolados",
+   "ele": 2925,
+   "wikidata": "Q21846690"
+  },
+  {
+   "lat": -48.802936,
+   "lon": -73.158676,
+   "name": "Cerro O'Higgins",
+   "ele": 2911
+  },
+  {
+   "lat": -49.134015,
+   "lon": -73.083027,
+   "name": "Cerro Gorra Blanca",
+   "ele": 2907,
+   "wikidata": "Q92614196"
+  },
+  {
+   "lat": -50.045951,
+   "lon": -73.501369,
+   "name": "Cerro Tomek",
+   "ele": 2880,
+   "wikidata": "Q116038101"
+  },
+  {
+   "lat": -49.290887,
+   "lon": -73.099131,
+   "name": "Torre Egger",
+   "ele": 2850,
+   "wikidata": "Q2444529"
+  },
+  {
+   "lat": -49.312004,
+   "lon": -73.095431,
+   "name": "Adela Sur",
+   "ele": 2840
+  },
+  {
+   "lat": -50.059739,
+   "lon": -73.5003,
+   "name": "Cerro Masters",
+   "ele": 2834,
+   "wikidata": "Q116039028"
+  },
+  {
+   "lat": -49.789444,
+   "lon": -73.451111,
+   "name": "Cerro Murallón",
+   "ele": 2831,
+   "wikidata": "Q5763132"
+  },
+  {
+   "lat": -49.298621,
+   "lon": -73.104025,
+   "name": "Adela Norte",
+   "ele": 2825
+  },
+  {
+   "lat": -49.318478,
+   "lon": -73.094135,
+   "name": "Cerro Ñato",
+   "ele": 2797,
+   "wikidata": "Q113536723"
+  },
+  {
+   "lat": -50.984872,
+   "lon": -73.110484,
+   "name": "Cumbre Norte",
+   "ele": 2770
+  },
+  {
+   "lat": -49.338569,
+   "lon": -73.097972,
+   "name": "Cerro Grande",
+   "ele": 2751,
+   "wikidata": "Q113675905"
+  },
+  {
+   "lat": -49.288526,
+   "lon": -73.098296,
+   "name": "Punta Herrón",
+   "ele": 2750,
+   "wikidata": "Q135656613"
+  },
+  {
+   "lat": -49.263622,
+   "lon": -73.037121,
+   "name": "Aguja Mermoz",
+   "ele": 2732
+  },
+  {
+   "lat": -51.010731,
+   "lon": -73.110248,
+   "name": "Cima Central",
+   "ele": 2730
+  },
+  {
+   "lat": -50.668706,
+   "lon": -73.15143,
+   "name": "Cerro Tilman",
+   "ele": 2721,
+   "wikidata": "Q113530827"
+  },
+  {
+   "lat": -49.266851,
+   "lon": -73.103803,
+   "name": "Cerro Domo Blanco",
+   "ele": 2700,
+   "wikidata": "Q116732257"
+  },
+  {
+   "lat": -49.256655,
+   "lon": -73.094741,
+   "name": "Cerro Piergiorgio",
+   "ele": 2700,
+   "wikidata": "Q28495497"
+  },
+  {
+   "lat": -50.972503,
+   "lon": -72.963801,
+   "name": "Monte Almirante Nieto",
+   "ele": 2697
+  },
+  {
+   "lat": -48.987828,
+   "lon": -73.475618,
+   "name": "Cerro Pangrec",
+   "ele": 2685
+  },
+  {
+   "lat": -50.956555,
+   "lon": -73.022483,
+   "name": "Cerro Fortaleza",
+   "ele": 2679
+  },
+  {
+   "lat": -49.423516,
+   "lon": -73.03445,
+   "name": "Cerro Huemul",
+   "ele": 2677,
+   "wikidata": "Q21840518"
+  },
+  {
+   "lat": -49.151559,
+   "lon": -73.060327,
+   "name": "Cerro Neumayer",
+   "ele": 2669
+  },
+  {
+   "lat": -50.163717,
+   "lon": -73.370214,
+   "name": "Cerro Heim",
+   "ele": 2669,
+   "wikidata": "Q113687685"
+  },
+  {
+   "lat": -49.325319,
+   "lon": -73.102009,
+   "name": "Cerro Doblado",
+   "ele": 2665,
+   "wikidata": "Q21841856"
+  },
+  {
+   "lat": -51.02119,
+   "lon": -73.104395,
+   "name": "Punta Bariloche",
+   "ele": 2660
+  },
+  {
+   "lat": -49.266796,
+   "lon": -73.040674,
+   "name": "Aguja Val de Biois",
+   "ele": 2653
+  },
+  {
+   "lat": -49.067731,
+   "lon": -73.266513,
+   "name": "Cerro Pirámide",
+   "ele": 2642
+  },
+  {
+   "lat": -50.156111,
+   "lon": -73.5125,
+   "name": "Cerro Onelli Central",
+   "ele": 2620,
+   "wikidata": "Q113496472"
+  },
+  {
+   "lat": -49.749664,
+   "lon": -73.114578,
+   "name": "Cerro Moyano",
+   "ele": 2615,
+   "wikidata": "Q21837694"
+  },
+  {
+   "lat": -49.879745,
+   "lon": -73.466802,
+   "name": "Cerro Bertachi",
+   "ele": 2612
+  },
+  {
+   "lat": -50.638333,
+   "lon": -73.168889,
+   "name": "Cerro Almirante Óscar Viel / Cerro Teniente Feilberg",
+   "ele": 2602,
+   "wikidata": "Q113530821"
+  },
+  {
+   "lat": -49.539505,
+   "lon": -73.563318,
+   "name": "Cerro Padre Hurtado",
+   "ele": 2600,
+   "wikidata": "Q116038879"
+  },
+  {
+   "lat": -49.123314,
+   "lon": -73.038522,
+   "name": "Cerro Cagliero",
+   "ele": 2584
+  },
+  {
+   "lat": -49.941239,
+   "lon": -73.381708,
+   "name": "Cerro MacAndrews",
+   "ele": 2581
+  },
+  {
+   "lat": -49.252992,
+   "lon": -73.089713,
+   "name": "Cerro Pollone",
+   "ele": 2579,
+   "wikidata": "Q130391358"
+  },
+  {
+   "lat": -49.260902,
+   "lon": -73.032982,
+   "name": "Aguja Guillaumet",
+   "ele": 2574
+  },
+  {
+   "lat": -49.658904,
+   "lon": -73.153883,
+   "name": "Cerro Divisadero",
+   "ele": 2570,
+   "wikidata": "Q137921072"
+  },
+  {
+   "lat": -49.578701,
+   "lon": -73.676965,
+   "name": "Nevado Riso Patrón",
+   "ele": 2563
+  },
+  {
+   "lat": -49.28818,
+   "lon": -73.038817,
+   "name": "Aguja Saint-Exupery",
+   "ele": 2558,
+   "wikidata": "Q4694562"
+  },
+  {
+   "lat": -49.278218,
+   "lon": -73.048863,
+   "name": "Aguja Desmochada",
+   "ele": 2550,
+   "wikidata": "Q123168083"
+  },
+  {
+   "lat": -50.400289,
+   "lon": -73.773331,
+   "name": "Volcán Aguilera",
+   "ele": 2546,
+   "wikidata": "Q398404",
+   "volcano": true
+  },
+  {
+   "lat": -49.40557,
+   "lon": -73.4674,
+   "name": "Cerro General Carrera / Cerro General Helbling",
+   "ele": 2516
+  },
+  {
+   "lat": -50.952959,
+   "lon": -72.989295,
+   "name": "Torre Sur",
+   "ele": 2501
+  },
+  {
+   "lat": -50.978669,
+   "lon": -73.025136,
+   "name": "Cerro Espada",
+   "ele": 2500
+  },
+  {
+   "lat": -50.166639,
+   "lon": -73.479245,
+   "name": "Cerro Onelli Sur",
+   "ele": 2493
+  },
+  {
+   "lat": -49.436689,
+   "lon": -73.482905,
+   "name": "Cerro Padre de Agostini",
+   "ele": 2487
+  },
+  {
+   "lat": -50.089475,
+   "lon": -73.465271,
+   "name": "Cerro Onelli Norte",
+   "ele": 2485
+  },
+  {
+   "lat": -49.284475,
+   "lon": -73.03978,
+   "name": "Aguja Rafael Juárez",
+   "ele": 2482
+  },
+  {
+   "lat": -50.467214,
+   "lon": -73.353332,
+   "name": "Cerro Cuerno Blanco",
+   "ele": 2480,
+   "wikidata": "Q115944514"
+  },
+  {
+   "lat": -48.728411,
+   "lon": -73.251865,
+   "name": "Cerro Plüschow",
+   "ele": 2469
+  },
+  {
+   "lat": -49.815064,
+   "lon": -73.017846,
+   "name": "Cerro Planchón",
+   "ele": 2468
+  },
+  {
+   "lat": -49.266714,
+   "lon": -73.133237,
+   "name": "Cerro Rincón",
+   "ele": 2465,
+   "wikidata": "Q116732284"
+  },
+  {
+   "lat": -50.702309,
+   "lon": -73.171821,
+   "name": "Cerro Comandante Dublé Almeyda / Cerro Comandante Piedra Buena",
+   "ele": 2464,
+   "wikidata": "Q113501674"
+  },
+  {
+   "lat": -50.59423,
+   "lon": -73.243028,
+   "name": "Cerro Gardener",
+   "ele": 2461,
+   "wikidata": "Q116037340"
+  },
+  {
+   "lat": -49.774711,
+   "lon": -73.023444,
+   "name": "Cerro Mesón",
+   "ele": 2458
+  },
+  {
+   "lat": -50.200075,
+   "lon": -73.416132,
+   "name": "Cerro Cruz del Sur",
+   "ele": 2454
+  },
+  {
+   "lat": -50.949704,
+   "lon": -72.98747,
+   "name": "Torre Central",
+   "ele": 2450
+  },
+  {
+   "lat": -50.226556,
+   "lon": -73.448496,
+   "name": "Cerro Spegazzini Norte",
+   "ele": 2447,
+   "wikidata": "Q116454241"
+  },
+  {
+   "lat": -49.868199,
+   "lon": -73.402233,
+   "name": "Cerro Cono",
+   "ele": 2440,
+   "wikidata": "Q21841272"
+  },
+  {
+   "lat": -49.757345,
+   "lon": -73.416263,
+   "name": "Cerro Don Bosco",
+   "ele": 2420,
+   "wikidata": "Q116039212"
+  },
+  {
+   "lat": -48.748902,
+   "lon": -73.086225,
+   "name": "Cerro Alesna",
+   "ele": 2416
+  },
+  {
+   "lat": -48.724344,
+   "lon": -73.42293,
+   "name": "Cerro Ilse von Rentzell",
+   "ele": 2408
+  },
+  {
+   "lat": -49.588319,
+   "lon": -73.678522,
+   "name": "Cerro Verdugo",
+   "ele": 2396
+  },
+  {
+   "lat": -49.279162,
+   "lon": -73.098856,
+   "name": "Aguja Bífida",
+   "ele": 2394,
+   "wikidata": "Q123173994"
+  },
+  {
+   "lat": -48.472563,
+   "lon": -73.118793,
+   "name": "Cerro San Martín",
+   "ele": 2390
+  },
+  {
+   "lat": -50.342503,
+   "lon": -73.32253,
+   "name": "Cerro Mayo",
+   "ele": 2380,
+   "wikidata": "Q21837165"
+  },
+  {
+   "lat": -50.571094,
+   "lon": -73.146262,
+   "name": "Cerro Cervantes",
+   "ele": 2380,
+   "wikidata": "Q21844490"
+  },
+  {
+   "lat": -48.815811,
+   "lon": -73.212479,
+   "name": "Cerro Hipótilo",
+   "ele": 2364
+  },
+  {
+   "lat": -50.743224,
+   "lon": -73.193428,
+   "name": "Cerro Cubo",
+   "ele": 2358,
+   "wikidata": "Q22547081"
+  },
+  {
+   "lat": -50.319469,
+   "lon": -73.485995,
+   "name": "Cerro Inmaculado",
+   "ele": 2343,
+   "wikidata": "Q115943219"
+  },
+  {
+   "lat": -49.632163,
+   "lon": -73.112677,
+   "name": "Cerro Mascarello",
+   "ele": 2342
+  },
+  {
+   "lat": -49.292767,
+   "lon": -73.039572,
+   "name": "Aguja de la S",
+   "ele": 2335
+  },
+  {
+   "lat": -50.179942,
+   "lon": -73.441374,
+   "name": "Cerro Don Sixto",
+   "ele": 2332
+  },
+  {
+   "lat": -49.357545,
+   "lon": -73.129138,
+   "name": "Cerro Murallón del Viedma",
+   "ele": 2319
+  },
+  {
+   "lat": -49.251476,
+   "lon": -73.070472,
+   "name": "Aguja Pollone",
+   "ele": 2313
+  },
+  {
+   "lat": -50.989422,
+   "lon": -73.019471,
+   "name": "Cerro Máscara",
+   "ele": 2300
+  },
+  {
+   "lat": -48.65653,
+   "lon": -72.922077,
+   "name": "Cerro Pascua",
+   "ele": 2285
+  },
+  {
+   "lat": -49.222954,
+   "lon": -73.147307,
+   "name": "Cerro Marconi",
+   "ele": 2284
+  },
+  {
+   "lat": -49.273568,
+   "lon": -73.098176,
+   "name": "Aguja Cuatro Dedos",
+   "ele": 2281,
+   "wikidata": "Q123174123"
+  },
+  {
+   "lat": -49.270893,
+   "lon": -73.10157,
+   "name": "Aguja CAT",
+   "ele": 2275,
+   "wikidata": "Q123174446"
+  },
+  {
+   "lat": -50.112598,
+   "lon": -73.691783,
+   "name": "Cerro de La Concepción",
+   "ele": 2269
+  },
+  {
+   "lat": -49.251778,
+   "lon": -73.008634,
+   "name": "Cerro Eléctrico",
+   "ele": 2257
+  },
+  {
+   "lat": -50.426692,
+   "lon": -73.42059,
+   "name": "Cerro Paredón",
+   "ele": 2256
+  },
+  {
+   "lat": -51.414953,
+   "lon": -73.197827,
+   "name": "Monte Balmaceda",
+   "ele": 2250,
+   "wikidata": "Q1945723"
+  },
+  {
+   "lat": -50.383923,
+   "lon": -73.483837,
+   "name": "Cerro Bastión Blanco",
+   "ele": 2245
+  },
+  {
+   "lat": -50.940319,
+   "lon": -72.981421,
+   "name": "Cerro Nido de Cóndor",
+   "ele": 2243
+  },
+  {
+   "lat": -50.945877,
+   "lon": -73.024951,
+   "name": "Cerro Escudo",
+   "ele": 2240
+  },
+  {
+   "lat": -50.760092,
+   "lon": -72.255502,
+   "name": "Cerro Pináculo",
+   "ele": 2240,
+   "wikidata": "Q21835709"
+  },
+  {
+   "lat": -50.945024,
+   "lon": -72.985027,
+   "name": "Torre Norte",
+   "ele": 2237
+  },
+  {
+   "lat": -50.945631,
+   "lon": -73.047963,
+   "name": "Cerro Cabeza de Indio",
+   "ele": 2230
+  },
+  {
+   "lat": -50.052889,
+   "lon": -73.409999,
+   "name": "Cerro Kennedy",
+   "ele": 2230
+  },
+  {
+   "lat": -50.49657,
+   "lon": -73.273545,
+   "name": "Cerro Dos Picos",
+   "ele": 2227,
+   "wikidata": "Q115944385"
+  },
+  {
+   "lat": -48.190739,
+   "lon": -72.119633,
+   "name": "Monte Tetris",
+   "ele": 2215
+  },
+  {
+   "lat": -48.812251,
+   "lon": -73.111674,
+   "name": "Cerro Cóndor",
+   "ele": 2213
+  },
+  {
+   "lat": -49.198588,
+   "lon": -73.140093,
+   "name": "Cerro Marconi Norte",
+   "ele": 2210
+  },
+  {
+   "lat": -50.252222,
+   "lon": -73.427222,
+   "name": "Cerro Spegazzini Sur",
+   "ele": 2207,
+   "wikidata": "Q116454644"
+  },
+  {
+   "lat": -50.999092,
+   "lon": -73.016565,
+   "name": "Cuerno Norte",
+   "ele": 2200
+  },
+  {
+   "lat": -50.98337,
+   "lon": -73.023934,
+   "name": "Cerro Hoja",
+   "ele": 2200
+  },
+  {
+   "lat": -50.951113,
+   "lon": -73.084941,
+   "name": "Cerro Trono Blanco",
+   "ele": 2197
+  },
+  {
+   "lat": -49.250753,
+   "lon": -73.004115,
+   "name": "Cerro Eléctrico NE",
+   "ele": 2183
+  },
+  {
+   "lat": -50.96498,
+   "lon": -73.12451,
+   "name": "Cerro Catedral",
+   "ele": 2167
+  },
+  {
+   "lat": -50.30832,
+   "lon": -73.513828,
+   "name": "Cerro Dagmar Aaen",
+   "ele": 2165,
+   "wikidata": "Q116037749"
+  },
+  {
+   "lat": -49.297189,
+   "lon": -73.034417,
+   "name": "Mojón Rojo",
+   "ele": 2163
+  },
+  {
+   "lat": -49.300335,
+   "lon": -73.013211,
+   "name": "Techado Negro",
+   "ele": 2152
+  },
+  {
+   "lat": -49.050845,
+   "lon": -72.926927,
+   "name": "Cerro Vespignani",
+   "ele": 2146
+  },
+  {
+   "lat": -50.812067,
+   "lon": -73.190761,
+   "name": "Monte Stokes",
+   "ele": 2140
+  },
+  {
+   "lat": -50.609334,
+   "lon": -73.23643,
+   "name": "Cerro Cacique Casimiro / Cerro Cacique Papón",
+   "ele": 2131,
+   "wikidata": "Q113530853"
+  },
+  {
+   "lat": -49.569502,
+   "lon": -73.682996,
+   "name": "Cerro Gaviota",
+   "ele": 2130
+  },
+  {
+   "lat": -49.481678,
+   "lon": -73.463809,
+   "name": "Cerro Gemelos Blancos",
+   "ele": 2127
+  },
+  {
+   "lat": -49.948608,
+   "lon": -73.777956,
+   "name": "Cerro Falso Gaviota",
+   "ele": 2124
+  },
+  {
+   "lat": -49.342907,
+   "lon": -73.027714,
+   "name": "Cerro Solo",
+   "ele": 2121
+  },
+  {
+   "lat": -50.998905,
+   "lon": -73.006444,
+   "name": "Cuerno Principal",
+   "ele": 2110
+  },
+  {
+   "lat": -49.711666,
+   "lon": -73.182504,
+   "name": "Cerro Campana",
+   "ele": 2105,
+   "wikidata": "Q21843875"
+  },
+  {
+   "lat": -49.798423,
+   "lon": -73.393963,
+   "name": "Cerro Tosello",
+   "ele": 2104
+  },
+  {
+   "lat": -50.316173,
+   "lon": -73.499595,
+   "name": "Punta Aparición",
+   "ele": 2100,
+   "wikidata": "Q116038387"
+  },
+  {
+   "lat": -49.497459,
+   "lon": -73.423603,
+   "name": "Cerro Witte",
+   "ele": 2095
+  },
+  {
+   "lat": -48.608423,
+   "lon": -73.070186,
+   "name": "Cerro Peine",
+   "ele": 2072
+  },
+  {
+   "lat": -50.820566,
+   "lon": -73.200864,
+   "name": "Cerro Falso Stokes",
+   "ele": 2070,
+   "wikidata": "Q5763253"
+  },
+  {
+   "lat": -49.104888,
+   "lon": -72.856803,
+   "name": "Cerro Padre",
+   "ele": 2068
+  },
+  {
+   "lat": -50.228811,
+   "lon": -73.385876,
+   "name": "Cerro Peineta",
+   "ele": 2068,
+   "wikidata": "Q21835349"
+  },
+  {
+   "lat": -49.734226,
+   "lon": -73.168822,
+   "name": "Cerro Belvedere",
+   "ele": 2065
+  },
+  {
+   "lat": -50.446326,
+   "lon": -73.358931,
+   "name": "Cerro Cuerno",
+   "ele": 2060,
+   "wikidata": "Q115943329"
+  },
+  {
+   "lat": -49.029472,
+   "lon": -72.981258,
+   "name": "Cerro Milanesio",
+   "ele": 2053
+  },
+  {
+   "lat": -49.064698,
+   "lon": -72.935619,
+   "name": "Cerro Crestón",
+   "ele": 2050
+  },
+  {
+   "lat": -48.24633,
+   "lon": -72.111251,
+   "name": "Pico de Las Vacas",
+   "ele": 2050,
+   "wikidata": "Q21832117"
+  },
+  {
+   "lat": -49.501662,
+   "lon": -73.488504,
+   "name": "Cerro Kolliker",
+   "ele": 2042
+  },
+  {
+   "lat": -49.202423,
+   "lon": -73.019592,
+   "name": "Cerro Aniversario",
+   "ele": 2029
+  },
+  {
+   "lat": -49.123623,
+   "lon": -72.809886,
+   "name": "Cerro Bonete",
+   "ele": 2028,
+   "wikidata": "Q21846725"
+  },
+  {
+   "lat": -49.299277,
+   "lon": -72.372876,
+   "name": "Cerro Pana",
+   "ele": 2012
+  },
+  {
+   "lat": -51.193317,
+   "lon": -73.484392,
+   "name": "Cerro Desconsuelo",
+   "ele": 2011
+  },
+  {
+   "lat": -50.39023,
+   "lon": -73.244283,
+   "name": "Cerro Negro",
+   "ele": 2011
+  },
+  {
+   "lat": -49.269772,
+   "lon": -73.014902,
+   "name": "Punta Velluda",
+   "ele": 2010
+  },
+  {
+   "lat": -50.62377,
+   "lon": -73.045569,
+   "name": "Cerro Adriana",
+   "ele": 2005,
+   "wikidata": "Q21848164"
+  },
+  {
+   "lat": -49.155902,
+   "lon": -72.599417,
+   "name": "Cerro Astillado",
+   "ele": 2005,
+   "wikidata": "Q21845906"
+  },
+  {
+   "lat": -50.951611,
+   "lon": -73.168478,
+   "name": "Cerro Blanco Sur",
+   "ele": 2002
+  },
+  {
+   "lat": -51.001261,
+   "lon": -72.998525,
+   "name": "Cuerno Este",
+   "ele": 2000
+  },
+  {
+   "lat": -50.971931,
+   "lon": -73.115117,
+   "name": "Cerro Cota 2000",
+   "ele": 2000
+  },
+  {
+   "lat": -50.107143,
+   "lon": -72.993031,
+   "name": "Cerro Punto Alto",
+   "ele": 1993
+  },
+  {
+   "lat": -49.137136,
+   "lon": -73.213191,
+   "name": "Cerro Lliboutry",
+   "ele": 1980
+  },
+  {
+   "lat": -48.193444,
+   "lon": -72.429805,
+   "name": "Cerro Campanario",
+   "ele": 1978
+  },
+  {
+   "lat": -50.13383,
+   "lon": -72.960198,
+   "name": "Cerro de Los Fósiles",
+   "ele": 1969,
+   "wikidata": "Q21839715"
+  },
+  {
+   "lat": -48.677359,
+   "lon": -73.164005,
+   "name": "Cerro Mocho",
+   "ele": 1962
+  },
+  {
+   "lat": -49.292914,
+   "lon": -73.079208,
+   "name": "El Mocho",
+   "ele": 1953
+  },
+  {
+   "lat": -50.946859,
+   "lon": -73.062342,
+   "name": "Punta Catalina",
+   "ele": 1950
+  },
+  {
+   "lat": -49.332331,
+   "lon": -72.439506,
+   "name": "Cerro Cangrejo",
+   "ele": 1944,
+   "wikidata": "Q21843992"
+  },
+  {
+   "lat": -49.726953,
+   "lon": -73.388372,
+   "name": "Cerro Arturo Merino Benítez / Cerro Capitán Olezza",
+   "ele": 1942
+  },
+  {
+   "lat": -50.807916,
+   "lon": -72.23463,
+   "name": "Cerro Tridente",
+   "ele": 1940,
+   "wikidata": "Q21831918"
+  },
+  {
+   "lat": -48.939456,
+   "lon": -72.914193,
+   "name": "Cerro El Trueno",
+   "ele": 1937
+  },
+  {
+   "lat": -48.41554,
+   "lon": -73.107065,
+   "name": "Cerro Mayo",
+   "ele": 1930
+  },
+  {
+   "lat": -50.951151,
+   "lon": -73.106436,
+   "name": "Cerro Los Gemelos",
+   "ele": 1930
+  },
+  {
+   "lat": -50.839676,
+   "lon": -73.155497,
+   "name": "Cerro Ohnet",
+   "ele": 1927,
+   "wikidata": "Q22461649"
+  },
+  {
+   "lat": -49.304148,
+   "lon": -72.625935,
+   "name": "Cerro Sombrero",
+   "ele": 1920
+  },
+  {
+   "lat": -51.157654,
+   "lon": -73.52145,
+   "name": "Cerro Travesía",
+   "ele": 1913
+  },
+  {
+   "lat": -50.908986,
+   "lon": -73.418198,
+   "name": "Cerro Blanco",
+   "ele": 1910
+  },
+  {
+   "lat": -48.785573,
+   "lon": -72.657938,
+   "name": "Cerro Cascabel",
+   "ele": 1908
+  },
+  {
+   "lat": -48.490356,
+   "lon": -72.277519,
+   "name": "Cerro Hatcher",
+   "ele": 1895,
+   "wikidata": "Q21840318"
+  },
+  {
+   "lat": -48.042175,
+   "lon": -72.428066,
+   "name": "Cerro Cono",
+   "ele": 1890
+  },
+  {
+   "lat": -49.240923,
+   "lon": -73.041901,
+   "name": "Cerro Eléctrico oeste",
+   "ele": 1882
+  },
+  {
+   "lat": -50.646611,
+   "lon": -72.401105,
+   "name": "Cerro Redondo",
+   "ele": 1882
+  },
+  {
+   "lat": -50.892491,
+   "lon": -73.153657,
+   "name": "Cerro Paine Chico Norte",
+   "ele": 1880
+  },
+  {
+   "lat": -49.254227,
+   "lon": -72.580285,
+   "name": "Cerro Cordón",
+   "ele": 1879
+  },
+  {
+   "lat": -50.931143,
+   "lon": -73.014702,
+   "name": "Cerro Tridente",
+   "ele": 1878
+  },
+  {
+   "lat": -50.893077,
+   "lon": -73.180797,
+   "name": "Punta Puma",
+   "ele": 1866
+  },
+  {
+   "lat": -50.133444,
+   "lon": -72.886623,
+   "name": "Cerro Hobler",
+   "ele": 1864,
+   "wikidata": "Q21840360"
+  },
+  {
+   "lat": -48.517509,
+   "lon": -72.501837,
+   "name": "Cerro Submarino",
+   "ele": 1851
+  },
+  {
+   "lat": -50.66165,
+   "lon": -72.43297,
+   "name": "Cerro Pilar",
+   "ele": 1849
+  },
+  {
+   "lat": -48.072066,
+   "lon": -72.383934,
+   "name": "Cerro Rasgado",
+   "ele": 1840,
+   "wikidata": "Q22468022"
+  },
+  {
+   "lat": -49.02141,
+   "lon": -72.804617,
+   "name": "Cerro El Rodado",
+   "ele": 1838,
+   "wikidata": "Q114411763"
+  },
+  {
+   "lat": -49.378275,
+   "lon": -73.127808,
+   "name": "Cerro Azara",
+   "ele": 1834
+  },
+  {
+   "lat": -50.620472,
+   "lon": -72.261474,
+   "name": "Cerro Verlika",
+   "ele": 1832,
+   "wikidata": "Q21832332"
+  },
+  {
+   "lat": -50.619421,
+   "lon": -72.156934,
+   "name": "Cerro Mangrullo",
+   "ele": 1824,
+   "wikidata": "Q21839487"
+  },
+  {
+   "lat": -49.269391,
+   "lon": -72.99246,
+   "name": "Cerro Madsen",
+   "ele": 1806
+  },
+  {
+   "lat": -49.344184,
+   "lon": -72.744709,
+   "name": "Cerro El Faldeo",
+   "ele": 1803
+  },
+  {
+   "lat": -48.887198,
+   "lon": -72.876637,
+   "name": "Cerro Colorado",
+   "ele": 1799
+  },
+  {
+   "lat": -50.142524,
+   "lon": -73.754225,
+   "name": "Cerro Solitario",
+   "ele": 1799
+  },
+  {
+   "lat": -48.096983,
+   "lon": -72.596296,
+   "name": "Cerro Pamposo",
+   "ele": 1798
+  },
+  {
+   "lat": -48.29007,
+   "lon": -72.390697,
+   "name": "Cerro Quilla",
+   "ele": 1794
+  },
+  {
+   "lat": -50.91331,
+   "lon": -73.192107,
+   "name": "Cerro Cóndor",
+   "ele": 1790
+  },
+  {
+   "lat": -49.747302,
+   "lon": -72.923679,
+   "name": "Cerro Huemules",
+   "ele": 1784,
+   "wikidata": "Q21840524"
+  },
+  {
+   "lat": -50.645061,
+   "lon": -72.213682,
+   "name": "Cerro Bote",
+   "ele": 1773,
+   "wikidata": "Q21841978"
+  },
+  {
+   "lat": -49.518327,
+   "lon": -73.265522,
+   "name": "Cerro Puntudo",
+   "ele": 1768,
+   "wikidata": "Q115944306"
+  },
+  {
+   "lat": -50.919932,
+   "lon": -73.184998,
+   "name": "Cerro Amistad",
+   "ele": 1766
+  },
+  {
+   "lat": -48.546596,
+   "lon": -73.064657,
+   "name": "Cerro Mellizo Norte",
+   "ele": 1758
+  },
+  {
+   "lat": -48.583204,
+   "lon": -71.675915,
+   "name": "Cerro Dos Cuernos",
+   "ele": 1758,
+   "wikidata": "Q21841892"
+  },
+  {
+   "lat": -50.920751,
+   "lon": -73.190092,
+   "name": "Cerro Traición",
+   "ele": 1752
+  },
+  {
+   "lat": -49.601862,
+   "lon": -73.755913,
+   "name": "Cerro Lucero",
+   "ele": 1752
+  },
+  {
+   "lat": -48.212781,
+   "lon": -72.625407,
+   "name": "Cerro Pilares",
+   "ele": 1742
+  },
+  {
+   "lat": -48.943556,
+   "lon": -72.76582,
+   "name": "Cerro Tobi",
+   "ele": 1736,
+   "wikidata": "Q22471779"
+  },
+  {
+   "lat": -50.959258,
+   "lon": -73.082419,
+   "name": "Cerro Aleta de Tiburón",
+   "ele": 1717
+  },
+  {
+   "lat": -48.981243,
+   "lon": -72.959035,
+   "name": "Cerro Demetrio",
+   "ele": 1717
+  },
+  {
+   "lat": -50.215224,
+   "lon": -73.188485,
+   "name": "Cerro Negro",
+   "ele": 1710
+  },
+  {
+   "lat": -49.297753,
+   "lon": -72.982525,
+   "name": "Loma de las Pizarras",
+   "ele": 1691
+  },
+  {
+   "lat": -50.451028,
+   "lon": -73.22686,
+   "name": "Cerro Catedral",
+   "ele": 1684
+  },
+  {
+   "lat": -50.913119,
+   "lon": -72.991411,
+   "name": "Cerro Oggioni",
+   "ele": 1662
+  },
+  {
+   "lat": -50.011314,
+   "lon": -72.815224,
+   "name": "Cerro Camilo",
+   "ele": 1652,
+   "wikidata": "Q21843856"
+  },
+  {
+   "lat": -51.379258,
+   "lon": -72.850166,
+   "name": "Cerro Tenerife",
+   "ele": 1650,
+   "wikidata": "Q27919361"
+  },
+  {
+   "lat": -49.13468,
+   "lon": -73.704743,
+   "name": "Cerro Sepúlveda",
+   "ele": 1641
+  },
+  {
+   "lat": -50.514515,
+   "lon": -73.074777,
+   "name": "Cerro Perito Moreno",
+   "ele": 1640
+  },
+  {
+   "lat": -48.038534,
+   "lon": -72.543302,
+   "name": "Cerro Vista Alegre",
+   "ele": 1632
+  },
+  {
+   "lat": -50.748201,
+   "lon": -72.623096,
+   "name": "Cerro Obelisco",
+   "ele": 1623
+  },
+  {
+   "lat": -50.44995,
+   "lon": -73.197467,
+   "name": "Cerro Lechuza",
+   "ele": 1620
+  },
+  {
+   "lat": -49.386891,
+   "lon": -73.32123,
+   "name": "Cerro Viedma",
+   "ele": 1620,
+   "wikidata": "Q312929"
+  },
+  {
+   "lat": -50.959996,
+   "lon": -73.119415,
+   "name": "Punta Quirquinchos",
+   "ele": 1620
+  },
+  {
+   "lat": -49.705871,
+   "lon": -73.380656,
+   "name": "Cerro Capitán Punto Muñoz / Cerro Piloto Luis Pardo",
+   "ele": 1618
+  },
+  {
+   "lat": -50.269558,
+   "lon": -73.033146,
+   "name": "Cerro Punto Alto",
+   "ele": 1612
+  },
+  {
+   "lat": -51.151641,
+   "lon": -73.198787,
+   "name": "Cerro Ferrier",
+   "ele": 1600
+  },
+  {
+   "lat": -49.903693,
+   "lon": -72.902486,
+   "name": "Cerro Cuadrado",
+   "ele": 1578
+  },
+  {
+   "lat": -50.396061,
+   "lon": -72.988212,
+   "name": "Cerro Buenos Aires",
+   "ele": 1572,
+   "wikidata": "Q21846834"
+  },
+  {
+   "lat": -50.434031,
+   "lon": -72.845826,
+   "name": "Cerro Mitre",
+   "ele": 1565,
+   "wikidata": "Q21837448"
+  },
+  {
+   "lat": -50.673992,
+   "lon": -72.730019,
+   "name": "Cerro Divisadero",
+   "ele": 1562,
+   "wikidata": "Q23646741"
+  },
+  {
+   "lat": -49.573126,
+   "lon": -73.751614,
+   "name": "Cerro Gemelos Negros",
+   "ele": 1553
+  },
+  {
+   "lat": -50.706199,
+   "lon": -72.941197,
+   "name": "Cerro Paz",
+   "ele": 1538
+  },
+  {
+   "lat": -50.520559,
+   "lon": -72.429104,
+   "name": "Cerro Cuncuna",
+   "ele": 1536,
+   "wikidata": "Q21841667"
+  },
+  {
+   "lat": -50.132155,
+   "lon": -72.800206,
+   "name": "Cerro Horqueta",
+   "ele": 1536,
+   "wikidata": "Q21840434"
+  },
+  {
+   "lat": -51.053376,
+   "lon": -73.360305,
+   "name": "Cerro Zapata",
+   "ele": 1530,
+   "wikidata": "Q22474039"
+  },
+  {
+   "lat": -50.802383,
+   "lon": -72.958737,
+   "name": "Cerro Diente",
+   "ele": 1527
+  },
+  {
+   "lat": -49.359442,
+   "lon": -72.967521,
+   "name": "Loma del Pliegue Tumbado",
+   "ele": 1520
+  },
+  {
+   "lat": -50.806858,
+   "lon": -73.05079,
+   "name": "Cerro Agudo",
+   "ele": 1517,
+   "wikidata": "Q23655609"
+  },
+  {
+   "lat": -48.334568,
+   "lon": -72.089965,
+   "name": "Punta de Las Vacas",
+   "ele": 1510
+  },
+  {
+   "lat": -50.451397,
+   "lon": -72.386741,
+   "name": "Moyano",
+   "ele": 1509
+  },
+  {
+   "lat": -50.451385,
+   "lon": -72.386794,
+   "name": "Cerro Moyano",
+   "ele": 1509,
+   "wikidata": "Q21849923"
+  },
+  {
+   "lat": -50.934889,
+   "lon": -72.908681,
+   "name": "Cerro Paine",
+   "ele": 1508
+  },
+  {
+   "lat": -50.237163,
+   "lon": -73.123274,
+   "name": "Cerro Puesto La Diana",
+   "ele": 1505
+  },
+  {
+   "lat": -51.010839,
+   "lon": -73.656206,
+   "name": "Cerro Mano del Diablo",
+   "ele": 1490
+  },
+  {
+   "lat": -51.219954,
+   "lon": -73.162421,
+   "name": "Cerro Donoso",
+   "ele": 1480
+  },
+  {
+   "lat": -50.722195,
+   "lon": -73.153833,
+   "name": "Torre Dedo del César",
+   "ele": 1480
+  },
+  {
+   "lat": -48.97866,
+   "lon": -72.30624,
+   "name": "Cerro Chacabuco",
+   "ele": 1479
+  },
+  {
+   "lat": -50.550459,
+   "lon": -72.573529,
+   "name": "Cerro Mesa de Truco",
+   "ele": 1479,
+   "wikidata": "Q21837353"
+  },
+  {
+   "lat": -48.905609,
+   "lon": -72.737045,
+   "name": "Cerro Martínez de Rozas",
+   "ele": 1464
+  },
+  {
+   "lat": -51.472278,
+   "lon": -72.809653,
+   "name": "Cerro Esmeralda",
+   "ele": 1460
+  },
+  {
+   "lat": -51.382154,
+   "lon": -73.010867,
+   "name": "Cerro Chacabuco",
+   "ele": 1458
+  },
+  {
+   "lat": -51.458733,
+   "lon": -72.826749,
+   "name": "Monte Pirámide del Prat",
+   "ele": 1446
+  },
+  {
+   "lat": -50.546805,
+   "lon": -72.642938,
+   "name": "Cerro del Fraile",
+   "ele": 1445,
+   "wikidata": "Q21839723"
+  },
+  {
+   "lat": -50.775,
+   "lon": -73.1025,
+   "name": "Cerro Daudet",
+   "ele": 1442,
+   "wikidata": "Q2946754"
+  },
+  {
+   "lat": -50.939264,
+   "lon": -73.581442,
+   "name": "Volcán Reclus",
+   "ele": 1437,
+   "wikidata": "Q548229",
+   "volcano": true
+  },
+  {
+   "lat": -48.410738,
+   "lon": -73.23644,
+   "name": "Cerro Nublado",
+   "ele": 1430
+  },
+  {
+   "lat": -50.510173,
+   "lon": -72.414548,
+   "name": "Cerro Bayo",
+   "ele": 1430,
+   "wikidata": "Q21846362"
+  },
+  {
+   "lat": -50.273872,
+   "lon": -72.948499,
+   "name": "Cerro Avellaneda",
+   "ele": 1424,
+   "wikidata": "Q21845970"
+  },
+  {
+   "lat": -49.786412,
+   "lon": -73.200234,
+   "name": "Cerro Yumil",
+   "ele": 1421
+  },
+  {
+   "lat": -49.040155,
+   "lon": -72.114672,
+   "name": "Cerro El Moro",
+   "ele": 1410
+  },
+  {
+   "lat": -50.97827,
+   "lon": -73.102591,
+   "name": "Cerro Castillo",
+   "ele": 1410
+  },
+  {
+   "lat": -50.595171,
+   "lon": -72.549099,
+   "name": "Cerro Solo",
+   "ele": 1407,
+   "wikidata": "Q21834477"
+  },
+  {
+   "lat": -50.597643,
+   "lon": -72.398469,
+   "name": "Cerro Morado",
+   "ele": 1386,
+   "wikidata": "Q21837611"
+  },
+  {
+   "lat": -50.997526,
+   "lon": -73.002475,
+   "name": "Cuerno Chico",
+   "ele": 1380
+  },
+  {
+   "lat": -50.559497,
+   "lon": -72.306768,
+   "name": "Cerro Centinela",
+   "ele": 1368
+  },
+  {
+   "lat": -50.463846,
+   "lon": -72.177436,
+   "name": "Cerro Campo 25 de Mayo",
+   "ele": 1358
+  },
+  {
+   "lat": -50.463729,
+   "lon": -72.177923,
+   "name": "Campo de Mayo",
+   "ele": 1357
+  },
+  {
+   "lat": -50.456429,
+   "lon": -72.323936,
+   "name": "Cerro Redondo",
+   "ele": 1355,
+   "wikidata": "Q21833324"
+  },
+  {
+   "lat": -48.289305,
+   "lon": -73.089363,
+   "name": "Cerro Horacio",
+   "ele": 1325
+  },
+  {
+   "lat": -48.384872,
+   "lon": -73.094631,
+   "name": "Cerro Esperanza",
+   "ele": 1320
+  },
+  {
+   "lat": -50.51963,
+   "lon": -72.587973,
+   "name": "Cerro Freile",
+   "ele": 1315,
+   "wikidata": "Q21839739"
+  },
+  {
+   "lat": -49.064194,
+   "lon": -73.78257,
+   "name": "Cerro Piedra Colgada",
+   "ele": 1303
+  },
+  {
+   "lat": -49.963897,
+   "lon": -72.706723,
+   "name": "Cerro Mora",
+   "ele": 1299
+  },
+  {
+   "lat": -50.889837,
+   "lon": -72.467405,
+   "name": "Cerro Guido",
+   "ele": 1298,
+   "wikidata": "Q23643544"
+  },
+  {
+   "lat": -50.5668,
+   "lon": -72.780917,
+   "name": "Cerro de los Cristales",
+   "ele": 1296,
+   "wikidata": "Q21841515"
+  },
+  {
+   "lat": -49.08384,
+   "lon": -71.815132,
+   "name": "Cerro Colorado",
+   "ele": 1294
+  },
+  {
+   "lat": -50.473432,
+   "lon": -72.056413,
+   "name": "Cerro Sombrero",
+   "ele": 1290
+  },
+  {
+   "lat": -49.72604,
+   "lon": -72.708768,
+   "name": "Cerro Pico Negro",
+   "ele": 1279,
+   "wikidata": "Q21835592"
+  },
+  {
+   "lat": -50.007932,
+   "lon": -72.477356,
+   "name": "Cerro Loyola O Mirador",
+   "ele": 1267
+  },
+  {
+   "lat": -50.176176,
+   "lon": -72.876441,
+   "name": "Cerro Castillo",
+   "ele": 1258,
+   "wikidata": "Q21844314"
+  },
+  {
+   "lat": -50.487341,
+   "lon": -72.137701,
+   "name": "Cerro Negro O León",
+   "ele": 1256
+  },
+  {
+   "lat": -50.007335,
+   "lon": -71.731791,
+   "name": "Cerro Colorado",
+   "ele": 1235
+  },
+  {
+   "lat": -48.353973,
+   "lon": -72.310244,
+   "name": "Cerro Mayer",
+   "ele": 1220
+  },
+  {
+   "lat": -49.257025,
+   "lon": -72.927829,
+   "name": "Polo",
+   "ele": 1188
+  },
+  {
+   "lat": -48.316173,
+   "lon": -73.095134,
+   "name": "Cerro Menor",
+   "ele": 1160
+  },
+  {
+   "lat": -50.711632,
+   "lon": -72.156514,
+   "name": "Cerro Puesto La Piedra",
+   "ele": 1155,
+   "wikidata": "Q21836122"
+  },
+  {
+   "lat": -49.763386,
+   "lon": -72.430138,
+   "name": "Cerro Las Tetas",
+   "ele": 1145
+  },
+  {
+   "lat": -48.86672,
+   "lon": -71.483988,
+   "name": "Cerro Bayo",
+   "ele": 1124
+  },
+  {
+   "lat": -50.355264,
+   "lon": -72.637894,
+   "name": "Frías",
+   "ele": 1095
+  },
+  {
+   "lat": -49.816539,
+   "lon": -72.336883,
+   "name": "Cerro Ratones",
+   "ele": 1085
+  },
+  {
+   "lat": -48.774548,
+   "lon": -71.746545,
+   "name": "Cerro Negro",
+   "ele": 1075
+  },
+  {
+   "lat": -50.750951,
+   "lon": -71.990821,
+   "name": "Cerro Pan de Azúcar",
+   "ele": 1075,
+   "wikidata": "Q21835126"
+  },
+  {
+   "lat": -50.399988,
+   "lon": -71.779661,
+   "name": "Cerro La Criolla",
+   "ele": 1074,
+   "wikidata": "Q21840926"
+  },
+  {
+   "lat": -49.021548,
+   "lon": -71.625776,
+   "name": "Cerro de Las Vacas",
+   "ele": 1072
+  },
+  {
+   "lat": -49.425146,
+   "lon": -71.914271,
+   "name": "Cerro Colorado",
+   "ele": 1065
+  },
+  {
+   "lat": -50.700434,
+   "lon": -73.076819,
+   "name": "Cerro Castillo",
+   "ele": 1046
+  },
+  {
+   "lat": -49.996154,
+   "lon": -71.118053,
+   "name": "Cerro Pirámide",
+   "ele": 1046
+  },
+  {
+   "lat": -49.779578,
+   "lon": -72.374008,
+   "name": "Cerro Colorado",
+   "ele": 1044,
+   "wikidata": "Q21841103"
+  },
+  {
+   "lat": -51.438593,
+   "lon": -72.100197,
+   "name": "Punta Alta",
+   "ele": 1040,
+   "wikidata": "Q21836162"
+  },
+  {
+   "lat": -51.145823,
+   "lon": -72.392178,
+   "name": "Cerro Cazador",
+   "ele": 1039,
+   "wikidata": "Q21844383"
+  },
+  {
+   "lat": -48.862012,
+   "lon": -72.462165,
+   "name": "Cerro Falucho",
+   "ele": 1038
+  },
+  {
+   "lat": -49.14616,
+   "lon": -72.043782,
+   "name": "Cerro Kach Aike",
+   "ele": 1008,
+   "wikidata": "Q21840783"
+  },
+  {
+   "lat": -50.853739,
+   "lon": -72.796451,
+   "name": "Sierra Masle",
+   "ele": 1000
+  },
+  {
+   "lat": -50.401288,
+   "lon": -72.139871,
+   "name": "Cerro Los Dos Mellizos",
+   "ele": 970,
+   "wikidata": "Q21839076"
+  },
+  {
+   "lat": -50.790704,
+   "lon": -72.059693,
+   "name": "Cerro Campana",
+   "ele": 964,
+   "wikidata": "Q21843870"
+  },
+  {
+   "lat": -48.221545,
+   "lon": -71.170738,
+   "name": "Cerro Las Horquetas",
+   "ele": 963
+  },
+  {
+   "lat": -48.025718,
+   "lon": -70.790445,
+   "name": "Cerro Manola",
+   "ele": 958
+  },
+  {
+   "lat": -50.032142,
+   "lon": -73.113554,
+   "name": "Cerro Carnero",
+   "ele": 916
+  },
+  {
+   "lat": -50.746826,
+   "lon": -72.048828,
+   "name": "Cerro Vizcachas",
+   "ele": 909,
+   "wikidata": "Q21838624"
+  },
+  {
+   "lat": -51.183935,
+   "lon": -72.352999,
+   "name": "Cerro Sin Nombre",
+   "ele": 903
+  },
+  {
+   "lat": -50.380432,
+   "lon": -72.287114,
+   "name": "Cerro Huyliches",
+   "ele": 898
+  },
+  {
+   "lat": -50.363237,
+   "lon": -72.220839,
+   "name": "Cerro Calafate",
+   "ele": 868
+  },
+  {
+   "lat": -49.309205,
+   "lon": -72.925027,
+   "name": "León",
+   "ele": 866,
+   "wikidata": "Q21838750"
+  },
+  {
+   "lat": -50.052805,
+   "lon": -71.081285,
+   "name": "Cerro Bi Aike",
+   "ele": 865,
+   "wikidata": "Q21846482"
+  },
+  {
+   "lat": -50.069267,
+   "lon": -71.155389,
+   "name": "Cerro Catedral",
+   "ele": 863,
+   "wikidata": "Q21844345"
+  },
+  {
+   "lat": -49.758404,
+   "lon": -70.722481,
+   "name": "Cerro Mank Aike",
+   "ele": 844
+  },
+  {
+   "lat": -50.630788,
+   "lon": -71.647393,
+   "name": "Cerro El Morro",
+   "ele": 837,
+   "wikidata": "Q21842143"
+  },
+  {
+   "lat": -50.113102,
+   "lon": -71.262862,
+   "name": "Cerro Mirador",
+   "ele": 823,
+   "wikidata": "Q21837429"
+  },
+  {
+   "lat": -50.39073,
+   "lon": -71.479389,
+   "name": "Cerro Los Escarchados",
+   "ele": 818,
+   "wikidata": "Q21839078"
+  },
+  {
+   "lat": -51.348772,
+   "lon": -72.321668,
+   "name": "Cerro Vega Mala",
+   "ele": 818,
+   "wikidata": "Q21832468"
+  },
+  {
+   "lat": -49.800843,
+   "lon": -71.793461,
+   "name": "Cerro Indice O Bandera",
+   "ele": 812
+  },
+  {
+   "lat": -50.050053,
+   "lon": -72.017494,
+   "name": "Cerro La Meseta",
+   "ele": 811,
+   "wikidata": "Q21838222"
+  },
+  {
+   "lat": -48.131963,
+   "lon": -70.758343,
+   "name": "Cerro El Cuadrado",
+   "ele": 807
+  },
+  {
+   "lat": -49.931314,
+   "lon": -73.175874,
+   "name": "Cerro Feruglio",
+   "ele": 779
+  },
+  {
+   "lat": -48.315929,
+   "lon": -71.72113,
+   "name": "Cerro Pan de Azúcar",
+   "ele": 776
+  },
+  {
+   "lat": -49.775246,
+   "lon": -71.313884,
+   "name": "Cerro Pari Aike",
+   "ele": 773,
+   "wikidata": "Q21835199"
+  },
+  {
+   "lat": -49.886756,
+   "lon": -72.213528,
+   "name": "Cerro Piramides",
+   "ele": 771
+  },
+  {
+   "lat": -48.145775,
+   "lon": -70.587349,
+   "name": "Cerro El Sillón",
+   "ele": 771
+  },
+  {
+   "lat": -50.327906,
+   "lon": -71.16836,
+   "name": "Cerro Grande",
+   "ele": 767,
+   "wikidata": "Q21840018"
+  },
+  {
+   "lat": -49.852095,
+   "lon": -73.20822,
+   "name": "Cerro Pulido",
+   "ele": 765
+  },
+  {
+   "lat": -50.009876,
+   "lon": -72.252271,
+   "name": "Cerro Cañadon de Los Potros",
+   "ele": 747,
+   "wikidata": "Q21843943"
+  },
+  {
+   "lat": -49.995506,
+   "lon": -70.693067,
+   "name": "Cerro La Laguna",
+   "ele": 745
+  },
+  {
+   "lat": -50.898488,
+   "lon": -71.785069,
+   "name": "Cerro Negro",
+   "ele": 745,
+   "wikidata": "Q21836501"
+  },
+  {
+   "lat": -49.229131,
+   "lon": -71.306834,
+   "name": "Cerro Cordón",
+   "ele": 740,
+   "wikidata": "Q21841325"
+  },
+  {
+   "lat": -49.89261,
+   "lon": -73.161874,
+   "name": "Cerro Colorado",
+   "ele": 734
+  },
+  {
+   "lat": -49.943283,
+   "lon": -72.016249,
+   "name": "Cerro Fortaleza",
+   "ele": 720,
+   "wikidata": "Q21839703"
+  },
+  {
+   "lat": -51.201001,
+   "lon": -72.304078,
+   "name": "Monte Chico",
+   "ele": 719,
+   "wikidata": "Q21849901"
+  },
+  {
+   "lat": -49.919515,
+   "lon": -71.88609,
+   "name": "Cerro Cuadrado",
+   "ele": 709
+  },
+  {
+   "lat": -49.415223,
+   "lon": -71.468688,
+   "name": "Cerro Bagual",
+   "ele": 660
+  },
+  {
+   "lat": -49.349311,
+   "lon": -72.878387,
+   "name": "Cerro Antena",
+   "ele": 655
+  },
+  {
+   "lat": -51.298228,
+   "lon": -72.310687,
+   "name": "Cerro Cancha Carrera",
+   "ele": 649,
+   "wikidata": "Q21843971"
+  },
+  {
+   "lat": -49.204388,
+   "lon": -70.947453,
+   "name": "Cerro Moro",
+   "ele": 643,
+   "wikidata": "Q21837651"
+  },
+  {
+   "lat": -49.325882,
+   "lon": -72.877956,
+   "name": "Cerro Paredón",
+   "ele": 642
+  },
+  {
+   "lat": -50.148741,
+   "lon": -71.238668,
+   "name": "Cerro Fortaleza",
+   "ele": 612,
+   "wikidata": "Q21839704"
+  },
+  {
+   "lat": -49.836831,
+   "lon": -72.111082,
+   "name": "Cerro Guacho",
+   "ele": 580
+  },
+  {
+   "lat": -50.829574,
+   "lon": -71.557631,
+   "name": "Cerro La Correntina",
+   "ele": 573,
+   "wikidata": "Q21840922"
+  },
+  {
+   "lat": -50.917256,
+   "lon": -71.570713,
+   "name": "Cerro La Paloma",
+   "ele": 565,
+   "wikidata": "Q21838264"
+  },
+  {
+   "lat": -50.601054,
+   "lon": -71.360096,
+   "name": "Cerro Estancia Ana",
+   "ele": 554,
+   "wikidata": "Q21842434"
+  },
+  {
+   "lat": -49.031639,
+   "lon": -70.532753,
+   "name": "Cerro Las Tetas",
+   "ele": 552
+  },
+  {
+   "lat": -50.471776,
+   "lon": -71.131961,
+   "name": "Morro de Piedra",
+   "ele": 527,
+   "wikidata": "Q21835622"
+  },
+  {
+   "lat": -51.37388,
+   "lon": -72.201442,
+   "name": "Cerro Tres Marías",
+   "ele": 511,
+   "wikidata": "Q21831878"
+  },
+  {
+   "lat": -49.721195,
+   "lon": -71.585167,
+   "name": "Cerro Redondo",
+   "ele": 502
+  },
+  {
+   "lat": -49.936947,
+   "lon": -73.10499,
+   "name": "Cerro Sombrero",
+   "ele": 502
+  },
+  {
+   "lat": -51.108128,
+   "lon": -71.425051,
+   "name": "Cerro Camporro",
+   "ele": 496,
+   "wikidata": "Q21843912"
+  },
+  {
+   "lat": -50.505737,
+   "lon": -70.857582,
+   "name": "Cerro Cuadrado",
+   "ele": 489,
+   "wikidata": "Q21841557"
+  },
+  {
+   "lat": -50.134183,
+   "lon": -71.567488,
+   "name": "Cerro Palenque",
+   "ele": 482,
+   "wikidata": "Q21835030"
+  },
+  {
+   "lat": -51.195635,
+   "lon": -71.577309,
+   "name": "Cerro Piramide",
+   "ele": 478,
+   "wikidata": "Q21835756"
+  },
+  {
+   "lat": -50.609366,
+   "lon": -70.953442,
+   "name": "Cerro Redondo",
+   "ele": 423,
+   "wikidata": "Q21833297"
+  },
+  {
+   "lat": -51.143349,
+   "lon": -71.650673,
+   "name": "Cerro Bandera",
+   "ele": 386,
+   "wikidata": "Q21846124"
+  },
+  {
+   "lat": -50.0903,
+   "lon": -73.16852,
+   "name": "Morro del Aguila",
+   "ele": 380
+  },
+  {
+   "lat": -51.469154,
+   "lon": -71.204323,
+   "name": "Cerro Minik Aike",
+   "ele": 365,
+   "wikidata": "Q21837422"
+  },
+  {
+   "lat": -50.293652,
+   "lon": -72.19338,
+   "name": "Cerro Gualicho",
+   "ele": 329
+  },
+  {
+   "lat": -51.062799,
+   "lon": -71.583179,
+   "name": "Cerro Patancha",
+   "ele": 328,
+   "wikidata": "Q21835257"
+  },
+  {
+   "lat": -50.185914,
+   "lon": -71.420363,
+   "name": "Cerro Redondo",
+   "ele": 304,
+   "wikidata": "Q21849970"
+  },
+  {
+   "lat": -50.221272,
+   "lon": -71.824463,
+   "name": "Cerro Pastoso",
+   "ele": 261,
+   "wikidata": "Q21835244"
+  },
+  {
+   "lat": -49.291077,
+   "lon": -73.083924,
+   "name": "Torre de la Medialuna"
+  },
+  {
+   "lat": -49.279007,
+   "lon": -73.04007,
+   "name": "Aguja Kakito"
+  },
+  {
+   "lat": -49.278458,
+   "lon": -73.099754,
+   "name": "Punta Philip",
+   "wikidata": "Q123183231"
+  },
+  {
+   "lat": -49.277895,
+   "lon": -73.100392,
+   "name": "Torre Atchachila"
+  },
+  {
+   "lat": -49.275748,
+   "lon": -73.099433,
+   "name": "Perfil de Indio"
+  },
+  {
+   "lat": -49.276877,
+   "lon": -73.100134,
+   "name": "Torre Inti"
+  },
+  {
+   "lat": -49.345457,
+   "lon": -73.113599,
+   "name": "Aguja Leo"
+  },
+  {
+   "lat": -49.349226,
+   "lon": -73.119217,
+   "name": "Aguja Chata"
+  },
+  {
+   "lat": -49.352133,
+   "lon": -73.125655,
+   "name": "Aguja Lise"
+  },
+  {
+   "lat": -49.33882,
+   "lon": -73.100627,
+   "name": "Punta Luca"
+  },
+  {
+   "lat": -49.339631,
+   "lon": -73.110077,
+   "name": "Mini Torre"
+  },
+  {
+   "lat": -49.339351,
+   "lon": -73.104365,
+   "name": "Punta Sordo"
+  },
+  {
+   "lat": -49.861667,
+   "lon": -73.500556,
+   "name": "Cerro Torino Este",
+   "wikidata": "Q113496450"
+  },
+  {
+   "lat": -49.266786,
+   "lon": -73.072049,
+   "name": "Punta Mujer"
+  },
+  {
+   "lat": -49.265053,
+   "lon": -73.073769,
+   "name": "Punta Anna"
+  },
+  {
+   "lat": -48.921898,
+   "lon": -72.906937,
+   "name": "Cerro Vicente"
+  },
+  {
+   "lat": -51.481384,
+   "lon": -72.634398,
+   "name": "Cerro Mocho o La Hoya"
+  },
+  {
+   "lat": -48.528116,
+   "lon": -73.229628,
+   "name": "Cerro El Celador"
+  },
+  {
+   "lat": -50.146815,
+   "lon": -73.36249,
+   "name": "Cerro Heimito"
+  },
+  {
+   "lat": -50.150899,
+   "lon": -73.300684,
+   "name": "Cerro Jani"
+  },
+  {
+   "lat": -49.198738,
+   "lon": -73.096803,
+   "name": "El Morro"
+  },
+  {
+   "lat": -49.279084,
+   "lon": -73.340196,
+   "name": "Cerro Ramón de Girard"
+  },
+  {
+   "lat": -49.534788,
+   "lon": -73.162859,
+   "name": "Cerro Venecia"
+  },
+  {
+   "lat": -49.31698,
+   "lon": -72.905067,
+   "name": "Cerro Rosado"
+  },
+  {
+   "lat": -49.112817,
+   "lon": -72.866095,
+   "name": "Cordón Martínez de Rozas",
+   "wikidata": "Q91355666"
+  },
+  {
+   "lat": -49.294264,
+   "lon": -73.07017,
+   "name": "El Mochito"
+  },
+  {
+   "lat": -49.167628,
+   "lon": -73.420615,
+   "name": "Cerro Koelliker"
+  },
+  {
+   "lat": -49.06296,
+   "lon": -73.005407,
+   "name": "Cerro Cagliero"
+  },
+  {
+   "lat": -49.164869,
+   "lon": -73.734165,
+   "name": "Cerro Marcela"
+  },
+  {
+   "lat": -48.45534,
+   "lon": -73.639319,
+   "name": "Punta Cassari"
+  },
+  {
+   "lat": -50.644986,
+   "lon": -73.320988,
+   "name": "Cerro Palois"
+  },
+  {
+   "lat": -49.895512,
+   "lon": -73.734384,
+   "name": "Punta Vayelmichael"
+  },
+  {
+   "lat": -49.672022,
+   "lon": -73.152713,
+   "name": "Cerro Anders"
+  },
+  {
+   "lat": -49.629484,
+   "lon": -73.190443,
+   "name": "Cerro Cacique"
+  },
+  {
+   "lat": -50.956107,
+   "lon": -73.165829,
+   "name": "Cerro Ostrava",
+   "wikidata": "Q109461948"
+  },
+  {
+   "lat": -48.448157,
+   "lon": -72.501485,
+   "name": "Cerro Santiago"
+  },
+  {
+   "lat": -48.664097,
+   "lon": -72.685746,
+   "name": "Cerro Tres Frailes"
+  },
+  {
+   "lat": -49.738239,
+   "lon": -73.040383,
+   "name": "Cerro Norte"
+  },
+  {
+   "lat": -50.643215,
+   "lon": -72.574407,
+   "name": "Cerro Negro",
+   "wikidata": "Q21836500"
+  },
+  {
+   "lat": -49.538801,
+   "lon": -73.549561,
+   "name": "Cerro Folco"
+  },
+  {
+   "lat": -50.487501,
+   "lon": -73.364886,
+   "name": "Cerro Dos Codos",
+   "wikidata": "Q116037175"
+  },
+  {
+   "lat": -50.608926,
+   "lon": -72.727346,
+   "name": "Cerro La Mesa",
+   "wikidata": "Q21838220"
+  },
+  {
+   "lat": -50.981934,
+   "lon": -72.034036,
+   "name": "Cerro Palique",
+   "wikidata": "Q21835035"
+  },
+  {
+   "lat": -50.214162,
+   "lon": -73.56095,
+   "name": "Cerro Julie",
+   "wikidata": "Q116038145"
+  },
+  {
+   "lat": -50.285675,
+   "lon": -73.516612,
+   "name": "Cerro Pío",
+   "wikidata": "Q116037931"
+  },
+  {
+   "lat": -50.326293,
+   "lon": -73.480004,
+   "name": "Punta Ilusión"
+  },
+  {
+   "lat": -50.335085,
+   "lon": -73.475826,
+   "name": "Cerro Khau"
+  },
+  {
+   "lat": -50.757626,
+   "lon": -73.166772,
+   "name": "Cerro Gemelos",
+   "wikidata": "Q131169667"
+  },
+  {
+   "lat": -48.827936,
+   "lon": -71.093481,
+   "name": "Cerro El Puntudo"
+  },
+  {
+   "lat": -48.975253,
+   "lon": -71.047617,
+   "name": "Cerro Gorro"
+  },
+  {
+   "lat": -48.919773,
+   "lon": -71.477096,
+   "name": "Cerro Kar Ken",
+   "wikidata": "Q21840785"
+  },
+  {
+   "lat": -48.438128,
+   "lon": -72.305329,
+   "name": "Cerro Narváez"
+  },
+  {
+   "lat": -51.259828,
+   "lon": -72.439092,
+   "name": "Cerro sol"
+  },
+  {
+   "lat": -49.275631,
+   "lon": -73.047999,
+   "name": "Aguja de la Silla",
+   "wikidata": "Q123174699"
+  },
+  {
+   "lat": -49.875891,
+   "lon": -73.600703,
+   "name": "Cerro Torino",
+   "wikidata": "Q113496172"
+  },
+  {
+   "lat": -50.850091,
+   "lon": -73.244031,
+   "name": "Cerro Mitre"
+  },
+  {
+   "lat": -49.865112,
+   "lon": -72.660059,
+   "name": "Cerro Bayo"
+  },
+  {
+   "lat": -49.881426,
+   "lon": -72.876182,
+   "name": "Cerro Pintado"
+  },
+  {
+   "lat": -49.234881,
+   "lon": -73.078589,
+   "name": "Cero Loma Blanca"
+  },
+  {
+   "lat": -49.241022,
+   "lon": -73.084692,
+   "name": "Gran Gendarme"
+  },
+  {
+   "lat": -49.250011,
+   "lon": -73.088913,
+   "name": "Aguja Tito Carrasco"
+  },
+  {
+   "lat": -49.252617,
+   "lon": -73.078828,
+   "name": "Aguja Stefan"
+  },
+  {
+   "lat": -49.261905,
+   "lon": -73.135594,
+   "name": "Los Colmillos"
+  },
+  {
+   "lat": -49.257063,
+   "lon": -73.137226,
+   "name": "Aguja Volonqui"
+  },
+  {
+   "lat": -49.213062,
+   "lon": -73.143721,
+   "name": "Cerro Marconi Central"
+  },
+  {
+   "lat": -49.219679,
+   "lon": -73.147724,
+   "name": "Cerro Marconi Sur"
+  },
+  {
+   "lat": -49.232156,
+   "lon": -73.145911,
+   "name": "Aguja Dumbo"
+  }
+ ]
+}

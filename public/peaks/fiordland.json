@@ -1,7 +1,14 @@
 {
  "region": "fiordland",
- "generated": "2026-08-13T09:16:20+00:00",
+ "generated": "2026-08-18T20:47:27+00:00",
  "peaks": [
+  {
+   "lat": -44.622342,
+   "lon": 168.410599,
+   "name": "East Peak",
+   "ele": 2830,
+   "wikidata": "Q31480651"
+  },
   {
    "lat": -44.623235,
    "lon": 168.402404,
@@ -9,13 +16,6 @@
    "name_en": "Mount Earnslaw",
    "ele": 2830,
    "wikidata": "Q6920530"
-  },
-  {
-   "lat": -44.622342,
-   "lon": 168.410599,
-   "name": "East Peak",
-   "ele": 2830,
-   "wikidata": "Q31480651"
   },
   {
    "lat": -44.6256,
@@ -146,18 +146,18 @@
    "wikidata": "Q31653049"
   },
   {
-   "lat": -44.551853,
-   "lon": 168.455125,
-   "name": "Osonzac Twins",
-   "ele": 2282,
-   "wikidata": "Q31653065"
-  },
-  {
    "lat": -44.844084,
    "lon": 168.008988,
    "name": "Flat Top Peak",
    "ele": 2282,
    "wikidata": "Q31649323"
+  },
+  {
+   "lat": -44.551853,
+   "lon": 168.455125,
+   "name": "Osonzac Twins",
+   "ele": 2282,
+   "wikidata": "Q31653065"
   },
   {
    "lat": -44.554574,
@@ -618,6 +618,13 @@
    "wikidata": "Q31654482"
   },
   {
+   "lat": -44.867239,
+   "lon": 168.466171,
+   "name": "Mount Alaska",
+   "ele": 1965,
+   "wikidata": "Q31653703"
+  },
+  {
    "lat": -44.772694,
    "lon": 167.977177,
    "name": "Mount Moir",
@@ -637,13 +644,6 @@
    "name": "Amphion Peak",
    "ele": 1965,
    "wikidata": "Q31653207"
-  },
-  {
-   "lat": -44.867239,
-   "lon": 168.466171,
-   "name": "Mount Alaska",
-   "ele": 1965,
-   "wikidata": "Q31653703"
   },
   {
    "lat": -44.772237,
@@ -1176,18 +1176,18 @@
    "wikidata": "Q31649268"
   },
   {
-   "lat": -44.806475,
-   "lon": 167.746858,
-   "name": "Mount Hart",
-   "ele": 1679,
-   "wikidata": "Q31649095"
-  },
-  {
    "lat": -44.540122,
    "lon": 168.223825,
    "name": "Fiery Peak",
    "ele": 1679,
    "wikidata": "Q31653159"
+  },
+  {
+   "lat": -44.806475,
+   "lon": 167.746858,
+   "name": "Mount Hart",
+   "ele": 1679,
+   "wikidata": "Q31649095"
   },
   {
    "lat": -45.23311,
@@ -1245,14 +1245,6 @@
    "wikidata": "Q31644989"
   },
   {
-   "lat": -45.69179,
-   "lon": 167.1683,
-   "name": "Tamatea Peak",
-   "name_en": "Tamatea Peak",
-   "ele": 1640,
-   "wikidata": "Q31647039"
-  },
-  {
    "lat": -44.542049,
    "lon": 168.19555,
    "name": "Welshman Peak",
@@ -1265,6 +1257,14 @@
    "name": "Mount Thunder",
    "ele": 1640,
    "wikidata": "Q31647551"
+  },
+  {
+   "lat": -45.69179,
+   "lon": 167.1683,
+   "name": "Tamatea Peak",
+   "name_en": "Tamatea Peak",
+   "ele": 1640,
+   "wikidata": "Q31647039"
   },
   {
    "lat": -45.64098,
@@ -1963,17 +1963,17 @@
    "wikidata": "Q31654740"
   },
   {
-   "lat": -44.773408,
-   "lon": 167.730791,
-   "name": "Mount Pillans",
-   "ele": 1391
-  },
-  {
    "lat": -44.781989,
    "lon": 167.739219,
    "name": "Mount Pillans",
    "ele": 1391,
    "wikidata": "Q31649079"
+  },
+  {
+   "lat": -44.773408,
+   "lon": 167.730791,
+   "name": "Mount Pillans",
+   "ele": 1391
   },
   {
    "lat": -44.947212,
@@ -2657,18 +2657,18 @@
    "ele": 1129
   },
   {
-   "lat": -44.985943,
-   "lon": 167.48349,
-   "name": "Middle Peak",
-   "ele": 1127,
-   "wikidata": "Q31643793"
-  },
-  {
    "lat": -44.971609,
    "lon": 168.458693,
    "name": "Big Geordie",
    "ele": 1127,
    "wikidata": "Q31654010"
+  },
+  {
+   "lat": -44.985943,
+   "lon": 167.48349,
+   "name": "Middle Peak",
+   "ele": 1127,
+   "wikidata": "Q31643793"
   },
   {
    "lat": -46.00937,
@@ -3057,18 +3057,18 @@
    "wikidata": "Q31482509"
   },
   {
-   "lat": -45.64648,
-   "lon": 166.75047,
-   "name": "Mount Patten",
-   "ele": 864,
-   "wikidata": "Q31644190"
-  },
-  {
    "lat": -44.699182,
    "lon": 168.478456,
    "name": "Cone Hill",
    "ele": 864,
    "wikidata": "Q31652823"
+  },
+  {
+   "lat": -45.64648,
+   "lon": 166.75047,
+   "name": "Mount Patten",
+   "ele": 864,
+   "wikidata": "Q31644190"
   },
   {
    "lat": -45.31345,
@@ -3645,10 +3645,86 @@
    "ele": 78
   },
   {
-   "lat": -46.24557,
-   "lon": 167.72758,
-   "name": "Stucks Hill",
-   "wikidata": "Q31648763"
+   "lat": -44.529264,
+   "lon": 168.195041,
+   "name": "Courtenay Peak",
+   "wikidata": "Q31646046"
+  },
+  {
+   "lat": -44.555173,
+   "lon": 168.190386,
+   "name": "Barrington Peak",
+   "wikidata": "Q31646022"
+  },
+  {
+   "lat": -44.569315,
+   "lon": 168.184181,
+   "name": "Frenchman Peak",
+   "wikidata": "Q31646010"
+  },
+  {
+   "lat": -44.60614,
+   "lon": 168.16097,
+   "name": "Prospector Peak",
+   "wikidata": "Q31645998"
+  },
+  {
+   "lat": -44.565464,
+   "lon": 168.052279,
+   "name": "Mount Dot",
+   "wikidata": "Q31645949"
+  },
+  {
+   "lat": -44.583807,
+   "lon": 168.039383,
+   "name": "Alice Peak",
+   "wikidata": "Q31645882"
+  },
+  {
+   "lat": -44.92006,
+   "lon": 167.987684,
+   "name": "Disappearing Peaks",
+   "wikidata": "Q31711914"
+  },
+  {
+   "lat": -44.97525,
+   "lon": 168.140806,
+   "name": "David Peaks",
+   "wikidata": "Q31649558"
+  },
+  {
+   "lat": -44.573607,
+   "lon": 168.295822,
+   "name": "East Peak"
+  },
+  {
+   "lat": -44.569122,
+   "lon": 168.28969,
+   "name": "West Peak"
+  },
+  {
+   "lat": -44.513779,
+   "lon": 168.276836,
+   "name": "Brenda Peak",
+   "wikidata": "Q31652030"
+  },
+  {
+   "lat": -44.522899,
+   "lon": 168.318179,
+   "name": "McBride Peaks",
+   "wikidata": "Q31727693"
+  },
+  {
+   "lat": -44.508592,
+   "lon": 168.347704,
+   "name": "Hedin Peak",
+   "wikidata": "Q31652122"
+  },
+  {
+   "lat": -44.665,
+   "lon": 167.933361,
+   "name": "Bowen Hill",
+   "wikidata": "Q31706733"
   },
   {
    "lat": -45.9613,
@@ -3853,12 +3929,6 @@
    "wikidata": "Q31648409"
   },
   {
-   "lat": -45.562116,
-   "lon": 167.739095,
-   "name": "Mount York",
-   "wikidata": "Q31647954"
-  },
-  {
    "lat": -44.833778,
    "lon": 167.477722,
    "name": "Bare Cone",
@@ -3965,86 +4035,16 @@
    "name": "Te Tumutu"
   },
   {
-   "lat": -44.529264,
-   "lon": 168.195041,
-   "name": "Courtenay Peak",
-   "wikidata": "Q31646046"
+   "lat": -45.562116,
+   "lon": 167.739095,
+   "name": "Mount York",
+   "wikidata": "Q31647954"
   },
   {
-   "lat": -44.555173,
-   "lon": 168.190386,
-   "name": "Barrington Peak",
-   "wikidata": "Q31646022"
-  },
-  {
-   "lat": -44.569315,
-   "lon": 168.184181,
-   "name": "Frenchman Peak",
-   "wikidata": "Q31646010"
-  },
-  {
-   "lat": -44.60614,
-   "lon": 168.16097,
-   "name": "Prospector Peak",
-   "wikidata": "Q31645998"
-  },
-  {
-   "lat": -44.565464,
-   "lon": 168.052279,
-   "name": "Mount Dot",
-   "wikidata": "Q31645949"
-  },
-  {
-   "lat": -44.583807,
-   "lon": 168.039383,
-   "name": "Alice Peak",
-   "wikidata": "Q31645882"
-  },
-  {
-   "lat": -44.92006,
-   "lon": 167.987684,
-   "name": "Disappearing Peaks",
-   "wikidata": "Q31711914"
-  },
-  {
-   "lat": -44.97525,
-   "lon": 168.140806,
-   "name": "David Peaks",
-   "wikidata": "Q31649558"
-  },
-  {
-   "lat": -44.573607,
-   "lon": 168.295822,
-   "name": "East Peak"
-  },
-  {
-   "lat": -44.569122,
-   "lon": 168.28969,
-   "name": "West Peak"
-  },
-  {
-   "lat": -44.513779,
-   "lon": 168.276836,
-   "name": "Brenda Peak",
-   "wikidata": "Q31652030"
-  },
-  {
-   "lat": -44.522899,
-   "lon": 168.318179,
-   "name": "McBride Peaks",
-   "wikidata": "Q31727693"
-  },
-  {
-   "lat": -44.508592,
-   "lon": 168.347704,
-   "name": "Hedin Peak",
-   "wikidata": "Q31652122"
-  },
-  {
-   "lat": -44.665,
-   "lon": 167.933361,
-   "name": "Bowen Hill",
-   "wikidata": "Q31706733"
+   "lat": -46.24557,
+   "lon": 167.72758,
+   "name": "Stucks Hill",
+   "wikidata": "Q31648763"
   }
  ]
 }

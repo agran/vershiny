@@ -1,11 +1,11 @@
 {
  "region": "jan-mayen",
- "generated": "2026-08-13T09:16:22+00:00",
+ "generated": "2026-08-18T20:47:29+00:00",
  "peaks": [
   {
    "lat": 71.082203,
    "lon": -8.177768,
-   "name": "Beerenberg",
+   "name": "Бееренберг",
    "name_ru": "Бееренберг",
    "ele": 2277,
    "wikidata": "Q814113",
@@ -166,19 +166,19 @@
    "ele": 540
   },
   {
+   "lat": 70.916964,
+   "lon": -8.790989,
+   "name": "Midtfjellet",
+   "ele": 534,
+   "wikidata": "Q31550160"
+  },
+  {
    "lat": 70.904778,
    "lon": -8.848072,
    "name": "Ringkollen",
    "ele": 534,
    "wikidata": "Q31550130",
    "volcano": true
-  },
-  {
-   "lat": 70.916964,
-   "lon": -8.790989,
-   "name": "Midtfjellet",
-   "ele": 534,
-   "wikidata": "Q31550160"
   },
   {
    "lat": 70.915762,
@@ -237,18 +237,18 @@
    "wikidata": "Q140690710"
   },
   {
-   "lat": 70.91963,
-   "lon": -8.751472,
-   "name": "Trollslottet",
-   "ele": 419,
-   "wikidata": "Q140690612"
-  },
-  {
    "lat": 70.876465,
    "lon": -8.818932,
    "name": "Flykollen",
    "ele": 419,
    "wikidata": "Q31550309"
+  },
+  {
+   "lat": 70.91963,
+   "lon": -8.751472,
+   "name": "Trollslottet",
+   "ele": 419,
+   "wikidata": "Q140690612"
   },
   {
    "lat": 70.933685,
@@ -323,18 +323,18 @@
    "wikidata": "Q140690467"
   },
   {
-   "lat": 70.835615,
-   "lon": -8.948339,
-   "name": "Hjelmen",
-   "ele": 341,
-   "wikidata": "Q31550246"
-  },
-  {
    "lat": 70.828768,
    "lon": -9.005351,
    "name": "Sørkappfjellet",
    "ele": 341,
    "wikidata": "Q140690852"
+  },
+  {
+   "lat": 70.835615,
+   "lon": -8.948339,
+   "name": "Hjelmen",
+   "ele": 341,
+   "wikidata": "Q31550246"
   },
   {
    "lat": 70.866645,

@@ -1,11 +1,11 @@
 {
  "region": "hawaii",
- "generated": "2026-08-13T09:16:20+00:00",
+ "generated": "2026-08-18T20:47:27+00:00",
  "peaks": [
   {
    "lat": 19.820667,
    "lon": -155.468071,
-   "name": "Mauna Kea",
+   "name": "Мауна-Кеа",
    "name_ru": "Мауна-Кеа",
    "ele": 4205,
    "wikidata": "Q131230",
@@ -19,16 +19,16 @@
    "wikidata": "Q49065236"
   },
   {
-   "lat": 19.475528,
-   "lon": -155.605703,
+   "lat": 19.471735,
+   "lon": -155.592374,
    "name": "Mauna Loa",
    "ele": 4169,
    "wikidata": "Q159762",
    "volcano": true
   },
   {
-   "lat": 19.471735,
-   "lon": -155.592374,
+   "lat": 19.475528,
+   "lon": -155.605703,
    "name": "Mauna Loa",
    "ele": 4169,
    "wikidata": "Q159762",
@@ -257,10 +257,42 @@
    "ele": 3072
   },
   {
+   "lat": 20.71009,
+   "lon": -156.253093,
+   "name": "вулкан Халеакала (пик Пуу-Улаула)",
+   "name_ru": "вулкан Халеакала (пик Пуу-Улаула)",
+   "name_en": "Red Hill",
+   "ele": 3055,
+   "wikidata": "Q49065713",
+   "volcano": true
+  },
+  {
+   "lat": 20.707276,
+   "lon": -156.256284,
+   "name": "Kolekole",
+   "ele": 3052,
+   "wikidata": "Q49042319"
+  },
+  {
+   "lat": 20.707988,
+   "lon": -156.250687,
+   "name": "Magnetic Peak",
+   "ele": 3052,
+   "wikidata": "Q49047428"
+  },
+  {
    "lat": 19.533086,
    "lon": -155.459401,
    "name": "Puʻuwahi",
    "ele": 3026
+  },
+  {
+   "lat": 20.713846,
+   "lon": -156.249837,
+   "name": "Pākaʻaoʻao",
+   "name_en": "White Hill",
+   "ele": 3006,
+   "wikidata": "Q49065869"
   },
   {
    "lat": 19.882514,
@@ -281,6 +313,13 @@
    "lon": -155.455683,
    "name": "Puʻukupanaha",
    "ele": 2929
+  },
+  {
+   "lat": 20.72694,
+   "lon": -156.241698,
+   "name": "Kilohana",
+   "ele": 2906,
+   "wikidata": "Q49041590"
   },
   {
    "lat": 19.75672,
@@ -310,6 +349,13 @@
    "wikidata": "Q49065085"
   },
   {
+   "lat": 20.700938,
+   "lon": -156.224791,
+   "name": "Haupaʻakea Peak",
+   "ele": 2788,
+   "wikidata": "Q49035300"
+  },
+  {
    "lat": 19.819281,
    "lon": -155.385615,
    "name": "Puʻukawaiwai",
@@ -324,6 +370,13 @@
    "wikidata": "Q49065521"
   },
   {
+   "lat": 20.696299,
+   "lon": -156.281799,
+   "name": "Kalepeamoa",
+   "ele": 2768,
+   "wikidata": "Q49040653"
+  },
+  {
    "lat": 19.877127,
    "lon": -155.393265,
    "name": "Kaaliali",
@@ -335,6 +388,13 @@
    "lon": -155.429372,
    "name": "Puʻukulua",
    "ele": 2748
+  },
+  {
+   "lat": 20.735484,
+   "lon": -156.178587,
+   "name": "Hanakauhi",
+   "ele": 2697,
+   "wikidata": "Q49034766"
   },
   {
    "lat": 19.496889,
@@ -361,6 +421,13 @@
    "lon": -155.563898,
    "name": "Puʻunānā",
    "ele": 2672
+  },
+  {
+   "lat": 20.690501,
+   "lon": -156.293091,
+   "name": "Kanahau",
+   "ele": 2660,
+   "wikidata": "Q49040717"
   },
   {
    "lat": 19.808112,
@@ -405,6 +472,12 @@
    "ele": 2518
   },
   {
+   "lat": 20.731089,
+   "lon": -156.148923,
+   "name": "Lauʻulu",
+   "ele": 2515
+  },
+  {
    "lat": 19.686891,
    "lon": -155.86358,
    "name": "Puu Lalakaukole",
@@ -412,11 +485,24 @@
    "wikidata": "Q49064777"
   },
   {
+   "lat": 20.701487,
+   "lon": -156.173277,
+   "name": "Haleakalā",
+   "ele": 2502
+  },
+  {
    "lat": 19.688722,
    "lon": -155.870416,
    "name": "Puʻuhonuaʻula",
    "ele": 2499,
    "wikidata": "Q49065088"
+  },
+  {
+   "lat": 20.716685,
+   "lon": -156.227782,
+   "name": "Kamaʻoliʻi",
+   "ele": 2490,
+   "wikidata": "Q49040702"
   },
   {
    "lat": 19.876898,
@@ -439,10 +525,50 @@
    "wikidata": "Q49038884"
   },
   {
+   "lat": 20.702098,
+   "lon": -156.2041,
+   "name": "Kumuʻiliahi",
+   "ele": 2479,
+   "wikidata": "Q49042572"
+  },
+  {
+   "lat": 20.718699,
+   "lon": -156.21942,
+   "name": "Puʻuomāui",
+   "ele": 2477,
+   "wikidata": "Q49065576"
+  },
+  {
+   "lat": 20.709483,
+   "lon": -156.221495,
+   "name": "Puʻuopele",
+   "ele": 2466,
+   "wikidata": "Q49065581"
+  },
+  {
+   "lat": 20.730296,
+   "lon": -156.140378,
+   "name": "Pōhakupālaha",
+   "ele": 2466,
+   "wikidata": "Q49065907"
+  },
+  {
    "lat": 19.610679,
    "lon": -155.571556,
    "name": "Koʻokoʻolau",
    "ele": 2454
+  },
+  {
+   "lat": 20.729136,
+   "lon": -156.1817,
+   "name": "Maunahina",
+   "ele": 2453
+  },
+  {
+   "lat": 20.692881,
+   "lon": -156.228209,
+   "name": "Puʻualiʻi",
+   "ele": 2452
   },
   {
    "lat": 19.551519,
@@ -492,6 +618,20 @@
    "wikidata": "Q49091516"
   },
   {
+   "lat": 20.718356,
+   "lon": -156.19357,
+   "name": "Puʻunaue",
+   "ele": 2343,
+   "wikidata": "Q49065525"
+  },
+  {
+   "lat": 20.716929,
+   "lon": -156.204405,
+   "name": "Kamoaopele",
+   "ele": 2343,
+   "wikidata": "Q49040708"
+  },
+  {
    "lat": 19.882373,
    "lon": -155.365126,
    "name": "Kalepa",
@@ -510,10 +650,37 @@
    "ele": 2334
   },
   {
+   "lat": 20.738108,
+   "lon": -156.143796,
+   "name": "Puʻuʻalaea",
+   "ele": 2333
+  },
+  {
    "lat": 19.724494,
    "lon": -155.428581,
    "name": "Loaloa",
    "ele": 2331
+  },
+  {
+   "lat": 20.729503,
+   "lon": -156.187498,
+   "name": "Puʻukumu",
+   "ele": 2328,
+   "wikidata": "Q49065337"
+  },
+  {
+   "lat": 20.722911,
+   "lon": -156.189573,
+   "name": "Puʻumāmane",
+   "ele": 2319,
+   "wikidata": "Q49065511"
+  },
+  {
+   "lat": 20.718699,
+   "lon": -156.19879,
+   "name": "Halāliʻi",
+   "ele": 2318,
+   "wikidata": "Q49034669"
   },
   {
    "lat": 19.904418,
@@ -530,6 +697,40 @@
    "wikidata": "Q49065709"
   },
   {
+   "lat": 20.730906,
+   "lon": -156.166624,
+   "name": "Kalua Awa",
+   "ele": 2301
+  },
+  {
+   "lat": 20.710337,
+   "lon": -156.136472,
+   "name": "Kuiki",
+   "ele": 2300,
+   "wikidata": "Q49042533"
+  },
+  {
+   "lat": 20.718333,
+   "lon": -156.205992,
+   "name": "Kaulupō",
+   "ele": 2295,
+   "wikidata": "Q49040851"
+  },
+  {
+   "lat": 20.712535,
+   "lon": -156.178404,
+   "name": "Puʻumaile",
+   "ele": 2289,
+   "wikidata": "Q49065468"
+  },
+  {
+   "lat": 20.71823,
+   "lon": -156.187815,
+   "name": "Puʻunole",
+   "ele": 2280,
+   "wikidata": "Q49065527"
+  },
+  {
    "lat": 19.833929,
    "lon": -155.594599,
    "name": "Puʻulāʻau",
@@ -542,6 +743,20 @@
    "name": "Puʻuʻulaʻula",
    "ele": 2262,
    "wikidata": "Q49065707"
+  },
+  {
+   "lat": 20.71992,
+   "lon": -156.182005,
+   "name": "Nāmanaokeakua",
+   "ele": 2256,
+   "wikidata": "Q49057773"
+  },
+  {
+   "lat": 20.713084,
+   "lon": -156.189024,
+   "name": "Puʻukauaua",
+   "ele": 2246,
+   "wikidata": "Q49065207"
   },
   {
    "lat": 19.634189,
@@ -570,6 +785,26 @@
    "wikidata": "Q49062833"
   },
   {
+   "lat": 20.755688,
+   "lon": -156.2489,
+   "name": "Puʻuoili",
+   "ele": 2222
+  },
+  {
+   "lat": 20.722728,
+   "lon": -156.174375,
+   "name": "Honokahua",
+   "ele": 2197,
+   "wikidata": "Q49036946"
+  },
+  {
+   "lat": 20.677134,
+   "lon": -156.273681,
+   "name": "Kāhua",
+   "ele": 2174,
+   "wikidata": "Q49042879"
+  },
+  {
    "lat": 19.678102,
    "lon": -155.849969,
    "name": "Umiahu",
@@ -582,6 +817,13 @@
    "name": "Omaokoili",
    "ele": 2160,
    "wikidata": "Q49058665"
+  },
+  {
+   "lat": 20.678904,
+   "lon": -156.3219,
+   "name": "Puʻukeōkea",
+   "ele": 2149,
+   "wikidata": "Q49065252"
   },
   {
    "lat": 19.746283,
@@ -630,6 +872,12 @@
    "ele": 2100
   },
   {
+   "lat": 20.717112,
+   "lon": -156.158506,
+   "name": "ʻŌʻilipuʻu",
+   "ele": 2099
+  },
+  {
    "lat": 19.909125,
    "lon": -155.46368,
    "name": "Puʻumoana",
@@ -651,11 +899,23 @@
    "wikidata": "Q49065523"
   },
   {
+   "lat": 20.772289,
+   "lon": -156.244384,
+   "name": "Puʻunianiau",
+   "ele": 2088
+  },
+  {
    "lat": 19.696295,
    "lon": -155.49578,
    "name": "Puʻunēnē",
    "ele": 2078,
    "wikidata": "Q49065534"
+  },
+  {
+   "lat": 20.723094,
+   "lon": -156.15521,
+   "name": "Lāʻie Puʻu",
+   "ele": 2066
   },
   {
    "lat": 19.686638,
@@ -664,14 +924,14 @@
    "ele": 2058
   },
   {
-   "lat": 19.91836,
-   "lon": -155.493065,
+   "lat": 19.91828,
+   "lon": -155.492977,
    "name": "Kaikipauula",
    "ele": 2026
   },
   {
-   "lat": 19.91828,
-   "lon": -155.492977,
+   "lat": 19.91836,
+   "lon": -155.493065,
    "name": "Kaikipauula",
    "ele": 2026
   },
@@ -724,6 +984,13 @@
    "wikidata": "Q49065636"
   },
   {
+   "lat": 20.671335,
+   "lon": -156.334595,
+   "name": "Polipoli",
+   "ele": 1961,
+   "wikidata": "Q49063077"
+  },
+  {
    "lat": 19.88233,
    "lon": -155.551875,
    "name": "Puʻuʻokihe",
@@ -763,6 +1030,18 @@
    "name": "Puʻukīpū",
    "ele": 1917,
    "wikidata": "Q49065380"
+  },
+  {
+   "lat": 20.780102,
+   "lon": -156.23181,
+   "name": "Puʻulūʻau",
+   "ele": 1905
+  },
+  {
+   "lat": 20.75172,
+   "lon": -156.269103,
+   "name": "Puʻupahu",
+   "ele": 1902
   },
   {
    "lat": 19.650514,
@@ -878,6 +1157,21 @@
    "name": "Hinakapoula",
    "ele": 1778,
    "wikidata": "Q49036561"
+  },
+  {
+   "lat": 20.890331,
+   "lon": -156.58631,
+   "name": "Puʻukukui",
+   "ele": 1764,
+   "wikidata": "Q7262536"
+  },
+  {
+   "lat": 20.889787,
+   "lon": -156.58524,
+   "name": "Maui Komohana",
+   "ele": 1764,
+   "wikidata": "Q2225973",
+   "volcano": true
   },
   {
    "lat": 19.767376,
@@ -1025,6 +1319,13 @@
    "wikidata": "Q49064850"
   },
   {
+   "lat": 20.660714,
+   "lon": -156.352479,
+   "name": "Puu Makua",
+   "ele": 1600,
+   "wikidata": "Q49064815"
+  },
+  {
    "lat": 20.07929,
    "lon": -155.703122,
    "name": "Puu o Umi",
@@ -1039,6 +1340,13 @@
    "wikidata": "Q49064726"
   },
   {
+   "lat": 22.055593,
+   "lon": -159.496674,
+   "name": "Kawaikini",
+   "ele": 1587,
+   "wikidata": "Q1269419"
+  },
+  {
    "lat": 19.562318,
    "lon": -155.796684,
    "name": "Puʻulehua",
@@ -1051,6 +1359,13 @@
    "name": "Nāʻōhuleʻelua",
    "ele": 1571,
    "wikidata": "Q49057793"
+  },
+  {
+   "lat": 22.070065,
+   "lon": -159.497901,
+   "name": "Wai‘ale‘ale",
+   "ele": 1569,
+   "wikidata": "Q1541056"
   },
   {
    "lat": 19.605532,
@@ -1085,11 +1400,32 @@
    "wikidata": "Q49065168"
   },
   {
+   "lat": 20.800304,
+   "lon": -156.242309,
+   "name": "Puʻuokākaʻe",
+   "ele": 1517,
+   "wikidata": "Q49065573"
+  },
+  {
    "lat": 19.574098,
    "lon": -155.799491,
    "name": "Keapuna",
    "ele": 1512,
    "wikidata": "Q49040966"
+  },
+  {
+   "lat": 21.106701,
+   "lon": -156.868421,
+   "name": "Kamakou",
+   "ele": 1506,
+   "wikidata": "Q6355310"
+  },
+  {
+   "lat": 21.107349,
+   "lon": -156.870825,
+   "name": "Uapa",
+   "ele": 1504,
+   "wikidata": "Q49086501"
   },
   {
    "lat": 20.094305,
@@ -1113,6 +1449,13 @@
    "wikidata": "Q49065881"
   },
   {
+   "lat": 21.109143,
+   "lon": -156.87544,
+   "name": "Puʻuowahaʻula",
+   "ele": 1462,
+   "wikidata": "Q49065585"
+  },
+  {
    "lat": 20.095282,
    "lon": -155.747006,
    "name": "Puu Mala",
@@ -1127,6 +1470,13 @@
    "wikidata": "Q49065433"
   },
   {
+   "lat": 21.104138,
+   "lon": -156.862806,
+   "name": "Kaholoapele",
+   "ele": 1450,
+   "wikidata": "Q49040568"
+  },
+  {
    "lat": 19.94953,
    "lon": -155.517025,
    "name": "Puʻupueo",
@@ -1138,6 +1488,19 @@
    "lon": -155.763303,
    "name": "Puʻupili",
    "ele": 1431
+  },
+  {
+   "lat": 20.866282,
+   "lon": -156.600715,
+   "name": "Helu",
+   "ele": 1428,
+   "wikidata": "Q49035928"
+  },
+  {
+   "lat": 20.685312,
+   "lon": -156.114377,
+   "name": "Puʻuahulili",
+   "ele": 1417
   },
   {
    "lat": 20.101691,
@@ -1161,6 +1524,13 @@
    "wikidata": "Q49057771"
   },
   {
+   "lat": 21.132702,
+   "lon": -156.849806,
+   "name": "Olokuʻi",
+   "ele": 1403,
+   "wikidata": "Q48839593"
+  },
+  {
    "lat": 19.517707,
    "lon": -155.283377,
    "name": "Na Lua Mahoe",
@@ -1168,11 +1538,32 @@
    "wikidata": "Q49056193"
   },
   {
+   "lat": 20.707895,
+   "lon": -156.067684,
+   "name": "Kaumakani",
+   "ele": 1400,
+   "wikidata": "Q49040859"
+  },
+  {
+   "lat": 20.848887,
+   "lon": -156.556829,
+   "name": "Hanaʻula",
+   "ele": 1398,
+   "wikidata": "Q49034773"
+  },
+  {
    "lat": 20.061895,
    "lon": -155.69592,
    "name": "Puʻupohoʻulaʻula",
    "ele": 1392,
    "wikidata": "Q49064944"
+  },
+  {
+   "lat": 21.114086,
+   "lon": -156.885633,
+   "name": "Kaunuohua",
+   "ele": 1379,
+   "wikidata": "Q49040868"
   },
   {
    "lat": 19.83173,
@@ -1189,11 +1580,45 @@
    "wikidata": "Q49064909"
   },
   {
+   "lat": 20.746288,
+   "lon": -156.298889,
+   "name": "Puʻumaho",
+   "ele": 1351,
+   "wikidata": "Q49065467"
+  },
+  {
+   "lat": 22.131041,
+   "lon": -159.495567,
+   "name": "Namolokama",
+   "ele": 1347
+  },
+  {
    "lat": 20.077703,
    "lon": -155.681211,
    "name": "Kaiholena",
    "ele": 1346,
    "wikidata": "Q49040582"
+  },
+  {
+   "lat": 20.650094,
+   "lon": -156.362184,
+   "name": "Keonehunehune",
+   "ele": 1335,
+   "wikidata": "Q49041286"
+  },
+  {
+   "lat": 20.647103,
+   "lon": -156.344911,
+   "name": "Puu Ouli",
+   "ele": 1329,
+   "wikidata": "Q49064901"
+  },
+  {
+   "lat": 21.1031,
+   "lon": -156.85182,
+   "name": "Pākuʻi",
+   "ele": 1321,
+   "wikidata": "Q49065873"
   },
   {
    "lat": 19.975104,
@@ -1217,6 +1642,12 @@
    "wikidata": "Q49064725"
   },
   {
+   "lat": 21.118908,
+   "lon": -156.896131,
+   "name": "Pēpēʻōpae",
+   "ele": 1310
+  },
+  {
    "lat": 20.102911,
    "lon": -155.762998,
    "name": "Puʻuiki",
@@ -1237,6 +1668,27 @@
    "ele": 1307
   },
   {
+   "lat": 22.154974,
+   "lon": -159.617472,
+   "name": "Pihea",
+   "ele": 1306,
+   "wikidata": "Q49061190"
+  },
+  {
+   "lat": 21.128307,
+   "lon": -156.897718,
+   "name": "Puʻualiʻi",
+   "ele": 1284,
+   "wikidata": "Q49065038"
+  },
+  {
+   "lat": 20.851695,
+   "lon": -156.598334,
+   "name": "Līhau",
+   "ele": 1278,
+   "wikidata": "Q49047283"
+  },
+  {
    "lat": 19.743533,
    "lon": -155.811883,
    "name": "Kalamalu",
@@ -1251,11 +1703,25 @@
    "wikidata": "Q49064801"
   },
   {
+   "lat": 21.1031,
+   "lon": -156.844495,
+   "name": "Kīlau",
+   "ele": 1247,
+   "wikidata": "Q49042899"
+  },
+  {
    "lat": 20.047491,
    "lon": -155.647885,
    "name": "Hāloa",
    "ele": 1247,
    "wikidata": "Q49034663"
+  },
+  {
+   "lat": 21.105297,
+   "lon": -156.894117,
+   "name": "Lehuʻula",
+   "ele": 1246,
+   "wikidata": "Q49043920"
   },
   {
    "lat": 19.747317,
@@ -1279,6 +1745,13 @@
    "wikidata": "Q49065675"
   },
   {
+   "lat": 21.122692,
+   "lon": -156.911512,
+   "name": "Hanalilolilo",
+   "ele": 1237,
+   "wikidata": "Q49034770"
+  },
+  {
    "lat": 19.880498,
    "lon": -155.669795,
    "name": "Mahoelua",
@@ -1300,11 +1773,30 @@
    "wikidata": "Q49063227"
   },
   {
+   "lat": 21.507747,
+   "lon": -158.142296,
+   "name": "Kaʻala",
+   "ele": 1229,
+   "wikidata": "Q1737629"
+  },
+  {
+   "lat": 20.793712,
+   "lon": -156.283325,
+   "name": "Puʻumahanalua",
+   "ele": 1225
+  },
+  {
    "lat": 20.103888,
    "lon": -155.770322,
    "name": "Puʻuhonu",
    "ele": 1225,
    "wikidata": "Q49064647"
+  },
+  {
+   "lat": 20.657114,
+   "lon": -156.249694,
+   "name": "Puʻupane",
+   "ele": 1224
   },
   {
    "lat": 20.128486,
@@ -1349,6 +1841,27 @@
    "ele": 1208
   },
   {
+   "lat": 20.651315,
+   "lon": -156.370302,
+   "name": "Keonenelu",
+   "ele": 1207,
+   "wikidata": "Q49041287"
+  },
+  {
+   "lat": 21.145336,
+   "lon": -156.860426,
+   "name": "Pōhakuʻulaʻula",
+   "ele": 1206,
+   "wikidata": "Q49065910"
+  },
+  {
+   "lat": 21.102307,
+   "lon": -156.901807,
+   "name": "Puʻukolekole",
+   "ele": 1205,
+   "wikidata": "Q49065300"
+  },
+  {
    "lat": 20.04511,
    "lon": -155.668881,
    "name": "Puʻuʻohu",
@@ -1363,12 +1876,6 @@
    "wikidata": "Q49064922"
   },
   {
-   "lat": 19.412081,
-   "lon": -155.253253,
-   "name": "Puʻu Puaʻi",
-   "ele": 1184
-  },
-  {
    "lat": 19.964483,
    "lon": -155.582211,
    "name": "Puʻukaliali",
@@ -1381,6 +1888,12 @@
    "name": "Puʻuiki",
    "ele": 1184,
    "wikidata": "Q49064669"
+  },
+  {
+   "lat": 19.412081,
+   "lon": -155.253253,
+   "name": "Puʻu Puaʻi",
+   "ele": 1184
   },
   {
    "lat": 19.830326,
@@ -1431,11 +1944,39 @@
    "wikidata": "Q49064906"
   },
   {
+   "lat": 22.106473,
+   "lon": -159.620514,
+   "name": "Kohua Ridge",
+   "ele": 1151,
+   "wikidata": "Q49691760"
+  },
+  {
    "lat": 20.054693,
    "lon": -155.664182,
    "name": "Puʻuiki",
    "ele": 1149,
    "wikidata": "Q49064665"
+  },
+  {
+   "lat": 21.114086,
+   "lon": -156.916517,
+   "name": "Puʻuokaʻeha",
+   "ele": 1143,
+   "wikidata": "Q49065563"
+  },
+  {
+   "lat": 22.163644,
+   "lon": -159.514,
+   "name": "Mamalahoa",
+   "ele": 1141,
+   "wikidata": "Q49056179"
+  },
+  {
+   "lat": 20.840708,
+   "lon": -156.581488,
+   "name": "Halepōhaku",
+   "ele": 1140,
+   "wikidata": "Q49034544"
   },
   {
    "lat": 19.943487,
@@ -1451,11 +1992,39 @@
    "ele": 1135
   },
   {
+   "lat": 21.097729,
+   "lon": -156.87721,
+   "name": "Puʻuhaha",
+   "ele": 1130,
+   "wikidata": "Q49065054"
+  },
+  {
    "lat": 19.547737,
    "lon": -155.221976,
    "name": "Puʻumakaʻala",
    "ele": 1130,
    "wikidata": "Q49065479"
+  },
+  {
+   "lat": 20.894481,
+   "lon": -156.546026,
+   "name": "Puʻukāne",
+   "ele": 1129,
+   "wikidata": "Q49065346"
+  },
+  {
+   "lat": 21.127514,
+   "lon": -156.928541,
+   "name": "Kaulahuki",
+   "ele": 1128,
+   "wikidata": "Q49040843"
+  },
+  {
+   "lat": 21.13612,
+   "lon": -156.926222,
+   "name": "Puʻukaeʻo",
+   "ele": 1119,
+   "wikidata": "Q49065108"
   },
   {
    "lat": 20.04511,
@@ -1472,6 +2041,27 @@
    "wikidata": "Q49064811"
   },
   {
+   "lat": 21.092907,
+   "lon": -156.879102,
+   "name": "Kaʻāpahu",
+   "ele": 1110,
+   "wikidata": "Q49040940"
+  },
+  {
+   "lat": 22.106255,
+   "lon": -159.671822,
+   "name": "Pu'u Hinahina",
+   "ele": 1108,
+   "wikidata": "Q49065077"
+  },
+  {
+   "lat": 20.642282,
+   "lon": -156.292908,
+   "name": "Manukani",
+   "ele": 1098,
+   "wikidata": "Q49047800"
+  },
+  {
    "lat": 20.007697,
    "lon": -155.520505,
    "name": "Puu Ohia",
@@ -1479,11 +2069,81 @@
    "wikidata": "Q49064890"
   },
   {
+   "lat": 21.132885,
+   "lon": -156.922926,
+   "name": "Kalāhuapueo",
+   "ele": 1080,
+   "wikidata": "Q49040683"
+  },
+  {
+   "lat": 20.910717,
+   "lon": -156.550909,
+   "name": "Keahiʻāloa",
+   "ele": 1073,
+   "wikidata": "Q49040953"
+  },
+  {
+   "lat": 21.489012,
+   "lon": -158.13241,
+   "name": "Puʻukalena",
+   "ele": 1068,
+   "wikidata": "Q49065133"
+  },
+  {
    "lat": 20.011481,
    "lon": -155.534787,
    "name": "Puʻukaʻala",
    "ele": 1067,
    "wikidata": "Q49064682"
+  },
+  {
+   "lat": 21.145336,
+   "lon": -156.893019,
+   "name": "ʻŌhiʻalele",
+   "ele": 1066,
+   "wikidata": "Q49091534"
+  },
+  {
+   "lat": 21.099316,
+   "lon": -156.884412,
+   "name": "Moʻoloa",
+   "ele": 1063,
+   "wikidata": "Q49055469"
+  },
+  {
+   "lat": 20.725534,
+   "lon": -156.046383,
+   "name": "Puʻukaukanu",
+   "ele": 1063,
+   "wikidata": "Q49065211"
+  },
+  {
+   "lat": 20.642281,
+   "lon": -156.365114,
+   "name": "Maunanu",
+   "ele": 1062,
+   "wikidata": "Q49048350"
+  },
+  {
+   "lat": 22.090153,
+   "lon": -159.679177,
+   "name": "Puʻu Lua",
+   "ele": 1060,
+   "wikidata": "Q49065443"
+  },
+  {
+   "lat": 22.102666,
+   "lon": -159.656283,
+   "name": "Ka'ou",
+   "ele": 1057,
+   "wikidata": "Q49040935"
+  },
+  {
+   "lat": 20.640939,
+   "lon": -156.31128,
+   "name": "Puʻukao",
+   "ele": 1055,
+   "wikidata": "Q49065178"
   },
   {
    "lat": 19.961309,
@@ -1499,6 +2159,13 @@
    "ele": 1053,
    "wikidata": "Q3300188",
    "volcano": true
+  },
+  {
+   "lat": 20.706125,
+   "lon": -156.049191,
+   "name": "Puʻuhoʻolio",
+   "ele": 1052,
+   "wikidata": "Q49065096"
   },
   {
    "lat": 20.035528,
@@ -1529,11 +2196,33 @@
    "wikidata": "Q49064707"
   },
   {
+   "lat": 22.044814,
+   "lon": -159.595191,
+   "name": "Ka‘anakeakua",
+   "ele": 1048,
+   "wikidata": "Q49040529"
+  },
+  {
    "lat": 19.371103,
    "lon": -155.205191,
    "name": "Puʻu Huluhulu",
    "ele": 1047,
    "wikidata": "Q3411149"
+  },
+  {
+   "lat": 22.080189,
+   "lon": -159.61406,
+   "name": "Kaluaha'ula Ridge",
+   "ele": 1044,
+   "wikidata": "Q49691259"
+  },
+  {
+   "lat": 20.639718,
+   "lon": -156.367921,
+   "name": "Kaimalo‘o",
+   "name_en": "Kaimaloo",
+   "ele": 1041,
+   "wikidata": "Q49040597"
   },
   {
    "lat": 19.213688,
@@ -1563,11 +2252,46 @@
    "wikidata": "Q49064924"
   },
   {
+   "lat": 20.812229,
+   "lon": -156.873141,
+   "name": "Lānaʻihale",
+   "ele": 1026,
+   "wikidata": "Q1708434"
+  },
+  {
    "lat": 20.031927,
    "lon": -155.680783,
    "name": "Hōkūʻula",
    "ele": 1026,
    "wikidata": "Q49036787"
+  },
+  {
+   "lat": 20.809227,
+   "lon": -156.867718,
+   "name": "Haʻalelepaʻakai",
+   "ele": 1026,
+   "wikidata": "Q49035727"
+  },
+  {
+   "lat": 21.512099,
+   "lon": -158.132809,
+   "name": "Kamaohanui",
+   "ele": 1024,
+   "wikidata": "Q49040700"
+  },
+  {
+   "lat": 20.645517,
+   "lon": -156.276489,
+   "name": "Nāwini",
+   "ele": 1019,
+   "wikidata": "Q49057787"
+  },
+  {
+   "lat": 21.115428,
+   "lon": -156.806254,
+   "name": "Puʻuʻōhelo",
+   "ele": 1018,
+   "wikidata": "Q49065719"
   },
   {
    "lat": 20.146491,
@@ -1577,11 +2301,66 @@
    "wikidata": "Q49043197"
   },
   {
+   "lat": 21.155102,
+   "lon": -156.866896,
+   "name": "Honukaʻupu",
+   "ele": 1013,
+   "wikidata": "Q49036951"
+  },
+  {
    "lat": 19.350899,
    "lon": -155.27648,
    "name": "Puu Ohale",
    "ele": 1011,
    "wikidata": "Q49064886"
+  },
+  {
+   "lat": 21.993517,
+   "lon": -159.499401,
+   "name": "Kapala'oa",
+   "ele": 1009,
+   "wikidata": "Q49040763"
+  },
+  {
+   "lat": 21.131298,
+   "lon": -156.940992,
+   "name": "Puʻumakaliʻiliʻi",
+   "ele": 1002,
+   "wikidata": "Q49065475"
+  },
+  {
+   "lat": 20.812511,
+   "lon": -156.290405,
+   "name": "Puʻuʻalaea",
+   "ele": 998
+  },
+  {
+   "lat": 21.111911,
+   "lon": -156.807878,
+   "name": "Kawaiuliuli",
+   "ele": 993,
+   "wikidata": "Q49040894"
+  },
+  {
+   "lat": 20.805308,
+   "lon": -156.864817,
+   "name": "Waiakeakua",
+   "ele": 992,
+   "wikidata": "Q49839783"
+  },
+  {
+   "lat": 20.640084,
+   "lon": -156.376405,
+   "name": "Kulanapahu",
+   "ele": 992,
+   "wikidata": "Q49042550"
+  },
+  {
+   "lat": 21.152721,
+   "lon": -156.937941,
+   "name": "Kaluahauoni",
+   "ele": 991,
+   "wikidata": "Q49040664"
   },
   {
    "lat": 19.976323,
@@ -1611,6 +2390,13 @@
    "ele": 984
   },
   {
+   "lat": 22.122718,
+   "lon": -159.413523,
+   "name": "Makaleha",
+   "ele": 980,
+   "wikidata": "Q49047600"
+  },
+  {
    "lat": 19.738709,
    "lon": -155.953302,
    "name": "Moanuiahea",
@@ -1624,6 +2410,13 @@
    "ele": 979
   },
   {
+   "lat": 20.766733,
+   "lon": -156.062191,
+   "name": "Pākī",
+   "ele": 978,
+   "wikidata": "Q49065874"
+  },
+  {
    "lat": 20.042302,
    "lon": -155.734799,
    "name": "Puʻukawaiwai",
@@ -1631,11 +2424,25 @@
    "wikidata": "Q49064720"
   },
   {
+   "lat": 20.818309,
+   "lon": -156.877513,
+   "name": "Puu Aalii",
+   "ele": 977,
+   "wikidata": "Q49064618"
+  },
+  {
    "lat": 20.056524,
    "lon": -155.62219,
    "name": "Puʻulala",
    "ele": 977,
    "wikidata": "Q49064774"
+  },
+  {
+   "lat": 22.156488,
+   "lon": -159.509339,
+   "name": "Pu'u Manu",
+   "ele": 977,
+   "wikidata": "Q49065487"
   },
   {
    "lat": 20.031927,
@@ -1652,10 +2459,51 @@
    "wikidata": "Q49064739"
   },
   {
+   "lat": 21.135693,
+   "lon": -156.938917,
+   "name": "Kikiakalā",
+   "ele": 968,
+   "wikidata": "Q49041530"
+  },
+  {
+   "lat": 20.638681,
+   "lon": -156.292175,
+   "name": "Uma",
+   "ele": 968,
+   "wikidata": "Q49086546"
+  },
+  {
+   "lat": 21.108898,
+   "lon": -156.811415,
+   "name": "Puʻulua",
+   "ele": 967,
+   "wikidata": "Q49065447"
+  },
+  {
+   "lat": 21.35799,
+   "lon": -157.787903,
+   "name": "Kōnāhuanui (K1)",
+   "ele": 960
+  },
+  {
+   "lat": 21.109847,
+   "lon": -156.809811,
+   "name": "Waiopipi",
+   "ele": 957,
+   "wikidata": "Q49087303"
+  },
+  {
    "lat": 20.137885,
    "lon": -155.789976,
    "name": "Puʻuʻōʻō",
    "ele": 955
+  },
+  {
+   "lat": 20.872081,
+   "lon": -156.533513,
+   "name": "Puu Lio",
+   "ele": 954,
+   "wikidata": "Q49064794"
   },
   {
    "lat": 20.031927,
@@ -1665,11 +2513,52 @@
    "wikidata": "Q49064695"
   },
   {
+   "lat": 21.353263,
+   "lon": -157.788623,
+   "name": "Kōnāhuanui (K2)",
+   "ele": 946
+  },
+  {
+   "lat": 21.977766,
+   "lon": -159.493369,
+   "name": "Kahili",
+   "ele": 942,
+   "wikidata": "Q49042871"
+  },
+  {
+   "lat": 21.441298,
+   "lon": -158.098691,
+   "name": "Puʻukaua",
+   "ele": 940,
+   "wikidata": "Q49065203"
+  },
+  {
+   "lat": 20.920483,
+   "lon": -156.546209,
+   "name": "Maunaalani",
+   "ele": 940,
+   "wikidata": "Q49048337"
+  },
+  {
    "lat": 19.122926,
    "lon": -155.784901,
    "name": "Honopū",
    "ele": 939,
    "wikidata": "Q49036948"
+  },
+  {
+   "lat": 21.414503,
+   "lon": -158.100277,
+   "name": "Palikea",
+   "ele": 938,
+   "wikidata": "Q49059482"
+  },
+  {
+   "lat": 20.833323,
+   "lon": -156.58869,
+   "name": "ʻUlaʻula",
+   "ele": 932,
+   "wikidata": "Q49091526"
   },
   {
    "lat": 20.12348,
@@ -1686,10 +2575,31 @@
    "wikidata": "Q49064792"
   },
   {
+   "lat": 20.939892,
+   "lon": -156.565802,
+   "name": "Keahikauō",
+   "ele": 923,
+   "wikidata": "Q49040950"
+  },
+  {
+   "lat": 21.118725,
+   "lon": -156.936231,
+   "name": "Kūpāʻia",
+   "ele": 922,
+   "wikidata": "Q49042916"
+  },
+  {
    "lat": 19.347724,
    "lon": -155.352468,
    "name": "Maunaiki",
    "ele": 920
+  },
+  {
+   "lat": 21.142895,
+   "lon": -156.822218,
+   "name": "Nāʻehu",
+   "ele": 919,
+   "wikidata": "Q49057791"
   },
   {
    "lat": 20.141913,
@@ -1712,11 +2622,32 @@
    "ele": 909
   },
   {
+   "lat": 22.034292,
+   "lon": -159.568799,
+   "name": "Kipole",
+   "ele": 908,
+   "wikidata": "Q49041851"
+  },
+  {
+   "lat": 20.93391,
+   "lon": -156.613228,
+   "name": "Kaulalewelewe",
+   "ele": 906,
+   "wikidata": "Q49040845"
+  },
+  {
    "lat": 19.951726,
    "lon": -155.654781,
    "name": "Heihei",
    "ele": 905,
    "wikidata": "Q49035843"
+  },
+  {
+   "lat": 20.739694,
+   "lon": -156.031184,
+   "name": "Koaʻekea",
+   "ele": 902,
+   "wikidata": "Q49042232"
   },
   {
    "lat": 20.031683,
@@ -1726,11 +2657,46 @@
    "wikidata": "Q49064808"
   },
   {
+   "lat": 20.821299,
+   "lon": -156.547429,
+   "name": "Puʻuanu",
+   "ele": 901,
+   "wikidata": "Q49065046"
+  },
+  {
+   "lat": 20.806895,
+   "lon": -156.872691,
+   "name": "Puu Kole",
+   "ele": 899,
+   "wikidata": "Q49064753"
+  },
+  {
+   "lat": 21.490737,
+   "lon": -158.167782,
+   "name": "Puʻukawiwi",
+   "ele": 899,
+   "wikidata": "Q49065222"
+  },
+  {
+   "lat": 20.819712,
+   "lon": -156.566595,
+   "name": "Hanaʻulaiki",
+   "ele": 897,
+   "wikidata": "Q49034775"
+  },
+  {
    "lat": 20.039313,
    "lon": -155.51959,
    "name": "Puu Loe",
    "ele": 892,
    "wikidata": "Q49064803"
+  },
+  {
+   "lat": 20.697885,
+   "lon": -156.048092,
+   "name": "Puʻukue",
+   "ele": 888,
+   "wikidata": "Q49065332"
   },
   {
    "lat": 20.136298,
@@ -1740,11 +2706,74 @@
    "wikidata": "Q49064860"
   },
   {
+   "lat": 21.134533,
+   "lon": -156.951002,
+   "name": "Kaulolo",
+   "ele": 883,
+   "wikidata": "Q49040847"
+  },
+  {
+   "lat": 21.139721,
+   "lon": -156.951429,
+   "name": "Maunahui",
+   "ele": 882,
+   "wikidata": "Q49048343"
+  },
+  {
+   "lat": 20.720103,
+   "lon": -156.34668,
+   "name": "Waiohuli",
+   "ele": 881,
+   "wikidata": "Q49087299"
+  },
+  {
+   "lat": 21.467717,
+   "lon": -158.104202,
+   "name": "Puʻuhapapa",
+   "ele": 879,
+   "wikidata": "Q49065064"
+  },
+  {
+   "lat": 21.141491,
+   "lon": -156.955213,
+   "name": "Kalualohe",
+   "ele": 879,
+   "wikidata": "Q49040671"
+  },
+  {
+   "lat": 21.4803,
+   "lon": -158.122006,
+   "name": "Puʻukūmakaliʻi",
+   "ele": 878,
+   "wikidata": "Q49065386"
+  },
+  {
    "lat": 20.156135,
    "lon": -155.793577,
    "name": "Puu Liolio",
    "ele": 869,
    "wikidata": "Q49064796"
+  },
+  {
+   "lat": 21.089123,
+   "lon": -156.891919,
+   "name": "Pōhakuloa",
+   "ele": 866,
+   "wikidata": "Q49065893"
+  },
+  {
+   "lat": 20.635934,
+   "lon": -156.377504,
+   "name": "Luapelani",
+   "ele": 866,
+   "wikidata": "Q49047097"
+  },
+  {
+   "lat": 20.765696,
+   "lon": -156.050472,
+   "name": "Puʻupūʻou",
+   "ele": 866,
+   "wikidata": "Q49065637"
   },
   {
    "lat": 20.153327,
@@ -1754,10 +2783,37 @@
    "wikidata": "Q49064833"
   },
   {
+   "lat": 20.822337,
+   "lon": -156.893321,
+   "name": "Puʻualiʻi",
+   "ele": 865,
+   "wikidata": "Q49065036"
+  },
+  {
+   "lat": 21.148327,
+   "lon": -156.801588,
+   "name": "Keahiakalio",
+   "ele": 862,
+   "wikidata": "Q49040947"
+  },
+  {
+   "lat": 20.648507,
+   "lon": -156.38611,
+   "name": "Puʻukaʻeo",
+   "ele": 862,
+   "wikidata": "Q49065226"
+  },
+  {
    "lat": 19.322088,
    "lon": -155.419301,
    "name": "Puʻukuanēnē",
    "ele": 861
+  },
+  {
+   "lat": 22.149137,
+   "lon": -159.422771,
+   "name": "Namahana (Kekoiki)",
+   "ele": 858
   },
   {
    "lat": 19.938115,
@@ -1767,6 +2823,13 @@
    "wikidata": "Q49057149"
   },
   {
+   "lat": 20.672311,
+   "lon": -156.382997,
+   "name": "Puʻuʻio",
+   "ele": 854,
+   "wikidata": "Q49065677"
+  },
+  {
    "lat": 20.046515,
    "lon": -155.558592,
    "name": "Puu Waiko Loa",
@@ -1774,11 +2837,100 @@
    "wikidata": "Q49064962"
   },
   {
+   "lat": 22.088672,
+   "lon": -159.64366,
+   "name": "Kāhililoa",
+   "ele": 854,
+   "wikidata": "Q49042877"
+  },
+  {
+   "lat": 20.864512,
+   "lon": -156.62043,
+   "name": "Luakoʻi",
+   "ele": 851,
+   "wikidata": "Q49047095"
+  },
+  {
+   "lat": 21.368827,
+   "lon": -157.80737,
+   "name": "Puʻulanihuli",
+   "ele": 848,
+   "wikidata": "Q49065399"
+  },
+  {
+   "lat": 21.388401,
+   "lon": -157.825352,
+   "name": "Kahoʻomoe ʻihikapulani",
+   "ele": 847
+  },
+  {
+   "lat": 20.721933,
+   "lon": -156.038875,
+   "name": "Puʻuhoʻolewa",
+   "ele": 845,
+   "wikidata": "Q49065093"
+  },
+  {
+   "lat": 21.404494,
+   "lon": -158.097775,
+   "name": "Maunakapu",
+   "ele": 843,
+   "wikidata": "Q49048327"
+  },
+  {
+   "lat": 21.395747,
+   "lon": -157.824113,
+   "name": "Puʻukeahiakahoe",
+   "ele": 841,
+   "wikidata": "Q49065240"
+  },
+  {
+   "lat": 21.144726,
+   "lon": -156.888197,
+   "name": "Puʻuokoʻeke",
+   "ele": 839,
+   "wikidata": "Q49065570"
+  },
+  {
+   "lat": 22.130809,
+   "lon": -159.409702,
+   "name": "Pu'u 'Eu",
+   "ele": 838,
+   "wikidata": "Q49065671"
+  },
+  {
    "lat": 19.798709,
    "lon": -155.830378,
    "name": "Puʻuhuluhulu",
    "ele": 833,
    "wikidata": "Q49064654"
+  },
+  {
+   "lat": 21.454115,
+   "lon": -158.095517,
+   "name": "Puʻukānehoa",
+   "ele": 832,
+   "wikidata": "Q49065175"
+  },
+  {
+   "lat": 21.385253,
+   "lon": -157.824095,
+   "name": "Puʻukahuauli",
+   "ele": 830,
+   "wikidata": "Q49065117"
+  },
+  {
+   "lat": 21.392046,
+   "lon": -157.825561,
+   "name": "Maunakapu",
+   "ele": 829
+  },
+  {
+   "lat": 21.119885,
+   "lon": -156.877516,
+   "name": "Kāleleʻolehuaʻula",
+   "ele": 825,
+   "wikidata": "Q49042884"
   },
   {
    "lat": 19.306892,
@@ -1800,11 +2952,53 @@
    "wikidata": "Q49042505"
   },
   {
+   "lat": 20.825511,
+   "lon": -156.539922,
+   "name": "Kaonohua",
+   "ele": 818,
+   "wikidata": "Q49040754"
+  },
+  {
+   "lat": 20.823925,
+   "lon": -156.297485,
+   "name": "Puʻuonepohue",
+   "ele": 817,
+   "wikidata": "Q49065580"
+  },
+  {
+   "lat": 21.501289,
+   "lon": -157.897834,
+   "name": "Puʻukaʻaumakua",
+   "ele": 817,
+   "wikidata": "Q49065225"
+  },
+  {
+   "lat": 21.523939,
+   "lon": -157.916623,
+   "name": "Puu Pauao",
+   "ele": 811,
+   "wikidata": "Q49064926"
+  },
+  {
    "lat": 19.98969,
    "lon": -155.704098,
    "name": "Puʻupā",
    "ele": 811,
    "wikidata": "Q49064905"
+  },
+  {
+   "lat": 21.113903,
+   "lon": -156.94972,
+   "name": "Ooa",
+   "ele": 810,
+   "wikidata": "Q49058726"
+  },
+  {
+   "lat": 21.453322,
+   "lon": -157.873411,
+   "name": "ʻEleao",
+   "ele": 809,
+   "wikidata": "Q49091519"
   },
   {
    "lat": 20.122076,
@@ -1828,10 +3022,87 @@
    "wikidata": "Q49064626"
   },
   {
+   "lat": 20.631905,
+   "lon": -156.384401,
+   "name": "Puʻumāhoe",
+   "ele": 803,
+   "wikidata": "Q49065506"
+  },
+  {
    "lat": 19.217717,
    "lon": -155.514515,
    "name": "ʻAlili",
    "ele": 802
+  },
+  {
+   "lat": 21.493544,
+   "lon": -158.204708,
+   "name": "Puʻukeaʻau",
+   "ele": 801,
+   "wikidata": "Q49065243"
+  },
+  {
+   "lat": 21.477492,
+   "lon": -158.177487,
+   "name": "Puʻukēpauʻula",
+   "ele": 800,
+   "wikidata": "Q49065351"
+  },
+  {
+   "lat": 21.335832,
+   "lon": -157.777005,
+   "name": "Mount Olympus",
+   "ele": 792,
+   "wikidata": "Q49053893"
+  },
+  {
+   "lat": 20.827525,
+   "lon": -156.588202,
+   "name": "Kōʻai",
+   "ele": 782,
+   "wikidata": "Q49042913"
+  },
+  {
+   "lat": 20.947094,
+   "lon": -156.551214,
+   "name": "Lanilili",
+   "ele": 782,
+   "wikidata": "Q49043474"
+  },
+  {
+   "lat": 20.804332,
+   "lon": -156.316102,
+   "name": "Puʻupane",
+   "ele": 781,
+   "wikidata": "Q49065604"
+  },
+  {
+   "lat": 20.887889,
+   "lon": -156.633919,
+   "name": "Paʻupaʻu",
+   "ele": 780,
+   "wikidata": "Q49060284"
+  },
+  {
+   "lat": 21.331669,
+   "lon": -157.759521,
+   "name": "Puʻulanipō",
+   "ele": 779,
+   "wikidata": "Q49065402"
+  },
+  {
+   "lat": 20.832286,
+   "lon": -156.89619,
+   "name": "Puu Kilea",
+   "ele": 777,
+   "wikidata": "Q49064741"
+  },
+  {
+   "lat": 20.904735,
+   "lon": -156.544195,
+   "name": "Puʻuokaupō",
+   "ele": 776,
+   "wikidata": "Q49065562"
   },
   {
    "lat": 20.067693,
@@ -1848,11 +3119,32 @@
    "wikidata": "Q3411151"
   },
   {
+   "lat": 21.516737,
+   "lon": -158.112912,
+   "name": "Puʻupane",
+   "ele": 768,
+   "wikidata": "Q49064919"
+  },
+  {
    "lat": 20.136725,
    "lon": -155.812376,
    "name": "Puu Kaakihi",
    "ele": 767,
    "wikidata": "Q49064680"
+  },
+  {
+   "lat": 20.840281,
+   "lon": -156.569708,
+   "name": "Hōkūʻula",
+   "ele": 766,
+   "wikidata": "Q49038201"
+  },
+  {
+   "lat": 21.331879,
+   "lon": -157.762804,
+   "name": "Puʻu Kainawaʻanui",
+   "ele": 762,
+   "wikidata": "Q49040604"
   },
   {
    "lat": 20.153327,
@@ -1869,11 +3161,32 @@
    "wikidata": "Q49064656"
   },
   {
+   "lat": 20.742136,
+   "lon": -156.022578,
+   "name": "Kaihuokalā",
+   "ele": 746,
+   "wikidata": "Q49040585"
+  },
+  {
    "lat": 20.169685,
    "lon": -155.791624,
    "name": "Puu Manu Kalika",
    "ele": 744,
    "wikidata": "Q49064829"
+  },
+  {
+   "lat": 21.416755,
+   "lon": -157.854343,
+   "name": "Puʻukawipoʻo",
+   "ele": 744,
+   "wikidata": "Q49065221"
+  },
+  {
+   "lat": 21.158703,
+   "lon": -156.792189,
+   "name": "Kaunupahu",
+   "ele": 736,
+   "wikidata": "Q49040870"
   },
   {
    "lat": 19.158512,
@@ -1897,11 +3210,39 @@
    "wikidata": "Q49064846"
   },
   {
+   "lat": 20.814097,
+   "lon": -156.5398,
+   "name": "Puʻumoe",
+   "ele": 730,
+   "wikidata": "Q49065499"
+  },
+  {
+   "lat": 21.332289,
+   "lon": -157.768675,
+   "name": "Puʻu Palikea",
+   "ele": 730,
+   "wikidata": "Q49059481"
+  },
+  {
    "lat": 19.4015,
    "lon": -155.092216,
    "name": "Puu Kahaualea",
    "ele": 727,
    "wikidata": "Q49064692"
+  },
+  {
+   "lat": 21.386305,
+   "lon": -158.105099,
+   "name": "Puʻukanawahua",
+   "ele": 725,
+   "wikidata": "Q49065172"
+  },
+  {
+   "lat": 19.752503,
+   "lon": -155.9638,
+   "name": "Kileo",
+   "ele": 724,
+   "wikidata": "Q49041555"
   },
   {
    "lat": 19.38891,
@@ -1913,11 +3254,18 @@
    "volcano": true
   },
   {
-   "lat": 19.752503,
-   "lon": -155.9638,
-   "name": "Kileo",
-   "ele": 724,
-   "wikidata": "Q49041555"
+   "lat": 20.828502,
+   "lon": -156.90272,
+   "name": "Puʻunēnē",
+   "ele": 723,
+   "wikidata": "Q49065538"
+  },
+  {
+   "lat": 20.838085,
+   "lon": -156.88502,
+   "name": "Kaʻaealiʻi",
+   "ele": 723,
+   "wikidata": "Q49040925"
   },
   {
    "lat": 20.172737,
@@ -1927,12 +3275,26 @@
    "wikidata": "Q49064652"
   },
   {
+   "lat": 21.587111,
+   "lon": -157.953977,
+   "name": "Puʻukaʻinapuaʻa",
+   "ele": 718,
+   "wikidata": "Q49065120"
+  },
+  {
    "lat": 19.071109,
    "lon": -155.677966,
    "name": "Kamakapaʻa",
    "name_en": "Kamakapaa",
    "ele": 718,
    "wikidata": "Q49040692"
+  },
+  {
+   "lat": 22.171792,
+   "lon": -159.485273,
+   "name": "Hihimanu",
+   "ele": 716,
+   "wikidata": "Q49038197"
   },
   {
    "lat": 19.08588,
@@ -1948,10 +3310,66 @@
    "ele": 711
   },
   {
+   "lat": 20.9557,
+   "lon": -156.613106,
+   "name": "Kekaalaau",
+   "ele": 710,
+   "wikidata": "Q49041037"
+  },
+  {
+   "lat": 20.808909,
+   "lon": -156.547491,
+   "name": "Puʻulūʻau",
+   "ele": 710,
+   "wikidata": "Q49065462"
+  },
+  {
+   "lat": 21.163341,
+   "lon": -156.968825,
+   "name": "Puʻukauā",
+   "ele": 708,
+   "wikidata": "Q49065217"
+  },
+  {
+   "lat": 21.086926,
+   "lon": -156.839002,
+   "name": "Makalihua",
+   "ele": 708,
+   "wikidata": "Q49047603"
+  },
+  {
    "lat": 19.088077,
    "lon": -155.630603,
    "name": "Puu Lepo",
    "ele": 708
+  },
+  {
+   "lat": 21.097485,
+   "lon": -156.92793,
+   "name": "Lapakohana",
+   "ele": 705,
+   "wikidata": "Q49043480"
+  },
+  {
+   "lat": 21.090283,
+   "lon": -156.829115,
+   "name": "Maunaʻoluʻolu",
+   "ele": 704,
+   "wikidata": "Q49048358"
+  },
+  {
+   "lat": 21.92534,
+   "lon": -159.401799,
+   "name": "Haʻupu",
+   "ele": 700,
+   "wikidata": "Q49038193"
+  },
+  {
+   "lat": 21.388686,
+   "lon": -158.094113,
+   "name": "Puʻupoulihale",
+   "ele": 697,
+   "wikidata": "Q49065619"
   },
   {
    "lat": 19.067081,
@@ -1960,6 +3378,13 @@
    "name_en": "Puu o Lokuana",
    "ele": 697,
    "wikidata": "Q49064868"
+  },
+  {
+   "lat": 21.133129,
+   "lon": -156.778517,
+   "name": "Keahuokū",
+   "ele": 696,
+   "wikidata": "Q49040956"
   },
   {
    "lat": 19.394298,
@@ -1983,11 +3408,46 @@
    "ele": 691
   },
   {
+   "lat": 21.512709,
+   "lon": -157.875303,
+   "name": "Puʻuʻōhulehule",
+   "ele": 686,
+   "wikidata": "Q49065722"
+  },
+  {
+   "lat": 20.852123,
+   "lon": -156.293824,
+   "name": "Piʻiholo",
+   "ele": 686,
+   "wikidata": "Q7193496"
+  },
+  {
    "lat": 19.817874,
    "lon": -155.850276,
    "name": "Nāpuʻu",
    "ele": 683,
    "wikidata": "Q49056195"
+  },
+  {
+   "lat": 21.160717,
+   "lon": -156.789626,
+   "name": "Pōhakuloa",
+   "ele": 679,
+   "wikidata": "Q49065898"
+  },
+  {
+   "lat": 20.676096,
+   "lon": -156.072812,
+   "name": "Palikea",
+   "ele": 675,
+   "wikidata": "Q49059487"
+  },
+  {
+   "lat": 20.884288,
+   "lon": -156.551031,
+   "name": "The Needle",
+   "ele": 675,
+   "wikidata": "Q49082710"
   },
   {
    "lat": 19.751893,
@@ -2011,6 +3471,27 @@
    "wikidata": "Q49064674"
   },
   {
+   "lat": 21.324268,
+   "lon": -157.725494,
+   "name": "Puʻuʻokona",
+   "ele": 671,
+   "wikidata": "Q49065687"
+  },
+  {
+   "lat": 21.081494,
+   "lon": -156.899915,
+   "name": "Nāpuʻukūlua",
+   "ele": 662,
+   "wikidata": "Q49057782"
+  },
+  {
+   "lat": 21.142529,
+   "lon": -156.884901,
+   "name": "Papaiki",
+   "ele": 662,
+   "wikidata": "Q49059728"
+  },
+  {
    "lat": 19.823123,
    "lon": -155.839411,
    "name": "Puu Lili",
@@ -2031,6 +3512,20 @@
    "wikidata": "Q49064635"
   },
   {
+   "lat": 21.14851,
+   "lon": -156.783217,
+   "name": "Puʻuau",
+   "ele": 658,
+   "wikidata": "Q49065050"
+  },
+  {
+   "lat": 20.866894,
+   "lon": -156.251709,
+   "name": "Ulalena",
+   "ele": 654,
+   "wikidata": "Q49086522"
+  },
+  {
    "lat": 19.282721,
    "lon": -155.393178,
    "name": "Yellow Cone",
@@ -2038,11 +3533,39 @@
    "wikidata": "Q49091237"
   },
   {
+   "lat": 20.706919,
+   "lon": -156.374513,
+   "name": "Kamahale",
+   "ele": 650,
+   "wikidata": "Q49040684"
+  },
+  {
+   "lat": 21.166881,
+   "lon": -156.984694,
+   "name": "Puʻuʻōlelo",
+   "ele": 649,
+   "wikidata": "Q49065725"
+  },
+  {
+   "lat": 21.175487,
+   "lon": -156.959303,
+   "name": "ʻAlae",
+   "ele": 644,
+   "wikidata": "Q49091506"
+  },
+  {
    "lat": 19.081486,
    "lon": -155.600573,
    "name": "Puu Hoomaha",
    "ele": 642,
    "wikidata": "Q49064651"
+  },
+  {
+   "lat": 21.174327,
+   "lon": -156.977308,
+   "name": "Keōlewa",
+   "ele": 636,
+   "wikidata": "Q49041422"
   },
   {
    "lat": 19.065127,
@@ -2057,11 +3580,73 @@
    "ele": 632
   },
   {
+   "lat": 20.776682,
+   "lon": -156.8697,
+   "name": "Puʻumanu",
+   "ele": 631,
+   "wikidata": "Q49065489"
+  },
+  {
    "lat": 19.077885,
    "lon": -155.60509,
    "name": "Kapuna",
    "ele": 630,
    "wikidata": "Q49040784"
+  },
+  {
+   "lat": 21.171886,
+   "lon": -156.970839,
+   "name": "ʻIliʻilikā",
+   "ele": 625,
+   "wikidata": "Q49091523"
+  },
+  {
+   "lat": 21.079113,
+   "lon": -156.894605,
+   "name": "Puʻuʻula",
+   "ele": 622,
+   "wikidata": "Q49065700"
+  },
+  {
+   "lat": 21.320517,
+   "lon": -157.723095,
+   "name": "Kuliʻouʻou Summit",
+   "ele": 618
+  },
+  {
+   "lat": 21.165539,
+   "lon": -156.780226,
+   "name": "Hākaʻaʻano",
+   "ele": 616,
+   "wikidata": "Q49038190"
+  },
+  {
+   "lat": 20.851513,
+   "lon": -156.924205,
+   "name": "Kākaʻalani",
+   "ele": 615,
+   "wikidata": "Q49042883"
+  },
+  {
+   "lat": 20.845104,
+   "lon": -156.921214,
+   "name": "Pohoula",
+   "ele": 614,
+   "wikidata": "Q49062829"
+  },
+  {
+   "lat": 21.332717,
+   "lon": -157.814817,
+   "name": "Tantalus",
+   "ele": 614,
+   "wikidata": "Q7683805"
+  },
+  {
+   "lat": 20.969311,
+   "lon": -156.606819,
+   "name": "Keahikano",
+   "ele": 612,
+   "wikidata": "Q49040949"
   },
   {
    "lat": 19.07892,
@@ -2078,16 +3663,37 @@
    "wikidata": "Q49040939"
   },
   {
+   "lat": 21.147106,
+   "lon": -156.979017,
+   "name": "Kapuna",
+   "ele": 603,
+   "wikidata": "Q49040787"
+  },
+  {
    "lat": 19.408703,
    "lon": -155.052299,
    "name": "Puʻukiaʻi",
    "ele": 603
   },
   {
+   "lat": 21.163708,
+   "lon": -156.776992,
+   "name": "Kanupa",
+   "ele": 602,
+   "wikidata": "Q49040753"
+  },
+  {
    "lat": 19.833682,
    "lon": -155.846492,
    "name": "Puu Kukai",
    "ele": 598
+  },
+  {
+   "lat": 20.957898,
+   "lon": -156.623116,
+   "name": "Puu Makina",
+   "ele": 597,
+   "wikidata": "Q49064813"
   },
   {
    "lat": 19.090517,
@@ -2103,11 +3709,94 @@
    "ele": 594
   },
   {
+   "lat": 20.847729,
+   "lon": -156.924205,
+   "name": "Puulala",
+   "ele": 584,
+   "wikidata": "Q49064970"
+  },
+  {
+   "lat": 20.830517,
+   "lon": -156.322877,
+   "name": "Puu Koa",
+   "ele": 584,
+   "wikidata": "Q49064749"
+  },
+  {
+   "lat": 20.849926,
+   "lon": -156.919505,
+   "name": "Puʻualeʻaleʻa",
+   "ele": 582,
+   "wikidata": "Q49065032"
+  },
+  {
+   "lat": 21.40193,
+   "lon": -158.132077,
+   "name": "Puʻuheleakalā",
+   "ele": 579,
+   "wikidata": "Q49065073"
+  },
+  {
+   "lat": 20.864086,
+   "lon": -156.293885,
+   "name": "Puʻuehu",
+   "ele": 576,
+   "wikidata": "Q49065053"
+  },
+  {
+   "lat": 21.395094,
+   "lon": -158.087399,
+   "name": "Puʻumoʻopuna",
+   "ele": 575,
+   "wikidata": "Q49065500"
+  },
+  {
+   "lat": 21.469496,
+   "lon": -158.120602,
+   "name": "Puʻukaʻīlio",
+   "ele": 570,
+   "wikidata": "Q49065234"
+  },
+  {
+   "lat": 20.973889,
+   "lon": -156.58332,
+   "name": "Kaihukiako",
+   "ele": 565,
+   "wikidata": "Q49040583"
+  },
+  {
+   "lat": 20.711313,
+   "lon": -156.028072,
+   "name": "Puʻumāhoe",
+   "ele": 563
+  },
+  {
+   "lat": 22.020508,
+   "lon": -159.598217,
+   "name": "Kāhililoa",
+   "ele": 563,
+   "wikidata": "Q49042875"
+  },
+  {
    "lat": 19.060123,
    "lon": -155.64757,
    "name": "Kaluapuhi",
    "ele": 562,
    "wikidata": "Q49040674"
+  },
+  {
+   "lat": 21.954748,
+   "lon": -159.491326,
+   "name": "Kalualea",
+   "ele": 562,
+   "wikidata": "Q49040668"
+  },
+  {
+   "lat": 20.767893,
+   "lon": -156.032405,
+   "name": "Olopawa",
+   "ele": 561,
+   "wikidata": "Q49058620"
   },
   {
    "lat": 19.147892,
@@ -2117,6 +3806,55 @@
    "wikidata": "Q49047610"
   },
   {
+   "lat": 21.35652,
+   "lon": -157.828794,
+   "name": "Nāpuʻumaiʻa",
+   "ele": 558,
+   "wikidata": "Q49057785"
+  },
+  {
+   "lat": 20.829113,
+   "lon": -156.9145,
+   "name": "Nīniniwai Hill",
+   "ele": 553,
+   "wikidata": "Q49057794"
+  },
+  {
+   "lat": 21.167919,
+   "lon": -156.938307,
+   "name": "Puʻukauā",
+   "ele": 549,
+   "wikidata": "Q49065218"
+  },
+  {
+   "lat": 21.147716,
+   "lon": -156.988416,
+   "name": "Puʻuʻoli",
+   "ele": 542,
+   "wikidata": "Q49065691"
+  },
+  {
+   "lat": 20.87006,
+   "lon": -156.982035,
+   "name": "Kānepuʻu",
+   "ele": 541,
+   "wikidata": "Q49042890"
+  },
+  {
+   "lat": 21.084118,
+   "lon": -156.826917,
+   "name": "Kaluaʻaha",
+   "ele": 539,
+   "wikidata": "Q49040676"
+  },
+  {
+   "lat": 20.821483,
+   "lon": -156.332398,
+   "name": "Puʻuoweli",
+   "ele": 539,
+   "wikidata": "Q49065589"
+  },
+  {
    "lat": 20.200508,
    "lon": -155.843383,
    "name": "Puʻuonale",
@@ -2124,10 +3862,58 @@
    "wikidata": "Q49064876"
   },
   {
+   "lat": 21.465845,
+   "lon": -158.077959,
+   "name": "Maunauna",
+   "ele": 539,
+   "wikidata": "Q49048356"
+  },
+  {
+   "lat": 20.610481,
+   "lon": -156.371095,
+   "name": "Pimoe",
+   "ele": 537,
+   "wikidata": "Q49061407"
+  },
+  {
+   "lat": 21.081311,
+   "lon": -156.907422,
+   "name": "Wahuaalapai",
+   "ele": 536,
+   "wikidata": "Q49087286"
+  },
+  {
+   "lat": 21.559889,
+   "lon": -157.888303,
+   "name": "Puʻupiei",
+   "ele": 529,
+   "wikidata": "Q49065610"
+  },
+  {
+   "lat": 21.522291,
+   "lon": -157.848325,
+   "name": "Puʻukānehoalani",
+   "ele": 525
+  },
+  {
+   "lat": 20.866711,
+   "lon": -156.986888,
+   "name": "Kapukaloa",
+   "ele": 524,
+   "wikidata": "Q49040783"
+  },
+  {
    "lat": 19.424272,
    "lon": -154.990128,
    "name": "Heiheiahulu",
    "ele": 522
+  },
+  {
+   "lat": 20.870739,
+   "lon": -156.927623,
+   "name": "Puu Mahana",
+   "ele": 517,
+   "wikidata": "Q49064804"
   },
   {
    "lat": 19.423901,
@@ -2143,6 +3929,13 @@
    "wikidata": "Q49064672"
   },
   {
+   "lat": 20.971936,
+   "lon": -156.619027,
+   "name": "Puʻukaʻeo",
+   "ele": 513,
+   "wikidata": "Q49065228"
+  },
+  {
    "lat": 19.040531,
    "lon": -155.66997,
    "name": "Puu Poopaa",
@@ -2155,10 +3948,85 @@
    "ele": 513
   },
   {
+   "lat": 20.749521,
+   "lon": -156.016292,
+   "name": "Puʻukī",
+   "ele": 512
+  },
+  {
+   "lat": 21.928973,
+   "lon": -159.380786,
+   "name": "Hokulei",
+   "ele": 508,
+   "wikidata": "Q49036784"
+  },
+  {
+   "lat": 21.1609,
+   "lon": -157.003797,
+   "name": "Hahaeule",
+   "ele": 506,
+   "wikidata": "Q49034498"
+  },
+  {
+   "lat": 21.134899,
+   "lon": -156.766493,
+   "name": "Pahualoo",
+   "ele": 505,
+   "wikidata": "Q49059381"
+  },
+  {
+   "lat": 21.405713,
+   "lon": -157.882637,
+   "name": "Puʻuʻuaʻu",
+   "ele": 505,
+   "wikidata": "Q49065697"
+  },
+  {
+   "lat": 20.783884,
+   "lon": -156.058773,
+   "name": "Puʻuhīnaʻi",
+   "ele": 503,
+   "wikidata": "Q49065103"
+  },
+  {
+   "lat": 21.174694,
+   "lon": -157.005629,
+   "name": "Puʻulua",
+   "ele": 502,
+   "wikidata": "Q49065449"
+  },
+  {
+   "lat": 21.361259,
+   "lon": -157.75059,
+   "name": "Mount Olomana",
+   "ele": 501
+  },
+  {
    "lat": 19.034305,
    "lon": -155.680162,
    "name": "Puu Poo Pueo",
    "ele": 500
+  },
+  {
+   "lat": 22.212778,
+   "lon": -159.583611,
+   "name": "Maunapuluʻō",
+   "ele": 498,
+   "wikidata": "Q49048352"
+  },
+  {
+   "lat": 21.0807,
+   "lon": -156.83534,
+   "name": "Maileliʻi",
+   "ele": 495,
+   "wikidata": "Q49047585"
+  },
+  {
+   "lat": 21.554091,
+   "lon": -157.989498,
+   "name": "Puʻupeʻahināiʻa",
+   "ele": 494,
+   "wikidata": "Q49065607"
   },
   {
    "lat": 19.24848,
@@ -2168,11 +4036,25 @@
    "wikidata": "Q49067187"
   },
   {
+   "lat": 20.866284,
+   "lon": -156.303712,
+   "name": "Puʻukiʻi",
+   "ele": 492,
+   "wikidata": "Q49065278"
+  },
+  {
    "lat": 19.761292,
    "lon": -155.97497,
    "name": "Puhiapele",
    "ele": 492,
    "wikidata": "Q49064421"
+  },
+  {
+   "lat": 21.932855,
+   "lon": -159.373491,
+   "name": "Hokunui",
+   "ele": 490,
+   "wikidata": "Q49038200"
   },
   {
    "lat": 19.414884,
@@ -2181,6 +4063,110 @@
    "name_en": "Puu Kauka",
    "ele": 487,
    "wikidata": "Q49064717"
+  },
+  {
+   "lat": 21.074292,
+   "lon": -156.857435,
+   "name": "Kanola",
+   "ele": 485,
+   "wikidata": "Q49040749"
+  },
+  {
+   "lat": 21.513502,
+   "lon": -157.886777,
+   "name": "Puu Koiele",
+   "ele": 481,
+   "wikidata": "Q49064751"
+  },
+  {
+   "lat": 20.798533,
+   "lon": -156.547429,
+   "name": "Pōhakuloa",
+   "ele": 481,
+   "wikidata": "Q49065889"
+  },
+  {
+   "lat": 20.832897,
+   "lon": -156.935924,
+   "name": "Hoopapalani Hill",
+   "ele": 477,
+   "wikidata": "Q49037018"
+  },
+  {
+   "lat": 21.539503,
+   "lon": -158.148983,
+   "name": "Kaupakuhale",
+   "ele": 477,
+   "wikidata": "Q49040872"
+  },
+  {
+   "lat": 21.162487,
+   "lon": -156.76393,
+   "name": "Kepoʻokoholua",
+   "ele": 476,
+   "wikidata": "Q49041294"
+  },
+  {
+   "lat": 20.815136,
+   "lon": -156.944591,
+   "name": "Puu Koa",
+   "ele": 476,
+   "wikidata": "Q49064748"
+  },
+  {
+   "lat": 20.819103,
+   "lon": -156.936229,
+   "name": "Hulupuuniu",
+   "ele": 476,
+   "wikidata": "Q49037913"
+  },
+  {
+   "lat": 20.851696,
+   "lon": -156.964122,
+   "name": "Leinukalahua",
+   "ele": 474,
+   "wikidata": "Q49043931"
+  },
+  {
+   "lat": 20.778087,
+   "lon": -156.885996,
+   "name": "Puʻumakani",
+   "ele": 472,
+   "wikidata": "Q49065476"
+  },
+  {
+   "lat": 21.528517,
+   "lon": -157.867124,
+   "name": "Puʻumanamana",
+   "ele": 472
+  },
+  {
+   "lat": 20.874889,
+   "lon": -156.927501,
+   "name": "Puu Kawelo",
+   "ele": 471,
+   "wikidata": "Q49064721"
+  },
+  {
+   "lat": 21.139904,
+   "lon": -156.763319,
+   "name": "ʻApeʻe",
+   "ele": 467,
+   "wikidata": "Q49091515"
+  },
+  {
+   "lat": 21.520521,
+   "lon": -157.889707,
+   "name": "Puʻuʻokila",
+   "ele": 467,
+   "wikidata": "Q49065686"
+  },
+  {
+   "lat": 21.393507,
+   "lon": -158.078915,
+   "name": "Puʻukuʻua",
+   "ele": 466,
+   "wikidata": "Q49065341"
   },
   {
    "lat": 19.84888,
@@ -2193,6 +4179,48 @@
    "lon": -155.855586,
    "name": "Puʻuanahulu",
    "ele": 464
+  },
+  {
+   "lat": 21.089306,
+   "lon": -156.805616,
+   "name": "ʻAkahi",
+   "ele": 463,
+   "wikidata": "Q49091503"
+  },
+  {
+   "lat": 20.871105,
+   "lon": -156.521306,
+   "name": "Kaiapaokaʻīlio",
+   "ele": 463,
+   "wikidata": "Q49040579"
+  },
+  {
+   "lat": 21.157909,
+   "lon": -157.013441,
+   "name": "Kauluwai",
+   "ele": 462,
+   "wikidata": "Q49040852"
+  },
+  {
+   "lat": 20.85371,
+   "lon": -156.892406,
+   "name": "Kauiki",
+   "ele": 462,
+   "wikidata": "Q49040836"
+  },
+  {
+   "lat": 21.928376,
+   "lon": -159.423798,
+   "name": "Kamaulele",
+   "ele": 460,
+   "wikidata": "Q49042888"
+  },
+  {
+   "lat": 20.811718,
+   "lon": -156.916392,
+   "name": "Pulehuloa",
+   "ele": 458,
+   "wikidata": "Q49064427"
   },
   {
    "lat": 20.209297,
@@ -2215,11 +4243,66 @@
    "ele": 455
   },
   {
+   "lat": 22.214444,
+   "lon": -159.584034,
+   "name": "Maunahou",
+   "ele": 455,
+   "wikidata": "Q49048341"
+  },
+  {
+   "lat": 20.804882,
+   "lon": -156.936717,
+   "name": "Puu Nana i Hawaii",
+   "ele": 454,
+   "wikidata": "Q49064840"
+  },
+  {
+   "lat": 22.150209,
+   "lon": -159.330266,
+   "name": "Kalalea",
+   "ele": 454
+  },
+  {
+   "lat": 21.521742,
+   "lon": -158.093197,
+   "name": "Māʻili",
+   "ele": 453,
+   "wikidata": "Q49056183"
+  },
+  {
+   "lat": 20.872509,
+   "lon": -156.308411,
+   "name": "Puʻuomālei",
+   "ele": 453,
+   "wikidata": "Q49065574"
+  },
+  {
+   "lat": 22.070066,
+   "lon": -159.647365,
+   "name": "Po'okaeha",
+   "ele": 453,
+   "wikidata": "Q49063969"
+  },
+  {
    "lat": 20.188728,
    "lon": -155.759275,
    "name": "Haleone",
    "ele": 452,
    "wikidata": "Q49034538"
+  },
+  {
+   "lat": 21.320949,
+   "lon": -157.817497,
+   "name": "Puʻukākea",
+   "ele": 450,
+   "wikidata": "Q49064699"
+  },
+  {
+   "lat": 21.162914,
+   "lon": -156.757521,
+   "name": "Kawaikapu",
+   "ele": 448,
+   "wikidata": "Q49040888"
   },
   {
    "lat": 19.439099,
@@ -2229,11 +4312,46 @@
    "wikidata": "Q49040864"
   },
   {
+   "lat": 21.466322,
+   "lon": -157.941709,
+   "name": "Puʻukamana",
+   "ele": 444,
+   "wikidata": "Q49065150"
+  },
+  {
+   "lat": 20.733103,
+   "lon": -156.387392,
+   "name": "Puʻuokali",
+   "ele": 443,
+   "wikidata": "Q49065555"
+  },
+  {
    "lat": 19.037907,
    "lon": -155.649889,
    "name": "Pauoheohe",
    "ele": 443,
    "wikidata": "Q49060250"
+  },
+  {
+   "lat": 20.606514,
+   "lon": -156.329408,
+   "name": "Hōkūkano",
+   "ele": 441,
+   "wikidata": "Q49038198"
+  },
+  {
+   "lat": 21.095105,
+   "lon": -156.79524,
+   "name": "Nāmohokū",
+   "ele": 440,
+   "wikidata": "Q49057775"
+  },
+  {
+   "lat": 20.978711,
+   "lon": -156.561103,
+   "name": "Maunakini",
+   "ele": 438,
+   "wikidata": "Q49048348"
   },
   {
    "lat": 19.901782,
@@ -2245,10 +4363,71 @@
    "volcano": true
   },
   {
+   "lat": 20.76594,
+   "lon": -156.888194,
+   "name": "Puʻumāhanalua",
+   "ele": 434
+  },
+  {
+   "lat": 21.137707,
+   "lon": -157.166394,
+   "name": "Kukui",
+   "ele": 433,
+   "wikidata": "Q49042545"
+  },
+  {
+   "lat": 20.972119,
+   "lon": -156.625924,
+   "name": "Mahana",
+   "ele": 424,
+   "wikidata": "Q49047462"
+  },
+  {
+   "lat": 20.968701,
+   "lon": -156.551886,
+   "name": "Puʻuʻōlelo",
+   "ele": 424,
+   "wikidata": "Q49065723"
+  },
+  {
+   "lat": 21.939284,
+   "lon": -159.459,
+   "name": "Laʻaukahi",
+   "ele": 423,
+   "wikidata": "Q49043110"
+  },
+  {
    "lat": 19.021305,
    "lon": -155.671068,
    "name": "Puu Kanikani",
    "ele": 415
+  },
+  {
+   "lat": 21.132885,
+   "lon": -157.178723,
+   "name": "Maunaloa",
+   "ele": 413
+  },
+  {
+   "lat": 21.141491,
+   "lon": -157.155042,
+   "name": "Puʻunānā",
+   "ele": 410,
+   "wikidata": "Q49065532"
+  },
+  {
+   "lat": 21.589491,
+   "lon": -158.006405,
+   "name": "Puʻukapu",
+   "ele": 407,
+   "wikidata": "Q49065198"
+  },
+  {
+   "lat": 20.669687,
+   "lon": -156.064572,
+   "name": "Puʻuʻahuʻula",
+   "ele": 405,
+   "wikidata": "Q49065655"
   },
   {
    "lat": 19.160099,
@@ -2256,6 +4435,62 @@
    "name": "Pākanaka",
    "ele": 404,
    "wikidata": "Q49065868"
+  },
+  {
+   "lat": 21.918771,
+   "lon": -159.398982,
+   "name": "Naluakeina",
+   "ele": 403,
+   "wikidata": "Q49056338"
+  },
+  {
+   "lat": 21.127331,
+   "lon": -157.188794,
+   "name": "ʻAmikopala",
+   "ele": 401,
+   "wikidata": "Q49091513"
+  },
+  {
+   "lat": 20.787914,
+   "lon": -156.950999,
+   "name": "Iliolono",
+   "ele": 401,
+   "wikidata": "Q49038314"
+  },
+  {
+   "lat": 21.165538,
+   "lon": -157.025038,
+   "name": "Puʻuanoano",
+   "ele": 400,
+   "wikidata": "Q49065043"
+  },
+  {
+   "lat": 21.105114,
+   "lon": -156.781141,
+   "name": "Kaimumanō",
+   "ele": 399,
+   "wikidata": "Q49040600"
+  },
+  {
+   "lat": 22.177951,
+   "lon": -159.482799,
+   "name": "Pu'u Ki",
+   "ele": 398,
+   "wikidata": "Q49065366"
+  },
+  {
+   "lat": 21.954221,
+   "lon": -159.453517,
+   "name": "Omoe",
+   "ele": 396,
+   "wikidata": "Q49058677"
+  },
+  {
+   "lat": 21.130688,
+   "lon": -157.197888,
+   "name": "Kopala",
+   "ele": 394,
+   "wikidata": "Q49042361"
   },
   {
    "lat": 20.184517,
@@ -2270,6 +4505,13 @@
    "ele": 391
   },
   {
+   "lat": 20.665109,
+   "lon": -156.073483,
+   "name": "Papaloa",
+   "ele": 389,
+   "wikidata": "Q49059734"
+  },
+  {
    "lat": 19.775086,
    "lon": -155.974787,
    "name": "Puʻunāhāhā",
@@ -2277,11 +4519,202 @@
    "wikidata": "Q49064836"
   },
   {
+   "lat": 21.127331,
+   "lon": -157.148206,
+   "name": "Kāʻana",
+   "ele": 388,
+   "wikidata": "Q49042895"
+  },
+  {
+   "lat": 22.185033,
+   "lon": -159.479641,
+   "name": "Kauka'opua",
+   "ele": 388,
+   "wikidata": "Q49040839"
+  },
+  {
+   "lat": 21.935803,
+   "lon": -159.497689,
+   "name": "Kahuamoa",
+   "ele": 386,
+   "wikidata": "Q49040577"
+  },
+  {
+   "lat": 20.764904,
+   "lon": -156.96931,
+   "name": "Puʻuʻulaʻula",
+   "ele": 382,
+   "wikidata": "Q49065715"
+  },
+  {
+   "lat": 21.453688,
+   "lon": -157.862913,
+   "name": "Ulimakoli",
+   "ele": 382,
+   "wikidata": "Q49086526"
+  },
+  {
+   "lat": 21.938647,
+   "lon": -160.083346,
+   "name": "вулкан Паниау",
+   "name_ru": "вулкан Паниау",
+   "name_en": "Mount Paniau",
+   "ele": 381,
+   "wikidata": "Q49065877",
+   "volcano": true
+  },
+  {
+   "lat": 20.726328,
+   "lon": -156.007625,
+   "name": "Keākamanu",
+   "ele": 381,
+   "wikidata": "Q49041420"
+  },
+  {
+   "lat": 21.481886,
+   "lon": -158.152401,
+   "name": "Kōlealiʻiliʻi",
+   "ele": 380,
+   "wikidata": "Q49042912"
+  },
+  {
    "lat": 19.418702,
    "lon": -155.876883,
    "name": "Puʻukalapa",
    "ele": 380,
    "wikidata": "Q49065126"
+  },
+  {
+   "lat": 22.061406,
+   "lon": -159.354828,
+   "name": "Nounou (Sleeping Giant)",
+   "ele": 378,
+   "wikidata": "Q7539868"
+  },
+  {
+   "lat": 20.814524,
+   "lon": -156.834422,
+   "name": "Puʻunēnē",
+   "ele": 376,
+   "wikidata": "Q49065537"
+  },
+  {
+   "lat": 21.175487,
+   "lon": -157.026991,
+   "name": "Puʻukamoʻo",
+   "ele": 373
+  },
+  {
+   "lat": 20.861888,
+   "lon": -156.880199,
+   "name": "Wāwaekū",
+   "ele": 372,
+   "wikidata": "Q49091130"
+  },
+  {
+   "lat": 21.085095,
+   "lon": -156.809827,
+   "name": "Haleone",
+   "ele": 371,
+   "wikidata": "Q49034542"
+  },
+  {
+   "lat": 21.129528,
+   "lon": -157.011793,
+   "name": "Puʻuluahine",
+   "ele": 371,
+   "wikidata": "Q49065453"
+  },
+  {
+   "lat": 20.777538,
+   "lon": -156.926524,
+   "name": "Pepeiaohuluhulu",
+   "ele": 371,
+   "wikidata": "Q49060695"
+  },
+  {
+   "lat": 21.373305,
+   "lon": -157.818296,
+   "name": "Puʻunukohe",
+   "ele": 371,
+   "wikidata": "Q49065529"
+  },
+  {
+   "lat": 21.122692,
+   "lon": -156.998731,
+   "name": "Kākalahale",
+   "ele": 370,
+   "wikidata": "Q49042880"
+  },
+  {
+   "lat": 20.892895,
+   "lon": -156.317506,
+   "name": "Kauhikoa",
+   "ele": 369,
+   "wikidata": "Q49040832"
+  },
+  {
+   "lat": 21.932964,
+   "lon": -159.450717,
+   "name": "Kokiʻi",
+   "ele": 369,
+   "wikidata": "Q49042308"
+  },
+  {
+   "lat": 21.284926,
+   "lon": -157.686401,
+   "name": "Koko Crater Lookout",
+   "ele": 366,
+   "wikidata": "Q49042286"
+  },
+  {
+   "lat": 21.592116,
+   "lon": -157.913083,
+   "name": "Puʻuwaiahilahila",
+   "ele": 365,
+   "wikidata": "Q49065642"
+  },
+  {
+   "lat": 21.151318,
+   "lon": -156.760939,
+   "name": "Pōʻala",
+   "ele": 364,
+   "wikidata": "Q49065922"
+  },
+  {
+   "lat": 21.563734,
+   "lon": -157.883482,
+   "name": "Kila",
+   "ele": 364,
+   "wikidata": "Q49041542"
+  },
+  {
+   "lat": 20.97633,
+   "lon": -156.553107,
+   "name": "Pōhakuloa",
+   "ele": 358,
+   "wikidata": "Q49065892"
+  },
+  {
+   "lat": 21.940896,
+   "lon": -159.362526,
+   "name": "Keopaweo",
+   "ele": 356,
+   "wikidata": "Q49041290"
+  },
+  {
+   "lat": 21.35652,
+   "lon": -157.810484,
+   "name": "Makuku",
+   "ele": 355,
+   "wikidata": "Q49047625"
+  },
+  {
+   "lat": 20.602303,
+   "lon": -156.363405,
+   "name": "Pōhākea",
+   "ele": 354,
+   "wikidata": "Q49065918"
   },
   {
    "lat": 19.026676,
@@ -2298,11 +4731,39 @@
    "wikidata": "Q49064831"
   },
   {
+   "lat": 20.773326,
+   "lon": -156.918223,
+   "name": "Uwala Hill",
+   "ele": 353,
+   "wikidata": "Q49086775"
+  },
+  {
    "lat": 19.457897,
    "lon": -154.958977,
    "name": "Puu Palai",
    "ele": 350,
    "wikidata": "Q49064912"
+  },
+  {
+   "lat": 21.53871,
+   "lon": -158.122677,
+   "name": "Puʻuiki",
+   "ele": 347,
+   "wikidata": "Q49065104"
+  },
+  {
+   "lat": 21.170299,
+   "lon": -157.036512,
+   "name": "ʻEleueue",
+   "ele": 345,
+   "wikidata": "Q49091521"
+  },
+  {
+   "lat": 20.903088,
+   "lon": -156.27649,
+   "name": "Kapuai o Kamehameha",
+   "ele": 345,
+   "wikidata": "Q49040780"
   },
   {
    "lat": 18.994877,
@@ -2312,11 +4773,68 @@
    "wikidata": "Q49065209"
   },
   {
+   "lat": 21.994159,
+   "lon": -159.431506,
+   "name": "Kilohana Crater",
+   "ele": 345,
+   "wikidata": "Q49004653"
+  },
+  {
+   "lat": 20.771312,
+   "lon": -156.382082,
+   "name": "Puʻukahala",
+   "ele": 342,
+   "wikidata": "Q49065109"
+  },
+  {
+   "lat": 20.817881,
+   "lon": -156.578985,
+   "name": "Pu‘u Kauoha",
+   "name_en": "Puu Kauoha",
+   "ele": 341,
+   "wikidata": "Q49064719"
+  },
+  {
+   "lat": 22.218333,
+   "lon": -159.58,
+   "name": "Makana",
+   "ele": 341,
+   "wikidata": "Q6738680"
+  },
+  {
+   "lat": 20.878124,
+   "lon": -156.33423,
+   "name": "Kamole",
+   "ele": 337,
+   "wikidata": "Q49040712"
+  },
+  {
+   "lat": 21.66371,
+   "lon": -158.000973,
+   "name": "Mount Kawela",
+   "ele": 334,
+   "wikidata": "Q49053283"
+  },
+  {
    "lat": 19.461315,
    "lon": -154.957879,
    "name": "Puu Pahoehoe",
    "ele": 334,
    "wikidata": "Q49064908"
+  },
+  {
+   "lat": 20.719309,
+   "lon": -156.400209,
+   "name": "Kekuawahaʻulaʻula",
+   "ele": 333,
+   "wikidata": "Q49041041"
+  },
+  {
+   "lat": 20.754528,
+   "lon": -156.978587,
+   "name": "Kāhilikalani",
+   "ele": 329,
+   "wikidata": "Q49040551"
   },
   {
    "lat": 19.452531,
@@ -2333,11 +4851,47 @@
    "wikidata": "Q49064800"
   },
   {
+   "lat": 21.313511,
+   "lon": -157.822777,
+   "name": "Round Top",
+   "name_en": "Round Top",
+   "ele": 322,
+   "wikidata": "Q49069994"
+  },
+  {
+   "lat": 21.104138,
+   "lon": -156.986707,
+   "name": "Puʻuhele",
+   "ele": 321,
+   "wikidata": "Q49065072"
+  },
+  {
+   "lat": 21.37654,
+   "lon": -158.07269,
+   "name": "Puʻukapuaʻi",
+   "ele": 320,
+   "wikidata": "Q49065199"
+  },
+  {
    "lat": 20.191902,
    "lon": -155.743101,
    "name": "Puʻukilauea",
    "ele": 320,
    "wikidata": "Q49065262"
+  },
+  {
+   "lat": 21.463942,
+   "lon": -158.191891,
+   "name": "Puʻukamaileʻunu",
+   "ele": 319,
+   "wikidata": "Q49065146"
+  },
+  {
+   "lat": 20.61689,
+   "lon": -156.404177,
+   "name": "Puʻunaio",
+   "ele": 318,
+   "wikidata": "Q49065519"
   },
   {
    "lat": 19.555726,
@@ -2347,10 +4901,67 @@
    "wikidata": "Q49064798"
   },
   {
+   "lat": 20.822704,
+   "lon": -156.368715,
+   "name": "Puu o Koha",
+   "ele": 317,
+   "wikidata": "Q49064855"
+  },
+  {
    "lat": 19.275888,
    "lon": -155.259512,
    "name": "Puʻukapukapu",
    "ele": 317
+  },
+  {
+   "lat": 20.845287,
+   "lon": -156.357179,
+   "name": "Kailua",
+   "ele": 313,
+   "wikidata": "Q49040594"
+  },
+  {
+   "lat": 21.467909,
+   "lon": -158.14758,
+   "name": "Kauaʻōpuʻu",
+   "ele": 312,
+   "wikidata": "Q49040828"
+  },
+  {
+   "lat": 21.150097,
+   "lon": -157.051221,
+   "name": "Kualapuʻu",
+   "ele": 310,
+   "wikidata": "Q49042512"
+  },
+  {
+   "lat": 21.900022,
+   "lon": -160.136355,
+   "name": "гора Каэо",
+   "name_ru": "гора Каэо",
+   "name_en": "Mount Kaeo",
+   "ele": 310
+  },
+  {
+   "lat": 21.133312,
+   "lon": -156.874525,
+   "name": "Kaweoa",
+   "ele": 307,
+   "wikidata": "Q49040902"
+  },
+  {
+   "lat": 21.166698,
+   "lon": -156.888319,
+   "name": "Hāʻupu",
+   "ele": 306,
+   "wikidata": "Q49038195"
+  },
+  {
+   "lat": 20.795481,
+   "lon": -156.833689,
+   "name": "Mauna o Umi",
+   "ele": 306,
+   "wikidata": "Q49048335"
   },
   {
    "lat": 19.788698,
@@ -2360,10 +4971,46 @@
    "wikidata": "Q49064758"
   },
   {
+   "lat": 21.455092,
+   "lon": -157.86041,
+   "name": "Nanaikaalaea",
+   "ele": 304,
+   "wikidata": "Q49056344"
+  },
+  {
+   "lat": 20.843089,
+   "lon": -156.626228,
+   "name": "Puʻuhipa",
+   "ele": 304,
+   "wikidata": "Q49065079"
+  },
+  {
+   "lat": 20.9287,
+   "lon": -156.649023,
+   "name": "Pu‘u Koli‘i",
+   "name_en": "Puu Kolii",
+   "ele": 303,
+   "wikidata": "Q49064760"
+  },
+  {
    "lat": 19.20368,
    "lon": -155.43047,
    "name": "Puʻuʻulaʻula",
    "ele": 299
+  },
+  {
+   "lat": 20.976941,
+   "lon": -156.53443,
+   "name": "Puʻuōlaʻi",
+   "ele": 297,
+   "wikidata": "Q49065653"
+  },
+  {
+   "lat": 21.360487,
+   "lon": -158.075802,
+   "name": "Puʻumakakilo",
+   "ele": 294,
+   "wikidata": "Q49065472"
   },
   {
    "lat": 20.209725,
@@ -2380,6 +5027,13 @@
    "wikidata": "Q49065495"
   },
   {
+   "lat": 21.383925,
+   "lon": -157.774778,
+   "name": "Ulumawao",
+   "ele": 288,
+   "wikidata": "Q49086535"
+  },
+  {
    "lat": 20.229927,
    "lon": -155.861511,
    "name": "Puu Ula",
@@ -2394,11 +5048,107 @@
    "wikidata": "Q49064629"
   },
   {
+   "lat": 21.442519,
+   "lon": -157.851377,
+   "name": "Kalahaku",
+   "ele": 280,
+   "wikidata": "Q49040627"
+  },
+  {
+   "lat": 21.117687,
+   "lon": -157.151013,
+   "name": "Kāluakanaka",
+   "ele": 278,
+   "wikidata": "Q49042887"
+  },
+  {
+   "lat": 20.812693,
+   "lon": -156.519414,
+   "name": "Puu Hoha",
+   "ele": 274,
+   "wikidata": "Q49064645"
+  },
+  {
+   "lat": 20.737924,
+   "lon": -156.000972,
+   "name": "Puʻukolo",
+   "ele": 274
+  },
+  {
+   "lat": 21.114514,
+   "lon": -157.202222,
+   "name": "Kapalikōī",
+   "ele": 272,
+   "wikidata": "Q49040766"
+  },
+  {
+   "lat": 21.168713,
+   "lon": -157.162122,
+   "name": "Puʻupili",
+   "ele": 272,
+   "wikidata": "Q49065612"
+  },
+  {
+   "lat": 20.735483,
+   "lon": -156.001094,
+   "name": "Pahūolonā",
+   "ele": 270,
+   "wikidata": "Q49059386"
+  },
+  {
+   "lat": 21.097729,
+   "lon": -156.776991,
+   "name": "Puʻumanō",
+   "ele": 269,
+   "wikidata": "Q49065490"
+  },
+  {
+   "lat": 21.13612,
+   "lon": -156.878309,
+   "name": "Puʻuhoi",
+   "ele": 269,
+   "wikidata": "Q49065084"
+  },
+  {
+   "lat": 20.64332,
+   "lon": -156.149778,
+   "name": "Pōhakuloa",
+   "ele": 269
+  },
+  {
+   "lat": 21.325331,
+   "lon": -157.796385,
+   "name": "Puʻupia",
+   "ele": 266,
+   "wikidata": "Q49065609"
+  },
+  {
    "lat": 19.82972,
    "lon": -155.11401,
    "name": "Kānoa",
    "ele": 264,
    "wikidata": "Q49040748"
+  },
+  {
+   "lat": 21.534499,
+   "lon": -158.097897,
+   "name": "Puʻukamananui",
+   "ele": 263,
+   "wikidata": "Q49065152"
+  },
+  {
+   "lat": 21.184337,
+   "lon": -157.050428,
+   "name": "Pōhakunui",
+   "ele": 258,
+   "wikidata": "Q49065902"
+  },
+  {
+   "lat": 20.916699,
+   "lon": -156.282899,
+   "name": "Kuloli",
+   "ele": 258,
+   "wikidata": "Q49042552"
   },
   {
    "lat": 19.480283,
@@ -2408,11 +5158,198 @@
    "wikidata": "Q3411148"
   },
   {
+   "lat": 21.11372,
+   "lon": -157.146497,
+   "name": "Kaluakau",
+   "ele": 257,
+   "wikidata": "Q49040667"
+  },
+  {
+   "lat": 20.86311,
+   "lon": -156.17462,
+   "name": "Puʻuokoholā",
+   "ele": 257,
+   "wikidata": "Q49065569"
+  },
+  {
+   "lat": 21.066296,
+   "lon": -156.899121,
+   "name": "Puʻupāpaʻi",
+   "ele": 254,
+   "wikidata": "Q49065628"
+  },
+  {
+   "lat": 21.499342,
+   "lon": -157.8598,
+   "name": "Puʻupueo",
+   "ele": 252,
+   "wikidata": "Q49065622"
+  },
+  {
+   "lat": 21.176891,
+   "lon": -157.060926,
+   "name": "Kanakaloloa",
+   "ele": 248
+  },
+  {
+   "lat": 21.57289,
+   "lon": -158.268672,
+   "name": "Puʻupueo",
+   "ele": 248,
+   "wikidata": "Q49064952"
+  },
+  {
+   "lat": 21.460524,
+   "lon": -158.155209,
+   "name": "Maunakūwale",
+   "ele": 248,
+   "wikidata": "Q49048329"
+  },
+  {
+   "lat": 20.678921,
+   "lon": -156.0371,
+   "name": "Mopua",
+   "ele": 247
+  },
+  {
+   "lat": 21.667311,
+   "lon": -158.010007,
+   "name": "Puʻukauweweole",
+   "ele": 245,
+   "wikidata": "Q49065214"
+  },
+  {
+   "lat": 20.840281,
+   "lon": -156.633918,
+   "name": "Puʻumāhanaluanui",
+   "ele": 244,
+   "wikidata": "Q49065502"
+  },
+  {
+   "lat": 21.40071,
+   "lon": -158.169796,
+   "name": "Puʻuʻohulukai",
+   "ele": 243,
+   "wikidata": "Q49065680"
+  },
+  {
+   "lat": 21.124096,
+   "lon": -157.23341,
+   "name": "Pōhakuloa",
+   "ele": 242,
+   "wikidata": "Q49065896"
+  },
+  {
+   "lat": 21.171093,
+   "lon": -156.740492,
+   "name": "Lamaloa Head",
+   "ele": 241,
+   "wikidata": "Q49043328"
+  },
+  {
+   "lat": 21.944678,
+   "lon": -159.354275,
+   "name": "Kalanipuʻu",
+   "ele": 237,
+   "wikidata": "Q49040642"
+  },
+  {
+   "lat": 21.172497,
+   "lon": -157.18739,
+   "name": "Kahalelani",
+   "ele": 234,
+   "wikidata": "Q49040547"
+  },
+  {
+   "lat": 21.259752,
+   "lon": -157.811677,
+   "name": "Diamond Head",
+   "ele": 232,
+   "wikidata": "Q944686"
+  },
+  {
+   "lat": 21.118725,
+   "lon": -157.129102,
+   "name": "Puʻuhoʻolehua",
+   "ele": 230,
+   "wikidata": "Q49065092"
+  },
+  {
    "lat": 19.448742,
    "lon": -154.91192,
    "name": "Puʻu Kepaka",
    "ele": 229,
    "wikidata": "Q49064733"
+  },
+  {
+   "lat": 21.156689,
+   "lon": -157.129102,
+   "name": "Waihuna",
+   "ele": 226,
+   "wikidata": "Q49087293"
+  },
+  {
+   "lat": 21.906718,
+   "lon": -159.398768,
+   "name": "Puʻu Pihakapu",
+   "ele": 223,
+   "wikidata": "Q49064934"
+  },
+  {
+   "lat": 21.003919,
+   "lon": -156.616585,
+   "name": "Puʻukīlea",
+   "ele": 222,
+   "wikidata": "Q49065376"
+  },
+  {
+   "lat": 21.152294,
+   "lon": -156.725721,
+   "name": "Koaliʻi",
+   "ele": 221,
+   "wikidata": "Q49042230"
+  },
+  {
+   "lat": 21.475111,
+   "lon": -157.853391,
+   "name": "Puʻukiolea",
+   "ele": 221,
+   "wikidata": "Q49065274"
+  },
+  {
+   "lat": 21.1255,
+   "lon": -156.82649,
+   "name": "Puʻuowailau",
+   "ele": 219,
+   "wikidata": "Q49065587"
+  },
+  {
+   "lat": 21.652907,
+   "lon": -158.031491,
+   "name": "Puʻuwaihuʻena",
+   "ele": 219,
+   "wikidata": "Q49065646"
+  },
+  {
+   "lat": 21.151501,
+   "lon": -156.728895,
+   "name": "Kalanikāula",
+   "ele": 218,
+   "wikidata": "Q49040641"
+  },
+  {
+   "lat": 21.432509,
+   "lon": -158.177303,
+   "name": "Puʻumāʻiliʻili",
+   "ele": 216,
+   "wikidata": "Q49065515"
+  },
+  {
+   "lat": 22.000195,
+   "lon": -159.358216,
+   "name": "Kalepa",
+   "ele": 216,
+   "wikidata": "Q49040651"
   },
   {
    "lat": 19.468884,
@@ -2422,11 +5359,53 @@
    "wikidata": "Q49041444"
   },
   {
+   "lat": 22.022474,
+   "lon": -159.352882,
+   "name": "Kokomo",
+   "ele": 215,
+   "wikidata": "Q49042310"
+  },
+  {
+   "lat": 21.403944,
+   "lon": -158.156002,
+   "name": "Puʻuʻohuluuka",
+   "ele": 213,
+   "wikidata": "Q49065681"
+  },
+  {
+   "lat": 22.019015,
+   "lon": -160.098338,
+   "name": "гора Лехуа",
+   "name_ru": "гора Лехуа",
+   "name_en": "Mount Lehua",
+   "ele": 213
+  },
+  {
+   "lat": 21.444899,
+   "lon": -157.822508,
+   "name": "Puʻumāʻeliʻeli",
+   "ele": 211,
+   "wikidata": "Q49065513"
+  },
+  {
+   "lat": 21.90402,
+   "lon": -159.390818,
+   "name": "Kawelikoa",
+   "ele": 211
+  },
+  {
    "lat": 19.793702,
    "lon": -155.986689,
    "name": "Muheenui",
    "ele": 209,
    "wikidata": "Q49055611"
+  },
+  {
+   "lat": 20.993543,
+   "lon": -156.6316,
+   "name": "Puʻuokaʻōpuʻu",
+   "ele": 208,
+   "wikidata": "Q49065565"
   },
   {
    "lat": 20.049504,
@@ -2436,10 +5415,66 @@
    "wikidata": "Q49064706"
   },
   {
+   "lat": 22.039179,
+   "lon": -159.355178,
+   "name": "Mauna Kapu",
+   "ele": 208,
+   "wikidata": "Q49048347"
+  },
+  {
+   "lat": 21.094311,
+   "lon": -156.987806,
+   "name": "Makakiloiʻa",
+   "ele": 204,
+   "wikidata": "Q49047599"
+  },
+  {
    "lat": 19.852481,
    "lon": -155.868281,
    "name": "ʻĀhinahina",
    "ele": 204
+  },
+  {
+   "lat": 20.761484,
+   "lon": -156.006099,
+   "name": "Helani",
+   "ele": 203,
+   "wikidata": "Q49035851"
+  },
+  {
+   "lat": 20.648079,
+   "lon": -156.421877,
+   "name": "Oanapuka",
+   "ele": 203,
+   "wikidata": "Q49058055"
+  },
+  {
+   "lat": 21.135083,
+   "lon": -156.730543,
+   "name": "Kuala",
+   "ele": 202,
+   "wikidata": "Q49042507"
+  },
+  {
+   "lat": 20.875317,
+   "lon": -156.363893,
+   "name": "Puʻuokaiʻa",
+   "ele": 202,
+   "wikidata": "Q49065551"
+  },
+  {
+   "lat": 22.013879,
+   "lon": -159.353139,
+   "name": "Waiu",
+   "ele": 202,
+   "wikidata": "Q49087314"
+  },
+  {
+   "lat": 21.454542,
+   "lon": -157.73181,
+   "name": "Ulupaʻu Head",
+   "ele": 201,
+   "wikidata": "Q49086537"
   },
   {
    "lat": 20.242135,
@@ -2449,11 +5484,108 @@
    "wikidata": "Q49041019"
   },
   {
+   "lat": 21.265334,
+   "lon": -157.703185,
+   "name": "Kuamoʻokāne",
+   "ele": 200
+  },
+  {
+   "lat": 21.308278,
+   "lon": -157.65293,
+   "name": "Makapuʻu Head",
+   "ele": 198,
+   "wikidata": "Q49047614"
+  },
+  {
+   "lat": 21.670912,
+   "lon": -157.980588,
+   "name": "Puʻukī",
+   "ele": 196,
+   "wikidata": "Q49065355"
+  },
+  {
+   "lat": 20.97511,
+   "lon": -156.650339,
+   "name": "Puʻuokalauliko",
+   "ele": 192,
+   "wikidata": "Q49065553"
+  },
+  {
+   "lat": 20.919934,
+   "lon": -156.331422,
+   "name": "Puu o Umi",
+   "ele": 191,
+   "wikidata": "Q49064882"
+  },
+  {
+   "lat": 20.895885,
+   "lon": -156.6681,
+   "name": "Puʻulaina",
+   "ele": 191,
+   "wikidata": "Q49065391"
+  },
+  {
+   "lat": 21.163707,
+   "lon": -157.070997,
+   "name": "Puʻukapeʻelua",
+   "ele": 190,
+   "wikidata": "Q49065194"
+  },
+  {
+   "lat": 21.444899,
+   "lon": -158.176876,
+   "name": "Puʻupāheʻeheʻe",
+   "ele": 190,
+   "wikidata": "Q49065624"
+  },
+  {
+   "lat": 21.003736,
+   "lon": -156.566108,
+   "name": "Puu Haunako",
+   "ele": 188,
+   "wikidata": "Q49064636"
+  },
+  {
+   "lat": 21.001111,
+   "lon": -156.545416,
+   "name": "Puʻu Koaʻe",
+   "ele": 186,
+   "wikidata": "Q49065016"
+  },
+  {
+   "lat": 20.977734,
+   "lon": -156.529119,
+   "name": "Puʻumakawana",
+   "ele": 186,
+   "wikidata": "Q49065478"
+  },
+  {
+   "lat": 20.689706,
+   "lon": -156.019588,
+   "name": "Makaliʻihānau",
+   "ele": 186,
+   "wikidata": "Q49047607"
+  },
+  {
+   "lat": 21.473707,
+   "lon": -157.861082,
+   "name": "Puʻukuolani",
+   "ele": 184,
+   "wikidata": "Q49065339"
+  },
+  {
    "lat": 18.97028,
    "lon": -155.653977,
    "name": "Puʻuhuluhulu",
    "ele": 184,
    "wikidata": "Q49065098"
+  },
+  {
+   "lat": 21.617506,
+   "lon": -157.9223,
+   "name": "Kaipapaʻu Hill",
+   "ele": 183,
+   "wikidata": "Q49040608"
   },
   {
    "lat": 19.473889,
@@ -2476,10 +5608,93 @@
    "wikidata": "Q49034535"
   },
   {
+   "lat": 21.20864,
+   "lon": -157.197915,
+   "name": "Kaʻa",
+   "ele": 182,
+   "wikidata": "Q49040924"
+  },
+  {
+   "lat": 21.475111,
+   "lon": -157.848997,
+   "name": "Puʻukauai",
+   "ele": 181,
+   "wikidata": "Q49065205"
+  },
+  {
+   "lat": 21.144298,
+   "lon": -157.068616,
+   "name": "Puʻukanaio",
+   "ele": 179,
+   "wikidata": "Q49065160"
+  },
+  {
+   "lat": 21.213082,
+   "lon": -157.229126,
+   "name": "Kaeo",
+   "ele": 178,
+   "wikidata": "Q49040537"
+  },
+  {
+   "lat": 21.166515,
+   "lon": -157.213208,
+   "name": "Kuinihu",
+   "ele": 177,
+   "wikidata": "Q49042537"
+  },
+  {
+   "lat": 21.10249,
+   "lon": -157.236523,
+   "name": "Waiʻeli",
+   "ele": 177,
+   "wikidata": "Q49087316"
+  },
+  {
    "lat": 19.472729,
    "lon": -154.888787,
    "name": "Puu Pilau",
    "ele": 177
+  },
+  {
+   "lat": 20.894299,
+   "lon": -156.203612,
+   "name": "Puʻukūkae",
+   "ele": 173
+  },
+  {
+   "lat": 21.110729,
+   "lon": -157.017713,
+   "name": "Puʻuoʻahu",
+   "ele": 171
+  },
+  {
+   "lat": 21.782342,
+   "lon": -160.203103,
+   "name": "гора Каунуакала",
+   "name_ru": "гора Каунуакала",
+   "name_en": "Mount Kaunuakala",
+   "ele": 167
+  },
+  {
+   "lat": 20.755136,
+   "lon": -155.995478,
+   "name": "Puʻuokahaula",
+   "ele": 163,
+   "wikidata": "Q49065549"
+  },
+  {
+   "lat": 20.997693,
+   "lon": -156.543829,
+   "name": "Puʻukāhuliʻanapa",
+   "ele": 163,
+   "wikidata": "Q49065345"
+  },
+  {
+   "lat": 21.177502,
+   "lon": -157.217908,
+   "name": "Okoli",
+   "ele": 162,
+   "wikidata": "Q49058316"
   },
   {
    "lat": 19.787293,
@@ -2489,11 +5704,39 @@
    "wikidata": "Q49064897"
   },
   {
-   "lat": 19.491983,
-   "lon": -154.87567,
-   "name": "Puʻu Kiʻi",
-   "ele": 147,
-   "wikidata": "Q49064738"
+   "lat": 21.157482,
+   "lon": -157.231824,
+   "name": "Nāpuʻukūlua",
+   "ele": 158,
+   "wikidata": "Q49057784"
+  },
+  {
+   "lat": 21.108532,
+   "lon": -157.13252,
+   "name": "Kaluaokawahine",
+   "ele": 156,
+   "wikidata": "Q49040672"
+  },
+  {
+   "lat": 21.422499,
+   "lon": -157.756895,
+   "name": "Puʻupāpaʻa",
+   "ele": 156,
+   "wikidata": "Q49065626"
+  },
+  {
+   "lat": 21.90393,
+   "lon": -159.482743,
+   "name": "Manuhonuhonu",
+   "ele": 152,
+   "wikidata": "Q49047799"
+  },
+  {
+   "lat": 21.340712,
+   "lon": -158.090573,
+   "name": "Puʻupālailai",
+   "ele": 149,
+   "wikidata": "Q49065596"
   },
   {
    "lat": 19.713082,
@@ -2510,10 +5753,113 @@
    "wikidata": "Q49040575"
   },
   {
+   "lat": 19.491983,
+   "lon": -154.87567,
+   "name": "Puʻu Kiʻi",
+   "ele": 147,
+   "wikidata": "Q49064738"
+  },
+  {
+   "lat": 21.299871,
+   "lon": -157.8109,
+   "name": "Waahila",
+   "ele": 147
+  },
+  {
+   "lat": 20.869092,
+   "lon": -157.033885,
+   "name": "Kaʻapahu",
+   "ele": 146
+  },
+  {
    "lat": 19.187323,
    "lon": -155.455677,
    "name": "Cinder Hills",
    "ele": 146
+  },
+  {
+   "lat": 21.558215,
+   "lon": -157.863482,
+   "name": "Crouching Lion",
+   "ele": 143,
+   "wikidata": "Q49023101"
+  },
+  {
+   "lat": 20.614693,
+   "lon": -156.413393,
+   "name": "Kalua o Lapa",
+   "ele": 142,
+   "wikidata": "Q49040663"
+  },
+  {
+   "lat": 21.083508,
+   "lon": -156.815198,
+   "name": "Waikakulu",
+   "ele": 139,
+   "wikidata": "Q49087295"
+  },
+  {
+   "lat": 20.728281,
+   "lon": -156.423281,
+   "name": "Nāwāwaeoʻalika",
+   "ele": 138,
+   "wikidata": "Q49057789"
+  },
+  {
+   "lat": 21.481886,
+   "lon": -157.869077,
+   "name": "Makikiki",
+   "ele": 137,
+   "wikidata": "Q49047618"
+  },
+  {
+   "lat": 20.731332,
+   "lon": -155.988521,
+   "name": "Kaiwiopele",
+   "ele": 137,
+   "wikidata": "Q49040617"
+  },
+  {
+   "lat": 20.999097,
+   "lon": -156.557807,
+   "name": "ʻUmi",
+   "ele": 134,
+   "wikidata": "Q49091529"
+  },
+  {
+   "lat": 21.014295,
+   "lon": -156.575996,
+   "name": "Keikapalani",
+   "ele": 134,
+   "wikidata": "Q49041022"
+  },
+  {
+   "lat": 21.193493,
+   "lon": -157.091688,
+   "name": "Puʻukapele",
+   "ele": 133,
+   "wikidata": "Q49065191"
+  },
+  {
+   "lat": 21.146313,
+   "lon": -157.113599,
+   "name": "Puʻuopipika",
+   "ele": 132,
+   "wikidata": "Q49065583"
+  },
+  {
+   "lat": 21.003919,
+   "lon": -156.560004,
+   "name": "Haunaa",
+   "ele": 129,
+   "wikidata": "Q49035297"
+  },
+  {
+   "lat": 21.176708,
+   "lon": -157.229993,
+   "name": "Puʻuapalu",
+   "ele": 124,
+   "wikidata": "Q49065047"
   },
   {
    "lat": 19.802674,
@@ -2530,11 +5876,89 @@
    "wikidata": "Q49065087"
   },
   {
+   "lat": 20.980114,
+   "lon": -156.658395,
+   "name": "Puʻunēnē",
+   "ele": 119,
+   "wikidata": "Q49065541"
+  },
+  {
+   "lat": 21.196483,
+   "lon": -157.220594,
+   "name": "Puʻuʻula",
+   "ele": 118,
+   "wikidata": "Q49065701"
+  },
+  {
    "lat": 18.993901,
    "lon": -155.624193,
    "name": "Puʻukoʻihala",
    "ele": 117,
    "wikidata": "Q49065317"
+  },
+  {
+   "lat": 20.754282,
+   "lon": -155.981502,
+   "name": "Kaʻuiki Head",
+   "ele": 116,
+   "wikidata": "Q42307946"
+  },
+  {
+   "lat": 20.847301,
+   "lon": -156.137205,
+   "name": "Puʻuililua",
+   "ele": 113,
+   "wikidata": "Q49065105"
+  },
+  {
+   "lat": 21.102734,
+   "lon": -157.0099,
+   "name": "Kukuiokahoʻāliʻi",
+   "ele": 112,
+   "wikidata": "Q49042546"
+  },
+  {
+   "lat": 20.636549,
+   "lon": -156.449286,
+   "name": "Puʻuōlaʻi",
+   "ele": 110,
+   "volcano": true
+  },
+  {
+   "lat": 21.557692,
+   "lon": -157.863706,
+   "name": "Kauhi",
+   "ele": 109,
+   "wikidata": "Q49040831"
+  },
+  {
+   "lat": 21.026502,
+   "lon": -156.604317,
+   "name": "Puʻukaʻeo",
+   "ele": 107,
+   "wikidata": "Q49065230"
+  },
+  {
+   "lat": 21.890705,
+   "lon": -159.440079,
+   "name": "Puʻuhi",
+   "ele": 105,
+   "wikidata": "Q49064639",
+   "volcano": true
+  },
+  {
+   "lat": 21.191112,
+   "lon": -156.965224,
+   "name": "Puʻuʻuao",
+   "ele": 104,
+   "wikidata": "Q49065696"
+  },
+  {
+   "lat": 20.626535,
+   "lon": -156.168516,
+   "name": "Puu Maneoneo",
+   "ele": 104,
+   "wikidata": "Q49064825"
   },
   {
    "lat": 19.178716,
@@ -2550,11 +5974,109 @@
    "wikidata": "Q49038192"
   },
   {
+   "lat": 21.095532,
+   "lon": -157.252514,
+   "name": "Puʻuhakina",
+   "ele": 101,
+   "wikidata": "Q49065058"
+  },
+  {
    "lat": 19.800294,
    "lon": -156.009578,
    "name": "Kuili",
    "ele": 101,
    "wikidata": "Q49042534"
+  },
+  {
+   "lat": 21.44789,
+   "lon": -157.756773,
+   "name": "Puʻuhawaiʻiloa",
+   "ele": 98,
+   "wikidata": "Q49064638"
+  },
+  {
+   "lat": 21.458937,
+   "lon": -157.855589,
+   "name": "Puʻukolo",
+   "ele": 97,
+   "wikidata": "Q49065308"
+  },
+  {
+   "lat": 21.414931,
+   "lon": -157.99072,
+   "name": "Puʻupōhaku",
+   "ele": 92,
+   "wikidata": "Q49065633"
+  },
+  {
+   "lat": 21.387343,
+   "lon": -157.74359,
+   "name": "Puʻuohu",
+   "ele": 89,
+   "wikidata": "Q49065546"
+  },
+  {
+   "lat": 21.846201,
+   "lon": -160.217762,
+   "name": "холм Каваэваэ",
+   "name_ru": "холм Каваэваэ",
+   "name_en": "Kawaewae Hill",
+   "ele": 88,
+   "wikidata": "Q49042891"
+  },
+  {
+   "lat": 21.303422,
+   "lon": -157.825809,
+   "name": "Rocky Hill",
+   "ele": 88,
+   "wikidata": "Q49069073"
+  },
+  {
+   "lat": 21.300435,
+   "lon": -157.652142,
+   "name": "Puʻuʻokīpahulu",
+   "ele": 87,
+   "wikidata": "Q49065690"
+  },
+  {
+   "lat": 21.213329,
+   "lon": -157.248242,
+   "name": "Kahenawai",
+   "ele": 86,
+   "wikidata": "Q49040549"
+  },
+  {
+   "lat": 21.422499,
+   "lon": -157.793577,
+   "name": "Puʻupahu",
+   "ele": 85,
+   "wikidata": "Q49065592"
+  },
+  {
+   "lat": 21.277907,
+   "lon": -157.799375,
+   "name": "Kaimukī",
+   "ele": 85
+  },
+  {
+   "lat": 20.818918,
+   "lon": -156.617683,
+   "name": "Kīlea",
+   "ele": 81,
+   "wikidata": "Q49042901"
+  },
+  {
+   "lat": 21.097912,
+   "lon": -157.272594,
+   "name": "Punākua",
+   "ele": 80,
+   "wikidata": "Q49064519"
+  },
+  {
+   "lat": 20.541167,
+   "lon": -156.64402,
+   "name": "BM 855",
+   "ele": 79
   },
   {
    "lat": 19.505505,
@@ -2583,11 +6105,39 @@
    "wikidata": "Q49065091"
   },
   {
+   "lat": 21.006726,
+   "lon": -156.55799,
+   "name": "Kaikaina",
+   "ele": 73,
+   "wikidata": "Q49040587"
+  },
+  {
+   "lat": 21.88423,
+   "lon": -159.440941,
+   "name": "Puu Hunehune",
+   "ele": 73,
+   "volcano": true
+  },
+  {
+   "lat": 21.392897,
+   "lon": -157.720824,
+   "name": "Puʻuhalo",
+   "ele": 70,
+   "wikidata": "Q49065062"
+  },
+  {
    "lat": 19.511303,
    "lon": -154.833185,
    "name": "Kūkiʻi",
    "ele": 70,
    "wikidata": "Q49042541"
+  },
+  {
+   "lat": 21.128491,
+   "lon": -157.103589,
+   "name": "Nao",
+   "ele": 69,
+   "wikidata": "Q49056375"
   },
   {
    "lat": 19.511475,
@@ -2597,6 +6147,35 @@
    "wikidata": "Q49064888"
   },
   {
+   "lat": 21.955027,
+   "lon": -160.108309,
+   "name": "холм Пууалала",
+   "name_ru": "холм Пууалала",
+   "name_en": "Puualala Hill",
+   "ele": 64
+  },
+  {
+   "lat": 21.018689,
+   "lon": -156.588203,
+   "name": "Akalua Nui",
+   "ele": 63,
+   "wikidata": "Q49008552"
+  },
+  {
+   "lat": 21.057324,
+   "lon": -156.881116,
+   "name": "Lepelepe",
+   "ele": 62,
+   "wikidata": "Q49044008"
+  },
+  {
+   "lat": 21.351332,
+   "lon": -157.885496,
+   "name": "Puʻukapu",
+   "ele": 62,
+   "wikidata": "Q49065196"
+  },
+  {
    "lat": 19.511486,
    "lon": -154.831171,
    "name": "Puʻukūkae",
@@ -2604,10 +6183,39 @@
    "wikidata": "Q49064765"
   },
   {
+   "lat": 21.10249,
+   "lon": -157.295604,
+   "name": "Kihaapiʻilani",
+   "ele": 60,
+   "wikidata": "Q49041509"
+  },
+  {
+   "lat": 20.602729,
+   "lon": -156.418215,
+   "name": "Puu o Kanaloa",
+   "ele": 60,
+   "wikidata": "Q49064853"
+  },
+  {
+   "lat": 21.820839,
+   "lon": -160.217702,
+   "name": "гора Мауулоа",
+   "name_ru": "гора Мауулоа",
+   "name_en": "Mount Mauuloa",
+   "ele": 60
+  },
+  {
    "lat": 19.195685,
    "lon": -155.398671,
    "name": "Puʻumoʻo",
    "ele": 55
+  },
+  {
+   "lat": 21.460471,
+   "lon": -158.213328,
+   "name": "Mauna Lahilahi",
+   "ele": 52,
+   "wikidata": "Q49048331"
   },
   {
    "lat": 18.928715,
@@ -2617,10 +6225,68 @@
    "wikidata": "Q49065704"
   },
   {
+   "lat": 21.427321,
+   "lon": -157.793028,
+   "name": "Pōhākea",
+   "ele": 50,
+   "wikidata": "Q49065911"
+  },
+  {
+   "lat": 21.016919,
+   "lon": -156.587288,
+   "name": "Akhluaiki",
+   "ele": 50,
+   "wikidata": "Q49008556"
+  },
+  {
+   "lat": 20.904492,
+   "lon": -156.212585,
+   "name": "Puu Ka Ae",
+   "ele": 50,
+   "wikidata": "Q49064678"
+  },
+  {
    "lat": 19.292492,
    "lon": -155.121086,
    "name": "Puʻu Loa",
    "ele": 49
+  },
+  {
+   "lat": 20.898693,
+   "lon": -156.395999,
+   "name": "Puʻunēnē",
+   "ele": 48
+  },
+  {
+   "lat": 21.12373,
+   "lon": -156.734388,
+   "name": "Puʻunananana",
+   "ele": 45
+  },
+  {
+   "lat": 21.336501,
+   "lon": -158.074399,
+   "name": "Puʻukapolei",
+   "ele": 45
+  },
+  {
+   "lat": 21.195324,
+   "lon": -157.24104,
+   "name": "Pōhakumāuliuli",
+   "ele": 43
+  },
+  {
+   "lat": 21.089489,
+   "lon": -157.009717,
+   "name": "Puʻumaninikolo",
+   "ele": 40
+  },
+  {
+   "lat": 21.112927,
+   "lon": -157.072827,
+   "name": "Puʻuokahanui",
+   "ele": 40,
+   "wikidata": "Q49065548"
   },
   {
    "lat": 19.004702,
@@ -2636,6 +6302,18 @@
    "ele": 40
   },
   {
+   "lat": 21.02229,
+   "lon": -156.638315,
+   "name": "Kulaokaʻeʻa",
+   "ele": 39
+  },
+  {
+   "lat": 20.921887,
+   "lon": -157.018322,
+   "name": "Kaena",
+   "ele": 39
+  },
+  {
    "lat": 19.102723,
    "lon": -155.906665,
    "name": "Hanakeaumoe",
@@ -2648,10 +6326,28 @@
    "ele": 39
   },
   {
+   "lat": 20.719125,
+   "lon": -155.989009,
+   "name": "Puʻuhele",
+   "ele": 37
+  },
+  {
    "lat": 18.971317,
    "lon": -155.715562,
    "name": "Puʻuwaimānalo",
    "ele": 36
+  },
+  {
+   "lat": 21.104687,
+   "lon": -157.116223,
+   "name": "Puʻuʻīloli",
+   "ele": 33
+  },
+  {
+   "lat": 21.021924,
+   "lon": -156.627023,
+   "name": "Pōhakupule",
+   "ele": 33
   },
   {
    "lat": 18.972904,
@@ -2666,6 +6362,12 @@
    "ele": 32
   },
   {
+   "lat": 20.903332,
+   "lon": -156.385683,
+   "name": "Olopua",
+   "ele": 31
+  },
+  {
    "lat": 19.239949,
    "lon": -155.333815,
    "name": "Nāpuʻuonāʻelemākule",
@@ -2676,6 +6378,18 @@
    "lon": -154.869989,
    "name": "Kaakepa",
    "ele": 30
+  },
+  {
+   "lat": 21.18214,
+   "lon": -157.250989,
+   "name": "Puʻuokaiaka",
+   "ele": 26
+  },
+  {
+   "lat": 21.130688,
+   "lon": -157.287731,
+   "name": "Puʻukaheu",
+   "ele": 25
   },
   {
    "lat": 18.936711,
@@ -2696,6 +6410,18 @@
    "ele": 24
   },
   {
+   "lat": 21.2093,
+   "lon": -156.969802,
+   "name": "Kiʻikolu",
+   "ele": 20
+  },
+  {
+   "lat": 20.927318,
+   "lon": -156.69581,
+   "name": "Puʻu Kekaʻa",
+   "ele": 19
+  },
+  {
    "lat": 20.089727,
    "lon": -155.871092,
    "name": "Puʻuʻulaʻula",
@@ -2708,10 +6434,22 @@
    "ele": 18
   },
   {
+   "lat": 21.005322,
+   "lon": -156.66572,
+   "name": "Puakahuahua",
+   "ele": 16
+  },
+  {
    "lat": 19.315503,
    "lon": -155.061882,
    "name": "Puu Manawalea",
    "ele": 16
+  },
+  {
+   "lat": 20.739329,
+   "lon": -156.888438,
+   "name": "Mānele Cone",
+   "ele": 14
   },
   {
    "lat": 19.144903,
@@ -2726,10 +6464,29 @@
    "ele": 12
   },
   {
+   "lat": 21.872225,
+   "lon": -159.446278,
+   "name": "Pihakekua",
+   "ele": 11,
+   "volcano": true
+  },
+  {
+   "lat": 21.15913,
+   "lon": -157.274303,
+   "name": "Puʻukaeʻo",
+   "ele": 9
+  },
+  {
    "lat": 19.626536,
    "lon": -154.969293,
    "name": "Kipaepae",
    "ele": 9
+  },
+  {
+   "lat": 20.522365,
+   "lon": -156.603563,
+   "name": "Black 2",
+   "ele": 8
   },
   {
    "lat": 18.947513,
@@ -2756,6 +6513,12 @@
    "ele": 5
   },
   {
+   "lat": 20.998486,
+   "lon": -156.666819,
+   "name": "Kapalua",
+   "ele": 4
+  },
+  {
    "lat": 19.084905,
    "lon": -155.546984,
    "name": "Puu o Kaau",
@@ -2774,11 +6537,56 @@
    "ele": 1
   },
   {
-   "lat": 19.766665,
-   "lon": -155.634182,
-   "name": "Puʻukapele Crater",
-   "name_en": "Puukapele Crater",
+   "lat": 21.341172,
+   "lon": -157.786941,
+   "name": "Manoa Middle"
+  },
+  {
+   "lat": 21.422743,
+   "lon": -157.743895,
+   "name": "Puʻu Nao",
+   "ele": 0
+  },
+  {
+   "lat": 20.716959,
+   "lon": -156.232919,
+   "name": "Ka Lua o ka ʻŌʻō Cinder Cone",
    "volcano": true
+  },
+  {
+   "lat": 20.880581,
+   "lon": -156.548057,
+   "name": "Iao Needle"
+  },
+  {
+   "lat": 19.819252,
+   "lon": -155.469443,
+   "name": "Puʻuwekiu",
+   "name_en": "Puuwekiu",
+   "wikidata": "Q49065649"
+  },
+  {
+   "lat": 19.861933,
+   "lon": -155.382442,
+   "name": "Puʻukolei",
+   "name_en": "Puukolei"
+  },
+  {
+   "lat": 22.14758,
+   "lon": -159.496395,
+   "name": "Kaliko",
+   "wikidata": "Q49040655"
+  },
+  {
+   "lat": 22.159308,
+   "lon": -159.654981,
+   "name": "Ni'ani'au",
+   "wikidata": "Q49057074"
+  },
+  {
+   "lat": 20.857236,
+   "lon": -156.150951,
+   "name": "Keʻanae Uka"
   },
   {
    "lat": 19.374032,
@@ -2805,15 +6613,57 @@
    "volcano": true
   },
   {
+   "lat": 21.900388,
+   "lon": -159.528867,
+   "name": "Ioleau",
+   "wikidata": "Q49038882"
+  },
+  {
+   "lat": 20.542664,
+   "lon": -156.60518,
+   "name": "Pu'u Moiwi",
+   "wikidata": "Q49065517"
+  },
+  {
+   "lat": 20.518475,
+   "lon": -156.649577,
+   "name": "Pu'u Lai",
+   "wikidata": "Q49065415"
+  },
+  {
+   "lat": 20.559887,
+   "lon": -156.56893,
+   "name": "Pu'u Moa'ulanui",
+   "volcano": true
+  },
+  {
+   "lat": 20.540321,
+   "lon": -156.629889,
+   "name": "Puʻukahua"
+  },
+  {
+   "lat": 20.53069,
+   "lon": -156.651651,
+   "name": "Lua ʻO Keaualalo",
+   "wikidata": "Q49004682"
+  },
+  {
+   "lat": 20.56488,
+   "lon": -156.586896,
+   "name": "Pu'u Moa'ulaiki"
+  },
+  {
    "lat": 19.461634,
    "lon": -154.90887,
    "name": "Ahuʻailāʻau",
    "volcano": true
   },
   {
-   "lat": 19.402017,
-   "lon": -155.068084,
-   "name": "Kalalua"
+   "lat": 19.766665,
+   "lon": -155.634182,
+   "name": "Puʻukapele Crater",
+   "name_en": "Puukapele Crater",
+   "volcano": true
   },
   {
    "lat": 19.472828,
@@ -2822,40 +6672,15 @@
    "name_en": "Puu Pilau"
   },
   {
-   "lat": 19.819252,
-   "lon": -155.469443,
-   "name": "Puʻuwekiu",
-   "name_en": "Puuwekiu",
-   "wikidata": "Q49065649"
-  },
-  {
-   "lat": 19.861933,
-   "lon": -155.382442,
-   "name": "Puʻukolei",
-   "name_en": "Puukolei"
+   "lat": 22.178081,
+   "lon": -159.638654,
+   "name": "Kanakou",
+   "wikidata": "Q49040725"
   },
   {
    "lat": 19.41374,
    "lon": -155.246622,
    "name": "Kīlauea Iki",
-   "volcano": true
-  },
-  {
-   "lat": 19.76009,
-   "lon": -155.623316,
-   "name": "Puʻukea Crater",
-   "name_en": "Puukea Crater",
-   "volcano": true
-  },
-  {
-   "lat": 19.72716,
-   "lon": -155.449462,
-   "name": "Hoʻokomo"
-  },
-  {
-   "lat": 19.400084,
-   "lon": -155.264003,
-   "name": "Keanakākoʻi Crater",
    "volcano": true
   },
   {
@@ -2869,6 +6694,644 @@
    "lon": -155.249004,
    "name": "Puhimau Crater",
    "volcano": true
+  },
+  {
+   "lat": 21.35982,
+   "lon": -157.749457,
+   "name": "Pakuʻi",
+   "name_en": "Pakui"
+  },
+  {
+   "lat": 21.880249,
+   "lon": -159.445656,
+   "name": "Puʻu Wanawana",
+   "volcano": true
+  },
+  {
+   "lat": 20.919115,
+   "lon": -156.573028,
+   "name": "Eke Crater",
+   "wikidata": "Q49004617"
+  },
+  {
+   "lat": 19.400084,
+   "lon": -155.264003,
+   "name": "Keanakākoʻi Crater",
+   "volcano": true
+  },
+  {
+   "lat": 20.732134,
+   "lon": -156.387205,
+   "name": "Puu o Kali",
+   "wikidata": "Q49065555",
+   "volcano": true
+  },
+  {
+   "lat": 21.952728,
+   "lon": -159.48948,
+   "name": "Puʻu Kolo",
+   "wikidata": "Q49064761"
+  },
+  {
+   "lat": 21.895389,
+   "lon": -159.417222,
+   "name": "Puʻu Keke",
+   "wikidata": "Q49064730"
+  },
+  {
+   "lat": 22.193224,
+   "lon": -159.509937,
+   "name": "Paepae"
+  },
+  {
+   "lat": 22.185971,
+   "lon": -159.513702,
+   "name": "Waiokihi"
+  },
+  {
+   "lat": 22.054857,
+   "lon": -159.542685,
+   "name": "Keʻāpua"
+  },
+  {
+   "lat": 22.175003,
+   "lon": -159.618609,
+   "name": "Waiahuakua"
+  },
+  {
+   "lat": 21.945274,
+   "lon": -159.566652,
+   "name": "Ahuaeliku Peak"
+  },
+  {
+   "lat": 22.099776,
+   "lon": -159.676752,
+   "name": "Kāʻana"
+  },
+  {
+   "lat": 22.147658,
+   "lon": -159.715598,
+   "name": "Anaki"
+  },
+  {
+   "lat": 22.117227,
+   "lon": -159.419439,
+   "name": "Uluawaa"
+  },
+  {
+   "lat": 21.906667,
+   "lon": -160.093333,
+   "name": "Puʻulua"
+  },
+  {
+   "lat": 22.139733,
+   "lon": -159.645669,
+   "name": "Pōhakuwaʻawaʻa"
+  },
+  {
+   "lat": 22.064163,
+   "lon": -159.354486,
+   "name": "Sleeping Giant"
+  },
+  {
+   "lat": 22.117403,
+   "lon": -159.417555,
+   "name": "Wēkiu"
+  },
+  {
+   "lat": 22.053604,
+   "lon": -159.387052,
+   "name": "Puʻupilo"
+  },
+  {
+   "lat": 22.176799,
+   "lon": -159.471215,
+   "name": "Waipuni"
+  },
+  {
+   "lat": 22.117179,
+   "lon": -159.52505,
+   "name": "Puu Laau"
+  },
+  {
+   "lat": 22.201389,
+   "lon": -159.547222,
+   "name": "Puʻuuahia"
+  },
+  {
+   "lat": 22.119005,
+   "lon": -159.363554,
+   "name": "Puu Kinui"
+  },
+  {
+   "lat": 22.017589,
+   "lon": -159.644776,
+   "name": "Puʻukī"
+  },
+  {
+   "lat": 22.179481,
+   "lon": -159.446502,
+   "name": "Puu Maheu"
+  },
+  {
+   "lat": 22.111207,
+   "lon": -159.362208,
+   "name": "Puu Lawii"
+  },
+  {
+   "lat": 22.14836,
+   "lon": -159.327424,
+   "name": "Puu Konanae",
+   "name_en": "Hole-in-the-Mountain"
+  },
+  {
+   "lat": 22.213056,
+   "lon": -159.559722,
+   "name": "Puʻunōpili"
+  },
+  {
+   "lat": 22.176389,
+   "lon": -159.631389,
+   "name": "Puʻukī"
+  },
+  {
+   "lat": 22.048611,
+   "lon": -159.516389,
+   "name": "Puʻukī"
+  },
+  {
+   "lat": 22.165833,
+   "lon": -159.552222,
+   "name": "Puʻuʻiliahi"
+  },
+  {
+   "lat": 22.159441,
+   "lon": -159.384708,
+   "name": "Puu Keakea"
+  },
+  {
+   "lat": 22.210278,
+   "lon": -159.524167,
+   "name": "Puʻukamanu"
+  },
+  {
+   "lat": 22.13,
+   "lon": -159.535,
+   "name": "Puʻukamaha"
+  },
+  {
+   "lat": 22.15652,
+   "lon": -159.349273,
+   "name": "Puʻuehu"
+  },
+  {
+   "lat": 22.074502,
+   "lon": -159.481537,
+   "name": "Pōhakupele"
+  },
+  {
+   "lat": 22.028889,
+   "lon": -159.642222,
+   "name": "Poʻololoʻole"
+  },
+  {
+   "lat": 22.147741,
+   "lon": -159.631069,
+   "name": "Puʻuokila"
+  },
+  {
+   "lat": 21.923942,
+   "lon": -159.473341,
+   "name": "Puu o Hewa"
+  },
+  {
+   "lat": 22.17201,
+   "lon": -159.470867,
+   "name": "Puu o Miki"
+  },
+  {
+   "lat": 21.943333,
+   "lon": -159.541783,
+   "name": "Pōhākea"
+  },
+  {
+   "lat": 22.11462,
+   "lon": -159.393618,
+   "name": "Pohakupili"
+  },
+  {
+   "lat": 22.194858,
+   "lon": -159.565455,
+   "name": "Palikea"
+  },
+  {
+   "lat": 22.188784,
+   "lon": -159.605309,
+   "name": "Pōhākea"
+  },
+  {
+   "lat": 22.011941,
+   "lon": -159.480819,
+   "name": "Palikea"
+  },
+  {
+   "lat": 22.149044,
+   "lon": -159.396248,
+   "name": "Mālamalamaiki"
+  },
+  {
+   "lat": 22.038847,
+   "lon": -159.438867,
+   "name": "Maunaʻou"
+  },
+  {
+   "lat": 22.178858,
+   "lon": -159.531062,
+   "name": "Mahina Kehau"
+  },
+  {
+   "lat": 22.184722,
+   "lon": -159.579444,
+   "name": "Paliʻeleʻele"
+  },
+  {
+   "lat": 22.09681,
+   "lon": -159.453587,
+   "name": "Maheo"
+  },
+  {
+   "lat": 21.999444,
+   "lon": -159.568611,
+   "name": "Peʻapeʻa"
+  },
+  {
+   "lat": 22.045274,
+   "lon": -159.522486,
+   "name": "Pālehua"
+  },
+  {
+   "lat": 22.13833,
+   "lon": -159.499708,
+   "name": "Nāmolokama Mountain"
+  },
+  {
+   "lat": 22.037591,
+   "lon": -159.525354,
+   "name": "Makaopihi"
+  },
+  {
+   "lat": 22.167713,
+   "lon": -159.609838,
+   "name": "Moaalele"
+  },
+  {
+   "lat": 22.149243,
+   "lon": -159.421439,
+   "name": "Mount Namahana"
+  },
+  {
+   "lat": 22.026395,
+   "lon": -159.539702,
+   "name": "Kuahua"
+  },
+  {
+   "lat": 21.966389,
+   "lon": -159.495,
+   "name": "Laʻauhihaʻihaʻi"
+  },
+  {
+   "lat": 22.027689,
+   "lon": -159.489598,
+   "name": "ʻIole"
+  },
+  {
+   "lat": 22.068456,
+   "lon": -159.49851,
+   "name": "Kuaohukini"
+  },
+  {
+   "lat": 22.122993,
+   "lon": -159.416502,
+   "name": "Leleiwi"
+  },
+  {
+   "lat": 22.209342,
+   "lon": -159.567336,
+   "name": "Kulanaililia"
+  },
+  {
+   "lat": 22.181822,
+   "lon": -159.532186,
+   "name": "Kolopua"
+  },
+  {
+   "lat": 22.156347,
+   "lon": -159.594176,
+   "name": "Kilohana"
+  },
+  {
+   "lat": 21.918832,
+   "lon": -159.424311,
+   "name": "Koloakapohu"
+  },
+  {
+   "lat": 22.148489,
+   "lon": -159.406846,
+   "name": "Leleiwi"
+  },
+  {
+   "lat": 22.050193,
+   "lon": -159.658282,
+   "name": "Kukui"
+  },
+  {
+   "lat": 22.101385,
+   "lon": -159.48693,
+   "name": "Kīloa"
+  },
+  {
+   "lat": 22.03545,
+   "lon": -159.63667,
+   "name": "Koiohi"
+  },
+  {
+   "lat": 22.109005,
+   "lon": -159.440434,
+   "name": "Kualapa"
+  },
+  {
+   "lat": 22.168187,
+   "lon": -159.619875,
+   "name": "Keanapuka"
+  },
+  {
+   "lat": 22.030833,
+   "lon": -159.64,
+   "name": "Keanapahu"
+  },
+  {
+   "lat": 22.114735,
+   "lon": -159.431691,
+   "name": "Keahua"
+  },
+  {
+   "lat": 22.026734,
+   "lon": -159.577704,
+   "name": "Keanaʻihiʻihi"
+  },
+  {
+   "lat": 22.153251,
+   "lon": -159.33802,
+   "name": "Kawaiumakua"
+  },
+  {
+   "lat": 22.013063,
+   "lon": -159.579822,
+   "name": "Kaupuaʻa"
+  },
+  {
+   "lat": 22.116061,
+   "lon": -159.476926,
+   "name": "Kaumanalehua"
+  },
+  {
+   "lat": 22.194719,
+   "lon": -159.547764,
+   "name": "Kealawela"
+  },
+  {
+   "lat": 21.932219,
+   "lon": -159.438041,
+   "name": "Kawaimanu"
+  },
+  {
+   "lat": 22.189313,
+   "lon": -159.529826,
+   "name": "Kamani"
+  },
+  {
+   "lat": 22.119016,
+   "lon": -159.481746,
+   "name": "Kawailewa"
+  },
+  {
+   "lat": 22.058318,
+   "lon": -159.54247,
+   "name": "Kaumahaloa"
+  },
+  {
+   "lat": 22.181113,
+   "lon": -159.514765,
+   "name": "Kapalikea"
+  },
+  {
+   "lat": 22.193628,
+   "lon": -159.497186,
+   "name": "Kamoo Koleaka"
+  },
+  {
+   "lat": 22.164967,
+   "lon": -159.456991,
+   "name": "Kapaka"
+  },
+  {
+   "lat": 22.029719,
+   "lon": -159.533319,
+   "name": "Kalaluapuu"
+  },
+  {
+   "lat": 22.157338,
+   "lon": -159.550711,
+   "name": "Kamakeanu"
+  },
+  {
+   "lat": 22.170798,
+   "lon": -159.528757,
+   "name": "Kapailu"
+  },
+  {
+   "lat": 22.112704,
+   "lon": -159.413397,
+   "name": "Kapehuaala"
+  },
+  {
+   "lat": 22.060883,
+   "lon": -159.60562,
+   "name": "Kalehuahakihaki"
+  },
+  {
+   "lat": 22.031663,
+   "lon": -159.530525,
+   "name": "Kalaluanahelehele"
+  },
+  {
+   "lat": 22.051083,
+   "lon": -159.483526,
+   "name": "Kalalea"
+  },
+  {
+   "lat": 22.194076,
+   "lon": -159.529735,
+   "name": "Kaooa"
+  },
+  {
+   "lat": 21.908765,
+   "lon": -159.425619,
+   "name": "Kalapa"
+  },
+  {
+   "lat": 22.10085,
+   "lon": -159.399025,
+   "name": "Kamahuna"
+  },
+  {
+   "lat": 22.048769,
+   "lon": -159.48027,
+   "name": "Kamanu"
+  },
+  {
+   "lat": 22.156207,
+   "lon": -159.651094,
+   "name": "Kalahū"
+  },
+  {
+   "lat": 22.14631,
+   "lon": -159.65332,
+   "name": "Kaʻinamanu"
+  },
+  {
+   "lat": 22.1575,
+   "lon": -159.377222,
+   "name": "Kahoʻopulu"
+  },
+  {
+   "lat": 22.150731,
+   "lon": -159.410734,
+   "name": "Kāhili"
+  },
+  {
+   "lat": 22.01822,
+   "lon": -159.608281,
+   "name": "Kaʻala"
+  },
+  {
+   "lat": 22.146802,
+   "lon": -159.325904,
+   "name": "Hokualele"
+  },
+  {
+   "lat": 22.181389,
+   "lon": -159.586944,
+   "name": "Honoʻonāpali"
+  },
+  {
+   "lat": 19.72716,
+   "lon": -155.449462,
+   "name": "Hoʻokomo"
+  },
+  {
+   "lat": 22.114896,
+   "lon": -159.435007,
+   "name": "Hanalei"
+  },
+  {
+   "lat": 22.155175,
+   "lon": -159.43084,
+   "name": "Haleone"
+  },
+  {
+   "lat": 22.176389,
+   "lon": -159.503056,
+   "name": "Halaʻula"
+  },
+  {
+   "lat": 22.223297,
+   "lon": -159.395192,
+   "name": "Crater Hill"
+  },
+  {
+   "lat": 22.173234,
+   "lon": -159.352169,
+   "name": "Amu"
+  },
+  {
+   "lat": 22.17441,
+   "lon": -159.626176,
+   "name": "ʻAlēalau"
+  },
+  {
+   "lat": 22.188333,
+   "lon": -159.55,
+   "name": "ʻAikanaka"
+  },
+  {
+   "lat": 22.04141,
+   "lon": -159.375236,
+   "name": "ʻAʻahoaka"
+  },
+  {
+   "lat": 22.113172,
+   "lon": -159.669893,
+   "name": "Halemanu"
+  },
+  {
+   "lat": 22.073056,
+   "lon": -159.691944,
+   "name": "Papaʻalai"
+  },
+  {
+   "lat": 22.080556,
+   "lon": -159.666389,
+   "name": "Puʻukapele"
+  },
+  {
+   "lat": 22.051941,
+   "lon": -159.679986,
+   "name": "Pōhakumanō"
+  },
+  {
+   "lat": 20.83692,
+   "lon": -156.818157,
+   "name": "Kāhe‘a"
+  },
+  {
+   "lat": 20.791455,
+   "lon": -156.819634,
+   "name": "Awehi"
+  },
+  {
+   "lat": 22.065053,
+   "lon": -159.619265,
+   "name": "Ka'aha",
+   "wikidata": "Q49040927"
+  },
+  {
+   "lat": 22.036361,
+   "lon": -159.706847,
+   "name": "Puʻu ʻŌpae",
+   "wikidata": "Q49065727"
+  },
+  {
+   "lat": 19.402017,
+   "lon": -155.068084,
+   "name": "Kalalua"
+  },
+  {
+   "lat": 19.76009,
+   "lon": -155.623316,
+   "name": "Puʻukea Crater",
+   "name_en": "Puukea Crater",
+   "volcano": true
+  },
+  {
+   "lat": 22.008807,
+   "lon": -159.355323,
+   "name": "Kailiiliahinale"
+  },
+  {
+   "lat": 22.034265,
+   "lon": -159.352586,
+   "name": "Nāʻiliakaʻauea"
   },
   {
    "lat": 18.92,

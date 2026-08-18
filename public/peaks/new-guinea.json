@@ -1,6 +1,6 @@
 {
  "region": "new-guinea",
- "generated": "2026-08-13T09:16:24+00:00",
+ "generated": "2026-08-18T20:47:32+00:00",
  "peaks": [
   {
    "lat": -4.078605,
@@ -41,7 +41,7 @@
   {
    "lat": -4.262042,
    "lon": 138.681664,
-   "name": "Trikora",
+   "name": "Трикора",
    "name_ru": "Трикора",
    "ele": 4730,
    "wikidata": "Q1349622"
@@ -62,7 +62,7 @@
   {
    "lat": -4.682735,
    "lon": 140.081229,
-   "name": "Puncak Yamin",
+   "name": "Яамин",
    "name_ru": "Яамин",
    "name_en": "Mount Yamin",
    "ele": 4510,
@@ -166,15 +166,15 @@
    "wikidata": "Q31748596"
   },
   {
-   "lat": -3.758383,
-   "lon": 137.311092,
-   "name": "Ngga Nggulumbulu",
-   "ele": 4060
-  },
-  {
    "lat": -6.236036,
    "lon": 146.960548,
    "name": "Mount Kotewon",
+   "ele": 4060
+  },
+  {
+   "lat": -3.758383,
+   "lon": 137.311092,
+   "name": "Ngga Nggulumbulu",
    "ele": 4060
   },
   {
@@ -234,16 +234,16 @@
    "ele": 3962
   },
   {
-   "lat": -4.995797,
-   "lon": 141.08246,
-   "name": "Capella",
-   "ele": 3960
-  },
-  {
    "lat": -3.993845,
    "lon": 139.18568,
    "name": "Gunung Elit",
    "name_en": "Mount Elit",
+   "ele": 3960
+  },
+  {
+   "lat": -4.995797,
+   "lon": 141.08246,
+   "name": "Capella",
    "ele": 3960
   },
   {
@@ -318,16 +318,16 @@
    "wikidata": "Q1424033"
   },
   {
+   "lat": -5.800497,
+   "lon": 144.853137,
+   "name": "Mount Undan",
+   "ele": 3774
+  },
+  {
    "lat": -3.633049,
    "lon": 136.923363,
    "name": "Z-Chain",
    "name_en": "Z-Chain Mountains",
-   "ele": 3774
-  },
-  {
-   "lat": -5.800497,
-   "lon": 144.853137,
-   "name": "Mount Undan",
    "ele": 3774
   },
   {
@@ -674,17 +674,17 @@
    "ele": 2693
   },
   {
+   "lat": -6.341957,
+   "lon": 146.769115,
+   "name": "Mount Tekema",
+   "ele": 2689
+  },
+  {
    "lat": -6.147467,
    "lon": 142.754803,
    "name": "Mount Sisa",
    "ele": 2689,
    "wikidata": "Q31746679"
-  },
-  {
-   "lat": -6.341957,
-   "lon": 146.769115,
-   "name": "Mount Tekema",
-   "ele": 2689
   },
   {
    "lat": -6.557768,
@@ -1090,18 +1090,18 @@
    "ele": 1540
   },
   {
-   "lat": -3.191692,
-   "lon": 141.055879,
-   "name": "Mount Mokkofiang",
-   "ele": 1530,
-   "wikidata": "Q31747447"
-  },
-  {
    "lat": -6.414386,
    "lon": 146.59535,
    "name": "Namuti Mountain",
    "ele": 1530,
    "wikidata": "Q31747324"
+  },
+  {
+   "lat": -3.191692,
+   "lon": 141.055879,
+   "name": "Mount Mokkofiang",
+   "ele": 1530,
+   "wikidata": "Q31747447"
   },
   {
    "lat": -4.510289,
@@ -1731,14 +1731,502 @@
    "ele": 44
   },
   {
-   "lat": -9.489472,
-   "lon": 147.183595,
-   "name": "Kila Kila Hill"
+   "lat": -2.147785,
+   "lon": 146.941324,
+   "name": "Mount Dremsel"
+  },
+  {
+   "lat": -10.74923,
+   "lon": 142.51559,
+   "name": "Carnegie Range"
+  },
+  {
+   "lat": -3.614561,
+   "lon": 143.636261,
+   "name": "Mt Kwakabo"
+  },
+  {
+   "lat": -6.040355,
+   "lon": 143.398632,
+   "name": "Soh Manda"
+  },
+  {
+   "lat": -6.34473,
+   "lon": 146.829814,
+   "name": "Erap Mountain",
+   "wikidata": "Q31749022"
+  },
+  {
+   "lat": -6.359924,
+   "lon": 146.734458,
+   "name": "Mount Gwasan",
+   "wikidata": "Q31748829"
+  },
+  {
+   "lat": -7.99087,
+   "lon": 146.831577,
+   "name": "Mount Chapman"
+  },
+  {
+   "lat": -3.157253,
+   "lon": 141.963304,
+   "name": "Palsore Hill"
+  },
+  {
+   "lat": -3.169191,
+   "lon": 142.012999,
+   "name": "Grofune Hill"
+  },
+  {
+   "lat": -4.345359,
+   "lon": 139.204531,
+   "name": "Gunung Biliam"
+  },
+  {
+   "lat": -6.848526,
+   "lon": 146.94003,
+   "name": "Sugarloaf"
+  },
+  {
+   "lat": -6.734099,
+   "lon": 146.85742,
+   "name": "Oomsis Hill"
+  },
+  {
+   "lat": -8.307521,
+   "lon": 146.814234,
+   "name": "Mount Kwirapa"
+  },
+  {
+   "lat": -8.343062,
+   "lon": 146.908649,
+   "name": "Pilutu North"
+  },
+  {
+   "lat": -6.195822,
+   "lon": 147.137437,
+   "name": "Mount Gong"
+  },
+  {
+   "lat": -6.143655,
+   "lon": 147.155061,
+   "name": "Mount Kuman"
+  },
+  {
+   "lat": -6.241047,
+   "lon": 147.496876,
+   "name": "Mount Mone"
+  },
+  {
+   "lat": -6.275059,
+   "lon": 147.458932,
+   "name": "Mount Nanson"
+  },
+  {
+   "lat": -6.329039,
+   "lon": 147.616785,
+   "name": "Mount Bulebe"
+  },
+  {
+   "lat": -6.362815,
+   "lon": 147.653606,
+   "name": "Mount Besenona"
+  },
+  {
+   "lat": -6.645001,
+   "lon": 147.752332,
+   "name": "Mount Ulamoa"
+  },
+  {
+   "lat": -6.613752,
+   "lon": 146.659433,
+   "name": "Pyramid Hill"
+  },
+  {
+   "lat": -9.362599,
+   "lon": 150.481371,
+   "name": "Mount Maybole"
+  },
+  {
+   "lat": -10.088819,
+   "lon": 148.882385,
+   "name": "Badiai Hill"
+  },
+  {
+   "lat": -10.124521,
+   "lon": 148.525228,
+   "name": "Paidnu Hill"
+  },
+  {
+   "lat": -3.166762,
+   "lon": 141.000016,
+   "name": "Waris",
+   "wikidata": "Q3502610"
+  },
+  {
+   "lat": -3.117547,
+   "lon": 141.127481,
+   "name": "Airu",
+   "name_en": "Mount Airu",
+   "wikidata": "Q34880401"
+  },
+  {
+   "lat": -3.111004,
+   "lon": 141.076805,
+   "name": "Sin",
+   "name_en": "Mount Sin",
+   "wikidata": "Q31746724"
+  },
+  {
+   "lat": -5.64511,
+   "lon": 146.449749,
+   "name": "Uripolung"
+  },
+  {
+   "lat": -3.376226,
+   "lon": 142.66928,
+   "name": "Mount Ilau"
+  },
+  {
+   "lat": -8.067942,
+   "lon": 146.832582,
+   "name": "Mount Sauk"
+  },
+  {
+   "lat": -8.043648,
+   "lon": 146.843701,
+   "name": "Mount Louis"
+  },
+  {
+   "lat": -8.066431,
+   "lon": 146.844732,
+   "name": "Mount Guari"
+  },
+  {
+   "lat": -8.055181,
+   "lon": 146.846304,
+   "name": "Mount Gough"
+  },
+  {
+   "lat": -8.10626,
+   "lon": 146.829899,
+   "name": "Mount Amu"
+  },
+  {
+   "lat": -8.090203,
+   "lon": 146.895062,
+   "name": "Mount Bipi"
+  },
+  {
+   "lat": -8.070434,
+   "lon": 146.939125,
+   "name": "Mount Narau Karob"
+  },
+  {
+   "lat": -8.023126,
+   "lon": 146.945811,
+   "name": "Mount Gelilipuku"
+  },
+  {
+   "lat": -8.048156,
+   "lon": 146.947583,
+   "name": "Mount Uiakiwa"
+  },
+  {
+   "lat": -8.030083,
+   "lon": 146.924615,
+   "name": "Eastern Peak"
+  },
+  {
+   "lat": -7.985056,
+   "lon": 146.871711,
+   "name": "Mount Gondurumu"
+  },
+  {
+   "lat": -8.00497,
+   "lon": 146.787297,
+   "name": "Mount Turu"
+  },
+  {
+   "lat": -8.172111,
+   "lon": 146.83733,
+   "name": "Mount Beluveria"
+  },
+  {
+   "lat": -8.171911,
+   "lon": 146.85687,
+   "name": "Mont Bisori"
+  },
+  {
+   "lat": -8.178346,
+   "lon": 146.882546,
+   "name": "Mount Galimara"
+  },
+  {
+   "lat": -8.156108,
+   "lon": 146.861436,
+   "name": "Mount Mauvisa"
+  },
+  {
+   "lat": -8.165833,
+   "lon": 146.904655,
+   "name": "Mount Burava"
+  },
+  {
+   "lat": -8.140211,
+   "lon": 146.898204,
+   "name": "Mount Kavirapa"
+  },
+  {
+   "lat": -3.468072,
+   "lon": 142.214375,
+   "name": "Mount Waralap"
+  },
+  {
+   "lat": -3.626177,
+   "lon": 142.411141,
+   "name": "Mount Hauk"
+  },
+  {
+   "lat": -3.338237,
+   "lon": 142.037497,
+   "name": "Mount Gorbu"
+  },
+  {
+   "lat": -9.148142,
+   "lon": 149.170461,
+   "name": "Mount Hall",
+   "wikidata": "Q31748806"
   },
   {
    "lat": -9.463755,
    "lon": 147.207909,
    "name": "Mount Omoganiga"
+  },
+  {
+   "lat": -5.53,
+   "lon": 130.292,
+   "name": "Manuk",
+   "volcano": true
+  },
+  {
+   "lat": -6.200709,
+   "lon": 145.156097,
+   "name": "Mount Elimbari"
+  },
+  {
+   "lat": -6.065797,
+   "lon": 144.98222,
+   "name": "Mount Konoma"
+  },
+  {
+   "lat": -6.061112,
+   "lon": 145.066213,
+   "name": "Mount Mani"
+  },
+  {
+   "lat": -6.00087,
+   "lon": 145.1191,
+   "name": "Mount Kerigomna"
+  },
+  {
+   "lat": -6.016665,
+   "lon": 144.868478,
+   "name": "Mount Naru"
+  },
+  {
+   "lat": -5.776837,
+   "lon": 144.822511,
+   "name": "Mount Udon"
+  },
+  {
+   "lat": -6.686918,
+   "lon": 145.604625,
+   "name": "Mount Tamiloa"
+  },
+  {
+   "lat": -4.938996,
+   "lon": 144.21162,
+   "name": "Rain Mountain"
+  },
+  {
+   "lat": -9.499429,
+   "lon": 147.190094,
+   "name": "Kauka Hill"
+  },
+  {
+   "lat": -9.618369,
+   "lon": 150.647346,
+   "name": "Mount Edagwaba"
+  },
+  {
+   "lat": -10.614246,
+   "lon": 150.980085,
+   "name": "Mount Tuliluli"
+  },
+  {
+   "lat": -9.943613,
+   "lon": 149.410263,
+   "name": "Mount Mura",
+   "wikidata": "Q31747379"
+  },
+  {
+   "lat": -2.611229,
+   "lon": 140.53182,
+   "name": "Bukit Bhanjibey"
+  },
+  {
+   "lat": -9.924905,
+   "lon": 147.992574,
+   "name": "Pyramid Hill"
+  },
+  {
+   "lat": -9.536915,
+   "lon": 147.583718,
+   "name": "Mount Dundas",
+   "wikidata": "Q31749128"
+  },
+  {
+   "lat": -5.555762,
+   "lon": 150.186091,
+   "name": "Mount Wago"
+  },
+  {
+   "lat": -5.305862,
+   "lon": 150.01805,
+   "name": "Mount Schleuther"
+  },
+  {
+   "lat": -7.166519,
+   "lon": 146.476975,
+   "name": "Mount Kosh",
+   "wikidata": "Q31748353"
+  },
+  {
+   "lat": -8.207344,
+   "lon": 146.781912,
+   "name": "Mount Yule",
+   "wikidata": "Q31745785"
+  },
+  {
+   "lat": -6.981054,
+   "lon": 146.750726,
+   "name": "Mt Lanjun"
+  },
+  {
+   "lat": -6.966587,
+   "lon": 146.754519,
+   "name": "Bikaru"
+  },
+  {
+   "lat": -6.989185,
+   "lon": 146.760785,
+   "name": "Mt Kasenta"
+  },
+  {
+   "lat": -5.904143,
+   "lon": 144.355702,
+   "name": "Mount Wanee"
+  },
+  {
+   "lat": -5.944179,
+   "lon": 144.288625,
+   "name": "Mount Koomga"
+  },
+  {
+   "lat": -4.587244,
+   "lon": 145.330887,
+   "name": "Kirina Hill"
+  },
+  {
+   "lat": -4.580848,
+   "lon": 145.397808,
+   "name": "Mount Anboa"
+  },
+  {
+   "lat": -4.545012,
+   "lon": 145.31002,
+   "name": "Kiramur Hill"
+  },
+  {
+   "lat": -4.688735,
+   "lon": 145.459962,
+   "name": "Mount Musar"
+  },
+  {
+   "lat": -4.687741,
+   "lon": 145.285941,
+   "name": "Mount Pihom"
+  },
+  {
+   "lat": -4.711638,
+   "lon": 145.26623,
+   "name": "Mount Mengam"
+  },
+  {
+   "lat": -9.680058,
+   "lon": 148.242769,
+   "name": "Durigoro Mountain"
+  },
+  {
+   "lat": -5.49926,
+   "lon": 151.744459,
+   "name": "Kwoi Peak"
+  },
+  {
+   "lat": -6.022821,
+   "lon": 143.376244,
+   "name": "Mount Hiri"
+  },
+  {
+   "lat": -2.696784,
+   "lon": 141.282515,
+   "name": "Dupri Hill"
+  },
+  {
+   "lat": -2.674665,
+   "lon": 141.257136,
+   "name": "Kipri Hill"
+  },
+  {
+   "lat": -2.68279,
+   "lon": 141.262403,
+   "name": "Tiba Hill"
+  },
+  {
+   "lat": -2.837582,
+   "lon": 141.326373,
+   "name": "Mount Saou"
+  },
+  {
+   "lat": -2.818477,
+   "lon": 141.311291,
+   "name": "Mount Lade"
+  },
+  {
+   "lat": -2.808072,
+   "lon": 141.278817,
+   "name": "Mount Asowa"
+  },
+  {
+   "lat": -3.361633,
+   "lon": 142.2149,
+   "name": "Mount Seno"
+  },
+  {
+   "lat": -3.407453,
+   "lon": 142.206642,
+   "name": "Mount Sulen"
+  },
+  {
+   "lat": -3.391358,
+   "lon": 142.142462,
+   "name": "Mount Somero"
+  },
+  {
+   "lat": -10.540877,
+   "lon": 149.922267,
+   "name": "Mount Gould"
   },
   {
    "lat": -9.338759,
@@ -1752,9 +2240,311 @@
    "name": "Burns Peak"
   },
   {
-   "lat": -6.598009,
-   "lon": 142.844594,
-   "name": "Mount Bosavi"
+   "lat": -3.619419,
+   "lon": 143.645002,
+   "name": "Mt Tazaki"
+  },
+  {
+   "lat": -3.619447,
+   "lon": 143.612261,
+   "name": "Mt Shiburangu"
+  },
+  {
+   "lat": -3.192273,
+   "lon": 141.037812,
+   "name": "Situ"
+  },
+  {
+   "lat": -5.466634,
+   "lon": 150.951618,
+   "name": "Mount Ruckenberg"
+  },
+  {
+   "lat": -5.458971,
+   "lon": 150.756986,
+   "name": "Saddle Mountain"
+  },
+  {
+   "lat": -4.236857,
+   "lon": 142.649118,
+   "name": "Yessan Hills"
+  },
+  {
+   "lat": -4.174623,
+   "lon": 142.730796,
+   "name": "Waskuk Hills"
+  },
+  {
+   "lat": -6.666091,
+   "lon": 146.932452,
+   "name": "Atzera Range"
+  },
+  {
+   "lat": -6.648979,
+   "lon": 146.808169,
+   "name": "Mount Misantum"
+  },
+  {
+   "lat": -6.751119,
+   "lon": 146.765216,
+   "name": "Garagos Mountain"
+  },
+  {
+   "lat": -6.873317,
+   "lon": 146.676624,
+   "name": "Dambi Peak"
+  },
+  {
+   "lat": -6.71078,
+   "lon": 146.502882,
+   "name": "Mount Wanion"
+  },
+  {
+   "lat": -6.720034,
+   "lon": 146.207271,
+   "name": "Mount Rabumpun"
+  },
+  {
+   "lat": -4.672297,
+   "lon": 145.490577,
+   "name": "Mount Masur"
+  },
+  {
+   "lat": -4.938684,
+   "lon": 145.625937,
+   "name": "Mount Buruk"
+  },
+  {
+   "lat": -9.975834,
+   "lon": 149.59748,
+   "name": "Mount Udawa",
+   "wikidata": "Q31746113"
+  },
+  {
+   "lat": -6.568696,
+   "lon": 144.774844,
+   "name": "Mount Karimui",
+   "wikidata": "Q31748532"
+  },
+  {
+   "lat": -10.575849,
+   "lon": 150.853109,
+   "name": "Mount Gwalabu"
+  },
+  {
+   "lat": -10.668307,
+   "lon": 150.413996,
+   "name": "Niguana Mountain"
+  },
+  {
+   "lat": -10.501148,
+   "lon": 150.646002,
+   "name": "Mount Dohu"
+  },
+  {
+   "lat": -5.416272,
+   "lon": 142.494677,
+   "name": "1400 M"
+  },
+  {
+   "lat": -9.489472,
+   "lon": 147.183595,
+   "name": "Kila Kila Hill"
+  },
+  {
+   "lat": -4.513089,
+   "lon": 139.450386,
+   "name": "Gunung Amlah"
+  },
+  {
+   "lat": -5.85721,
+   "lon": 144.905543,
+   "name": "Kuapu-muglo"
+  },
+  {
+   "lat": -10.166667,
+   "lon": 142.166667,
+   "name": "Mount Abai",
+   "wikidata": "Q21939352"
+  },
+  {
+   "lat": -10.699167,
+   "lon": 142.534167,
+   "name": "Mount Bremer"
+  },
+  {
+   "lat": -9.416667,
+   "lon": 142.533333,
+   "name": "Mount Cornwallis"
+  },
+  {
+   "lat": -10.801835,
+   "lon": 142.404739,
+   "name": "Mount Paterson"
+  },
+  {
+   "lat": -10.733889,
+   "lon": 142.519722,
+   "name": "Mount Roma"
+  },
+  {
+   "lat": -10.9975,
+   "lon": 142.737778,
+   "name": "Shadwell Peak"
+  },
+  {
+   "lat": -5.521409,
+   "lon": 150.38925,
+   "name": "Mount Matalelok"
+  },
+  {
+   "lat": -5.862108,
+   "lon": 144.891161,
+   "name": "Minmina Muglo"
+  },
+  {
+   "lat": -5.545433,
+   "lon": 144.647216,
+   "name": "Korai Mountain"
+  },
+  {
+   "lat": -5.5402,
+   "lon": 144.650838,
+   "name": "Mekpai Ridge"
+  },
+  {
+   "lat": -10.265047,
+   "lon": 150.500059,
+   "name": "Mount Dimali",
+   "wikidata": "Q31750435"
+  },
+  {
+   "lat": -9.610693,
+   "lon": 150.887279,
+   "name": "Lamonai Crater",
+   "volcano": true
+  },
+  {
+   "lat": -9.695499,
+   "lon": 150.859253,
+   "name": "Deidei",
+   "volcano": true
+  },
+  {
+   "lat": -3.476862,
+   "lon": 143.236423,
+   "name": "Mount Albawagi"
+  },
+  {
+   "lat": -5.557939,
+   "lon": 144.276742,
+   "name": "Mount Maragubui"
+  },
+  {
+   "lat": -5.52358,
+   "lon": 144.273756,
+   "name": "Mount Meri"
+  },
+  {
+   "lat": -8.694474,
+   "lon": 147.078678,
+   "name": "Mount Mana"
+  },
+  {
+   "lat": -8.701829,
+   "lon": 147.033849,
+   "name": "Boala Peaks"
+  },
+  {
+   "lat": -8.702025,
+   "lon": 147.045006,
+   "name": "Boala Peaks"
+  },
+  {
+   "lat": -8.666687,
+   "lon": 147.089144,
+   "name": "Mount Gaiva"
+  },
+  {
+   "lat": -8.629262,
+   "lon": 147.18005,
+   "name": "Mount Tafa"
+  },
+  {
+   "lat": -8.652498,
+   "lon": 147.131532,
+   "name": "Mount Varapi"
+  },
+  {
+   "lat": -8.638446,
+   "lon": 147.226792,
+   "name": "Mount Hegere"
+  },
+  {
+   "lat": -8.478304,
+   "lon": 147.166702,
+   "name": "Mount Boismenu"
+  },
+  {
+   "lat": -8.449019,
+   "lon": 147.009041,
+   "name": "Mount Kailape"
+  },
+  {
+   "lat": -8.538563,
+   "lon": 147.026957,
+   "name": "Mount Mafulu"
+  },
+  {
+   "lat": -8.495076,
+   "lon": 147.06659,
+   "name": "Mount Pitsoku"
+  },
+  {
+   "lat": -3.477997,
+   "lon": 143.209644,
+   "name": "Mount Ulbaneb"
+  },
+  {
+   "lat": -5.580082,
+   "lon": 145.219801,
+   "name": "Mount Palai"
+  },
+  {
+   "lat": -5.548304,
+   "lon": 145.199373,
+   "name": "Mount Kua"
+  },
+  {
+   "lat": -10.609777,
+   "lon": 150.549351,
+   "name": "Mount Bossim"
+  },
+  {
+   "lat": -10.604785,
+   "lon": 150.457733,
+   "name": "Mount Brainble"
+  },
+  {
+   "lat": -10.599197,
+   "lon": 150.240308,
+   "name": "Mount Nelson"
+  },
+  {
+   "lat": -6.047422,
+   "lon": 145.395894,
+   "name": "Mount Agopea"
+  },
+  {
+   "lat": -10.292509,
+   "lon": 150.67401,
+   "name": "Mount Gera Gera",
+   "wikidata": "Q31750299"
+  },
+  {
+   "lat": -10.290336,
+   "lon": 150.60872,
+   "name": "Palia Hill"
   },
   {
    "lat": -5.909378,
@@ -1767,10 +2557,387 @@
    "name": "Mount Agu"
   },
   {
+   "lat": -5.537365,
+   "lon": 148.392823,
+   "name": "Mount Talawe",
+   "volcano": true
+  },
+  {
+   "lat": -1.090515,
+   "lon": 134.079109,
+   "name": "Acemo"
+  },
+  {
+   "lat": -5.645089,
+   "lon": 132.690719,
+   "name": "Gunung Gelanit"
+  },
+  {
+   "lat": -5.820551,
+   "lon": 132.922636,
+   "name": "Gunung Aduilnas"
+  },
+  {
+   "lat": -4.931868,
+   "lon": 142.592193,
+   "name": "Scharfe Mountain"
+  },
+  {
+   "lat": -6.284632,
+   "lon": 144.663856,
+   "name": "Mount Suaru"
+  },
+  {
+   "lat": -6.867023,
+   "lon": 144.80289,
+   "name": "Mount Trube"
+  },
+  {
+   "lat": -6.867864,
+   "lon": 144.730887,
+   "name": "Mount Musgrave"
+  },
+  {
+   "lat": -6.149323,
+   "lon": 144.914614,
+   "name": "Mount Wikauma"
+  },
+  {
+   "lat": -5.948725,
+   "lon": 145.032849,
+   "name": "Mount Kombog"
+  },
+  {
+   "lat": -9.163835,
+   "lon": 147.645107,
+   "name": "Brigade Hill"
+  },
+  {
+   "lat": -6.598009,
+   "lon": 142.844594,
+   "name": "Mount Bosavi"
+  },
+  {
+   "lat": -9.924103,
+   "lon": 144.044346,
+   "name": "Galem Paser"
+  },
+  {
+   "lat": -6.702832,
+   "lon": 145.892444,
+   "name": "Mount Oneiba"
+  },
+  {
+   "lat": -6.668361,
+   "lon": 146.051447,
+   "name": "Mount Karsini"
+  },
+  {
+   "lat": -6.615157,
+   "lon": 146.116332,
+   "name": "Mount Lamunyang"
+  },
+  {
+   "lat": -6.507889,
+   "lon": 146.012805,
+   "name": "Mount Elandora",
+   "wikidata": "Q31749066"
+  },
+  {
+   "lat": -6.534511,
+   "lon": 145.929283,
+   "name": "Mount Kautaira"
+  },
+  {
+   "lat": -6.557504,
+   "lon": 145.805787,
+   "name": "Mount Jabara",
+   "wikidata": "Q31748615"
+  },
+  {
+   "lat": -8.211092,
+   "lon": 146.883321,
+   "name": "Mount Gumanivi"
+  },
+  {
+   "lat": -8.220885,
+   "lon": 146.897515,
+   "name": "Mount Gogu"
+  },
+  {
+   "lat": -8.254327,
+   "lon": 146.889214,
+   "name": "Mount Lumu"
+  },
+  {
+   "lat": -8.310877,
+   "lon": 146.892439,
+   "name": "Mount Kwaigutu"
+  },
+  {
+   "lat": -8.520817,
+   "lon": 147.10428,
+   "name": "Gari Peak"
+  },
+  {
+   "lat": -8.594949,
+   "lon": 147.109225,
+   "name": "Mount Abadi"
+  },
+  {
+   "lat": -8.446748,
+   "lon": 147.1349,
+   "name": "Mount Filloderi"
+  },
+  {
+   "lat": -8.387454,
+   "lon": 147.222497,
+   "name": "Olopu"
+  },
+  {
+   "lat": -8.137356,
+   "lon": 146.727495,
+   "name": "Mount Koputako"
+  },
+  {
+   "lat": -8.089165,
+   "lon": 146.738727,
+   "name": "Mount Gawdabuka"
+  },
+  {
+   "lat": -7.992307,
+   "lon": 146.719184,
+   "name": "Mount Danavalari"
+  },
+  {
+   "lat": -9.588339,
+   "lon": 150.982426,
+   "name": "Oyaboa Hill"
+  },
+  {
+   "lat": -5.635943,
+   "lon": 146.452252,
+   "name": "Namungni"
+  },
+  {
+   "lat": -5.637901,
+   "lon": 146.450353,
+   "name": "Fininekang"
+  },
+  {
+   "lat": -3.315614,
+   "lon": 142.069116,
+   "name": "Mount Pili"
+  },
+  {
+   "lat": -7.133175,
+   "lon": 147.062281,
+   "name": "Yamal"
+  },
+  {
+   "lat": -6.814835,
+   "lon": 146.193557,
+   "name": "Wasus Mountain"
+  },
+  {
+   "lat": -6.82498,
+   "lon": 146.073766,
+   "name": "Mount Kasini"
+  },
+  {
+   "lat": -3.606434,
+   "lon": 144.586939,
+   "name": "Kadovar"
+  },
+  {
+   "lat": -8.427477,
+   "lon": 147.022125,
+   "name": "Mount Minaru"
+  },
+  {
+   "lat": -8.360824,
+   "lon": 147.184153,
+   "name": "Mount Champion"
+  },
+  {
+   "lat": -8.379986,
+   "lon": 147.128375,
+   "name": "Mount Speedie"
+  },
+  {
+   "lat": -8.249306,
+   "lon": 147.200915,
+   "name": "Mount Gireri"
+  },
+  {
+   "lat": -8.14207,
+   "lon": 147.226547,
+   "name": "Mount Nelson"
+  },
+  {
+   "lat": -8.049102,
+   "lon": 147.138913,
+   "name": "Mount Hummock"
+  },
+  {
+   "lat": -10.104859,
+   "lon": 150.052505,
+   "name": "Mount Pasi Pasi",
+   "wikidata": "Q31750426"
+  },
+  {
+   "lat": -9.923326,
+   "lon": 149.285021,
+   "name": "Mount Baratun",
+   "wikidata": "Q31749773"
+  },
+  {
+   "lat": -9.886644,
+   "lon": 149.202546,
+   "name": "Mount Orian",
+   "wikidata": "Q31747130"
+  },
+  {
+   "lat": -9.944407,
+   "lon": 147.675633,
+   "name": "Mount Boulogolo",
+   "wikidata": "Q31240114"
+  },
+  {
+   "lat": -9.953347,
+   "lon": 147.758235,
+   "name": "Manu Manu Hill"
+  },
+  {
    "lat": -5.574015,
    "lon": 150.515585,
    "name": "Mount Pago",
    "volcano": true
+  },
+  {
+   "lat": -2.155805,
+   "lon": 146.664873,
+   "name": "Mount Hahie"
+  },
+  {
+   "lat": -9.356169,
+   "lon": 147.162779,
+   "name": "Mount Saamu"
+  },
+  {
+   "lat": -9.333449,
+   "lon": 150.311041,
+   "name": "Wakala Hill"
+  },
+  {
+   "lat": -10.091652,
+   "lon": 149.447485,
+   "name": "Mount Taibin",
+   "wikidata": "Q31750200"
+  },
+  {
+   "lat": -10.016307,
+   "lon": 149.281257,
+   "name": "Mount Damaeta",
+   "wikidata": "Q31750322"
+  },
+  {
+   "lat": -5.200598,
+   "lon": 150.047112,
+   "name": "Mount Tolokembu"
+  },
+  {
+   "lat": -5.093357,
+   "lon": 150.094211,
+   "name": "Mount Langalanga"
+  },
+  {
+   "lat": -8.501242,
+   "lon": 146.828726,
+   "name": "Verjus Dome"
+  },
+  {
+   "lat": -6.312783,
+   "lon": 146.419146,
+   "name": "Wongri Mountain",
+   "wikidata": "Q31745847"
+  },
+  {
+   "lat": -4.476267,
+   "lon": 139.454572,
+   "name": "Gunung Erim"
+  },
+  {
+   "lat": -9.709083,
+   "lon": 147.44584,
+   "name": "Deregoro Hill"
+  },
+  {
+   "lat": -9.690414,
+   "lon": 147.427124,
+   "name": "Kapagununa Hill"
+  },
+  {
+   "lat": -9.602331,
+   "lon": 147.374218,
+   "name": "Tapa",
+   "name_en": "Bald Hill"
+  },
+  {
+   "lat": -9.612853,
+   "lon": 147.382205,
+   "name": "Siwina",
+   "name_en": "Highland Hill"
+  },
+  {
+   "lat": -9.590805,
+   "lon": 147.364203,
+   "name": "Godio",
+   "name_en": "Bayview Hill"
+  },
+  {
+   "lat": -9.595937,
+   "lon": 147.354392,
+   "name": "Bogio Hill"
+  },
+  {
+   "lat": -9.567918,
+   "lon": 147.415109,
+   "name": "Borenumu Hill"
+  },
+  {
+   "lat": -9.584088,
+   "lon": 147.400964,
+   "name": "Waraha",
+   "name_en": "Scrub Hill"
+  },
+  {
+   "lat": -9.611413,
+   "lon": 147.396468,
+   "name": "Yuinbisisi",
+   "name_en": "Blueberry Hill"
+  },
+  {
+   "lat": -9.621513,
+   "lon": 147.460669,
+   "name": "Numuta Hill"
+  },
+  {
+   "lat": -9.519068,
+   "lon": 147.330869,
+   "name": "Touvara",
+   "name_en": "Marauder Hill"
+  },
+  {
+   "lat": -9.510262,
+   "lon": 147.351064,
+   "name": "Samo Hills"
+  },
+  {
+   "lat": -9.117463,
+   "lon": 148.519907,
+   "name": "Mount De Vis",
+   "wikidata": "Q31749421"
   },
   {
    "lat": -2.316667,
@@ -2430,388 +3597,9 @@
    "name": "Ipatlolo"
   },
   {
-   "lat": -4.636927,
-   "lon": 145.995014,
-   "name": "Mount Uluman"
-  },
-  {
-   "lat": -2.147785,
-   "lon": 146.941324,
-   "name": "Mount Dremsel"
-  },
-  {
-   "lat": -10.166667,
-   "lon": 142.166667,
-   "name": "Mount Abai",
-   "wikidata": "Q21939352"
-  },
-  {
-   "lat": -10.699167,
-   "lon": 142.534167,
-   "name": "Mount Bremer"
-  },
-  {
-   "lat": -9.416667,
-   "lon": 142.533333,
-   "name": "Mount Cornwallis"
-  },
-  {
-   "lat": -10.801835,
-   "lon": 142.404739,
-   "name": "Mount Paterson"
-  },
-  {
-   "lat": -10.733889,
-   "lon": 142.519722,
-   "name": "Mount Roma"
-  },
-  {
-   "lat": -10.9975,
-   "lon": 142.737778,
-   "name": "Shadwell Peak"
-  },
-  {
-   "lat": -9.924103,
-   "lon": 144.044346,
-   "name": "Galem Paser"
-  },
-  {
-   "lat": -10.74923,
-   "lon": 142.51559,
-   "name": "Carnegie Range"
-  },
-  {
-   "lat": -1.667259,
-   "lon": 134.066365,
-   "name": "Gn. Botak"
-  },
-  {
    "lat": -5.410509,
    "lon": 145.442434,
    "name": "Urirai"
-  },
-  {
-   "lat": -5.53,
-   "lon": 130.292,
-   "name": "Manuk",
-   "volcano": true
-  },
-  {
-   "lat": -5.789156,
-   "lon": 144.292017,
-   "name": "Mt Ambra"
-  },
-  {
-   "lat": -5.198327,
-   "lon": 151.239878,
-   "name": "Mount Bamus",
-   "volcano": true
-  },
-  {
-   "lat": -4.925516,
-   "lon": 151.211214,
-   "name": "Giwu Peak"
-  },
-  {
-   "lat": -4.345359,
-   "lon": 139.204531,
-   "name": "Gunung Biliam"
-  },
-  {
-   "lat": -4.476267,
-   "lon": 139.454572,
-   "name": "Gunung Erim"
-  },
-  {
-   "lat": -9.610693,
-   "lon": 150.887279,
-   "name": "Lamonai Crater",
-   "volcano": true
-  },
-  {
-   "lat": -9.695499,
-   "lon": 150.859253,
-   "name": "Deidei",
-   "volcano": true
-  },
-  {
-   "lat": -4.513089,
-   "lon": 139.450386,
-   "name": "Gunung Amlah"
-  },
-  {
-   "lat": -3.614561,
-   "lon": 143.636261,
-   "name": "Mt Kwakabo"
-  },
-  {
-   "lat": -3.619419,
-   "lon": 143.645002,
-   "name": "Mt Tazaki"
-  },
-  {
-   "lat": -3.619447,
-   "lon": 143.612261,
-   "name": "Mt Shiburangu"
-  },
-  {
-   "lat": -2.155805,
-   "lon": 146.664873,
-   "name": "Mount Hahie"
-  },
-  {
-   "lat": -5.537365,
-   "lon": 148.392823,
-   "name": "Mount Talawe",
-   "volcano": true
-  },
-  {
-   "lat": -2.161699,
-   "lon": 146.811153,
-   "name": "Mount Bayem"
-  },
-  {
-   "lat": -3.192273,
-   "lon": 141.037812,
-   "name": "Situ"
-  },
-  {
-   "lat": -3.166762,
-   "lon": 141.000016,
-   "name": "Waris",
-   "wikidata": "Q3502610"
-  },
-  {
-   "lat": -3.117547,
-   "lon": 141.127481,
-   "name": "Airu",
-   "name_en": "Mount Airu",
-   "wikidata": "Q34880401"
-  },
-  {
-   "lat": -3.111004,
-   "lon": 141.076805,
-   "name": "Sin",
-   "name_en": "Mount Sin",
-   "wikidata": "Q31746724"
-  },
-  {
-   "lat": -1.090515,
-   "lon": 134.079109,
-   "name": "Acemo"
-  },
-  {
-   "lat": -5.837999,
-   "lon": 143.513053,
-   "name": "Lungu Rocks"
-  },
-  {
-   "lat": -5.833809,
-   "lon": 143.511342,
-   "name": "Neng Saii"
-  },
-  {
-   "lat": -5.466634,
-   "lon": 150.951618,
-   "name": "Mount Ruckenberg"
-  },
-  {
-   "lat": -5.458971,
-   "lon": 150.756986,
-   "name": "Saddle Mountain"
-  },
-  {
-   "lat": -5.521409,
-   "lon": 150.38925,
-   "name": "Mount Matalelok"
-  },
-  {
-   "lat": -5.555762,
-   "lon": 150.186091,
-   "name": "Mount Wago"
-  },
-  {
-   "lat": -5.305862,
-   "lon": 150.01805,
-   "name": "Mount Schleuther"
-  },
-  {
-   "lat": -5.200598,
-   "lon": 150.047112,
-   "name": "Mount Tolokembu"
-  },
-  {
-   "lat": -5.093357,
-   "lon": 150.094211,
-   "name": "Mount Langalanga"
-  },
-  {
-   "lat": -5.49926,
-   "lon": 151.744459,
-   "name": "Kwoi Peak"
-  },
-  {
-   "lat": -6.022821,
-   "lon": 143.376244,
-   "name": "Mount Hiri"
-  },
-  {
-   "lat": -6.040355,
-   "lon": 143.398632,
-   "name": "Soh Manda"
-  },
-  {
-   "lat": -3.477997,
-   "lon": 143.209644,
-   "name": "Mount Ulbaneb"
-  },
-  {
-   "lat": -3.476862,
-   "lon": 143.236423,
-   "name": "Mount Albawagi"
-  },
-  {
-   "lat": -5.649931,
-   "lon": 146.465111,
-   "name": "Baibui Mountain"
-  },
-  {
-   "lat": -5.635943,
-   "lon": 146.452252,
-   "name": "Namungni"
-  },
-  {
-   "lat": -5.637901,
-   "lon": 146.450353,
-   "name": "Fininekang"
-  },
-  {
-   "lat": -5.64511,
-   "lon": 146.449749,
-   "name": "Uripolung"
-  },
-  {
-   "lat": -5.580082,
-   "lon": 145.219801,
-   "name": "Mount Palai"
-  },
-  {
-   "lat": -5.548304,
-   "lon": 145.199373,
-   "name": "Mount Kua"
-  },
-  {
-   "lat": -10.609777,
-   "lon": 150.549351,
-   "name": "Mount Bossim"
-  },
-  {
-   "lat": -10.604785,
-   "lon": 150.457733,
-   "name": "Mount Brainble"
-  },
-  {
-   "lat": -10.599197,
-   "lon": 150.240308,
-   "name": "Mount Nelson"
-  },
-  {
-   "lat": -6.568696,
-   "lon": 144.774844,
-   "name": "Mount Karimui",
-   "wikidata": "Q31748532"
-  },
-  {
-   "lat": -7.166519,
-   "lon": 146.476975,
-   "name": "Mount Kosh",
-   "wikidata": "Q31748353"
-  },
-  {
-   "lat": -8.207344,
-   "lon": 146.781912,
-   "name": "Mount Yule",
-   "wikidata": "Q31745785"
-  },
-  {
-   "lat": -8.501242,
-   "lon": 146.828726,
-   "name": "Verjus Dome"
-  },
-  {
-   "lat": -6.981054,
-   "lon": 146.750726,
-   "name": "Mt Lanjun"
-  },
-  {
-   "lat": -6.966587,
-   "lon": 146.754519,
-   "name": "Bikaru"
-  },
-  {
-   "lat": -6.989185,
-   "lon": 146.760785,
-   "name": "Mt Kasenta"
-  },
-  {
-   "lat": -6.200709,
-   "lon": 145.156097,
-   "name": "Mount Elimbari"
-  },
-  {
-   "lat": -6.065797,
-   "lon": 144.98222,
-   "name": "Mount Konoma"
-  },
-  {
-   "lat": -6.061112,
-   "lon": 145.066213,
-   "name": "Mount Mani"
-  },
-  {
-   "lat": -6.00087,
-   "lon": 145.1191,
-   "name": "Mount Kerigomna"
-  },
-  {
-   "lat": -6.016665,
-   "lon": 144.868478,
-   "name": "Mount Naru"
-  },
-  {
-   "lat": -5.776837,
-   "lon": 144.822511,
-   "name": "Mount Udon"
-  },
-  {
-   "lat": -6.284632,
-   "lon": 144.663856,
-   "name": "Mount Suaru"
-  },
-  {
-   "lat": -6.867023,
-   "lon": 144.80289,
-   "name": "Mount Trube"
-  },
-  {
-   "lat": -6.867864,
-   "lon": 144.730887,
-   "name": "Mount Musgrave"
-  },
-  {
-   "lat": -6.149323,
-   "lon": 144.914614,
-   "name": "Mount Wikauma"
-  },
-  {
-   "lat": -5.948725,
-   "lon": 145.032849,
-   "name": "Mount Kombog"
-  },
-  {
-   "lat": -6.686918,
-   "lon": 145.604625,
-   "name": "Mount Tamiloa"
   },
   {
    "lat": -5.667024,
@@ -2824,219 +3612,49 @@
    "name": "Karup Hill"
   },
   {
-   "lat": -3.376226,
-   "lon": 142.66928,
-   "name": "Mount Ilau"
+   "lat": -10.022598,
+   "lon": 150.957302,
+   "name": "Mount Baldhead"
   },
   {
-   "lat": -4.236857,
-   "lon": 142.649118,
-   "name": "Yessan Hills"
+   "lat": -10.185653,
+   "lon": 151.216786,
+   "name": "Kesagai Hill"
   },
   {
-   "lat": -4.174623,
-   "lon": 142.730796,
-   "name": "Waskuk Hills"
+   "lat": -10.280122,
+   "lon": 151.020492,
+   "name": "Mount Tanorabwa"
   },
   {
-   "lat": -3.315614,
-   "lon": 142.069116,
-   "name": "Mount Pili"
+   "lat": -4.636927,
+   "lon": 145.995014,
+   "name": "Mount Uluman"
   },
   {
-   "lat": -2.696784,
-   "lon": 141.282515,
-   "name": "Dupri Hill"
+   "lat": -1.667259,
+   "lon": 134.066365,
+   "name": "Gn. Botak"
   },
   {
-   "lat": -2.674665,
-   "lon": 141.257136,
-   "name": "Kipri Hill"
+   "lat": -5.789156,
+   "lon": 144.292017,
+   "name": "Mt Ambra"
   },
   {
-   "lat": -2.68279,
-   "lon": 141.262403,
-   "name": "Tiba Hill"
+   "lat": -2.161699,
+   "lon": 146.811153,
+   "name": "Mount Bayem"
   },
   {
-   "lat": -2.837582,
-   "lon": 141.326373,
-   "name": "Mount Saou"
+   "lat": -5.837999,
+   "lon": 143.513053,
+   "name": "Lungu Rocks"
   },
   {
-   "lat": -2.818477,
-   "lon": 141.311291,
-   "name": "Mount Lade"
-  },
-  {
-   "lat": -2.808072,
-   "lon": 141.278817,
-   "name": "Mount Asowa"
-  },
-  {
-   "lat": -6.848526,
-   "lon": 146.94003,
-   "name": "Sugarloaf"
-  },
-  {
-   "lat": -6.734099,
-   "lon": 146.85742,
-   "name": "Oomsis Hill"
-  },
-  {
-   "lat": -6.666091,
-   "lon": 146.932452,
-   "name": "Atzera Range"
-  },
-  {
-   "lat": -6.648979,
-   "lon": 146.808169,
-   "name": "Mount Misantum"
-  },
-  {
-   "lat": -6.751119,
-   "lon": 146.765216,
-   "name": "Garagos Mountain"
-  },
-  {
-   "lat": -6.873317,
-   "lon": 146.676624,
-   "name": "Dambi Peak"
-  },
-  {
-   "lat": -6.71078,
-   "lon": 146.502882,
-   "name": "Mount Wanion"
-  },
-  {
-   "lat": -6.720034,
-   "lon": 146.207271,
-   "name": "Mount Rabumpun"
-  },
-  {
-   "lat": -6.34473,
-   "lon": 146.829814,
-   "name": "Erap Mountain",
-   "wikidata": "Q31749022"
-  },
-  {
-   "lat": -6.359924,
-   "lon": 146.734458,
-   "name": "Mount Gwasan",
-   "wikidata": "Q31748829"
-  },
-  {
-   "lat": -6.312783,
-   "lon": 146.419146,
-   "name": "Wongri Mountain",
-   "wikidata": "Q31745847"
-  },
-  {
-   "lat": -5.862108,
-   "lon": 144.891161,
-   "name": "Minmina Muglo"
-  },
-  {
-   "lat": -6.702832,
-   "lon": 145.892444,
-   "name": "Mount Oneiba"
-  },
-  {
-   "lat": -6.668361,
-   "lon": 146.051447,
-   "name": "Mount Karsini"
-  },
-  {
-   "lat": -6.615157,
-   "lon": 146.116332,
-   "name": "Mount Lamunyang"
-  },
-  {
-   "lat": -6.507889,
-   "lon": 146.012805,
-   "name": "Mount Elandora",
-   "wikidata": "Q31749066"
-  },
-  {
-   "lat": -6.534511,
-   "lon": 145.929283,
-   "name": "Mount Kautaira"
-  },
-  {
-   "lat": -6.557504,
-   "lon": 145.805787,
-   "name": "Mount Jabara",
-   "wikidata": "Q31748615"
-  },
-  {
-   "lat": -7.133175,
-   "lon": 147.062281,
-   "name": "Yamal"
-  },
-  {
-   "lat": -6.814835,
-   "lon": 146.193557,
-   "name": "Wasus Mountain"
-  },
-  {
-   "lat": -6.82498,
-   "lon": 146.073766,
-   "name": "Mount Kasini"
-  },
-  {
-   "lat": -5.85721,
-   "lon": 144.905543,
-   "name": "Kuapu-muglo"
-  },
-  {
-   "lat": -6.047422,
-   "lon": 145.395894,
-   "name": "Mount Agopea"
-  },
-  {
-   "lat": -5.645089,
-   "lon": 132.690719,
-   "name": "Gunung Gelanit"
-  },
-  {
-   "lat": -5.820551,
-   "lon": 132.922636,
-   "name": "Gunung Aduilnas"
-  },
-  {
-   "lat": -7.99087,
-   "lon": 146.831577,
-   "name": "Mount Chapman"
-  },
-  {
-   "lat": -5.545433,
-   "lon": 144.647216,
-   "name": "Korai Mountain"
-  },
-  {
-   "lat": -5.5402,
-   "lon": 144.650838,
-   "name": "Mekpai Ridge"
-  },
-  {
-   "lat": -9.356169,
-   "lon": 147.162779,
-   "name": "Mount Saamu"
-  },
-  {
-   "lat": -5.557939,
-   "lon": 144.276742,
-   "name": "Mount Maragubui"
-  },
-  {
-   "lat": -5.52358,
-   "lon": 144.273756,
-   "name": "Mount Meri"
-  },
-  {
-   "lat": -3.606434,
-   "lon": 144.586939,
-   "name": "Kadovar"
+   "lat": -5.833809,
+   "lon": 143.511342,
+   "name": "Neng Saii"
   },
   {
    "lat": -4.030474,
@@ -3054,169 +3672,35 @@
    "name": "Frieda Mountain"
   },
   {
-   "lat": -4.931868,
-   "lon": 142.592193,
-   "name": "Scharfe Mountain"
+   "lat": -8.516631,
+   "lon": 146.840848,
+   "name": "Mount Davidson"
   },
   {
-   "lat": -4.938996,
-   "lon": 144.21162,
-   "name": "Rain Mountain"
+   "lat": -8.447637,
+   "lon": 146.817347,
+   "name": "Mount Elieli"
   },
   {
-   "lat": -9.163835,
-   "lon": 147.645107,
-   "name": "Brigade Hill"
+   "lat": -9.243637,
+   "lon": 150.198303,
+   "name": "Mount Oiava-Ai"
   },
   {
-   "lat": -8.427477,
-   "lon": 147.022125,
-   "name": "Mount Minaru"
+   "lat": -10.018215,
+   "lon": 147.983141,
+   "name": "Animarupu Hill"
   },
   {
-   "lat": -8.360824,
-   "lon": 147.184153,
-   "name": "Mount Champion"
+   "lat": -5.198327,
+   "lon": 151.239878,
+   "name": "Mount Bamus",
+   "volcano": true
   },
   {
-   "lat": -8.379986,
-   "lon": 147.128375,
-   "name": "Mount Speedie"
-  },
-  {
-   "lat": -8.249306,
-   "lon": 147.200915,
-   "name": "Mount Gireri"
-  },
-  {
-   "lat": -8.14207,
-   "lon": 147.226547,
-   "name": "Mount Nelson"
-  },
-  {
-   "lat": -8.049102,
-   "lon": 147.138913,
-   "name": "Mount Hummock"
-  },
-  {
-   "lat": -8.067942,
-   "lon": 146.832582,
-   "name": "Mount Sauk"
-  },
-  {
-   "lat": -8.043648,
-   "lon": 146.843701,
-   "name": "Mount Louis"
-  },
-  {
-   "lat": -8.066431,
-   "lon": 146.844732,
-   "name": "Mount Guari"
-  },
-  {
-   "lat": -8.055181,
-   "lon": 146.846304,
-   "name": "Mount Gough"
-  },
-  {
-   "lat": -8.10626,
-   "lon": 146.829899,
-   "name": "Mount Amu"
-  },
-  {
-   "lat": -8.090203,
-   "lon": 146.895062,
-   "name": "Mount Bipi"
-  },
-  {
-   "lat": -8.070434,
-   "lon": 146.939125,
-   "name": "Mount Narau Karob"
-  },
-  {
-   "lat": -8.023126,
-   "lon": 146.945811,
-   "name": "Mount Gelilipuku"
-  },
-  {
-   "lat": -8.048156,
-   "lon": 146.947583,
-   "name": "Mount Uiakiwa"
-  },
-  {
-   "lat": -8.030083,
-   "lon": 146.924615,
-   "name": "Eastern Peak"
-  },
-  {
-   "lat": -7.985056,
-   "lon": 146.871711,
-   "name": "Mount Gondurumu"
-  },
-  {
-   "lat": -8.00497,
-   "lon": 146.787297,
-   "name": "Mount Turu"
-  },
-  {
-   "lat": -8.172111,
-   "lon": 146.83733,
-   "name": "Mount Beluveria"
-  },
-  {
-   "lat": -8.171911,
-   "lon": 146.85687,
-   "name": "Mont Bisori"
-  },
-  {
-   "lat": -8.178346,
-   "lon": 146.882546,
-   "name": "Mount Galimara"
-  },
-  {
-   "lat": -8.156108,
-   "lon": 146.861436,
-   "name": "Mount Mauvisa"
-  },
-  {
-   "lat": -8.165833,
-   "lon": 146.904655,
-   "name": "Mount Burava"
-  },
-  {
-   "lat": -8.140211,
-   "lon": 146.898204,
-   "name": "Mount Kavirapa"
-  },
-  {
-   "lat": -8.307521,
-   "lon": 146.814234,
-   "name": "Mount Kwirapa"
-  },
-  {
-   "lat": -8.343062,
-   "lon": 146.908649,
-   "name": "Pilutu North"
-  },
-  {
-   "lat": -8.211092,
-   "lon": 146.883321,
-   "name": "Mount Gumanivi"
-  },
-  {
-   "lat": -8.220885,
-   "lon": 146.897515,
-   "name": "Mount Gogu"
-  },
-  {
-   "lat": -8.254327,
-   "lon": 146.889214,
-   "name": "Mount Lumu"
-  },
-  {
-   "lat": -8.310877,
-   "lon": 146.892439,
-   "name": "Mount Kwaigutu"
+   "lat": -4.925516,
+   "lon": 151.211214,
+   "name": "Giwu Peak"
   },
   {
    "lat": -8.242459,
@@ -3254,332 +3738,20 @@
    "name": "Mount Voruvoru"
   },
   {
-   "lat": -8.516631,
-   "lon": 146.840848,
-   "name": "Mount Davidson"
-  },
-  {
-   "lat": -8.447637,
-   "lon": 146.817347,
-   "name": "Mount Elieli"
-  },
-  {
-   "lat": -8.694474,
-   "lon": 147.078678,
-   "name": "Mount Mana"
-  },
-  {
-   "lat": -8.701829,
-   "lon": 147.033849,
-   "name": "Boala Peaks"
-  },
-  {
-   "lat": -8.702025,
-   "lon": 147.045006,
-   "name": "Boala Peaks"
-  },
-  {
-   "lat": -8.666687,
-   "lon": 147.089144,
-   "name": "Mount Gaiva"
-  },
-  {
-   "lat": -8.629262,
-   "lon": 147.18005,
-   "name": "Mount Tafa"
-  },
-  {
-   "lat": -8.652498,
-   "lon": 147.131532,
-   "name": "Mount Varapi"
-  },
-  {
-   "lat": -8.638446,
-   "lon": 147.226792,
-   "name": "Mount Hegere"
-  },
-  {
-   "lat": -8.478304,
-   "lon": 147.166702,
-   "name": "Mount Boismenu"
-  },
-  {
-   "lat": -8.449019,
-   "lon": 147.009041,
-   "name": "Mount Kailape"
-  },
-  {
-   "lat": -8.538563,
-   "lon": 147.026957,
-   "name": "Mount Mafulu"
-  },
-  {
-   "lat": -8.495076,
-   "lon": 147.06659,
-   "name": "Mount Pitsoku"
-  },
-  {
-   "lat": -8.520817,
-   "lon": 147.10428,
-   "name": "Gari Peak"
-  },
-  {
-   "lat": -8.594949,
-   "lon": 147.109225,
-   "name": "Mount Abadi"
-  },
-  {
-   "lat": -8.446748,
-   "lon": 147.1349,
-   "name": "Mount Filloderi"
-  },
-  {
-   "lat": -8.387454,
-   "lon": 147.222497,
-   "name": "Olopu"
-  },
-  {
-   "lat": -8.137356,
-   "lon": 146.727495,
-   "name": "Mount Koputako"
-  },
-  {
-   "lat": -8.089165,
-   "lon": 146.738727,
-   "name": "Mount Gawdabuka"
-  },
-  {
-   "lat": -7.992307,
-   "lon": 146.719184,
-   "name": "Mount Danavalari"
-  },
-  {
-   "lat": -9.499429,
-   "lon": 147.190094,
-   "name": "Kauka Hill"
-  },
-  {
-   "lat": -3.157253,
-   "lon": 141.963304,
-   "name": "Palsore Hill"
-  },
-  {
-   "lat": -3.169191,
-   "lon": 142.012999,
-   "name": "Grofune Hill"
-  },
-  {
-   "lat": -3.361633,
-   "lon": 142.2149,
-   "name": "Mount Seno"
-  },
-  {
-   "lat": -3.407453,
-   "lon": 142.206642,
-   "name": "Mount Sulen"
-  },
-  {
-   "lat": -3.391358,
-   "lon": 142.142462,
-   "name": "Mount Somero"
-  },
-  {
-   "lat": -3.468072,
-   "lon": 142.214375,
-   "name": "Mount Waralap"
-  },
-  {
-   "lat": -3.626177,
-   "lon": 142.411141,
-   "name": "Mount Hauk"
-  },
-  {
-   "lat": -3.338237,
-   "lon": 142.037497,
-   "name": "Mount Gorbu"
-  },
-  {
-   "lat": -5.904143,
-   "lon": 144.355702,
-   "name": "Mount Wanee"
-  },
-  {
-   "lat": -5.944179,
-   "lon": 144.288625,
-   "name": "Mount Koomga"
-  },
-  {
-   "lat": -6.195822,
-   "lon": 147.137437,
-   "name": "Mount Gong"
-  },
-  {
-   "lat": -6.143655,
-   "lon": 147.155061,
-   "name": "Mount Kuman"
-  },
-  {
-   "lat": -6.241047,
-   "lon": 147.496876,
-   "name": "Mount Mone"
-  },
-  {
-   "lat": -6.275059,
-   "lon": 147.458932,
-   "name": "Mount Nanson"
-  },
-  {
-   "lat": -6.329039,
-   "lon": 147.616785,
-   "name": "Mount Bulebe"
-  },
-  {
-   "lat": -6.362815,
-   "lon": 147.653606,
-   "name": "Mount Besenona"
-  },
-  {
-   "lat": -6.645001,
-   "lon": 147.752332,
-   "name": "Mount Ulamoa"
-  },
-  {
-   "lat": -6.613752,
-   "lon": 146.659433,
-   "name": "Pyramid Hill"
-  },
-  {
-   "lat": -4.672297,
-   "lon": 145.490577,
-   "name": "Mount Masur"
-  },
-  {
-   "lat": -4.938684,
-   "lon": 145.625937,
-   "name": "Mount Buruk"
-  },
-  {
-   "lat": -4.587244,
-   "lon": 145.330887,
-   "name": "Kirina Hill"
-  },
-  {
-   "lat": -4.580848,
-   "lon": 145.397808,
-   "name": "Mount Anboa"
-  },
-  {
-   "lat": -4.545012,
-   "lon": 145.31002,
-   "name": "Kiramur Hill"
-  },
-  {
-   "lat": -4.688735,
-   "lon": 145.459962,
-   "name": "Mount Musar"
-  },
-  {
-   "lat": -4.687741,
-   "lon": 145.285941,
-   "name": "Mount Pihom"
-  },
-  {
-   "lat": -4.711638,
-   "lon": 145.26623,
-   "name": "Mount Mengam"
-  },
-  {
-   "lat": -9.243637,
-   "lon": 150.198303,
-   "name": "Mount Oiava-Ai"
-  },
-  {
-   "lat": -9.333449,
-   "lon": 150.311041,
-   "name": "Wakala Hill"
-  },
-  {
    "lat": -9.325463,
    "lon": 150.184958,
    "name": "Mount Oiafuefue"
   },
   {
-   "lat": -9.362599,
-   "lon": 150.481371,
-   "name": "Mount Maybole"
+   "lat": -5.335837,
+   "lon": 151.098316,
+   "name": "Mount Galloseulo",
+   "wikidata": "Q31450884"
   },
   {
-   "lat": -9.618369,
-   "lon": 150.647346,
-   "name": "Mount Edagwaba"
-  },
-  {
-   "lat": -9.588339,
-   "lon": 150.982426,
-   "name": "Oyaboa Hill"
-  },
-  {
-   "lat": -10.022598,
-   "lon": 150.957302,
-   "name": "Mount Baldhead"
-  },
-  {
-   "lat": -10.185653,
-   "lon": 151.216786,
-   "name": "Kesagai Hill"
-  },
-  {
-   "lat": -10.280122,
-   "lon": 151.020492,
-   "name": "Mount Tanorabwa"
-  },
-  {
-   "lat": -10.614246,
-   "lon": 150.980085,
-   "name": "Mount Tuliluli"
-  },
-  {
-   "lat": -10.575849,
-   "lon": 150.853109,
-   "name": "Mount Gwalabu"
-  },
-  {
-   "lat": -10.668307,
-   "lon": 150.413996,
-   "name": "Niguana Mountain"
-  },
-  {
-   "lat": -10.501148,
-   "lon": 150.646002,
-   "name": "Mount Dohu"
-  },
-  {
-   "lat": -5.416272,
-   "lon": 142.494677,
-   "name": "1400 M"
-  },
-  {
-   "lat": -10.292509,
-   "lon": 150.67401,
-   "name": "Mount Gera Gera",
-   "wikidata": "Q31750299"
-  },
-  {
-   "lat": -10.290336,
-   "lon": 150.60872,
-   "name": "Palia Hill"
-  },
-  {
-   "lat": -10.265047,
-   "lon": 150.500059,
-   "name": "Mount Dimali",
-   "wikidata": "Q31750435"
-  },
-  {
-   "lat": -10.104859,
-   "lon": 150.052505,
-   "name": "Mount Pasi Pasi",
-   "wikidata": "Q31750426"
+   "lat": -5.649931,
+   "lon": 146.465111,
+   "name": "Baibui Mountain"
   },
   {
    "lat": -10.478193,
@@ -3595,178 +3767,6 @@
    "lat": -10.284121,
    "lon": 150.47748,
    "name": "Cameron Plateau"
-  },
-  {
-   "lat": -9.975834,
-   "lon": 149.59748,
-   "name": "Mount Udawa",
-   "wikidata": "Q31746113"
-  },
-  {
-   "lat": -5.335837,
-   "lon": 151.098316,
-   "name": "Mount Galloseulo",
-   "wikidata": "Q31450884"
-  },
-  {
-   "lat": -10.540877,
-   "lon": 149.922267,
-   "name": "Mount Gould"
-  },
-  {
-   "lat": -9.943613,
-   "lon": 149.410263,
-   "name": "Mount Mura",
-   "wikidata": "Q31747379"
-  },
-  {
-   "lat": -9.923326,
-   "lon": 149.285021,
-   "name": "Mount Baratun",
-   "wikidata": "Q31749773"
-  },
-  {
-   "lat": -9.886644,
-   "lon": 149.202546,
-   "name": "Mount Orian",
-   "wikidata": "Q31747130"
-  },
-  {
-   "lat": -9.680058,
-   "lon": 148.242769,
-   "name": "Durigoro Mountain"
-  },
-  {
-   "lat": -10.091652,
-   "lon": 149.447485,
-   "name": "Mount Taibin",
-   "wikidata": "Q31750200"
-  },
-  {
-   "lat": -10.016307,
-   "lon": 149.281257,
-   "name": "Mount Damaeta",
-   "wikidata": "Q31750322"
-  },
-  {
-   "lat": -10.088819,
-   "lon": 148.882385,
-   "name": "Badiai Hill"
-  },
-  {
-   "lat": -10.124521,
-   "lon": 148.525228,
-   "name": "Paidnu Hill"
-  },
-  {
-   "lat": -2.611229,
-   "lon": 140.53182,
-   "name": "Bukit Bhanjibey"
-  },
-  {
-   "lat": -9.924905,
-   "lon": 147.992574,
-   "name": "Pyramid Hill"
-  },
-  {
-   "lat": -9.536915,
-   "lon": 147.583718,
-   "name": "Mount Dundas",
-   "wikidata": "Q31749128"
-  },
-  {
-   "lat": -9.944407,
-   "lon": 147.675633,
-   "name": "Mount Boulogolo",
-   "wikidata": "Q31240114"
-  },
-  {
-   "lat": -9.953347,
-   "lon": 147.758235,
-   "name": "Manu Manu Hill"
-  },
-  {
-   "lat": -10.018215,
-   "lon": 147.983141,
-   "name": "Animarupu Hill"
-  },
-  {
-   "lat": -9.709083,
-   "lon": 147.44584,
-   "name": "Deregoro Hill"
-  },
-  {
-   "lat": -9.690414,
-   "lon": 147.427124,
-   "name": "Kapagununa Hill"
-  },
-  {
-   "lat": -9.602331,
-   "lon": 147.374218,
-   "name": "Tapa",
-   "name_en": "Bald Hill"
-  },
-  {
-   "lat": -9.612853,
-   "lon": 147.382205,
-   "name": "Siwina",
-   "name_en": "Highland Hill"
-  },
-  {
-   "lat": -9.590805,
-   "lon": 147.364203,
-   "name": "Godio",
-   "name_en": "Bayview Hill"
-  },
-  {
-   "lat": -9.595937,
-   "lon": 147.354392,
-   "name": "Bogio Hill"
-  },
-  {
-   "lat": -9.567918,
-   "lon": 147.415109,
-   "name": "Borenumu Hill"
-  },
-  {
-   "lat": -9.584088,
-   "lon": 147.400964,
-   "name": "Waraha",
-   "name_en": "Scrub Hill"
-  },
-  {
-   "lat": -9.611413,
-   "lon": 147.396468,
-   "name": "Yuinbisisi",
-   "name_en": "Blueberry Hill"
-  },
-  {
-   "lat": -9.621513,
-   "lon": 147.460669,
-   "name": "Numuta Hill"
-  },
-  {
-   "lat": -9.519068,
-   "lon": 147.330869,
-   "name": "Touvara",
-   "name_en": "Marauder Hill"
-  },
-  {
-   "lat": -9.510262,
-   "lon": 147.351064,
-   "name": "Samo Hills"
-  },
-  {
-   "lat": -9.117463,
-   "lon": 148.519907,
-   "name": "Mount De Vis",
-   "wikidata": "Q31749421"
-  },
-  {
-   "lat": -9.148142,
-   "lon": 149.170461,
-   "name": "Mount Hall",
-   "wikidata": "Q31748806"
   }
  ]
 }

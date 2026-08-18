@@ -1,6 +1,6 @@
 {
  "region": "garhwal",
- "generated": "2026-08-13T09:16:20+00:00",
+ "generated": "2026-08-18T20:47:27+00:00",
  "peaks": [
   {
    "lat": 30.376077,
@@ -119,15 +119,15 @@
    "ele": 6974
   },
   {
-   "lat": 31.032749,
-   "lon": 79.503069,
-   "name": "Saraswati Parvat I",
-   "ele": 6940
-  },
-  {
    "lat": 30.797853,
    "lon": 79.066291,
    "name": "Kedarnath Main",
+   "ele": 6940
+  },
+  {
+   "lat": 31.032749,
+   "lon": 79.503069,
+   "name": "Saraswati Parvat I",
    "ele": 6940
   },
   {
@@ -224,17 +224,17 @@
    "ele": 6805
   },
   {
+   "lat": 31.00708,
+   "lon": 79.129611,
+   "name": "Sri Kailas West",
+   "ele": 6803
+  },
+  {
    "lat": 30.271182,
    "lon": 79.871845,
    "name": "Maiktoli",
    "ele": 6803,
    "wikidata": "Q61780782"
-  },
-  {
-   "lat": 31.00708,
-   "lon": 79.129611,
-   "name": "Sri Kailas West",
-   "ele": 6803
   },
   {
    "lat": 30.964826,
@@ -301,6 +301,12 @@
    "ele": 6728
   },
   {
+   "lat": 30.690868,
+   "lon": 79.704106,
+   "name": "HATHI PARVAT",
+   "ele": 6727
+  },
+  {
    "lat": 30.683088,
    "lon": 79.706377,
    "name": "Hathi Parbat",
@@ -308,21 +314,15 @@
    "wikidata": "Q998772"
   },
   {
-   "lat": 30.690868,
-   "lon": 79.704106,
-   "name": "HATHI PARVAT",
-   "ele": 6727
+   "lat": 30.809708,
+   "lon": 79.225512,
+   "name": "Swachhand Peak",
+   "ele": 6721
   },
   {
    "lat": 31.013614,
    "lon": 79.071456,
    "name": "Matri",
-   "ele": 6721
-  },
-  {
-   "lat": 30.809708,
-   "lon": 79.225512,
-   "name": "Swachhand Peak",
    "ele": 6721
   },
   {
@@ -455,6 +455,12 @@
    "ele": 6565
   },
   {
+   "lat": 30.42675,
+   "lon": 80.297025,
+   "name": "Chiring We",
+   "ele": 6559
+  },
+  {
    "lat": 30.828505,
    "lon": 79.603747,
    "name": "Mandir Parbat",
@@ -462,23 +468,17 @@
    "wikidata": "Q96105700"
   },
   {
-   "lat": 30.42675,
-   "lon": 80.297025,
-   "name": "Chiring We",
-   "ele": 6559
+   "lat": 30.858703,
+   "lon": 79.254795,
+   "name": "Chandra Parbat S",
+   "ele": 6557,
+   "wikidata": "Q97151015"
   },
   {
    "lat": 30.996262,
    "lon": 79.152251,
    "name": "Atal-2",
    "ele": 6557
-  },
-  {
-   "lat": 30.858703,
-   "lon": 79.254795,
-   "name": "Chandra Parbat S",
-   "ele": 6557,
-   "wikidata": "Q97151015"
   },
   {
    "lat": 31.353692,
@@ -514,18 +514,18 @@
    "wikidata": "Q93427166"
   },
   {
-   "lat": 30.905215,
-   "lon": 79.000575,
-   "name": "Manda III",
-   "ele": 6529,
-   "wikidata": "Q96105022"
-  },
-  {
    "lat": 30.349563,
    "lon": 79.880561,
    "name": "Devasthan II",
    "ele": 6529,
    "wikidata": "Q96621372"
+  },
+  {
+   "lat": 30.905215,
+   "lon": 79.000575,
+   "name": "Manda III",
+   "ele": 6529,
+   "wikidata": "Q96105022"
   },
   {
    "lat": 30.863588,
@@ -660,17 +660,17 @@
    "ele": 6387
   },
   {
-   "lat": 31.043584,
-   "lon": 79.021736,
-   "name": "Kalidhang",
-   "ele": 6373
-  },
-  {
    "lat": 30.331501,
    "lon": 80.380455,
    "name": "Suj Tilla East",
    "ele": 6373,
    "wikidata": "Q7635607"
+  },
+  {
+   "lat": 31.043584,
+   "lon": 79.021736,
+   "name": "Kalidhang",
+   "ele": 6373
   },
   {
    "lat": 30.222948,
@@ -679,15 +679,15 @@
    "ele": 6355
   },
   {
-   "lat": 30.840237,
-   "lon": 79.376825,
-   "name": "Arwa Tower",
-   "ele": 6352
-  },
-  {
    "lat": 30.3771,
    "lon": 79.787269,
    "name": "Bethartoli Himal",
+   "ele": 6352
+  },
+  {
+   "lat": 30.840237,
+   "lon": 79.376825,
+   "name": "Arwa Tower",
    "ele": 6352
   },
   {
@@ -847,13 +847,6 @@
    "ele": 6245
   },
   {
-   "lat": 30.456079,
-   "lon": 79.891353,
-   "name": "Rishi Kot",
-   "ele": 6236,
-   "wikidata": "Q96623795"
-  },
-  {
    "lat": 30.53142,
    "lon": 80.123083,
    "name": "Nital Thaur",
@@ -864,6 +857,13 @@
    "lon": 80.062986,
    "name": "Nandabhana",
    "ele": 6236
+  },
+  {
+   "lat": 30.456079,
+   "lon": 79.891353,
+   "name": "Rishi Kot",
+   "ele": 6236,
+   "wikidata": "Q96623795"
   },
   {
    "lat": 30.45319,
@@ -923,15 +923,15 @@
    "wikidata": "Q97019838"
   },
   {
-   "lat": 30.632648,
-   "lon": 80.031444,
-   "name": "Shambhu Ka Qilla",
-   "ele": 6160
-  },
-  {
    "lat": 30.597642,
    "lon": 80.042523,
    "name": "Chalab",
+   "ele": 6160
+  },
+  {
+   "lat": 30.632648,
+   "lon": 80.031444,
+   "name": "Shambhu Ka Qilla",
    "ele": 6160
   },
   {
@@ -996,12 +996,6 @@
    "ele": 6105
   },
   {
-   "lat": 30.920624,
-   "lon": 79.280583,
-   "name": "Kalindi Peak",
-   "ele": 6102
-  },
-  {
    "lat": 31.006974,
    "lon": 78.526726,
    "name": "Bandarpunch II",
@@ -1011,6 +1005,12 @@
    "lat": 30.174944,
    "lon": 80.468988,
    "name": "Telkot",
+   "ele": 6102
+  },
+  {
+   "lat": 30.920624,
+   "lon": 79.280583,
+   "name": "Kalindi Peak",
    "ele": 6102
   },
   {
@@ -1421,15 +1421,15 @@
    "ele": 2231
   },
   {
-   "lat": 30.068152,
-   "lon": 78.713557,
-   "name": "Ranigarh",
-   "ele": 2150
-  },
-  {
    "lat": 29.606621,
    "lon": 80.266338,
    "name": "Saurlek",
+   "ele": 2150
+  },
+  {
+   "lat": 30.068152,
+   "lon": 78.713557,
+   "name": "Ranigarh",
    "ele": 2150
   },
   {
@@ -1505,159 +1505,34 @@
    "ele": 1560
   },
   {
-   "lat": 30.599864,
-   "lon": 79.69615,
-   "name": "Barmal"
-  },
-  {
-   "lat": 31.423238,
-   "lon": 79.144424,
-   "name": "塔加拉"
-  },
-  {
-   "lat": 29.799218,
-   "lon": 80.199455,
-   "name": "Bhagaling"
-  },
-  {
-   "lat": 31.161545,
-   "lon": 79.125676,
-   "name": "贾达普"
-  },
-  {
-   "lat": 31.208274,
-   "lon": 79.151652,
-   "name": "索囊"
-  },
-  {
-   "lat": 30.799054,
-   "lon": 78.855715,
-   "name": "Bhetiara ka Danda"
-  },
-  {
-   "lat": 30.423671,
-   "lon": 79.592136,
-   "name": "Pangarchulla"
-  },
-  {
-   "lat": 30.20478,
-   "lon": 79.563785,
-   "name": "Khamila Top"
-  },
-  {
    "lat": 31.240887,
    "lon": 78.449155,
    "name": "Borasu Kandi"
   },
   {
-   "lat": 29.896727,
-   "lon": 80.170788,
-   "name": "Murri Danda"
+   "lat": 30.084283,
+   "lon": 79.192886,
+   "name": "Musa ka Kotha"
   },
   {
-   "lat": 29.98516,
-   "lon": 80.109311,
-   "name": "Balohail Danda"
+   "lat": 30.477722,
+   "lon": 79.838903,
+   "name": "Hanuman"
   },
   {
-   "lat": 30.692074,
-   "lon": 78.912713,
-   "name": "Patagnian"
+   "lat": 30.471292,
+   "lon": 79.784283,
+   "name": "Malatoni"
   },
   {
-   "lat": 30.729322,
-   "lon": 78.822141,
-   "name": "Shastru"
-  },
-  {
-   "lat": 30.536815,
-   "lon": 78.545379,
-   "name": "Akhor"
-  },
-  {
-   "lat": 31.410059,
-   "lon": 78.1079,
-   "name": "Ulsi Shikhar"
+   "lat": 30.757975,
+   "lon": 79.869428,
+   "name": "GURGATI"
   },
   {
    "lat": 30.843024,
    "lon": 78.54466,
    "name": "Dyara"
-  },
-  {
-   "lat": 30.767633,
-   "lon": 79.341674,
-   "name": "Balakun"
-  },
-  {
-   "lat": 30.486439,
-   "lon": 79.221206,
-   "name": "Chandrasila"
-  },
-  {
-   "lat": 30.898625,
-   "lon": 78.499138,
-   "name": "Darwa"
-  },
-  {
-   "lat": 30.291552,
-   "lon": 80.388937,
-   "name": "Lachar We"
-  },
-  {
-   "lat": 30.313283,
-   "lon": 80.38604,
-   "name": "Rimla Wi"
-  },
-  {
-   "lat": 30.293646,
-   "lon": 80.401039,
-   "name": "Mahadev Dhura"
-  },
-  {
-   "lat": 30.247612,
-   "lon": 80.393958,
-   "name": "Meneka"
-  },
-  {
-   "lat": 30.493281,
-   "lon": 80.145309,
-   "name": "Shangas"
-  },
-  {
-   "lat": 30.871423,
-   "lon": 79.031725,
-   "name": "Meru North"
-  },
-  {
-   "lat": 30.222216,
-   "lon": 79.428605,
-   "name": "Rudugaira"
-  },
-  {
-   "lat": 30.177726,
-   "lon": 79.504214,
-   "name": "Busiya"
-  },
-  {
-   "lat": 30.702444,
-   "lon": 78.65604,
-   "name": "Kushkalyan"
-  },
-  {
-   "lat": 30.960202,
-   "lon": 78.350414,
-   "name": "Samay Ka Tibba"
-  },
-  {
-   "lat": 30.393143,
-   "lon": 78.83341,
-   "name": "Ratkot Tibba रतकोट तिब्बा"
-  },
-  {
-   "lat": 29.670715,
-   "lon": 80.115566,
-   "name": "Bharabheo"
   },
   {
    "lat": 30.544984,
@@ -1683,46 +1558,6 @@
    "lat": 30.648177,
    "lon": 79.860263,
    "name": "Phorchula"
-  },
-  {
-   "lat": 30.060012,
-   "lon": 80.188328,
-   "name": "Khalia Danda"
-  },
-  {
-   "lat": 30.625578,
-   "lon": 79.725551,
-   "name": "Oti Ka Danda"
-  },
-  {
-   "lat": 29.924812,
-   "lon": 78.6658,
-   "name": "Bhairavgarhi"
-  },
-  {
-   "lat": 30.422181,
-   "lon": 79.744863,
-   "name": "Raunthi Peak"
-  },
-  {
-   "lat": 30.478769,
-   "lon": 78.677296,
-   "name": "Talkund"
-  },
-  {
-   "lat": 30.532592,
-   "lon": 79.01006,
-   "name": "Puandala Danda"
-  },
-  {
-   "lat": 31.434384,
-   "lon": 78.385876,
-   "name": "Miquellink"
-  },
-  {
-   "lat": 30.431648,
-   "lon": 79.583181,
-   "name": "Mini Pangarchulla"
   },
   {
    "lat": 31.293918,
@@ -1770,14 +1605,39 @@
    "name": "Homling"
   },
   {
-   "lat": 31.023517,
-   "lon": 78.313551,
-   "name": "Dhar Khoi"
+   "lat": 30.595957,
+   "lon": 79.460292,
+   "name": "Sona Sankar"
   },
   {
-   "lat": 31.019104,
-   "lon": 78.259692,
-   "name": "Chaunda"
+   "lat": 30.522962,
+   "lon": 79.424232,
+   "name": "Modera"
+  },
+  {
+   "lat": 30.54661,
+   "lon": 79.388859,
+   "name": "Raturi"
+  },
+  {
+   "lat": 30.55195,
+   "lon": 79.305711,
+   "name": "Phating Khan"
+  },
+  {
+   "lat": 30.486439,
+   "lon": 79.221206,
+   "name": "Chandrasila"
+  },
+  {
+   "lat": 30.898625,
+   "lon": 78.499138,
+   "name": "Darwa"
+  },
+  {
+   "lat": 30.625578,
+   "lon": 79.725551,
+   "name": "Oti Ka Danda"
   },
   {
    "lat": 30.951905,
@@ -1785,19 +1645,417 @@
    "name": "Suwai Tibba"
   },
   {
-   "lat": 30.967748,
-   "lon": 78.343463,
-   "name": "Mugarkanda"
+   "lat": 30.082612,
+   "lon": 80.354562,
+   "name": "Urma"
   },
   {
-   "lat": 30.867752,
-   "lon": 78.37934,
-   "name": "Thadol"
+   "lat": 30.14329,
+   "lon": 80.303192,
+   "name": "Nagni Dhura"
   },
   {
-   "lat": 30.890827,
-   "lon": 78.449893,
-   "name": "Dhyadamani"
+   "lat": 30.176147,
+   "lon": 80.390911,
+   "name": "Halsyun"
+  },
+  {
+   "lat": 30.168876,
+   "lon": 80.330315,
+   "name": "Kamrani"
+  },
+  {
+   "lat": 31.148659,
+   "lon": 78.606577,
+   "name": "Lamkagha"
+  },
+  {
+   "lat": 31.198413,
+   "lon": 78.684855,
+   "name": "Nela"
+  },
+  {
+   "lat": 31.423238,
+   "lon": 79.144424,
+   "name": "塔加拉"
+  },
+  {
+   "lat": 29.896727,
+   "lon": 80.170788,
+   "name": "Murri Danda"
+  },
+  {
+   "lat": 29.98516,
+   "lon": 80.109311,
+   "name": "Balohail Danda"
+  },
+  {
+   "lat": 30.536815,
+   "lon": 78.545379,
+   "name": "Akhor"
+  },
+  {
+   "lat": 30.177726,
+   "lon": 79.504214,
+   "name": "Busiya"
+  },
+  {
+   "lat": 30.478769,
+   "lon": 78.677296,
+   "name": "Talkund"
+  },
+  {
+   "lat": 30.532592,
+   "lon": 79.01006,
+   "name": "Puandala Danda"
+  },
+  {
+   "lat": 30.188204,
+   "lon": 79.884682,
+   "name": "Batuni Dhar"
+  },
+  {
+   "lat": 30.199035,
+   "lon": 79.960899,
+   "name": "Rajpanthu"
+  },
+  {
+   "lat": 30.227665,
+   "lon": 79.953861,
+   "name": "Malla Panchel"
+  },
+  {
+   "lat": 30.243219,
+   "lon": 80.07278,
+   "name": "Laspa Dhuar"
+  },
+  {
+   "lat": 30.207158,
+   "lon": 80.027955,
+   "name": "Chepar Choti"
+  },
+  {
+   "lat": 30.236694,
+   "lon": 80.02965,
+   "name": "Lamchhir"
+  },
+  {
+   "lat": 29.799218,
+   "lon": 80.199455,
+   "name": "Bhagaling"
+  },
+  {
+   "lat": 30.702444,
+   "lon": 78.65604,
+   "name": "Kushkalyan"
+  },
+  {
+   "lat": 31.161545,
+   "lon": 79.125676,
+   "name": "贾达普"
+  },
+  {
+   "lat": 31.208274,
+   "lon": 79.151652,
+   "name": "索囊"
+  },
+  {
+   "lat": 30.431648,
+   "lon": 79.583181,
+   "name": "Mini Pangarchulla"
+  },
+  {
+   "lat": 31.499321,
+   "lon": 80.100221,
+   "name": "阿伊拉日居",
+   "name_en": "Ayila Ri’gyü"
+  },
+  {
+   "lat": 30.291552,
+   "lon": 80.388937,
+   "name": "Lachar We"
+  },
+  {
+   "lat": 30.313283,
+   "lon": 80.38604,
+   "name": "Rimla Wi"
+  },
+  {
+   "lat": 30.293646,
+   "lon": 80.401039,
+   "name": "Mahadev Dhura"
+  },
+  {
+   "lat": 30.247612,
+   "lon": 80.393958,
+   "name": "Meneka"
+  },
+  {
+   "lat": 31.278924,
+   "lon": 78.332775,
+   "name": "Lami"
+  },
+  {
+   "lat": 30.369025,
+   "lon": 80.115394,
+   "name": "Kalchu Dhura"
+  },
+  {
+   "lat": 30.365174,
+   "lon": 80.135822,
+   "name": "Mapa Dhura"
+  },
+  {
+   "lat": 30.414927,
+   "lon": 80.130329,
+   "name": "Pachu Dhura"
+  },
+  {
+   "lat": 30.692074,
+   "lon": 78.912713,
+   "name": "Patagnian"
+  },
+  {
+   "lat": 30.393143,
+   "lon": 78.83341,
+   "name": "Ratkot Tibba रतकोट तिब्बा"
+  },
+  {
+   "lat": 30.61425,
+   "lon": 78.446653,
+   "name": "Kalwa"
+  },
+  {
+   "lat": 30.832972,
+   "lon": 78.754163,
+   "name": "Rakhau Top"
+  },
+  {
+   "lat": 30.566049,
+   "lon": 78.548555,
+   "name": "Manka"
+  },
+  {
+   "lat": 31.240096,
+   "lon": 78.058385,
+   "name": "Holandi 3"
+  },
+  {
+   "lat": 31.246656,
+   "lon": 78.032157,
+   "name": "Holondi 2"
+  },
+  {
+   "lat": 31.242638,
+   "lon": 78.022942,
+   "name": "Holondi 1"
+  },
+  {
+   "lat": 30.474277,
+   "lon": 78.047952,
+   "name": "Dalai Hill"
+  },
+  {
+   "lat": 30.47683,
+   "lon": 78.014186,
+   "name": "Benog peak"
+  },
+  {
+   "lat": 31.159961,
+   "lon": 79.072327,
+   "name": "桑松多"
+  },
+  {
+   "lat": 31.227977,
+   "lon": 79.131877,
+   "name": "索囊日"
+  },
+  {
+   "lat": 30.932486,
+   "lon": 79.599766,
+   "name": "依比康麦",
+   "name_en": "Abi Gamin"
+  },
+  {
+   "lat": 30.916733,
+   "lon": 79.829253,
+   "name": "加内希甘加"
+  },
+  {
+   "lat": 30.950593,
+   "lon": 79.849018,
+   "name": "基翁隆"
+  },
+  {
+   "lat": 30.774918,
+   "lon": 80.19966,
+   "name": "巴日"
+  },
+  {
+   "lat": 30.759435,
+   "lon": 80.239513,
+   "name": "穷共日（穷孔日）"
+  },
+  {
+   "lat": 30.739728,
+   "lon": 80.006536,
+   "name": "苏姆那"
+  },
+  {
+   "lat": 30.643763,
+   "lon": 80.217687,
+   "name": "藏麻果"
+  },
+  {
+   "lat": 30.588821,
+   "lon": 80.227163,
+   "name": "拉莎尔"
+  },
+  {
+   "lat": 30.342926,
+   "lon": 79.430434,
+   "name": "Aera"
+  },
+  {
+   "lat": 30.421033,
+   "lon": 79.667101,
+   "name": "Bugyalkoti"
+  },
+  {
+   "lat": 29.784306,
+   "lon": 79.127312,
+   "name": "Khamlekh Garhi"
+  },
+  {
+   "lat": 30.20478,
+   "lon": 79.563785,
+   "name": "Khamila Top"
+  },
+  {
+   "lat": 30.422181,
+   "lon": 79.744863,
+   "name": "Raunthi Peak"
+  },
+  {
+   "lat": 31.434384,
+   "lon": 78.385876,
+   "name": "Miquellink"
+  },
+  {
+   "lat": 31.149416,
+   "lon": 78.992521,
+   "name": "讷郎山"
+  },
+  {
+   "lat": 31.410059,
+   "lon": 78.1079,
+   "name": "Ulsi Shikhar"
+  },
+  {
+   "lat": 30.600149,
+   "lon": 78.579605,
+   "name": "Tir Tibba"
+  },
+  {
+   "lat": 30.615441,
+   "lon": 78.795061,
+   "name": "Luni Dongar Hill"
+  },
+  {
+   "lat": 30.606096,
+   "lon": 78.787036,
+   "name": "Paula Hill"
+  },
+  {
+   "lat": 30.710091,
+   "lon": 79.03897,
+   "name": "Dhungajgiri"
+  },
+  {
+   "lat": 30.703985,
+   "lon": 79.117742,
+   "name": "Khulira"
+  },
+  {
+   "lat": 30.717931,
+   "lon": 79.132504,
+   "name": "Dautulia Tibba"
+  },
+  {
+   "lat": 30.747995,
+   "lon": 79.142675,
+   "name": "Kham Bank"
+  },
+  {
+   "lat": 30.778271,
+   "lon": 79.087808,
+   "name": "Mayalaya Parvat"
+  },
+  {
+   "lat": 29.839267,
+   "lon": 80.055656,
+   "name": "Khamlekh"
+  },
+  {
+   "lat": 29.728868,
+   "lon": 80.199637,
+   "name": "Chhirakantha"
+  },
+  {
+   "lat": 29.718657,
+   "lon": 80.238261,
+   "name": "Lori"
+  },
+  {
+   "lat": 30.10218,
+   "lon": 80.036387,
+   "name": "Malla Dhar"
+  },
+  {
+   "lat": 30.245722,
+   "lon": 80.13874,
+   "name": "Bankatiya"
+  },
+  {
+   "lat": 30.196773,
+   "lon": 80.134706,
+   "name": "Plansang"
+  },
+  {
+   "lat": 30.178967,
+   "lon": 80.172129,
+   "name": "Sijwa Dhuar"
+  },
+  {
+   "lat": 29.951755,
+   "lon": 78.976346,
+   "name": "Devithan"
+  },
+  {
+   "lat": 29.670124,
+   "lon": 80.206942,
+   "name": "Kamroli"
+  },
+  {
+   "lat": 30.049993,
+   "lon": 79.394224,
+   "name": "Khankrakhet"
+  },
+  {
+   "lat": 30.228311,
+   "lon": 80.115637,
+   "name": "Namik Glacier"
+  },
+  {
+   "lat": 31.49411,
+   "lon": 78.838015,
+   "name": "亚拉山",
+   "name_en": "Yala Shan"
+  },
+  {
+   "lat": 30.729322,
+   "lon": 78.822141,
+   "name": "Shastru"
   },
   {
    "lat": 30.635457,
@@ -1860,59 +2118,174 @@
    "name": "Tinthya"
   },
   {
-   "lat": 30.61425,
-   "lon": 78.446653,
-   "name": "Kalwa"
+   "lat": 30.456246,
+   "lon": 78.02774,
+   "name": "Radhanath Sikdar Peak"
   },
   {
-   "lat": 30.832972,
-   "lon": 78.754163,
-   "name": "Rakhau Top"
+   "lat": 30.960202,
+   "lon": 78.350414,
+   "name": "Samay Ka Tibba"
   },
   {
-   "lat": 30.566049,
-   "lon": 78.548555,
-   "name": "Manka"
+   "lat": 29.670715,
+   "lon": 80.115566,
+   "name": "Bharabheo"
   },
   {
-   "lat": 30.600149,
-   "lon": 78.579605,
-   "name": "Tir Tibba"
+   "lat": 30.042053,
+   "lon": 79.457438,
+   "name": "Dungargarhi"
   },
   {
-   "lat": 30.615441,
-   "lon": 78.795061,
-   "name": "Luni Dongar Hill"
+   "lat": 30.195771,
+   "lon": 79.85949,
+   "name": "Baraultoli"
   },
   {
-   "lat": 30.606096,
-   "lon": 78.787036,
-   "name": "Paula Hill"
+   "lat": 30.170081,
+   "lon": 79.779367,
+   "name": "Dak Danda"
   },
   {
-   "lat": 30.710091,
-   "lon": 79.03897,
-   "name": "Dhungajgiri"
+   "lat": 30.131265,
+   "lon": 79.761611,
+   "name": "Chholiya Minsingh"
   },
   {
-   "lat": 30.703985,
-   "lon": 79.117742,
-   "name": "Khulira"
+   "lat": 30.002963,
+   "lon": 78.902676,
+   "name": "Ameli"
   },
   {
-   "lat": 30.717931,
-   "lon": 79.132504,
-   "name": "Dautulia Tibba"
+   "lat": 30.214538,
+   "lon": 79.088087,
+   "name": "Gwanagarh"
   },
   {
-   "lat": 30.747995,
-   "lon": 79.142675,
-   "name": "Kham Bank"
+   "lat": 30.799054,
+   "lon": 78.855715,
+   "name": "Bhetiara ka Danda"
   },
   {
-   "lat": 30.778271,
-   "lon": 79.087808,
-   "name": "Mayalaya Parvat"
+   "lat": 30.493281,
+   "lon": 80.145309,
+   "name": "Shangas"
+  },
+  {
+   "lat": 30.871423,
+   "lon": 79.031725,
+   "name": "Meru North"
+  },
+  {
+   "lat": 30.222216,
+   "lon": 79.428605,
+   "name": "Rudugaira"
+  },
+  {
+   "lat": 30.057877,
+   "lon": 80.033298,
+   "name": "Lahur Dhura"
+  },
+  {
+   "lat": 30.069205,
+   "lon": 80.025873,
+   "name": "Kurmuria"
+  },
+  {
+   "lat": 30.164497,
+   "lon": 80.056257,
+   "name": "Salgwar"
+  },
+  {
+   "lat": 30.124213,
+   "lon": 80.037525,
+   "name": "Dangu"
+  },
+  {
+   "lat": 30.711205,
+   "lon": 79.446236,
+   "name": "Rishni Peak and Rishni Pass"
+  },
+  {
+   "lat": 30.599864,
+   "lon": 79.69615,
+   "name": "Barmal"
+  },
+  {
+   "lat": 30.423671,
+   "lon": 79.592136,
+   "name": "Pangarchulla"
+  },
+  {
+   "lat": 30.767633,
+   "lon": 79.341674,
+   "name": "Balakun"
+  },
+  {
+   "lat": 29.924812,
+   "lon": 78.6658,
+   "name": "Bhairavgarhi"
+  },
+  {
+   "lat": 30.560635,
+   "lon": 79.295036,
+   "name": "Golung"
+  },
+  {
+   "lat": 30.590009,
+   "lon": 79.306955,
+   "name": "Kamdir"
+  },
+  {
+   "lat": 30.655191,
+   "lon": 79.144049,
+   "name": "Dwarakhal"
+  },
+  {
+   "lat": 30.666377,
+   "lon": 79.162245,
+   "name": "Dhaula Tibba"
+  },
+  {
+   "lat": 30.675088,
+   "lon": 79.78529,
+   "name": "Phulanga Parbat"
+  },
+  {
+   "lat": 30.649432,
+   "lon": 79.711905,
+   "name": "Dhanesh Parbat"
+  },
+  {
+   "lat": 30.967748,
+   "lon": 78.343463,
+   "name": "Mugarkanda"
+  },
+  {
+   "lat": 30.867752,
+   "lon": 78.37934,
+   "name": "Thadol"
+  },
+  {
+   "lat": 30.890827,
+   "lon": 78.449893,
+   "name": "Dhyadamani"
+  },
+  {
+   "lat": 30.060012,
+   "lon": 80.188328,
+   "name": "Khalia Danda"
+  },
+  {
+   "lat": 31.023517,
+   "lon": 78.313551,
+   "name": "Dhar Khoi"
+  },
+  {
+   "lat": 31.019104,
+   "lon": 78.259692,
+   "name": "Chaunda"
   },
   {
    "lat": 30.346732,
@@ -1943,379 +2316,6 @@
    "lat": 30.544152,
    "lon": 78.984189,
    "name": "Bains"
-  },
-  {
-   "lat": 30.560635,
-   "lon": 79.295036,
-   "name": "Golung"
-  },
-  {
-   "lat": 30.590009,
-   "lon": 79.306955,
-   "name": "Kamdir"
-  },
-  {
-   "lat": 30.655191,
-   "lon": 79.144049,
-   "name": "Dwarakhal"
-  },
-  {
-   "lat": 30.666377,
-   "lon": 79.162245,
-   "name": "Dhaula Tibba"
-  },
-  {
-   "lat": 30.595957,
-   "lon": 79.460292,
-   "name": "Sona Sankar"
-  },
-  {
-   "lat": 30.522962,
-   "lon": 79.424232,
-   "name": "Modera"
-  },
-  {
-   "lat": 30.54661,
-   "lon": 79.388859,
-   "name": "Raturi"
-  },
-  {
-   "lat": 30.55195,
-   "lon": 79.305711,
-   "name": "Phating Khan"
-  },
-  {
-   "lat": 30.675088,
-   "lon": 79.78529,
-   "name": "Phulanga Parbat"
-  },
-  {
-   "lat": 30.649432,
-   "lon": 79.711905,
-   "name": "Dhanesh Parbat"
-  },
-  {
-   "lat": 30.342926,
-   "lon": 79.430434,
-   "name": "Aera"
-  },
-  {
-   "lat": 30.421033,
-   "lon": 79.667101,
-   "name": "Bugyalkoti"
-  },
-  {
-   "lat": 30.188204,
-   "lon": 79.884682,
-   "name": "Batuni Dhar"
-  },
-  {
-   "lat": 30.199035,
-   "lon": 79.960899,
-   "name": "Rajpanthu"
-  },
-  {
-   "lat": 30.227665,
-   "lon": 79.953861,
-   "name": "Malla Panchel"
-  },
-  {
-   "lat": 30.243219,
-   "lon": 80.07278,
-   "name": "Laspa Dhuar"
-  },
-  {
-   "lat": 30.207158,
-   "lon": 80.027955,
-   "name": "Chepar Choti"
-  },
-  {
-   "lat": 30.236694,
-   "lon": 80.02965,
-   "name": "Lamchhir"
-  },
-  {
-   "lat": 30.042053,
-   "lon": 79.457438,
-   "name": "Dungargarhi"
-  },
-  {
-   "lat": 30.195771,
-   "lon": 79.85949,
-   "name": "Baraultoli"
-  },
-  {
-   "lat": 30.170081,
-   "lon": 79.779367,
-   "name": "Dak Danda"
-  },
-  {
-   "lat": 30.131265,
-   "lon": 79.761611,
-   "name": "Chholiya Minsingh"
-  },
-  {
-   "lat": 30.084283,
-   "lon": 79.192886,
-   "name": "Musa ka Kotha"
-  },
-  {
-   "lat": 30.214538,
-   "lon": 79.088087,
-   "name": "Gwanagarh"
-  },
-  {
-   "lat": 30.057877,
-   "lon": 80.033298,
-   "name": "Lahur Dhura"
-  },
-  {
-   "lat": 30.069205,
-   "lon": 80.025873,
-   "name": "Kurmuria"
-  },
-  {
-   "lat": 30.164497,
-   "lon": 80.056257,
-   "name": "Salgwar"
-  },
-  {
-   "lat": 30.124213,
-   "lon": 80.037525,
-   "name": "Dangu"
-  },
-  {
-   "lat": 29.839267,
-   "lon": 80.055656,
-   "name": "Khamlekh"
-  },
-  {
-   "lat": 29.728868,
-   "lon": 80.199637,
-   "name": "Chhirakantha"
-  },
-  {
-   "lat": 29.718657,
-   "lon": 80.238261,
-   "name": "Lori"
-  },
-  {
-   "lat": 30.10218,
-   "lon": 80.036387,
-   "name": "Malla Dhar"
-  },
-  {
-   "lat": 30.245722,
-   "lon": 80.13874,
-   "name": "Bankatiya"
-  },
-  {
-   "lat": 30.196773,
-   "lon": 80.134706,
-   "name": "Plansang"
-  },
-  {
-   "lat": 30.178967,
-   "lon": 80.172129,
-   "name": "Sijwa Dhuar"
-  },
-  {
-   "lat": 31.499321,
-   "lon": 80.100221,
-   "name": "阿伊拉日居",
-   "name_en": "Ayila Ri’gyü"
-  },
-  {
-   "lat": 29.951755,
-   "lon": 78.976346,
-   "name": "Devithan"
-  },
-  {
-   "lat": 29.784306,
-   "lon": 79.127312,
-   "name": "Khamlekh Garhi"
-  },
-  {
-   "lat": 30.082612,
-   "lon": 80.354562,
-   "name": "Urma"
-  },
-  {
-   "lat": 30.14329,
-   "lon": 80.303192,
-   "name": "Nagni Dhura"
-  },
-  {
-   "lat": 30.176147,
-   "lon": 80.390911,
-   "name": "Halsyun"
-  },
-  {
-   "lat": 30.168876,
-   "lon": 80.330315,
-   "name": "Kamrani"
-  },
-  {
-   "lat": 31.240096,
-   "lon": 78.058385,
-   "name": "Holandi 3"
-  },
-  {
-   "lat": 31.246656,
-   "lon": 78.032157,
-   "name": "Holondi 2"
-  },
-  {
-   "lat": 31.242638,
-   "lon": 78.022942,
-   "name": "Holondi 1"
-  },
-  {
-   "lat": 31.148659,
-   "lon": 78.606577,
-   "name": "Lamkagha"
-  },
-  {
-   "lat": 31.198413,
-   "lon": 78.684855,
-   "name": "Nela"
-  },
-  {
-   "lat": 31.278924,
-   "lon": 78.332775,
-   "name": "Lami"
-  },
-  {
-   "lat": 30.002963,
-   "lon": 78.902676,
-   "name": "Ameli"
-  },
-  {
-   "lat": 29.670124,
-   "lon": 80.206942,
-   "name": "Kamroli"
-  },
-  {
-   "lat": 30.049993,
-   "lon": 79.394224,
-   "name": "Khankrakhet"
-  },
-  {
-   "lat": 30.477722,
-   "lon": 79.838903,
-   "name": "Hanuman"
-  },
-  {
-   "lat": 30.471292,
-   "lon": 79.784283,
-   "name": "Malatoni"
-  },
-  {
-   "lat": 30.369025,
-   "lon": 80.115394,
-   "name": "Kalchu Dhura"
-  },
-  {
-   "lat": 30.365174,
-   "lon": 80.135822,
-   "name": "Mapa Dhura"
-  },
-  {
-   "lat": 30.414927,
-   "lon": 80.130329,
-   "name": "Pachu Dhura"
-  },
-  {
-   "lat": 30.711205,
-   "lon": 79.446236,
-   "name": "Rishni Peak and Rishni Pass"
-  },
-  {
-   "lat": 30.456246,
-   "lon": 78.02774,
-   "name": "Radhanath Sikdar Peak"
-  },
-  {
-   "lat": 30.474277,
-   "lon": 78.047952,
-   "name": "Dalai Hill"
-  },
-  {
-   "lat": 30.47683,
-   "lon": 78.014186,
-   "name": "Benog peak"
-  },
-  {
-   "lat": 30.757975,
-   "lon": 79.869428,
-   "name": "GURGATI"
-  },
-  {
-   "lat": 31.159961,
-   "lon": 79.072327,
-   "name": "桑松多"
-  },
-  {
-   "lat": 31.227977,
-   "lon": 79.131877,
-   "name": "索囊日"
-  },
-  {
-   "lat": 30.932486,
-   "lon": 79.599766,
-   "name": "依比康麦",
-   "name_en": "Abi Gamin"
-  },
-  {
-   "lat": 30.916733,
-   "lon": 79.829253,
-   "name": "加内希甘加"
-  },
-  {
-   "lat": 30.950593,
-   "lon": 79.849018,
-   "name": "基翁隆"
-  },
-  {
-   "lat": 30.774918,
-   "lon": 80.19966,
-   "name": "巴日"
-  },
-  {
-   "lat": 30.759435,
-   "lon": 80.239513,
-   "name": "穷共日（穷孔日）"
-  },
-  {
-   "lat": 30.739728,
-   "lon": 80.006536,
-   "name": "苏姆那"
-  },
-  {
-   "lat": 30.643763,
-   "lon": 80.217687,
-   "name": "藏麻果"
-  },
-  {
-   "lat": 30.588821,
-   "lon": 80.227163,
-   "name": "拉莎尔"
-  },
-  {
-   "lat": 30.228311,
-   "lon": 80.115637,
-   "name": "Namik Glacier"
-  },
-  {
-   "lat": 31.149416,
-   "lon": 78.992521,
-   "name": "讷郎山"
-  },
-  {
-   "lat": 31.49411,
-   "lon": 78.838015,
-   "name": "亚拉山",
-   "name_en": "Yala Shan"
   }
  ]
 }

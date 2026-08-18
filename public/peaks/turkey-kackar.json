@@ -1,6 +1,6 @@
 {
  "region": "turkey-kackar",
- "generated": "2026-08-13T09:16:28+00:00",
+ "generated": "2026-08-18T20:47:36+00:00",
  "peaks": [
   {
    "lat": 40.835471,
@@ -149,17 +149,17 @@
    "ele": 3433
   },
   {
+   "lat": 40.932202,
+   "lon": 41.216617,
+   "name": "Mizrakli",
+   "ele": 3428
+  },
+  {
    "lat": 41.340952,
    "lon": 41.989695,
    "name": "Karçal Dağları",
    "ele": 3428,
    "wikidata": "Q6091684"
-  },
-  {
-   "lat": 40.932202,
-   "lon": 41.216617,
-   "name": "Mizrakli",
-   "ele": 3428
   },
   {
    "lat": 40.735681,
@@ -186,14 +186,14 @@
    "ele": 3418
   },
   {
-   "lat": 41.013263,
-   "lon": 41.330489,
+   "lat": 41.049018,
+   "lon": 41.365326,
    "name": "Gudashev",
    "ele": 3406
   },
   {
-   "lat": 41.049018,
-   "lon": 41.365326,
+   "lat": 41.013263,
+   "lon": 41.330489,
    "name": "Gudashev",
    "ele": 3406
   },
@@ -278,15 +278,15 @@
    "ele": 3353
   },
   {
-   "lat": 40.602943,
-   "lon": 40.768465,
-   "name": "Üç Göller Tepe",
-   "ele": 3350
-  },
-  {
    "lat": 40.675829,
    "lon": 40.873122,
    "name": "Kızılkaya",
+   "ele": 3350
+  },
+  {
+   "lat": 40.602943,
+   "lon": 40.768465,
+   "name": "Üç Göller Tepe",
    "ele": 3350
   },
   {
@@ -442,7 +442,7 @@
   {
    "lat": 41.115983,
    "lon": 41.450661,
-   "name": "Samurkele",
+   "name": "Самуркеле",
    "name_ru": "Самуркеле",
    "ele": 3251
   },
@@ -533,7 +533,7 @@
   {
    "lat": 41.055,
    "lon": 41.638384,
-   "name": "Kurt Dağı",
+   "name": "Курт",
    "name_ru": "Курт",
    "ele": 3198,
    "wikidata": "Q31562916"
@@ -588,15 +588,15 @@
    "ele": 3172
   },
   {
-   "lat": 40.578699,
-   "lon": 40.461086,
-   "name": "Akdağ Tepesi",
-   "ele": 3170
-  },
-  {
    "lat": 41.02166,
    "lon": 41.319704,
    "name": "Barhal Aşıtı",
+   "ele": 3170
+  },
+  {
+   "lat": 40.578699,
+   "lon": 40.461086,
+   "name": "Akdağ Tepesi",
    "ele": 3170
   },
   {
@@ -608,7 +608,7 @@
   {
    "lat": 41.101102,
    "lon": 41.470679,
-   "name": "Zalikon",
+   "name": "Заликон",
    "name_ru": "Заликон",
    "ele": 3168
   },
@@ -656,15 +656,15 @@
    "ele": 3145
   },
   {
-   "lat": 40.71839,
-   "lon": 41.071959,
-   "name": "Yıldırımkaya Tepesi",
-   "ele": 3131
-  },
-  {
    "lat": 40.799943,
    "lon": 40.843326,
    "name": "Nuskan Tepe",
+   "ele": 3131
+  },
+  {
+   "lat": 40.71839,
+   "lon": 41.071959,
+   "name": "Yıldırımkaya Tepesi",
    "ele": 3131
   },
   {
@@ -785,15 +785,15 @@
    "ele": 3082
   },
   {
-   "lat": 40.780205,
-   "lon": 41.240785,
-   "name": "Davut Dağları",
-   "ele": 3080
-  },
-  {
    "lat": 40.237942,
    "lon": 41.257623,
    "name": "Eğerli Tepe",
+   "ele": 3080
+  },
+  {
+   "lat": 40.780205,
+   "lon": 41.240785,
+   "name": "Davut Dağları",
    "ele": 3080
   },
   {
@@ -886,21 +886,21 @@
   {
    "lat": 41.444494,
    "lon": 42.524186,
-   "name": "Kanli / ყანლისმთა",
+   "name": "Канли",
    "name_ru": "Канли",
    "name_en": "Kanli",
    "ele": 2995
   },
   {
-   "lat": 40.514065,
-   "lon": 41.30599,
-   "name": "Dadaş Tepesi",
-   "ele": 2978
-  },
-  {
    "lat": 40.495595,
    "lon": 41.195064,
    "name": "Bulanık Tepe",
+   "ele": 2978
+  },
+  {
+   "lat": 40.514065,
+   "lon": 41.30599,
+   "name": "Dadaş Tepesi",
    "ele": 2978
   },
   {
@@ -916,13 +916,6 @@
    "ele": 2966
   },
   {
-   "lat": 41.331897,
-   "lon": 42.638069,
-   "name": "Cin Dağı",
-   "ele": 2961,
-   "wikidata": "Q31569456"
-  },
-  {
    "lat": 40.028375,
    "lon": 40.34936,
    "name": "Coşan Dağı",
@@ -934,6 +927,13 @@
    "lon": 41.395507,
    "name": "Kızıl Tepe",
    "ele": 2961
+  },
+  {
+   "lat": 41.331897,
+   "lon": 42.638069,
+   "name": "Cin Dağı",
+   "ele": 2961,
+   "wikidata": "Q31569456"
   },
   {
    "lat": 41.157276,
@@ -986,17 +986,17 @@
    "ele": 2921
   },
   {
-   "lat": 41.423337,
-   "lon": 42.758308,
-   "name": "Ilgar Dağı",
-   "ele": 2918
-  },
-  {
    "lat": 40.05386,
    "lon": 40.506974,
    "name": "Kop Dağı",
    "ele": 2918,
    "wikidata": "Q31190010"
+  },
+  {
+   "lat": 41.423337,
+   "lon": 42.758308,
+   "name": "Ilgar Dağı",
+   "ele": 2918
   },
   {
    "lat": 40.257664,
@@ -1024,6 +1024,12 @@
    "ele": 2907
   },
   {
+   "lat": 40.53523,
+   "lon": 40.695479,
+   "name": "Kayışkıran Tepesi",
+   "ele": 2906
+  },
+  {
    "lat": 41.040921,
    "lon": 41.331236,
    "name": "Korgöl Tepe",
@@ -1033,12 +1039,6 @@
    "lat": 40.404729,
    "lon": 41.79854,
    "name": "Gökdağı",
-   "ele": 2906
-  },
-  {
-   "lat": 40.53523,
-   "lon": 40.695479,
-   "name": "Kayışkıran Tepesi",
    "ele": 2906
   },
   {
@@ -1227,7 +1227,7 @@
   {
    "lat": 41.491494,
    "lon": 42.206769,
-   "name": "ხევა",
+   "name": "Хева",
    "name_ru": "Хева",
    "name_en": "Kheva",
    "ele": 2812
@@ -1246,6 +1246,12 @@
    "ele": 2807
   },
   {
+   "lat": 40.374393,
+   "lon": 42.389391,
+   "name": "Çember Dağı",
+   "ele": 2806
+  },
+  {
    "lat": 40.357679,
    "lon": 42.39408,
    "name": "Soğanlı Dağı",
@@ -1253,21 +1259,15 @@
    "wikidata": "Q31561423"
   },
   {
-   "lat": 40.374393,
-   "lon": 42.389391,
-   "name": "Çember Dağı",
-   "ele": 2806
+   "lat": 40.505907,
+   "lon": 40.606845,
+   "name": "Akdağ",
+   "ele": 2795
   },
   {
    "lat": 40.551095,
    "lon": 40.865146,
    "name": "Oluklu Tepe",
-   "ele": 2795
-  },
-  {
-   "lat": 40.505907,
-   "lon": 40.606845,
-   "name": "Akdağ",
    "ele": 2795
   },
   {
@@ -1446,15 +1446,15 @@
    "ele": 2674
   },
   {
-   "lat": 40.912276,
-   "lon": 41.948889,
-   "name": "Kireçli Tepe",
-   "ele": 2671
-  },
-  {
    "lat": 41.399407,
    "lon": 42.484125,
    "name": "Rejudi Tepe",
+   "ele": 2671
+  },
+  {
+   "lat": 40.912276,
+   "lon": 41.948889,
+   "name": "Kireçli Tepe",
    "ele": 2671
   },
   {
@@ -1521,6 +1521,12 @@
    "ele": 2653
   },
   {
+   "lat": 40.450984,
+   "lon": 41.578812,
+   "name": "Kılıç Tepesi",
+   "ele": 2648
+  },
+  {
    "lat": 40.302196,
    "lon": 42.767678,
    "name": "Karanlık Tepe",
@@ -1528,10 +1534,10 @@
    "wikidata": "Q31388244"
   },
   {
-   "lat": 40.450984,
-   "lon": 41.578812,
-   "name": "Kılıç Tepesi",
-   "ele": 2648
+   "lat": 40.315446,
+   "lon": 40.802924,
+   "name": "Koru Tepesi",
+   "ele": 2647
   },
   {
    "lat": 40.292839,
@@ -1539,12 +1545,6 @@
    "name": "Karataşdağı Tepesi",
    "ele": 2647,
    "wikidata": "Q31387787"
-  },
-  {
-   "lat": 40.315446,
-   "lon": 40.802924,
-   "name": "Koru Tepesi",
-   "ele": 2647
   },
   {
    "lat": 40.569655,
@@ -1559,15 +1559,15 @@
    "ele": 2643
   },
   {
-   "lat": 41.047962,
-   "lon": 41.461548,
-   "name": "Soğuksu Sırtı",
-   "ele": 2642
-  },
-  {
    "lat": 40.513199,
    "lon": 42.414268,
    "name": "Gündoğmuş Tepesi",
+   "ele": 2642
+  },
+  {
+   "lat": 41.047962,
+   "lon": 41.461548,
+   "name": "Soğuksu Sırtı",
    "ele": 2642
   },
   {
@@ -1677,15 +1677,15 @@
    "wikidata": "Q31388603"
   },
   {
-   "lat": 40.000606,
-   "lon": 42.478158,
-   "name": "Kurttaşı Tepesi",
-   "ele": 2588
-  },
-  {
    "lat": 41.405057,
    "lon": 42.530554,
    "name": "Arsiyan",
+   "ele": 2588
+  },
+  {
+   "lat": 40.000606,
+   "lon": 42.478158,
+   "name": "Kurttaşı Tepesi",
    "ele": 2588
   },
   {
@@ -1815,17 +1815,17 @@
    "wikidata": "Q21211475"
   },
   {
+   "lat": 40.375282,
+   "lon": 40.809967,
+   "name": "Kavakdağı Tepesi",
+   "ele": 2532
+  },
+  {
    "lat": 40.290932,
    "lon": 42.413344,
    "name": "Sivrinin Tepesi",
    "ele": 2532,
    "wikidata": "Q31387824"
-  },
-  {
-   "lat": 40.375282,
-   "lon": 40.809967,
-   "name": "Kavakdağı Tepesi",
-   "ele": 2532
   },
   {
    "lat": 40.400273,
@@ -1853,17 +1853,17 @@
    "ele": 2521
   },
   {
-   "lat": 40.568057,
-   "lon": 41.512021,
-   "name": "Killi Tepe",
-   "ele": 2519
-  },
-  {
    "lat": 40.412651,
    "lon": 39.847537,
    "name": "Karakaban Dağı",
    "ele": 2519,
    "wikidata": "Q31565499"
+  },
+  {
+   "lat": 40.568057,
+   "lon": 41.512021,
+   "name": "Killi Tepe",
+   "ele": 2519
   },
   {
    "lat": 40.58104,
@@ -2018,17 +2018,17 @@
    "ele": 2445
   },
   {
-   "lat": 40.287384,
-   "lon": 41.069874,
-   "name": "Kurusırt Tepesi",
-   "ele": 2442
-  },
-  {
    "lat": 40.027851,
    "lon": 42.529485,
    "name": "Şehit Tepesi",
    "ele": 2442,
    "wikidata": "Q31388211"
+  },
+  {
+   "lat": 40.287384,
+   "lon": 41.069874,
+   "name": "Kurusırt Tepesi",
+   "ele": 2442
   },
   {
    "lat": 41.273521,
@@ -2057,17 +2057,17 @@
    "ele": 2434
   },
   {
+   "lat": 40.683844,
+   "lon": 40.327613,
+   "name": "Ligoras",
+   "ele": 2431
+  },
+  {
    "lat": 40.805541,
    "lon": 42.030048,
    "name": "Akdağ",
    "ele": 2431,
    "wikidata": "Q31571918"
-  },
-  {
-   "lat": 40.683844,
-   "lon": 40.327613,
-   "name": "Ligoras",
-   "ele": 2431
   },
   {
    "lat": 40.290571,
@@ -2234,15 +2234,15 @@
    "wikidata": "Q32210290"
   },
   {
-   "lat": 40.80748,
-   "lon": 42.081561,
-   "name": "Küçük Dağ",
-   "ele": 2325
-  },
-  {
    "lat": 40.005695,
    "lon": 40.664284,
    "name": "Kızıltaş Tepesi",
+   "ele": 2325
+  },
+  {
+   "lat": 40.80748,
+   "lon": 42.081561,
+   "name": "Küçük Dağ",
    "ele": 2325
   },
   {
@@ -2279,18 +2279,18 @@
    "ele": 2302
   },
   {
-   "lat": 40.618093,
-   "lon": 42.802658,
-   "name": "Hedef Tepesi",
-   "ele": 2301,
-   "wikidata": "Q31388260"
-  },
-  {
    "lat": 40.068637,
    "lon": 41.912067,
    "name": "Kurunlar Tepesi",
    "ele": 2301,
    "wikidata": "Q31387742"
+  },
+  {
+   "lat": 40.618093,
+   "lon": 42.802658,
+   "name": "Hedef Tepesi",
+   "ele": 2301,
+   "wikidata": "Q31388260"
   },
   {
    "lat": 40.342422,
@@ -2299,17 +2299,17 @@
    "ele": 2298
   },
   {
-   "lat": 40.749203,
-   "lon": 42.436385,
-   "name": "Elmalı Tepe",
-   "ele": 2296
-  },
-  {
    "lat": 40.107662,
    "lon": 42.852978,
    "name": "Bedenin Tepesi",
    "ele": 2296,
    "wikidata": "Q31388265"
+  },
+  {
+   "lat": 40.749203,
+   "lon": 42.436385,
+   "name": "Elmalı Tepe",
+   "ele": 2296
   },
   {
    "lat": 40.386667,
@@ -2361,15 +2361,15 @@
    "ele": 2265
   },
   {
-   "lat": 40.297737,
-   "lon": 39.76945,
-   "name": "Çimlidağ Tepesi",
-   "ele": 2265
-  },
-  {
    "lat": 40.032475,
    "lon": 39.695798,
    "name": "Meyri Tepesi",
+   "ele": 2265
+  },
+  {
+   "lat": 40.297737,
+   "lon": 39.76945,
+   "name": "Çimlidağ Tepesi",
    "ele": 2265
   },
   {
@@ -2380,15 +2380,15 @@
    "wikidata": "Q32127135"
   },
   {
-   "lat": 40.896977,
-   "lon": 42.489062,
-   "name": "Ziyaret Dağı",
-   "ele": 2260
-  },
-  {
    "lat": 40.577422,
    "lon": 41.545486,
    "name": "Bozdağ",
+   "ele": 2260
+  },
+  {
+   "lat": 40.896977,
+   "lon": 42.489062,
+   "name": "Ziyaret Dağı",
    "ele": 2260
   },
   {
@@ -2543,17 +2543,17 @@
    "ele": 2143
   },
   {
-   "lat": 40.657866,
-   "lon": 42.408233,
-   "name": "Göller Tepesi",
-   "ele": 2139
-  },
-  {
    "lat": 40.013323,
    "lon": 42.777474,
    "name": "Karataş Tepesi",
    "ele": 2139,
    "wikidata": "Q31388246"
+  },
+  {
+   "lat": 40.657866,
+   "lon": 42.408233,
+   "name": "Göller Tepesi",
+   "ele": 2139
   },
   {
    "lat": 40.153529,
@@ -2564,7 +2564,7 @@
   {
    "lat": 41.030428,
    "lon": 41.13296,
-   "name": "Halkalıtaş Tepesi",
+   "name": "Халкалыташ-Тепеси",
    "name_ru": "Халкалыташ-Тепеси",
    "ele": 2130
   },
@@ -2588,15 +2588,15 @@
    "ele": 2111
   },
   {
-   "lat": 40.963377,
-   "lon": 41.028826,
-   "name": "Pokut Dağı",
-   "ele": 2100
-  },
-  {
    "lat": 40.741501,
    "lon": 41.71523,
    "name": "Tekketaş Tepesi",
+   "ele": 2100
+  },
+  {
+   "lat": 40.963377,
+   "lon": 41.028826,
+   "name": "Pokut Dağı",
    "ele": 2100
   },
   {
@@ -2801,7 +2801,7 @@
   {
    "lat": 41.131486,
    "lon": 41.789954,
-   "name": "Barbareti",
+   "name": "Барбарети",
    "name_ru": "Барбарети",
    "name_en": "Barbareti",
    "ele": 1988,
@@ -2815,18 +2815,18 @@
    "wikidata": "Q31388263"
   },
   {
-   "lat": 40.858913,
-   "lon": 41.740904,
-   "name": "Sağısol Tepesi",
-   "ele": 1981,
-   "wikidata": "Q31387713"
-  },
-  {
    "lat": 40.355459,
    "lon": 41.496093,
    "name": "Boz Tepe",
    "ele": 1981,
    "wikidata": "Q31570575"
+  },
+  {
+   "lat": 40.858913,
+   "lon": 41.740904,
+   "name": "Sağısol Tepesi",
+   "ele": 1981,
+   "wikidata": "Q31387713"
   },
   {
    "lat": 40.310135,
@@ -2972,15 +2972,15 @@
    "ele": 1848
   },
   {
-   "lat": 40.817116,
-   "lon": 41.695388,
-   "name": "Terzigilin Tepe",
-   "ele": 1845
-  },
-  {
    "lat": 40.401941,
    "lon": 40.530187,
    "name": "Güney Tepe",
+   "ele": 1845
+  },
+  {
+   "lat": 40.817116,
+   "lon": 41.695388,
+   "name": "Terzigilin Tepe",
    "ele": 1845
   },
   {
@@ -3157,7 +3157,7 @@
   {
    "lat": 41.494491,
    "lon": 41.638024,
-   "name": "ბოლოკო",
+   "name": "Болоко",
    "name_ru": "Болоко",
    "name_en": "Boloko",
    "ele": 1531,
@@ -3219,7 +3219,7 @@
   {
    "lat": 41.06624,
    "lon": 41.098676,
-   "name": "Alan Dağı",
+   "name": "Алан",
    "name_ru": "Алан",
    "ele": 1263,
    "wikidata": "Q31571592"
@@ -3297,36 +3297,6 @@
    "ele": 275
   },
   {
-   "lat": 40.936536,
-   "lon": 41.200296,
-   "name": "Avusor gölü"
-  },
-  {
-   "lat": 40.73745,
-   "lon": 40.32087,
-   "name": "Rakkaya"
-  },
-  {
-   "lat": 41.114461,
-   "lon": 42.432246,
-   "name": "Kuşkula Tepesi"
-  },
-  {
-   "lat": 41.171806,
-   "lon": 42.451773,
-   "name": "Orta Tepe"
-  },
-  {
-   "lat": 41.17523,
-   "lon": 42.465849,
-   "name": "Tucun Tepesi"
-  },
-  {
-   "lat": 41.174196,
-   "lon": 42.491512,
-   "name": "Tepir Tepesi"
-  },
-  {
    "lat": 40.622349,
    "lon": 40.688139,
    "name": "Kasteniçe Taşı"
@@ -3382,9 +3352,24 @@
    "name": "Garhali"
   },
   {
-   "lat": 40.681091,
-   "lon": 39.689719,
-   "name": "Semon Dağı"
+   "lat": 40.52551,
+   "lon": 42.750484,
+   "name": "Top Tepe"
+  },
+  {
+   "lat": 40.533335,
+   "lon": 42.754725,
+   "name": "Ziyaret Tepesi"
+  },
+  {
+   "lat": 40.526763,
+   "lon": 42.718809,
+   "name": "Döşekkaya Tepesi"
+  },
+  {
+   "lat": 40.538119,
+   "lon": 42.729465,
+   "name": "Şehitler Tepesi"
   },
   {
    "lat": 40.435152,
@@ -3397,19 +3382,9 @@
    "name": "Cırcır Tepesi"
   },
   {
-   "lat": 40.470088,
-   "lon": 42.424244,
-   "name": "Akçayırın Tepesi"
-  },
-  {
-   "lat": 40.512635,
-   "lon": 42.441173,
-   "name": "Kızılkale Tepesi"
-  },
-  {
-   "lat": 40.523503,
-   "lon": 42.440587,
-   "name": "Kılavuz Tepesi"
+   "lat": 40.681091,
+   "lon": 39.689719,
+   "name": "Semon Dağı"
   },
   {
    "lat": 40.346141,
@@ -3562,29 +3537,44 @@
    "name": "Sarıyurtüstü Tepesi"
   },
   {
-   "lat": 40.461821,
-   "lon": 42.397521,
-   "name": "Ayı Taşı"
+   "lat": 40.470088,
+   "lon": 42.424244,
+   "name": "Akçayırın Tepesi"
   },
   {
-   "lat": 40.52551,
-   "lon": 42.750484,
-   "name": "Top Tepe"
+   "lat": 40.512635,
+   "lon": 42.441173,
+   "name": "Kızılkale Tepesi"
   },
   {
-   "lat": 40.533335,
-   "lon": 42.754725,
-   "name": "Ziyaret Tepesi"
+   "lat": 40.523503,
+   "lon": 42.440587,
+   "name": "Kılavuz Tepesi"
   },
   {
-   "lat": 40.526763,
-   "lon": 42.718809,
-   "name": "Döşekkaya Tepesi"
+   "lat": 41.114461,
+   "lon": 42.432246,
+   "name": "Kuşkula Tepesi"
   },
   {
-   "lat": 40.538119,
-   "lon": 42.729465,
-   "name": "Şehitler Tepesi"
+   "lat": 41.171806,
+   "lon": 42.451773,
+   "name": "Orta Tepe"
+  },
+  {
+   "lat": 41.17523,
+   "lon": 42.465849,
+   "name": "Tucun Tepesi"
+  },
+  {
+   "lat": 41.174196,
+   "lon": 42.491512,
+   "name": "Tepir Tepesi"
+  },
+  {
+   "lat": 40.936536,
+   "lon": 41.200296,
+   "name": "Avusor gölü"
   },
   {
    "lat": 40.52055,
@@ -3865,6 +3855,16 @@
    "lat": 40.445157,
    "lon": 42.55675,
    "name": "Meşeçayırı Sırtları"
+  },
+  {
+   "lat": 40.461821,
+   "lon": 42.397521,
+   "name": "Ayı Taşı"
+  },
+  {
+   "lat": 40.73745,
+   "lon": 40.32087,
+   "name": "Rakkaya"
   }
  ]
 }
