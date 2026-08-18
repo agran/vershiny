@@ -74,6 +74,9 @@ async function attachStream(
   videoEl.srcObject = null;
   videoEl.srcObject = stream;
   videoEl.playsInline = true;
+  // Android Chrome иначе сворачивает играющую камеру в auto-PiP при уходе
+  // с экрана приложения (домой/другое приложение) — нам PiP не нужен
+  videoEl.disablePictureInPicture = true;
   await videoEl.play();
 }
 
