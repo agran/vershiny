@@ -1038,6 +1038,15 @@ async function initDemForRegion(region: string): Promise<void> {
  *   гасил автоподбор, и в следующий выход в горы приложение открывалось
  *   с регионом, выбранным когда-то на диване
  */
+/**
+ * Токен актуальности смены региона. Загрузка вершин и DEM — асинхронная,
+ * и быстрая последовательность switchRegion(A) → switchRegion(B) могла
+ * завершиться в обратном порядке: поздний ответ A перетирал currentPeaks
+ * уже выбранного B, а его initDemForRegion переключал worker обратно на
+ * патч A. Ответ применяется, только если токен всё ещё последний.
+ */
+let regionSwitchSeq = 0;
+
 async function switchRegion(region: string, manual = false): Promise<void> {
   // Флаг ставим до раннего выхода: ткнуть в уже активный регион — это
   // законный способ закрепить его за собой, и раньше он работал (обработчик
@@ -1047,6 +1056,7 @@ async function switchRegion(region: string, manual = false): Promise<void> {
     rememberRegion();
   }
   if (region === currentRegion && currentPeaks.length) return;
+  const switchSeq = ++regionSwitchSeq;
   if (region !== currentRegion) {
     currentPeaks = [];
     if (panorama) {
@@ -1068,6 +1078,8 @@ async function switchRegion(region: string, manual = false): Promise<void> {
     const { getPeaks } = await import("./core/db");
     peaks = ((await getPeaks(region)) ?? null) as PeaksFile["peaks"] | null;
   }
+  // Пока грузили, регион могли сменить повторно: чужой результат не применяем
+  if (switchSeq !== regionSwitchSeq) return;
   if (peaks) {
     const { annotateIsolation } = await import("./core/peaks");
     annotateIsolation(peaks);
