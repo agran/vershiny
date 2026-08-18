@@ -12,6 +12,9 @@ import {
   lookFromDeviceOrientation,
   isAbsoluteReading,
   followAzimuth,
+  verticalRateFromGyro,
+  correctDrift,
+  confirmSnap,
 } from '../src/core/orientation';
 
 const deg = (rad: number): number => ((rad * 180) / Math.PI + 360) % 360;
@@ -125,5 +128,112 @@ describe('слежение за компасом', () => {
 
     // И обратно: испорченное состояние чинится первым же годным показанием
     expect(deg(followAzimuth(NaN, deg2rad(42)))).toBeCloseTo(42, 6);
+  });
+});
+
+describe('гироскоп: скорость изменения азимута', () => {
+  const dps = (degPerSec: number): number => (degPerSec * 180) / Math.PI;
+
+  it('портрет (β=90°): поворот вправо увеличивает азимут', () => {
+    // Экран вертикально: земная вертикаль — ось Y устройства, поворот вправо
+    // (по часовой сверху) — вращение вокруг −Y → скорость gamma отрицательна
+    const rate = verticalRateFromGyro(90, 0, 0, 0, -90);
+    expect(dps(rate)).toBeCloseTo(90, 3);
+  });
+
+  it('телефон экраном вверх (β=0): поворот вправо увеличивает азимут', () => {
+    // Земная вертикаль — ось Z устройства, по часовой сверху — alpha < 0
+    const rate = verticalRateFromGyro(0, 0, -90, 0, 0);
+    expect(dps(rate)).toBeCloseTo(90, 3);
+  });
+
+  it('ландшафт (β=0, γ=90°): поворот вправо увеличивает азимут', () => {
+    // Земная вертикаль — ось −X устройства → скорость beta положительна
+    const rate = verticalRateFromGyro(0, 90, 0, 90, 0);
+    expect(dps(rate)).toBeCloseTo(90, 3);
+  });
+
+  it('крен вокруг оси взгляда азимут не меняет', () => {
+    // Портрет: вращение вокруг Z устройства (горизонтальной) — чистый крен
+    expect(verticalRateFromGyro(90, 0, 90, 0, 0)).toBeCloseTo(0, 6);
+    // Ландшафт: крен — тоже вращение вокруг Z устройства
+    expect(verticalRateFromGyro(0, 90, 90, 0, 0)).toBeCloseTo(0, 6);
+  });
+
+  it('наклон вверх-вниз азимут не меняет', () => {
+    // Портрет: подъём/опускание — вращение вокруг X устройства (горизонтальной)
+    expect(verticalRateFromGyro(110, 0, 0, 60, 0)).toBeCloseTo(0, 6);
+  });
+});
+
+describe('комплементарный фильтр: коррекция дрейфа компасом', () => {
+  const deg2rad = (d: number): number => (d * Math.PI) / 180;
+
+  it('малое расхождение гасится экспонентой, а не мгновенно', () => {
+    // Гироскоп ушёл на 1°: за шаг 0.1 с съедается только ~6% расхождения —
+    // кратковременный шум магнитометра в картинку не проходит
+    const next = correctDrift(deg2rad(1), 0, 0.1);
+    expect(degSigned(next)).toBeGreaterThan(0.8);
+    expect(degSigned(next)).toBeLessThan(1);
+
+    // А накопленный дрейф за несколько секунд сходится к компасу
+    let v = deg2rad(1);
+    for (let i = 0; i < 60; i++) v = correctDrift(v, 0, 0.1);
+    expect(Math.abs(degSigned(v))).toBeLessThan(0.05);
+  });
+
+  it('большое расхождение принимается сразу: это смена системы отсчёта', () => {
+    // Перекалибровка «восьмёркой» или первое absolute после относительных —
+    // тянуть 70° секундами было бы хуже, чем один скачок
+    expect(deg(correctDrift(deg2rad(10), deg2rad(80), 0.016))).toBeCloseTo(80, 6);
+  });
+
+  it('идёт кратчайшим путём через север', () => {
+    const next = correctDrift(deg2rad(359), deg2rad(1), 1);
+    const d = deg(next);
+    expect(d > 358 || d < 2).toBe(true);
+  });
+
+  it('NaN от датчика не ломает интеграл', () => {
+    expect(deg(correctDrift(deg2rad(100), NaN, 0.1))).toBeCloseTo(100, 6);
+    expect(deg(correctDrift(NaN, deg2rad(42), 0.1))).toBeCloseTo(42, 6);
+  });
+
+  it('без подтверждения (allowSnap=false) большое расхождение идёт экспонентой', () => {
+    // Выброс на 70°, но snap не подтверждён: за шаг 16 мс съедается ~1%
+    const next = correctDrift(deg2rad(10), deg2rad(80), 0.016, false);
+    expect(degSigned(next)).toBeCloseTo(10 + 70 * (1 - Math.exp(-0.016 / 1.5)), 3);
+  });
+});
+
+describe('подтверждение скачка компаса (snap)', () => {
+  const deg2rad = (d: number): number => (d * Math.PI) / 180;
+  const big = deg2rad(25); // за порогом ≈20°
+
+  it('одиночный выброс не подтверждён, серия растёт', () => {
+    let s = confirmSnap(0, 0, big);
+    expect(s.confirmed).toBe(false);
+    expect(s.run).toBe(1);
+    s = confirmSnap(s.run, s.dir, big);
+    expect(s.confirmed).toBe(false);
+    s = confirmSnap(s.run, s.dir, big);
+    expect(s.confirmed).toBe(true); // третье подряд — перекалибровка
+  });
+
+  it('смена знака сбрасывает серию', () => {
+    let s = confirmSnap(0, 0, big);
+    s = confirmSnap(s.run, s.dir, big);
+    expect(s.run).toBe(2);
+    s = confirmSnap(s.run, s.dir, -big); // выброс в другую сторону
+    expect(s.run).toBe(1);
+    expect(s.confirmed).toBe(false);
+  });
+
+  it('возврат под порог сбрасывает серию', () => {
+    let s = confirmSnap(0, 0, big);
+    s = confirmSnap(s.run, s.dir, big);
+    s = confirmSnap(s.run, s.dir, deg2rad(2));
+    expect(s.run).toBe(0);
+    expect(s.confirmed).toBe(false);
   });
 });

@@ -1,11 +1,18 @@
 /**
  * Ориентация устройства (ROADMAP 2.3, ALGORITHMS.md §3):
- * deviceorientation absolute + комплементарный фильтр.
+ * deviceorientation absolute + комплементарный фильтр с гироскопом.
  *
  * Стратегия:
  *   - iOS 13+: DeviceOrientationEvent.requestPermission() по user gesture
+ *     (и DeviceMotionEvent.requestPermission() — для гироскопа)
  *   - Android: deviceorientationabsolute или deviceorientation
  *   - Fallback: ручной свайп + поправка из калибровки (core/calibration.ts)
+ *
+ * Комплементарный фильтр — честный, а не скользящее среднее: азимут
+ * интегрируется из rotationRate гироскопа (devicemotion, до 60 Гц, без шума
+ * и лага магнитометра), а компас служит только медленным якорем против
+ * дрейфа (correctDrift, τ ≈ 1.5 с). Без живого гироскопа (десктоп, часть
+ * WebView) — прежняя схема: круговое среднее по окну + followAzimuth.
  *
  * Важно: «absolute» у обеих платформ — от **магнитного** севера, а панорама
  * строится от истинного. Склонение (на Кавказе +7°, на Камчатке −9°) мы
@@ -38,14 +45,50 @@ export interface OrientationState {
 
 type OrientationCallback = (state: OrientationState) => void;
 
-/** Сглаживание сырых данных компаса */
-const GYRO_SMOOTH_WINDOW = 5;
+/** Сглаживание сырых данных компаса (fallback без гироскопа) */
+const COMPASS_SMOOTH_WINDOW = 5;
 /** Изменение меньше этого считаем дрожанием датчика, рад (≈2°) */
 const NOISE_RAD = 0.035;
 /** Изменение больше этого — осознанный поворот, пропускаем как есть, рад (≈8°) */
 const MOTION_RAD = 4 * NOISE_RAD;
 /** Минимальная доля шага: иначе за медленным поворотом картинка не поспевает */
 const MIN_FOLLOW = 0.12;
+
+/** Гироскоп считается живым, если rotationRate приходил не старше этого, мс */
+const GYRO_ALIVE_MS = 500;
+/**
+ * Максимальный шаг интегрирования, с. После сна вкладки события приходят
+ * пачкой — без ограничения один такой шаг закрутил бы азимут на весь
+ * накопленный поворот.
+ */
+const GYRO_MAX_DT_S = 0.1;
+/**
+ * Постоянная времени подтяжки к компасу, с: быстрые повороты идут за
+ * гироскопом, а магнитометр только убирает дрейф. Шум компаса (±2–5°) через
+ * такую коррекцию в картинку почти не проходит.
+ */
+const GYRO_TAU_S = 1.5;
+/**
+ * Расхождение с компасом больше этого — кандидат на мгновенный приём,
+ * рад (≈20°): это не дрейф, а смена системы отсчёта (перекалибровка
+ * «восьмёркой», первое absolute-показание после относительных).
+ * Но такой же скачок даёт и одиночный выброс магнитометра возле металла —
+ * поэтому приём только после подтверждения, см. confirmSnap.
+ */
+const GYRO_SNAP_RAD = 0.35;
+/**
+ * Сколько подряд показаний за порогом GYRO_SNAP_RAD подтверждают скачок.
+ * При 20–60 Гц событий это 50–150 мс — перекалибровка принимается быстро,
+ * а одиночный выброс успевает пройти мимо.
+ */
+const SNAP_CONFIRM_SAMPLES = 3;
+/**
+ * Absolute-показания молчат дольше этого — компас потерян (ушёл магнитометр
+ * в WebView, webkitCompassHeading стал NaN): снова принимаем относительные
+ * события. Стабильный якорь с постоянным офсетом (закрывается свайпом)
+ * лучше, чем гиро-интеграл, дрейфующий без предела.
+ */
+const ABSOLUTE_LOST_MS = 10_000;
 
 /**
  * Годится ли показание как источник абсолютного азимута.
@@ -88,6 +131,85 @@ export function followAzimuth(prevRad: number, targetRad: number): number {
   const diff = shortestAngle(targetRad - prevRad);
   const k = Math.min(1, Math.max(MIN_FOLLOW, Math.abs(diff) / MOTION_RAD));
   return normalizeAngle(prevRad + diff * k);
+}
+
+/**
+ * Скорость изменения азимута взгляда по гироскопу, рад/с.
+ * Положительное значение — поворот вправо (азимут растёт, N→E).
+ *
+ * rotationRate задан в системе устройства (alpha/beta/gamma — скорости
+ * вокруг осей Z/X/Y устройства, град/с), а азимут живёт вокруг вертикальной
+ * оси Земли. Перевод — третьей строкой той же матрицы R = Rz(α)·Rx(β)·Ry(γ),
+ * что и для взгляда: ωz_earth = R[2]·ω_device. Третья строка не зависит от
+ * α (вертикаль инвариантна к повороту вокруг себя), поэтому α здесь нет.
+ *
+ * Знак: компас отсчитывает азимут по часовой, а положительное вращение
+ * вокруг +Z Земли (вверх) — против часовой, поэтому возвращаем −ωz.
+ */
+export function verticalRateFromGyro(
+  betaDeg: number,
+  gammaDeg: number,
+  rateAlphaDps: number,
+  rateBetaDps: number,
+  rateGammaDps: number,
+): number {
+  const b = (betaDeg * Math.PI) / 180;
+  const g = (gammaDeg * Math.PI) / 180;
+  const wa = (rateAlphaDps * Math.PI) / 180;
+  const wb = (rateBetaDps * Math.PI) / 180;
+  const wg = (rateGammaDps * Math.PI) / 180;
+  // Третья строка R: проекция осей устройства на вертикаль Земли
+  const wzEarth =
+    -Math.cos(b) * Math.sin(g) * wb + Math.sin(b) * wg + Math.cos(b) * Math.cos(g) * wa;
+  return -wzEarth;
+}
+
+/**
+ * Шаг комплементарного фильтра: медленная подтяжка интеграла гироскопа
+ * к показанию компаса.
+ *
+ * Малое расхождение (дрейф, смещение нуля гироскопа) гасится экспонентой с
+ * постоянной времени GYRO_TAU_S — кратковременный шум магнитометра в
+ * картинку не проходит. Большое — принимается сразу, но только с
+ * `allowSnap` (см. confirmSnap): столько дрейф не накапливает, значит
+ * изменилась сама система отсчёта (перекалибровка «восьмёркой», приход
+ * absolute-показаний после относительных).
+ */
+export function correctDrift(
+  prevRad: number,
+  compassRad: number,
+  dtS: number,
+  allowSnap = true,
+): number {
+  if (!Number.isFinite(compassRad)) return normalizeAngle(prevRad);
+  if (!Number.isFinite(prevRad)) return normalizeAngle(compassRad);
+  const diff = shortestAngle(compassRad - prevRad);
+  if (allowSnap && Math.abs(diff) > GYRO_SNAP_RAD) return normalizeAngle(compassRad);
+  const k = 1 - Math.exp(-Math.max(0, dtS) / GYRO_TAU_S);
+  return normalizeAngle(prevRad + diff * k);
+}
+
+/**
+ * Подтверждение скачка компаса перед мгновенным приёмом (snap).
+ *
+ * Одиночный выброс магнитометра возле металла (перила, машина) выглядит
+ * как смена системы отсчёта — тот же скачок на десятки градусов, но через
+ * пару событий компас возвращается, и картинку дёргает туда-обратно.
+ * Отличить их может только стойкость: настоящая перекалибровка держится,
+ * выброс — нет. Поэтому snap — после SNAP_CONFIRM_SAMPLES подряд показаний
+ * за порогом в одну сторону; до этого расхождение идёт обычной экспонентой.
+ *
+ * @returns новый счётчик/направление серии и признак подтверждения
+ */
+export function confirmSnap(
+  prevRun: number,
+  prevDir: number,
+  diffRad: number,
+): { run: number; dir: number; confirmed: boolean } {
+  if (Math.abs(diffRad) <= GYRO_SNAP_RAD) return { run: 0, dir: 0, confirmed: false };
+  const dir = Math.sign(diffRad);
+  const run = dir === prevDir ? prevRun + 1 : 1;
+  return { run, dir, confirmed: run >= SNAP_CONFIRM_SAMPLES };
 }
 
 /**
@@ -153,8 +275,25 @@ class OrientationTracker {
   private handler: ((ev: Event) => void) | null = null;
   /** Пришло ли хоть одно абсолютное показание (север, а не произвольный ноль) */
   private seenAbsolute = false;
-  /** Сглаженный азимут без ручной поправки, рад */
+  /** Сглаженный азимут без ручной поправки (fallback без гироскопа), рад */
   private followedRad: number | null = null;
+  /** Азимут комплементарного фильтра без ручной поправки; null — гироскопа нет */
+  private fusedRad: number | null = null;
+  /**
+   * Последние углы Эйлера из события ориентации: rotationRate приходит
+   * отдельным событием (devicemotion), а переводить его в систему Земли
+   * нужно текущей ориентацией устройства.
+   */
+  private lastEulerDeg: { beta: number; gamma: number } | null = null;
+  /** performance.now() последнего валидного rotationRate; 0 — гироскопа нет */
+  private lastGyroMs = 0;
+  /** performance.now() последнего события ориентации — шаг коррекции дрейфа */
+  private lastOrientMs = 0;
+  /** performance.now() последнего принятого absolute-показания; 0 — не было */
+  private lastAbsoluteMs = 0;
+  /** Серия подряд идущих показаний за snap-порогом (confirmSnap) */
+  private snapRun = 0;
+  private snapDir = 0;
   /** Физическое положение устройства (GPS) — для склонения по WMM */
   private locationDeg: { lat: number; lon: number } | null = null;
   /** Кэш склонения: WMM-суммирование — ~90 гармоник, на каждое событие незачем */
@@ -264,19 +403,27 @@ class OrientationTracker {
   private permissionRequest: Promise<boolean> | null = null;
 
   private async doRequestPermission(): Promise<boolean> {
-    try {
-      const DOE = DeviceOrientationEvent as unknown as {
-        requestPermission?: () => Promise<string>;
-      };
-      const result = await DOE.requestPermission?.();
-      if (result === 'granted') {
-        this.permissionPending = false;
-        this.listen();
-        return true;
-      }
-    } catch {
-      // Отказ или вызов вне жеста — остаёмся на ручной подстройке
+    const DOE = DeviceOrientationEvent as unknown as {
+      requestPermission?: () => Promise<string>;
+    };
+    const DME =
+      typeof DeviceMotionEvent !== 'undefined'
+        ? (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> })
+        : null;
+    // Оба запроса — параллельно из одного жеста: после await первого
+    // транзиентная активация жеста может быть уже израсходована, и iOS
+    // молча отклонит второй диалог — гироскоп не включился бы никогда.
+    // Отказ motion не страшен: без гироскопа работает сглаживание компаса
+    const [orientation] = await Promise.allSettled([
+      DOE.requestPermission?.(),
+      DME?.requestPermission?.(),
+    ]);
+    if (orientation.status === 'fulfilled' && orientation.value === 'granted') {
+      this.permissionPending = false;
+      this.listen();
+      return true;
     }
+    // Отказ или вызов вне жеста — остаёмся на ручной подстройке
     this.state.source = 'manual';
     this.callback?.(this.state);
     return false;
@@ -295,6 +442,9 @@ class OrientationTracker {
       window.addEventListener('deviceorientationabsolute', handler, true);
     }
     window.addEventListener('deviceorientation', handler, true);
+    // Гироскоп — быстрая составляющая комплементарного фильтра. Там, где
+    // rotationRate не приходит вовсе (десктоп), обработчик просто молчит
+    window.addEventListener('devicemotion', this.onMotion, true);
     // iOS сама просит калибровку: событие приходит, когда магнитометр
     // раскалиброван или рядом источник помех
     window.addEventListener('compassneedscalibration', this.onCalibrationNeeded, true);
@@ -310,6 +460,74 @@ class OrientationTracker {
     }, 15000);
     this.callback?.(this.state); // UI перечитает needsCalibration
   };
+
+  /**
+   * Быстрая составляющая комплементарного фильтра: интегрирование
+   * rotationRate. Гироскоп не шумит и не отстаёт — плавное панорамирование
+   * идёт по нему один-в-один, без «резинки» сглаживания. Дрейф интеграла
+   * (смещение нуля) убирает компас в onOrientation (correctDrift).
+   */
+  private onMotion = (ev: Event): void => {
+    const rate = (ev as DeviceMotionEvent).rotationRate;
+    if (!rate) return;
+    const { alpha: ra, beta: rb, gamma: rg } = rate;
+    if (ra == null || rb == null || rg == null) return;
+    if (!Number.isFinite(ra) || !Number.isFinite(rb) || !Number.isFinite(rg)) return;
+
+    const now = performance.now();
+    const dtS = Math.min((now - this.lastGyroMs) / 1000, GYRO_MAX_DT_S);
+    this.lastGyroMs = now;
+    if (dtS <= 0 || !this.lastEulerDeg) return;
+
+    // Фильтр ещё пуст (события ориентации ещё не было или гироскоп ожил
+    // после перерыва): начинаем интегрировать от текущей оценки — скачка нет
+    this.fusedRad ??= this.followedRad;
+    if (this.fusedRad === null) return;
+
+    const azRate = verticalRateFromGyro(
+      this.lastEulerDeg.beta,
+      this.lastEulerDeg.gamma,
+      ra,
+      rb,
+      rg,
+    );
+    this.fusedRad = normalizeAngle(this.fusedRad + azRate * dtS);
+    this.emitSensorState(now);
+  };
+
+  /** Собрать состояние из текущей оценки азимута и отправить, если оно значимо */
+  private emitSensorState(
+    now: number,
+    patch?: { tiltRad: number; accuracyDeg: number },
+  ): void {
+    const base = this.fusedRad ?? this.followedRad;
+    if (base === null) return;
+    // Применяем ручную подстройку (свайп-оффсет)
+    const finalAz = normalizeAngle(base + this.manualOffsetRad);
+
+    const prev = this.state;
+    this.state = {
+      azimuthRad: finalAz,
+      tiltRad: patch?.tiltRad ?? prev.tiltRad,
+      accuracyDeg: patch?.accuracyDeg ?? prev.accuracyDeg,
+      source: 'sensor',
+    };
+
+    // Отправляем только при значимом изменении (>0.1°) или раз в 100 мс:
+    // сравнивать нужно со временем прошлой отправки, а не с текущим.
+    // Смена флага калибровки — тоже повод сообщить: UI показывает подсказку
+    const wasUncalibrated = prev.source === 'sensor' && prev.accuracyDeg < 0;
+    const isUncalibrated = this.state.accuracyDeg < 0;
+    const diff = Math.abs(shortestAngle(finalAz - prev.azimuthRad));
+    if (
+      diff > 0.0017 ||
+      now - this.lastEmitted > 100 ||
+      wasUncalibrated !== isUncalibrated
+    ) {
+      this.lastEmitted = now;
+      this.callback?.(this.state);
+    }
+  }
 
   private onOrientation(ev: DeviceOrientationEvent, eventType: string): void {
     if (ev.alpha === null) return;
@@ -328,6 +546,18 @@ class OrientationTracker {
     // всему состоянию и рисовать становилось нечего — до перезагрузки
     const heading = webkit.webkitCompassHeading;
     const hasCompass = Number.isFinite(heading);
+
+    // Absolute-показания молчат дольше ABSOLUTE_LOST_MS — компас потерян:
+    // снова годятся относительные, иначе гиро-интеграл останется без якоря
+    // и будет дрейфовать без предела
+    if (
+      this.seenAbsolute &&
+      this.lastAbsoluteMs > 0 &&
+      performance.now() - this.lastAbsoluteMs > ABSOLUTE_LOST_MS
+    ) {
+      this.seenAbsolute = false;
+    }
+
     if (!isAbsoluteReading(eventType, hasCompass, ev.absolute === true, this.seenAbsolute)) {
       return;
     }
@@ -349,6 +579,7 @@ class OrientationTracker {
       eventType === 'deviceorientationabsolute' || hasCompass || ev.absolute === true;
     if (absolute) {
       this.seenAbsolute = true;
+      this.lastAbsoluteMs = performance.now();
     }
 
     // Компас отсчитывает азимут от магнитного севера — переводим в истинный
@@ -365,46 +596,56 @@ class OrientationTracker {
     // Там точность неизвестна — честный NaN, а не «плохо»
     const accuracy = hasCompass ? (webkit.webkitCompassAccuracy ?? -1) : NaN;
 
-    // Комплементарный фильтр: сглаживаем скачки компаса
-    this.gyroSamples.push(azimuthRad);
-    if (this.gyroSamples.length > GYRO_SMOOTH_WINDOW) {
-      this.gyroSamples.shift();
+    // Гироскопу нужна текущая ориентация устройства для перевода
+    // rotationRate в систему Земли — запоминаем из этого же события
+    this.lastEulerDeg = { beta: betaDeg, gamma: gammaDeg };
+
+    const gyroAlive = this.lastGyroMs > 0 && now - this.lastGyroMs < GYRO_ALIVE_MS;
+    if (gyroAlive) {
+      // Комплементарный фильтр: азимут интегрируется гироскопом (onMotion),
+      // компас здесь — только медленный якорь против дрейфа. Запасную
+      // оценку followAzimuth не ведём: если гироскоп умолкнет, fallback
+      // продолжит от fusedRad без скачка
+      if (this.fusedRad === null) {
+        this.fusedRad = azimuthRad;
+        this.snapRun = 0;
+        this.snapDir = 0;
+      } else {
+        const dtS = this.lastOrientMs > 0 ? (now - this.lastOrientMs) / 1000 : 0;
+        // Мгновенный приём большого расхождения — только подтверждённого:
+        // одиночный выброс возле металла уходит обычной экспонентой
+        const snap = confirmSnap(
+          this.snapRun,
+          this.snapDir,
+          shortestAngle(azimuthRad - this.fusedRad),
+        );
+        this.snapRun = snap.confirmed ? 0 : snap.run;
+        this.snapDir = snap.confirmed ? 0 : snap.dir;
+        this.fusedRad = correctDrift(this.fusedRad, azimuthRad, dtS, snap.confirmed);
+      }
+      this.followedRad = null;
+      this.gyroSamples.length = 0;
+    } else {
+      // Гироскопа нет (десктоп, часть WebView): прежняя схема —
+      // круговое среднее по окну (чтобы 359° и 1° не давали 180°), затем
+      // слежение с подавлением дрожания: одного среднего мало — шум компаса
+      // оно размазывает
+      this.followedRad ??= this.fusedRad; // гироскоп только что умолк: без скачка
+      this.fusedRad = null;
+      this.gyroSamples.push(azimuthRad);
+      if (this.gyroSamples.length > COMPASS_SMOOTH_WINDOW) {
+        this.gyroSamples.shift();
+      }
+      const smoothed = circularMean(this.gyroSamples);
+      this.followedRad =
+        this.followedRad === null ? smoothed : followAzimuth(this.followedRad, smoothed);
     }
-
-    // Круговое среднее (чтобы 359° и 1° не давали 180°), затем слежение с
-    // подавлением дрожания: одного среднего мало — шум компаса оно размазывает
-    const smoothed = circularMean(this.gyroSamples);
-    this.followedRad =
-      this.followedRad === null ? smoothed : followAzimuth(this.followedRad, smoothed);
-
-    // Применяем ручную подстройку (свайп-оффсет)
-    const finalAz = normalizeAngle(this.followedRad + this.manualOffsetRad);
+    this.lastOrientMs = now;
 
     // Точность вернулась в норму — системная просьба о калибровке отработана
     if (accuracy >= 0) this.calibrationRequested = false;
 
-    const prev = this.state;
-    this.state = {
-      azimuthRad: finalAz,
-      tiltRad: look.elevationRad,
-      accuracyDeg: accuracy,
-      source: 'sensor',
-    };
-
-    // Отправляем только при значимом изменении (>0.1°) или раз в 100 мс:
-    // сравнивать нужно со временем прошлой отправки, а не с текущим.
-    // Смена флага калибровки — тоже повод сообщить: UI показывает подсказку
-    const wasUncalibrated = prev.source === 'sensor' && prev.accuracyDeg < 0;
-    const isUncalibrated = accuracy < 0;
-    const diff = Math.abs(shortestAngle(finalAz - prev.azimuthRad));
-    if (
-      diff > 0.0017 ||
-      now - this.lastEmitted > 100 ||
-      wasUncalibrated !== isUncalibrated
-    ) {
-      this.lastEmitted = now;
-      this.callback?.(this.state);
-    }
+    this.emitSensorState(now, { tiltRad: look.elevationRad, accuracyDeg: accuracy });
   }
 
   /** Ручная подстройка (свайп): добавляет оффсет к сенсорному азимуту */
@@ -437,12 +678,21 @@ class OrientationTracker {
       window.removeEventListener('deviceorientation', this.handler, true);
       this.handler = null;
     }
+    window.removeEventListener('devicemotion', this.onMotion, true);
     window.removeEventListener('compassneedscalibration', this.onCalibrationNeeded, true);
     if (this.calibrationTimer) {
       clearTimeout(this.calibrationTimer);
       this.calibrationTimer = null;
     }
     this.calibrationRequested = false;
+    // Гироскоп и фильтр — в исходное: после повторного start() старые
+    // motion-события не должны считаться живыми
+    this.lastGyroMs = 0;
+    this.lastOrientMs = 0;
+    this.lastEulerDeg = null;
+    this.fusedRad = null;
+    this.snapRun = 0;
+    this.snapDir = 0;
     this.listening = false;
     this.callback = null;
   }
