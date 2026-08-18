@@ -149,6 +149,14 @@ export function selectMapPeaks(
 const LABEL_HEIGHT = 24;
 /** Полузазор между подписями, чтобы не слипались */
 const LABEL_GAP = 3;
+/**
+ * Подъём сдвинутой подписи над маркером, px. Освобождает место выноске —
+ * тонкой линии от вершины треугольника к углу подписи: без линии в плотном
+ * поле непонятно, к какому треугольнику относится уехавшая вбок подпись
+ */
+const LABEL_LIFT = 8;
+/** Боковой отступ сдвинутой подписи от точки: сдвиг = половина ширины + это */
+const LABEL_SIDE_GAP = 10;
 /** Сколько кадров метка помнит свой якорь, будучи временно неразмещённой */
 const LABEL_STICKY_TTL = 30;
 
@@ -228,7 +236,9 @@ export function createLabelLayoutState(): LabelLayoutState {
  *     вершина, к которой человек ведёт карту, не гаснет от вошедшего
  *     более значимого соседа — сосед сам уйдёт на другой якорь;
  *  3) три якоря (над точкой, правее, левее): при нехватке места подпись
- *     отходит в сторону, а не пропадает; маркер остаётся на вершине.
+ *     отходит в сторону, а не пропадает; маркер остаётся на вершине, а
+ *     сдвинутая подпись приподнимается (LABEL_LIFT) и соединяется с
+ *     маркером выноской — иначе в плотном поле не видно, чья она.
  *
  * Цена липкости — результат зависит от истории: тот же кадр, достигнутый
  * другим путём, может дать другую раскладку. Это осознанный размен ради
@@ -263,7 +273,7 @@ export function placeMapPeakLabels(
       const { w: bw, h: bh } = mapPeakLabelSize(it.text);
       // Якоря: сдвиг центра подписи относительно точки. Сдвинутая подпись
       // целиком уходит за пределы маркера плюс небольшой отступ
-      const shifts = [0, bw / 2 + 10, -(bw / 2 + 10)];
+      const shifts = [0, bw / 2 + LABEL_SIDE_GAP, -(bw / 2 + LABEL_SIDE_GAP)];
       const prev = state.anchor.get(it.key);
       // Прошлый якорь пробуем первым: подпись не должна прыгать вокруг точки
       const order =
@@ -274,7 +284,9 @@ export function placeMapPeakLabels(
         const cx = it.x + shifts[ai];
         const x0 = cx - bw / 2 - LABEL_GAP;
         const x1 = cx + bw / 2 + LABEL_GAP;
-        const y0 = it.y - bh - LABEL_GAP;
+        // Сдвинутая подпись поднята на LABEL_LIFT — бокс выше, чтобы
+        // приподнятая метка не наезжала на вершины над её маркером
+        const y0 = it.y - bh - (ai === 0 ? 0 : LABEL_LIFT) - LABEL_GAP;
         const y1 = it.y + LABEL_GAP;
         if (hits(x0, y0, x1, y1)) continue;
         placed.push(x0, y0, x1, y1);
@@ -515,16 +527,43 @@ export function openMap(options: MapOptions): () => void {
           "background:rgba(13,27,42,.8);border-radius:4px;padding:0 4px;" +
           "font:11px system-ui,sans-serif;color:#f1faee;white-space:nowrap;" +
           "max-width:140px;overflow:hidden;text-overflow:ellipsis";
-        el.append(label, markerEl);
+        // Выноска: линия от вершины треугольника к углу сдвинутой подписи.
+        // position:absolute — вне flex-потока. Начало (left:50%, bottom:7px)
+        // на пиксель заходит ПОД остриё треугольника, конец (+3px к длине) —
+        // под край подписи: стыки не «светятся» зазорами
+        const leaderEl = document.createElement("div");
+        leaderEl.style.cssText =
+          "position:absolute;left:50%;bottom:7px;width:0;height:2px;" +
+          "border-radius:1px;background:rgba(241,250,238,.55);" +
+          "transform-origin:0 50%;" +
+          "filter:drop-shadow(0 0 1px rgba(0,0,0,.9));" +
+          "pointer-events:none;display:none";
+        el.append(label, markerEl, leaderEl);
         peaksLayer.appendChild(el);
         peakEls.push(el);
       }
       // Подпись — ПЕРВЫЙ ребёнок (label), маркер-стрелка вторым: иначе текст
       // уходил в треугольник, оставался без стилей и разворачивался крупно
       const label = el.firstElementChild as HTMLElement;
+      const leader = el.lastElementChild as HTMLElement;
       label.textContent = text;
-      // Сдвинутый якорь: уезжает только подпись, маркер остаётся на вершине
+      // Сдвинутый якорь: уезжает и приподнимается только подпись, маркер
+      // остаётся на вершине, а выноска показывает, к какому треугольнику
+      // относится подпись (в плотном поле иначе не разобрать)
       label.style.transform = shift ? `translateX(${shift}px)` : "";
+      label.style.marginBottom = shift ? `${LABEL_LIFT}px` : "";
+      if (shift) {
+        // От острия треугольника (центр, 8px от точки) к ближнему нижнему
+        // углу подписи: он на LABEL_SIDE_GAP вбок и на LABEL_LIFT выше
+        // острия. +3px — конец заходит под край подписи: выноска
+        // визуально «воткнута» в неё, а не висит рядом
+        const dx = shift > 0 ? LABEL_SIDE_GAP : -LABEL_SIDE_GAP;
+        leader.style.display = "block";
+        leader.style.width = `${Math.hypot(dx, LABEL_LIFT) + 3}px`;
+        leader.style.transform = `rotate(${(Math.atan2(-LABEL_LIFT, dx) * 180) / Math.PI}deg)`;
+      } else {
+        leader.style.display = "none";
+      }
       el.style.left = `${x}px`;
       el.style.top = `${y}px`;
       el.style.display = "flex";

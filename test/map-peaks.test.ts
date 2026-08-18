@@ -265,6 +265,25 @@ describe("placeMapPeakLabels", () => {
     expect(placed.map((p) => p.key)).toContain("target");
   });
 
+  it("приподнятая сдвинутая подпись не наезжает на вершину выше неё", () => {
+    const state = createLabelLayoutState();
+    const placed = placeMapPeakLabels(
+      [
+        item("a", 100, 100),
+        // «b» тесно с «a» — уходит на правый якорь и приподнимается (LABEL_LIFT)
+        item("b", 108, 100, "оченьдлинноеимя 9999"),
+        // «c» стоит над сдвинутой подписью «b»: без учёта подъёма её центральный
+        // якорь влезал бы впритык под метку, на которую она визуально наехала
+        item("c", 200, 68),
+      ],
+      state,
+    );
+    const b = placed.find((p) => p.key === "b");
+    expect(b!.shift).toBeGreaterThan(0);
+    // Все якоря «c» пересекают приподнятый бокс «b» — метка честно пропущена
+    expect(placed.find((p) => p.key === "c")).toBeUndefined();
+  });
+
   it("липкий якорь не прыгает: метка держит прошлую сторону, пока она свободна", () => {
     const state = createLabelLayoutState();
     placeMapPeakLabels(
