@@ -39,7 +39,13 @@ function segSeg(p1: Pt, p2: Pt, p3: Pt, p4: Pt): boolean {
   const d2 = d(p3, p4, p2);
   const d3 = d(p1, p2, p3);
   const d4 = d(p1, p2, p4);
-  return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0));
+  if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
+    return true;
+  const on = (a: Pt, b: Pt, c: Pt): boolean =>
+    d(a, b, c) === 0 &&
+    c.x >= Math.min(a.x, b.x) && c.x <= Math.max(a.x, b.x) &&
+    c.y >= Math.min(a.y, b.y) && c.y <= Math.max(a.y, b.y);
+  return on(p3, p4, p1) || on(p3, p4, p2) || on(p1, p2, p3) || on(p1, p2, p4);
 }
 function segIntersectsRect(a: Pt, b: Pt, r: { left: number; top: number; right: number; bottom: number }): boolean {
   if ((a.x < r.left && b.x < r.left) || (a.x > r.right && b.x > r.right) ||
@@ -355,6 +361,26 @@ describe('раскладка плашек подписей', () => {
           `стрелка «${placed[i].text}» × стрелка «${placed[j].text}»`,
         ).toBe(false);
       }
+  });
+});
+
+describe('segSeg: пересечение отрезков включая касание', () => {
+  it('строгое пересечение', () => {
+    expect(segSeg({ x: 0, y: 0 }, { x: 10, y: 10 }, { x: 0, y: 10 }, { x: 10, y: 0 })).toBe(true);
+    expect(segSeg({ x: 0, y: 0 }, { x: 4, y: 4 }, { x: 6, y: 0 }, { x: 10, y: 4 })).toBe(false);
+  });
+
+  it('касание и общий конец — тоже пересечение', () => {
+    // T-образное касание серединой
+    expect(segSeg({ x: 0, y: 5 }, { x: 10, y: 5 }, { x: 5, y: 5 }, { x: 5, y: 10 })).toBe(true);
+    // Общий конец
+    expect(segSeg({ x: 0, y: 0 }, { x: 5, y: 5 }, { x: 5, y: 5 }, { x: 10, y: 0 })).toBe(true);
+    // Коллинеарные с перекрытием
+    expect(segSeg({ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 5, y: 0 }, { x: 15, y: 0 })).toBe(true);
+    // Коллинеарные без перекрытия — мимо
+    expect(segSeg({ x: 0, y: 0 }, { x: 4, y: 0 }, { x: 5, y: 0 }, { x: 9, y: 0 })).toBe(false);
+    // Продолжение коллинеарного за спаном — мимо
+    expect(segSeg({ x: 0, y: 0 }, { x: 10, y: 10 }, { x: 11, y: 11 }, { x: 20, y: 0 })).toBe(false);
   });
 });
 
