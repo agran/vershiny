@@ -114,6 +114,28 @@ function detailTileKeys(center: LatLon, radiusM: number): string[] {
 }
 
 /**
+ * Предикат дедупликации слоёв: базовый LOD 0 (217 м) избыточен в ячейках 1°,
+ * полностью покрытых hi-слоем (87 м) — hi строго детальнее и тоже качается.
+ * Ячейка считается покрытой, только если у hi есть все 25 тайлов 0.2°:
+ * частично покрытую (берег, дыра в данных) ячейку базовый слой страхует.
+ */
+export function keepBaseTileKey(demHi: DemSampler): (key: string) => boolean {
+  return (key) => {
+    const [lod, tx, ty] = key.split("/").map(Number);
+    if (lod !== 0) return true;
+    // Ячейка 1° базовой пирамиды (тайл 0.5°) ↔ квадрат 5×5 тайлов hi (0.2°)
+    const cx = Math.floor(tx / 2);
+    const cy = Math.floor(ty / 2);
+    for (let i = 0; i < 5; i++) {
+      for (let j = 0; j < 5; j++) {
+        if (!demHi.hasTile(0, cx * 5 + i, cy * 5 + j)) return true;
+      }
+    }
+    return false;
+  };
+}
+
+/**
  * Оценка объёма загрузки региона в байтах: пирамида по bbox + детальная зона.
  * Считается по реальному числу тайлов, а не по площади: разреженная пирамида
  * не хранит море и равнины, и разница доходит до порядка.
@@ -125,12 +147,16 @@ export async function estimateRegionBytes(
 ): Promise<number> {
   const dem = sampler ?? (await sharedPyramid());
   const center = inBBox(origin, info.bbox) ? origin : bboxCenter(info.bbox);
-  // Детальный слой разрежён: вне p1–p2 даст ноль байт; недоступен — не мешает
-  const hiBytes = await sharedPyramidHi()
-    .then((hi) => hi.bboxDownloadBytes(info.bbox))
-    .catch(() => 0);
+  // Детальный слой разрежён: вне p1–p3 даст ноль байт; недоступен — не мешает.
+  // Где hi есть, базовый LOD 0 в оценку не входит — качать его не будем
+  const demHi = await sharedPyramidHi().catch(() => null);
+  const hiBytes = demHi?.bboxDownloadBytes(info.bbox) ?? 0;
+  const baseBytes = dem.bboxDownloadBytes(
+    info.bbox,
+    demHi ? keepBaseTileKey(demHi) : undefined,
+  );
   return (
-    dem.bboxDownloadBytes(info.bbox) +
+    baseBytes +
     hiBytes +
     detailTileKeys(center, DETAIL_RADIUS_M).length * TERRARIUM_TILE_BYTES
   );
@@ -156,7 +182,7 @@ function sharedPyramid(): Promise<DemSampler> {
   return pyramid;
 }
 
-/** Детальный слой p1–p2; не развёрнут или офлайн — регион качается без него */
+/** Детальный слой p1–p3; не развёрнут или офлайн — регион качается без него */
 let pyramidHi: Promise<DemSampler> | null = null;
 function sharedPyramidHi(): Promise<DemSampler> {
   pyramidHi ??= (async () => {
@@ -202,8 +228,13 @@ export async function downloadRegion(
   // bbox — приедет он всё-таки туда.
   const dem = await sharedPyramid();
   const demHi = await sharedPyramidHi().catch(() => null);
-  const pyramidKeys = dem.tileKeysInBBox(info.bbox);
+  const allPyramidKeys = dem.tileKeysInBBox(info.bbox);
   const hiKeys = demHi?.tileKeysInBBox(info.bbox) ?? [];
+  // Дедупликация: в ячейках, полностью покрытых hi (87 м), базовый LOD 0
+  // (217 м) не качаем — он там избыточен. Без hi (слой недоступен) качаем всё
+  const pyramidKeys = demHi
+    ? allPyramidKeys.filter(keepBaseTileKey(demHi))
+    : allPyramidKeys;
   const center = inBBox(origin, info.bbox) ? origin : bboxCenter(info.bbox);
   const detailKeys = detailTileKeys(center, DETAIL_RADIUS_M);
   const total = pyramidKeys.length + hiKeys.length + detailKeys.length;

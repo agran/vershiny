@@ -356,10 +356,14 @@ export class DemSampler {
   }
 
   /** Оценка веса тайлов bbox в байтах (по среднему весу тайла из индекса) */
-  bboxDownloadBytes(bbox: [number, number, number, number]): number {
+  bboxDownloadBytes(
+    bbox: [number, number, number, number],
+    filter?: (key: string) => boolean,
+  ): number {
     if (!this.index) throw new Error("loadIndex() не вызван");
     let bytes = 0;
     for (const key of this.tileKeysInBBox(bbox)) {
+      if (filter && !filter(key)) continue;
       const lodIndex = Number(key.split("/")[0]);
       bytes += this.index.lods[lodIndex].avgTileBytes ?? 40_000;
     }
