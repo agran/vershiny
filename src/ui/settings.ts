@@ -96,11 +96,18 @@ export function openSettings(
   langRow.appendChild(langSelect);
   panel.appendChild(langRow);
 
-  // --- Регион (только для информации, выбор — кликом по строке ниже) ---
+  // --- Регион: ссылка, клик по которой проматывает список регионов ниже
+  // до строки активного — там его можно скачать или выбрать соседний ---
   const regionRow = row(t("region"));
-  const regionValue = document.createElement("span");
+  const regionValue = document.createElement("a");
+  regionValue.href = "#";
   regionValue.textContent = currentRegion;
-  regionValue.style.cssText = "color:#f1faee;font-weight:500";
+  regionValue.style.cssText =
+    "color:#4cc9f0;font-weight:500;text-decoration:underline;cursor:pointer";
+  regionValue.onclick = (ev) => {
+    ev.preventDefault(); // не трогаем хеш адреса — он занят стопкой слоёв
+    scrollToRegionRow();
+  };
   regionRow.appendChild(regionValue);
   panel.appendChild(regionRow);
 
@@ -124,6 +131,29 @@ export function openSettings(
   const dlList = document.createElement("div");
   dlList.style.cssText = "display:flex;flex-direction:column;gap:4px";
   panel.appendChild(dlList);
+
+  // Ссылка «Регион» вверху проматывает список до строки активного региона.
+  // Реестр грузится асинхронно: кликнули до построения строк — запоминаем
+  // и проматываем, когда список появится
+  let regionScrollPending = false;
+  function scrollToRegionRow(): void {
+    const target = dlList.querySelector<HTMLElement>(
+      `[data-region="${currentRegion}"]`,
+    );
+    if (!target) {
+      regionScrollPending = true;
+      return;
+    }
+    regionScrollPending = false;
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    // Вспышка фона — показать, куда смотреть: рамка у активной строки есть
+    // и без того, но при плавной прокрутке глаз за ней не успевает
+    target.style.transition = "background 0.4s";
+    target.style.background = "#3d5a80";
+    setTimeout(() => {
+      target.style.background = "#1f2833";
+    }, 1200);
+  }
 
   // Загрузка реестра + скачанных. Отметки о скачанном — не повод потерять
   // список: в частном режиме IndexedDB может быть закрыт совсем
@@ -203,6 +233,8 @@ export function openSettings(
           const isDownloaded = downloadedSet.has(key);
 
           const rowEl = document.createElement("div");
+          // По ключу строку находит ссылка активного региона вверху панели
+          rowEl.dataset.region = key;
           rowEl.style.cssText =
             "display:flex;align-items:center;gap:8px;padding:6px 8px;" +
             "border-radius:8px;background:#1f2833;" +
@@ -340,6 +372,9 @@ export function openSettings(
       if (currentInfo) {
         regionValue.textContent = regionLabel(currentInfo);
       }
+
+      // Клик по ссылке региона пришёл раньше, чем построился список
+      if (regionScrollPending) scrollToRegionRow();
     })
     .catch((err) => {
       // Единственный оставшийся источник отказа — IndexedDB (частный режим,
