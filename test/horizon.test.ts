@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { destination, makeRayMarcher, type LatLon } from "../src/core/geo";
 import {
-    buildMarchTable,
-    checkPeakVisibility,
-    computeHorizon,
-    computeLayeredHorizon,
-    nextRayStep,
-    type SampleFn,
+  buildMarchTable,
+  checkPeakVisibility,
+  computeHorizon,
+  computeLayeredHorizon,
+  nextRayStep,
+  type SampleFn,
 } from "../src/core/horizon";
 import type { Peak } from "../src/core/peaks";
 
@@ -166,5 +166,28 @@ describe("ray-marching горизонта", () => {
         expect(p.lon).toBe(ref.lon);
       }
     }
+  });
+
+  it("horizon и layers[0] делят буфер: дубль в трансферах postMessage запрещён", () => {
+    // Регресс: воркер передавал result.horizon.buffer И layers[0].buffer
+    // в списке трансферов — это один и тот же ArrayBuffer (horizon ===
+    // layers[0]), и postMessage падал с «ArrayBuffer at index N is a
+    // duplicate of an earlier ArrayBuffer». Трансферить надо layers,
+    // horizon читать из layers[0] на приёмной стороне
+    const sample: SampleFn = () => 100;
+    const layered = computeLayeredHorizon(ORIGIN, 0, sample, {
+      maxDistM: 20_000,
+      azimuthStepRad: (1 * Math.PI) / 180,
+    });
+    // Инвариант, который ломал прод: horizon — это ссылка на layers[0]
+    const horizon = layered.layers[0];
+    expect(horizon.buffer).toBe(layered.layers[0].buffer);
+    // Список буферов для трансфера не должен содержать дублей
+    const transfers = [
+      ...layered.layers.map((a) => a.buffer),
+      layered.distanceToHorizonM.buffer,
+      ...layered.crests.map((a) => a.buffer),
+    ];
+    expect(new Set(transfers).size).toBe(transfers.length);
   });
 });

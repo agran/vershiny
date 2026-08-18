@@ -338,9 +338,10 @@ async function handle(msg: WorkerInMessage): Promise<void> {
       );
       result.reqId = reqId;
       // Все типизированные буферы уходят без копирования (transfer):
-      // horizon + 5 слоёв + дистанции + гребни + плоские фронты
+      // 5 слоёв + дистанции + гребни + плоские фронты. horizon отдельно не
+      // передаём: это тот же буфер, что layers[0], а дубль ArrayBuffer в
+      // списке трансферов запрещён («ArrayBuffer at index N is a duplicate»)
       (self as unknown as Worker).postMessage(result, [
-        result.horizon.buffer,
         ...result.layers.map((a) => a.buffer),
         result.distanceToHorizonM.buffer,
         ...result.crests.map((a) => a.buffer),
