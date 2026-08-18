@@ -72,9 +72,25 @@ export async function pickDemBase(
     cached(url: string): Promise<boolean>;
   },
 ): Promise<string | undefined> {
-  for (const candidate of candidates) {
-    if (await probes.online(candidate)) return candidate;
-    if (await probes.cached(candidate)) return candidate;
+  // Заведомый офлайн (onLine === false ложным не бывает, в отличие от true):
+  // сетевые пробы пропускаем целиком — не тратим по 2.5 с таймаута на
+  // кандидата, когда всё равно ответ один, из IndexedDB
+  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+    for (const candidate of candidates) {
+      if (await probes.cached(candidate)) return candidate;
+    }
+    return undefined;
   }
-  return undefined;
+
+  // Пробы всех кандидатов параллельно, выбор — первый подошедший в исходном
+  // порядке приоритета. Время = максимум проб, а не сумма: при мёртвой сети
+  // последовательный перебор умножал таймаут на длину цепочки
+  const results = await Promise.all(
+    candidates.map(async (url) => {
+      if (await probes.online(url)) return true;
+      return probes.cached(url);
+    }),
+  );
+  const idx = results.indexOf(true);
+  return idx >= 0 ? candidates[idx] : undefined;
 }

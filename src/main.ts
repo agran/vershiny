@@ -273,7 +273,29 @@ const edgeRight = (offset = 0): string =>
 
 function draw(): void {
   if (!panorama) return;
+  // При активной AR-сессии кадр рисует её rAF-цикл (видео + оверлей):
+  // полный рендер панорамы здесь затирался бы следующим AR-кадром через
+  // миллисекунды — 10–60 лишних рендеров в секунду впустую
+  if (arSession) return;
   renderPanorama(ctx, panorama, view);
+}
+
+/** Кадр уже запланирован — события датчика/мыши сливаются в один рендер */
+let drawScheduled = false;
+
+/**
+ * Отложенная перерисовка: события ориентации приходят до 60 Гц (и раз
+ * в 100 мс даже в покое), pointermove — чаще rAF. Без коалесцинга каждый
+ * из них рисовал полный кадр; с ним — один рендер на кадр, финальное
+ * состояние за кадр тождественно
+ */
+function scheduleDraw(): void {
+  if (drawScheduled) return;
+  drawScheduled = true;
+  requestAnimationFrame(() => {
+    drawScheduled = false;
+    draw();
+  });
 }
 
 // --- Управление: поворот + перемещение ---
@@ -351,7 +373,7 @@ canvas.addEventListener("pointermove", (ev) => {
         cameraFovDeg: pinchStartFovDeg / (dist / pinchStartDist),
       });
       syncFov();
-      draw();
+      scheduleDraw();
     }
     return;
   }
@@ -409,7 +431,7 @@ canvas.addEventListener("pointermove", (ev) => {
       view.tiltRad + (dy / canvas.clientHeight) * view.fovVRad,
     ),
   );
-  draw();
+  scheduleDraw();
 });
 
 const endPointer = (ev: PointerEvent): void => {
@@ -639,7 +661,7 @@ orientationTracker.start((state) => {
       -MAX_TILT,
       Math.min(MAX_TILT, state.tiltRad + tiltOffset),
     );
-    draw();
+    scheduleDraw();
   }
   updateCompassButton();
   updateCompassCalibration();
@@ -771,6 +793,14 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   }
   setStatus("");
   hideButtonCaptions(); // первая панорама есть — загрузка кончилась
+  // SW теперь может докачать чанки приложения: до этого момента они не
+  // качались, чтобы не конкурировать с веером тайлов за соединения
+  if (!precacheSignaled) {
+    precacheSignaled = true;
+    navigator.serviceWorker?.controller?.postMessage({
+      type: "PRECACHE_READY",
+    });
+  }
   draw();
   // Камера — по первому результату: оверлею нужна панорама
   arAutoStart?.();
@@ -781,6 +811,9 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
 };
 
 let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
+
+/** SW уже получил сигнал «первая панорама готова» (чанки можно докачивать) */
+let precacheSignaled = false;
 
 async function main(): Promise<void> {
   setStatus(t("waitingGps"));
@@ -964,7 +997,7 @@ function setupMapButton(): void {
         // смотрит человек, туда и панорама. Карта задаёт взгляд там, где
         // датчиков нет или в них отказано
         if (panorama) applyAutoTilt(panorama);
-        draw();
+        scheduleDraw();
       },
       // Карта закрылась сама (крестик, Escape): без этого кнопка думала, что
       // карта ещё открыта, и следующее нажатие уходило на её «закрытие»
@@ -1034,14 +1067,21 @@ async function initDemForRegion(region: string): Promise<void> {
   const { hiDemCandidates, globalDemCandidates, pickDemBase } =
     await import("./core/dem-config");
   const { getDemIndex } = await import("./core/db");
-  const { fetchWithTimeout } = await import("./core/fetch-timeout");
+  const { fetchWithTimeout, PROBE_TIMEOUT_MS } = await import(
+    "./core/fetch-timeout"
+  );
   const probes = {
     online: async (url: string) => {
       // Мёртвая сеть: проба index.json без таймаута ждёт до минуты,
-      // а дальше всё равно идёт кеш — лучше уйти туда за секунды
-      const probe = await fetchWithTimeout(`${url}/index.json`).catch(
-        () => null,
-      );
+      // а дальше всё равно идёт кеш — лучше уйти туда за секунды.
+      // Пробе хватает короткого таймаута: она отличает «нет файла» (быстрый
+      // 404) от «сеть не отвечает», ложный промах на очень медленной сети
+      // ловит следующая строка — cached-индекс
+      const probe = await fetchWithTimeout(
+        `${url}/index.json`,
+        {},
+        PROBE_TIMEOUT_MS,
+      ).catch(() => null);
       return !!probe && isJson(probe);
     },
     cached: async (url: string) =>

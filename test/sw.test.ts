@@ -32,6 +32,8 @@ interface SwEnv {
   handlers: Record<string, (ev: unknown) => void>;
   deleted: string[];
   added: string[];
+  /** Отложенные таймеры (страховка прекэша в activate) — для ручного запуска */
+  timers: (() => void)[];
   claimed: () => boolean;
   skipped: () => boolean;
 }
@@ -47,6 +49,7 @@ function runSw(existingCaches: string[], opts: SwOptions = {}): SwEnv {
   const handlers: Record<string, (ev: unknown) => void> = {};
   const deleted: string[] = [];
   const added: string[] = [];
+  const timers: (() => void)[] = [];
   let claimed = false;
   let skipped = false;
 
@@ -86,6 +89,12 @@ function runSw(existingCaches: string[], opts: SwOptions = {}): SwEnv {
     fetch: opts.fetchImpl ?? (async () => new Response("")),
     Response,
     URL,
+    // Отложенный прекэш: таймер activate запоминаем, чтобы запустить вручную
+    setTimeout: (fn: () => void) => {
+      timers.push(fn);
+      return timers.length;
+    },
+    clearTimeout: () => {},
   };
   vm.createContext(context);
   vm.runInContext(built, context);
@@ -94,6 +103,7 @@ function runSw(existingCaches: string[], opts: SwOptions = {}): SwEnv {
     handlers,
     deleted,
     added,
+    timers,
     claimed: () => claimed,
     skipped: () => skipped,
   };
@@ -153,17 +163,48 @@ describe("Service Worker", () => {
     expect(env.skipped()).toBe(true);
   });
 
-  it("при установке кладёт чанки приложения в кеш", async () => {
-    // Ленивые чанки (настройки, карта, поиск) грузятся по нажатию: без
-    // предзагрузки офлайн работало только то, что успели открыть при сети
+  it("чанки приложения докачиваются после первой панорамы, не в install", async () => {
+    // Прекэш чанков в install соревновался за соединения с веером тайлов
+    // первого расчёта: на слабой сети человек ждал и панораму, и настройки.
+    // Теперь install кладёт только оболочку, чанки — по сигналу страницы
+    // (PRECACHE_READY) или по таймеру-страховке после активации
     const env = runSw([]);
     let done: Promise<unknown> = Promise.resolve();
     env.handlers.install({ waitUntil: (p: Promise<unknown>) => (done = p) });
     await done;
 
+    // В install — только оболочка, чанков нет
+    expect(env.added).toContain("https://example.org/vershiny/index.html");
+    expect(env.added).not.toContain(
+      "https://example.org/vershiny/assets/settings-def.js",
+    );
+
+    // Сигнал «первая панорама готова» — чанки докачиваются
+    env.handlers.message({ data: { type: "PRECACHE_READY" } });
+    await Promise.resolve();
+    await Promise.resolve();
+    await Promise.resolve();
     expect(env.added).toContain(
       "https://example.org/vershiny/assets/settings-def.js",
     );
+    expect(env.added).toContain(
+      "https://example.org/vershiny/assets/main-abc.js",
+    );
+  });
+
+  it("без сигнала страницы чанки докачиваются по таймеру-страховке", async () => {
+    // Упавшая до первой панорамы страница не должна навсегда лишать офлайн
+    // доступа к настройкам/карте: минута после активации — и кеш полон
+    const env = runSw([]);
+    let done: Promise<unknown> = Promise.resolve();
+    env.handlers.activate({ waitUntil: (p: Promise<unknown>) => (done = p) });
+    await done;
+    expect(env.timers.length).toBeGreaterThan(0);
+
+    env.timers[0]();
+    await Promise.resolve();
+    await Promise.resolve();
+    await Promise.resolve();
     expect(env.added).toContain(
       "https://example.org/vershiny/assets/main-abc.js",
     );

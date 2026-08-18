@@ -95,20 +95,42 @@ function isData(url: string): boolean {
 
 self.addEventListener("install", (ev) => {
   // Ждём в состоянии waiting: решение об обновлении принимает пользователь.
-  // Но чанки складываем в кеш сразу — иначе офлайн доступно только то,
-  // что успели открыть при живой сети
+  // Кладём в кеш только оболочку; чанки приложения — позже (см. ниже):
+  // иначе на первом запуске скачивание ~20 чанков соревновалось за пул
+  // соединений с веером тайлов панорамы, и на слабой сети человек ждал
+  // и то, и другое
   ev.waitUntil(
     (async () => {
       const cache = await caches.open(APP_CACHE);
       // Каждый по отдельности: один отвалившийся файл не должен отменять всё
       await Promise.all(
-        [...SHELL, ...PRECACHE].map((path) =>
+        SHELL.map((path) =>
           cache.add(new URL(path, self.location.href).href).catch(() => {}),
         ),
       );
     })(),
   );
 });
+
+/**
+ * Догрузка чанков приложения в кеш — по сигналу «первая панорама готова»
+ * (страница шлёт PRECACHE_READY) или через минуту после активации: так
+ * офлайн остаются доступны настройки/карта/поиск, но первый расчёт не
+ * делит с ними соединения
+ */
+let precacheTimer: ReturnType<typeof setTimeout> | undefined;
+let precacheDone = false;
+async function precacheChunks(): Promise<void> {
+  if (precacheDone) return;
+  precacheDone = true;
+  if (precacheTimer !== undefined) clearTimeout(precacheTimer);
+  const cache = await caches.open(APP_CACHE);
+  await Promise.all(
+    PRECACHE.map((path) =>
+      cache.add(new URL(path, self.location.href).href).catch(() => {}),
+    ),
+  );
+}
 
 self.addEventListener("activate", (ev) => {
   ev.waitUntil(
@@ -121,13 +143,19 @@ self.addEventListener("activate", (ev) => {
           .map((name) => caches.delete(name)),
       );
       await self.clients.claim();
+      // Страховка: если страница не пришлёт сигнал (упала раньше), чанки
+      // всё равно докачаются — просто не в момент первого расчёта
+      precacheTimer = setTimeout(() => void precacheChunks(), 60_000);
     })(),
   );
 });
 
 self.addEventListener("message", (ev) => {
-  if ((ev.data as { type?: string } | undefined)?.type === "SKIP_WAITING") {
+  const type = (ev.data as { type?: string } | undefined)?.type;
+  if (type === "SKIP_WAITING") {
     void self.skipWaiting();
+  } else if (type === "PRECACHE_READY") {
+    void precacheChunks();
   }
 });
 

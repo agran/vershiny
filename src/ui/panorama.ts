@@ -167,8 +167,14 @@ export function drawOverlay(
     const rayCount = profiles[0].length;
     const ridgeWidth = RIDGE_WIDTH_CSS * uiScale;
     const ridgeOffset = RIDGE_OFFSET_CSS * uiScale;
-    // Окклюзия: гребень виден только там, где он выше всех более близких
-    const runningMax = new Float32Array(rayCount).fill(-Infinity);
+    // Окклюзия: гребень виден только там, где он выше всех более близких.
+    // Буфер переиспользуем между кадрами: 14.4 КБ молодого мусора на кадр
+    // на слабом телефоне — это GC-паузы посреди поворота
+    if (runningMaxBuf.length !== rayCount) {
+      runningMaxBuf = new Float32Array(rayCount);
+    }
+    runningMaxBuf.fill(-Infinity);
+    const runningMax = runningMaxBuf;
     const EPS = 5e-4; // ~0.03° — не рисуем «дрожание» на одном уровне
 
     for (const prof of profiles) {
@@ -344,6 +350,17 @@ interface PlacedLabel {
  * потребители переводят его в «силуэт бесконечно низко».
  */
 export function silhouetteProfile(state: PanoramaState): Float32Array {
+  // Панорама мутируется на месте (Object.assign в worker.onmessage), поэтому
+  // кеш привязан к ссылке на horizon: она меняется при каждом новом расчёте,
+  // а между ними все поля константны — итоговый массив побитово тот же
+  if (
+    silhouetteCache &&
+    silhouetteCache.horizon === state.horizon &&
+    silhouetteCache.crests === state.crests &&
+    silhouetteCache.layers === state.layers
+  ) {
+    return silhouetteCache.out;
+  }
   const profiles: (Float32Array | undefined)[] = [
     ...(state.crests ?? []),
     ...(state.layers ?? []),
@@ -357,8 +374,25 @@ export function silhouetteProfile(state: PanoramaState): Float32Array {
       if (Number.isFinite(v) && v > out[i]) out[i] = v;
     }
   }
+  silhouetteCache = {
+    horizon: state.horizon,
+    crests: state.crests,
+    layers: state.layers,
+    out,
+  };
   return out;
 }
+
+/** Кеш силуэта: ключи — ссылки на массивы панорамы (меняются при пересчёте) */
+let silhouetteCache: {
+  horizon: Float32Array;
+  crests: Float32Array[] | undefined;
+  layers: Float32Array[] | undefined;
+  out: Float32Array;
+} | null = null;
+
+/** Переиспользуемый буфер окклюзии гребней (drawOverlay) */
+let runningMaxBuf = new Float32Array(0);
 
 function drawLabels(
   ctx: CanvasRenderingContext2D,
