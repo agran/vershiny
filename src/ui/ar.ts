@@ -60,6 +60,66 @@ const CAMERA_CONSTRAINTS: MediaStreamConstraints = {
   audio: false,
 };
 
+async function attachStream(videoEl: HTMLVideoElement, stream: MediaStream): Promise<void> {
+  videoEl.pause();
+  videoEl.srcObject = null;
+  videoEl.srcObject = stream;
+  videoEl.playsInline = true;
+  await videoEl.play();
+}
+
+/** Сколько ждём новый кадр камеры, прежде чем считать его застывшим, мс */
+const FREEZE_CHECK_MS = 300;
+
+/**
+ * Дождаться либо нового кадра видео, либо истечения таймаута.
+ *
+ * `requestVideoFrameCallback` смотрит именно на отрисованный кадр, а не на
+ * производные состояния (`readyState`, `paused`) — поэтому ловит ровно тот
+ * баг, который чинит этот файл: трек живой, `<video>` не на паузе, а кадр
+ * не обновляется (Android Chrome после блокировки экрана). Там, где метода
+ * нет (Safari < 15.4), сверяем `currentTime` — не так надёжно для
+ * MediaStream (время может идти и без смены кадра), но лучше, чем ничего.
+ */
+function waitForFrame(videoEl: HTMLVideoElement, timeoutMs: number): Promise<boolean> {
+  if (typeof videoEl.requestVideoFrameCallback === 'function') {
+    return new Promise((resolve) => {
+      let settled = false;
+      const id = videoEl.requestVideoFrameCallback(() => {
+        if (settled) return;
+        settled = true;
+        resolve(true);
+      });
+      setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        videoEl.cancelVideoFrameCallback(id);
+        resolve(false);
+      }, timeoutMs);
+    });
+  }
+  const t0 = videoEl.currentTime;
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(videoEl.currentTime !== t0), timeoutMs);
+  });
+}
+
+/**
+ * Жёсткое переприсоединение потока (attachStream) плюс диагностика:
+ * если кадр не пошёл даже после него — залогировать. Само авто-восстановление
+ * этот случай не покрывает (устройство и так в необычном состоянии), но в
+ * логах будет видно, что баг не исчерпан текущим фиксом.
+ */
+async function attachStreamAndVerify(
+  videoEl: HTMLVideoElement,
+  stream: MediaStream,
+): Promise<void> {
+  await attachStream(videoEl, stream);
+  void waitForFrame(videoEl, FREEZE_CHECK_MS).then((ok) => {
+    if (!ok) console.warn('Камера: кадр не пошёл даже после переприсоединения потока');
+  });
+}
+
 /** Запуск камеры и привязка к canvas */
 export async function startAr(
   videoEl: HTMLVideoElement,
@@ -74,9 +134,7 @@ export async function startAr(
   // запущен: без явной остановки камера продолжала гореть, вызывающий видел
   // только исключение и убирал <video> — из которого поток и не выключается
   try {
-    videoEl.srcObject = stream;
-    videoEl.playsInline = true;
-    await videoEl.play();
+    await attachStream(videoEl, stream);
   } catch (err) {
     stream.getTracks().forEach((track) => track.stop());
     videoEl.srcObject = null;
@@ -84,34 +142,69 @@ export async function startAr(
   }
 
   let stopped = false;
+  // Не даёт двум почти одновременным сигналам (visibilitychange + focus +
+  // pageshow при одной и той же разблокировке) переприсоединять поток
+  // параллельно: две гонки за srcObject друг друга ломали бы
+  let resuming = false;
 
   /**
    * Возобновление после блокировки экрана / сворачивания вкладки.
    *
    * Пока страница была фоном, браузер приостанавливает камеру, а часть
-   * платформ (Android Chrome) трек завершает совсем: после разблокировки
-   * <video> показывает последний кадр, хотя requestAnimationFrame рисует
-   * исправно. Живой трек достаточно снова play(), завершённый приходится
-   * запрашивать заново — разрешение на камеру уже дано, диалога не будет.
+   * платформ (Android Chrome) трек завершает совсем — тогда без вариантов
+   * нужен новый `getUserMedia` (разрешение уже дано, диалога не будет).
+   * Но есть и третий, самый частый исход: трек живой, `<video>` не на
+   * паузе, а кадр просто не обновляется. Отличить его от нормального
+   * состояния по `readyState`/`paused` нельзя — только подождать реальный
+   * кадр (`waitForFrame`). Поэтому дорогое переприсоединение (`attachStream`:
+   * pause + новый srcObject + play, с неизбежным пустым кадром на миг)
+   * делаем только когда кадр действительно не пришёл, а не при каждом
+   * возврате в приложение — иначе на десктопе даже безобидный alt-tab
+   * между окнами моргал бы кадром камеры.
    */
   const resume = async (): Promise<void> => {
-    if (stopped) return;
-    const track = stream.getVideoTracks()[0];
-    if (track && track.readyState === 'ended') {
-      stream.getTracks().forEach((t) => t.stop());
-      try {
-        stream = await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
-        videoEl.srcObject = stream;
-        readZoom();
-      } catch (err) {
-        console.warn('Камера после сворачивания не перезапустилась:', err);
+    if (stopped || resuming) return;
+    resuming = true;
+    try {
+      const track = stream.getVideoTracks()[0];
+      if (track && track.readyState === 'ended') {
+        stream.getTracks().forEach((t) => t.stop());
+        try {
+          stream = await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
+          readZoom();
+          rebindTrackEnded();
+        } catch (err) {
+          console.warn('Камера после сворачивания не перезапустилась:', err);
+          return;
+        }
+        // Новый MediaStream кадра ещё не отдавал — переприсоединение неизбежно
+        try {
+          await attachStreamAndVerify(videoEl, stream);
+        } catch {
+          // Отказ — только в лог; следующий resume() (по одному из трёх
+          // событий) попробует снова
+        }
         return;
       }
-    }
-    try {
-      await videoEl.play();
-    } catch {
-      // Повторный play при живом воспроизведении безвреден; отказ — только в лог
+      if (stopped || document.hidden) return; // страница успела снова свернуться
+      if (videoEl.paused) {
+        try {
+          await videoEl.play();
+        } catch {
+          // Если кадр так и не пойдёт — сработает детектор ниже
+        }
+      }
+      if (stopped || document.hidden) return;
+      const gotFrame = await waitForFrame(videoEl, FREEZE_CHECK_MS);
+      if (!gotFrame && !stopped && !document.hidden) {
+        try {
+          await attachStreamAndVerify(videoEl, stream);
+        } catch {
+          // Отказ — только в лог
+        }
+      }
+    } finally {
+      resuming = false;
     }
   };
 
@@ -119,10 +212,21 @@ export async function startAr(
     if (!document.hidden) void resume();
   };
   document.addEventListener('visibilitychange', onVisible);
+  window.addEventListener('focus', onVisible);
+  window.addEventListener('pageshow', onVisible);
+
   // Трек может завершиться и в видимой вкладке (камеру отобрало другое
-  // приложение) — пытаемся перезапустить сразу, не дожидаясь сворачивания
+  // приложение) — пытаемся перезапустить сразу, не дожидаясь сворачивания.
+  // Слушатель переезжает на новый трек при каждой замене потока (rebindTrackEnded)
+  // — иначе повторное завершение после перезапуска осталось бы незамеченным
   const onTrackEnded = (): void => void resume();
-  stream.getVideoTracks()[0]?.addEventListener('ended', onTrackEnded);
+  let endedTrack: MediaStreamTrack | undefined;
+  function rebindTrackEnded(): void {
+    endedTrack?.removeEventListener('ended', onTrackEnded);
+    endedTrack = stream.getVideoTracks()[0];
+    endedTrack?.addEventListener('ended', onTrackEnded);
+  }
+  rebindTrackEnded();
 
   const ctx = canvas.getContext('2d')!;
   const opacity = options.opacity ?? 0.55;
@@ -168,7 +272,9 @@ export async function startAr(
     stop: () => {
       stopped = true;
       document.removeEventListener('visibilitychange', onVisible);
-      stream.getVideoTracks()[0]?.removeEventListener('ended', onTrackEnded);
+      window.removeEventListener('focus', onVisible);
+      window.removeEventListener('pageshow', onVisible);
+      endedTrack?.removeEventListener('ended', onTrackEnded);
       cancelAnimationFrame(raf);
       stream.getTracks().forEach((t) => t.stop());
       videoEl.srcObject = null;
