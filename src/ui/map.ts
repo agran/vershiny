@@ -12,7 +12,7 @@
 
 import type { LatLon } from "../core/geo";
 import { normalizeAz } from "../core/geo";
-import { getLocale, peakName, t } from "../core/i18n";
+import { peakName, t } from "../core/i18n";
 import type { Peak } from "../core/peaks";
 import { peakScore } from "../core/peaks";
 import type { SearchHit } from "../core/search";
@@ -913,14 +913,20 @@ export function openMap(options: MapOptions): () => void {
   button(ICON_CLOSE, "left:16px;top:16px;width:44px;height:44px", () =>
     close(),
   ).title = t("close");
-  button(
+  const zoomInBtn = button(
     "＋",
     "right:16px;top:16px;width:44px;height:44px;font-size:20px",
     () => setZoom(zoom + 1),
   );
-  button("−", "right:16px;top:68px;width:44px;height:44px;font-size:22px", () =>
-    setZoom(zoom - 1),
+  zoomInBtn.title = t("mapZoomIn");
+  zoomInBtn.setAttribute("aria-label", t("mapZoomIn"));
+  const zoomOutBtn = button(
+    "−",
+    "right:16px;top:68px;width:44px;height:44px;font-size:22px",
+    () => setZoom(zoom - 1),
   );
+  zoomOutBtn.title = t("mapZoomOut");
+  zoomOutBtn.setAttribute("aria-label", t("mapZoomOut"));
   button(ICON_LOCATE, "left:16px;top:68px;width:44px;height:44px", () => {
     // К наблюдателю, а не к точке открытия: после выбора вершины он уже
     // стоит в подобранной точке обзора
@@ -985,12 +991,7 @@ export function openMap(options: MapOptions): () => void {
     if (holdMs) hintTimer = setTimeout(() => hint.remove(), holdMs);
   };
 
-  setHint(
-    getLocale() === "ru"
-      ? "Ведите карту — центр станет новой точкой. Кружок на луче поворачивает взгляд"
-      : "Pan the map — the centre becomes your new spot. Drag the knob to aim the view",
-    4000,
-  );
+  setHint(t("mapHintPan"), 4000);
 
   // --- Поиск вершины (живёт в карте, а не отдельной кнопкой на панораме) ---
   const panel = document.createElement("div");
@@ -1098,7 +1099,7 @@ export function openMap(options: MapOptions): () => void {
 
       const ele =
         hit.peak.ele !== undefined
-          ? ` · ${Math.round(hit.peak.ele)} ${getLocale() === "ru" ? "м" : "m"}`
+          ? ` · ${Math.round(hit.peak.ele)} ${t("unitM")}`
           : "";
       const title = document.createElement("span");
       title.textContent = `${peakName(hit.peak)}${ele}`;
@@ -1128,20 +1129,11 @@ export function openMap(options: MapOptions): () => void {
   async function pickPeak(hit: SearchHit): Promise<void> {
     toggleSearch(); // список свою работу сделал
     const name = peakName(hit.peak);
-    setHint(
-      getLocale() === "ru"
-        ? `Подбираю точку обзора: ${name}…`
-        : `Finding a viewpoint: ${name}…`,
-    );
+    setHint(`${t("mapHintFinding")}: ${name}…`);
 
     const spot = await options.onPickPeak(hit);
     if (!spot) {
-      setHint(
-        getLocale() === "ru"
-          ? `Не удалось подобрать точку обзора: ${name}`
-          : `No viewpoint found: ${name}`,
-        5000,
-      );
+      setHint(`${t("mapHintNoSpot")}: ${name}`, 5000);
       return;
     }
 
@@ -1154,11 +1146,7 @@ export function openMap(options: MapOptions): () => void {
     center = { ...spot.origin };
     applyHeading();
     render();
-    setHint(
-      getLocale() === "ru"
-        ? "Точка обзора подобрана. Поправьте её и нажмите «Применить»"
-        : "Viewpoint ready. Adjust it and press “Apply”",
-    );
+    setHint(t("mapHintReady"));
   }
 
   input.onkeydown = (ev) => {

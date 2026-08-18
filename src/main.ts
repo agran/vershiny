@@ -736,7 +736,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   lastObserverH = r.observerH;
   // Обновляем индикатор высоты
   const heightEl = document.getElementById("height-indicator");
-  if (heightEl) heightEl.textContent = `${Math.round(r.observerH)} м`;
+  if (heightEl) heightEl.textContent = `${Math.round(r.observerH)} ${t("unitM")}`;
   if (autoTiltPending) {
     autoTiltPending = false;
     applyAutoTilt(r);
@@ -1879,7 +1879,7 @@ function setupNavPad(): void {
   heightLabel.id = "height-indicator";
   heightLabel.style.cssText =
     "background:rgba(13,27,42,0.8);color:#f1faee;border-radius:6px;padding:2px 8px;font-size:12px;font-family:system-ui";
-  heightLabel.textContent = `${Math.round(lastObserverH)} м`;
+  heightLabel.textContent = `${Math.round(lastObserverH)} ${t("unitM")}`;
   heightPad.appendChild(heightLabel);
 
   heightBtn(ICON_DOWN, "heightDown", -100);
@@ -2130,7 +2130,7 @@ function regionLabelSync(info: RegionInfo): string {
 function adjustHeight(deltaM: number): void {
   heightOverride = (heightOverride ?? lastObserverH) + deltaM;
   const el = document.getElementById("height-indicator");
-  if (el) el.textContent = `${Math.round(heightOverride)} м`;
+  if (el) el.textContent = `${Math.round(heightOverride)} ${t("unitM")}`;
   requestCompute(lastOrigin);
 }
 

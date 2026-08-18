@@ -180,6 +180,21 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   mapGoHere: { ru: 'Перенестись сюда', en: 'Go here' },
   mapMyPosition: { ru: 'Моё положение', en: 'My position' },
   mapHeading: { ru: 'Куда смотрим — потяните', en: 'Drag to aim the view' },
+  mapZoomIn: { ru: 'Увеличить масштаб', en: 'Zoom in' },
+  mapZoomOut: { ru: 'Уменьшить масштаб', en: 'Zoom out' },
+  mapHintPan: {
+    ru: 'Ведите карту — центр станет новой точкой. Кружок на луче поворачивает взгляд',
+    en: 'Pan the map — the centre becomes your new spot. Drag the knob to aim the view',
+  },
+  mapHintFinding: { ru: 'Подбираю точку обзора', en: 'Finding a viewpoint' },
+  mapHintNoSpot: {
+    ru: 'Не удалось подобрать точку обзора',
+    en: 'No viewpoint found',
+  },
+  mapHintReady: {
+    ru: 'Точка обзора подобрана. Поправьте её и нажмите «Применить»',
+    en: 'Viewpoint ready. Adjust it and press “Apply”',
+  },
   shareInstall: { ru: 'Поделиться ссылкой на установку', en: 'Share install link' },
   shareInstallCopied: { ru: 'Ссылка скопирована', en: 'Link copied' },
   about: { ru: 'О проекте', en: 'About' },
@@ -206,6 +221,8 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   navGps: { ru: 'К моей геопозиции', en: 'To my location' },
   heightUp: { ru: 'Выше на 100 м', en: '100 m higher' },
   heightDown: { ru: 'Ниже на 100 м', en: '100 m lower' },
+  /** Единица высоты: короткая подпись после числа («5642 м» / «5642 m») */
+  unitM: { ru: 'м', en: 'm' },
   // Стороны света
   N: { ru: 'С', en: 'N' },
   NE: { ru: 'СВ', en: 'NE' },
