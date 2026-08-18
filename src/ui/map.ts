@@ -55,20 +55,15 @@ function unproject(x: number, y: number, zoom: number): LatLon {
 // --- Слой вершин (работает и без сети: данные свои, с устройства) ---
 
 /**
- * Страховочные потолки слоя вершин.
+ * Страховочный потолок кандидатов слоя вершин.
  *
- * Реальный предел подписей задаёт не счётчик, а размещение без перекрытий
- * (renderPeaks): подписи ставятся жадно от самой значимой, и метка,
- * наехавшая на уже стоящую, пропускается. Поэтому свободное место кадра
- * заполняется целиком, и вершина не исчезает только потому, что в кадр
- * вошли более значимые соседи — как было с фиксированным «топ-N на зум».
- * Эти константы — лишь защита от вырожденных случаев: CANDIDATE_CAP
- * ограничивает сортировку/проекцию в плотном кадре, PLACED_CAP — число
- * DOM-узлов (столько непересекающихся подписей на экран всё равно не
- * поместится).
+ * Реального предела по счёту нет: подписи размещаются без перекрытий
+ * (placeMapPeakLabels), и метку убирает только реальное столкновение, а не
+ * ранг. Потолок нужен лишь от вырожденного кадра — ограничивает сортировку
+ * и проекцию в плотном регионе. Вершина, к которой человек ведёт карту,
+ * не должна вылетать из-за вошедших в кадр более значимых соседей.
  */
-export const MAP_PEAK_CANDIDATE_CAP = 150;
-export const MAP_PEAK_PLACED_CAP = 64;
+export const MAP_PEAK_CANDIDATE_CAP = 400;
 
 /**
  * Отбор вершин-кандидатов для слоя карты: самые значимые В КАДРЕ по той
@@ -148,15 +143,161 @@ export function selectMapPeaks(
   return picked;
 }
 
-/**
- * Оценка прямоугольника метки «имя + высота» для размещения без перекрытий.
- * Мерять реальный DOM на каждый кадр — layout thrash, поэтому считаем по
- * длине текста: 11px system-ui ≈ 6.5 px на символ, ширина ограничена
- * max-width:140px + padding 2×4px из стилей метки. Высота — подпись (~15px)
- * плюс треугольник-маркер (8px).
- */
+// --- Размещение подписей без перекрытий ---
+
+/** Высота бокса метки: подпись (~15px) + треугольник-маркер (8px) */
+const LABEL_HEIGHT = 24;
+/** Полузазор между подписями, чтобы не слипались */
+const LABEL_GAP = 3;
+/** Сколько кадров метка помнит свой якорь, будучи временно неразмещённой */
+const LABEL_STICKY_TTL = 30;
+
+// Ширина текста — через canvas measureText с кешем: точнее оценки «6.5px
+// на символ» (та завышала бокс на узких глифах в полтора раза) и не трогает
+// layout, в отличие от getBoundingClientRect на каждом DOM-элементе. В
+// тестовом окружении canvas может не быть — тогда оценка по длине строки.
+let measureCtx: CanvasRenderingContext2D | null | undefined;
+const widthCache = new Map<string, number>();
+
+function measureLabelWidth(text: string): number {
+  let w = widthCache.get(text);
+  if (w !== undefined) return w;
+  if (measureCtx === undefined) {
+    measureCtx = null;
+    try {
+      if (typeof document !== "undefined") {
+        const ctx = document.createElement("canvas").getContext("2d");
+        if (ctx) {
+          ctx.font = "11px system-ui, sans-serif";
+          // Проверка адекватности: в jsdom/happy-dom measureText бывает
+          // заглушкой с мусором в ответе
+          const probe = ctx.measureText("probe").width;
+          if (Number.isFinite(probe) && probe > 0) measureCtx = ctx;
+        }
+      }
+    } catch {
+      measureCtx = null;
+    }
+  }
+  const raw = measureCtx ? measureCtx.measureText(text).width : text.length * 6.5;
+  // max-width:140px + padding 2×4px из стилей метки
+  w = Math.min(148, raw + 8);
+  if (widthCache.size > 4000) widthCache.clear();
+  widthCache.set(text, w);
+  return w;
+}
+
+/** Размер бокса метки «имя + высота» */
 export function mapPeakLabelSize(text: string): { w: number; h: number } {
-  return { w: Math.min(148, text.length * 6.5 + 8), h: 24 };
+  return { w: measureLabelWidth(text), h: LABEL_HEIGHT };
+}
+
+export interface MapPeakLabelItem {
+  /** Стабильный ключ вершины (координаты) — по нему работает липкость */
+  key: string;
+  /** Текст подписи («имя высота») */
+  text: string;
+  /** Экранные координаты точки вершины, px */
+  x: number;
+  y: number;
+}
+
+export interface MapPeakLabelPlaced extends MapPeakLabelItem {
+  /** Горизонтальный сдвиг подписи относительно точки, px (0 — над точкой) */
+  shift: number;
+}
+
+/** Состояние раскладки между кадрами (липкость якорей) */
+export interface LabelLayoutState {
+  /** Ключ вершины → якорь (0 — по центру, 1 — вправо, 2 — влево) прошлого кадра */
+  anchor: Map<string, number>;
+  /** Ключ → сколько кадров подряд метка не встала */
+  age: Map<string, number>;
+}
+
+export function createLabelLayoutState(): LabelLayoutState {
+  return { anchor: new Map(), age: new Map() };
+}
+
+/**
+ * Размещение подписей без перекрытий.
+ *
+ * Три принципа, каждый — против конкретной болезни:
+ *  1) нет потолка по счёту — метку убирает только реальное перекрытие;
+ *  2) липкость: то, что стояло в прошлом кадре, размещается первым, поэтому
+ *     вершина, к которой человек ведёт карту, не гаснет от вошедшего
+ *     более значимого соседа — сосед сам уйдёт на другой якорь;
+ *  3) три якоря (над точкой, правее, левее): при нехватке места подпись
+ *     отходит в сторону, а не пропадает; маркер остаётся на вершине.
+ *
+ * Цена липкости — результат зависит от истории: тот же кадр, достигнутый
+ * другим путём, может дать другую раскладку. Это осознанный размен ради
+ * стабильности кадр-кадру (в MapLibre ту же роль играет переносимый
+ * CollisionIndex с fade-переходами).
+ */
+export function placeMapPeakLabels(
+  items: MapPeakLabelItem[],
+  state: LabelLayoutState = createLabelLayoutState(),
+): MapPeakLabelPlaced[] {
+  const placed: number[] = []; // плоско: x0, y0, x1, y1
+  const out: MapPeakLabelPlaced[] = [];
+  const nextAnchor = new Map<string, number>();
+  const nextAge = new Map<string, number>();
+
+  const hits = (x0: number, y0: number, x1: number, y1: number): boolean => {
+    for (let i = 0; i < placed.length; i += 4) {
+      if (x0 < placed[i + 2] && x1 > placed[i] && y0 < placed[i + 3] && y1 > placed[i + 1]) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // Два прохода: сперва стоявшие в прошлом кадре (в их порядке значимости),
+  // потом новички — вошедшая в кадр доминанта не выбивает ведомую вершину
+  const wasShown = (it: MapPeakLabelItem): boolean => state.anchor.has(it.key);
+  const passes = [items.filter(wasShown), items.filter((it) => !wasShown(it))];
+
+  for (const pass of passes) {
+    for (const it of pass) {
+      const { w: bw, h: bh } = mapPeakLabelSize(it.text);
+      // Якоря: сдвиг центра подписи относительно точки. Сдвинутая подпись
+      // целиком уходит за пределы маркера плюс небольшой отступ
+      const shifts = [0, bw / 2 + 10, -(bw / 2 + 10)];
+      const prev = state.anchor.get(it.key);
+      // Прошлый якорь пробуем первым: подпись не должна прыгать вокруг точки
+      const order =
+        prev === undefined ? [0, 1, 2] : [prev, ...[0, 1, 2].filter((i) => i !== prev)];
+
+      let done = false;
+      for (const ai of order) {
+        const cx = it.x + shifts[ai];
+        const x0 = cx - bw / 2 - LABEL_GAP;
+        const x1 = cx + bw / 2 + LABEL_GAP;
+        const y0 = it.y - bh - LABEL_GAP;
+        const y1 = it.y + LABEL_GAP;
+        if (hits(x0, y0, x1, y1)) continue;
+        placed.push(x0, y0, x1, y1);
+        out.push({ ...it, shift: shifts[ai] });
+        nextAnchor.set(it.key, ai);
+        done = true;
+        break;
+      }
+      if (!done && prev !== undefined) {
+        // Не встала — но липкость держим ещё TTL кадров, чтобы при обратном
+        // движении карты она вернулась на тот же якорь, а одиночный кадр
+        // невезения не сбрасывал историю
+        const age = (state.age.get(it.key) ?? 0) + 1;
+        if (age < LABEL_STICKY_TTL) {
+          nextAnchor.set(it.key, prev);
+          nextAge.set(it.key, age);
+        }
+      }
+    }
+  }
+  state.anchor = nextAnchor;
+  state.age = nextAge;
+  return out;
 }
 
 export interface ProjectedMapPeak {
@@ -279,8 +420,12 @@ export function openMap(options: MapOptions): () => void {
   let mapPeaks: Peak[] = options.peaks ? [...options.peaks] : [];
   /** Пул DOM-элементов меток: скрываем лишние, а не удаляем */
   const peakEls: HTMLElement[] = [];
+  /** Раскладка подписей между кадрами: липкость якорей (placeMapPeakLabels) */
+  const labelLayout = createLabelLayoutState();
   /** Слой виден, только пока тайлы не загрузились (офлайн) — см. render */
   let peaksLayerNeeded = true;
+  /** Дебаунс переключения слоя: тайлы догружаются рывками, не дёргаем слой */
+  let layerFlipTimer: ReturnType<typeof setTimeout> | undefined;
 
   /** Спрятать все метки вершин (слой закрыт тайлами, пуст или карта нулевая) */
   const hidePeakLabels = (): void => {
@@ -294,17 +439,33 @@ export function openMap(options: MapOptions): () => void {
    * дырявее с закрытым слоем, чем с двойными подписями.
    */
   const updatePeaksLayerNeed = (): void => {
-    let anyOk = false;
-    let anyFailed = false;
+    // Кадр считается покрытым, когда есть загрузившиеся тайлы, ни один не
+    // упал и не осталось летящих: иначе при панорамировании въезжающие
+    // незагруженные тайлы включали и выключали слой по несколько раз в секунду
+    let okCount = 0;
+    let failedCount = 0;
+    let pendingCount = 0;
     for (const img of tiles.values()) {
-      if (img.dataset.ok) anyOk = true;
-      else if (img.dataset.failed) anyFailed = true;
+      if (img.dataset.ok) okCount++;
+      else if (img.dataset.failed) failedCount++;
+      else pendingCount++;
     }
-    const needed = !(anyOk && !anyFailed);
-    if (needed !== peaksLayerNeeded) {
-      peaksLayerNeeded = needed;
-      renderPeaks();
+    const needed = !(okCount > 0 && failedCount === 0 && pendingCount === 0);
+    if (needed === peaksLayerNeeded) {
+      // Состояние снова согласовано — отложенное переключение не нужно
+      if (layerFlipTimer !== undefined) {
+        clearTimeout(layerFlipTimer);
+        layerFlipTimer = undefined;
+      }
+      return;
     }
+    // Переключение — с дебаунсом: одиночный запоздавший тайл не должен
+    // мигать слоем; по таймауту пересчитываем на свежем состоянии
+    if (layerFlipTimer !== undefined) return;
+    layerFlipTimer = setTimeout(() => {
+      layerFlipTimer = undefined;
+      updatePeaksLayerNeed();
+    }, 250);
   };
 
   /** Перерисовать слой вершин под текущий центр/зум */
@@ -318,41 +479,24 @@ export function openMap(options: MapOptions): () => void {
     peaksLayer.style.display = "block";
     const selected = selectMapPeaks(mapPeaks, zoom, center, w, h);
     const projected = projectPeaks(selected, center, zoom, w, h);
-
-    // Размещение без перекрытий: жадно от самой значимой — метка, наехавшая
-    // на уже стоящую, пропускается. Свободное место кадра заполняется
-    // целиком: вершина не исчезает из-за того, что в кадр вошли более
-    // значимые соседи, — только из-за реального столкновения подписей
-    const GAP = 4; // полузазор между подписями, чтобы не слипались
-    const placed: number[] = []; // плоско: x0, y0, x1, y1
-    const accepted: Array<ProjectedMapPeak & { text: string }> = [];
-    outer: for (const p of projected) {
-      if (accepted.length >= MAP_PEAK_PLACED_CAP) break;
-      const text =
-        p.peak.ele !== undefined
-          ? `${peakName(p.peak)} ${Math.round(p.peak.ele)}`
-          : peakName(p.peak);
-      const { w: bw, h: bh } = mapPeakLabelSize(text);
-      // Элемент прибит к точке через translate(-50%,-100%): прямоугольник
-      // над точкой, по центру
-      const x0 = p.x - bw / 2 - GAP;
-      const x1 = p.x + bw / 2 + GAP;
-      const y0 = p.y - bh - GAP;
-      const y1 = p.y + GAP;
-      for (let i = 0; i < placed.length; i += 4) {
-        if (x0 < placed[i + 2] && x1 > placed[i] && y0 < placed[i + 3] && y1 > placed[i + 1]) {
-          continue outer;
-        }
-      }
-      placed.push(x0, y0, x1, y1);
-      accepted.push({ ...p, text });
-    }
+    const placedLabels = placeMapPeakLabels(
+      projected.map((p) => ({
+        key: `${p.peak.lat.toFixed(5)},${p.peak.lon.toFixed(5)}`,
+        text:
+          p.peak.ele !== undefined
+            ? `${peakName(p.peak)} ${Math.round(p.peak.ele)}`
+            : peakName(p.peak),
+        x: p.x,
+        y: p.y,
+      })),
+      labelLayout,
+    );
 
     let used = 0;
-    // Главные рисуем последними (выше в DOM): accepted отсортирован по
-    // убыванию значимости, поэтому идём с хвоста
-    for (let i = accepted.length - 1; i >= 0; i--) {
-      const { x, y, text } = accepted[i];
+    // Главные рисуем последними (выше в DOM): placeMapPeakLabels вернул их
+    // по убыванию значимости, поэтому идём с хвоста
+    for (let i = placedLabels.length - 1; i >= 0; i--) {
+      const { x, y, text, shift } = placedLabels[i];
 
       let el = peakEls[used];
       if (!el) {
@@ -377,7 +521,10 @@ export function openMap(options: MapOptions): () => void {
       }
       // Подпись — ПЕРВЫЙ ребёнок (label), маркер-стрелка вторым: иначе текст
       // уходил в треугольник, оставался без стилей и разворачивался крупно
-      (el.firstElementChild as HTMLElement).textContent = text;
+      const label = el.firstElementChild as HTMLElement;
+      label.textContent = text;
+      // Сдвинутый якорь: уезжает только подпись, маркер остаётся на вершине
+      label.style.transform = shift ? `translateX(${shift}px)` : "";
       el.style.left = `${x}px`;
       el.style.top = `${y}px`;
       el.style.display = "flex";
@@ -711,6 +858,10 @@ export function openMap(options: MapOptions): () => void {
     stopResize?.();
     resizeObserver = null;
     stopPeaksFeed();
+    if (layerFlipTimer !== undefined) {
+      clearTimeout(layerFlipTimer);
+      layerFlipTimer = undefined;
+    }
     options.onClose?.();
   };
 

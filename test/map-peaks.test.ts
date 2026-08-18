@@ -10,6 +10,8 @@ import {
   mapPeakLabelSize,
   selectMapPeaks,
   projectPeaks,
+  placeMapPeakLabels,
+  createLabelLayoutState,
 } from "../src/ui/map";
 import type { Peak } from "../src/core/peaks";
 
@@ -22,14 +24,15 @@ const peak = (name: string, ele: number, lat = 43, lon = 42): Peak => ({
 
 describe("потолки слоя вершин", () => {
   it("кадр не отдаёт больше страховочного потолка кандидатов", () => {
-    // Реальный предел подписей — размещение без перекрытий в renderPeaks;
+    // Реальный предел подписей — размещение без перекрытий (placeMapPeakLabels);
     // здесь лишь защита от плотного кадра (сортировка/проекция/DOM)
-    const many = Array.from({ length: 300 }, (_, i) =>
+    const count = MAP_PEAK_CANDIDATE_CAP + 100;
+    const many = Array.from({ length: count }, (_, i) =>
       peak(`V${i}`, 1000 + i, 42 + (i % 30) * 0.02, 41 + ((i / 30) | 0) * 0.02),
     );
     const selected = selectMapPeaks(many, 11);
     expect(selected).toHaveLength(MAP_PEAK_CANDIDATE_CAP);
-    expect(selected[0].name).toBe("V299"); // самая высокая — первой
+    expect(selected[0].name).toBe(`V${count - 1}`); // самая высокая — первой
   });
 
   it("оценка подписи ограничена max-width из стилей метки", () => {
@@ -204,5 +207,72 @@ describe("projectPeaks", () => {
     // чуть правее центра, а не «за левым краем мира» в сотнях тысяч пикселей
     expect(p.x).toBeGreaterThan(400);
     expect(p.x).toBeLessThan(800);
+  });
+});
+
+describe("placeMapPeakLabels", () => {
+  // В тестовом окружении canvas-замер недоступен → ширина ≈ 6.5px/символ + 8
+  const item = (key: string, x: number, y: number, text = key) => ({
+    key,
+    text,
+    x,
+    y,
+  });
+
+  it("размещает всех, пока подписи не перекрываются", () => {
+    const state = createLabelLayoutState();
+    const placed = placeMapPeakLabels(
+      [item("a", 100, 100), item("b", 400, 100), item("c", 100, 400)],
+      state,
+    );
+    expect(placed).toHaveLength(3);
+    expect(placed.every((p) => p.shift === 0)).toBe(true); // всем хватило центра
+  });
+
+  it("при нехватке места подпись уходит на сдвинутый якорь, а не пропадает", () => {
+    const state = createLabelLayoutState();
+    const placed = placeMapPeakLabels(
+      [item("a", 100, 100), item("b", 130, 100, "оченьдлинноеимя 9999")],
+      state,
+    );
+    const b = placed.find((p) => p.key === "b");
+    expect(b).toBeDefined();
+    expect(b!.shift).not.toBe(0);
+  });
+
+  it("совсем тесная метка пропускается, но не рвёт остальных", () => {
+    const state = createLabelLayoutState();
+    // «b» в той же точке, что и «a»: ни один из трёх якорей не влезает
+    const placed = placeMapPeakLabels(
+      [item("a", 100, 100), item("b", 100, 100), item("c", 500, 100)],
+      state,
+    );
+    expect(placed.map((p) => p.key)).toEqual(["a", "c"]);
+  });
+
+  it("липкость: вошедшая более значимая вершина не выбивает уже стоящую", () => {
+    // Регрессия: пользователь ведёт карту к вершине у края, в кадр входят
+    // более значимые соседи — и целевая исчезала, хотя место на экране было
+    const state = createLabelLayoutState();
+    // Кадр 1: целевая стоит одна
+    placeMapPeakLabels([item("target", 200, 200)], state);
+    // Кадр 2: новичок значимее (первым в списке) и почти в той же точке —
+    // без липкости он занял бы центр, а «target» не влез бы ни в один якорь
+    const placed = placeMapPeakLabels(
+      [item("new", 200, 200), item("target", 200, 200)],
+      state,
+    );
+    expect(placed.map((p) => p.key)).toContain("target");
+  });
+
+  it("липкий якорь не прыгает: метка держит прошлую сторону, пока она свободна", () => {
+    const state = createLabelLayoutState();
+    placeMapPeakLabels(
+      [item("a", 100, 100), item("b", 130, 100, "оченьдлинноеимя 9999")],
+      state,
+    );
+    // Кадр 2: «a» ушла, у «b» центр свободен — но якорь липкий, не дёргаемся
+    const placed = placeMapPeakLabels([item("b", 130, 100, "оченьдлинноеимя 9999")], state);
+    expect(placed[0].shift).not.toBe(0);
   });
 });
