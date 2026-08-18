@@ -66,8 +66,8 @@
       -67.0,
       -15.0
     ],
-    "core_ru": "Иллимани (6438м), Уайна-Потоси (6088м), Чекарани",
-    "core_en": "Illimani (6438m), Huayna Potosí (6088m), Chekarama",
+    "core_ru": "Иллимани (6438м), Уайна-Потоси (6088м), Чеароко",
+    "core_en": "Illimani (6438m), Huayna Potosí (6088m), Chearoco",
     "priority": 1,
     "group": "Анды"
   },
@@ -178,7 +178,7 @@
       80.5,
       31.5
     ],
-    "core_ru": "Нанда-Деви (7816м), Кедарнатх (3583м), Ганготри, Пинари-ледник",
+    "core_ru": "Нанда-Деви (7816м), Кедарнатх (3583м), Ганготри, Бандарпунч",
     "core_en": "Nanda Devi (7816m), Bandarpunch, Gangotri, Kedarnath",
     "priority": 1,
     "group": "Гималаи"
@@ -234,8 +234,8 @@
       80.5,
       35.5
     ],
-    "core_ru": "Сточр-Кангри (6153м), Занскарский хребет, Лех, Занскар-каньон",
-    "core_en": "Stok Kangri (6153m), Stanzin, Zanskar",
+    "core_ru": "Сток-Кангри (6153м), Занскарский хребет, Лех, Занскар-каньон",
+    "core_en": "Stok Kangri (6153m), Zanskar Range, Leh, Zanskar Canyon",
     "priority": 1,
     "group": "Гималаи"
   },
@@ -618,7 +618,7 @@
     "group": "Колумбия"
   },
   "himalaya-central": {
-    "title_ru": "Центральная Гималаи",
+    "title_ru": "Центральные Гималаи",
     "title_en": "Central Himalaya",
     "bbox": [
       80.0,
@@ -657,7 +657,7 @@
     "core_ru": "Тигер-Тыш, Шерегеш, Мустаг",
     "core_en": "Tiger-Tysh, Sheregesh, Mustag",
     "priority": 3,
-    "group": "Прочее"
+    "group": "Сибирь и Алтай"
   },
   "pamir": {
     "title_ru": "Памир",
@@ -682,7 +682,7 @@
       -70.0,
       -39.5
     ],
-    "core_ru": "Трондор (3478м), Тронадор, Черепаховая тропа, Нахуэль-Уапи",
+    "core_ru": "Тронадор (3478м), Черепаховая тропа, Нахуэль-Уапи",
     "core_en": "Tronador (3478m), Turtle Trail, Nahuel Huapi",
     "priority": 3,
     "group": "Патагония"
@@ -753,7 +753,7 @@
       57.0
     ],
     "core_ru": "Красноярские Столбы, Манские Белки, Борус",
-    "core_en": "Krasnoyarsk Stolby, Byurert",
+    "core_en": "Krasnoyarsk Stolby, Borus",
     "priority": 3,
     "group": "Сибирь и Алтай"
   },
