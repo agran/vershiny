@@ -502,6 +502,17 @@ describe("многострочная подпись", () => {
     expect(texts.find((t) => t.text === "Джанги-Тау")).toBeUndefined();
   });
 
+  it("перенос работает и для скрытых вершин", () => {
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon, "Длинное Название");
+    (st.peaks[0] as unknown as { visibility: string }).visibility = "hidden";
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    expect(texts.find((t) => t.text === "Длинное")).toBeDefined();
+    expect(texts.find((t) => t.text === "Название")).toBeDefined();
+  });
+
   it("строки центрируются под первой (по оси текста)", () => {
     const horizon = new Float32Array(2000).fill(0.05);
     const { ctx, texts } = makeCtx();
