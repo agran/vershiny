@@ -353,6 +353,7 @@ describe("многострочная подпись", () => {
     "Большой": 100,
     "Пик": 480,
     "Широкий": 200,
+    "Монолит": 1400,
   };
 
   /** Контекст, который ведёт счёт transform-ов и собирает fillText */
@@ -462,17 +463,30 @@ describe("многострочная подпись", () => {
     expect(texts.find((t) => t.text === "Широкий · 5642 м")).toBeUndefined();
   });
 
-  it("когда вторая строка не помещается в кадр, остаётся одна строка", () => {
-    // Вершина у самого правого края: вторая строка целиком за кадром
+  it("если перенос не помогает, полная строка уходит за край, ничего не скрывая", () => {
+    // Вершина у самого правого края: ни одна раскладка не влезает целиком —
+    // ставится полная строка, частично уходящая за правый край
     const horizon = new Float32Array(2000).fill(0.05);
     const st = state(horizon);
     (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = 0.5525;
     const { ctx, texts } = makeCtx();
     drawOverlay(ctx, st, view, 1, { ridges: false });
 
-    // Название помещается, а хвост и вторая строка — нет
-    expect(texts.find((t) => t.text === "Эльбрус")).toBeDefined();
-    expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeUndefined();
+    expect(
+      texts.find((t) => t.text === "Эльбрус · 5642 м · 5.0 км"),
+    ).toBeDefined();
+    expect(texts.find((t) => t.text === "Эльбрус")).toBeUndefined();
+  });
+
+  it("длинное название без разрывов уходит за оба края, а не скрывается", () => {
+    const horizon = new Float32Array(2000).fill(0.05);
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, state(horizon, "Монолит"), view, 1, { ridges: false });
+
+    // Переносить не по чему — полная строка торчит за оба края кадра
+    expect(
+      texts.find((t) => t.text === "Монолит · 5642 м · 5.0 км"),
+    ).toBeDefined();
   });
 
   it("название, не влезающее в строку, переносится по пробелу", () => {

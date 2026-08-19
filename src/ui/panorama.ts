@@ -1076,8 +1076,10 @@ function drawLabels(
       },
       nameScore: number,
       infoParts: number,
+      penalty = 0,
     ): void => {
-      const score = nameScore * 100 + infoParts * 10 - res.draw.length;
+      const score =
+        nameScore * 100 + infoParts * 10 - penalty - res.draw.length;
       if (score > bestScore) {
         bestScore = score;
         result.value = res;
@@ -1172,6 +1174,36 @@ function drawLabels(
           if (any) break wrapped;
         }
       }
+
+    // D. Перенос не помог (нет точек разрыва или фрагмент всё равно не
+    // влезает): полная строка может частично уходить за левый и правый край
+    // экрана — ничего не скрываем, лишнее обрежет канвас. Штраф в критерии
+    // держит D ниже всех влезающих раскладок (включая перенос), но выше
+    // тех, что что-нибудь скрывают.
+    const fullBox = {
+      v: ax * vx + ay * vy,
+      u0: ax * ux + ay * uy,
+      u1: ax * ux + ay * uy + fullW,
+    };
+    if (!conflicts([fullBox])) {
+      consider(
+        {
+          draw: [
+            {
+              ax,
+              ay,
+              text: parts.join(LABEL_SEP),
+              first: 0,
+              last: parts.length - 1,
+            },
+          ],
+          boxes: [fullBox],
+        },
+        2,
+        parts.length - 1,
+        5,
+      );
+    }
 
     if (!result.value) return false; // ни одна раскладка не влезла — прячем всё
 
