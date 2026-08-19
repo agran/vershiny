@@ -954,8 +954,14 @@ function drawLabels(
       draw: DrawLine[];
       boxes: { v: number; u0: number; u1: number }[];
     } | null => {
-      const boxes: { v: number; u0: number; u1: number }[] = [];
-      const draw: DrawLine[] = [];
+      // Проход 1: почастная обрезка краем кадра БЕЗ сдвига (как раньше).
+      // Обрезать уже сдвинутую строку нельзя: обрезка меняет ширину, ширина
+      // меняет сдвиг, сдвиг меняет обрезку — цикл. Поэтому двухфазно.
+      const trimmed: {
+        line: LineCand;
+        range: { first: number; last: number };
+        w: number;
+      }[] = [];
       for (let i = 0; i < lines.length && i < MAX_LABEL_LINES; i++) {
         const line = lines[i];
         const b = lineBase(line.k);
@@ -972,20 +978,66 @@ function drawLabels(
             uiScale,
           ),
         );
-        if (!range) return i === 0 ? null : { draw, boxes };
+        if (!range) break; // строку и всё, что под ней, отбрасываем
+        trimmed.push({
+          line,
+          range,
+          w: line.prefixW[range.last + 1] - line.prefixW[range.first],
+        });
+      }
+      if (trimmed.length === 0) return null;
+
+      // Проход 2: сдвиги центрирования. Строка 0 — база (выноска ведёт к её
+      // первой букве), остальные центрируются под ней: off = (w0 − wk)/2,
+      // с округлением до целых пикселей — иначе субпиксельное дрожание ширин
+      // из кеша даст мерцание текста между кадрами.
+      const off: number[] = [];
+      for (let i = 1; i < trimmed.length; i++) {
+        off.push(Math.round((trimmed[0].w - trimmed[i].w) / 2));
+      }
+
+      // Проход 3: перепроверка со сдвигом. Сдвинутая строка не влезла (в кадр
+      // или в свою дорожку) — детерминированный откат к выравниванию влево;
+      // если и влево не влезает — строку (и всё ниже) отбрасываем.
+      const boxes: { v: number; u0: number; u1: number }[] = [];
+      const draw: DrawLine[] = [];
+      for (let i = 0; i < trimmed.length; i++) {
+        const { line, range, w } = trimmed[i];
+        const b = lineBase(line.k);
         const base = b.x * ux + b.y * uy;
-        const box = {
+        const startU = line.prefixW[range.first];
+        let o = i === 0 ? 0 : off[i - 1];
+        const fits = (s: number): boolean =>
+          labelFullyOnScreen(
+            b.x + (startU + s) * ux,
+            b.y + (startU + s) * uy,
+            w,
+            ux,
+            uy,
+            view.rollRad ?? 0,
+            width,
+            height,
+            uiScale,
+          );
+        const boxOf = (s: number): { v: number; u0: number; u1: number } => ({
           v: b.x * vx + b.y * vy,
-          u0: base + line.prefixW[range.first],
-          u1: base + line.prefixW[range.last + 1],
-        };
+          u0: base + startU + s,
+          u1: base + startU + s + w,
+        });
+        let box = boxOf(o);
+        if (o !== 0 && (!fits(o) || conflicts(boxes.concat([box])))) {
+          o = 0;
+          box = boxOf(0);
+        }
+        // fits(0) гарантирован проходом 1 — остаётся проверить дорожку
         if (conflicts(boxes.concat([box]))) {
-          return i === 0 ? null : { draw, boxes };
+          if (i === 0) return null;
+          break;
         }
         boxes.push(box);
         draw.push({
-          ax: b.x + ux * line.prefixW[range.first],
-          ay: b.y + uy * line.prefixW[range.first],
+          ax: b.x + ux * (startU + o),
+          ay: b.y + uy * (startU + o),
           text: line.parts.slice(range.first, range.last + 1).join(LABEL_SEP),
           first: range.first,
           last: range.last,

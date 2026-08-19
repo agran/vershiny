@@ -345,6 +345,9 @@ describe("многострочная подпись", () => {
     "Джанги-Тау": 600,
     "Джанги-": 250,
     "Тау": 300,
+    "Большой Пик": 1900,
+    "Большой": 100,
+    "Пик": 400,
   };
 
   /** Контекст, который ведёт счёт transform-ов и собирает fillText */
@@ -475,6 +478,46 @@ describe("многострочная подпись", () => {
     expect(texts.find((t) => t.text === "Джанги-")).toBeDefined();
     expect(texts.find((t) => t.text === "Тау")).toBeDefined();
     expect(texts.find((t) => t.text === "Джанги-Тау")).toBeUndefined();
+  });
+
+  it("строки центрируются под первой (по оси текста)", () => {
+    const horizon = new Float32Array(2000).fill(0.05);
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, state(horizon, "Длинное Название"), view, 1, {
+      ridges: false,
+    });
+
+    // Проекция точки на ось текста u (то же, что в раскладке)
+    const uOf = (t: { x: number; y: number }): number =>
+      t.x * 0.5 - t.y * Math.sin(Math.PI / 3);
+    const center = (t: { x: number; y: number }, w: number): number =>
+      uOf(t) + w / 2;
+    const name = texts.find((t) => t.text === "Длинное")!;
+    const tail = texts.find((t) => t.text === "Название")!;
+    const info = texts.find((t) => t.text === "5642 м · 5.0 км")!;
+    const cName = center(name, WIDTHS["Длинное"]);
+    // Сдвиги округляются до целых пикселей — допуск 1 px
+    expect(Math.abs(center(tail, WIDTHS["Название"]) - cName)).toBeLessThanOrEqual(1);
+    const wInfo =
+      WIDTHS["5642 м"] + WIDTHS[" · "] + WIDTHS["5.0 км"];
+    expect(Math.abs(center(info, wInfo) - cName)).toBeLessThanOrEqual(1);
+  });
+
+  it("сдвиг, выталкивающий строку за край кадра, откатывается к левому выравниванию", () => {
+    // Горизонт −0.1 рад: якорь ниже, чтобы хвост (400 px) помещался по высоте
+    const horizon = new Float32Array(2000).fill(-0.1);
+    const st = state(horizon, "Большой Пик");
+    (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = -0.34;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    const f0 = texts.find((t) => t.text === "Большой")!;
+    const tail = texts.find((t) => t.text === "Пик")!;
+    // Якорь без сдвига: 60 (азимут) + 3.5 (LEAD вдоль u)
+    expect(f0.x).toBeCloseTo(63.5, 0);
+    // Отцентрованный хвост ушёл бы за левый край (off = −150) — откат к 0:
+    // база строки 1 = якорь + LINE_H·vx = 63.5 + 13
+    expect(tail.x).toBeCloseTo(76.5, 0);
   });
 });
 
