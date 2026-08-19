@@ -775,8 +775,18 @@ export function drawArOverlayCached(
     // чтобы совместить, переносим начало координат
     rctx.translate(marginX, marginY);
     lctx.translate(marginX, marginY);
-    drawOverlay(rctx, state, cacheView, uiScale, { ...cacheOpts, labels: false });
-    drawOverlay(lctx, state, cacheView, uiScale, { ...cacheOpts, ridges: false });
+    drawOverlay(rctx, state, cacheView, uiScale, {
+      ...cacheOpts,
+      labels: false,
+      viewWidth: width,
+      viewHeight: height,
+    });
+    drawOverlay(lctx, state, cacheView, uiScale, {
+      ...cacheOpts,
+      ridges: false,
+      viewWidth: width,
+      viewHeight: height,
+    });
     rctx.restore();
     lctx.restore();
 

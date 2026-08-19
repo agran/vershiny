@@ -3,10 +3,11 @@
  * поверхности, не должны соединяться ложной «вертикалью» через весь кадр.
  */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
     buildRidgeSegments,
     decimateSegments,
+    drawOverlay,
     labelVisibleOnScreen,
     MAX_RIDGE_SLOPE,
     rollEdgeMarginX,
@@ -36,6 +37,64 @@ function segmentsOf(profile: number[]): { x: number; y: number }[][] {
     HEIGHT,
   );
 }
+
+/**
+ * Разбиение силуэта на сегменты: соседние лучи, попавшие на разные
+ * поверхности, не должны соединяться ложной «вертикалью» через весь кадр.
+ */
+
+describe("оверлей в буфере с полями (кэш AR)", () => {
+  it("проекция считается от видимой области, а не от поверхности", () => {
+    const points: [number, number][] = [];
+    const ctx = {
+      canvas: { width: 1440, height: 810, clientWidth: 800, clientHeight: 450 },
+      beginPath: () => {},
+      moveTo: (x: number, y: number) => points.push([x, y]),
+      lineTo: () => {},
+      stroke: () => {},
+      strokeText: () => {},
+      fillText: () => {},
+      measureText: vi.fn(() => ({ width: 10 })),
+      set font(_v: string) {},
+      set textAlign(_v: string) {},
+      set lineJoin(_v: string) {},
+      set lineCap(_v: string) {},
+      set strokeStyle(_v: unknown) {},
+      set fillStyle(_v: unknown) {},
+      set lineWidth(_v: number) {},
+      set miterLimit(_v: number) {},
+      set globalAlpha(_v: number) {},
+    } as unknown as CanvasRenderingContext2D;
+
+    const state = {
+      horizon: new Float32Array(0),
+      peaks: [],
+      stepRad: 0.001,
+    } as unknown as PanoramaState;
+    const view = {
+      centerAzRad: 0,
+      tiltRad: 0,
+      fovRad: 1,
+      fovVRad: 1,
+      rollRad: 0,
+    } as never;
+
+    drawOverlay(ctx, state, view, 1, {
+      labels: false,
+      viewWidth: 800,
+      viewHeight: 450,
+    });
+
+    // Тик шкалы на азимуте 0: x — центр видимой области, y — её горизонт.
+    // Без viewWidth/viewHeight горизонт считался бы от буфера (810·0.62),
+    // и контуры вместе с ним уезжали за нижний край экрана
+    expect(points).toContainEqual([400, 450 * 0.62]);
+    const bufferHorizon = points.filter(
+      ([, y]) => Math.abs(y - 810 * 0.62) < 0.5,
+    );
+    expect(bufferHorizon).toHaveLength(0);
+  });
+});
 
 describe("силуэт: разбиение на сегменты", () => {
   it("плавный гребень остаётся одной линией", () => {

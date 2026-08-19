@@ -154,6 +154,15 @@ export interface OverlayOptions {
    * чтобы проекция не прыгала при каждом перерендере
    */
   anchorAzRad?: number;
+  /**
+   * Размеры ВИДИМОЙ области, если оверлей рисуется в буфер большего
+   * размера (кэш AR с полями запаса): проекция считается от этих размеров,
+   * холст — лишь поверхность. Без этого горизонт и масштаб берутся от
+   * буфера, оверлей растягивается в bufH/height раз и уезжает за нижний
+   * край экрана
+   */
+  viewWidth?: number;
+  viewHeight?: number;
 }
 
 /**
@@ -204,7 +213,13 @@ export function drawOverlay(
   uiScaleOverride?: number,
   overlay: OverlayOptions = {},
 ): void {
-  const { width, height } = ctx.canvas;
+  const canvasW = ctx.canvas.width;
+  const canvasH = ctx.canvas.height;
+  // Кеш AR рисует оверлей в буфер с полями запаса: проекция обязана
+  // считаться от размеров ВИДИМОЙ области, а не поверхности рисования —
+  // иначе горизонт уезжает к низу буфера, и контуры падают за экран
+  const width = overlay.viewWidth ?? canvasW;
+  const height = overlay.viewHeight ?? canvasH;
   const horizonY = height * HORIZON_FRAC;
   const drawRidges = overlay.ridges !== false;
   const tTotal = perfEnabled ? performance.now() : 0;
@@ -325,7 +340,17 @@ export function drawOverlay(
   // Подписи пиков с кластеризацией. Отдельным флагом: AR рисует их вторым
   // проходом без полупрозрачности (labels:false у прохода с контурами)
   if (overlay.labels !== false) {
-    drawLabels(ctx, state.peaks, azToX, elevToY, view, state, uiScale);
+    drawLabels(
+      ctx,
+      state.peaks,
+      azToX,
+      elevToY,
+      view,
+      state,
+      uiScale,
+      width,
+      height,
+    );
   }
   if (perfEnabled) {
     perfPhase("labels", performance.now() - tSection);
@@ -651,8 +676,9 @@ function drawLabels(
   view: ViewState,
   state: PanoramaState,
   uiScale: number,
+  width: number,
+  height: number,
 ): void {
-  const { width, height } = ctx.canvas;
   const labelFont = `${13 * uiScale}px system-ui, sans-serif`;
   ctx.font = labelFont;
   // Обратная проекция экрана в азимут — для обрыва выносок о силуэт
