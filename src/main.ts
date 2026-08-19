@@ -175,9 +175,32 @@ const touchOnly =
  */
 let captionLayoutQueued = false;
 
+/**
+ * Верхняя плотность пикселей холста. Полный devicePixelRatio — это 3840×2160
+ * на 4K@200% и 9+ Мп на телефоне с DPR 3: заливка градиента, stroke контуров
+ * и композитинг растут с квадратом плотности, а разница между DPR 2 и 3
+ * на линиях 1.4 CSS px и тексте 13 px глазу не видна
+ */
+const MAX_DPR = 2;
+/**
+ * Плотность на время ручного поворота (мышь, свайп без датчиков): детали
+ * движущейся картинки глаз не различает, а при отпускании resize() вернёт
+ * полное разрешение и перерисует финальный кадр тем же событием
+ */
+const DRAG_DPR = 1;
+/**
+ * Холст сейчас в пониженном разрешении из-за drag.
+ * Стоит ДО resize() по той же причине, что и captionLayoutQueued выше:
+ * resize() вызывается при вычислении модуля, и обращение к `let`, объявленной
+ * ниже по файлу (dragging, arSession), — TDZ ReferenceError на iPhone
+ */
+let dragLowRes = false;
+
 function resize(): void {
-  canvas.width = Math.round(canvas.clientWidth * devicePixelRatio);
-  canvas.height = Math.round(canvas.clientHeight * devicePixelRatio);
+  const dpr = Math.min(devicePixelRatio || 1, MAX_DPR);
+  const scale = dragLowRes ? Math.min(dpr, DRAG_DPR) : dpr;
+  canvas.width = Math.round(canvas.clientWidth * scale);
+  canvas.height = Math.round(canvas.clientHeight * scale);
   syncFov();
   layoutControls();
   // Плашки подписей привязаны к кнопкам: кнопки переехали — плашки тоже
@@ -219,6 +242,17 @@ if (
   });
 } else {
   window.addEventListener("orientationchange", () => setTimeout(resize, 50));
+}
+
+/**
+ * Переключение разрешения на время ручного поворота и обратно. Смена размера
+ * холста очищает его, поэтому идём через resize() — он сам перерисует кадр
+ * (на pointerup это и есть финальный чёткий кадр жеста)
+ */
+function setDragLowRes(on: boolean): void {
+  if (dragLowRes === on) return;
+  dragLowRes = on;
+  resize();
 }
 
 const view: ViewState = {
@@ -281,6 +315,32 @@ function draw(): void {
   // миллисекунды — 10–60 лишних рендеров в секунду впустую
   if (arSession) return;
   renderPanorama(ctx, panorama, view);
+  drawnAzRad = view.centerAzRad;
+  drawnTiltRad = view.tiltRad;
+}
+
+/** Углы, попавшие в последний отрисованный кадр (NaN — кадра ещё не было) */
+let drawnAzRad = NaN;
+let drawnTiltRad = NaN;
+
+/**
+ * Сместился ли взгляд от последнего отрисованного кадра хотя бы на
+ * полпикселя. Датчик ориентации шлёт состояние раз в 100 мс даже в покое
+ * (heartbeat в emitSensorState), и каждое событие раньше запускало полный
+ * рендер панорамы — до 10 лишних кадров/с, крупная статья расхода батареи
+ * на телефоне. Крен (rollRad) здесь не учитываем: без AR он влияет только
+ * на невидимый запас за краями холста (rollEdgeMarginX), а в AR наш draw()
+ * всё равно выходит — кадр рисует её собственный цикл
+ */
+function viewDrifted(): boolean {
+  if (!Number.isFinite(drawnAzRad)) return true; // кадра ещё не было
+  const azPx =
+    (Math.abs(wrapAngle(view.centerAzRad - drawnAzRad)) / view.fovRad) *
+    canvas.clientWidth;
+  const tiltPx =
+    (Math.abs(view.tiltRad - drawnTiltRad) / view.fovVRad) *
+    canvas.clientHeight;
+  return azPx > 0.5 || tiltPx > 0.5;
 }
 
 /** Кадр уже запланирован — события датчика/мыши сливаются в один рендер */
@@ -341,6 +401,12 @@ canvas.addEventListener("pointerdown", (ev) => {
   dragging = true;
   lastX = ev.clientX;
   lastY = ev.clientY;
+  // Пониженное разрешение на время поворота. Только ручной режим: при
+  // датчиках свайп — редкая подстройка калибровки, и мылить картинку под
+  // почти неподвижным пальцем незачем. В AR холст занят видео — не трогаем
+  if (!arSession && orientationTracker.current.source !== "sensor") {
+    setDragLowRes(true);
+  }
   try {
     canvas.setPointerCapture(ev.pointerId);
   } catch {
@@ -455,6 +521,8 @@ const endPointer = (ev: PointerEvent): void => {
   if (activePointers.size < 2) pinchStartDist = 0;
   if (activePointers.size === 0) {
     dragging = false;
+    // Жест кончился: полное разрешение и финальный чёткий кадр тем же вызовом
+    setDragLowRes(false);
   } else if (activePointers.size === 1 && !dragging) {
     // После pinch остался один палец: продолжаем поворот им, но от текущей
     // точки — иначе картинка прыгала бы на разницу между пальцами
@@ -697,7 +765,10 @@ orientationTracker.start((state) => {
       state.rollRad,
       screenOrientationModule.softAngleDeg(),
     );
-    scheduleDraw();
+    // Перерисовка — только если взгляд сместился на ≥ полпикселя от последнего
+    // отрисованного кадра: heartbeat датчика (10/с в покое) и дрожание компаса
+    // иначе гоняют полный рендер панорамы впустую
+    if (viewDrifted()) scheduleDraw();
   }
   updateCompassButton();
   updateCompassCalibration();
