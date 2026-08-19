@@ -483,10 +483,37 @@ describe("многострочная подпись", () => {
     const { ctx, texts } = makeCtx();
     drawOverlay(ctx, state(horizon, "Монолит"), view, 1, { ridges: false });
 
-    // Переносить не по чему — полная строка торчит за оба края кадра
+    // Переносить не по чему: название свешивается за оба края кадра,
+    // info-строка — под ним, ничего не скрывается
+    expect(texts.find((t) => t.text === "Монолит")).toBeDefined();
+    expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeDefined();
+  });
+
+  it("нижняя строка не сдвигается левее якоря — стрелка и кружок видны", () => {
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = 0.5;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    const info = texts.find((t) => t.text === "5642 м · 5.0 км")!;
+    // Якорь 900 + LEAD·ux: центрирование влево (off = −36) нижней строке
+    // запрещено — иначе текст накрыл бы кружок вершины и стрелку
+    expect(info.x).toBeCloseTo(903.5, 0);
+  });
+
+  it("у верхнего края название свешивается, многострочность сохраняется", () => {
+    // Горизонт −0.3 рад: якорь у верхнего края — строка названия уходит за
+    // край, но подпись остаётся двухстрочной (название + info-строка)
+    const horizon = new Float32Array(2000).fill(-0.3);
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, state(horizon, "Монолит"), view, 1, { ridges: false });
+
+    expect(texts.find((t) => t.text === "Монолит")).toBeDefined();
+    expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeDefined();
     expect(
       texts.find((t) => t.text === "Монолит · 5642 м · 5.0 км"),
-    ).toBeDefined();
+    ).toBeUndefined();
   });
 
   it("название, не влезающее в строку, переносится по пробелу", () => {

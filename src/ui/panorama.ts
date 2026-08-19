@@ -950,9 +950,11 @@ function drawLabels(
      */
     const tryLines = (
       lines: LineCand[],
+      overhangFirst = false,
     ): {
       draw: DrawLine[];
       boxes: { v: number; u0: number; u1: number }[];
+      hang: boolean;
     } | null => {
       // Многострочная подпись якорится нижней строкой: та стоит на обычном
       // LEAD от вершины, выноска к ней остаётся короткой при любом числе
@@ -972,6 +974,7 @@ function drawLabels(
         line: LineCand;
         range: { first: number; last: number };
         w: number;
+        hang: boolean;
       }[] = [];
       for (let i = 0; i < lines.length && i < MAX_LABEL_LINES; i++) {
         const line = lines[i];
@@ -989,11 +992,27 @@ function drawLabels(
             uiScale,
           ),
         );
-        if (!range) break; // строку и всё, что под ней, отбрасываем
+        if (!range) {
+          // Первая строка может свешиваться за край кадра (канвас обрежет),
+          // если кандидат явно попросил: иначе при уходе названия за край
+          // подпись схлопывалась бы в одну строку, хотя многострочная
+          // структура ещё уместна.
+          if (i === 0 && overhangFirst) {
+            trimmed.push({
+              line,
+              range: { first: 0, last: line.parts.length - 1 },
+              w: line.prefixW[line.prefixW.length - 1],
+              hang: true,
+            });
+            continue;
+          }
+          break; // строку и всё, что под ней, отбрасываем
+        }
         trimmed.push({
           line,
           range,
           w: line.prefixW[range.last + 1] - line.prefixW[range.first],
+          hang: false,
         });
       }
       if (trimmed.length === 0) return null;
@@ -1013,11 +1032,14 @@ function drawLabels(
       const boxes: { v: number; u0: number; u1: number }[] = [];
       const draw: DrawLine[] = [];
       for (let i = 0; i < trimmed.length; i++) {
-        const { line, range, w } = trimmed[i];
+        const { line, range, w, hang } = trimmed[i];
         const b = baseOf(line.k);
         const base = b.x * ux + b.y * uy;
         const startU = line.prefixW[range.first];
         let o = i === 0 ? 0 : off[i - 1];
+        // Нижняя строка — якорь выноски: левее якоря её не сдвигать, иначе
+        // текст накроет кружок вершины и стрелку
+        if (i === trimmed.length - 1) o = Math.max(0, o);
         const fits = (s: number): boolean =>
           labelFullyOnScreen(
             b.x + (startU + s) * ux,
@@ -1036,7 +1058,8 @@ function drawLabels(
           u1: base + startU + s + w,
         });
         let box = boxOf(o);
-        if (o !== 0 && (!fits(o) || conflicts(boxes.concat([box])))) {
+        // Свешивающаяся строка кадр игнорирует — канвас обрежет сам
+        if (!hang && o !== 0 && (!fits(o) || conflicts(boxes.concat([box])))) {
           o = 0;
           box = boxOf(0);
         }
@@ -1054,7 +1077,7 @@ function drawLabels(
           last: range.last,
         });
       }
-      return { draw, boxes };
+      return { draw, boxes, hang: trimmed.some((t) => t.hang) };
     };
 
     // Критерий «лучше» (лексикографический): полнота названия (2 — целиком,
@@ -1101,20 +1124,24 @@ function drawLabels(
 
     // B. Двустрочная форма, если под подписью есть свободное место:
     // название первой строкой, «высота · расстояние» — второй, под первой.
-    // Пачка приподнимается целиком (см. tryLines), поэтому и у скрытых
-    // вершин — их подпись поднята над склоном — нижняя строка на склон не
-    // ложится.
+    // Название может свешиваться за край кадра (канвас обрежет): иначе при
+    // его уходе за край подпись схлопывалась бы в одну строку. Пачка
+    // якорится нижней строкой, поэтому и у скрытых вершин — их подпись
+    // поднята над склоном — нижняя строка на склон не ложится.
     if (parts.length > 1) {
-      const two = tryLines([
-        { k: 0, parts: [parts[0]], prefixW: [0, prefixW[1]] },
-        { k: 1, parts: parts.slice(1), prefixW: prefixW2 },
-      ]);
+      const two = tryLines(
+        [
+          { k: 0, parts: [parts[0]], prefixW: [0, prefixW[1]] },
+          { k: 1, parts: parts.slice(1), prefixW: prefixW2 },
+        ],
+        true,
+      );
       if (two) {
         const infoParts =
           two.draw.length === 2
             ? two.draw[1].last - two.draw[1].first + 1
             : 0;
-        consider(two, 2, infoParts);
+        consider(two, 2, infoParts, two.hang ? 3 : 0);
       }
     }
 
