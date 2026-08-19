@@ -21,9 +21,9 @@ import {
     type FrameFov,
 } from "../core/camera-fov";
 import {
-  currentFrameRotationDeg,
-  drawVideoAligned,
-  rotatedFrameSize,
+    currentFrameRotationDeg,
+    drawVideoAligned,
+    rotatedFrameSize,
 } from "../core/frame-orientation";
 import { softAngleDeg } from "../core/screen-orientation";
 import type { PanoramaState, ViewState } from "./panorama";
@@ -417,9 +417,9 @@ function drawArFrame(
   if (video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    // Доворот кадра к программному повороту UI: окно наше повёрнуто на C,
-    // а кадр ориентирован относительно окна — доворачиваем на −C. Это
-    // константа сессии (не зависит от хвата): см. core/frame-orientation.ts
+    // Кадр ориентирован под окно (Samsung компенсирует сенсор), а body при
+    // CSS-повороте повёрнут вместе с видео — доворачивать кадр НЕ нужно,
+    // R = 0 (подтверждено отладочным оверлеем на устройстве)
     const rot = currentFrameRotationDeg();
     const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
     drawVideoAligned(ctx, video, width, height, rot);

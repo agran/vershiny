@@ -4,14 +4,14 @@
  */
 
 import { applyCoverCrop, type FrameFov } from "../core/camera-fov";
-import type { LatLon } from "../core/geo";
-import { getLocale } from "../core/i18n";
-import { getPhotoCaption } from "../core/photo-caption";
 import {
   currentFrameRotationDeg,
   drawVideoAligned,
   rotatedFrameSize,
 } from "../core/frame-orientation";
+import type { LatLon } from "../core/geo";
+import { getLocale } from "../core/i18n";
+import { getPhotoCaption } from "../core/photo-caption";
 import { translitToLatin } from "../core/transliterate";
 import {
   drawOverlay,
@@ -108,9 +108,8 @@ export async function capturePhoto(
   if (video && video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    // Тот же конвейер, что на экране (drawArFrame): кадр доворачивается к
-    // программному повороту UI на R = −CSS-угол, FOV и cover-кроп — от
-    // повёрнутого кадра (оси меняются при ±90°)
+    // Тот же конвейер, что на экране (drawArFrame): кадр уже ориентирован
+    // под окно (R = 0), FOV и cover-кроп — от него же
     const rot = currentFrameRotationDeg();
     const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
     ctx.fillStyle = "#000";
