@@ -8,10 +8,11 @@ import {
     buildRidgeSegments,
     decimateSegments,
     drawOverlay,
-    labelVisibleOnScreen,
+    labelFullyOnScreen,
     MAX_RIDGE_SLOPE,
     rollEdgeMarginX,
     silhouetteProfile,
+    visibleLabelRange,
     type PanoramaState,
 } from "../src/ui/panorama";
 
@@ -236,19 +237,34 @@ describe("подписи за краем кадра", () => {
   const UX = Math.cos(Math.PI / 3);
   const UY = -Math.sin(Math.PI / 3);
 
-  it("торчащая из-за левого края подпись считается видимой", () => {
-    // Вершина за краем, текст заходит на экран — подпись плавно выезжает
-    expect(labelVisibleOnScreen(-150, 350, 350, UX, UY, 0, W, H, 1)).toBe(true);
+  it("полностью поместившаяся подпись ставится", () => {
+    // Якорь (600, 400), текст 200 px вправо-вверх: вся рамка глифов в кадре
+    expect(labelFullyOnScreen(600, 400, 200, UX, UY, 0, W, H, 1)).toBe(true);
+  });
+
+  it("название, торчащее из-за левого края, не помещается", () => {
+    // Вершина и начало названия за краем: раньше подпись «выезжала» обрезком
+    expect(labelFullyOnScreen(-150, 350, 350, UX, UY, 0, W, H, 1)).toBe(false);
+  });
+
+  it("хвост «· км», уходящий за правый край, не помещается", () => {
+    // Конец строки выходит на x ≈ 1008 (рамка глифов) — расстояние обрезано
+    expect(labelFullyOnScreen(900, 500, 200, UX, UY, 0, W, H, 1)).toBe(false);
+  });
+
+  it("отрезок, уходящий за верхний край, не помещается", () => {
+    // Верх строки выше нуля: хвост обрезан по верху кадра
+    expect(labelFullyOnScreen(200, 20, 300, UX, UY, 0, W, H, 1)).toBe(false);
   });
 
   it("полностью невидимая подпись место не занимает", () => {
     // Текст кончается левее края даже с запасом на глифы
-    expect(labelVisibleOnScreen(-400, 350, 350, UX, UY, 0, W, H, 1)).toBe(false);
+    expect(labelFullyOnScreen(-400, 350, 350, UX, UY, 0, W, H, 1)).toBe(false);
     // И полностью за правым краем — тоже
-    expect(labelVisibleOnScreen(1100, 350, 350, UX, UY, 0, W, H, 1)).toBe(false);
+    expect(labelFullyOnScreen(1100, 350, 350, UX, UY, 0, W, H, 1)).toBe(false);
   });
 
-  it("при крене видимость считается в координатах экрана, а не оверлея", () => {
+  it("при крене вместимость считается в координатах экрана, а не оверлея", () => {
     const roll = 0.5;
     const c = Math.cos(roll);
     const s = Math.sin(roll);
@@ -258,16 +274,174 @@ describe("подписи за краем кадра", () => {
       const Y = sy - H / 2;
       return { x: W / 2 + X * c + Y * s, y: H / 2 - X * s + Y * c };
     };
-    const a = toOverlay(5, 40);
+    const a = toOverlay(10, 60);
     const w = 40;
-    const b = { x: a.x + w * UX, y: a.y + w * UY };
-    // Обе точки отрезка — левее нуля в координатах оверлея, но весь отрезок
-    // лежит в углу повёрнутого кадра: он видим только с учётом крена
+    // Якорь — левее нуля в координатах оверлея, но вся рамка глифов лежит
+    // в углу повёрнутого кадра: помещается только с учётом крена
     expect(a.x).toBeLessThan(0);
-    expect(b.x).toBeLessThan(0);
-    expect(labelVisibleOnScreen(a.x, a.y, w, UX, UY, roll, W, H, 1)).toBe(true);
-    // Без доворота тот же отрезок невидим — запас не «панорамный»
-    expect(labelVisibleOnScreen(a.x, a.y, w, UX, UY, 0, W, H, 1)).toBe(false);
+    expect(labelFullyOnScreen(a.x, a.y, w, UX, UY, roll, W, H, 1)).toBe(true);
+    // Без доворота та же рамка целиком левее нуля — подпись не ставится
+    expect(labelFullyOnScreen(a.x, a.y, w, UX, UY, 0, W, H, 1)).toBe(false);
+  });
+});
+
+describe("отсечение частей подписи за краем кадра", () => {
+  // Ширины: название 100, высота 150, расстояние 250, разделители по 20
+  const PREFIX = [0, 100, 270, 540];
+  // fits: отрезок [u0, u1] целиком внутри [left, right] (рамка глифов
+  // у реальной проверки шире, для отсечения важно положение границ)
+  const makeFits =
+    (left: number, right: number) =>
+    (u0: number, u1: number): boolean =>
+      u0 >= left && u1 <= right;
+
+  it("полностью поместившаяся подпись остаётся целиком", () => {
+    expect(visibleLabelRange(PREFIX, makeFits(0, 600))).toEqual({
+      first: 0,
+      last: 2,
+    });
+  });
+
+  it("хвост «· км» за краем отпадает, название и высота остаются", () => {
+    // Влезает [0, 270]: расстояние целиком за правым краем
+    expect(visibleLabelRange(PREFIX, makeFits(0, 300))).toEqual({
+      first: 0,
+      last: 1,
+    });
+  });
+
+  it("название за левым краем отпадает, высота и расстояние остаются", () => {
+    // Влезает [100, 540]: название целиком за левым краем
+    expect(visibleLabelRange(PREFIX, makeFits(100, 1000))).toEqual({
+      first: 1,
+      last: 2,
+    });
+  });
+
+  it("при обрезанных обоих концах остаётся середина", () => {
+    // Влезает только высота [100, 270]
+    expect(visibleLabelRange(PREFIX, makeFits(100, 300))).toEqual({
+      first: 1,
+      last: 1,
+    });
+  });
+
+  it("не влезла ни одна часть — подпись не ставится", () => {
+    expect(visibleLabelRange(PREFIX, () => false)).toBeNull();
+  });
+});
+
+describe("двустрочная подпись", () => {
+  const W = 1000;
+  const H = 600;
+  const WIDTHS: Record<string, number> = {
+    "Эльбрус": 60,
+    "5642 м": 58,
+    "5.0 км": 55,
+    " · ": 20,
+  };
+
+  /** Контекст, который ведёт счёт transform-ов и собирает fillText */
+  const makeCtx = (): {
+    ctx: CanvasRenderingContext2D;
+    texts: { text: string; x: number; y: number }[];
+  } => {
+    const texts: { text: string; x: number; y: number }[] = [];
+    const stack: { tx: number; ty: number; rot: number }[] = [];
+    let t = { tx: 0, ty: 0, rot: 0 };
+    const point = (x: number, y: number): { x: number; y: number } => ({
+      x: t.tx + x * Math.cos(t.rot) - y * Math.sin(t.rot),
+      y: t.ty + x * Math.sin(t.rot) + y * Math.cos(t.rot),
+    });
+    const ctx = {
+      canvas: { width: W, height: H, clientWidth: W, clientHeight: H },
+      save: () => stack.push({ ...t }),
+      restore: () => {
+        t = stack.pop() ?? t;
+      },
+      translate: (x: number, y: number) => {
+        const c = Math.cos(t.rot);
+        const s = Math.sin(t.rot);
+        t = { tx: t.tx + x * c - y * s, ty: t.ty + x * s + y * c, rot: t.rot };
+      },
+      rotate: (r: number) => {
+        t = { ...t, rot: t.rot + r };
+      },
+      fillText: (text: string, x: number, y: number) => {
+        const p = point(x, y);
+        texts.push({ text: String(text), x: p.x, y: p.y });
+      },
+      strokeText: () => {},
+      measureText: (s: string) => ({ width: WIDTHS[s] ?? 30 }),
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      stroke: () => {},
+      fill: () => {},
+      arc: () => {},
+      setLineDash: () => {},
+      set font(_v: string) {},
+      set textAlign(_v: string) {},
+      set textBaseline(_v: string) {},
+      set lineJoin(_v: string) {},
+      set lineCap(_v: string) {},
+      set strokeStyle(_v: unknown) {},
+      set fillStyle(_v: unknown) {},
+      set lineWidth(_v: number) {},
+      set miterLimit(_v: number) {},
+      set globalAlpha(_v: number) {},
+    } as unknown as CanvasRenderingContext2D;
+    return { ctx, texts };
+  };
+
+  const state = (horizon: Float32Array): PanoramaState =>
+    ({
+      horizon,
+      stepRad: 0.001,
+      peaks: [
+        {
+          azimuthRad: 0.1,
+          elevationRad: 0.05,
+          distanceM: 5000,
+          ele: 5642,
+          visibility: "visible",
+          name: "Эльбрус",
+        },
+      ],
+    }) as unknown as PanoramaState;
+
+  const view = {
+    centerAzRad: 0.1,
+    tiltRad: 0,
+    fovRad: 1,
+    fovVRad: 1,
+    rollRad: 0,
+  } as never;
+
+  it("при свободном месте под подписью высота и расстояние идут второй строкой", () => {
+    const horizon = new Float32Array(2000).fill(0.05);
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, state(horizon), view, 1, { ridges: false });
+
+    const name = texts.find((t) => t.text === "Эльбрус");
+    const line2 = texts.find((t) => t.text === "5642 м · 5.0 км");
+    expect(name).toBeDefined();
+    expect(line2).toBeDefined();
+    // Вторая строка — под первой (ниже по экрану)
+    expect(line2!.y).toBeGreaterThan(name!.y);
+  });
+
+  it("когда вторая строка не помещается в кадр, остаётся одна строка", () => {
+    // Вершина у самого правого края: вторая строка целиком за кадром
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = 0.5525;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    // Название помещается, а хвост и вторая строка — нет
+    expect(texts.find((t) => t.text === "Эльбрус")).toBeDefined();
+    expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeUndefined();
   });
 });
 

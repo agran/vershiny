@@ -517,13 +517,15 @@ interface PlacedLabel {
   /** Точка вершины на силуэте */
   mx: number;
   my: number;
-  /** Якорь первой буквы (чуть выше вершины по направлению текста) */
+  /** Якорь первой видимой буквы первой строки */
   ax: number;
   ay: number;
-  /** Проекции на ось текста (u) и поперечную (v) — для проверки пересечений */
-  u0: number;
-  u1: number;
-  v: number;
+  /** Текст первой строки: части, уходящие за край кадра, из него вырезаны */
+  text: string;
+  /** Вторая строка («высота · расстояние» под первой), если нашлось место */
+  line2: { ax: number; ay: number; text: string } | null;
+  /** Дорожки строк в координатах (v, u) — для проверки пересечений */
+  boxes: { v: number; u0: number; u1: number }[];
 }
 
 /**
@@ -585,14 +587,16 @@ let silhouetteCache: {
 let runningMaxBuf = new Float32Array(0);
 
 /**
- * Видна ли на экране хоть часть подписи. Подпись — отрезок от якоря вдоль
- * направления текста (глифы добавляют толщину ~g с каждой стороны), а экран
- * в оверлейных координатах при довороте на крен — повёрнутый прямоугольник.
- * Поэтому отрезок сперва переводится в экранные координаты (тот же переход,
- * что делает ctx.rotate в rotateAroundCenter) и клипается о прямоугольник
- * кадра Liang–Barsky — за O(1), без тригонометрии на каждую вершину.
+ * Помещается ли отрезок строки подписи в кадр целиком. Отрезок — от якоря
+ * вдоль направления текста (толщина ±vh поперёк, обводка включена). Если
+ * хоть один угол рамки глифов выходит за край экрана — пусть и на несколько
+ * пикселей — отрезок не помещается: обрезанный канвасом хвост «· 12 км»
+ * или начало названия выглядят как брак, а не как край кадра. Экран при
+ * довороте на крен — повёрнутый прямоугольник, поэтому углы рамки сперва
+ * переводятся в экранные координаты (тот же переход, что делает ctx.rotate
+ * в rotateAroundCenter) и проверяются на попадание в кадр.
  */
-export function labelVisibleOnScreen(
+export function labelFullyOnScreen(
   ax: number,
   ay: number,
   w: number,
@@ -603,46 +607,61 @@ export function labelVisibleOnScreen(
   height: number,
   uiScale: number,
 ): boolean {
-  let x0 = ax;
-  let y0 = ay;
-  let x1 = ax + w * ux;
-  let y1 = ay + w * uy;
+  const vh = 9 * uiScale; // полувысота глифов с обводкой
+  const vx = -uy; // ось поперёк текста: перпендикуляр к (ux, uy)
+  const vy = ux;
+  const corners: [number, number][] = [];
+  for (const u of [0, w]) {
+    for (const v of [-vh, vh]) {
+      corners.push([ax + u * ux + v * vx, ay + u * uy + v * vy]);
+    }
+  }
   if (rollRad) {
     const c = Math.cos(rollRad);
     const s = Math.sin(rollRad);
     const cx = width / 2;
     const cy = height / 2;
-    const toScreen = (x: number, y: number): [number, number] => [
-      cx + (x - cx) * c - (y - cy) * s,
-      cy + (x - cx) * s + (y - cy) * c,
-    ];
-    [x0, y0] = toScreen(x0, y0);
-    [x1, y1] = toScreen(x1, y1);
-  }
-  const g = 9 * uiScale; // полувысота глифов с запасом
-  let t0 = 0;
-  let t1 = 1;
-  const dx = x1 - x0;
-  const dy = y1 - y0;
-  // Liang–Barsky: отрезок пересекает [−g, width+g] × [−g, height+g]
-  const clip = (p: number, q: number): boolean => {
-    if (p === 0) return q >= 0;
-    const r = q / p;
-    if (p < 0) {
-      if (r > t1) return false;
-      if (r > t0) t0 = r;
-    } else {
-      if (r < t0) return false;
-      if (r < t1) t1 = r;
+    for (let i = 0; i < corners.length; i++) {
+      const [x, y] = corners[i];
+      corners[i] = [
+        cx + (x - cx) * c - (y - cy) * s,
+        cy + (x - cx) * s + (y - cy) * c,
+      ];
     }
-    return true;
-  };
-  return (
-    clip(-dx, x0 + g) &&
-    clip(dx, width + g - x0) &&
-    clip(-dy, y0 + g) &&
-    clip(dy, height + g - y0)
+  }
+  return corners.every(
+    ([x, y]) => x >= 0 && x <= width && y >= 0 && y <= height,
   );
+}
+
+/**
+ * Какие части подписи остаются в кадре. Части лежат на одной строке подряд:
+ * k-я начинается на prefixW[k] от якоря, последняя кончается на последнем
+ * элементе. Часть, уходящая за край кадра, скрывается ЦЕЛИКОМ (вместе со
+ * своим « · »), поэтому режем по границам частей: сперва отпадает хвост
+ * «· N км», затем «· высота»; название держится, пока влезает само.
+ * fits(u0, u1) — помещается ли отрезок строки [u0, u1] вместе с рамкой
+ * глифов в кадр. null — не влезла ни одна часть, подпись не ставится.
+ */
+export function visibleLabelRange(
+  prefixW: number[],
+  fits: (u0: number, u1: number) => boolean,
+): { first: number; last: number } | null {
+  let first = 0;
+  let last = prefixW.length - 2;
+  while (first <= last) {
+    if (fits(prefixW[first], prefixW[last + 1])) break;
+    // Убираем крайнюю часть, из-за которой отрезок не влезает. Обе стороны
+    // могут мешать сразу (название за левым краем, хвост за правым) — режем
+    // с двух; если ни одна порознь не виновата (плавающая погрешность на
+    // самой границе) — снимаем хвост, обрезок не рисуем.
+    const endClears = fits(prefixW[first], prefixW[last]);
+    const startClears = fits(prefixW[first + 1], prefixW[last + 1]);
+    if (endClears) last--;
+    if (startClears) first++;
+    if (!endClears && !startClears) last--;
+  }
+  return first <= last ? { first, last } : null;
 }
 
 /**
@@ -768,55 +787,147 @@ function drawLabels(
     // за нижний край, важно лишь чтобы сама подпись попала в кадр
     if (my < 0 || (!hidden && my > height)) return false;
 
-    const text = labelText(peak);
-    const w = measureLabelWidth(ctx, labelFont, text);
+    // Части подписи: название, высота, расстояние. Часть, уходящая за край
+    // кадра, скрывается целиком (вместе со своим « · »), остальные остаются
+    // на своих местах: сперва отпадает хвост «· N км», затем «· высота» —
+    // название держится, пока влезает само.
+    const parts = labelParts(peak);
+    const partW = parts.map((p) => measureLabelWidth(ctx, labelFont, p));
+    const sepW = measureLabelWidth(ctx, labelFont, LABEL_SEP);
+    // prefixW[k] — смещение начала k-й части от якоря вдоль строки
+    const prefixW = [0];
+    for (let k = 0; k < parts.length; k++) {
+      prefixW.push(prefixW[k] + partW[k] + (k > 0 ? sepW : 0));
+    }
+    const fullW = prefixW[parts.length];
 
     // Якорь первой буквы. Обычно — сразу над вершиной по направлению текста;
     // для скрытой вершины поднимаемся вдоль строки, пока подпись целиком
     // не выйдет из-за загораживающего склона (её место — над силуэтом).
-    const lead = hidden ? liftAboveSilhouette(mx, my, w) : LEAD;
+    const lead = hidden ? liftAboveSilhouette(mx, my, fullW) : LEAD;
     const ax = mx + ux * lead;
     const ay = my + uy * lead;
     if (ay < LINE_H) return false; // подпись ушла бы за верх кадра
 
-    // Вершина может стоять за краем кадра: подпись смотрит вправо-вверх,
-    // поэтому слева она выглядывает из-за края, пока вершина ещё не вошла.
-    // Ставим подпись, когда видна хоть её часть (канвас сам обрежет остаток):
-    // при повороте подпись плавно выходит из-за края, а не возникает скачком.
-    // Проверка — в координатах ЭКРАНА, чтобы крен (rotateAroundCenter) не
-    // резал подписи у углов повёрнутого кадра; полностью невидимые подписи
-    // места в кадре не занимают.
-    if (
-      !labelVisibleOnScreen(
-        ax,
-        ay,
-        w,
+    const base = ax * ux + ay * uy;
+    const v = ax * vx + ay * vy;
+
+    // Отрезаем части, не помещающиеся целиком. Проверка — в координатах
+    // ЭКРАНА, чтобы крен (rotateAroundCenter) не резал подписи у углов
+    // повёрнутого кадра; невидимые части места в кадре не занимают.
+    const fits = (u0: number, u1: number): boolean =>
+      labelFullyOnScreen(
+        ax + u0 * ux,
+        ay + u0 * uy,
+        u1 - u0,
         ux,
         uy,
         view.rollRad ?? 0,
         width,
         height,
         uiScale,
-      )
-    ) {
-      return false;
-    }
-
-    const u0 = ax * ux + ay * uy;
-    const v = ax * vx + ay * vy;
-    const u1 = u0 + w;
+      );
 
     // Пересечение параллельных прямоугольников — это пересечение интервалов
     // по обеим осям повёрнутой системы координат. Вытесненная вершина просто
     // не подписывается: счётчик «+N» рядом с соседней подписью ничего не
     // сообщал (что именно за N — не узнать), но забирал место в кадре
-    const conflict = placed.some(
-      (p) =>
-        Math.abs(p.v - v) < LINE_H && u0 < p.u1 + PAD_U && u1 > p.u0 - PAD_U,
-    );
-    if (conflict) return false;
+    const conflicts = (
+      boxes: { v: number; u0: number; u1: number }[],
+    ): boolean =>
+      placed.some((p) =>
+        p.boxes.some((pb) =>
+          boxes.some(
+            (b) =>
+              Math.abs(pb.v - b.v) < LINE_H &&
+              b.u0 < pb.u1 + PAD_U &&
+              b.u1 > pb.u0 - PAD_U,
+          ),
+        ),
+      );
 
-    placed.push({ peak, mx, my, ax, ay, u0, u1, v });
+    // Двустрочная форма, если под подписью есть свободное место: название —
+    // первой строкой, «высота · расстояние» — второй, под первой (сдвиг
+    // вдоль поперечной оси на LINE_H). Нужно: название целиком в кадре,
+    // вторая строка помещается (её части режутся, как в одну строку) и обе
+    // дорожки свободны. Иначе — одна строка. Скрытым вершинам вторая
+    // строка не ставится: их подпись поднята над склоном, и текст под ней
+    // вернулся бы на склон (читался бы как «вершина вот здесь»).
+    if (!hidden && parts.length > 1 && fits(0, prefixW[1])) {
+      const partW2 = partW.slice(1);
+      const prefixW2 = [0];
+      for (let k = 0; k < partW2.length; k++) {
+        prefixW2.push(prefixW2[k] + partW2[k] + (k > 0 ? sepW : 0));
+      }
+      const ax2 = ax + LINE_H * vx;
+      const ay2 = ay + LINE_H * vy;
+      const fits2 = (u0: number, u1: number): boolean =>
+        labelFullyOnScreen(
+          ax2 + u0 * ux,
+          ay2 + u0 * uy,
+          u1 - u0,
+          ux,
+          uy,
+          view.rollRad ?? 0,
+          width,
+          height,
+          uiScale,
+        );
+      const range2 = visibleLabelRange(prefixW2, fits2);
+      if (range2) {
+        const base2 = ax2 * ux + ay2 * uy;
+        const v2 = ax2 * vx + ay2 * vy;
+        const boxes = [
+          { v, u0: base, u1: base + prefixW[1] },
+          {
+            v: v2,
+            u0: base2 + prefixW2[range2.first],
+            u1: base2 + prefixW2[range2.last + 1],
+          },
+        ];
+        if (!conflicts(boxes)) {
+          placed.push({
+            peak,
+            mx,
+            my,
+            ax,
+            ay,
+            text: parts[0],
+            line2: {
+              ax: ax2 + ux * prefixW2[range2.first],
+              ay: ay2 + uy * prefixW2[range2.first],
+              text: parts
+                .slice(1 + range2.first, 2 + range2.last)
+                .join(LABEL_SEP),
+            },
+            boxes,
+          });
+          return true;
+        }
+      }
+    }
+
+    // Одна строка: части режутся по краям кадра
+    const range = visibleLabelRange(prefixW, fits);
+    if (!range) return false; // не влезла ни одна часть — прячем всё
+
+    // Видимый текст сдвигается к первой оставшейся части (если название
+    // скрыто, строка начинается с высоты), выноска ведёт к ней же
+    const boxes = [
+      { v, u0: base + prefixW[range.first], u1: base + prefixW[range.last + 1] },
+    ];
+    if (conflicts(boxes)) return false;
+
+    placed.push({
+      peak,
+      mx,
+      my,
+      ax: ax + ux * prefixW[range.first],
+      ay: ay + uy * prefixW[range.first],
+      text: parts.slice(range.first, range.last + 1).join(LABEL_SEP),
+      line2: null,
+      boxes,
+    });
     return true;
   };
 
@@ -849,7 +960,6 @@ function drawLabels(
 
   // Рендер: подпись вершины, для которой нашлось место
   for (const p of placed) {
-    const text = labelText(p.peak);
     // Скрытая вершина: выноска обрывается о склон, маркера вершины нет
     const end =
       p.peak.visibility === "hidden"
@@ -865,16 +975,35 @@ function drawLabels(
           )
         : { x: p.mx, y: p.my };
     drawPeakAnchor(ctx, end.x, end.y, p.ax, p.ay, p.peak.visibility, uiScale);
-    drawRotatedLabel(ctx, p.ax, p.ay, theta, text, p.peak.visibility, uiScale);
+    drawRotatedLabel(ctx, p.ax, p.ay, theta, p.text, p.peak.visibility, uiScale);
+    if (p.line2) {
+      drawRotatedLabel(
+        ctx,
+        p.line2.ax,
+        p.line2.ay,
+        theta,
+        p.line2.text,
+        p.peak.visibility,
+        uiScale,
+      );
+    }
   }
 }
 
-function labelText(peak: VisiblePeak): string {
+/** Разделитель частей подписи */
+const LABEL_SEP = " · ";
+
+/** Части подписи: название, высота, расстояние — собираются через « · ». */
+function labelParts(peak: VisiblePeak): string[] {
+  const parts = [peakName(peak)];
+  if (peak.ele !== undefined) {
+    const unit = getLocale() === "ru" ? "м" : "m";
+    parts.push(`${Math.round(peak.ele)} ${unit}`);
+  }
   const km = (peak.distanceM / 1000).toFixed(peak.distanceM < 10_000 ? 1 : 0);
-  const unit = getLocale() === "ru" ? "м" : "m";
   const kmUnit = getLocale() === "ru" ? "км" : "km";
-  const ele = peak.ele !== undefined ? `${Math.round(peak.ele)} ${unit}` : "";
-  return `${peakName(peak)}${ele ? " · " + ele : ""} · ${km} ${kmUnit}`;
+  parts.push(`${km} ${kmUnit}`);
+  return parts;
 }
 
 /**
