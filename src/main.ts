@@ -2656,9 +2656,12 @@ function setupActionButtons(): void {
     "photo",
     `right:${edgeRight()};bottom:${edgeBottom(60)}`,
   );
+  // Имена снимков, уже скачанные в этой сессии: повтор за секунду получает
+  // суффикс -2, -3… вместо вопроса браузера про перезапись файла
+  const usedPhotoNames = new Set<string>();
   photoBtn.onclick = async () => {
     if (!panorama) return;
-    const { capturePhoto, savePhoto, photoFilename } =
+    const { capturePhoto, savePhoto, uniquePhotoFilename } =
       await import("./ui/photo");
     // Регион — запасной вариант подписи на случай кадра без видимых вершин
     // (ui/photo.ts): туда идёт название на языке интерфейса
@@ -2685,7 +2688,7 @@ function setupActionButtons(): void {
       cameraFov: arSession?.fullFrameFov,
     };
     const blob = await capturePhoto(panorama, view, options);
-    savePhoto(blob, photoFilename(options));
+    savePhoto(blob, uniquePhotoFilename(usedPhotoNames, options));
     setStatus(t("photoSaved"));
     setTimeout(() => setStatus(""), 3000);
   };

@@ -300,9 +300,13 @@ export function savePhoto(blob: Blob, filename = "vershiny.png"): void {
  */
 export function photoFilename(options: PhotoOptions, at = new Date()): string {
   const pad = (n: number): string => String(n).padStart(2, "0");
+  // Минута в имени сталкивала серию снимков одного места в один файл:
+  // браузер либо спрашивал про перезапись, либо сам превращал имя в
+  // «… (1).png». Секунды почти исключают совпадение, а редкий повтор
+  // добивает uniquePhotoFilename суффиксом -2, -3…
   const stamp =
     `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}` +
-    `-${pad(at.getHours())}${pad(at.getMinutes())}`;
+    `-${pad(at.getHours())}${pad(at.getMinutes())}${pad(at.getSeconds())}`;
 
   const peak = options.peakName ? slug(translitToLatin(options.peakName)) : "";
   // Регион приходит локализованным («Приэльбрусье») — в имя файла, как и
@@ -311,6 +315,26 @@ export function photoFilename(options: PhotoOptions, at = new Date()): string {
   const place =
     peak || (options.region ? slug(translitToLatin(options.region)) : "");
   return ["vershiny", place, stamp].filter(Boolean).join("-") + ".png";
+}
+
+/**
+ * Уникальное имя снимка в сессии. photoFilename с точностью до секунды,
+ * а серия снимков подряд может попасть в одну и ту же секунду — тогда
+ * браузер спрашивал бы про уже существующий файл. Повтору дописывается
+ * суффикс -2, -3… (множество занятых имён живёт в main между снимками).
+ */
+export function uniquePhotoFilename(
+  used: Set<string>,
+  options: PhotoOptions,
+  at = new Date(),
+): string {
+  const base = photoFilename(options, at);
+  let name = base;
+  for (let i = 2; used.has(name); i++) {
+    name = base.replace(/\.png$/, `-${i}.png`);
+  }
+  used.add(name);
+  return name;
 }
 
 /**

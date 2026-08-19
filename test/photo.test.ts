@@ -16,7 +16,7 @@ import {
     type PhotoCaption,
 } from "../src/core/photo-caption";
 import type { PanoramaState, ViewState } from "../src/ui/panorama";
-import { capturePhoto, photoFilename } from "../src/ui/photo";
+import { capturePhoto, photoFilename, uniquePhotoFilename } from "../src/ui/photo";
 
 const STATE: PanoramaState = {
   horizon: Float32Array.from(
@@ -532,7 +532,7 @@ describe("имя файла снимка", () => {
         },
         AT,
       ),
-    ).toBe("vershiny-elbrus-zapadnyy-2026-08-13-2238.png");
+    ).toBe("vershiny-elbrus-zapadnyy-2026-08-13-223800.png");
   });
 
   it("без вершины в кадре — регион и время", () => {
@@ -541,7 +541,7 @@ describe("имя файла снимка", () => {
         { origin: { lat: 43.3, lon: 42.4 }, observerH: 4100, region: "alps" },
         AT,
       ),
-    ).toBe("vershiny-alps-2026-08-13-2238.png");
+    ).toBe("vershiny-alps-2026-08-13-223800.png");
   });
 
   it("локализованное название региона транслитерируется, а не стирается", () => {
@@ -557,7 +557,7 @@ describe("имя файла снимка", () => {
         },
         AT,
       ),
-    ).toBe("vershiny-prielbruse-2026-08-13-2238.png");
+    ).toBe("vershiny-prielbruse-2026-08-13-223800.png");
   });
 
   it("в имени нет ничего, кроме латиницы, цифр и дефисов", () => {
@@ -575,7 +575,7 @@ describe("имя файла снимка", () => {
     // ломаются в облаках и на чужих файловых системах
     expect(name).toMatch(/^[a-z0-9-]+\.png$/);
     expect(name.startsWith("vershiny-")).toBe(true);
-    expect(name.endsWith("-2026-08-13-2238.png")).toBe(true);
+    expect(name.endsWith("-2026-08-13-223800.png")).toBe(true);
   });
 
   it("время дописывается с ведущими нулями и сортируется по порядку", () => {
@@ -588,7 +588,18 @@ describe("имя файла снимка", () => {
       new Date(2026, 0, 5, 18, 40),
     );
 
-    expect(early).toBe("vershiny-alps-2026-01-05-0704.png");
+    expect(early).toBe("vershiny-alps-2026-01-05-070400.png");
     expect(early < late).toBe(true);
+  });
+
+  it("повтор снимка за одну секунду получает суффикс -2, -3…", () => {
+    const used = new Set<string>();
+    const opts = { origin: { lat: 0, lon: 0 }, observerH: 0, region: "alps" };
+    const first = uniquePhotoFilename(used, opts, AT);
+    const second = uniquePhotoFilename(used, opts, AT);
+    const third = uniquePhotoFilename(used, opts, AT);
+    expect(first).toBe("vershiny-alps-2026-08-13-223800.png");
+    expect(second).toBe("vershiny-alps-2026-08-13-223800-2.png");
+    expect(third).toBe("vershiny-alps-2026-08-13-223800-3.png");
   });
 });
