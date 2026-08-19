@@ -1577,18 +1577,12 @@ function drawLabels(
     // если все её строки остаются в кадре целиком (свешиваний не плодим),
     // а дорожки и выноски не пересекают остальных
     const MAX_PAIR_LANES = 3;
-    const moveUp = (
+    const validMoved = (
       p: PlacedLabel,
-      m: number,
+      lines: PlacedLabel["lines"],
+      boxes: PlacedLabel["boxes"],
       others: PlacedLabel[],
-    ): PlacedLabel | null => {
-      const step = -m * LINE_H;
-      const lines = p.lines.map((l) => ({
-        ...l,
-        ax: l.ax + step * vx,
-        ay: l.ay + step * vy,
-      }));
-      const boxes = p.boxes.map((b) => ({ ...b, v: b.v + step }));
+    ): boolean => {
       for (let i = 0; i < lines.length; i++) {
         if (
           !labelFullyOnScreen(
@@ -1603,27 +1597,67 @@ function drawLabels(
             uiScale,
           )
         ) {
-          return null;
+          return false;
         }
       }
-      if (conflictsAgainst(others, boxes)) return null;
-      const moved: PlacedLabel = { ...p, lines, boxes, shift: p.shift - m };
+      if (conflictsAgainst(others, boxes)) return false;
+      const moved: PlacedLabel = { ...p, lines, boxes };
       const L = placedLeader(moved);
       for (const q of others) {
         for (const b of q.boxes) {
-          if (leaderCrossesBox(L.x1, L.y1, L.x2, L.y2, b)) return null;
+          if (leaderCrossesBox(L.x1, L.y1, L.x2, L.y2, b)) return false;
         }
         const ql = placedLeader(q);
         if (
           segmentsCross(L.x1, L.y1, L.x2, L.y2, ql.x1, ql.y1, ql.x2, ql.y2)
         ) {
-          return null;
+          return false;
         }
         for (const b of boxes) {
-          if (leaderCrossesBox(ql.x1, ql.y1, ql.x2, ql.y2, b)) return null;
+          if (leaderCrossesBox(ql.x1, ql.y1, ql.x2, ql.y2, b)) return false;
         }
       }
-      return moved;
+      return true;
+    };
+
+    const moveUp = (
+      p: PlacedLabel,
+      m: number,
+      others: PlacedLabel[],
+    ): PlacedLabel | null => {
+      const step = -m * LINE_H;
+      const lines = p.lines.map((l) => ({
+        ...l,
+        ax: l.ax + step * vx,
+        ay: l.ay + step * vy,
+      }));
+      const boxes = p.boxes.map((b) => ({ ...b, v: b.v + step }));
+      if (!validMoved(p, lines, boxes, others)) return null;
+      return { ...p, lines, boxes, shift: p.shift - m };
+    };
+
+    // Сосед, сдвинутый на du вправо ВДОЛЬ своей строки: освобождает
+    // u-коридор для нашей подписи, не поднимая соседа по дорожкам. Его
+    // выноска растёт по горизонтали — та же цена, что у подъёма, и критерий
+    // «меньше максимум длин выносок пары» выбирает дешевле. Поперечная
+    // координата v не меняется: u и v ортогональны
+    const moveRight = (
+      p: PlacedLabel,
+      du: number,
+      others: PlacedLabel[],
+    ): PlacedLabel | null => {
+      const lines = p.lines.map((l) => ({
+        ...l,
+        ax: l.ax + du * ux,
+        ay: l.ay + du * uy,
+      }));
+      const boxes = p.boxes.map((b) => ({
+        ...b,
+        u0: b.u0 + du,
+        u1: b.u1 + du,
+      }));
+      if (!validMoved(p, lines, boxes, others)) return null;
+      return { ...p, lines, boxes, shift: p.shift };
     };
 
     // Мешает ли сосед нашему варианту: дорожками или выноской
@@ -1653,8 +1687,10 @@ function drawLabels(
       );
     };
 
-    // Кандидаты на парный сдвиг: соседи, мешающие лучшему варианту. Если
-    // вариантов нет вовсе — соседи, занимающие дорожку полной строки
+    // Кандидаты на парный сдвиг: соседи, занимающие естественные дорожки
+    // полной строки (дорожки 0…−2 от якоря) — именно они заставили нашу
+    // подпись подняться, даже если поднятый вариант с ними уже не
+    // пересекается. Если вариантов нет вовсе — тот же отбор
     const blockers = (
       r:
         | {
@@ -1664,21 +1700,18 @@ function drawLabels(
         | null,
     ): PlacedLabel[] => {
       const out: PlacedLabel[] = [];
-      const probeBoxes: { v: number; u0: number; u1: number }[] = r
-        ? r.boxes
-        : [
-            {
-              v: ax * vx + ay * vy,
-              u0: ax * ux + ay * uy,
-              u1: ax * ux + ay * uy + fullW,
-            },
-          ];
+      const probeBoxes: { v: number; u0: number; u1: number }[] = [0, -1, -2].map(
+        (s) => ({
+          v: ax * vx + ay * vy + s * LINE_H,
+          u0: ax * ux + ay * uy,
+          u1: ax * ux + ay * uy + fullW,
+        }),
+      );
       for (const p of placed) {
         if (p.shift <= -MAX_PAIR_LANES) continue;
         if (
-          r
-            ? blocks(p, r.boxes, r.draw)
-            : conflictsAgainst([p], probeBoxes)
+          conflictsAgainst([p], probeBoxes) ||
+          (r && blocks(p, r.boxes, r.draw))
         ) {
           out.push(p);
           if (out.length >= 3) break;
@@ -1693,7 +1726,10 @@ function drawLabels(
 
     if (res) {
       // Сосед мешает и вынуждает подниматься: пробуем поднять и его — если
-      // максимум длин выносок пары при этом уменьшится, принимаем обмен
+      // максимум длин выносок пары при этом уменьшится, принимаем обмен.
+      // Второй способ размена — сдвиг соседа ВПРАВО вдоль его строки: тогда
+      // наша подпись может вернуться к нижним дорожкам, а выноски пары
+      // уравниваются (или хотя бы их максимум уменьшается)
       const lenRes = leaderLenOf(res.draw);
       let bestTrial: {
         p: PlacedLabel;
@@ -1717,6 +1753,26 @@ function drawLabels(
             bestTrial = { p, p2, res2, after };
           }
         }
+        // Сдвиг вправо: насколько нужно отодвинуть соседа, чтобы наши строки
+        // перестали пересекаться с ним по u вовсе (запас PAD_U + 2 px).
+        // Половинный сдвиг — промежуточный вариант: сосед едет меньше, мы
+        // поднимаемся на одну-две дорожки, критерий выбирает дешевле.
+        // Потолок 120 px — дальше выноска соседа деградирует без пользы
+        const xU1 = Math.max(...res.boxes.map((b) => b.u1));
+        const pU0 = Math.min(...p.boxes.map((b) => b.u0));
+        const need = Math.min(xU1 + PAD_U - pU0 + 2, 120);
+        if (need > 2) {
+          for (const du of [need, Math.max(need / 2, 14)]) {
+            const p2 = moveRight(p, du, placed.filter((q) => q !== p));
+            if (!p2) continue;
+            const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
+            if (!res2) continue;
+            const after = Math.max(leaderLenOf(res2.draw), leaderLenPlaced(p2));
+            if (after < before && (!bestTrial || after < bestTrial.after)) {
+              bestTrial = { p, p2, res2, after };
+            }
+          }
+        }
       }
       if (bestTrial) {
         final = bestTrial.res2;
@@ -1724,8 +1780,8 @@ function drawLabels(
         movedNew = bestTrial.p2;
       }
     } else {
-      // Места не нашлось вовсе: раздвигаем соседей — вдруг после их подъёма
-      // появится место хотя бы для одной строки
+      // Места не нашлось вовсе: раздвигаем соседей — вверх по дорожкам или
+      // вправо вдоль строки — вдруг появится место хотя бы для одной строки
       for (const p of blockers(null)) {
         for (
           let m = 1;
@@ -1740,6 +1796,23 @@ function drawLabels(
             movedOld = p;
             movedNew = p2;
             break;
+          }
+        }
+        if (final) break;
+        const xU1 = ax * ux + ay * uy + fullW;
+        const pU0 = Math.min(...p.boxes.map((b) => b.u0));
+        const need = Math.min(xU1 + PAD_U - pU0 + 2, 120);
+        if (need > 2) {
+          for (const du of [need, Math.max(need / 2, 14)]) {
+            const p2 = moveRight(p, du, placed.filter((q) => q !== p));
+            if (!p2) continue;
+            const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
+            if (res2) {
+              final = res2;
+              movedOld = p;
+              movedNew = p2;
+              break;
+            }
           }
         }
         if (final) break;

@@ -611,6 +611,48 @@ describe("многострочная подпись", () => {
     expect(Math.abs(center(info, wInfo) - cName)).toBeLessThanOrEqual(1);
   });
 
+  it("поднятую подпись и соседа разводит парный сдвиг — максимум выносок пары меньше", () => {
+    // Сосед занимает дорожки 0 и −1: X поднимается на две дорожки (выноска
+    // 30 px). Раньше парный сдвиг смотрел только на тех, кто мешает уже
+    // ПОДНЯТОМУ варианту, — виновника не находил, и X оставался с длинной
+    // выноской. Теперь сосед из естественных дорожек поднимается на одну,
+    // X встаёт на якорь одной строкой, и максимум длин выносок пары падает
+    // с 30 до 16.5 px
+    const horizon = new Float32Array(2000).fill(0.05);
+    horizon[194] = 0.05933;
+    horizon[195] = 0.05933;
+    const st = state(horizon);
+    st.peaks = [
+      {
+        azimuthRad: 0.1946,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "М",
+      },
+      {
+        azimuthRad: 0.2,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "Эльбрус",
+      },
+    ] as never;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    // X — одной строкой на естественном якоре (horizonY = 0.62·H)
+    const xLine = texts.find((t) => t.text === "Эльбрус · 5642 м · 5.0 км")!;
+    expect(xLine).toBeDefined();
+    expect(xLine.y).toBeCloseTo(335.94, 0);
+    // P поднят на дорожку вверх: было 330.34, стало 330.34 − LINE_H·vy
+    const pLine = texts.find((t) => t.text === "М · 5642 м · 5.0 км")!;
+    expect(pLine).toBeDefined();
+    expect(pLine.y).toBeCloseTo(330.34 - 7.5, 0);
+  });
+
   it("во время перетаскивания подписи не перекладываются — форма не меняется", () => {
     // «Широкий» у правого края — двухстрочная подпись (хвост не влезает).
     // При перетаскивании взгляд сдвигается, вершина уходит к центру, где
