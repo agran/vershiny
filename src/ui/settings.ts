@@ -16,6 +16,10 @@ import { getLocale, setLocale, t, type Locale } from "../core/i18n";
 import { orientationTracker } from "../core/orientation";
 import { getPhotoCaption, setPhotoCaption } from "../core/photo-caption";
 import {
+    isRollCompensationOn,
+    setRollCompensation,
+} from "../core/roll-compensation";
+import {
     estimateRegionBytes,
     hasHiDetail,
     isRegionOutdated,
@@ -125,6 +129,7 @@ export function openSettings(
   panel.appendChild(accRow);
 
   panel.appendChild(buildCalibration(callbacks.onCalibrationChange));
+  panel.appendChild(buildRollCompensation());
   panel.appendChild(buildPhotoCaption());
 
   // --- Регионы: выбор + скачивание (сгруппированные) ---
@@ -669,6 +674,34 @@ function buildCalibration(onChange: () => void): HTMLElement {
  * горы, и нарисованный силуэт конфликтует с ними. На снимке остаются только
  * подписи вершин — то, ради чего снимок и делается.
  */
+/** Компенсация крена в AR: доворот оверлея вслед за наклонённым кадром */
+function buildRollCompensation(): HTMLElement {
+  const box = document.createElement("div");
+
+  const title = document.createElement("h3");
+  title.textContent = t("rollCompensation");
+  title.style.cssText = "margin:20px 0 4px;font-size:16px;font-weight:600";
+  box.appendChild(title);
+
+  const hint = document.createElement("div");
+  hint.textContent = t("rollCompensationHint");
+  hint.style.cssText =
+    "color:#8a9ba8;font-size:12px;line-height:1.4;margin-bottom:12px";
+  box.appendChild(hint);
+
+  const line = row(t("rollCompensation"));
+  const input = document.createElement("input");
+  input.type = "checkbox";
+  input.checked = isRollCompensationOn();
+  input.style.cssText =
+    "width:20px;height:20px;accent-color:#4cc9f0;cursor:pointer";
+  input.onchange = () => setRollCompensation(input.checked);
+  line.appendChild(input);
+  box.appendChild(line);
+
+  return box;
+}
+
 function buildPhotoCaption(): HTMLElement {
   const box = document.createElement("div");
 

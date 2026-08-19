@@ -110,6 +110,17 @@ const STRINGS: Record<string, Record<Locale, string>> = {
       "the drawn skyline mismatches the real mountains in the frame. Without " +
       "the camera, outlines are always drawn.",
   },
+  rollCompensation: { ru: "Компенсация крена", en: "Tilt compensation" },
+  rollCompensationHint: {
+    ru:
+      "Если телефон держать не ровно (один угол ниже), контуры и подписи " +
+      "доворачиваются вслед за кадром камеры и ложатся на горы. Выключите — " +
+      "горизонт останется ровной линией экрана.",
+    en:
+      "If you hold the phone unevenly (one corner lower), outlines and " +
+      "labels rotate with the camera frame to sit on the mountains. Turn " +
+      "off to keep the horizon a level line on the screen.",
+  },
   settings: { ru: "Настройки", en: "Settings" },
   orientation: { ru: "Поворот экрана", en: "Screen rotation" },
   orientationLandscape: {

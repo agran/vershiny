@@ -573,6 +573,7 @@ import {
 } from "./core/calibration";
 import { destination } from "./core/geo";
 import { orientationTracker } from "./core/orientation";
+import { isRollCompensationOn } from "./core/roll-compensation";
 import * as screenOrientationModule from "./core/screen-orientation";
 
 /**
@@ -678,9 +679,10 @@ orientationTracker.start((state) => {
       Math.min(MAX_TILT, state.tiltRad + tiltOffset),
     );
     // Крен идёт в AR-оверлей (и в снимок из AR): там горизонт доворачивается
-    // под наклонённый кадр камеры. В обычной панораме rollRad не используется
-    // — горизонт держим ровным.
-    view.rollRad = state.rollRad;
+    // под наклонённый кадр камеры. Отключается в настройках (компенсация
+    // крена) — тогда горизонт остаётся ровной линией экрана. В обычной
+    // панораме rollRad не используется — горизонт держим ровным.
+    view.rollRad = isRollCompensationOn() ? state.rollRad : 0;
     scheduleDraw();
   }
   updateCompassButton();
