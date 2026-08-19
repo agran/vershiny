@@ -84,6 +84,10 @@ export const MAX_RIDGE_SLOPE = 15;
  */
 const HIDDEN_LABEL_BUDGET = 6;
 
+/** Потолки многострочной раскладки подписи (построение — в tryPlace) */
+const MAX_LABEL_LINES = 4; // ≤ 3 фрагментов названия + строка «высота · расстояние»
+const MAX_NAME_BREAKS = 7; // точек разрыва названия (пробел/дефис)
+
 /**
  * Повернуть систему координат вокруг центра холста на крен (рад).
  *
@@ -517,13 +521,8 @@ interface PlacedLabel {
   /** Точка вершины на силуэте */
   mx: number;
   my: number;
-  /** Якорь первой видимой буквы первой строки */
-  ax: number;
-  ay: number;
-  /** Текст первой строки: части, уходящие за край кадра, из него вырезаны */
-  text: string;
-  /** Вторая строка («высота · расстояние» под первой), если нашлось место */
-  line2: { ax: number; ay: number; text: string } | null;
+  /** Строки подписи: первая — от выноски, остальные — под ней (дорожки k·LINE_H) */
+  lines: { ax: number; ay: number; text: string }[];
   /** Дорожки строк в координатах (v, u) — для проверки пересечений */
   boxes: { v: number; u0: number; u1: number }[];
 }
@@ -687,6 +686,78 @@ function measureLabelWidth(
   return measured;
 }
 
+/**
+ * Точка переноса названия: фрагмент кончается на end (дефис входит во
+ * фрагмент, чтобы остаться в конце строки), следующий начинается со start.
+ */
+interface NameBreak {
+  end: number;
+  start: number;
+}
+
+/**
+ * Разбивка названия по пробелам и дефисам вместе со всеми ширинами
+ * фрагментов. Считается один раз на название и кешируется: точки разрыва и
+ * ширины от кадра не зависят, а measureText — самая дорогая операция
+ * раскладки (в устоявшемся кадре все ширины уже в labelWidthCache).
+ */
+interface NameTokens {
+  breaks: NameBreak[];
+  /** prefW[i] — ширина name[0..breaks[i].end); prefW[n] — полная ширина */
+  prefW: number[];
+  /** tailW[i] — ширина name[breaks[i].start..) */
+  tailW: number[];
+  /** midW[i][j] — ширина name[breaks[i].start..breaks[j].end), j > i */
+  midW: number[][];
+}
+
+const nameTokenCache = new Map<string, NameTokens>();
+
+function nameTokens(
+  ctx: CanvasRenderingContext2D,
+  font: string,
+  name: string,
+): NameTokens {
+  const cached = nameTokenCache.get(name);
+  if (cached) return cached;
+  const breaks: NameBreak[] = [];
+  for (let i = 0; i < name.length && breaks.length < MAX_NAME_BREAKS; i++) {
+    const c = name[i];
+    if (c !== " " && c !== "-") continue;
+    const end = c === "-" ? i + 1 : i; // дефис остаётся в конце строки
+    const start = i + 1;
+    if (end === 0 || end >= name.length) continue; // пустой фрагмент/хвост
+    if (name[start] === " " || name[start] === "-") continue; // слипшиеся разделители
+    breaks.push({ end, start });
+  }
+  const n = breaks.length;
+  const prefW: number[] = [];
+  for (let i = 0; i < n; i++) {
+    prefW.push(measureLabelWidth(ctx, font, name.slice(0, breaks[i].end)));
+  }
+  prefW.push(measureLabelWidth(ctx, font, name));
+  const tailW: number[] = [];
+  for (let i = 0; i < n; i++) {
+    tailW.push(measureLabelWidth(ctx, font, name.slice(breaks[i].start)));
+  }
+  const midW: number[][] = [];
+  for (let i = 0; i < n; i++) {
+    const row = new Array<number>(n).fill(0);
+    for (let j = i + 1; j < n; j++) {
+      row[j] = measureLabelWidth(
+        ctx,
+        font,
+        name.slice(breaks[i].start, breaks[j].end),
+      );
+    }
+    midW.push(row);
+  }
+  const tokens: NameTokens = { breaks, prefW, tailW, midW };
+  if (nameTokenCache.size >= 500) nameTokenCache.clear();
+  nameTokenCache.set(name, tokens);
+  return tokens;
+}
+
 function drawLabels(
   ctx: CanvasRenderingContext2D,
   peaks: VisiblePeak[],
@@ -800,6 +871,12 @@ function drawLabels(
       prefixW.push(prefixW[k] + partW[k] + (k > 0 ? sepW : 0));
     }
     const fullW = prefixW[parts.length];
+    // Ширины info-строки «высота · расстояние» (кладётся отдельной дорожкой)
+    const partW2 = partW.slice(1);
+    const prefixW2 = [0];
+    for (let k = 0; k < partW2.length; k++) {
+      prefixW2.push(prefixW2[k] + partW2[k] + (k > 0 ? sepW : 0));
+    }
 
     // Якорь первой буквы. Обычно — сразу над вершиной по направлению текста;
     // для скрытой вершины поднимаемся вдоль строки, пока подпись целиком
@@ -809,16 +886,20 @@ function drawLabels(
     const ay = my + uy * lead;
     if (ay < LINE_H) return false; // подпись ушла бы за верх кадра
 
-    const base = ax * ux + ay * uy;
-    const v = ax * vx + ay * vy;
-
-    // Отрезаем части, не помещающиеся целиком. Проверка — в координатах
-    // ЭКРАНА, чтобы крен (rotateAroundCenter) не резал подписи у углов
-    // повёрнутого кадра; невидимые части места в кадре не занимают.
-    const fits = (u0: number, u1: number): boolean =>
-      labelFullyOnScreen(
-        ax + u0 * ux,
-        ay + u0 * uy,
+    // Базовая точка строки k: дорожки отстоят на LINE_H по поперечной оси v
+    const lineBase = (k: number): { x: number; y: number } => ({
+      x: ax + k * LINE_H * vx,
+      y: ay + k * LINE_H * vy,
+    });
+    // Помещается ли отрезок строки [u0, u1] на дорожке k целиком в кадр.
+    // Проверка — в координатах ЭКРАНА, чтобы крен (rotateAroundCenter) не
+    // резал подписи у углов повёрнутого кадра; невидимые части места в
+    // кадре не занимают.
+    const fitsAt = (k: number, u0: number, u1: number): boolean => {
+      const b = lineBase(k);
+      return labelFullyOnScreen(
+        b.x + u0 * ux,
+        b.y + u0 * uy,
         u1 - u0,
         ux,
         uy,
@@ -827,6 +908,7 @@ function drawLabels(
         height,
         uiScale,
       );
+    };
 
     // Пересечение параллельных прямоугольников — это пересечение интервалов
     // по обеим осям повёрнутой системы координат. Вытесненная вершина просто
@@ -846,87 +928,203 @@ function drawLabels(
         ),
       );
 
-    // Двустрочная форма, если под подписью есть свободное место: название —
-    // первой строкой, «высота · расстояние» — второй, под первой (сдвиг
-    // вдоль поперечной оси на LINE_H). Нужно: название целиком в кадре,
-    // вторая строка помещается (её части режутся, как в одну строку) и обе
-    // дорожки свободны. Иначе — одна строка. Скрытым вершинам вторая
-    // строка не ставится: их подпись поднята над склоном, и текст под ней
-    // вернулся бы на склон (читался бы как «вершина вот здесь»).
-    if (!hidden && parts.length > 1 && fits(0, prefixW[1])) {
-      const partW2 = partW.slice(1);
-      const prefixW2 = [0];
-      for (let k = 0; k < partW2.length; k++) {
-        prefixW2.push(prefixW2[k] + partW2[k] + (k > 0 ? sepW : 0));
-      }
-      const ax2 = ax + LINE_H * vx;
-      const ay2 = ay + LINE_H * vy;
-      const fits2 = (u0: number, u1: number): boolean =>
-        labelFullyOnScreen(
-          ax2 + u0 * ux,
-          ay2 + u0 * uy,
-          u1 - u0,
-          ux,
-          uy,
-          view.rollRad ?? 0,
-          width,
-          height,
-          uiScale,
+    /** Строка-кандидат: дорожка, части и их префиксные ширины */
+    interface LineCand {
+      k: number;
+      parts: string[];
+      prefixW: number[];
+    }
+    /** Отрисованная строка раскладки */
+    interface DrawLine {
+      ax: number;
+      ay: number;
+      text: string;
+      first: number;
+      last: number;
+    }
+    /**
+     * Пробуем раскладку из строк сверху вниз. Каждая строка проходит
+     * почастную обрезку краем кадра и проверку своей дорожки; неудачная
+     * хвостовая строка (и всё, что под ней) просто отбрасывается, неудачная
+     * первая строка — провал всей раскладки.
+     */
+    const tryLines = (
+      lines: LineCand[],
+    ): {
+      draw: DrawLine[];
+      boxes: { v: number; u0: number; u1: number }[];
+    } | null => {
+      const boxes: { v: number; u0: number; u1: number }[] = [];
+      const draw: DrawLine[] = [];
+      for (let i = 0; i < lines.length && i < MAX_LABEL_LINES; i++) {
+        const line = lines[i];
+        const b = lineBase(line.k);
+        const range = visibleLabelRange(line.prefixW, (u0, u1) =>
+          labelFullyOnScreen(
+            b.x + u0 * ux,
+            b.y + u0 * uy,
+            u1 - u0,
+            ux,
+            uy,
+            view.rollRad ?? 0,
+            width,
+            height,
+            uiScale,
+          ),
         );
-      const range2 = visibleLabelRange(prefixW2, fits2);
-      if (range2) {
-        const base2 = ax2 * ux + ay2 * uy;
-        const v2 = ax2 * vx + ay2 * vy;
-        const boxes = [
-          { v, u0: base, u1: base + prefixW[1] },
-          {
-            v: v2,
-            u0: base2 + prefixW2[range2.first],
-            u1: base2 + prefixW2[range2.last + 1],
-          },
-        ];
-        if (!conflicts(boxes)) {
-          placed.push({
-            peak,
-            mx,
-            my,
-            ax,
-            ay,
-            text: parts[0],
-            line2: {
-              ax: ax2 + ux * prefixW2[range2.first],
-              ay: ay2 + uy * prefixW2[range2.first],
-              text: parts
-                .slice(1 + range2.first, 2 + range2.last)
-                .join(LABEL_SEP),
-            },
-            boxes,
-          });
-          return true;
+        if (!range) return i === 0 ? null : { draw, boxes };
+        const base = b.x * ux + b.y * uy;
+        const box = {
+          v: b.x * vx + b.y * vy,
+          u0: base + line.prefixW[range.first],
+          u1: base + line.prefixW[range.last + 1],
+        };
+        if (conflicts(boxes.concat([box]))) {
+          return i === 0 ? null : { draw, boxes };
+        }
+        boxes.push(box);
+        draw.push({
+          ax: b.x + ux * line.prefixW[range.first],
+          ay: b.y + uy * line.prefixW[range.first],
+          text: line.parts.slice(range.first, range.last + 1).join(LABEL_SEP),
+          first: range.first,
+          last: range.last,
+        });
+      }
+      return { draw, boxes };
+    };
+
+    // Критерий «лучше» (лексикографический): полнота названия (2 — целиком,
+    // 1 — обрезано переносом, 0 — нет) > число видимых info-частей (2/1/0) >
+    // меньше строк. Двустрочная форма получает небольшой бонус: «высота ·
+    // расстояние» второй строкой — пожелание пользователя, когда под
+    // подписью есть место.
+    let bestScore = -1;
+    // Результат — в поле объекта: к let-переменной, присваиваемой внутри
+    // замыкания, TS применяет сужение по инициализатору (null навсегда)
+    const result: {
+      value: {
+        draw: DrawLine[];
+        boxes: { v: number; u0: number; u1: number }[];
+      } | null;
+    } = { value: null };
+    const consider = (
+      res: {
+        draw: DrawLine[];
+        boxes: { v: number; u0: number; u1: number }[];
+      },
+      nameScore: number,
+      infoParts: number,
+      twoLineBonus: number,
+    ): void => {
+      const score =
+        nameScore * 100 + infoParts * 10 + twoLineBonus - res.draw.length;
+      if (score > bestScore) {
+        bestScore = score;
+        result.value = res;
+      }
+    };
+
+    // A. Одна строка: «Название · высота · расстояние» с почастной обрезкой
+    // краем кадра (она же — финальный фолбэк: усечённая строка, если не
+    // вышло ничего другого).
+    const single = tryLines([{ k: 0, parts, prefixW }]);
+    if (single) {
+      const nameSeen = single.draw[0].first === 0;
+      const infoParts = nameSeen
+        ? single.draw[0].last
+        : single.draw[0].last - single.draw[0].first + 1;
+      consider(single, nameSeen ? 2 : 0, infoParts, 0);
+    }
+
+    if (!hidden) {
+      // B. Двустрочная форма, если под подписью есть свободное место:
+      // название первой строкой, «высота · расстояние» — второй, под первой.
+      // Скрытым вершинам вторая строка не ставится: их подпись поднята над
+      // склоном, и текст под ней вернулся бы на склон.
+      if (parts.length > 1) {
+        const two = tryLines([
+          { k: 0, parts: [parts[0]], prefixW: [0, prefixW[1]] },
+          { k: 1, parts: parts.slice(1), prefixW: prefixW2 },
+        ]);
+        if (two) {
+          const infoParts =
+            two.draw.length === 2
+              ? two.draw[1].last - two.draw[1].first + 1
+              : 0;
+          consider(two, 2, infoParts, 2);
         }
       }
     }
 
-    // Одна строка: части режутся по краям кадра
-    const range = visibleLabelRange(prefixW, fits);
-    if (!range) return false; // не влезла ни одна часть — прячем всё
+    if (!hidden) {
+      // C. Перенос названия по пробелам и дефисам, когда целиком оно в одну
+      // строку не влезает: фрагменты складываются друг под другом, info-строка
+      // — последней, если для неё есть место. Точка разрыва — жадный
+      // максимальный префикс; меньший первый фрагмент только удлиняет хвост,
+      // так что первый успешный разрыв — последний проверяемый.
+      if (!fitsAt(0, 0, prefixW[1])) {
+        const T = nameTokens(ctx, labelFont, parts[0]);
+        wrapped: for (let i = T.breaks.length - 1; i >= 0; i--) {
+          if (!fitsAt(0, 0, T.prefW[i])) continue;
+          const b = T.breaks[i];
+          let any = false;
 
-    // Видимый текст сдвигается к первой оставшейся части (если название
-    // скрыто, строка начинается с высоты), выноска ведёт к ней же
-    const boxes = [
-      { v, u0: base + prefixW[range.first], u1: base + prefixW[range.last + 1] },
-    ];
-    if (conflicts(boxes)) return false;
+          // 2 фрагмента: остаток названия целиком на второй дорожке
+          const twoFrag = tryLines([
+            { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
+            { k: 1, parts: [parts[0].slice(b.start)], prefixW: [0, T.tailW[i]] },
+            { k: 2, parts: parts.slice(1), prefixW: prefixW2 },
+          ]);
+          if (twoFrag) {
+            any = true;
+            const infoParts =
+              twoFrag.draw.length === 3
+                ? twoFrag.draw[2].last - twoFrag.draw[2].first + 1
+                : 0;
+            consider(twoFrag, twoFrag.draw.length >= 2 ? 2 : 1, infoParts, 0);
+          }
+
+          // 3 фрагмента: хвост делится на оставшихся разрывах
+          for (let j = i + 1; j < T.breaks.length; j++) {
+            const bj = T.breaks[j];
+            const threeFrag = tryLines([
+              { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
+              {
+                k: 1,
+                parts: [parts[0].slice(b.start, bj.end)],
+                prefixW: [0, T.midW[i][j]],
+              },
+              { k: 2, parts: [parts[0].slice(bj.start)], prefixW: [0, T.tailW[j]] },
+              { k: 3, parts: parts.slice(1), prefixW: prefixW2 },
+            ]);
+            if (threeFrag) {
+              any = true;
+              const infoParts =
+                threeFrag.draw.length === 4
+                  ? threeFrag.draw[3].last - threeFrag.draw[3].first + 1
+                  : 0;
+              consider(
+                threeFrag,
+                threeFrag.draw.length >= 3 ? 2 : 1,
+                infoParts,
+                0,
+              );
+            }
+          }
+          if (any) break wrapped;
+        }
+      }
+    }
+
+    if (!result.value) return false; // ни одна раскладка не влезла — прячем всё
 
     placed.push({
       peak,
       mx,
       my,
-      ax: ax + ux * prefixW[range.first],
-      ay: ay + uy * prefixW[range.first],
-      text: parts.slice(range.first, range.last + 1).join(LABEL_SEP),
-      line2: null,
-      boxes,
+      lines: result.value.draw,
+      boxes: result.value.boxes,
     });
     return true;
   };
@@ -960,12 +1158,13 @@ function drawLabels(
 
   // Рендер: подпись вершины, для которой нашлось место
   for (const p of placed) {
+    const first = p.lines[0];
     // Скрытая вершина: выноска обрывается о склон, маркера вершины нет
     const end =
       p.peak.visibility === "hidden"
         ? clipToSilhouette(
-            p.ax,
-            p.ay,
+            first.ax,
+            first.ay,
             p.mx,
             p.my,
             silhouette,
@@ -974,15 +1173,22 @@ function drawLabels(
             elevToY,
           )
         : { x: p.mx, y: p.my };
-    drawPeakAnchor(ctx, end.x, end.y, p.ax, p.ay, p.peak.visibility, uiScale);
-    drawRotatedLabel(ctx, p.ax, p.ay, theta, p.text, p.peak.visibility, uiScale);
-    if (p.line2) {
+    drawPeakAnchor(
+      ctx,
+      end.x,
+      end.y,
+      first.ax,
+      first.ay,
+      p.peak.visibility,
+      uiScale,
+    );
+    for (const l of p.lines) {
       drawRotatedLabel(
         ctx,
-        p.line2.ax,
-        p.line2.ay,
+        l.ax,
+        l.ay,
         theta,
-        p.line2.text,
+        l.text,
         p.peak.visibility,
         uiScale,
       );

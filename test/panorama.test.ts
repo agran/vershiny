@@ -331,7 +331,7 @@ describe("отсечение частей подписи за краем кад�
   });
 });
 
-describe("двустрочная подпись", () => {
+describe("многострочная подпись", () => {
   const W = 1000;
   const H = 600;
   const WIDTHS: Record<string, number> = {
@@ -339,6 +339,12 @@ describe("двустрочная подпись", () => {
     "5642 м": 58,
     "5.0 км": 55,
     " · ": 20,
+    "Длинное Название": 600,
+    "Длинное": 250,
+    "Название": 300,
+    "Джанги-Тау": 600,
+    "Джанги-": 250,
+    "Тау": 300,
   };
 
   /** Контекст, который ведёт счёт transform-ов и собирает fillText */
@@ -394,7 +400,7 @@ describe("двустрочная подпись", () => {
     return { ctx, texts };
   };
 
-  const state = (horizon: Float32Array): PanoramaState =>
+  const state = (horizon: Float32Array, name = "Эльбрус"): PanoramaState =>
     ({
       horizon,
       stepRad: 0.001,
@@ -405,7 +411,7 @@ describe("двустрочная подпись", () => {
           distanceM: 5000,
           ele: 5642,
           visibility: "visible",
-          name: "Эльбрус",
+          name,
         },
       ],
     }) as unknown as PanoramaState;
@@ -442,6 +448,33 @@ describe("двустрочная подпись", () => {
     // Название помещается, а хвост и вторая строка — нет
     expect(texts.find((t) => t.text === "Эльбрус")).toBeDefined();
     expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeUndefined();
+  });
+
+  it("название, не влезающее в строку, переносится по пробелу", () => {
+    const horizon = new Float32Array(2000).fill(0.05);
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, state(horizon, "Длинное Название"), view, 1, {
+      ridges: false,
+    });
+
+    // Одна строка не влезает (600 px от x≈503), перенос — влезает:
+    // «Длинное» и «Название» на разных дорожках, info — последней строкой
+    expect(texts.find((t) => t.text === "Длинное")).toBeDefined();
+    expect(texts.find((t) => t.text === "Название")).toBeDefined();
+    expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeDefined();
+    expect(texts.find((t) => t.text === "Длинное Название")).toBeUndefined();
+  });
+
+  it("перенос по дефису оставляет дефис в конце первой строки", () => {
+    const horizon = new Float32Array(2000).fill(0.05);
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, state(horizon, "Джанги-Тау"), view, 1, {
+      ridges: false,
+    });
+
+    expect(texts.find((t) => t.text === "Джанги-")).toBeDefined();
+    expect(texts.find((t) => t.text === "Тау")).toBeDefined();
+    expect(texts.find((t) => t.text === "Джанги-Тау")).toBeUndefined();
   });
 });
 
