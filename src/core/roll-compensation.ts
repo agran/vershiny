@@ -8,6 +8,8 @@
  * всегда: настройки у компенсации больше нет.
  */
 
+import { effectiveOrientation, holdForm } from "./screen-orientation";
+
 /**
  * Крен для доворота оверлея, рад.
  *
@@ -19,6 +21,9 @@
  * вычитается тот же softAngle: видимый в кадре крен = крен датчика −
  * softAngle. Без программного поворота (softAngleDeg = 0) — тождественность.
  *
+ * Отдельно вычитается доворот под ЛАНДШАФТНОЕ ОКНО (см.
+ * landscapeWindowHoldRollDeg): там кадр довернул уже сам браузер.
+ *
  * @param rollRad крен из датчика, рад
  * @param softAngleDeg угол программного поворота UI (−90 | 0 | +90)
  */
@@ -26,5 +31,31 @@ export function overlayRollRad(
   rollRad: number,
   softAngleDeg: number,
 ): number {
-  return rollRad - (softAngleDeg * Math.PI) / 180;
+  return rollRad - ((softAngleDeg + landscapeWindowHoldRollDeg()) * Math.PI) / 180;
+}
+
+/**
+ * Доворот кадра, который браузер УЖЕ сделал под ландшафтное окно, град.
+ *
+ * В ландшафтном окне (screen.orientation.angle 90/270) кадр камеры приходит
+ * довёрнутым под окно. На Android Chrome события deviceorientation при этом
+ * идут в координатах УСТРОЙСТВА: при ровном ландшафтном хвате крен датчика
+ * ≈ ±90°, хотя картинка ровная — эти ±90° в кадр добавил браузер, и их надо
+ * вычесть (на S25 Ultra: окно landscape-primary 90°, крен датчика +98° при
+ * завале телефона всего на ~8°). На iOS события в координатах ЭКРАНА — крен
+ * в ландшафтном окне ≈ 0, форма хвата по ним портретная, вычитать нечего:
+ * поэтому коррекция включается только при ландшафтном хвате (tiltForm).
+ */
+function landscapeWindowHoldRollDeg(): number {
+  if (effectiveOrientation() !== "landscape" || holdForm() !== "landscape") {
+    return 0;
+  }
+  const angle = screen.orientation?.angle ?? 0;
+  // Кадр камеры браузер уже довернул на угол окна в экранных координатах:
+  // landscape-primary (90) — на +90°, secondary (270) — на −90°. Вычитаем
+  // тот же угол из крена датчика: S25 Ultra в landscape-primary отдаёт
+  // крен ≈ +98° при завале телефона на ~8°, видимый крен = 98 − 90 = 8°
+  if (angle === 90) return 90;
+  if (angle === 270) return -90;
+  return 0;
 }

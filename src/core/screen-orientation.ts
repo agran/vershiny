@@ -69,6 +69,11 @@ export function softRotated(): boolean {
   return softAngle !== 0;
 }
 
+/** Форма хвата по датчику: портрет или ландшафт (см. notePhysicalTilt) */
+export function holdForm(): "portrait" | "landscape" {
+  return tiltForm;
+}
+
 /** Куда повёрнут интерфейс, градусы: -90 | 0 | +90 */
 export function softAngleDeg(): number {
   return softAngle;
