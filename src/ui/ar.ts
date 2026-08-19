@@ -21,6 +21,11 @@ import {
   type FrameFov,
 } from "../core/camera-fov";
 import { softAngleDeg } from "../core/screen-orientation";
+import {
+  currentFrameRotationDeg,
+  drawVideoAligned,
+  rotatedFrameSize,
+} from "../core/frame-orientation";
 import type { PanoramaState, ViewState } from "./panorama";
 import { HORIZON_FRAC, drawOverlay, rotateAroundCenter } from "./panorama";
 
@@ -274,10 +279,15 @@ export async function startAr(
 
   /** FOV полного кадра камеры: базовый угол → пропорции кадра → зум */
   function fullFrameFov(): FrameFov {
-    return applyZoom(
-      fovForFrame(baseFovRad(), videoEl.videoWidth, videoEl.videoHeight),
-      zoomFactor,
+    // Размеры кадра — ПОСЛЕ доворота под программный поворот UI: они
+    // описывают тот же кадр, что рисует drawArFrame, и только с ними
+    // калибровка и снимок совпадут с картинкой на экране
+    const { w, h } = rotatedFrameSize(
+      videoEl.videoWidth,
+      videoEl.videoHeight,
+      currentFrameRotationDeg(),
     );
+    return applyZoom(fovForFrame(baseFovRad(), w, h), zoomFactor);
   }
 
   let raf = 0;
@@ -310,25 +320,35 @@ export async function startAr(
       videoEl.srcObject = null;
     },
     fullFrameFov,
-    frameHorizonFrac: () =>
-      horizonFracInFrame(
+    frameHorizonFrac: () => {
+      const { w, h } = rotatedFrameSize(
         videoEl.videoWidth,
         videoEl.videoHeight,
+        currentFrameRotationDeg(),
+      );
+      return horizonFracInFrame(
+        w,
+        h,
         canvas.width,
         canvas.height,
         HORIZON_FRAC,
-      ),
+      );
+    },
     grabFrame: () => {
       if (!probeCtx || videoEl.readyState < 2) return null;
       const vw = videoEl.videoWidth;
       const vh = videoEl.videoHeight;
-      // Кадр в пробу — как есть, без всякого доворота: в той же системе,
-      // что на экране
+      // Кадр в пробу — в том же довороте, что на экране: профиль
+      // «небо/земля» измеряется по колонкам пробы, и он обязан совпадать
+      // с горизонталью отрисованного кадра (иначе в программном ландшафте
+      // калибровка искала бы линию неба поперёк экрана)
+      const rot = currentFrameRotationDeg();
+      const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
       const width = 320;
-      const height = Math.max(1, Math.round((width * vh) / vw));
+      const height = Math.max(1, Math.round((width * ph) / pw));
       probe.width = width;
       probe.height = height;
-      probeCtx.drawImage(videoEl, 0, 0, width, height);
+      drawVideoAligned(probeCtx, videoEl, width, height, rot);
       return {
         rgba: probeCtx.getImageData(0, 0, width, height).data,
         width,
@@ -399,19 +419,21 @@ function drawArFrame(
   if (video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    // Кадр рисуется КАК ЕСТЬ, без всякого доворота: ориентацию кадра
-    // определяет платформа (Samsung компенсирует сенсор под окно), и любой
-    // наш трансформ ломал совпадение с контурами. Cover-кроп по центру.
-    const scale = Math.max(width / vw, height / vh);
-    const dw = vw * scale;
-    const dh = vh * scale;
-    ctx.drawImage(video, (width - dw) / 2, (height - dh) / 2, dw, dh);
+    // Кадр ориентацией «ровно под окно» (Samsung компенсирует сенсор под
+    // системную ориентацию окна), а интерфейс может быть довёрнут CSS-ом на
+    // ±90° (программный ландшафт). drawImage CSS-трансформ не применяет —
+    // поэтому доворачиваем кадр сами на −softAngle, иначе в ландшафтном
+    // режиме картинка лежит на боку. Cover-кроп по центру.
+    const rot = currentFrameRotationDeg();
+    drawVideoAligned(ctx, video, width, height, rot);
 
     // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
     // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
-    // кадра и расходились к краям, когда пропорции экрана и видео различались
-    const full = applyZoom(fovForFrame(baseFovRad(), vw, vh), zoomFactor);
-    const visible = applyCoverCrop(full, vw, vh, width, height);
+    // кадра и расходились к краям, когда пропорции экрана и видео различались.
+    // Размеры кадра — после доворота: FOV считается от повёрнутого кадра
+    const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
+    const full = applyZoom(fovForFrame(baseFovRad(), pw, ph), zoomFactor);
+    const visible = applyCoverCrop(full, pw, ph, width, height);
     overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
   } else {
     ctx.fillStyle = "#000";
