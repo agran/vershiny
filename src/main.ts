@@ -2496,14 +2496,27 @@ function setupOrientationButton(): void {
       }
     });
   }
-  // Выход из fullscreen (жест «назад», свайп) снимает запрет ориентации —
-  // без этого слушателя иконка продолжала рисовать замок на свободном экране
+  // Выход из fullscreen снимает системный запрет ориентации, а на Samsung
+  // это случается при обычном сворачивании PWA. Режим НЕ сбрасываем: выбор
+  // пользователя хранится в localStorage — вместо отката в «авто» запрет
+  // пере-применяется при возврате в приложение (и при возврате в fullscreen).
+  // Повторный lock дёшев и идемпотентен: уже запертый экран не дёргается.
+  const relock = (): void => {
+    if (pref === "auto" || document.hidden) return;
+    void applyOrientation(pref).then((applied) => {
+      if (!applied) {
+        // Реальный отказ (политика браузера): честный откат, иначе иконка
+        // нарисует замок на свободном экране
+        pref = "auto";
+        sync();
+      }
+    });
+  };
   document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement && pref !== "auto") {
-      pref = "auto";
-      sync();
-    }
+    if (document.fullscreenElement) relock(); // вернулись в fullscreen
   });
+  document.addEventListener("visibilitychange", relock); // вернулись в приложение
+  window.addEventListener("pageshow", relock); // bfcache-восстановление
 }
 
 /** Кнопки ⚙/AR/фото: создаются при старте, видны уже во время загрузки */
