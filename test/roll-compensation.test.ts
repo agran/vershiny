@@ -1,37 +1,11 @@
 // @vitest-environment jsdom
 /**
- * Компенсация крена (core/roll-compensation.ts): включена по умолчанию,
- * отключается и запоминается; мусор в хранилище читается как «вкл».
+ * Компенсация крена (core/roll-compensation.ts): включена всегда —
+ * настройки нет, оверлей доворачивается на видимый крен кадра.
  */
 
-import { beforeEach, describe, expect, it } from "vitest";
-import {
-    isRollCompensationOn,
-    overlayRollRad,
-    setRollCompensation,
-} from "../src/core/roll-compensation";
-
-describe("roll-compensation", () => {
-  beforeEach(() => {
-    localStorage.clear();
-  });
-
-  it("по умолчанию включена", () => {
-    expect(isRollCompensationOn()).toBe(true);
-  });
-
-  it("отключение запоминается", () => {
-    setRollCompensation(false);
-    expect(isRollCompensationOn()).toBe(false);
-    setRollCompensation(true);
-    expect(isRollCompensationOn()).toBe(true);
-  });
-
-  it("мусор в хранилище читается как «вкл» (дефолт безопаснее)", () => {
-    localStorage.setItem("vershiny-roll-compensation", "junk");
-    expect(isRollCompensationOn()).toBe(true);
-  });
-});
+import { describe, expect, it } from "vitest";
+import { overlayRollRad } from "../src/core/roll-compensation";
 
 describe("overlayRollRad", () => {
   const deg = (v: number): number => (v * Math.PI) / 180;

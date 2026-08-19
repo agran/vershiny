@@ -35,9 +35,6 @@ import {
   ICON_LOCATE,
   ICON_MAP,
   ICON_PHOTO,
-  ICON_ROTATE_AUTO,
-  ICON_ROTATE_LANDSCAPE,
-  ICON_ROTATE_PORTRAIT,
   ICON_SETTINGS,
   ICON_UP,
   iconArrow,
@@ -214,7 +211,12 @@ if (
   screenOrientation &&
   typeof screenOrientation.addEventListener === "function"
 ) {
-  screenOrientation.addEventListener("change", () => setTimeout(resize, 50));
+  screenOrientation.addEventListener("change", () => {
+    setTimeout(resize, 50);
+    // Окно перевернулось само (автоповорот ОС): переоценить, нужен ли ещё
+    // наш поворот. До первого показания датчика syncOrientation молчит
+    screenOrientationModule.syncOrientation();
+  });
 } else {
   window.addEventListener("orientationchange", () => setTimeout(resize, 50));
 }
@@ -573,7 +575,7 @@ import {
 } from "./core/calibration";
 import { destination } from "./core/geo";
 import { orientationTracker } from "./core/orientation";
-import { isRollCompensationOn, overlayRollRad } from "./core/roll-compensation";
+import { overlayRollRad } from "./core/roll-compensation";
 import * as screenOrientationModule from "./core/screen-orientation";
 
 /**
@@ -679,20 +681,17 @@ orientationTracker.start((state) => {
       Math.min(MAX_TILT, state.tiltRad + tiltOffset),
     );
     // Крен идёт в AR-оверлей (и в снимок из AR): там горизонт доворачивается
-    // под наклонённый кадр камеры. Отключается в настройках (компенсация
-    // крена) — тогда горизонт остаётся ровной линией экрана. В обычной
-    // панораме rollRad не используется — горизонт держим ровным.
+    // под наклонённый кадр камеры. Включён всегда — настройки у него больше
+    // нет. В обычной панораме rollRad не используется — горизонт держим ровным.
     // В программном ландшафте (CSS-поворот body на softAngle) кадр камеры
     // уже довёрнут на −softAngle при отрисовке (core/frame-orientation.ts),
     // а крен датчика отсчитывается от портретного окна — при ровном
     // ландшафтном хвате он показывает ±90°, хотя картинка стоит ровно.
     // Поэтому видимый крен = крен датчика − softAngle (overlayRollRad).
-    view.rollRad = isRollCompensationOn()
-      ? overlayRollRad(
-          state.rollRad,
-          screenOrientationModule.softAngleDeg(),
-        )
-      : 0;
+    view.rollRad = overlayRollRad(
+      state.rollRad,
+      screenOrientationModule.softAngleDeg(),
+    );
     scheduleDraw();
   }
   updateCompassButton();
@@ -2462,122 +2461,29 @@ function adjustHeight(deltaM: number): void {
 }
 
 /**
- * Кнопка поворота экрана рядом с настройками.
+ * Автоориентация: интерфейс следует за хватом телефона.
  *
- * Панорама смотрится в ландшафте (горизонт длинный), а системный автоповорот
- * в горах мешает: лёгкий наклон телефона переключает экран туда-сюда. Поэтому
- * у нас ориентация ручная: кнопка циклит авто → ландшафт → портрет; выбор
- * запоминается. Подпись показывает, ЧТО включится по нажатию, а зелёный фон —
- * что сейчас заперто (не авто).
- *
- * Стратегия гибридная (см. core/screen-orientation.ts): системный lock где
- * возможен (Android PWA — без жеста и fullscreen), иначе CSS-поворот body
- * (iOS, Firefox, вкладка). Кнопка поэтому есть везде, где есть DOM.
+ * Форму и сторону хвата следит сам модуль (гистерезис по углу крена,
+ * core/screen-orientation.ts) — на каждое изменение он зовёт нас, и мы
+ * пере-применяем поворот. То же при возврате в приложение (окно могло
+ * перевернуться под нами) и при старте — сразу после первого показания
+ * датчика, чтобы манифестный ландшафт Android PWA успел сработать первым.
  */
-function setupOrientationButton(): void {
-  const { applyOrientation, rememberOrientation, storedOrientation } =
-    screenOrientationModule;
+function setupAutoOrientation(): void {
   if (typeof document === "undefined" || !document.body) return;
-  let pref = storedOrientation();
-  const nextKey = (): TitleKey =>
-    pref === "auto"
-      ? "orientationLandscape"
-      : pref === "landscape"
-        ? "orientationPortrait"
-        : "orientationAuto";
-  /** Ключ ТЕКУЩЕГО режима — для статус-плашки по нажатию */
-  const currentKey = (): TitleKey =>
-    pref === "auto"
-      ? "orientationAuto"
-      : pref === "landscape"
-        ? "orientationLandscape"
-        : "orientationPortrait";
-  /** Таймер автоскрытия статуса режима: повторное нажатие не должно гасить свежий */
-  let statusTimer: ReturnType<typeof setTimeout> | null = null;
-  // Иконка показывает ТЕКУЩИЙ режим: авто — телефон в дуге, запертые —
-  // телефон с замком. Подпись по-прежнему говорит, что включится по нажатию.
-  const currentIcon = (): string =>
-    pref === "auto"
-      ? ICON_ROTATE_AUTO
-      : pref === "landscape"
-        ? ICON_ROTATE_LANDSCAPE
-        : ICON_ROTATE_PORTRAIT;
-  const btn = makeButton(
-    currentIcon(),
-    nextKey(),
-    `left:${edgeLeft(56)};top:${edgeTop()}`,
-    "right",
-  );
-  // Плашка-подпись при загрузке — общий смысл кнопки, а не следующий режим:
-  // «Ландшафтная ориентация» у незапертого экрана читалась как описание
-  // текущего состояния, а не как объяснение, зачем кнопка
-  const cap = captionEntries.find((c) => c.btn === btn);
-  if (cap) {
-    cap.key = "orientation";
-    cap.label.textContent = t("orientation");
-  }
-  /** Внешний вид под текущий режим: иконка + цвет запертого + подпись title */
   const sync = (): void => {
-    setTitle(btn, nextKey());
-    btn.innerHTML = currentIcon();
-    btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
+    if (!document.hidden) screenOrientationModule.syncOrientation();
   };
-  btn.onclick = () => {
-    pref =
-      pref === "auto"
-        ? "landscape"
-        : pref === "landscape"
-          ? "portrait"
-          : "auto";
-    rememberOrientation(pref);
-    sync();
-    // Программный поворот не требует ни жеста, ни разрешений и не может
-    // отказать — отката «не заперлось» здесь нет и не нужен
-    applyOrientation(pref);
-    // Подтверждение режима: title кнопки говорит, что БУДЕТ по нажатию,
-    // поэтому само нажатие без отклика выглядело молчаливой подменой
-    if (statusTimer) clearTimeout(statusTimer);
-    setStatus(t(currentKey()));
-    statusTimer = setTimeout(() => {
-      statusTimer = null;
-      setStatus("");
-    }, 2500);
-  };
-  sync();
-  // Сохранённый режим применяем сразу при запуске: CSS-поворот не требует
-  // ни жеста, ни fullscreen. Отсрочка ~0.4 с даёт манифестному запрету
-  // (Android PWA, "orientation": "landscape") сработать первым — иначе на
-  // медленных устройствах включили бы поворот поверх уже поворачивающегося
-  // окна и получили двойной
-  if (pref !== "auto") {
-    setTimeout(() => applyOrientation(pref), 400);
-  }
-  // Возврат в приложение: манифестный/системный поворот окна мог слететь
-  // или само окно перевернуться (автоповорот ОС) — переоцениваем, нужен ли
-  // ещё наш поворот. orientationMatches проверяет по пропорциям окна (см.
-  // модуль): проверка по строке type ложно решала бы, что поворот «не
-  // сработал»
-  const relock = (): void => {
-    if (pref === "auto" || document.hidden) return;
-    if (screenOrientationModule.orientationMatches(pref)) return; // не слетело
-    applyOrientation(pref);
-  };
-  document.addEventListener("visibilitychange", relock); // вернулись в приложение
-  window.addEventListener("pageshow", relock); // bfcache-восстановление
-  // Перехват телефона другим боком в ландшафте: переворачиваем UI на 180°,
-  // чтобы картинка не оставалась вверх ногами. Сторону следит сам модуль
-  // (гистерезис по γ), нам остаётся пере-применить режим — targetAngle
-  // возьмёт свежую сторону
-  screenOrientationModule.onPhysicalSideChange(() => {
-    if (pref === "landscape") applyOrientation(pref);
-  });
+  screenOrientationModule.onVisibleFormChange(sync);
+  document.addEventListener("visibilitychange", sync); // вернулись в приложение
+  window.addEventListener("pageshow", sync); // bfcache-восстановление
 }
 
 /** Кнопки ⚙/AR/фото: создаются при старте, видны уже во время загрузки */
 function setupActionButtons(): void {
   if (actionButtonsReady) return;
   actionButtonsReady = true;
-  setupOrientationButton();
+  setupAutoOrientation();
   // Настройки (⚙) — выбор региона, язык, сброс оффсета
   const settingsBtn = makeButton(
     ICON_SETTINGS,

@@ -73,12 +73,17 @@ describe("frame-orientation", () => {
   it("в программном ландшафте доворот равен −softAngle", async () => {
     const { fo, so } = await fresh();
     setOrientation({ type: "portrait-primary", angle: 0 });
+    // Управляем временем: дебаунс перехвата не должен глушить возврат
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
     so.notePhysicalTilt(-80); // хват влево
-    so.applyOrientation("landscape");
+    so.syncOrientation();
     expect(so.softAngleDeg()).toBe(-90);
     expect(fo.currentFrameRotationDeg()).toBe(90);
-    // Возврат в «авто» снимает и доворот
-    so.applyOrientation("auto");
+    // Возврат в портретный хват снимает и доворот
+    now += 1000;
+    so.notePhysicalTilt(0);
+    so.syncOrientation();
     expect(fo.currentFrameRotationDeg()).toBe(0);
   });
 

@@ -1,23 +1,21 @@
 // @vitest-environment jsdom
 /**
- * Программная ориентация экрана (core/screen-orientation.ts): выбор
- * запоминается, поворот — CSS-трансформом body (без системного lock и
- * fullscreen). Проверка «режим действует» — по пропорциям окна с поправкой
- * на наш трансформ, а не по строке type: при повороте ровно на 90°
- * primary/secondary меняются местами, и примитивное сравнение ложно решало
- * бы, что поворот не сработал.
+ * Автоматическая ориентация экрана (core/screen-orientation.ts): интерфейс
+ * следует за хватом телефона — поворот CSS-трансформом body (без системного
+ * lock и fullscreen). Форма хвата (портрет/ландшафт) и сторона берутся из
+ * угла крена с гистерезисом; перехват другим боком переворачивает UI на 180°.
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Модуль читает localStorage/screen при вызове, так что окружение можно
-// настраивать до импорта на каждый тест через vi.resetModules.
+// Модуль читает screen при вызове, так что окружение можно настраивать
+// до импорта на каждый тест через vi.resetModules.
 
 async function fresh() {
   vi.resetModules();
   const m = await import("../src/core/screen-orientation");
-  // Модуль держит сторону хвата и время последнего переворота между тестами —
-  // сбрасываем, иначе один тест влияет на следующий
+  // Модуль держит сторону, форму хвата и время последнего переворота между
+  // тестами — сбрасываем, иначе один тест влияет на следующий
   m._resetOrientationForTests();
   return m;
 }
@@ -31,7 +29,7 @@ function setOrientation(value: unknown): void {
   });
 }
 
-describe("screen-orientation", () => {
+describe("screen-orientation: автоповорот по хвату", () => {
   beforeEach(() => {
     localStorage.clear();
     // Поворот и стили прошлого теста не должны протечь в следующий
@@ -44,27 +42,6 @@ describe("screen-orientation", () => {
     vi.restoreAllMocks();
   });
 
-  it("по умолчанию — авто, без localStorage — авто", async () => {
-    const m = await fresh();
-    expect(m.storedOrientation()).toBe("auto");
-  });
-
-  it("запоминает выбор", async () => {
-    const m = await fresh();
-    m.rememberOrientation("landscape");
-    expect(m.storedOrientation()).toBe("landscape");
-    m.rememberOrientation("portrait");
-    expect(m.storedOrientation()).toBe("portrait");
-    m.rememberOrientation("auto");
-    expect(m.storedOrientation()).toBe("auto");
-  });
-
-  it("мусор в хранилище читается как авто", async () => {
-    localStorage.setItem("vershiny-orientation", "diagonal");
-    const m = await fresh();
-    expect(m.storedOrientation()).toBe("auto");
-  });
-
   it("effectiveOrientation читает type, без type — форму окна", async () => {
     const m = await fresh();
     setOrientation({ type: "landscape-secondary" });
@@ -73,151 +50,116 @@ describe("screen-orientation", () => {
     expect(m.effectiveOrientation()).toBe("portrait");
   });
 
-  it("«авто» не поворачивает", async () => {
+  it("до первого показания датчика поворот не включается", async () => {
     const m = await fresh();
     setOrientation({ type: "portrait-primary" });
-    expect(m.applyOrientation("auto")).toBe(true);
+    expect(m.syncOrientation()).toBe(false);
     expect(m.softRotated()).toBe(false);
     expect(document.body.style.transform).toBe("");
   });
 
-  it("«ландшафт» на портретном экране поворачивает body по стороне хвата", async () => {
+  it("портретный хват на портретном окне не поворачивает", async () => {
     const m = await fresh();
     setOrientation({ type: "portrait-primary", angle: 0 });
-    // Хват по умолчанию неизвестен → поворачиваем вправо (+90°)
-    expect(m.applyOrientation("landscape")).toBe(true);
-    expect(m.softRotated()).toBe(true);
-    expect(m.softAngleDeg()).toBe(90);
-    expect(document.body.style.transform).toBe("rotate(90deg)");
+    m.notePhysicalTilt(0); // первое показание: портрет
+    expect(m.syncOrientation()).toBe(true);
+    expect(m.softRotated()).toBe(false);
   });
 
-  it("направление поворота следует за физической стороной хвата", async () => {
+  it("ландшафтный хват на портретном окне поворачивает body по стороне хвата", async () => {
     const m = await fresh();
     setOrientation({ type: "portrait-primary", angle: 0 });
-    // Управляем временем: дебаунс не должен склеивать два перехвата
-    let now = 0;
-    vi.spyOn(performance, "now").mockImplementation(() => now);
-    // Телефон держат повёрнутым ВЛЕВО (roll ≈ −80°)
-    m.notePhysicalTilt(-80);
-    m.applyOrientation("landscape");
+    m.notePhysicalTilt(-80); // хват влево
+    m.syncOrientation();
     expect(m.softAngleDeg()).toBe(-90);
     expect(document.body.style.transform).toBe("rotate(-90deg)");
-    // Перехватили вправо — поворот переориентируется (после дебаунса)
-    now += 1000;
-    m.notePhysicalTilt(80);
-    m.applyOrientation("landscape");
-    expect(m.softAngleDeg()).toBe(90);
   });
 
-  it("сторона хвата из угла ландшафтного окна важнее запомненного наклона", async () => {
-    const m = await fresh();
-    // Окно ландшафтное (телефон уже повёрнут): угол однозначно говорит,
-    // КУДА — primary (90°) это хват влево. Поворачиваем в «портрет», чтобы
-    // поворот реально включился (на ландшафтном окне «ландшафт» не крутит)
-    setOrientation({ type: "landscape-primary", angle: 90 });
-    m.notePhysicalTilt(80); // устаревший наклон «вправо» — не должен решать
-    m.applyOrientation("portrait");
-    expect(m.softAngleDeg()).toBe(-90); // primary = хват влево
-  });
-
-  it("перехват другим боком в ландшафте зовёт переворот (гистерезис + дебаунс)", async () => {
+  it("перехват другим боком переворачивает UI на 180°", async () => {
     const m = await fresh();
     setOrientation({ type: "portrait-primary", angle: 0 });
-    // Управляем временем, чтобы дебаунс не склеивал вызовы подряд
     let now = 0;
     vi.spyOn(performance, "now").mockImplementation(() => now);
-    m.notePhysicalTilt(-80); // хват влево (roll ≈ −80°)
-    m.applyOrientation("landscape");
+    m.notePhysicalTilt(-80); // хват влево
+    m.syncOrientation();
     expect(m.softAngleDeg()).toBe(-90);
-
-    const calls: number[] = [];
-    m.onPhysicalSideChange(() => calls.push(1));
-    // Мёртвая зона вокруг вертикали (|roll| < 75°): держим прошлую сторону
     now += 1000;
-    m.notePhysicalTilt(-50);
-    expect(calls).toHaveLength(0);
-    now += 1000;
-    m.notePhysicalTilt(50);
-    expect(calls).toHaveLength(0);
-    // Глубокая зона противоположного знака — перехват, зовём переворот
-    now += 1000;
-    m.notePhysicalTilt(80);
-    expect(calls).toHaveLength(1);
-    // И новая сторона применяется
-    m.applyOrientation("landscape");
+    m.notePhysicalTilt(80); // перехват вправо
+    m.syncOrientation();
     expect(m.softAngleDeg()).toBe(90);
   });
 
-  it("смена стороны без поворота UI переворота не зовёт (нечего крутить)", async () => {
+  it("гистерезис: наклон ландшафтного хвата не роняет UI в портрет", async () => {
     const m = await fresh();
     setOrientation({ type: "portrait-primary", angle: 0 });
-    const calls: number[] = [];
-    m.onPhysicalSideChange(() => calls.push(1));
-    // UI не повёрнут (авто) — смена стороны молча запоминается
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
     m.notePhysicalTilt(-80);
-    m.notePhysicalTilt(80);
-    expect(calls).toHaveLength(0);
-  });
-
-  it("«ландшафт» на ландшафтном окне — поворот не нужен (манифест сработал)", async () => {
-    const m = await fresh();
-    setOrientation({ type: "landscape-primary" });
-    expect(m.applyOrientation("landscape")).toBe(true);
-    expect(m.softRotated()).toBe(false);
-  });
-
-  it("«портрет» на портретном окне — поворот не нужен", async () => {
-    const m = await fresh();
-    setOrientation({ type: "portrait-primary" });
-    expect(m.applyOrientation("portrait")).toBe(true);
-    expect(m.softRotated()).toBe(false);
-  });
-
-  it("«портрет» на ландшафтном окне поворачивает обратно", async () => {
-    const m = await fresh();
-    setOrientation({ type: "landscape-primary" });
-    expect(m.applyOrientation("portrait")).toBe(true);
-    expect(m.softRotated()).toBe(true);
-  });
-
-  it("возврат в «авто» снимает поворот и чистит стили", async () => {
-    const m = await fresh();
-    setOrientation({ type: "portrait-primary", angle: 0 });
-    m.applyOrientation("landscape");
-    expect(m.softRotated()).toBe(true);
-    expect(m.applyOrientation("auto")).toBe(true);
+    m.syncOrientation();
+    expect(m.softAngleDeg()).toBe(-90);
+    // Наклон к −50°: ещё ландшафт (порог возврата в портрет — 40°)
+    now += 1000;
+    m.notePhysicalTilt(-50);
+    m.syncOrientation();
+    expect(m.softAngleDeg()).toBe(-90);
+    // Под 40° — возврат в портрет
+    now += 1000;
+    m.notePhysicalTilt(-30);
+    m.syncOrientation();
     expect(m.softRotated()).toBe(false);
     expect(document.body.style.transform).toBe("");
-    expect(document.body.style.width).toBe("");
   });
 
-  it("orientationMatches: поворот НЕ считается слетевшим", async () => {
-    // Регрессия двойного поворота: после rotate(90deg) системная ориентация
-    // типа «landscape-primary» физически становится «portrait-primary»
-    // (смена осей). Сравнение по строке type ложно решало бы, что поворот
-    // не сработал, и пере-применение крутило бы экран при каждом возврате.
-    setOrientation({ type: "portrait-primary" });
+  it("onVisibleFormChange зовётся на первом показании и при смене формы/стороны", async () => {
     const m = await fresh();
-    m.applyOrientation("landscape");
-    // jsdom не считает реальную геометрию повёрнутого окна: innerWidth/
-    // innerHeight остаются портретными, что для видимой формы при нашем
-    // повороте как раз и означает «ландшафт». Проверяем инвариант:
-    // matches не должно требовать повторного применения.
-    expect(m.orientationMatches("landscape")).toBe(true);
-    expect(m.orientationMatches("portrait")).toBe(false);
-    expect(m.orientationMatches("auto")).toBe(true); // авто не может слететь
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    const calls: number[] = [];
+    m.onVisibleFormChange(() => calls.push(1));
+    m.notePhysicalTilt(0); // первое показание
+    expect(calls).toHaveLength(1);
+    now += 1000;
+    m.notePhysicalTilt(-80); // вход в ландшафт
+    expect(calls).toHaveLength(2);
+    // Мёртвая зона стороны (|roll| < 75°): смена не зовётся
+    now += 1000;
+    m.notePhysicalTilt(-50);
+    expect(calls).toHaveLength(2);
+    now += 1000;
+    m.notePhysicalTilt(80); // перехват другим боком
+    expect(calls).toHaveLength(3);
   });
 
-  it("orientationMatches: слетевший/ненужный поворот детектируется", async () => {
+  it("дебаунс глушит вспышки у порога", async () => {
     const m = await fresh();
-    // Экран портретный, выбран ландшафт, поворота нет — не совпадает
-    setOrientation({ type: "portrait-primary" });
-    expect(m.orientationMatches("landscape")).toBe(false);
-    // Физический ландшафт под выбранный ландшафт (манифест) — совпадает
-    setOrientation({ type: "landscape-primary" });
-    expect(m.orientationMatches("landscape")).toBe(true);
-    // А «портрет» на ландшафтном окне без поворота — не совпадает
-    expect(m.orientationMatches("portrait")).toBe(false);
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    const calls: number[] = [];
+    m.onVisibleFormChange(() => calls.push(1));
+    m.notePhysicalTilt(-80); // первое показание — сразу
+    expect(calls).toHaveLength(1);
+    now += 100;
+    m.notePhysicalTilt(80); // смена стороны слишком рано — глушится
+    expect(calls).toHaveLength(1);
+    now += 1000;
+    m.notePhysicalTilt(80); // за окном дебаунса — проходит
+    expect(calls).toHaveLength(2);
+  });
+
+  it("ландшафтное окно (манифест) не поворачивается при ландшафтном хвате", async () => {
+    const m = await fresh();
+    setOrientation({ type: "landscape-primary", angle: 90 });
+    m.notePhysicalTilt(-80);
+    m.syncOrientation();
+    expect(m.softRotated()).toBe(false);
+  });
+
+  it("портретный хват на ландшафтном окне поворачивает обратно", async () => {
+    const m = await fresh();
+    setOrientation({ type: "landscape-primary", angle: 90 });
+    m.notePhysicalTilt(0);
+    m.syncOrientation();
+    expect(m.softRotated()).toBe(true);
   });
 
   it("виртуальный viewport при повороте меняет местами ширину и высоту", async () => {
@@ -226,8 +168,9 @@ describe("screen-orientation", () => {
     let vv = m.virtualViewport();
     expect(vv.w).toBe(w);
     expect(vv.h).toBe(h);
-    setOrientation({ type: "portrait-primary" });
-    m.applyOrientation("landscape");
+    setOrientation({ type: "portrait-primary", angle: 0 });
+    m.notePhysicalTilt(-80);
+    m.syncOrientation();
     vv = m.virtualViewport();
     expect(vv.w).toBe(h);
     expect(vv.h).toBe(w);
@@ -238,18 +181,17 @@ describe("screen-orientation", () => {
     expect(m.toLocalDelta(10, 20)).toEqual({ x: 10, y: 20 });
     expect(m.toLocalPoint(10, 20)).toEqual({ x: 10, y: 20 });
     setOrientation({ type: "portrait-primary", angle: 0 });
-    // Управляем временем: дебаунс не должен склеивать два перехвата
     let now = 0;
     vi.spyOn(performance, "now").mockImplementation(() => now);
-    // Хват влево (roll ≈ −80°): обратный поворот R(−softAngle) —
+    // Хват влево: обратный поворот R(−softAngle) —
     // локальный +x — физический −y, локальный +y — физический +x
     m.notePhysicalTilt(-80);
-    m.applyOrientation("landscape");
+    m.syncOrientation();
     expect(m.toLocalDelta(10, 20)).toEqual({ x: -20, y: 10 });
-    // Хват вправо (roll ≈ +80°): зеркально — локальный +x — +y, +y — −x
+    // Хват вправо — зеркально
     now += 1000;
     m.notePhysicalTilt(80);
-    m.applyOrientation("landscape");
+    m.syncOrientation();
     expect(m.toLocalDelta(10, 20)).toEqual({ x: 20, y: -10 });
   });
 
