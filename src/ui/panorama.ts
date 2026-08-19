@@ -954,14 +954,15 @@ function drawLabels(
       draw: DrawLine[];
       boxes: { v: number; u0: number; u1: number }[];
     } | null => {
-      // Многострочная подпись поднимается целиком: самая нижняя строка не
-      // должна опускаться ниже точки вершины. Пачка сдвигается на
-      // (nLines−1)·LINE_H вдоль u — нижняя строка встаёт на место первой,
-      // и весь блок оказывается выше пика.
-      const liftU = (lines.length - 1) * LINE_H;
+      // Многострочная подпись якорится нижней строкой: та стоит на обычном
+      // LEAD от вершины, выноска к ней остаётся короткой при любом числе
+      // строк, а остальные строки уходят от неё вверх — вся пачка выше
+      // точки вершины. Сдвиг блока — по поперечной оси (без u-компоненты),
+      // поэтому расстояния вдоль строк и центрирование не меняются.
+      const bottomK = lines.length - 1;
       const baseOf = (k: number): { x: number; y: number } => ({
-        x: ax + liftU * ux + k * LINE_H * vx,
-        y: ay + liftU * uy + k * LINE_H * vy,
+        x: ax + (k - bottomK) * LINE_H * vx,
+        y: ay + (k - bottomK) * LINE_H * vy,
       });
 
       // Проход 1: почастная обрезка краем кадра БЕЗ сдвига (как раньше).
@@ -1246,13 +1247,15 @@ function drawLabels(
 
   // Рендер: подпись вершины, для которой нашлось место
   for (const p of placed) {
-    const first = p.lines[0];
+    // Выноска ведёт к нижней строке пачки — она ближе всех к вершине, и
+    // стрелка не удлиняется с ростом числа строк
+    const anchorLine = p.lines[p.lines.length - 1];
     // Скрытая вершина: выноска обрывается о склон, маркера вершины нет
     const end =
       p.peak.visibility === "hidden"
         ? clipToSilhouette(
-            first.ax,
-            first.ay,
+            anchorLine.ax,
+            anchorLine.ay,
             p.mx,
             p.my,
             silhouette,
@@ -1265,8 +1268,8 @@ function drawLabels(
       ctx,
       end.x,
       end.y,
-      first.ax,
-      first.ay,
+      anchorLine.ax,
+      anchorLine.ay,
       p.peak.visibility,
       uiScale,
     );
