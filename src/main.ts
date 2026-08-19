@@ -573,7 +573,7 @@ import {
 } from "./core/calibration";
 import { destination } from "./core/geo";
 import { orientationTracker } from "./core/orientation";
-import { isRollCompensationOn } from "./core/roll-compensation";
+import { isRollCompensationOn, overlayRollRad } from "./core/roll-compensation";
 import * as screenOrientationModule from "./core/screen-orientation";
 
 /**
@@ -682,7 +682,17 @@ orientationTracker.start((state) => {
     // под наклонённый кадр камеры. Отключается в настройках (компенсация
     // крена) — тогда горизонт остаётся ровной линией экрана. В обычной
     // панораме rollRad не используется — горизонт держим ровным.
-    view.rollRad = isRollCompensationOn() ? state.rollRad : 0;
+    // В программном ландшафте (CSS-поворот body на softAngle) кадр камеры
+    // уже довёрнут на −softAngle при отрисовке (core/frame-orientation.ts),
+    // а крен датчика отсчитывается от портретного окна — при ровном
+    // ландшафтном хвате он показывает ±90°, хотя картинка стоит ровно.
+    // Поэтому видимый крен = крен датчика − softAngle (overlayRollRad).
+    view.rollRad = isRollCompensationOn()
+      ? overlayRollRad(
+          state.rollRad,
+          screenOrientationModule.softAngleDeg(),
+        )
+      : 0;
     scheduleDraw();
   }
   updateCompassButton();
