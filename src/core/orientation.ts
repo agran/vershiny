@@ -33,6 +33,13 @@ export interface OrientationState {
   /** Наклон (beta: −180..180 → 0 = горизонтально), рад */
   tiltRad: number;
   /**
+   * Крен вокруг оси взгляда, рад: угол от «верха» кадра к земной вертикали,
+   * по часовой. Положительный — левый угол телефона ниже правого, мир в
+   * кадре камеры повёрнут по часовой. Оверлей AR доворачивается на этот
+   * угол вокруг центра кадра (см. rollRad в lookFromDeviceOrientation).
+   */
+  rollRad: number;
+  /**
    * Точность компаса (iOS webkitCompassAccuracy), градусы. Отрицательное
    * значение — датчик раскалиброван: iOS отдаёт −1, когда магнитометру
    * нельзя верить, пока человек не покрутит телефон «восьмёркой».
@@ -68,6 +75,12 @@ const GYRO_MAX_DT_S = 0.1;
  * такую коррекцию в картинку почти не проходит.
  */
 const GYRO_TAU_S = 1.5;
+/**
+ * Постоянная времени сглаживания крена, с. Крен крутит ВЕСЬ оверлей вокруг
+ * центра кадра, поэтому дрожание β/γ на нём заметнее, чем на наклоне, —
+ * лёгкая экспонента гасит шум, почти не добавляя лага.
+ */
+const ROLL_TAU_S = 0.25;
 /**
  * Расхождение с компасом больше этого — кандидат на мгновенный приём,
  * рад (≈20°): это не дрейф, а смена системы отсчёта (перекалибровка
@@ -241,14 +254,13 @@ export function confirmSnap(
  *
  * Направление взгляда — ось −Z устройства (сквозь экран от лица). Угол
  * поворота экрана (screen.orientation.angle) на него не влияет: вращение
- * вокруг оси взгляда меняет только крен кадра, а горизонт мы всегда держим
- * ровным.
+ * вокруг оси взгляда меняет только крен кадра (rollRad).
  */
 export function lookFromDeviceOrientation(
   alphaDeg: number,
   betaDeg: number,
   gammaDeg: number,
-): { azimuthRad: number; elevationRad: number } {
+): { azimuthRad: number; elevationRad: number; rollRad: number } {
   const a = (alphaDeg * Math.PI) / 180;
   const b = (betaDeg * Math.PI) / 180;
   const g = (gammaDeg * Math.PI) / 180;
@@ -271,6 +283,13 @@ export function lookFromDeviceOrientation(
   return {
     azimuthRad: normalizeAngle(Math.atan2(lookX, lookY)),
     elevationRad: Math.atan2(lookZ, horizontal),
+    // Крен: третья строка R = Rz(α)·Rx(β)·Ry(γ) — земная вертикаль в осях
+    // устройства (w = (−cosβ·sinγ, sinβ, cosβ·cosγ)). Угол от «верха»
+    // устройства (ось +Y) до её проекции на плоскость экрана, по часовой
+    // (система экрана: x вправо, y вниз). Положительный — мир в кадре
+    // повёрнут по часовой, на столько же надо довернуть оверлей. От α
+    // не зависит: поворот вокруг вертикали Земли крена не меняет.
+    rollRad: Math.atan2(-cb * sg, sb),
   };
 }
 
@@ -278,6 +297,7 @@ class OrientationTracker {
   private state: OrientationState = {
     azimuthRad: 0,
     tiltRad: 0,
+    rollRad: 0,
     accuracyDeg: -1,
     source: "none",
   };
@@ -305,6 +325,10 @@ class OrientationTracker {
   private lastGyroMs = 0;
   /** performance.now() последнего события ориентации — шаг коррекции дрейфа */
   private lastOrientMs = 0;
+  /** Сглаженный крен, рад; null — показаний ещё не было */
+  private rollSmoothed: number | null = null;
+  /** performance.now() последнего события ориентации — шаг сглаживания крена */
+  private lastRollMs = 0;
   /** performance.now() последнего принятого absolute-показания; 0 — не было */
   private lastAbsoluteMs = 0;
   /** Серия подряд идущих показаний за snap-порогом (confirmSnap) */
@@ -535,7 +559,7 @@ class OrientationTracker {
   /** Собрать состояние из текущей оценки азимута и отправить, если оно значимо */
   private emitSensorState(
     now: number,
-    patch?: { tiltRad: number; accuracyDeg: number },
+    patch?: { tiltRad?: number; accuracyDeg?: number; rollRad?: number },
   ): void {
     const base = this.fusedRad ?? this.followedRad;
     if (base === null) return;
@@ -546,6 +570,7 @@ class OrientationTracker {
     this.state = {
       azimuthRad: finalAz,
       tiltRad: patch?.tiltRad ?? prev.tiltRad,
+      rollRad: patch?.rollRad ?? prev.rollRad,
       accuracyDeg: patch?.accuracyDeg ?? prev.accuracyDeg,
       source: "sensor",
     };
@@ -556,8 +581,10 @@ class OrientationTracker {
     const wasUncalibrated = prev.source === "sensor" && prev.accuracyDeg < 0;
     const isUncalibrated = this.state.accuracyDeg < 0;
     const diff = Math.abs(shortestAngle(finalAz - prev.azimuthRad));
+    const rollDiff = Math.abs(shortestAngle(this.state.rollRad - prev.rollRad));
     if (
       diff > 0.0017 ||
+      rollDiff > 0.0017 ||
       now - this.lastEmitted > 100 ||
       wasUncalibrated !== isUncalibrated
     ) {
@@ -733,8 +760,23 @@ class OrientationTracker {
     // Точность вернулась в норму — системная просьба о калибровке отработана
     if (accuracy >= 0) this.calibrationRequested = false;
 
+    // Крен: лёгкая экспонента (ROLL_TAU_S). Азимут фильтруется компасом, наклон
+    // идёт сырым — а вот крен крутит весь кадр, и дрожание β/γ на нём видно
+    // сильнее всего. Первое показание принимаем как есть: иначе оверлей
+    // «доезжал» бы до угла с нуля при старте.
+    const dtRoll =
+      this.lastRollMs > 0 ? Math.min(0.5, (now - this.lastRollMs) / 1000) : 0;
+    if (this.rollSmoothed === null || dtRoll <= 0) {
+      this.rollSmoothed = look.rollRad;
+    } else {
+      const k = 1 - Math.exp(-dtRoll / ROLL_TAU_S);
+      this.rollSmoothed += shortestAngle(look.rollRad - this.rollSmoothed) * k;
+    }
+    this.lastRollMs = now;
+
     this.emitSensorState(now, {
       tiltRad: look.elevationRad,
+      rollRad: this.rollSmoothed,
       accuracyDeg: accuracy,
     });
   }
@@ -790,6 +832,8 @@ class OrientationTracker {
     this.lastOrientMs = 0;
     this.lastEulerDeg = null;
     this.fusedRad = null;
+    this.rollSmoothed = null;
+    this.lastRollMs = 0;
     this.snapRun = 0;
     this.snapDir = 0;
     this.listening = false;

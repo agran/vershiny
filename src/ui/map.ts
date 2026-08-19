@@ -15,8 +15,8 @@ import { normalizeAz } from "../core/geo";
 import { peakName, t } from "../core/i18n";
 import type { Peak } from "../core/peaks";
 import { peakScore } from "../core/peaks";
-import type { SearchHit } from "../core/search";
 import { toLocalDelta, toLocalPoint } from "../core/screen-orientation";
+import type { SearchHit } from "../core/search";
 import { ICON_CLOSE, ICON_HEADING, ICON_LOCATE, ICON_SEARCH } from "./icons";
 import { pushOverlay } from "./overlay-history";
 

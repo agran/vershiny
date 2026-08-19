@@ -13,6 +13,7 @@ import {
   INK_DARK,
   INK_LIGHT,
   renderPanorama,
+  rotateAroundCenter,
   type PanoramaState,
   type ViewState,
 } from "./panorama";
@@ -125,8 +126,12 @@ export async function capturePhoto(
     // Полная непрозрачность: на ЭКРАНЕ в AR оверлей полупрозрачный (дефолт
     // opacity в startAr), чтобы сквозь линии было видно живую камеру, но на
     // запечённом фото полупрозрачный текст выглядит выцветшим и плохо
-    // читается — снимок не интерактивен, просвечивать там нечему
+    // читается — снимок не интерактивен, просвечивать там нечему. Крен
+    // доворачивается так же, как на экране, — снимок повторяет увиденное
+    ctx.save();
+    rotateAroundCenter(ctx, overlayView.rollRad ?? 0);
     drawOverlay(ctx, state, overlayView, uiScale, { ridges });
+    ctx.restore();
   } else {
     renderPanorama(ctx, state, view, uiScale, { ridges });
   }

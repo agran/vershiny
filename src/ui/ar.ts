@@ -21,7 +21,7 @@ import {
   type FrameFov,
 } from "../core/camera-fov";
 import type { PanoramaState, ViewState } from "./panorama";
-import { HORIZON_FRAC, drawOverlay } from "./panorama";
+import { HORIZON_FRAC, drawOverlay, rotateAroundCenter } from "./panorama";
 
 export interface ArOptions {
   /** Прозрачность оверлея 0–1 */
@@ -364,10 +364,17 @@ function drawArFrame(
   // Оверлей в два прохода. Линии (контуры и шкала) — полупрозрачно: важно
   // видеть кадр камеры под ними. Подписи — полной непрозрачности: текст с
   // обводкой читается сам по себе, а полупрозрачный он на пёстром видео
-  // просто выцветает
+  // просто выцветает. Оба прохода доворачиваются на крен телефона вокруг
+  // центра кадра: если телефон держат с одним углом ниже, кадр камеры уже
+  // наклонён, и ровный горизонт разъезжался бы с ним по всему экрану.
+  const roll = overlayView.rollRad ?? 0;
   ctx.save();
+  rotateAroundCenter(ctx, roll);
   ctx.globalAlpha = opacity;
   drawOverlay(ctx, state, overlayView, undefined, { labels: false });
   ctx.restore();
+  ctx.save();
+  rotateAroundCenter(ctx, roll);
   drawOverlay(ctx, state, overlayView, undefined, { ridges: false });
+  ctx.restore();
 }

@@ -224,6 +224,7 @@ const view: ViewState = {
   tiltRad: 0,
   fovRad: toRad(60),
   fovVRad: toRad(45),
+  rollRad: 0,
 };
 
 /**
@@ -676,6 +677,10 @@ orientationTracker.start((state) => {
       -MAX_TILT,
       Math.min(MAX_TILT, state.tiltRad + tiltOffset),
     );
+    // Крен идёт в AR-оверлей (и в снимок из AR): там горизонт доворачивается
+    // под наклонённый кадр камеры. В обычной панораме rollRad не используется
+    // — горизонт держим ровным.
+    view.rollRad = state.rollRad;
     scheduleDraw();
   }
   updateCompassButton();

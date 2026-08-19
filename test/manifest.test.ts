@@ -9,9 +9,9 @@
  * Проверить это в браузере можно только с телефона в руках, поэтому здесь.
  */
 
-import { describe, it, expect } from "vitest";
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
 
 const read = (path: string): string =>
   readFileSync(fileURLToPath(new URL(path, import.meta.url)), "utf-8");

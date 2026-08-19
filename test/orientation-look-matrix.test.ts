@@ -317,3 +317,106 @@ describe("гироскоп: согласованность с матрицей",
     ); // −10° по кратчайшей дуге
   });
 });
+
+describe("крен (roll): третья строка матрицы", () => {
+  /**
+   * Эталон крена: третья строка R — земная вертикаль в осях устройства.
+   * Угол от «верха» устройства (ось +Y) до её проекции на плоскость
+   * экрана, по часовой. Положительный — левый угол телефона ниже.
+   */
+  function rollRef(
+    alphaDeg: number,
+    betaDeg: number,
+    gammaDeg: number,
+  ): number {
+    const r = mul(
+      mul(rotZ(alphaDeg * RAD), rotX(betaDeg * RAD)),
+      rotY(gammaDeg * RAD),
+    );
+    return Math.atan2(r[2][0], r[2][1]);
+  }
+
+  function expectSameRoll(actual: number, expected: number): void {
+    const d = Math.abs(norm(actual - expected));
+    expect(Math.min(d, 2 * Math.PI - d)).toBeLessThan(1e-9);
+  }
+
+  it("сетка и случайные тройки против эталонной матрицы", () => {
+    for (let a = 0; a < 360; a += 15) {
+      for (let b = -180; b <= 180; b += 15) {
+        for (let g = -90; g <= 90; g += 15) {
+          expectSameRoll(
+            lookFromDeviceOrientation(a, b, g).rollRad,
+            rollRef(a, b, g),
+          );
+        }
+      }
+    }
+    const rand = lcg(99);
+    for (let i = 0; i < 300; i++) {
+      const a = rand() * 720 - 360;
+      const b = rand() * 540 - 270;
+      const g = rand() * 360 - 180;
+      expectSameRoll(
+        lookFromDeviceOrientation(a, b, g).rollRad,
+        rollRef(a, b, g),
+      );
+    }
+  });
+
+  it("ровный портрет и ровные ландшафты: крен 0 или ±90° в кадре сенсора", () => {
+    // Портрет: мир в кадре стоит ровно
+    expect(deg(lookFromDeviceOrientation(0, 90, 0).rollRad)).toBeCloseTo(0, 9);
+    // Ландшафты без наклона: в НЕповёрнутом кадре сенсора мир «на боку» на
+    // ±90° — на iOS кадр доворачивается браузером под UI, и видимый крен 0.
+    // Для оверлея на Android (кадр сенсора как есть) это и есть правильный угол
+    expect(deg(lookFromDeviceOrientation(90, 0, -90).rollRad)).toBeCloseTo(
+      90,
+      9,
+    );
+    expect(deg(lookFromDeviceOrientation(270, 0, 90).rollRad)).toBeCloseTo(
+      -90,
+      9,
+    );
+  });
+
+  it("портрет с заваленным углом: (α=90, β=90−φ, γ=−90) — крен ровно φ", () => {
+    // Поза Rx(90)·Rz(φ) — вертикальный телефон, повёрнутый вокруг оси
+    // взгляда на φ. Раскладка в углы Эйлера: (90°, 90°−φ, −90°). Взгляд
+    // при этом не меняется — меняется только крен
+    for (const phi of [10, 30, 60]) {
+      const look = lookFromDeviceOrientation(90, 90 - phi, -90);
+      expect(deg(look.rollRad)).toBeCloseTo(phi, 9);
+      expect(deg(look.azimuthRad)).toBeCloseTo(0, 9); // смотрим на север
+      expect(deg(look.elevationRad)).toBeCloseTo(0, 9); // горизонт на уровне
+    }
+    // Отрицательный угол — правый угол ниже
+    expect(deg(lookFromDeviceOrientation(90, 90 + 30, -90).rollRad)).toBeCloseTo(
+      -30,
+      9,
+    );
+  });
+
+  it("ландшафт с лёгким завалом: крен отсчитывается от короткого края", () => {
+    // Ландшафт «вправо» с наклоном β=10°: w = (−cos10°, sin10°)
+    const look = lookFromDeviceOrientation(270, 10, 90);
+    expect(deg(look.rollRad)).toBeCloseTo(-80, 2);
+    expectSameRoll(look.rollRad, rollRef(270, 10, 90));
+  });
+
+  it("телефон перевёрнут (180° вокруг оси взгляда): крен разворачивается на π", () => {
+    // (α+180, −β, −γ) — та же линия взгляда, но экран «вверх ногами»:
+    // мир в кадре повёрнут ещё на 180°. Азимут/наклон не меняются
+    const rand = lcg(21);
+    for (let i = 0; i < 50; i++) {
+      const a = rand() * 360 - 180;
+      const b = rand() * 120 - 60;
+      const g = rand() * 120 - 60;
+      const up = lookFromDeviceOrientation(a, b, g);
+      const flipped = lookFromDeviceOrientation(a + 180, -b, -g);
+      expectSameLook(flipped, up);
+      const d = Math.abs(norm(flipped.rollRad - up.rollRad));
+      expect(Math.min(d, 2 * Math.PI - d)).toBeCloseTo(Math.PI, 9);
+    }
+  });
+});

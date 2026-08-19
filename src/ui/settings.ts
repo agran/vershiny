@@ -4,11 +4,11 @@
  */
 
 import {
-  CALIBRATION_LIMITS,
-  DEFAULT_CAMERA_FOV_DEG,
-  getCalibration,
-  resetCalibration,
-  setCalibration,
+    CALIBRATION_LIMITS,
+    DEFAULT_CAMERA_FOV_DEG,
+    getCalibration,
+    resetCalibration,
+    setCalibration,
 } from "../core/calibration";
 import { getDownloadedRegions } from "../core/db";
 import type { LatLon } from "../core/geo";
@@ -16,13 +16,13 @@ import { getLocale, setLocale, t, type Locale } from "../core/i18n";
 import { orientationTracker } from "../core/orientation";
 import { getPhotoCaption, setPhotoCaption } from "../core/photo-caption";
 import {
-  estimateRegionBytes,
-  hasHiDetail,
-  isRegionOutdated,
-  loadRegions,
-  regionCore,
-  regionLabel,
-  type RegionInfo,
+    estimateRegionBytes,
+    hasHiDetail,
+    isRegionOutdated,
+    loadRegions,
+    regionCore,
+    regionLabel,
+    type RegionInfo,
 } from "./download";
 import { ICON_GLOBE, ICON_SHARE } from "./icons";
 import { pushOverlay } from "./overlay-history";

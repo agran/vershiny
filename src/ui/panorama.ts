@@ -35,6 +35,13 @@ export interface ViewState {
   fovRad: number;
   /** Вертикальный FOV, рад */
   fovVRad: number;
+  /**
+   * Крен вокруг оси взгляда, рад (0 = горизонт ровный). Положительный —
+   * довернуть оверлей по часовой вокруг центра кадра. Ставится из
+   * OrientationState.rollRad (core/orientation.ts); в панораме без камеры
+   * остаётся 0 — горизонт держим ровным.
+   */
+  rollRad?: number;
 }
 
 const SKY_TOP = "#0d1b2a";
@@ -68,6 +75,26 @@ export const MAX_RIDGE_SLOPE = 15;
  * на видимые: пустой кадр отдаёт скрытым все 6 мест, плотный — ни одного.
  */
 const HIDDEN_LABEL_BUDGET = 6;
+
+/**
+ * Повернуть систему координат вокруг центра холста на крен (рад).
+ *
+ * AR-режим доворачивает оверлей этим поворотом, чтобы контуры легли на
+ * наклонённый кадр камеры (телефон держат с одним углом ниже): ось взгляда
+ * проходит через центр кадра и при cover-кропе (обрезка симметрична), так
+ * что центр холста и есть оптический центр. Видео при этом рисуется
+ * неповёрнутым — в нём мир уже наклонён как есть.
+ */
+export function rotateAroundCenter(
+  ctx: CanvasRenderingContext2D,
+  rollRad: number,
+): void {
+  if (!rollRad) return;
+  const { width, height } = ctx.canvas;
+  ctx.translate(width / 2, height / 2);
+  ctx.rotate(rollRad);
+  ctx.translate(-width / 2, -height / 2);
+}
 
 /**
  * Доля высоты кадра, на которой проходит линия горизонта — чуть ниже центра,
