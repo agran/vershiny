@@ -20,14 +20,19 @@ import {
   horizonFracInFrame,
   type FrameFov,
 } from "../core/camera-fov";
-import { softAngleDeg } from "../core/screen-orientation";
 import {
   currentFrameRotationDeg,
   drawVideoAligned,
   rotatedFrameSize,
 } from "../core/frame-orientation";
+import { softAngleDeg } from "../core/screen-orientation";
 import type { PanoramaState, ViewState } from "./panorama";
-import { HORIZON_FRAC, drawOverlay, rotateAroundCenter } from "./panorama";
+import {
+  HORIZON_FRAC,
+  drawOverlay,
+  rotateAroundCenter,
+  type OverlayOptions,
+} from "./panorama";
 
 export interface ArOptions {
   /** Прозрачность оверлея 0–1 */
@@ -256,6 +261,10 @@ export async function startAr(
 
   const ctx = canvas.getContext("2d")!;
   const opacity = options.opacity ?? 0.55;
+  // Кэш оверлея (см. ArOverlayCache ниже): линии и подписи перерендериваются
+  // только при смене азимута/наклона/содержимого, а каждый rAF — это видео
+  // плюс два blit готовых слоёв с доворотом на текущий крен
+  const overlayCache = createArOverlayCache();
 
   // Зум камеры, если браузер его сообщает (Android Chrome; на iOS поля нет).
   // События смены зума в спецификации нет — читаем при старте и перезапуске.
@@ -296,7 +305,15 @@ export async function startAr(
   // raw-sensor) без гипотез. Только локальная отладка, в проде выключен
   const debugEl = setupArDebug(canvas, videoEl);
   function frame() {
-    drawArFrame(ctx, videoEl, state, view, opacity, zoomFactor);
+    drawArFrame(
+      ctx,
+      videoEl,
+      state,
+      view,
+      opacity,
+      zoomFactor,
+      overlayCache,
+    );
     debugEl?.update();
     raf = requestAnimationFrame(frame);
   }
@@ -316,6 +333,7 @@ export async function startAr(
       window.removeEventListener("pageshow", onVisible);
       endedTrack?.removeEventListener("ended", onTrackEnded);
       cancelAnimationFrame(raf);
+      overlayCache.free();
       stream.getTracks().forEach((t) => t.stop());
       videoEl.srcObject = null;
     },
@@ -361,6 +379,295 @@ export async function startAr(
 /** Один кадр AR: видео + полупрозрачный силуэт и непрозрачные подписи */
 
 /**
+ * Запас кэша оверлея вокруг кадра: крен до ±40° (больше обычно не держат) +
+ * поле под дрейф азимута/наклона между перерендерами. Кадр строит drawOverlay
+ * в системе с НУЛЁВЫМ креном внутри этого запаса — края запаса позволяют
+ * выйти линиям за x = 0/width (rollEdgeMarginX их туда и пускает)
+ */
+const OVERLAY_MARGIN_FACTOR = 0.45;
+
+/**
+ * Пороги перерендера кэша оверлея. Подписи размещаются по снимку кадра на
+ * момент перерендера, поэтому дрейф внутри порога — не погрешность рисунка
+ * (кэш точен под свой view), а лишь то, что подписи видны не у самого края
+ * кадра. Смена содержимого (peaks/layers — ссылки меняет воркер), калибровки
+ * (fov) и формы кадра (zoom) перерендеривает немедленно.
+ */
+const AZ_DRIFT_TRIGGER_FRAC = 0.5; // от запаса: ушли дальше — перерендер
+const AZ_CENTER_STEP_FRAC = 0.25; // шаг перецентровки центра запаса
+const TILT_DRIFT_PX = 4; // наклон: субпиксельный дрейф — только blit
+/** Полный перерендер раз в N кадров, даже если взгляд стоит: освежить выбор подписей */
+const OVERLAY_REFRESH_FRAMES = 30;
+
+/**
+ * Кэш AR-оверлея. Два offscreen-холста: линии (полупрозрачный слой) и
+ * подписи (непрозрачные). Каждый живой кадр — видео плюс два blit с
+ * доворотом на текущий крен; полный drawOverlay — только по порогам выше.
+ */
+interface ArOverlayCache {
+  /** Линии (контуры+шкала) без альфы, в системе нулевого крена */
+  ridges: HTMLCanvasElement | null;
+  /** Подписи, полная непрозрачность */
+  labels: HTMLCanvasElement | null;
+  /** Снимок вида, под который построен кадр (азимут — центр запаса) */
+  anchor: { azRad: number; tiltRad: number; fovRad: number; fovVRad: number } | null;
+  /** Поля запаса, px устройства */
+  marginX: number;
+  marginY: number;
+  /** Размер буфера = холст + запас */
+  width: number;
+  height: number;
+  /** Контентные ссылки на момент построения */
+  peaksRef: unknown;
+  layersRef: unknown;
+  /** Параметры кадра камеры (зум, углы) */
+  zoom: number;
+  fovH: number;
+  fovV: number;
+  /** Номер кадра последнего полного рендера */
+  renderedAt: number;
+  /** Текущий номер кадра сессии (инкрементируется при blit/рендере) */
+  frameNo: number;
+  /** Освободить память при stop() */
+  free: () => void;
+}
+
+export type { ArOverlayCache };
+
+export const AR_OVERLAY_MARGIN_FACTOR = OVERLAY_MARGIN_FACTOR;
+export const AR_OVERLAY_REFRESH_FRAMES = OVERLAY_REFRESH_FRAMES;
+
+export function createArOverlayCache(): ArOverlayCache {
+  return {
+    ridges: null,
+    labels: null,
+    anchor: null,
+    marginX: 0,
+    marginY: 0,
+    width: 0,
+    height: 0,
+    peaksRef: null,
+    layersRef: null,
+    zoom: NaN,
+    fovH: NaN,
+    fovV: NaN,
+    renderedAt: -1,
+    frameNo: 0,
+    free() {
+      // Сбрасываем ссылки: буферы соберёт GC, без повторной аллокации
+      this.ridges = null;
+      this.labels = null;
+    },
+  };
+}
+
+/**
+ * Один кадр AR: видео + оверлей. Видео — каждый кадр (содержимое камеры),
+ * оверлей — blit из кэша; полный рендер слоёв — по порогам дрейфа/смене
+ * содержимого. Крен применяется поворотом blit'а вокруг центра экрана, а не
+ * перерендером: это ~0.2 мс вместо 10–20 мс и не «плывёт» от фильтра.
+ */
+function drawArFrame(
+  ctx: CanvasRenderingContext2D,
+  video: HTMLVideoElement,
+  state: PanoramaState,
+  view: ViewState,
+  opacity: number,
+  zoomFactor: number,
+  cache?: ArOverlayCache,
+): void {
+  const { width, height } = ctx.canvas;
+
+  let overlayView = view;
+  if (video.readyState >= 2 && video.videoWidth > 0) {
+    const vw = video.videoWidth;
+    const vh = video.videoHeight;
+    // Кадр ориентацией «ровно под окно» (Samsung компенсирует сенсор под
+    // системную ориентацию окна), а интерфейс может быть довёрнут CSS-ом на
+    // ±90° (программный ландшафт). drawImage CSS-трансформ не применяет —
+    // поэтому доворачиваем кадр сами на −softAngle, иначе в ландшафтном
+    // режиме картинка лежит на боку. Cover-кроп по центру.
+    const rot = currentFrameRotationDeg();
+    drawVideoAligned(ctx, video, width, height, rot);
+
+    // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
+    // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
+    // кадра и расходились к краям, когда пропорции экрана и видео различались.
+    // Размеры кадра — после доворота: FOV считается от повёрнутого кадра
+    const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
+    const full = applyZoom(fovForFrame(baseFovRad(), pw, ph), zoomFactor);
+    const visible = applyCoverCrop(full, pw, ph, width, height);
+    overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
+  } else {
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  const roll = overlayView.rollRad ?? 0;
+
+  if (cache && video.readyState >= 2 && video.videoWidth > 0) {
+    drawArOverlayCached(
+      ctx,
+      state,
+      overlayView,
+      roll,
+      opacity,
+      zoomFactor,
+      cache,
+    );
+    return;
+  }
+
+  // Без кэша (старый путь: тесты без готового видео, первый кадр до него)
+  ctx.save();
+  rotateAroundCenter(ctx, roll);
+  ctx.globalAlpha = opacity;
+  drawOverlay(ctx, state, overlayView, undefined, { labels: false });
+  ctx.restore();
+  ctx.save();
+  rotateAroundCenter(ctx, roll);
+  drawOverlay(ctx, state, overlayView, undefined, { ridges: false });
+  ctx.restore();
+}
+
+/**
+ * Оверлей из кэша: два blit (линии полупрозрачно, подписи непрозрачно) с
+ * доворотом на крен. Полный перерендер — по порогам: дрейф азимута за
+ * половину запаса, наклон дальше субпикселя, смена peaks/layers/fov/зума,
+ * либо регламентное обновление раз в OVERLAY_REFRESH_FRAMES кадров.
+ */
+export function drawArOverlayCached(
+  ctx: CanvasRenderingContext2D,
+  state: PanoramaState,
+  overlayView: ViewState,
+  roll: number,
+  opacity: number,
+  zoomFactor: number,
+  cache: ArOverlayCache,
+): void {
+  const { width, height } = ctx.canvas;
+  const uiScale = ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1;
+
+  // Запас кэша вокруг кадра: поле под крен + дрейф. Проекция оверлея считает
+  // по углам видимого кадра, поэтому масштаб px/рад берём из overlayView
+  const marginX = Math.round(width * OVERLAY_MARGIN_FACTOR);
+  const marginY = Math.round(height * OVERLAY_MARGIN_FACTOR);
+  const bufW = width + 2 * marginX;
+  const bufH = height + 2 * marginY;
+
+  const az = overlayView.centerAzRad;
+  const tilt = overlayView.tiltRad;
+  const fovH = overlayView.fovRad;
+  const fovV = overlayView.fovVRad;
+
+  // Центр запаса квантуется: не «текущий азимут», а ближайший шаг — иначе
+  // опора прыгала бы при каждом перерендере, и подписи «плыли» бы по кадру
+  const anchorStep = (fovH / (width || 1)) * marginX * AZ_CENTER_STEP_FRAC;
+  const anchorAz =
+    cache.anchor === null
+      ? az
+      : cache.anchor.azRad +
+        Math.round(shortestAngle(az - cache.anchor.azRad) / anchorStep) *
+          anchorStep;
+
+  const driftAzPx =
+    Math.abs(shortestAngle(az - (cache.anchor?.azRad ?? NaN))) *
+    (width / (fovH || 1));
+  const driftTiltPx =
+    Math.abs(tilt - (cache.anchor?.tiltRad ?? NaN)) * (height / (fovV || 1));
+
+  // Счётчик кадров сессии: регламентное обновление кэша раз в N кадров
+  cache.frameNo++;
+  const needRender =
+    cache.ridges === null ||
+    cache.labels === null ||
+    cache.anchor === null ||
+    cache.width !== bufW ||
+    cache.height !== bufH ||
+    cache.peaksRef !== state.peaks ||
+    cache.layersRef !== state.layers ||
+    cache.fovH !== fovH ||
+    cache.fovV !== fovV ||
+    cache.zoom !== zoomFactor ||
+    driftAzPx > marginX * AZ_DRIFT_TRIGGER_FRAC ||
+    driftTiltPx > TILT_DRIFT_PX ||
+    cache.frameNo - cache.renderedAt >= OVERLAY_REFRESH_FRAMES;
+
+  if (needRender) {
+    if (!cache.ridges) cache.ridges = document.createElement("canvas");
+    if (!cache.labels) cache.labels = document.createElement("canvas");
+    cache.ridges.width = bufW;
+    cache.ridges.height = bufH;
+    cache.labels.width = bufW;
+    cache.labels.height = bufH;
+
+    // Кадр кэша — оверлей той же проекции, но в системе нулевого крена и с
+    // центром запаса: экранные координаты = кэш + смещение полей
+    const cacheView: ViewState = {
+      centerAzRad: anchorAz,
+      tiltRad: tilt,
+      fovRad: fovH,
+      fovVRad: fovV,
+      rollRad: 0,
+    };
+    const cacheOpts: OverlayOptions = { anchorAzRad: anchorAz };
+    const rctx = cache.ridges.getContext("2d")!;
+    const lctx = cache.labels.getContext("2d")!;
+    rctx.save();
+    lctx.save();
+    // Сдвигаем систему кэша: точка (0,0) кэша — это (−marginX, −marginY)
+    // экрана. drawOverlay рисует кадр шириной bufW/bufH с центром по кэшу —
+    // чтобы совместить, переносим начало координат
+    rctx.translate(marginX, marginY);
+    lctx.translate(marginX, marginY);
+    drawOverlay(rctx, state, cacheView, uiScale, { ...cacheOpts, labels: false });
+    drawOverlay(lctx, state, cacheView, uiScale, { ...cacheOpts, ridges: false });
+    rctx.restore();
+    lctx.restore();
+
+    cache.anchor = { azRad: anchorAz, tiltRad: tilt, fovRad: fovH, fovVRad: fovV };
+    cache.marginX = marginX;
+    cache.marginY = marginY;
+    cache.width = bufW;
+    cache.height = bufH;
+    cache.peaksRef = state.peaks;
+    cache.layersRef = state.layers;
+    cache.zoom = zoomFactor;
+    cache.fovH = fovH;
+    cache.fovV = fovV;
+    cache.renderedAt = cache.frameNo;
+  }
+
+  // Blit: положение кэша на экране — центр кэша на центр запаса + дрейф по
+  // азимуту/наклону; поворот на крен — вокруг центра экрана (drawImage уже
+  // сдвинут, а поворачиваем мы экранную систему)
+  const pxPerRadH = width / (fovH || 1);
+  const pxPerRadV = height / (fovV || 1);
+  const ox =
+    (width - bufW) / 2 -
+    pxPerRadH * shortestAngle(az - cache.anchor!.azRad);
+  const oy =
+    (height - bufH) / 2 +
+    pxPerRadV * (tilt - cache.anchor!.tiltRad);
+
+  ctx.save();
+  rotateAroundCenter(ctx, roll);
+  ctx.globalAlpha = opacity;
+  ctx.drawImage(cache.ridges!, ox, oy);
+  ctx.restore();
+  ctx.save();
+  rotateAroundCenter(ctx, roll);
+  ctx.globalAlpha = 1;
+  ctx.drawImage(cache.labels!, ox, oy);
+  ctx.restore();
+}
+
+/** Кратчайшее угловое расстояние с знаком (для дрейфа по кругу) */
+function shortestAngle(d: number): number {
+  return Math.atan2(Math.sin(d), Math.cos(d));
+}
+
+/**
  * Отладочный оверлей ориентации кадра (?ardebug=1).
  *
  * Показывает живые цифры, по которым на устройстве определяется ветка
@@ -403,57 +710,4 @@ function setupArDebug(
       el.remove();
     },
   };
-}
-
-function drawArFrame(
-  ctx: CanvasRenderingContext2D,
-  video: HTMLVideoElement,
-  state: PanoramaState,
-  view: ViewState,
-  opacity: number,
-  zoomFactor: number,
-): void {
-  const { width, height } = ctx.canvas;
-
-  let overlayView = view;
-  if (video.readyState >= 2 && video.videoWidth > 0) {
-    const vw = video.videoWidth;
-    const vh = video.videoHeight;
-    // Кадр ориентацией «ровно под окно» (Samsung компенсирует сенсор под
-    // системную ориентацию окна), а интерфейс может быть довёрнут CSS-ом на
-    // ±90° (программный ландшафт). drawImage CSS-трансформ не применяет —
-    // поэтому доворачиваем кадр сами на −softAngle, иначе в ландшафтном
-    // режиме картинка лежит на боку. Cover-кроп по центру.
-    const rot = currentFrameRotationDeg();
-    drawVideoAligned(ctx, video, width, height, rot);
-
-    // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
-    // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
-    // кадра и расходились к краям, когда пропорции экрана и видео различались.
-    // Размеры кадра — после доворота: FOV считается от повёрнутого кадра
-    const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
-    const full = applyZoom(fovForFrame(baseFovRad(), pw, ph), zoomFactor);
-    const visible = applyCoverCrop(full, pw, ph, width, height);
-    overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
-  } else {
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, width, height);
-  }
-
-  // Оверлей в два прохода. Линии (контуры и шкала) — полупрозрачно: важно
-  // видеть кадр камеры под ними. Подписи — полной непрозрачности: текст с
-  // обводкой читается сам по себе, а полупрозрачный он на пёстром видео
-  // просто выцветает. Оба прохода доворачиваются на крен телефона вокруг
-  // центра кадра: если телефон держат с одним углом ниже, кадр камеры уже
-  // наклонён, и ровный горизонт разъезжался бы с ним по всему экрану.
-  const roll = overlayView.rollRad ?? 0;
-  ctx.save();
-  rotateAroundCenter(ctx, roll);
-  ctx.globalAlpha = opacity;
-  drawOverlay(ctx, state, overlayView, undefined, { labels: false });
-  ctx.restore();
-  ctx.save();
-  rotateAroundCenter(ctx, roll);
-  drawOverlay(ctx, state, overlayView, undefined, { ridges: false });
-  ctx.restore();
 }

@@ -147,6 +147,12 @@ export interface OverlayOptions {
    * (ui/ar.ts, drawArFrame).
    */
   labels?: boolean;
+  /**
+   * Опорный азимут азимутального цикла, рад. По умолчанию центр кадра:
+   * диапазон [centerAz−fov/2, centerAz+fov/2]. AR задаёт центр ЗАПАСА кэша,
+   * чтобы проекция не прыгала при каждом перерендере
+   */
+  anchorAzRad?: number;
 }
 
 /**
@@ -200,7 +206,10 @@ export function drawOverlay(
   const drawRidges = overlay.ridges !== false;
 
   const azToX = (az: number): number =>
-    (wrapAngle(az - view.centerAzRad) / view.fovRad) * width + width / 2;
+    (wrapAngle(az - (overlay.anchorAzRad ?? view.centerAzRad)) /
+      view.fovRad) *
+      width +
+    width / 2;
   const elevToY = (elev: number): number =>
     horizonY - ((elev - view.tiltRad) / view.fovVRad) * height;
 
