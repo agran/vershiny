@@ -154,12 +154,17 @@ describe("screen-orientation: автоповорот по хвату", () => {
     expect(m.softRotated()).toBe(false);
   });
 
-  it("портретный хват на ландшафтном окне поворачивает обратно", async () => {
+  it("ландшафтное окно не поворачивается и при «портретном» датчике (Android: β/γ в координатах экрана)", async () => {
     const m = await fresh();
+    // В ландшафтном окне Android Chrome пересчитывает события датчика в
+    // координаты ЭКРАНА: ландшафтный хват выглядит как портретный (roll ≈ 0).
+    // Доворачивать body поверх системного ландшафта нельзя — это двойное
+    // вращение, и контуры на канвасе ложатся на экран боком
     setOrientation({ type: "landscape-primary", angle: 90 });
     m.notePhysicalTilt(0);
     m.syncOrientation();
-    expect(m.softRotated()).toBe(true);
+    expect(m.softRotated()).toBe(false);
+    expect(document.body.style.transform).toBe("");
   });
 
   it("виртуальный viewport при повороте меняет местами ширину и высоту", async () => {

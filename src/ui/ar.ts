@@ -688,6 +688,10 @@ export function drawArOverlayCached(
   cache: ArOverlayCache,
 ): void {
   const { width, height } = ctx.canvas;
+  // Холст может быть сжат до нуля (скрыт, мгновенный спад размеров при
+  // повороте): буфер кэша тогда тоже нулевой, и drawImage бросил бы
+  // InvalidStateError — а он гасит rAF-цикл AR до следующего перезапуска
+  if (!width || !height) return;
   const uiScale = ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1;
 
   // Запас кэша вокруг кадра: поле под крен + дрейф. Проекция оверлея считает
