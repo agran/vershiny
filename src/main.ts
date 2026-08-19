@@ -197,6 +197,9 @@ const DRAG_DPR = 1;
  */
 let dragLowRes = false;
 
+/** Сессия AR: нужна автокалибровке и resize() (redraw после очистки холста) */
+let arSession: import("./ui/ar").ArSession | null = null;
+
 function resize(): void {
   perfCount("srcResize");
   const dpr = Math.min(devicePixelRatio || 1, MAX_DPR);
@@ -214,8 +217,11 @@ function resize(): void {
     });
   }
   // Смена размера очищает холст: без перерисовки панорама пропадала до
-  // следующего пересчёта (поворот телефона — пустой экран)
-  draw();
+  // следующего пересчёта (поворот телефона — пустой экран). В AR рисуем
+  // немедленно оба слоя сессии — иначе до ближайшего rAF оверлей мигал бы
+  // прозрачностью поверх видео (единичное моргание контуров при повороте)
+  if (arSession) arSession.redraw();
+  else draw();
 }
 // ResizeObserver появился только в Safari 13.4 (iOS 13.4): на более старых
 // айфонах `new ResizeObserver` бросал ReferenceError при загрузке модуля,
@@ -1777,7 +1783,10 @@ function makeButton(
     `position:fixed;${pos};width:48px;height:48px;` +
     "border-radius:50%;border:none;background:#415a77;color:#f1faee;" +
     "font-size:20px;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.4);" +
-    "display:flex;align-items:center;justify-content:center";
+    "display:flex;align-items:center;justify-content:center;" +
+    // Кнопки меняют край при повороте/переразметке — короткий переход,
+    // чтобы они плыли на новое место, а не телепортировались
+    "transition:left .15s ease,right .15s ease,top .15s ease,bottom .15s ease";
   // Подпись на время загрузки: приоритет — сбоку (у кнопок правого края
   // слева, у левого — справа): так текст читается на одной строке с кнопкой
   // и не уходит за экран. Сверху/снизу — только где сбоку занято (карте
@@ -1846,7 +1855,9 @@ function addCaption(
 ): void {
   const { layer } = ensureCaptionLayer();
   const root = document.createElement("div");
-  root.style.cssText = "position:absolute;visibility:hidden";
+  root.style.cssText =
+    "position:absolute;visibility:hidden;" +
+    "transition:left .15s ease,top .15s ease";
   const label = document.createElement("div");
   label.textContent = t(key);
   label.style.cssText =
@@ -2307,6 +2318,7 @@ function setupNavPad(): void {
   const pad = document.createElement("div");
   pad.style.cssText =
     "position:fixed;z-index:10;display:grid;gap:4px;" +
+    "transition:left .15s ease,bottom .15s ease,width .15s ease,height .15s ease;" +
     (touchOnly
       ? "grid-template-columns:1fr;grid-template-rows:1fr"
       : "grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr)");
@@ -2377,7 +2389,8 @@ function setupNavPad(): void {
   // Высота: вверх/вниз + индикатор
   const heightPad = document.createElement("div");
   heightPad.style.cssText =
-    "position:fixed;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center";
+    "position:fixed;z-index:10;display:flex;flex-direction:column;gap:4px;align-items:center;" +
+    "transition:left .15s ease,bottom .15s ease";
   document.body.appendChild(heightPad);
   heightPadEl = heightPad;
   layoutControls();
@@ -2463,8 +2476,12 @@ function layoutControls(): void {
 /** Текущая высота наблюдателя (из DEM) */
 let lastObserverH = 0;
 
-/** Сессия AR: нужна автокалибровке, чтобы взять кадр камеры */
-let arSession: import("./ui/ar").ArSession | null = null;
+/**
+ * Сессия AR: нужна автокалибровке, чтобы взять кадр камеры
+ *
+ * Объявлена выше (перед resize): ранний вызов resize() при инициализации
+ * модуля иначе читал бы её в TDZ.
+ */
 
 /**
  * Автокалибровка по кадру: линия «небо / земля» из камеры совмещается с

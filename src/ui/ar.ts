@@ -62,6 +62,12 @@ export interface ArSession {
    * вторая половина привязки автокалибровки к кадру.
    */
   frameHorizonFrac: () => number;
+  /**
+   * Немедленная перерисовка обоих слоёв. Нужна после внешнего resize:
+   * смена размеров холста очищает его, и до ближайшего rAF оверлей
+   * мигал бы прозрачностью поверх видео (моргание контуров при повороте)
+   */
+  redraw: () => void;
 }
 
 /** Базовый угол обзора по длинной стороне кадра камеры (калибровка), рад */
@@ -461,6 +467,20 @@ export async function startAr(
         canvas.width,
         canvas.height,
         HORIZON_FRAC,
+      );
+    },
+    redraw: () => {
+      if (stopped) return;
+      syncVideoLayer();
+      drawVideoLayer();
+      drawArFrame(
+        ctx,
+        videoEl,
+        state,
+        view,
+        opacity,
+        zoomFactor,
+        overlayCache,
       );
     },
     grabFrame: () => {
