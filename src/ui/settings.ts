@@ -4,11 +4,11 @@
  */
 
 import {
-  CALIBRATION_LIMITS,
-  DEFAULT_CAMERA_FOV_DEG,
-  getCalibration,
-  resetCalibration,
-  setCalibration,
+    CALIBRATION_LIMITS,
+    DEFAULT_CAMERA_FOV_DEG,
+    getCalibration,
+    resetCalibration,
+    setCalibration,
 } from "../core/calibration";
 import { getDownloadedRegions } from "../core/db";
 import type { LatLon } from "../core/geo";
@@ -16,13 +16,13 @@ import { getLocale, setLocale, t, type Locale } from "../core/i18n";
 import { orientationTracker } from "../core/orientation";
 import { getPhotoCaption, setPhotoCaption } from "../core/photo-caption";
 import {
-  estimateRegionBytes,
-  hasHiDetail,
-  isRegionOutdated,
-  loadRegions,
-  regionCore,
-  regionLabel,
-  type RegionInfo,
+    estimateRegionBytes,
+    hasHiDetail,
+    isRegionOutdated,
+    loadRegions,
+    regionCore,
+    regionLabel,
+    type RegionInfo,
 } from "./download";
 import { ICON_GLOBE, ICON_SHARE } from "./icons";
 import { pushOverlay } from "./overlay-history";
@@ -49,9 +49,14 @@ export function openSettings(
     "display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)";
 
   const panel = document.createElement("div");
+  // Высота — доля ВИДИМОГО контейнера, а не физического окна: при программном
+  // повороте экрана (screen-orientation.ts) vh считается от портретного окна,
+  // и 80vh раздували панель так, что заголовок с кнопкой ✕ уезжал за кадр.
+  // cqh — логические единицы повёрнутого body (он query-контейнер); запасной
+  // вариант после запятой — для браузеров без контейнерных запросов
   panel.style.cssText =
-    "background:#1a1a2e;border-radius:16px;padding:24px;max-width:420px;" +
-    "width:90%;max-height:80vh;overflow-y:auto;color:#f1faee;" +
+    "background:#1a1a2e;border-radius:16px;padding:24px;max-width:min(420px, 92cqw);" +
+    "width:90%;max-height:80vh;max-height:80cqh;overflow-y:auto;color:#f1faee;" +
     "font:14px/1.6 system-ui,sans-serif;position:relative";
   overlay.appendChild(panel);
 

@@ -84,6 +84,47 @@ export function softRotated(): boolean {
 }
 
 /**
+ * Типизированные размеры UI как CSS-переменные: --app-w/--app-h. На них же
+ * опираются логические единицы cqh/cqw (см. container-type ниже): панель
+ * настроек ограничивает высоту долей ВИДИМОГО контейнера, а не физического
+ * окна — иначе при повороте 80vh считались от портретного окна и панель с
+ * кнопкой закрытия уезжала за кадр.
+ *
+ * registerProperty с синтаксисом <length> делает переменные пригодными для
+ * calc(), а без container-type:size единицы cqw/cqh были бы «маленькими
+ * вьюпортными» и считались бы от физического окна — то есть неверно.
+ */
+let propsRegistered = false;
+function registerAppSizeProps(): void {
+  if (propsRegistered || typeof CSS === "undefined") return;
+  const reg = (
+    CSS as unknown as {
+      registerProperty?: (def: {
+        name: string;
+        syntax: string;
+        inherits: boolean;
+        initialValue: string;
+      }) => void;
+    }
+  ).registerProperty;
+  if (typeof reg !== "function") return;
+  try {
+    reg({ name: "--app-w", syntax: "<length>", inherits: true, initialValue: "0px" });
+    reg({ name: "--app-h", syntax: "<length>", inherits: true, initialValue: "0px" });
+    propsRegistered = true;
+  } catch {
+    // Старые браузеры: поворот работает и без переменных, просто настройки
+    // ограничат высоту физическим vh (запасной вариант, ничего не ломается)
+  }
+}
+
+/** Записать актуальные локальные размеры body в --app-w/--app-h */
+function syncAppSizeVars(w: number, h: number): void {
+  document.documentElement.style.setProperty("--app-w", `${w}px`);
+  document.documentElement.style.setProperty("--app-h", `${h}px`);
+}
+
+/**
  * Физические safe-area-инсеты окна. env() из JS не читается, поэтому они
  * продублированы CSS-переменными :root в index.html — отсюда и берём.
  * Нужны, чтобы при повороте вырез камеры и полоса жестов остались за
@@ -141,6 +182,9 @@ export function applySoftRotation(rotated: boolean): boolean {
     root.style.left = "";
     root.style.top = "";
     root.style.transformOrigin = "";
+    root.style.containerType = "";
+    // Размеры без поворота — само окно
+    syncAppSizeVars(window.innerWidth, window.innerHeight);
     return changed;
   }
   // Геометрия: body делаем размером «высота окна × ширина окна» минус
@@ -162,6 +206,11 @@ export function applySoftRotation(rotated: boolean): boolean {
   root.style.top = `${cy - bh / 2}px`;
   root.style.transformOrigin = "50% 50%";
   root.style.transform = "rotate(90deg)";
+  // body — query-контейнер по размеру: cqw/cqh внутри считаются от него
+  // (то есть от повёрнутого вьюпорта), а не от физического окна
+  registerAppSizeProps();
+  root.style.containerType = "size";
+  syncAppSizeVars(bw, bh);
   return changed;
 }
 
