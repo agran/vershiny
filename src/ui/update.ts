@@ -23,6 +23,39 @@ export const navigation = {
   reload: (): void => location.reload(),
 };
 
+/**
+ * Свежа ли страница относительно сервера: хеш Vite в имени собственного
+ * главного чанка сравнивается с чанком из index.html, который сервер отдаёт
+ * сейчас. Свежая страница = актуальная версия приложения уже загружена —
+ * плашка «Доступно обновление» тогда не нужна.
+ *
+ * Обычный fetch проходит мимо Service Worker (его стратегии ловят только
+ * навигации, тайлы, данные и assets), поэтому ответ — всегда из сети;
+ * офлайн (или неразборчивая оболочка) — считаем страницу старой, плашка
+ * ведёт себя как раньше.
+ */
+export async function pageIsCurrent(): Promise<boolean> {
+  const own = document
+    .querySelector('script[type="module"][src]')
+    ?.getAttribute("src");
+  if (!own) return false;
+  try {
+    const res = await fetch(new URL("index.html", location.href).href, {
+      cache: "no-store",
+    });
+    if (!res.ok) return false;
+    const html = await res.text();
+    const match = /src="([^"]*index-[^"]+\.js)"/.exec(html);
+    if (!match) return false;
+    return (
+      new URL(match[1], location.href).pathname ===
+      new URL(own, location.href).pathname
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function setupUpdates(registration: ServiceWorkerRegistration): void {
   // Один раз перезагрузить страницу, когда новая версия взяла управление.
   // Защита от повторного срабатывания: controllerchange, активация worker'а
@@ -34,9 +67,33 @@ export function setupUpdates(registration: ServiceWorkerRegistration): void {
     navigation.reload();
   };
 
+  // Решение о плашке откладывается до вердикта pageIsCurrent: при холодном
+  // запуске страница может загрузиться уже новой версией (оболочка —
+  // network-first), а новый SW в это же время встаёт в waiting — тогда
+  // плашка была бы ложной. Каждая новая установка SW — новая проверка:
+  // за время сессии могло выйти ещё одно обновление
+  let pageCurrent: boolean | null = null;
+  let checkSeq = 0;
+  const refreshPageStatus = (): void => {
+    pageCurrent = null;
+    const seq = ++checkSeq;
+    void (async () => {
+      const cur = await pageIsCurrent();
+      if (seq !== checkSeq) return; // началась более свежая проверка
+      pageCurrent = cur;
+      maybeShow();
+    })();
+  };
+  const maybeShow = (): void => {
+    if (pageCurrent !== false) return; // свежая страница — плашки нет
+    if (registration.waiting && navigator.serviceWorker.controller) {
+      showUpdateBanner(registration, registration.waiting, reload);
+    }
+  };
+
   // Worker мог оказаться в waiting ещё до подписки на updatefound
   if (registration.waiting && navigator.serviceWorker.controller) {
-    showUpdateBanner(registration, registration.waiting, reload);
+    refreshPageStatus();
   }
 
   registration.addEventListener("updatefound", () => {
@@ -48,7 +105,7 @@ export function setupUpdates(registration: ServiceWorkerRegistration): void {
         installing.state === "installed" &&
         navigator.serviceWorker.controller
       ) {
-        showUpdateBanner(registration, installing, reload);
+        refreshPageStatus();
       }
     });
   });
