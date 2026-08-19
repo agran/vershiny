@@ -328,25 +328,28 @@ export function applySoftRotation(rotated: boolean): boolean {
 
 /**
  * Дельта указателя (clientX/Y) из физических координат экрана в локальные
- * оси UI. При повороте на 90°: local +x = physical +y, local +y = −x.
- * Без поворота — тождественность. Нужна жестам: drag панорамы,
- * панорамирование карты.
+ * оси UI. CSS-трансформ body — rotate(softAngle): локальные координаты
+ * получаются ОБРАТНЫМ поворотом физической дельты (R(−softAngle)), а не
+ * прямым — знак ±90° решает, и при прямом повороте жесты в ландшафте
+ * шли на 180° не туда (drag панорамы, панорамирование карты, подстройка
+ * контуров). Без поворота — тождественность.
  */
 export function toLocalDelta(
   dx: number,
   dy: number,
 ): { x: number; y: number } {
   if (softAngle === 0) return { x: dx, y: dy };
-  // -90° (хват влево): local +x = physical +y, local +y = physical −x
-  // +90° (хват вправо): зеркально — local +x = physical −y, local +y = +x
-  return softAngle === -90 ? { x: dy, y: -dx } : { x: -dy, y: dx };
+  // Обратный поворот на −softAngle вокруг центра: для ±90° оси меняются
+  // местами со сменой знака одной из них
+  return softAngle === -90 ? { x: -dy, y: dx } : { x: dy, y: -dx };
 }
 
 /**
  * Точка указателя из физических координат в локальные (система body).
- * Обратный поворот вокруг центра body: lx = bw/2 + (py − cy),
- * ly = bh/2 + (cx − px). Нужна тем, кто меряет по canvas.clientWidth —
- * двойной клик «переместиться в точку», ручка сектора взгляда на карте.
+ * Обратный поворот вокруг центра body: как getBoundingClientRect видит
+ * повёрнутую раскладку, так и точка должна пройти через обратный трансформ
+ * (R(−softAngle)), иначе x-координата зеркалится. Нужна тем, кто меряет по
+ * canvas.clientWidth — двойной клик «переместиться в точку», карта.
  */
 export function toLocalPoint(px: number, py: number): { x: number; y: number } {
   if (softAngle === 0) return { x: px, y: py };
@@ -356,11 +359,11 @@ export function toLocalPoint(px: number, py: number): { x: number; y: number } {
   const cy = br.top + br.height / 2;
   const bw = b.offsetWidth; // offset* игнорируют трансформ — это локальные
   const bh = b.offsetHeight;
-  // Обратный поворот вокруг центра body. Для -90°: lx = bw/2 + (py − cy),
-  // ly = bh/2 + (cx − px); для +90° — знаки слагаемых меняются
+  // Обратный поворот вокруг центра body. Для −90°: lx = bw/2 − (py − cy),
+  // ly = bh/2 + (px − cx); для +90° — наоборот
   if (softAngle === -90)
-    return { x: bw / 2 + (py - cy), y: bh / 2 + (cx - px) };
-  return { x: bw / 2 - (py - cy), y: bh / 2 - (cx - px) };
+    return { x: bw / 2 - (py - cy), y: bh / 2 + (px - cx) };
+  return { x: bw / 2 + (py - cy), y: bh / 2 - (px - cx) };
 }
 
 // ---------------------------------------------------------------------------

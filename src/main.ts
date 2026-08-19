@@ -1668,8 +1668,18 @@ function btnRect(btn: HTMLElement): DOMRect {
   // Обратный поворот вокруг центра body; у повёрнутого прямоугольника
   // ширина и высота меняются местами. Знаки — по направлению поворота
   if (angle === -90)
-    return new DOMRect(bw / 2 + (r.top - cy), bh / 2 + (cx - r.right), r.height, r.width);
-  return new DOMRect(bw / 2 - (r.bottom - cy), bh / 2 - (r.left - cx), r.height, r.width);
+    return new DOMRect(
+      bw / 2 - (r.bottom - cy),
+      bh / 2 + (r.left - cx),
+      r.height,
+      r.width,
+    );
+  return new DOMRect(
+    bw / 2 + (r.top - cy),
+    bh / 2 - (r.right - cx),
+    r.height,
+    r.width,
+  );
 }
 
 /**

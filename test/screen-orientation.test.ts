@@ -241,15 +241,16 @@ describe("screen-orientation", () => {
     // Управляем временем: дебаунс не должен склеивать два перехвата
     let now = 0;
     vi.spyOn(performance, "now").mockImplementation(() => now);
-    // Хват влево (roll ≈ −80°): локальный +x — физический +y, +y — −x
+    // Хват влево (roll ≈ −80°): обратный поворот R(−softAngle) —
+    // локальный +x — физический −y, локальный +y — физический +x
     m.notePhysicalTilt(-80);
     m.applyOrientation("landscape");
-    expect(m.toLocalDelta(10, 20)).toEqual({ x: 20, y: -10 });
-    // Хват вправо (roll ≈ +80°): зеркально — локальный +x — −y, +y — +x
+    expect(m.toLocalDelta(10, 20)).toEqual({ x: -20, y: 10 });
+    // Хват вправо (roll ≈ +80°): зеркально — локальный +x — +y, +y — −x
     now += 1000;
     m.notePhysicalTilt(80);
     m.applyOrientation("landscape");
-    expect(m.toLocalDelta(10, 20)).toEqual({ x: -20, y: 10 });
+    expect(m.toLocalDelta(10, 20)).toEqual({ x: 20, y: -10 });
   });
 
   it("программный поворот: нет body — сообщаем неуспех", async () => {
