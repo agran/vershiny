@@ -117,29 +117,58 @@ export function onPhysicalSideChange(cb: () => void): void {
   sideListener = cb;
 }
 
+/** Дебаунс переворота: без него шум у порога крутил UI туда-сюда */
+const SIDE_FLIP_DEBOUNCE_MS = 600;
+let lastFlipMs = 0;
+
 /**
- * Запомнить сторону хвата по сырому γ. Гистерезис: переключение только в
- * глубокой зоне противоположного знака (|γ| > 60°), а в мёртвой зоне
- * ±45–60° держим прошлую сторону — при прохождении через вертикаль UI не
- * дёргается туда-сюда.
+ * Запомнить сторону хвата по углу КРЕНА (rollRad из core/orientation.ts —
+ * третья строка матрицы поворота), а НЕ по сырому γ. Причина: γ при
+ * вертикальном хвате (β≈90°) вырождается — там его крутит и наклон вверх-
+ * вниз (изменение β), и поворот вокруг взгляда (α), поэтому телефон,
+ * наклоняемый вверх-вниз, дёргал UI переворотами. Угол крена от α и β
+ * не зависит и устойчив в любой позе: это угол от «верха» экрана к земной
+ * вертикали. Портретный хват — roll≈0, ландшафт-влево ≈ −90°, вправо ≈ +90°,
+ * вверх ногами ≈ ±180°.
+ *
+ * Мёртвая зона вокруг вертикали (|roll| < 75°) держит прошлую сторону:
+ * ландшафт начинается за ней. Порог 75° (не 45°) — запас на шум наклона.
  */
-export function notePhysicalTilt(gammaDeg: number): void {
+export function notePhysicalTilt(rollDeg: number): void {
   const next =
-    gammaDeg > 60 ? 1 : gammaDeg < -60 ? -1 : lastPhysicalSide;
-  if (next !== lastPhysicalSide) {
-    lastPhysicalSide = next;
-    // Смена стороны имеет смысл только когда UI реально повёрнут: в авто
-    // переворачивать нечего, пусть при следующем включении возьмёт свежую
-    if (softAngle !== 0) sideListener?.();
-  }
+    rollDeg > 75 ? 1 : rollDeg < -75 ? -1 : lastPhysicalSide;
+  if (next === lastPhysicalSide) return;
+  const now =
+    typeof performance !== "undefined" ? performance.now() : Date.now();
+  // Дебаунс глушит повторные вспышки, но не первую осознанную смену стороны
+  // (lastFlipMs === 0 — признак «ещё не переворачивали», её пропускаем)
+  if (lastFlipMs !== 0 && now - lastFlipMs < SIDE_FLIP_DEBOUNCE_MS) return;
+  lastPhysicalSide = next;
+  lastFlipMs = now;
+  // Смена стороны имеет смысл только когда UI реально повёрнут: в авто
+  // переворачивать нечего, пусть при следующем включении возьмёт свежую
+  if (softAngle !== 0) sideListener?.();
 }
 
-// Сторону хвата узнаём сами: main видит только обработанное состояние
-// (азимут/наклон/крен), а сырые γ до него не доходят. Слушатель лёгкий —
-// только запоминает знак γ, когда телефон реально повёрнут набок
+/** Сброс состояния для тестов: модуль живёт между ними, иначе сторона и
+ *  время последнего переворота протекают из одного теста в другой */
+export function _resetOrientationForTests(): void {
+  lastPhysicalSide = 1;
+  lastFlipMs = 0;
+  sideListener = null;
+}
+
+// Сторону хвата узнаём из УГЛА КРЕНА (устойчив, в отличие от сырого γ):
+// считаем его здесь из тех же β/γ той же формулой, что orientation.ts —
+// так модуль самодостаточен и не зависит от внутренностей трекера
 if (typeof window !== "undefined") {
   window.addEventListener("deviceorientation", (ev) => {
-    if (ev.gamma !== null) notePhysicalTilt(ev.gamma);
+    if (ev.beta === null || ev.gamma === null) return;
+    const b = (ev.beta * Math.PI) / 180;
+    const g = (ev.gamma * Math.PI) / 180;
+    // roll = atan2(−cosβ·sinγ, sinβ) — см. lookFromDeviceOrientation
+    const rollRad = Math.atan2(-Math.cos(b) * Math.sin(g), Math.sin(b));
+    notePhysicalTilt((rollRad * 180) / Math.PI);
   });
 }
 

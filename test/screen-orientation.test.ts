@@ -15,7 +15,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 async function fresh() {
   vi.resetModules();
-  return import("../src/core/screen-orientation");
+  const m = await import("../src/core/screen-orientation");
+  // Модуль держит сторону хвата и время последнего переворота между тестами —
+  // сбрасываем, иначе один тест влияет на следующий
+  m._resetOrientationForTests();
+  return m;
 }
 
 /** Подменить screen.orientation (read-only в jsdom) */
@@ -90,12 +94,16 @@ describe("screen-orientation", () => {
   it("направление поворота следует за физической стороной хвата", async () => {
     const m = await fresh();
     setOrientation({ type: "portrait-primary", angle: 0 });
-    // Телефон держат повёрнутым ВЛЕВО (верх влево, γ < 0)
+    // Управляем временем: дебаунс не должен склеивать два перехвата
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    // Телефон держат повёрнутым ВЛЕВО (roll ≈ −80°)
     m.notePhysicalTilt(-80);
     m.applyOrientation("landscape");
     expect(m.softAngleDeg()).toBe(-90);
     expect(document.body.style.transform).toBe("rotate(-90deg)");
-    // Перехватили вправо — поворот переориентируется
+    // Перехватили вправо — поворот переориентируется (после дебаунса)
+    now += 1000;
     m.notePhysicalTilt(80);
     m.applyOrientation("landscape");
     expect(m.softAngleDeg()).toBe(90);
@@ -112,21 +120,27 @@ describe("screen-orientation", () => {
     expect(m.softAngleDeg()).toBe(-90); // primary = хват влево
   });
 
-  it("перехват другим боком в ландшафте зовёт переворот (гистерезис)", async () => {
+  it("перехват другим боком в ландшафте зовёт переворот (гистерезис + дебаунс)", async () => {
     const m = await fresh();
     setOrientation({ type: "portrait-primary", angle: 0 });
-    m.notePhysicalTilt(-80); // хват влево
+    // Управляем временем, чтобы дебаунс не склеивал вызовы подряд
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    m.notePhysicalTilt(-80); // хват влево (roll ≈ −80°)
     m.applyOrientation("landscape");
     expect(m.softAngleDeg()).toBe(-90);
 
     const calls: number[] = [];
     m.onPhysicalSideChange(() => calls.push(1));
-    // Мёртвая зона: прошли к нулю — не переключаемся
+    // Мёртвая зона вокруг вертикали (|roll| < 75°): держим прошлую сторону
+    now += 1000;
     m.notePhysicalTilt(-50);
     expect(calls).toHaveLength(0);
+    now += 1000;
     m.notePhysicalTilt(50);
     expect(calls).toHaveLength(0);
     // Глубокая зона противоположного знака — перехват, зовём переворот
+    now += 1000;
     m.notePhysicalTilt(80);
     expect(calls).toHaveLength(1);
     // И новая сторона применяется
@@ -224,11 +238,15 @@ describe("screen-orientation", () => {
     expect(m.toLocalDelta(10, 20)).toEqual({ x: 10, y: 20 });
     expect(m.toLocalPoint(10, 20)).toEqual({ x: 10, y: 20 });
     setOrientation({ type: "portrait-primary", angle: 0 });
-    // Хват влево (−90°): локальный +x — физический +y, локальный +y — −x
+    // Управляем временем: дебаунс не должен склеивать два перехвата
+    let now = 0;
+    vi.spyOn(performance, "now").mockImplementation(() => now);
+    // Хват влево (roll ≈ −80°): локальный +x — физический +y, +y — −x
     m.notePhysicalTilt(-80);
     m.applyOrientation("landscape");
     expect(m.toLocalDelta(10, 20)).toEqual({ x: 20, y: -10 });
-    // Хват вправо (+90°): зеркально — локальный +x — физический −y, +y — +x
+    // Хват вправо (roll ≈ +80°): зеркально — локальный +x — −y, +y — +x
+    now += 1000;
     m.notePhysicalTilt(80);
     m.applyOrientation("landscape");
     expect(m.toLocalDelta(10, 20)).toEqual({ x: -20, y: 10 });
