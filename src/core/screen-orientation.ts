@@ -412,11 +412,13 @@ let lockAttempted = false;
  * показывает свою иконку смены ориентации — весь поворот делает наш
  * CSS-трансформ, который следует за хватом.
  *
- * На Android Chrome lock() работает только в fullscreen, а fullscreen
- * доступен только из жеста пользователя — поэтому вызывается по первому
- * касанию холста (main.ts) и сперва раскрывает документ на весь экран.
- * Где API или fullscreen нет (iOS, часть WebView) — молча ничего:
- * программный поворот работает и без системного lock.
+ * Fullscreen здесь НЕ запрашивается (поведение браузера в нём не
+ * понравилось): на Android Chrome lock() вне fullscreen отклоняется,
+ * поэтому в обычной вкладке этот вызов — честный no-op, а системную
+ * ориентацию там чинит только установленный PWA (манифест `orientation`).
+ * В установленном приложении (display: standalone) и в браузерах, где
+ * lock разрешён без fullscreen, попытка срабатывает. Одна на сессию,
+ * отказ логируется, а не роняет приложение.
  */
 export function lockSystemOrientation(): void {
   if (lockAttempted || typeof document === "undefined") return;
@@ -428,18 +430,7 @@ export function lockSystemOrientation(): void {
     | undefined;
   const lockFn = so?.lock;
   if (typeof lockFn !== "function") return;
-  const de = document.documentElement;
-  let entered: Promise<unknown> = Promise.resolve();
-  if (!document.fullscreenElement && de.requestFullscreen) {
-    try {
-      entered = de.requestFullscreen();
-    } catch {
-      // Отказ fullscreen не ломает приложение — lock просто не сработает
-    }
-  }
-  void entered
-    .then(() => lockFn("portrait"))
-    .catch((err) => {
-      console.info("Системная ориентация не зафиксирована:", err);
-    });
+  lockFn("portrait").catch((err) => {
+    console.info("Системная ориентация не зафиксирована:", err);
+  });
 }
