@@ -275,8 +275,13 @@ export async function startAr(
   // каждый кадр оверлея начинается с clearRect. Без rVFC (ниже нашего
   // минимума Safari 16.4) видео рисуется в rAF, как раньше
   const videoLayer = document.createElement("canvas");
-  // В #app перед основным холстом: та же сетка CSS (#app canvas), тот же
-  // размер, ниже по стеку. Вне DOM (тесты) вызов — безвредный no-op
+  // В #app перед основным холстом. Оба холста в #app — статичные блоки в
+  // нормальном потоке: без абсолютного позиционирования видео-слой занял бы
+  // верхние 100% высоты, а холст с оверлеем уехал вниз за кадр (та же сетка
+  // CSS `#app canvas` даёт слою тот же размер, что холсту). z-index:-1 —
+  // под холстом, над <video> в body. Вне DOM (тесты) вставка — no-op
+  videoLayer.style.cssText =
+    "position:absolute;inset:0;z-index:-1;pointer-events:none";
   canvas.insertAdjacentElement("beforebegin", videoLayer);
   const vctx = videoLayer.getContext("2d")!;
   const hasRvfc = typeof videoEl.requestVideoFrameCallback === "function";

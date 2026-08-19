@@ -172,4 +172,33 @@ describe("AR camera resume", () => {
 
     session.stop();
   });
+
+  it("видео-слой накладывается на холст, а не течёт под ним в потоке", async () => {
+    const stream = createStream("live");
+    const getUserMedia = vi.fn().mockResolvedValue(stream);
+    Object.defineProperty(navigator, "mediaDevices", {
+      configurable: true,
+      value: { getUserMedia },
+    });
+    const { videoEl } = createVideoEl({ frozen: false });
+
+    // Холст лежит в #app как статичный блок. Видео-слой в нормальном потоке
+    // занял бы верхние 100% высоты и сдвинул холст с контурами за кадр —
+    // поэтому он обязан быть absolute поверх той же области, ниже холста
+    const app = document.createElement("div");
+    const canvas = document.createElement("canvas");
+    app.appendChild(canvas);
+    document.body.appendChild(app);
+
+    const session = await startAr(videoEl, canvas, {} as never, {} as never);
+    const layer = canvas.previousElementSibling as HTMLCanvasElement | null;
+    expect(layer).not.toBeNull();
+    expect(layer!.style.position).toBe("absolute");
+    expect(layer!.style.zIndex).toBe("-1");
+    expect(app.children.length).toBe(2); // слой и холст, ничего лишнего
+
+    session.stop();
+    expect(app.children.length).toBe(1); // stop() убирает видео-слой
+    app.remove();
+  });
 });
