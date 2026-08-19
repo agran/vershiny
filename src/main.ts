@@ -2437,11 +2437,21 @@ function layoutControls(): void {
   if (navPad) {
     navPad.style.width = `${padSize}px`;
     navPad.style.height = `${padSize}px`;
-    navPad.style.left = edgeLeft(mapWidth);
-    navPad.style.bottom = edgeBottom();
+    if (touchOnly) {
+      // Смартфон: возврат к геопозиции — над кнопкой карты, в той же колонке.
+      // Нижний ряд остаётся «карта + высота», без дыры на прежнем месте
+      // навипада; попадать в GPS проще, когда кнопка не зажата между двумя
+      navPad.style.left = edgeLeft();
+      navPad.style.bottom = edgeBottom(48 + 8);
+    } else {
+      navPad.style.left = edgeLeft(mapWidth);
+      navPad.style.bottom = edgeBottom();
+    }
   }
   if (heightPadEl) {
-    heightPadEl.style.left = edgeLeft(mapWidth + padSize + 8);
+    heightPadEl.style.left = edgeLeft(
+      touchOnly ? mapWidth : mapWidth + padSize + 8,
+    );
     heightPadEl.style.bottom = edgeBottom();
   }
   if (mapButton) {
