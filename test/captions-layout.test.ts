@@ -7,7 +7,7 @@
  * налезшим на «Настройки», и «К моему положению» на кнопке «Вперёд»).
  */
 
-import { describe, it, expect, beforeAll } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 // --- Минимальная копия алгоритма раскладки из main.ts (та же математика) ---
 
@@ -174,8 +174,9 @@ function layout(caps: Cap[], W: number, H: number): LaidOut {
         self.right > r.left &&
         self.top < r.bottom &&
         self.bottom > r.top;
+      // Своя кнопка — тоже препятствие: подпись «отдельно стоящая»,
+      // и у запертой кнопки ближайший свободный сдвиг — прямо на неё
       for (const o of caps) {
-        if (o === c) continue;
         const b = o.btn;
         if (
           hits({
@@ -254,15 +255,14 @@ function layout(caps: Cap[], W: number, H: number): LaidOut {
         const h = Math.min(self.bottom, r.bottom) - Math.max(self.top, r.top);
         if (w > 0 && h > 0) area += w * h;
       };
-      for (const o of caps) {
-        if (o === c) continue;
+      // Своя кнопка входит в площадь: даже запасной вариант не паркуется на ней
+      for (const o of caps)
         add({
           left: o.btn.left,
           right: o.btn.left + o.btn.width,
           top: o.btn.top,
           bottom: o.btn.top + o.btn.height,
         });
-      }
       for (const p of placed)
         add({ left: p.x, right: p.x + p.w, top: p.y, bottom: p.y + p.h });
       return area;
@@ -367,6 +367,38 @@ function overlaps(
   return (
     a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y
   );
+}
+
+/**
+ * Запертая кнопка карты: левый нижний угол экрана, слева край, справа
+ * кнопка, сверху — колонна кнопок до самого верха. Подпись «выше» не может
+ * забраться над колонной, и раньше ближайший свободный сдвиг — вниз, прямо
+ * на кнопку (своя кнопка не была препятствием).
+ */
+function corneredCaps(): Cap[] {
+  const sz = 48;
+  const mk = (left: number, top: number) => ({
+    left,
+    top,
+    width: sz,
+    height: sz,
+  });
+  const blocker = (left: number, top: number): Cap => ({
+    btn: mk(left, top),
+    side: "above",
+    w: 0,
+    h: 0,
+    text: "",
+  });
+  return [
+    { btn: mk(12, 300), side: "above", text: "Карта", w: 46, h: 18 },
+    blocker(12, 0),
+    blocker(12, 60),
+    blocker(12, 120),
+    blocker(12, 180),
+    blocker(12, 240),
+    blocker(80, 300),
+  ];
 }
 
 describe("раскладка плашек подписей", () => {
@@ -485,6 +517,22 @@ describe("раскладка плашек подписей", () => {
           `стрелка «${placed[i].text}» × стрелка «${placed[j].text}»`,
         ).toBe(false);
       }
+  });
+
+  it("запертая кнопка: подпись не ложится на СВОЮ кнопку", () => {
+    const caps = corneredCaps();
+    const laid = layout(caps, 400, 360);
+    const p = laid.placed.find((pl) => pl.text === "Карта")!;
+    const b = caps.find((c) => c.text === "Карта")!.btn;
+    expect(
+      overlaps(p, { x: b.left, y: b.top, w: b.width, h: b.height }),
+      "подпись «Карта» стоит на своей кнопке",
+    ).toBe(false);
+    // В пределах экрана
+    expect(p.x).toBeGreaterThanOrEqual(0);
+    expect(p.y).toBeGreaterThanOrEqual(0);
+    expect(p.x + p.w).toBeLessThanOrEqual(400);
+    expect(p.y + p.h).toBeLessThanOrEqual(360);
   });
 });
 

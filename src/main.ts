@@ -175,6 +175,8 @@ const touchOnly =
  * и обращение к `let` ниже по файлу — TDZ ReferenceError на iPhone.
  */
 let captionLayoutQueued = false;
+/** Таймер повторной раскладки после CSS-перехода кнопок (см. resize) */
+let captionSettleTimer = 0;
 
 /**
  * Верхняя плотность пикселей холста. Полный devicePixelRatio — это 3840×2160
@@ -216,6 +218,11 @@ function resize(): void {
       layoutCaptions();
     });
   }
+  // Кнопки едут на новые места с transition .15s: раскладка по их
+  // промежуточным позициям разъехалась бы с ними (подпись могла встать
+  // прямо на кнопку) — повторяем после завершения анимации
+  clearTimeout(captionSettleTimer);
+  captionSettleTimer = window.setTimeout(layoutCaptions, 250);
   // Смена размера очищает холст: без перерисовки панорама пропадала до
   // следующего пересчёта (поворот телефона — пустой экран). В AR рисуем
   // немедленно оба слоя сессии — иначе до ближайшего rAF оверлей мигал бы
@@ -2087,19 +2094,29 @@ function layoutCaptions(): void {
     const { w: W, h: H } = screenOrientationModule.virtualViewport();
     x = Math.max(4, Math.min(x, W - lw - 4));
     y = Math.max(4, Math.min(y, H - lh - 4));
-    // Раздвижка, пока есть пересечения. Своя кнопка не считается
-    // препятствием: плашка отстоит от неё на gap, но не пересекает.
-    const vertical = c.side === "left" || c.side === "right";
+    // Раздвижка, пока есть пересечения. Препятствия для подъёма «выше
+    // соседнего ряда» — только чужие кнопки: своя всегда под плашкой
+    // (по вертикали плашка выровнена на неё), и включение её в ряд
+    // зациклило бы подъём до верхнего края. Для проверки НАЛОЖЕНИЯ своя
+    // кнопка — тоже препятствие: подпись «отдельно стоящая», и у запертой
+    // кнопки (карта в углу, кругом соседи) ближайший свободный сдвиг —
+    // вниз, прямо на кнопку
+    const toRect = (r: DOMRect) => ({
+      left: r.left,
+      right: r.right,
+      top: r.top,
+      bottom: r.bottom,
+    });
+    const buttonRects = buttons
+      .map((b) => btnRect(b))
+      .filter((r) => r.width)
+      .map(toRect);
     const obstacles = buttons
       .filter((b) => b !== c.btn)
       .map((b) => btnRect(b))
       .filter((r) => r.width)
-      .map((r) => ({
-        left: r.left,
-        right: r.right,
-        top: r.top,
-        bottom: r.bottom,
-      }));
+      .map(toRect);
+    const vertical = c.side === "left" || c.side === "right";
     const rectHits = (rx: number, ry: number): boolean => {
       const self = { left: rx, right: rx + lw, top: ry, bottom: ry + lh };
       const hits = (r: {
@@ -2112,7 +2129,7 @@ function layoutCaptions(): void {
         self.right > r.left &&
         self.top < r.bottom &&
         self.bottom > r.top;
-      return obstacles.some(hits) || placed.some(hits);
+      return buttonRects.some(hits) || placed.some(hits);
     };
     /** Пересекает ли СТРЕЛКА этой плашки чужие плашки, кнопки или стрелки */
     const arrowHits = (rx: number, ry: number): boolean => {
@@ -2201,7 +2218,9 @@ function layoutCaptions(): void {
         const h = Math.min(self.bottom, r.bottom) - Math.max(self.top, r.top);
         if (w > 0 && h > 0) area += w * h;
       };
-      for (const r of obstacles) add(r);
+      // Своя кнопка входит в площадь пересечения: даже запасной вариант
+      // (минимум пересечений) не должен парковать подпись на кнопке
+      for (const r of buttonRects) add(r);
       for (const p of placed)
         add({
           left: p.x,
