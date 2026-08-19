@@ -81,12 +81,58 @@ function rotatableRoot(): HTMLElement | null {
   return typeof document === "undefined" ? null : document.body;
 }
 
-/** Текущий программный поворот: 0 — системная ориентация как есть */
-let softAngle: 0 | 90 = 0;
+/** Текущий программный поворот: 0 — как есть; ±90° — по стороне хвата */
+let softAngle: -90 | 0 | 90 = 0;
 
 /** Действует ли сейчас программный поворот */
 export function softRotated(): boolean {
   return softAngle !== 0;
+}
+
+/** Куда повёрнут интерфейс, градусы: -90 | 0 | +90 */
+export function softAngleDeg(): number {
+  return softAngle;
+}
+
+/**
+ * Физическая сторона хвата телефона: влево (landscape-primary, верх
+ * устройства влево) или вправо (landscape-secondary). По ней выбираем
+ * направление поворота UI: повернуть надо ТУДА ЖЕ, куда человек держит
+ * телефон, иначе картинка окажется вверх ногами относительно его хвата.
+ *
+ * Источник — screen.orientation.angle (0 портрет, 90 ландшафт-primary,
+ * 270 — secondary). Пока окно портретное (наш типичный случай: манифестный
+ * или кнопочный ландшафт на физическом портрете), угол ещё 0, и сторону
+ * хвата берём из последних сырых γ датчика ориентации.
+ */
+let lastPhysicalSide: 1 | -1 = 1; // -1 = влево (primary), +1 = вправо
+
+/** Запомнить сторону хвата по сырым углам датчика (β не нужен: он
+ *  вырождается при вертикальном телефоне; опираемся на γ) */
+export function notePhysicalTilt(gammaDeg: number): void {
+  // Значимый крен по γ — телефон реально повёрнут набок
+  if (gammaDeg > 45) lastPhysicalSide = 1; // правый край вниз = хват вправо
+  else if (gammaDeg < -45) lastPhysicalSide = -1;
+}
+
+// Сторону хвата узнаём сами: main видит только обработанное состояние
+// (азимут/наклон/крен), а сырые γ до него не доходят. Слушатель лёгкий —
+// только запоминает знак γ, когда телефон реально повёрнут набок
+if (typeof window !== "undefined") {
+  window.addEventListener("deviceorientation", (ev) => {
+    if (ev.gamma !== null) notePhysicalTilt(ev.gamma);
+  });
+}
+
+/** Угол для CSS-поворота под текущий хват: влево → -90°, вправо → +90° */
+function targetAngle(): -90 | 90 {
+  // Если окно уже ландшафтное (манифест сработал), направление однозначно
+  // по его углу; иначе — по запомненной стороне хвата
+  const angle =
+    typeof screen !== "undefined" ? (screen.orientation?.angle ?? 0) : 0;
+  if (angle === 90) return -90; // landscape-primary: хват влево
+  if (angle === 270) return 90; // landscape-secondary: хват вправо
+  return lastPhysicalSide === -1 ? -90 : 90;
 }
 
 /**
@@ -186,7 +232,7 @@ export function virtualViewport(): { w: number; h: number } {
 export function applySoftRotation(rotated: boolean): boolean {
   const root = rotatableRoot();
   if (!root) return false;
-  const next: 0 | 90 = rotated ? 90 : 0;
+  const next: -90 | 0 | 90 = rotated ? targetAngle() : 0;
   const changed = next !== softAngle;
   softAngle = next;
   if (softAngle === 0) {
@@ -221,7 +267,9 @@ export function applySoftRotation(rotated: boolean): boolean {
   root.style.left = `${cx - bw / 2}px`;
   root.style.top = `${cy - bh / 2}px`;
   root.style.transformOrigin = "50% 50%";
-  root.style.transform = "rotate(90deg)";
+  // Направление — по физической стороне хвата (targetAngle): поворачиваем
+  // туда же, куда человек держит телефон, иначе UI окажется вверх ногами
+  root.style.transform = `rotate(${softAngle}deg)`;
   // body — query-контейнер по размеру: cqw/cqh внутри считаются от него
   // (то есть от повёрнутого вьюпорта), а не от физического окна
   registerAppSizeProps();
@@ -240,7 +288,10 @@ export function toLocalDelta(
   dx: number,
   dy: number,
 ): { x: number; y: number } {
-  return softAngle === 0 ? { x: dx, y: dy } : { x: dy, y: -dx };
+  if (softAngle === 0) return { x: dx, y: dy };
+  // -90° (хват влево): local +x = physical +y, local +y = physical −x
+  // +90° (хват вправо): зеркально — local +x = physical −y, local +y = +x
+  return softAngle === -90 ? { x: dy, y: -dx } : { x: -dy, y: dx };
 }
 
 /**
@@ -255,10 +306,13 @@ export function toLocalPoint(px: number, py: number): { x: number; y: number } {
   const br = b.getBoundingClientRect(); // физический бокс повёрнутого body
   const cx = br.left + br.width / 2;
   const cy = br.top + br.height / 2;
-  return {
-    x: b.offsetWidth / 2 + (py - cy), // offset* игнорируют трансформ
-    y: b.offsetHeight / 2 + (cx - px),
-  };
+  const bw = b.offsetWidth; // offset* игнорируют трансформ — это локальные
+  const bh = b.offsetHeight;
+  // Обратный поворот вокруг центра body. Для -90°: lx = bw/2 + (py − cy),
+  // ly = bh/2 + (cx − px); для +90° — знаки слагаемых меняются
+  if (softAngle === -90)
+    return { x: bw / 2 + (py - cy), y: bh / 2 + (cx - px) };
+  return { x: bw / 2 - (py - cy), y: bh / 2 - (cx - px) };
 }
 
 // ---------------------------------------------------------------------------
@@ -268,6 +322,7 @@ export function toLocalPoint(px: number, py: number): { x: number; y: number } {
 /** Эффективная ВИДИМАЯ форма: физическая форма с поправкой на наш трансформ */
 function visibleOrientation(): "landscape" | "portrait" {
   const phys = effectiveOrientation();
+  // Любой ±90° меняет оси местами — знак на форму не влияет
   if (softAngle === 0) return phys;
   return phys === "landscape" ? "portrait" : "landscape";
 }

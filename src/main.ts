@@ -1647,21 +1647,19 @@ function addCaption(
  */
 function btnRect(btn: HTMLElement): DOMRect {
   const r = btn.getBoundingClientRect();
-  if (!screenOrientationModule.softRotated() || !r.width) return r;
+  const angle = screenOrientationModule.softAngleDeg();
+  if (angle === 0 || !r.width) return r;
   const b = document.body;
   const br = b.getBoundingClientRect(); // физический бокс повёрнутого body
   const cx = br.left + br.width / 2;
   const cy = br.top + br.height / 2;
   const bw = b.offsetWidth; // offset* игнорируют трансформ — это локальные
   const bh = b.offsetHeight;
-  // Обратный поворот: lx = bw/2 + (py − cy), ly = bh/2 + (cx − px);
-  // у повёрнутого прямоугольника ширина и высота меняются местами
-  return new DOMRect(
-    bw / 2 + (r.top - cy),
-    bh / 2 + (cx - r.right),
-    r.height,
-    r.width,
-  );
+  // Обратный поворот вокруг центра body; у повёрнутого прямоугольника
+  // ширина и высота меняются местами. Знаки — по направлению поворота
+  if (angle === -90)
+    return new DOMRect(bw / 2 + (r.top - cy), bh / 2 + (cx - r.right), r.height, r.width);
+  return new DOMRect(bw / 2 - (r.bottom - cy), bh / 2 - (r.left - cx), r.height, r.width);
 }
 
 /**

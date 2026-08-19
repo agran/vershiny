@@ -77,12 +77,39 @@ describe("screen-orientation", () => {
     expect(document.body.style.transform).toBe("");
   });
 
-  it("«ландшафт» на портретном экране поворачивает body на 90°", async () => {
+  it("«ландшафт» на портретном экране поворачивает body по стороне хвата", async () => {
     const m = await fresh();
-    setOrientation({ type: "portrait-primary" });
+    setOrientation({ type: "portrait-primary", angle: 0 });
+    // Хват по умолчанию неизвестен → поворачиваем вправо (+90°)
     expect(m.applyOrientation("landscape")).toBe(true);
     expect(m.softRotated()).toBe(true);
+    expect(m.softAngleDeg()).toBe(90);
     expect(document.body.style.transform).toBe("rotate(90deg)");
+  });
+
+  it("направление поворота следует за физической стороной хвата", async () => {
+    const m = await fresh();
+    setOrientation({ type: "portrait-primary", angle: 0 });
+    // Телефон держат повёрнутым ВЛЕВО (верх влево, γ < 0)
+    m.notePhysicalTilt(-80);
+    m.applyOrientation("landscape");
+    expect(m.softAngleDeg()).toBe(-90);
+    expect(document.body.style.transform).toBe("rotate(-90deg)");
+    // Перехватили вправо — поворот переориентируется
+    m.notePhysicalTilt(80);
+    m.applyOrientation("landscape");
+    expect(m.softAngleDeg()).toBe(90);
+  });
+
+  it("сторона хвата из угла ландшафтного окна важнее запомненного наклона", async () => {
+    const m = await fresh();
+    // Окно ландшафтное (телефон уже повёрнут): угол однозначно говорит,
+    // КУДА — primary (90°) это хват влево. Поворачиваем в «портрет», чтобы
+    // поворот реально включился (на ландшафтном окне «ландшафт» не крутит)
+    setOrientation({ type: "landscape-primary", angle: 90 });
+    m.notePhysicalTilt(80); // устаревший наклон «вправо» — не должен решать
+    m.applyOrientation("portrait");
+    expect(m.softAngleDeg()).toBe(-90); // primary = хват влево
   });
 
   it("«ландшафт» на ландшафтном окне — поворот не нужен (манифест сработал)", async () => {
@@ -108,7 +135,7 @@ describe("screen-orientation", () => {
 
   it("возврат в «авто» снимает поворот и чистит стили", async () => {
     const m = await fresh();
-    setOrientation({ type: "portrait-primary" });
+    setOrientation({ type: "portrait-primary", angle: 0 });
     m.applyOrientation("landscape");
     expect(m.softRotated()).toBe(true);
     expect(m.applyOrientation("auto")).toBe(true);
@@ -163,10 +190,15 @@ describe("screen-orientation", () => {
     const m = await fresh();
     expect(m.toLocalDelta(10, 20)).toEqual({ x: 10, y: 20 });
     expect(m.toLocalPoint(10, 20)).toEqual({ x: 10, y: 20 });
-    setOrientation({ type: "portrait-primary" });
+    setOrientation({ type: "portrait-primary", angle: 0 });
+    // Хват влево (−90°): локальный +x — физический +y, локальный +y — −x
+    m.notePhysicalTilt(-80);
     m.applyOrientation("landscape");
-    // Поворот на 90°: локальный +x — физический +y, локальный +y — физический −x
     expect(m.toLocalDelta(10, 20)).toEqual({ x: 20, y: -10 });
+    // Хват вправо (+90°): зеркально — локальный +x — физический −y, +y — +x
+    m.notePhysicalTilt(80);
+    m.applyOrientation("landscape");
+    expect(m.toLocalDelta(10, 20)).toEqual({ x: -20, y: 10 });
   });
 
   it("программный поворот: нет body — сообщаем неуспех", async () => {
