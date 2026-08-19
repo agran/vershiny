@@ -173,6 +173,7 @@ export function _resetOrientationForTests(): void {
   hasFlipped = false;
   tiltForm = "portrait";
   hasTilt = false;
+  lockAttempted = false;
   formListener = null;
 }
 
@@ -400,4 +401,45 @@ export function syncOrientation(): boolean {
   if (!hasTilt) return false;
   applySoftRotation(effectiveOrientation() !== tiltForm);
   return true;
+}
+
+/** Была ли уже попытка зафиксировать системную ориентацию (раз на сессию) */
+let lockAttempted = false;
+
+/**
+ * Зафиксировать системную ориентацию окна в портрете (Screen Orientation
+ * API): тогда система не крутит страницу при повороте телефона и не
+ * показывает свою иконку смены ориентации — весь поворот делает наш
+ * CSS-трансформ, который следует за хватом.
+ *
+ * На Android Chrome lock() работает только в fullscreen, а fullscreen
+ * доступен только из жеста пользователя — поэтому вызывается по первому
+ * касанию холста (main.ts) и сперва раскрывает документ на весь экран.
+ * Где API или fullscreen нет (iOS, часть WebView) — молча ничего:
+ * программный поворот работает и без системного lock.
+ */
+export function lockSystemOrientation(): void {
+  if (lockAttempted || typeof document === "undefined") return;
+  lockAttempted = true;
+  const so = screen.orientation as
+    | (ScreenOrientation & {
+        lock?: (orientation: string) => Promise<void>;
+      })
+    | undefined;
+  const lockFn = so?.lock;
+  if (typeof lockFn !== "function") return;
+  const de = document.documentElement;
+  let entered: Promise<unknown> = Promise.resolve();
+  if (!document.fullscreenElement && de.requestFullscreen) {
+    try {
+      entered = de.requestFullscreen();
+    } catch {
+      // Отказ fullscreen не ломает приложение — lock просто не сработает
+    }
+  }
+  void entered
+    .then(() => lockFn("portrait"))
+    .catch((err) => {
+      console.info("Системная ориентация не зафиксирована:", err);
+    });
 }

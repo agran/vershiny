@@ -317,6 +317,11 @@ let pinchStartDist = 0;
 let pinchStartFovDeg = DEFAULT_CAMERA_FOV_DEG;
 
 canvas.addEventListener("pointerdown", (ev) => {
+  // Первый жест — попытка зафиксировать системную ориентацию окна: на
+  // Android Chrome lock работает только в fullscreen, а fullscreen — только
+  // из жеста. Дальше система не крутит страницу и не показывает свою иконку
+  // поворота; хват по-прежнему отрабатывает наш CSS-поворот
+  screenOrientationModule.lockSystemOrientation();
   activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
 
   // Второй палец в AR: pinch — подгонка поля зрения под кадр камеры, прямо

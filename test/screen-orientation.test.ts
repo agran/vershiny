@@ -209,4 +209,37 @@ describe("screen-orientation: автоповорот по хвату", () => {
       configurable: true,
     });
   });
+
+  it("lockSystemOrientation: fullscreen + портрет, один раз за сессию", async () => {
+    const m = await fresh();
+    // jsdom не умеет fullscreen — подменяем; lock отдаёт обещание
+    const fullscreens: string[] = [];
+    const locks: string[] = [];
+    Object.defineProperty(document.documentElement, "requestFullscreen", {
+      value: vi.fn(() => {
+        fullscreens.push("fullscreen");
+        return Promise.resolve();
+      }),
+      configurable: true,
+    });
+    const so = { type: "portrait-primary", lock: vi.fn((o: string) => {
+      locks.push(o);
+      return Promise.resolve();
+    }) };
+    setOrientation(so);
+    m.lockSystemOrientation();
+    // Повторный вызов в этой сессии — no-op: fullscreen дважды не просим
+    m.lockSystemOrientation();
+    await vi.waitFor(() => {
+      expect(fullscreens).toEqual(["fullscreen"]);
+      expect(locks).toEqual(["portrait"]);
+    });
+  });
+
+  it("lockSystemOrientation без API — молча ничего не делает", async () => {
+    const m = await fresh();
+    setOrientation({ type: "portrait-primary" }); // lock отсутствует
+    expect(() => m.lockSystemOrientation()).not.toThrow();
+    expect(m.lockSystemOrientation()).toBeUndefined();
+  });
 });
