@@ -3,7 +3,8 @@
  * поверхности, не должны соединяться ложной «вертикалью» через весь кадр.
  */
 
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { setLocale } from "../src/core/i18n";
 import {
     buildRidgeSegments,
     decimateSegments,
@@ -332,6 +333,9 @@ describe("отсечение частей подписи за краем кад�
 });
 
 describe("многострочная подпись", () => {
+  // Названия в ожиданиях — кириллицей, а detectLocale() в jsdom на CI даёт
+  // «en»: транслитерация и единицы m/km ломали бы сравнения. Локаль — явно.
+  beforeEach(() => setLocale("ru"));
   const W = 1000;
   const H = 600;
   const WIDTHS: Record<string, number> = {
