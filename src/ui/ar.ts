@@ -20,6 +20,7 @@ import {
   horizonFracInFrame,
   type FrameFov,
 } from "../core/camera-fov";
+import { softRotated } from "../core/screen-orientation";
 import type { PanoramaState, ViewState } from "./panorama";
 import { HORIZON_FRAC, drawOverlay, rotateAroundCenter } from "./panorama";
 
@@ -57,6 +58,28 @@ function baseFovRad(): number {
   return (
     ((getCalibration().cameraFovDeg ?? DEFAULT_CAMERA_FOV_DEG) * Math.PI) / 180
   );
+}
+
+/**
+ * Кадр сенсора «боком» относительно того, как держат телефон?
+ *
+ * Android отдаёт кадр в НАТИВНОЙ ориентации сенсора (для задней камеры
+ * почти всегда ландшафт 1920×1080) независимо от позы; iOS — довёрнутым
+ * под UI. Когда интерфейс повёрнут программно (программный ландшафт,
+ * screen-orientation.ts), телефон физически портретный, а кадр сенсора
+ * ландшафтный — и видео надо довернуть в вертикаль, иначе сцена лежит
+ * боком, пока контуры (они в осях UI) стоят правильно. Детектор: кадр шире,
+ * чем высок (сенсор ландшафтный), а холст — выше, чем шире (повёрнут
+ * программно). Чистая функция — проверяется тестом без камеры.
+ */
+export function isSensorFrameSideways(
+  frameW: number,
+  frameH: number,
+  canvasW: number,
+  canvasH: number,
+): boolean {
+  if (!softRotated()) return false;
+  return frameW > frameH && canvasH > canvasW;
 }
 
 /** Параметры запроса камеры — вынесены: понадобятся при перезапуске трека */
@@ -279,9 +302,27 @@ export async function startAr(
     );
   }
 
+  /** Кадр сенсора «боком»? Вынесено в чистую функцию — проверяется тестом */
+  function sensorFrameSideways(): boolean {
+    return isSensorFrameSideways(
+      videoEl.videoWidth,
+      videoEl.videoHeight,
+      canvas.width,
+      canvas.height,
+    );
+  }
+
   let raf = 0;
   function frame() {
-    drawArFrame(ctx, videoEl, state, view, opacity, zoomFactor);
+    drawArFrame(
+      ctx,
+      videoEl,
+      state,
+      view,
+      opacity,
+      zoomFactor,
+      sensorFrameSideways(),
+    );
     raf = requestAnimationFrame(frame);
   }
   raf = requestAnimationFrame(frame);
@@ -303,24 +344,49 @@ export async function startAr(
       videoEl.srcObject = null;
     },
     fullFrameFov,
-    frameHorizonFrac: () =>
-      horizonFracInFrame(
-        videoEl.videoWidth,
-        videoEl.videoHeight,
+    frameHorizonFrac: () => {
+      // При довёрнутом кадре (сенсор боком) оси кадра меняются местами:
+      // «строка» горизонта идёт вдоль ШИРИНЫ исходного кадра
+      const fw = videoEl.videoWidth;
+      const fh = videoEl.videoHeight;
+      const sideways = isSensorFrameSideways(fw, fh, canvas.width, canvas.height);
+      return horizonFracInFrame(
+        sideways ? fh : fw,
+        sideways ? fw : fh,
         canvas.width,
         canvas.height,
         HORIZON_FRAC,
-      ),
+      );
+    },
     grabFrame: () => {
       if (!probeCtx || videoEl.readyState < 2) return null;
+      const vw = videoEl.videoWidth;
+      const vh = videoEl.videoHeight;
+      // Кадр в пробу — в той же системе, что на экране: при повёрнутом
+      // сенсоре доворачиваем в вертикаль, иначе автокалибровка искала бы
+      // линию неба вдоль лежачего кадра
+      const sideways = isSensorFrameSideways(vw, vh, canvas.width, canvas.height);
       const width = 320;
-      const height = Math.max(
-        1,
-        Math.round((width * videoEl.videoHeight) / videoEl.videoWidth),
-      );
+      // Повёрнутый кадр: его высота — это исходная ширина (оси меняются)
+      const height = sideways
+        ? Math.max(1, Math.round((width * vw) / vh))
+        : Math.max(1, Math.round((width * vh) / vw));
       probe.width = width;
       probe.height = height;
-      probeCtx.drawImage(videoEl, 0, 0, width, height);
+      if (sideways) {
+        // Ландшафтный кадр → в вертикаль: поворот вокруг центра пробы на
+        // -90°, исходник рисуем с масштабом под его ШИРИНУ (она станет
+        // высотой результата)
+        const s = height / vw; // = width / vh, оси согласованы
+        probeCtx.save();
+        probeCtx.translate(width / 2, height / 2);
+        probeCtx.rotate(-Math.PI / 2);
+        probeCtx.scale(s, s);
+        probeCtx.drawImage(videoEl, -vw / 2, -vh / 2);
+        probeCtx.restore();
+      } else {
+        probeCtx.drawImage(videoEl, 0, 0, width, height);
+      }
       return {
         rgba: probeCtx.getImageData(0, 0, width, height).data,
         width,
@@ -338,6 +404,7 @@ function drawArFrame(
   view: ViewState,
   opacity: number,
   zoomFactor: number,
+  sensorSideways: boolean,
 ): void {
   const { width, height } = ctx.canvas;
 
@@ -345,17 +412,45 @@ function drawArFrame(
   if (video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    const scale = Math.max(width / vw, height / vh);
-    const dw = vw * scale;
-    const dh = vh * scale;
-    ctx.drawImage(video, (width - dw) / 2, (height - dh) / 2, dw, dh);
+    if (sensorSideways) {
+      // Кадр сенсора ландшафтный, а телефон держат портретно (программный
+      // ландшафт): доворачиваем видео в вертикаль вокруг центра. FOV и
+      // cover-кроп считаем от ПОВЁРНУТОГО кадра — оси меняются местами.
+      const pw = vh; // повёрнутая ширина = исходная высота
+      const ph = vw;
+      const scale = Math.max(width / pw, height / ph);
+      ctx.save();
+      ctx.translate(width / 2, height / 2);
+      ctx.rotate(-Math.PI / 2); // ландшафтный кадр → в вертикаль
+      ctx.scale(scale, scale);
+      ctx.drawImage(video, -vw / 2, -vh / 2);
+      ctx.restore();
 
-    // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
-    // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
-    // кадра и расходились к краям, когда пропорции экрана и видео различались
-    const full = applyZoom(fovForFrame(baseFovRad(), vw, vh), zoomFactor);
-    const visible = applyCoverCrop(full, vw, vh, width, height);
-    overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
+      const full = applyZoom(fovForFrame(baseFovRad(), pw, ph), zoomFactor);
+      const visible = applyCoverCrop(full, pw, ph, width, height);
+      // Крен вычитаем доворот: rollRad снят с ФИЗИЧЕСКОГО устройства, а
+      // оверлей рисуем в системе уже довёрнутого кадра — иначе крен
+      // учитывался бы дважды
+      overlayView = {
+        ...view,
+        fovRad: visible.h,
+        fovVRad: visible.v,
+        rollRad: (view.rollRad ?? 0) + Math.PI / 2,
+      };
+    } else {
+      const scale = Math.max(width / vw, height / vh);
+      const dw = vw * scale;
+      const dh = vh * scale;
+      ctx.drawImage(video, (width - dw) / 2, (height - dh) / 2, dw, dh);
+
+      // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
+      // обрезанные cover'ом края и зум. Без этого контуры сходились по
+      // центру кадра и расходились к краям, когда пропорции экрана и видео
+      // различались
+      const full = applyZoom(fovForFrame(baseFovRad(), vw, vh), zoomFactor);
+      const visible = applyCoverCrop(full, vw, vh, width, height);
+      overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
+    }
   } else {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, width, height);

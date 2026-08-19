@@ -8,6 +8,7 @@ import type { LatLon } from "../core/geo";
 import { getLocale } from "../core/i18n";
 import { getPhotoCaption } from "../core/photo-caption";
 import { translitToLatin } from "../core/transliterate";
+import { isSensorFrameSideways } from "./ar";
 import {
   drawOverlay,
   INK_DARK,
@@ -103,26 +104,50 @@ export async function capturePhoto(
   if (video && video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    const scale = Math.max(canvas.width / vw, canvas.height / vh);
-    const dw = vw * scale;
-    const dh = vh * scale;
+    // Кадр сенсора «боком» (Android отдаёт нативный ландшафт, а снимок
+    // делается при программном ландшафте — телефон физически портретный):
+    // доворачиваем видео в вертикаль, как на экране (drawArFrame). Осей FOV
+    // и крена это тоже касается — они считаются в системе повёрнутого кадра
+    const sideways = isSensorFrameSideways(vw, vh, canvas.width, canvas.height);
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(
-      video,
-      (canvas.width - dw) / 2,
-      (canvas.height - dh) / 2,
-      dw,
-      dh,
-    );
-
-    const full = options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
-    const visible = applyCoverCrop(full, vw, vh, canvas.width, canvas.height);
-    const overlayView: ViewState = {
-      ...view,
-      fovRad: visible.h,
-      fovVRad: visible.v,
-    };
+    let full: FrameFov;
+    let overlayView: ViewState;
+    if (sideways) {
+      const pw = vh; // повёрнутая ширина = исходная высота
+      const ph = vw;
+      const scale = Math.max(canvas.width / pw, canvas.height / ph);
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.scale(scale, scale);
+      ctx.drawImage(video, -vw / 2, -vh / 2);
+      ctx.restore();
+      const base = options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
+      // fov считался от исходного кадра — для повёрнутого меняем оси местами
+      full = { h: base.v, v: base.h };
+      const visible = applyCoverCrop(full, pw, ph, canvas.width, canvas.height);
+      overlayView = {
+        ...view,
+        fovRad: visible.h,
+        fovVRad: visible.v,
+        rollRad: (view.rollRad ?? 0) + Math.PI / 2,
+      };
+    } else {
+      const scale = Math.max(canvas.width / vw, canvas.height / vh);
+      const dw = vw * scale;
+      const dh = vh * scale;
+      ctx.drawImage(
+        video,
+        (canvas.width - dw) / 2,
+        (canvas.height - dh) / 2,
+        dw,
+        dh,
+      );
+      full = options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
+      const visible = applyCoverCrop(full, vw, vh, canvas.width, canvas.height);
+      overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
+    }
     // Полная непрозрачность: на ЭКРАНЕ в AR оверлей полупрозрачный (дефолт
     // opacity в startAr), чтобы сквозь линии было видно живую камеру, но на
     // запечённом фото полупрозрачный текст выглядит выцветшим и плохо
