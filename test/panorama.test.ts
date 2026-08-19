@@ -12,6 +12,8 @@ import {
   labelFullyOnScreen,
   MAX_RIDGE_SLOPE,
   rollEdgeMarginX,
+  segmentsCross,
+  segVsAabb,
   silhouetteProfile,
   visibleLabelRange,
   type PanoramaState,
@@ -340,6 +342,7 @@ describe("многострочная подпись", () => {
   const H = 600;
   const WIDTHS: Record<string, number> = {
     "Эльбрус": 60,
+    "М": 10,
     "5642 м": 58,
     "5.0 км": 55,
     " · ": 20,
@@ -359,15 +362,26 @@ describe("многострочная подпись", () => {
   /** Контекст, который ведёт счёт transform-ов и собирает fillText */
   const makeCtx = (): {
     ctx: CanvasRenderingContext2D;
-    texts: { text: string; x: number; y: number }[];
+    texts: { text: string; x: number; y: number; w: number }[];
+    segs: { x1: number; y1: number; x2: number; y2: number }[];
   } => {
-    const texts: { text: string; x: number; y: number }[] = [];
+    const texts: { text: string; x: number; y: number; w: number }[] = [];
+    const segs: { x1: number; y1: number; x2: number; y2: number }[] = [];
     const stack: { tx: number; ty: number; rot: number }[] = [];
     let t = { tx: 0, ty: 0, rot: 0 };
     const point = (x: number, y: number): { x: number; y: number } => ({
       x: t.tx + x * Math.cos(t.rot) - y * Math.sin(t.rot),
       y: t.ty + x * Math.sin(t.rot) + y * Math.cos(t.rot),
     });
+    let path: { x: number; y: number }[] | null = null;
+    let last = { x: 0, y: 0 };
+    const widthOf = (text: string): number => {
+      const parts = text.split(" · ");
+      return (
+        parts.reduce((s, p) => s + (WIDTHS[p] ?? 30), 0) +
+        (parts.length - 1) * (WIDTHS[" · "] ?? 20)
+      );
+    };
     const ctx = {
       canvas: { width: W, height: H, clientWidth: W, clientHeight: H },
       save: () => stack.push({ ...t }),
@@ -384,14 +398,34 @@ describe("многострочная подпись", () => {
       },
       fillText: (text: string, x: number, y: number) => {
         const p = point(x, y);
-        texts.push({ text: String(text), x: p.x, y: p.y });
+        texts.push({ text: String(text), x: p.x, y: p.y, w: widthOf(String(text)) });
       },
       strokeText: () => {},
       measureText: (s: string) => ({ width: WIDTHS[s] ?? 30 }),
-      beginPath: () => {},
-      moveTo: () => {},
-      lineTo: () => {},
-      stroke: () => {},
+      beginPath: () => {
+        path = [];
+      },
+      moveTo: (x: number, y: number) => {
+        last = point(x, y);
+      },
+      lineTo: (x: number, y: number) => {
+        const p = point(x, y);
+        if (path) path.push(last, p);
+        last = p;
+      },
+      stroke: () => {
+        if (path) {
+          for (let i = 0; i + 1 < path.length; i += 2) {
+            segs.push({
+              x1: path[i].x,
+              y1: path[i].y,
+              x2: path[i + 1].x,
+              y2: path[i + 1].y,
+            });
+          }
+        }
+        path = null;
+      },
       fill: () => {},
       arc: () => {},
       setLineDash: () => {},
@@ -406,7 +440,7 @@ describe("многострочная подпись", () => {
       set miterLimit(_v: number) {},
       set globalAlpha(_v: number) {},
     } as unknown as CanvasRenderingContext2D;
-    return { ctx, texts };
+    return { ctx, texts, segs };
   };
 
   const state = (horizon: Float32Array, name = "Эльбрус"): PanoramaState =>
@@ -594,6 +628,253 @@ describe("многострочная подпись", () => {
     // Отцентрованный хвост ушёл бы за левый край (off = −190) — откат к 0:
     // база хвоста = якорь − LINE_H·vx = 63.5 − 13
     expect(tail.x).toBeCloseTo(50.5, 0);
+  });
+
+  it("выноска не пересекает чужую подпись — мешающего соседа поднимает парный сдвиг", () => {
+    // P слева и чуть выше X: рамка P накрывает путь выноски X при любом
+    // подъёме пачки, но не пересекает дорожку 0. Без парного сдвига X
+    // остался бы без подписи; после подъёма P на дорожку вверх X встаёт
+    // обычной однострочной подписью, а выноски никого не режут
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    st.peaks = [
+      {
+        azimuthRad: 0.19423, // mx = 594.23: рамка P — точно над путём выноски X
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "М",
+      },
+      {
+        azimuthRad: 0.2,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "Эльбрус",
+      },
+    ] as never;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    // X размещён одной строкой на естественном якоре (horizonY = 0.62·H,
+    // якорь = my + LEAD·uy = 342 − 6.06)
+    const xLine = texts.find((t) => t.text === "Эльбрус · 5642 м · 5.0 км")!;
+    expect(xLine).toBeDefined();
+    expect(xLine.y).toBeCloseTo(335.94, 0);
+    // P поднят на дорожку вверх: было 335.94, стало 335.94 − LINE_H·vy
+    const pLine = texts.find((t) => t.text === "М · 5642 м · 5.0 км")!;
+    expect(pLine).toBeDefined();
+    expect(pLine.y).toBeCloseTo(335.94 - 7.5, 0);
+  });
+
+  it("в плотном кластере выноски не пересекают чужие подписи и друг друга", () => {
+    // Четыре вершины вплотную: подписи вынуждены разъезжаться по дорожкам,
+    // но инвариант держится — выноска не режет чужую подпись и чужую выноску
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    st.peaks = [
+      {
+        azimuthRad: 0.2,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "Эльбрус",
+      },
+      {
+        azimuthRad: 0.204,
+        elevationRad: 0.0504,
+        distanceM: 5000,
+        ele: 5000,
+        visibility: "visible",
+        name: "Широкий",
+      },
+      {
+        azimuthRad: 0.208,
+        elevationRad: 0.0496,
+        distanceM: 5000,
+        ele: 4800,
+        visibility: "visible",
+        name: "Казбек",
+      },
+      {
+        azimuthRad: 0.212,
+        elevationRad: 0.0508,
+        distanceM: 5000,
+        ele: 4500,
+        visibility: "visible",
+        name: "Джанги-Тау",
+      },
+      {
+        azimuthRad: 0.216,
+        elevationRad: 0.0501,
+        distanceM: 5000,
+        ele: 4400,
+        visibility: "visible",
+        name: "Монолит",
+      },
+      {
+        azimuthRad: 0.220,
+        elevationRad: 0.0506,
+        distanceM: 5000,
+        ele: 4300,
+        visibility: "visible",
+        name: "Большой Пик",
+      },
+      {
+        azimuthRad: 0.224,
+        elevationRad: 0.0498,
+        distanceM: 5000,
+        ele: 4200,
+        visibility: "visible",
+        name: "Длинное Название",
+      },
+      {
+        azimuthRad: 0.228,
+        elevationRad: 0.0509,
+        distanceM: 5000,
+        ele: 4100,
+        visibility: "visible",
+        name: "Крутой",
+      },
+    ] as never;
+    const { ctx, texts, segs } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    const ux = 0.5;
+    const uy = -Math.sin(Math.PI / 3);
+    const vx = Math.sin(Math.PI / 3);
+    const vy = 0.5;
+    const names = [
+      "Эльбрус",
+      "Широкий",
+      "Казбек",
+      "Джанги",
+      "Монолит",
+      "Большой",
+      "Длинное",
+      "Крутой",
+    ];
+    // Подписи вершин (шкала и компас отбрасываются)
+    const peakTexts = texts.filter(
+      (t) =>
+        names.some((n) => t.text.includes(n)) ||
+        t.text.includes(" м ") ||
+        t.text.includes(" км "),
+    );
+    const boxes = peakTexts.map((t) => ({
+      text: t.text,
+      u0: t.x * ux + t.y * uy,
+      v: t.x * vx + t.y * vy,
+      u1: t.x * ux + t.y * uy + t.w,
+    }));
+    // Идентификатор подписи: строка с именем с тем же якорем. В строку
+    // выноски попадают строки той же подписи — их пересечения не считаются
+    const labelIdOf = (u0: number, v: number): number => {
+      for (let i = 0; i < boxes.length; i++) {
+        const b = boxes[i];
+        if (!names.some((n) => b.text.includes(n))) continue;
+        if (Math.abs(b.u0 - u0) < 80 && Math.abs(b.v - v) < 60) return i;
+      }
+      return -1;
+    };
+    const segHit = (
+      s: { x1: number; y1: number; x2: number; y2: number },
+      b: { u0: number; u1: number; v: number },
+    ): boolean => {
+      const u1 = s.x1 * ux + s.y1 * uy;
+      const v1 = s.x1 * vx + s.y1 * vy;
+      const u2 = s.x2 * ux + s.y2 * uy;
+      const v2 = s.x2 * vx + s.y2 * vy;
+      if (Math.max(u1, u2) < b.u0 || Math.min(u1, u2) > b.u1) return false;
+      if (Math.max(v1, v2) < b.v - 9 || Math.min(v1, v2) > b.v + 9) return false;
+      return true;
+    };
+    const cross = (a: typeof segs[number], b: typeof segs[number]): boolean => {
+      const d1 = (b.x1 - a.x1) * (a.y2 - a.y1) - (b.y1 - a.y1) * (a.x2 - a.x1);
+      const d2 = (b.x2 - a.x1) * (a.y2 - a.y1) - (b.y2 - a.y1) * (a.x2 - a.x1);
+      const d3 = (a.x1 - b.x1) * (b.y2 - b.y1) - (a.y1 - b.y1) * (b.x2 - b.x1);
+      const d4 = (a.x2 - b.x1) * (b.y2 - b.y1) - (a.y2 - b.y1) * (b.x2 - b.x1);
+      return (
+        ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+        ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
+      );
+    };
+    // Выноски: сегменты, заканчивающиеся у начала подписи. Каждая рисуется
+    // дважды (тёмная и светлая обводка) — дедуплицируем по координатам
+    const dedup = new Set<string>();
+    const leaders: { s: typeof segs[number]; ti: number }[] = [];
+    for (const s of segs) {
+      const key = [s.x1, s.y1, s.x2, s.y2].map((v) => v.toFixed(1)).join(",");
+      if (dedup.has(key)) continue;
+      dedup.add(key);
+      const i1 = boxes.findIndex((b) =>
+        Math.hypot(
+          b.u0 * ux + b.v * vx - s.x1,
+          b.u0 * uy + b.v * vy - s.y1,
+        ) < 4,
+      );
+      const i2 = boxes.findIndex((b) =>
+        Math.hypot(
+          b.u0 * ux + b.v * vx - s.x2,
+          b.u0 * uy + b.v * vy - s.y2,
+        ) < 4,
+      );
+      if (i1 >= 0 || i2 >= 0) leaders.push({ s, ti: i1 >= 0 ? i1 : i2 });
+    }
+    expect(leaders.length).toBeGreaterThanOrEqual(2);
+
+    const ownId = leaders.map((L) => {
+      const b = boxes[L.ti];
+      return labelIdOf(b.u0, b.v);
+    });
+    for (let i = 0; i < leaders.length; i++) {
+      const L = leaders[i];
+      for (let j = 0; j < boxes.length; j++) {
+        if (j === L.ti) continue;
+        const otherId = labelIdOf(boxes[j].u0, boxes[j].v);
+        if (otherId === ownId[i]) continue;
+        expect(
+          segHit(L.s, boxes[j]),
+          `выноска подписи «${boxes[L.ti].text}» пересекает подпись «${boxes[j].text}»`,
+        ).toBe(false);
+      }
+    }
+    for (let i = 0; i < leaders.length; i++) {
+      for (let j = i + 1; j < leaders.length; j++) {
+        if (ownId[i] === ownId[j]) continue;
+        expect(
+          cross(leaders[i].s, leaders[j].s),
+          `выноски подписей «${boxes[leaders[i].ti].text}» и «${boxes[leaders[j].ti].text}» пересекаются`,
+        ).toBe(false);
+      }
+    }
+  });
+});
+
+describe("пересечения выносок", () => {
+  it("отрезок против прямоугольника (slab)", () => {
+    const box = { xMin: 0, xMax: 10, yMin: 0, yMax: 10 };
+    const hit = (x1: number, y1: number, x2: number, y2: number): boolean =>
+      segVsAabb(x1, y1, x2, y2, box.xMin, box.xMax, box.yMin, box.yMax);
+    // Насквозь
+    expect(hit(-5, 5, 15, 5)).toBe(true);
+    // Концами внутри
+    expect(hit(2, 2, 8, 8)).toBe(true);
+    // Мимо
+    expect(hit(-5, 5, -1, 5)).toBe(false);
+    expect(hit(5, 11, 5, 20)).toBe(false);
+    // Параллелен грани и снаружи
+    expect(hit(5, 15, 5, 25)).toBe(false);
+  });
+
+  it("пересечение двух отрезков — строгое, без касаний", () => {
+    expect(segmentsCross(0, 0, 10, 10, 0, 10, 10, 0)).toBe(true);
+    expect(segmentsCross(0, 0, 10, 0, 0, 5, 10, 5)).toBe(false); // параллельны
+    expect(segmentsCross(0, 0, 10, 10, 10, 10, 20, 20)).toBe(false); // касание
+    expect(segmentsCross(0, 0, 1, 1, 5, 5, 6, 6)).toBe(false);
   });
 });
 

@@ -525,6 +525,8 @@ interface PlacedLabel {
   lines: { ax: number; ay: number; text: string }[];
   /** Дорожки строк в координатах (v, u) — для проверки пересечений */
   boxes: { v: number; u0: number; u1: number }[];
+  /** Сдвиг пачки вверх от естественного якоря, в дорожках (≤ 0) */
+  shift: number;
 }
 
 /**
@@ -584,6 +586,63 @@ let silhouetteCache: {
 
 /** Переиспользуемый буфер окклюзии гребней (drawOverlay) */
 let runningMaxBuf = new Float32Array(0);
+
+/**
+ * Пересекает ли отрезок осепараллельный прямоугольник (slab-метод
+ * Лианга—Барского). Координаты — уже в системе прямоугольника.
+ */
+export function segVsAabb(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  xMin: number,
+  xMax: number,
+  yMin: number,
+  yMax: number,
+): boolean {
+  let t0 = 0;
+  let t1 = 1;
+  const clip = (p: number, q: number): boolean => {
+    if (p === 0) return q >= 0;
+    const r = q / p;
+    if (p < 0) {
+      if (r > t1) return false;
+      if (r > t0) t0 = r;
+    } else {
+      if (r < t0) return false;
+      if (r < t1) t1 = r;
+    }
+    return true;
+  };
+  return (
+    clip(x1 - x2, x1 - xMin) &&
+    clip(x2 - x1, xMax - x1) &&
+    clip(y1 - y2, y1 - yMin) &&
+    clip(y2 - y1, yMax - y1)
+  );
+}
+
+/** Пересекаются ли два отрезка (строго, без касаний) */
+export function segmentsCross(
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number,
+  cx: number,
+  cy: number,
+  dx: number,
+  dy: number,
+): boolean {
+  const d1 = (cx - ax) * (by - ay) - (cy - ay) * (bx - ax);
+  const d2 = (dx - ax) * (by - ay) - (dy - ay) * (bx - ax);
+  const d3 = (ax - cx) * (dy - cy) - (ay - cy) * (dx - cx);
+  const d4 = (bx - cx) * (dy - cy) - (by - cy) * (dx - cx);
+  return (
+    ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+    ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
+  );
+}
 
 /**
  * Помещается ли отрезок строки подписи в кадр целиком. Отрезок — от якоря
@@ -914,10 +973,11 @@ function drawLabels(
     // по обеим осям повёрнутой системы координат. Вытесненная вершина просто
     // не подписывается: счётчик «+N» рядом с соседней подписью ничего не
     // сообщал (что именно за N — не узнать), но забирал место в кадре
-    const conflicts = (
+    const conflictsAgainst = (
+      list: PlacedLabel[],
       boxes: { v: number; u0: number; u1: number }[],
     ): boolean =>
-      placed.some((p) =>
+      list.some((p) =>
         p.boxes.some((pb) =>
           boxes.some(
             (b) =>
@@ -927,6 +987,100 @@ function drawLabels(
           ),
         ),
       );
+    // Список, против которого проверяются дорожки. Подменяется при пробе
+    // парного сдвига соседа: все проверки внутри tryLines видят его
+    let activePlaced = placed;
+    const conflicts = (
+      boxes: { v: number; u0: number; u1: number }[],
+    ): boolean => conflictsAgainst(activePlaced, boxes);
+
+    // Полувысота глифов с обводкой — та же, что в labelFullyOnScreen:
+    // выноска не должна задевать ни штрих, ни ореол
+    const GLYPH_HALF_V = 9 * uiScale;
+
+    /** Пересекает ли отрезок (в экранных координатах) рамку строки */
+    const leaderCrossesBox = (
+      x1: number,
+      y1: number,
+      x2: number,
+      y2: number,
+      box: { v: number; u0: number; u1: number },
+    ): boolean =>
+      segVsAabb(
+        x1 * ux + y1 * uy,
+        x1 * vx + y1 * vy,
+        x2 * ux + y2 * uy,
+        x2 * vx + y2 * vy,
+        box.u0,
+        box.u1,
+        box.v - GLYPH_HALF_V,
+        box.v + GLYPH_HALF_V,
+      );
+
+    /** Выноска размещённой подписи (у скрытой — только видимая часть) */
+    const placedLeader = (
+      p: PlacedLabel,
+    ): { x1: number; y1: number; x2: number; y2: number } => {
+      const bot = p.lines[p.lines.length - 1];
+      if (p.peak.visibility !== "hidden") {
+        return { x1: p.mx, y1: p.my, x2: bot.ax, y2: bot.ay };
+      }
+      const end = clipToSilhouette(
+        bot.ax,
+        bot.ay,
+        p.mx,
+        p.my,
+        silhouette,
+        stepRad,
+        xToAz,
+        elevToY,
+      );
+      return { x1: end.x, y1: end.y, x2: bot.ax, y2: bot.ay };
+    };
+
+    /** Выноска кандидата: от точки вершины к первой букве нижней строки */
+    const candidateLeader = (
+      draw: DrawLine[],
+    ): { x1: number; y1: number; x2: number; y2: number } => {
+      const bot = draw[draw.length - 1];
+      if (!hidden) return { x1: mx, y1: my, x2: bot.ax, y2: bot.ay };
+      const end = clipToSilhouette(
+        bot.ax,
+        bot.ay,
+        mx,
+        my,
+        silhouette,
+        stepRad,
+        xToAz,
+        elevToY,
+      );
+      return { x1: end.x, y1: end.y, x2: bot.ax, y2: bot.ay };
+    };
+
+    // Выноска не пересекает ни чужие рамки, ни чужие выноски; чужие выноски
+    // не пересекают рамки кандидата
+    const leaderClear = (
+      draw: DrawLine[],
+      boxes: { v: number; u0: number; u1: number }[],
+      list: PlacedLabel[],
+    ): boolean => {
+      const L = candidateLeader(draw);
+      for (const p of list) {
+        for (const b of p.boxes) {
+          if (leaderCrossesBox(L.x1, L.y1, L.x2, L.y2, b)) return false;
+        }
+        const q = placedLeader(p);
+        if (
+          segmentsCross(L.x1, L.y1, L.x2, L.y2, q.x1, q.y1, q.x2, q.y2)
+        ) {
+          return false;
+        }
+        for (const b of boxes) {
+          if (leaderCrossesBox(q.x1, q.y1, q.x2, q.y2, b)) return false;
+        }
+      }
+      return true;
+    };
 
     /** Строка-кандидат: дорожка, части и их префиксные ширины */
     interface LineCand {
@@ -950,21 +1104,25 @@ function drawLabels(
      */
     const tryLines = (
       lines: LineCand[],
-      overhangFirst = false,
+      hangFirst = false,
+      hangLast = false,
+      shiftLanes = 0,
     ): {
       draw: DrawLine[];
       boxes: { v: number; u0: number; u1: number }[];
-      hang: boolean;
+      hang: number;
     } | null => {
       // Многострочная подпись якорится нижней строкой: та стоит на обычном
       // LEAD от вершины, выноска к ней остаётся короткой при любом числе
       // строк, а остальные строки уходят от неё вверх — вся пачка выше
       // точки вершины. Сдвиг блока — по поперечной оси (без u-компоненты),
       // поэтому расстояния вдоль строк и центрирование не меняются.
+      // shiftLanes < 0 поднимает всю пачку на |shift| дорожек, когда
+      // естественная дорожка занята соседями.
       const bottomK = lines.length - 1;
       const baseOf = (k: number): { x: number; y: number } => ({
-        x: ax + (k - bottomK) * LINE_H * vx,
-        y: ay + (k - bottomK) * LINE_H * vy,
+        x: ax + (k - bottomK + shiftLanes) * LINE_H * vx,
+        y: ay + (k - bottomK + shiftLanes) * LINE_H * vy,
       });
 
       // Проход 1: почастная обрезка краем кадра БЕЗ сдвига (как раньше).
@@ -993,11 +1151,20 @@ function drawLabels(
           ),
         );
         if (!range) {
-          // Первая строка может свешиваться за край кадра (канвас обрежет),
-          // если кандидат явно попросил: иначе при уходе названия за край
-          // подпись схлопывалась бы в одну строку, хотя многострочная
-          // структура ещё уместна.
-          if (i === 0 && overhangFirst) {
+          // Первая и последняя строки могут свешиваться за край кадра
+          // (канвас обрежет), если кандидат явно попросил: иначе при уходе
+          // названия или info-строки за край подпись теряла бы их, хотя
+          // частично они могли бы остаться видны.
+          if (i === 0 && hangFirst) {
+            trimmed.push({
+              line,
+              range: { first: 0, last: line.parts.length - 1 },
+              w: line.prefixW[line.prefixW.length - 1],
+              hang: true,
+            });
+            continue;
+          }
+          if (i === lines.length - 1 && hangLast) {
             trimmed.push({
               line,
               range: { first: 0, last: line.parts.length - 1 },
@@ -1066,60 +1233,121 @@ function drawLabels(
         // fits(0) гарантирован проходом 1 — остаётся проверить дорожку
         if (conflicts(boxes.concat([box]))) {
           if (i === 0) return null;
-          break;
+          // Последняя строка с правом на свешивание: если дорожка занята,
+          // пробуем ужать хвост («высота · расстояние» → «высота») — место
+          // хотя бы для одной части ценнее, чем пустота
+          if (i === trimmed.length - 1 && hangLast) {
+            let short: { v: number; u0: number; u1: number } | null = null;
+            for (let last = range.last - 1; last >= range.first; last--) {
+              const wTail = line.prefixW[last + 1] - line.prefixW[range.first];
+              const cand = {
+                v: b.x * vx + b.y * vy,
+                u0: base + startU,
+                u1: base + startU + wTail,
+              };
+              if (!conflicts(boxes.concat([cand]))) {
+                short = cand;
+                trimmed[i] = { ...trimmed[i], range: { first: range.first, last } };
+                break;
+              }
+            }
+            if (!short) break;
+            // Укороченная строка выравнивается влево: выноска ведёт к первой
+            // букве, и кружок вершины остаётся открытым
+            o = 0;
+            box = short;
+          } else {
+            break;
+          }
         }
         boxes.push(box);
         draw.push({
           ax: b.x + ux * (startU + o),
           ay: b.y + uy * (startU + o),
-          text: line.parts.slice(range.first, range.last + 1).join(LABEL_SEP),
-          first: range.first,
-          last: range.last,
+          text: line.parts
+            .slice(trimmed[i].range.first, trimmed[i].range.last + 1)
+            .join(LABEL_SEP),
+          first: trimmed[i].range.first,
+          last: trimmed[i].range.last,
         });
       }
-      return { draw, boxes, hang: trimmed.some((t) => t.hang) };
+      return {
+        draw,
+        boxes,
+        hang: trimmed.reduce((s, t) => s + (t.hang ? 1 : 0), 0),
+      };
     };
 
     // Критерий «лучше» (лексикографический): полнота названия (2 — целиком,
     // 1 — обрезано переносом, 0 — нет) > число видимых info-частей (2/1/0) >
     // меньше строк. Подпись стремится к минимуму строк: к одной строке она
     // возвращается, как только края кадра перестают мешать.
-    let bestScore = -1;
-    // Результат — в поле объекта: к let-переменной, присваиваемой внутри
-    // замыкания, TS применяет сужение по инициализатору (null навсегда)
-    const result: {
-      value: {
-        draw: DrawLine[];
-        boxes: { v: number; u0: number; u1: number }[];
-      } | null;
-    } = { value: null };
-    const consider = (
-      res: {
-        draw: DrawLine[];
-        boxes: { v: number; u0: number; u1: number }[];
-      },
-      nameScore: number,
-      infoParts: number,
-      penalty = 0,
-    ): void => {
-      const score =
-        nameScore * 100 + infoParts * 10 - penalty - res.draw.length;
-      if (score > bestScore) {
-        bestScore = score;
-        result.value = res;
-      }
-    };
+    //
+    // bestFor перебирает все формы (A/B/C/D) против заданного списка уже
+    // размещённых подписей. Кандидат с выноской, пересекающей чужие рамки
+    // или чужие выноски, отклоняется: стрелка, режущая соседний текст,
+    // хуже отсутствующей подписи.
+    const bestFor = (
+      list: PlacedLabel[],
+    ): {
+      draw: DrawLine[];
+      boxes: { v: number; u0: number; u1: number }[];
+      shift: number;
+    } | null => {
+      activePlaced = list;
+      let bestScore = -1;
+      // Результат — в поле объекта: к let-переменной, присваиваемой внутри
+      // замыкания, TS применяет сужение по инициализатору (null навсегда)
+      const result: {
+        value: {
+          draw: DrawLine[];
+          boxes: { v: number; u0: number; u1: number }[];
+          shift: number;
+        } | null;
+      } = { value: null };
+      const consider = (
+        res: {
+          draw: DrawLine[];
+          boxes: { v: number; u0: number; u1: number }[];
+        },
+        nameScore: number,
+        infoParts: number,
+        penalty = 0,
+        shift = 0,
+      ): void => {
+        const score =
+          nameScore * 100 + infoParts * 10 - penalty - res.draw.length;
+        if (score > bestScore) {
+          bestScore = score;
+          result.value = { ...res, shift };
+        }
+      };
+      const considerClear = (
+        res: {
+          draw: DrawLine[];
+          boxes: { v: number; u0: number; u1: number }[];
+        },
+        nameScore: number,
+        infoParts: number,
+        penalty = 0,
+        shift = 0,
+      ): void => {
+        if (leaderClear(res.draw, res.boxes, list)) {
+          consider(res, nameScore, infoParts, penalty, shift);
+        }
+      };
 
     // A. Одна строка: «Название · высота · расстояние» с почастной обрезкой
     // краем кадра (она же — финальный фолбэк: усечённая строка, если не
-    // вышло ничего другого).
-    const single = tryLines([{ k: 0, parts, prefixW }]);
-    if (single) {
+    // вышло ничего другого). Дорожку тоже ищем: при занятой — строкой выше.
+    for (const shift of [0, -1]) {
+      const single = tryLines([{ k: 0, parts, prefixW }], false, false, shift);
+      if (!single) continue;
       const nameSeen = single.draw[0].first === 0;
       const infoParts = nameSeen
         ? single.draw[0].last
         : single.draw[0].last - single.draw[0].first + 1;
-      consider(single, nameSeen ? 2 : 0, infoParts);
+      considerClear(single, nameSeen ? 2 : 0, infoParts, -shift * 2, shift);
     }
 
     // B. Двустрочная форма, если под подписью есть свободное место:
@@ -1129,19 +1357,26 @@ function drawLabels(
     // якорится нижней строкой, поэтому и у скрытых вершин — их подпись
     // поднята над склоном — нижняя строка на склон не ложится.
     if (parts.length > 1) {
-      const two = tryLines(
-        [
-          { k: 0, parts: [parts[0]], prefixW: [0, prefixW[1]] },
-          { k: 1, parts: parts.slice(1), prefixW: prefixW2 },
-        ],
-        true,
-      );
-      if (two) {
-        const infoParts =
-          two.draw.length === 2
-            ? two.draw[1].last - two.draw[1].first + 1
-            : 0;
-        consider(two, 2, infoParts, two.hang ? 3 : 0);
+      // Пробуем положения пачки: естественное и до трёх дорожек выше — когда
+      // дорожка info-строки занята соседями, сдвиг вверх находит свободную,
+      // и высота с расстоянием не теряются. Сдвиг штрафуется в критерии.
+      for (const shift of [0, -1, -2, -3]) {
+        const two = tryLines(
+          [
+            { k: 0, parts: [parts[0]], prefixW: [0, prefixW[1]] },
+            { k: 1, parts: parts.slice(1), prefixW: prefixW2 },
+          ],
+          true,
+          true,
+          shift,
+        );
+        if (two) {
+          const infoParts =
+            two.draw.length === 2
+              ? two.draw[1].last - two.draw[1].first + 1
+              : 0;
+          considerClear(two, 2, infoParts, two.hang * 2 - shift * 2, shift);
+        }
       }
     }
 
@@ -1159,43 +1394,57 @@ function drawLabels(
           let any = false;
 
           // 2 фрагмента: остаток названия целиком на второй дорожке
-          const twoFrag = tryLines([
-            { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
-            { k: 1, parts: [parts[0].slice(b.start)], prefixW: [0, T.tailW[i]] },
-            { k: 2, parts: parts.slice(1), prefixW: prefixW2 },
-          ]);
+          const twoFrag = tryLines(
+            [
+              { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
+              { k: 1, parts: [parts[0].slice(b.start)], prefixW: [0, T.tailW[i]] },
+              { k: 2, parts: parts.slice(1), prefixW: prefixW2 },
+            ],
+            false,
+            true,
+          );
           if (twoFrag) {
             any = true;
             const infoParts =
               twoFrag.draw.length === 3
                 ? twoFrag.draw[2].last - twoFrag.draw[2].first + 1
                 : 0;
-            consider(twoFrag, twoFrag.draw.length >= 2 ? 2 : 1, infoParts);
+            considerClear(
+              twoFrag,
+              twoFrag.draw.length >= 2 ? 2 : 1,
+              infoParts,
+              twoFrag.hang * 2,
+            );
           }
 
           // 3 фрагмента: хвост делится на оставшихся разрывах
           for (let j = i + 1; j < T.breaks.length; j++) {
             const bj = T.breaks[j];
-            const threeFrag = tryLines([
-              { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
-              {
-                k: 1,
-                parts: [parts[0].slice(b.start, bj.end)],
-                prefixW: [0, T.midW[i][j]],
-              },
-              { k: 2, parts: [parts[0].slice(bj.start)], prefixW: [0, T.tailW[j]] },
-              { k: 3, parts: parts.slice(1), prefixW: prefixW2 },
-            ]);
+            const threeFrag = tryLines(
+              [
+                { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
+                {
+                  k: 1,
+                  parts: [parts[0].slice(b.start, bj.end)],
+                  prefixW: [0, T.midW[i][j]],
+                },
+                { k: 2, parts: [parts[0].slice(bj.start)], prefixW: [0, T.tailW[j]] },
+                { k: 3, parts: parts.slice(1), prefixW: prefixW2 },
+              ],
+              false,
+              true,
+            );
             if (threeFrag) {
               any = true;
               const infoParts =
                 threeFrag.draw.length === 4
                   ? threeFrag.draw[3].last - threeFrag.draw[3].first + 1
                   : 0;
-              consider(
+              considerClear(
                 threeFrag,
                 threeFrag.draw.length >= 3 ? 2 : 1,
                 infoParts,
+                threeFrag.hang * 2,
               );
             }
           }
@@ -1207,40 +1456,241 @@ function drawLabels(
     // влезает): полная строка может частично уходить за левый и правый край
     // экрана — ничего не скрываем, лишнее обрежет канвас. Штраф в критерии
     // держит D ниже всех влезающих раскладок (включая перенос), но выше
-    // тех, что что-нибудь скрывают.
-    const fullBox = {
-      v: ax * vx + ay * vy,
-      u0: ax * ux + ay * uy,
-      u1: ax * ux + ay * uy + fullW,
-    };
-    if (!conflicts([fullBox])) {
-      consider(
-        {
-          draw: [
-            {
-              ax,
-              ay,
-              text: parts.join(LABEL_SEP),
-              first: 0,
-              last: parts.length - 1,
-            },
-          ],
-          boxes: [fullBox],
-        },
-        2,
-        parts.length - 1,
-        5,
-      );
+    // тех, что что-нибудь скрывают. Дорожку тоже ищем: при занятой —
+    // строкой выше.
+    for (const shift of [0, -1, -2, -3]) {
+      const bx = ax + shift * LINE_H * vx;
+      const by = ay + shift * LINE_H * vy;
+      const fullBox = {
+        v: bx * vx + by * vy,
+        u0: bx * ux + by * uy,
+        u1: bx * ux + by * uy + fullW,
+      };
+      if (!conflicts([fullBox])) {
+        considerClear(
+          {
+            draw: [
+              {
+                ax: bx,
+                ay: by,
+                text: parts.join(LABEL_SEP),
+                first: 0,
+                last: parts.length - 1,
+              },
+            ],
+            boxes: [fullBox],
+          },
+          2,
+          parts.length - 1,
+          5 - shift * 2,
+          shift,
+        );
+      }
     }
 
-    if (!result.value) return false; // ни одна раскладка не влезла — прячем всё
+    return result.value;
+    };
+
+    // ============ Размещение с парным сдвигом ============
+
+    const res = bestFor(placed);
+
+    // Длина выноски: от точки вершины до первой буквы нижней строки
+    const leaderLenOf = (draw: DrawLine[]): number => {
+      const bot = draw[draw.length - 1];
+      return Math.hypot(bot.ax - mx, bot.ay - my);
+    };
+    const leaderLenPlaced = (p: PlacedLabel): number => {
+      const bot = p.lines[p.lines.length - 1];
+      return Math.hypot(bot.ax - p.mx, bot.ay - p.my);
+    };
+
+    // Подпись соседа, поднятая на m дорожек вверх. Подъём допустим, только
+    // если все её строки остаются в кадре целиком (свешиваний не плодим),
+    // а дорожки и выноски не пересекают остальных
+    const MAX_PAIR_LANES = 3;
+    const moveUp = (
+      p: PlacedLabel,
+      m: number,
+      others: PlacedLabel[],
+    ): PlacedLabel | null => {
+      const step = -m * LINE_H;
+      const lines = p.lines.map((l) => ({
+        ...l,
+        ax: l.ax + step * vx,
+        ay: l.ay + step * vy,
+      }));
+      const boxes = p.boxes.map((b) => ({ ...b, v: b.v + step }));
+      for (let i = 0; i < lines.length; i++) {
+        if (
+          !labelFullyOnScreen(
+            lines[i].ax,
+            lines[i].ay,
+            boxes[i].u1 - boxes[i].u0,
+            ux,
+            uy,
+            view.rollRad ?? 0,
+            width,
+            height,
+            uiScale,
+          )
+        ) {
+          return null;
+        }
+      }
+      if (conflictsAgainst(others, boxes)) return null;
+      const moved: PlacedLabel = { ...p, lines, boxes, shift: p.shift - m };
+      const L = placedLeader(moved);
+      for (const q of others) {
+        for (const b of q.boxes) {
+          if (leaderCrossesBox(L.x1, L.y1, L.x2, L.y2, b)) return null;
+        }
+        const ql = placedLeader(q);
+        if (
+          segmentsCross(L.x1, L.y1, L.x2, L.y2, ql.x1, ql.y1, ql.x2, ql.y2)
+        ) {
+          return null;
+        }
+        for (const b of boxes) {
+          if (leaderCrossesBox(ql.x1, ql.y1, ql.x2, ql.y2, b)) return null;
+        }
+      }
+      return moved;
+    };
+
+    // Мешает ли сосед нашему варианту: дорожками или выноской
+    const blocks = (
+      p: PlacedLabel,
+      boxes: { v: number; u0: number; u1: number }[],
+      draw: DrawLine[],
+    ): boolean => {
+      if (conflictsAgainst([p], boxes)) return true;
+      const q = placedLeader(p);
+      for (const b of boxes) {
+        if (leaderCrossesBox(q.x1, q.y1, q.x2, q.y2, b)) return true;
+      }
+      const L = candidateLeader(draw);
+      for (const b of p.boxes) {
+        if (leaderCrossesBox(L.x1, L.y1, L.x2, L.y2, b)) return true;
+      }
+      return segmentsCross(
+        L.x1,
+        L.y1,
+        L.x2,
+        L.y2,
+        q.x1,
+        q.y1,
+        q.x2,
+        q.y2,
+      );
+    };
+
+    // Кандидаты на парный сдвиг: соседи, мешающие лучшему варианту. Если
+    // вариантов нет вовсе — соседи, занимающие дорожку полной строки
+    const blockers = (
+      r:
+        | {
+            draw: DrawLine[];
+            boxes: { v: number; u0: number; u1: number }[];
+          }
+        | null,
+    ): PlacedLabel[] => {
+      const out: PlacedLabel[] = [];
+      const probeBoxes: { v: number; u0: number; u1: number }[] = r
+        ? r.boxes
+        : [
+            {
+              v: ax * vx + ay * vy,
+              u0: ax * ux + ay * uy,
+              u1: ax * ux + ay * uy + fullW,
+            },
+          ];
+      for (const p of placed) {
+        if (p.shift <= -MAX_PAIR_LANES) continue;
+        if (
+          r
+            ? blocks(p, r.boxes, r.draw)
+            : conflictsAgainst([p], probeBoxes)
+        ) {
+          out.push(p);
+          if (out.length >= 3) break;
+        }
+      }
+      return out;
+    };
+
+    let final = res;
+    let movedOld: PlacedLabel | null = null;
+    let movedNew: PlacedLabel | null = null;
+
+    if (res) {
+      // Сосед мешает и вынуждает подниматься: пробуем поднять и его — если
+      // максимум длин выносок пары при этом уменьшится, принимаем обмен
+      const lenRes = leaderLenOf(res.draw);
+      let bestTrial: {
+        p: PlacedLabel;
+        p2: PlacedLabel;
+        res2: NonNullable<typeof res>;
+        after: number;
+      } | null = null;
+      for (const p of blockers(res)) {
+        const before = Math.max(lenRes, leaderLenPlaced(p));
+        for (
+          let m = 1;
+          m <= MAX_PAIR_LANES && p.shift - m >= -MAX_PAIR_LANES;
+          m++
+        ) {
+          const p2 = moveUp(p, m, placed.filter((q) => q !== p));
+          if (!p2) continue;
+          const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
+          if (!res2) continue;
+          const after = Math.max(leaderLenOf(res2.draw), leaderLenPlaced(p2));
+          if (after < before && (!bestTrial || after < bestTrial.after)) {
+            bestTrial = { p, p2, res2, after };
+          }
+        }
+      }
+      if (bestTrial) {
+        final = bestTrial.res2;
+        movedOld = bestTrial.p;
+        movedNew = bestTrial.p2;
+      }
+    } else {
+      // Места не нашлось вовсе: раздвигаем соседей — вдруг после их подъёма
+      // появится место хотя бы для одной строки
+      for (const p of blockers(null)) {
+        for (
+          let m = 1;
+          m <= MAX_PAIR_LANES && p.shift - m >= -MAX_PAIR_LANES;
+          m++
+        ) {
+          const p2 = moveUp(p, m, placed.filter((q) => q !== p));
+          if (!p2) continue;
+          const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
+          if (res2) {
+            final = res2;
+            movedOld = p;
+            movedNew = p2;
+            break;
+          }
+        }
+        if (final) break;
+      }
+    }
+
+    if (!final) return false; // ни одна раскладка не влезла — прячем всё
+
+    if (movedOld && movedNew) {
+      placed[placed.indexOf(movedOld)] = movedNew;
+    }
 
     placed.push({
       peak,
       mx,
       my,
-      lines: result.value.draw,
-      boxes: result.value.boxes,
+      lines: final.draw,
+      boxes: final.boxes,
+      shift: final.shift,
     });
     return true;
   };
