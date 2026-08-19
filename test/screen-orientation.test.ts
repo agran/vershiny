@@ -112,6 +112,39 @@ describe("screen-orientation", () => {
     expect(m.softAngleDeg()).toBe(-90); // primary = хват влево
   });
 
+  it("перехват другим боком в ландшафте зовёт переворот (гистерезис)", async () => {
+    const m = await fresh();
+    setOrientation({ type: "portrait-primary", angle: 0 });
+    m.notePhysicalTilt(-80); // хват влево
+    m.applyOrientation("landscape");
+    expect(m.softAngleDeg()).toBe(-90);
+
+    const calls: number[] = [];
+    m.onPhysicalSideChange(() => calls.push(1));
+    // Мёртвая зона: прошли к нулю — не переключаемся
+    m.notePhysicalTilt(-50);
+    expect(calls).toHaveLength(0);
+    m.notePhysicalTilt(50);
+    expect(calls).toHaveLength(0);
+    // Глубокая зона противоположного знака — перехват, зовём переворот
+    m.notePhysicalTilt(80);
+    expect(calls).toHaveLength(1);
+    // И новая сторона применяется
+    m.applyOrientation("landscape");
+    expect(m.softAngleDeg()).toBe(90);
+  });
+
+  it("смена стороны без поворота UI переворота не зовёт (нечего крутить)", async () => {
+    const m = await fresh();
+    setOrientation({ type: "portrait-primary", angle: 0 });
+    const calls: number[] = [];
+    m.onPhysicalSideChange(() => calls.push(1));
+    // UI не повёрнут (авто) — смена стороны молча запоминается
+    m.notePhysicalTilt(-80);
+    m.notePhysicalTilt(80);
+    expect(calls).toHaveLength(0);
+  });
+
   it("«ландшафт» на ландшафтном окне — поворот не нужен (манифест сработал)", async () => {
     const m = await fresh();
     setOrientation({ type: "landscape-primary" });

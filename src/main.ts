@@ -2544,6 +2544,13 @@ function setupOrientationButton(): void {
   };
   document.addEventListener("visibilitychange", relock); // вернулись в приложение
   window.addEventListener("pageshow", relock); // bfcache-восстановление
+  // Перехват телефона другим боком в ландшафте: переворачиваем UI на 180°,
+  // чтобы картинка не оставалась вверх ногами. Сторону следит сам модуль
+  // (гистерезис по γ), нам остаётся пере-применить режим — targetAngle
+  // возьмёт свежую сторону
+  screenOrientationModule.onPhysicalSideChange(() => {
+    if (pref === "landscape") applyOrientation(pref);
+  });
 }
 
 /** Кнопки ⚙/AR/фото: создаются при старте, видны уже во время загрузки */
