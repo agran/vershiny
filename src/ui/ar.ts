@@ -764,15 +764,40 @@ function setupArDebug(
     gamma = ev.gamma ?? NaN;
   };
   window.addEventListener("deviceorientation", onOrient);
+  // Частота реальных кадров камеры: requestVideoFrameCallback срабатывает
+  // на каждый отрисованный в видео кадр (камера обычно 30/с, цикл AR — до
+  // 60/с). Callback одноразовый — перерегистрируемся в каждом, иначе счёт
+  // остановится после первого кадра
+  let camFrames = 0;
+  let camWinStart = 0;
+  let camLastAt = 0;
+  let camFps = NaN;
+  const onCamFrame = () => {
+    const now = performance.now();
+    camLastAt = now;
+    if (!camWinStart) camWinStart = now;
+    camFrames++;
+    if (now - camWinStart >= 1000) {
+      camFps = (camFrames * 1000) / (now - camWinStart);
+      camFrames = 0;
+      camWinStart = now;
+    }
+    videoEl.requestVideoFrameCallback?.(onCamFrame);
+  };
+  videoEl.requestVideoFrameCallback?.(onCamFrame);
   const f = (v: number): string => (Number.isFinite(v) ? v.toFixed(0) : "—");
   return {
     update: () => {
       const so = screen.orientation;
+      // Больше секунды без кадров камеры — видео стоит (пауза/конец потока)
+      const camStalled =
+        camLastAt > 0 && performance.now() - camLastAt > 1500;
       el.textContent =
         `β=${f(beta)} γ=${f(gamma)}\n` +
         `win: ${so?.type ?? "?"} ${so?.angle ?? "?"}°\n` +
         `css: ${softAngleDeg()}°\n` +
         `frame: ${videoEl.videoWidth}×${videoEl.videoHeight}\n` +
+        `cam: ${Number.isFinite(camFps) ? `${camFps.toFixed(1)} fps` : "—"}${camStalled ? " ⏸" : ""}\n` +
         `canvas: ${canvas.width}×${canvas.height}`;
     },
     remove: () => {
