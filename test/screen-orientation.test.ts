@@ -229,6 +229,11 @@ describe("screen-orientation: автоповорот по хвату", () => {
   it("lockSystemOrientation: отказ lock не роняет приложение", async () => {
     const m = await fresh();
     const info = vi.spyOn(console, "info").mockImplementation(() => {});
+    // На сенсорных устройствах отказ логируется — установка PWA его чинит
+    Object.defineProperty(navigator, "maxTouchPoints", {
+      value: 1,
+      configurable: true,
+    });
     const so = {
       type: "portrait-primary",
       lock: vi.fn(() => Promise.reject(new Error("NotAllowedError"))),
@@ -238,6 +243,23 @@ describe("screen-orientation: автоповорот по хвату", () => {
     await vi.waitFor(() => {
       expect(info).toHaveBeenCalled();
     });
+  });
+
+  it("lockSystemOrientation: на десктопе отказ молчит", async () => {
+    const m = await fresh();
+    const info = vi.spyOn(console, "info").mockImplementation(() => {});
+    Object.defineProperty(navigator, "maxTouchPoints", {
+      value: 0,
+      configurable: true,
+    });
+    const so = {
+      type: "portrait-primary",
+      lock: vi.fn(() => Promise.reject(new Error("NotSupportedError"))),
+    };
+    setOrientation(so);
+    expect(() => m.lockSystemOrientation()).not.toThrow();
+    await new Promise((r) => setTimeout(r, 0));
+    expect(info).not.toHaveBeenCalled();
   });
 
   it("lockSystemOrientation без API — молча ничего не делает", async () => {

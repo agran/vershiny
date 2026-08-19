@@ -6,12 +6,16 @@
  * «HTTP 503» — при том что пирамида и её тайлы лежали в IndexedDB.
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  demCandidates,
-  demStorePrefix,
-  pickDemBase,
-  GLOBAL_DEM_URL,
+    demCandidates,
+    demStorePrefix,
+    GLOBAL_DEM_HI_URL,
+    GLOBAL_DEM_URL,
+    globalDemCandidates,
+    hiDemCandidates,
+    pickDemBase,
+    regionDemCandidates,
 } from "../src/core/dem-config";
 
 const CANDIDATES = demCandidates("/vershiny/", "elbrus");
@@ -52,6 +56,38 @@ describe("выбор источника рельефа", () => {
 
   it("нет ни сети, ни кеша — источника нет", async () => {
     expect(await pickDemBase(CANDIDATES, probes([], []))).toBeUndefined();
+  });
+});
+
+describe("локальные кандидаты только в dev-сборке", () => {
+  it("прод не пробивает то, чего нет в public/", () => {
+    expect(demCandidates("/vershiny/", "elbrus", false)).toEqual([
+      GLOBAL_DEM_URL,
+    ]);
+    expect(regionDemCandidates("/vershiny/", "elbrus", false)).toEqual([]);
+    expect(hiDemCandidates("/vershiny/", false)).toEqual([GLOBAL_DEM_HI_URL]);
+    expect(globalDemCandidates("/vershiny/", false)).toEqual([
+      GLOBAL_DEM_URL,
+    ]);
+  });
+
+  it("dev сохраняет цепочку: локальная копия → внешняя", () => {
+    expect(demCandidates("/vershiny/", "elbrus", true)).toEqual([
+      "/vershiny/tiles/elbrus",
+      "/vershiny/tiles/global",
+      GLOBAL_DEM_URL,
+    ]);
+    expect(regionDemCandidates("/vershiny/", "elbrus", true)).toEqual([
+      "/vershiny/tiles/elbrus",
+    ]);
+    expect(hiDemCandidates("/vershiny/", true)).toEqual([
+      "/vershiny/tiles/hi",
+      GLOBAL_DEM_HI_URL,
+    ]);
+    expect(globalDemCandidates("/vershiny/", true)).toEqual([
+      "/vershiny/tiles/global",
+      GLOBAL_DEM_URL,
+    ]);
   });
 });
 

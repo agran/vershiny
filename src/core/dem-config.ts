@@ -20,21 +20,54 @@ export const GLOBAL_DEM_HI_URL =
   "https://agran.github.io/vershiny-dem-hi/tiles/hi";
 
 /**
+ * Локальные кандидаты существуют только в репозитории разработчика: тайлы
+ * не публикуются в public/ (26 тыс. файлов валят старт Vite), поэтому в
+ * прод-сборке их пробы — чистые 404 в консоли при каждом старте. Параметр
+ * `local` оставлен явным, чтобы тесты проверяли и прод-путь.
+ */
+const LOCAL_TILES = import.meta.env.DEV;
+
+/**
  * Кандидаты на роль локального патча, в порядке убывания детализации:
  * детальный патч региона → локальная пирамида → внешняя пирамида.
+ * В прод-сборке остаётся только внешняя пирамида.
  */
-export function demCandidates(base: string, region: string): string[] {
-  return [`${base}tiles/${region}`, `${base}tiles/global`, GLOBAL_DEM_URL];
+export function demCandidates(
+  base: string,
+  region: string,
+  local = LOCAL_TILES,
+): string[] {
+  return local
+    ? [`${base}tiles/${region}`, `${base}tiles/global`, GLOBAL_DEM_URL]
+    : [GLOBAL_DEM_URL];
+}
+
+/**
+ * Детальный патч региона: локальная копия есть только в репозитории
+ * разработчика, прод-сборке пробивать её нечего.
+ */
+export function regionDemCandidates(
+  base: string,
+  region: string,
+  local = LOCAL_TILES,
+): string[] {
+  return local ? [`${base}tiles/${region}`] : [];
 }
 
 /** Детальный слой p1–p2: локальная копия (разработка) → внешний сайт */
-export function hiDemCandidates(base: string): string[] {
-  return [`${base}tiles/hi`, GLOBAL_DEM_HI_URL];
+export function hiDemCandidates(
+  base: string,
+  local = LOCAL_TILES,
+): string[] {
+  return local ? [`${base}tiles/hi`, GLOBAL_DEM_HI_URL] : [GLOBAL_DEM_HI_URL];
 }
 
 /** Базовая пирамида: локальная копия (разработка) → внешний сайт */
-export function globalDemCandidates(base: string): string[] {
-  return [`${base}tiles/global`, GLOBAL_DEM_URL];
+export function globalDemCandidates(
+  base: string,
+  local = LOCAL_TILES,
+): string[] {
+  return local ? [`${base}tiles/global`, GLOBAL_DEM_URL] : [GLOBAL_DEM_URL];
 }
 
 /**

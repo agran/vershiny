@@ -1365,7 +1365,7 @@ async function goToHit(
  */
 async function initDemForRegion(region: string): Promise<void> {
   const base = import.meta.env.BASE_URL;
-  const { hiDemCandidates, globalDemCandidates, pickDemBase } =
+  const { regionDemCandidates, hiDemCandidates, globalDemCandidates, pickDemBase } =
     await import("./core/dem-config");
   const { getDemIndex } = await import("./core/db");
   const { fetchWithTimeout, PROBE_TIMEOUT_MS } = await import(
@@ -1390,7 +1390,7 @@ async function initDemForRegion(region: string): Promise<void> {
   };
   const patchBaseUrls = (
     await Promise.all([
-      pickDemBase([`${base}tiles/${region}`], probes),
+      pickDemBase(regionDemCandidates(base, region), probes),
       pickDemBase(hiDemCandidates(base), probes),
       pickDemBase(globalDemCandidates(base), probes),
     ])

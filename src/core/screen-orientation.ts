@@ -433,6 +433,12 @@ export function lockSystemOrientation(): void {
   // lock — метод ScreenOrientation: без call() браузер падает с
   // «Illegal invocation» (функция оторвана от this)
   lockFn.call(so, "portrait").catch((err) => {
-    console.info("Системная ориентация не зафиксирована:", err);
+    // На десктопе lock недоступен почти всегда, и NotSupportedError в
+    // консоли при каждом старте — чистый шум. Логируем только на сенсорных
+    // устройствах: там отказ во вкладке Android чинит установка PWA,
+    // и пользователю полезно это знать
+    if (navigator.maxTouchPoints > 0) {
+      console.info("Системная ориентация не зафиксирована:", err);
+    }
   });
 }
