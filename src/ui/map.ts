@@ -15,6 +15,7 @@ import { normalizeAz } from "../core/geo";
 import { peakName, t } from "../core/i18n";
 import type { Peak } from "../core/peaks";
 import { peakScore } from "../core/peaks";
+import { toLocalDelta, toLocalPoint } from "../core/screen-orientation";
 import type { SearchHit } from "../core/search";
 import { ICON_CLOSE, ICON_HEADING, ICON_LOCATE, ICON_SEARCH } from "./icons";
 import { pushOverlay } from "./overlay-history";
@@ -807,10 +808,15 @@ export function openMap(options: MapOptions): () => void {
   handle.addEventListener("pointermove", (ev) => {
     if (!rotating) return;
     ev.stopPropagation();
-    // Маркер — точка нулевого размера, его прямоугольник и есть наблюдатель
+    // Маркер — точка нулевого размера, его прямоугольник и есть наблюдатель.
+    // clientX/Y и getBoundingClientRect — физические координаты экрана, а
+    // азимут нужен в локальных осях UI: при программном повороте экрана
+    // (screen-orientation.ts) они различаются на 90° — конвертируем
     const at = marker.getBoundingClientRect();
-    const dx = ev.clientX - at.left;
-    const dy = ev.clientY - at.top;
+    const p = toLocalPoint(ev.clientX, ev.clientY);
+    const m = toLocalPoint(at.left, at.top);
+    const dx = p.x - m.x;
+    const dy = p.y - m.y;
     // У самого центра направление не определено: рывок на 180° при
     // проходе через точку выглядел бы поломкой
     if (Math.hypot(dx, dy) < 12) return;
@@ -843,12 +849,11 @@ export function openMap(options: MapOptions): () => void {
   });
   root.addEventListener("pointermove", (ev) => {
     if (!dragging) return;
+    // Дельта — из физических координат указателя в локальные оси UI
+    // (программный поворот экрана): иначе карта ехала бы боком
+    const d = toLocalDelta(ev.clientX - lastX, ev.clientY - lastY);
     const c = project(center, zoom);
-    const nextCenter = unproject(
-      c.x - (ev.clientX - lastX),
-      c.y - (ev.clientY - lastY),
-      zoom,
-    );
+    const nextCenter = unproject(c.x - d.x, c.y - d.y, zoom);
     center = nextCenter;
     observer = { ...nextCenter };
     lastX = ev.clientX;

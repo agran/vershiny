@@ -346,7 +346,7 @@ canvas.addEventListener("pointerdown", (ev) => {
   if (!touchOnly) {
     const now = Date.now();
     if (now - lastTap < 300) {
-      moveForward(ev.clientX);
+      moveForward(ev.clientX, ev.clientY);
       lastTap = 0;
     } else {
       lastTap = now;
@@ -380,8 +380,16 @@ canvas.addEventListener("pointermove", (ev) => {
   if (activePointers.size > 1) return;
 
   if (!dragging) return;
-  const dx = ev.clientX - lastX;
-  const dy = ev.clientY - lastY;
+  // clientX/clientY — физические координаты экрана; при программном повороте
+  // (ландшафт через CSS, screen-orientation.ts) локальные оси UI не совпадают
+  // с ними: физическое «вправо» — это локальное «вниз». Конвертируем раз,
+  // дальше вся математика жеста идёт в локальных осях
+  const dl = screenOrientationModule.toLocalDelta(
+    ev.clientX - lastX,
+    ev.clientY - lastY,
+  );
+  const dx = dl.x;
+  const dy = dl.y;
   lastX = ev.clientX;
   lastY = ev.clientY;
 
@@ -460,14 +468,21 @@ canvas.addEventListener("contextmenu", (ev) => ev.preventDefault()); // прав
  * Азимут берётся из точки клика, а не из центра кадра: изучая маршрут дома,
  * человек тычет в тот склон, куда собирается идти.
  *
- * @param screenX точка клика в CSS-пикселях; без неё — прямо по взгляду
+ * @param screenX/screenY точка клика, ФИЗИЧЕСКИЕ CSS-пиксели; без них —
+ *   прямо по взгляду. При программном повороте экрана конвертируются в
+ *   локальные координаты UI: clientX физический, а canvas.clientWidth —
+ *   локальный, смешивать их нельзя
  */
-function moveForward(screenX?: number): void {
+function moveForward(screenX?: number, screenY?: number): void {
   if (!panorama) return;
   const width = canvas.clientWidth;
+  const localX =
+    screenX !== undefined && screenY !== undefined
+      ? screenOrientationModule.toLocalPoint(screenX, screenY).x
+      : undefined;
   const offset =
-    screenX !== undefined && width > 0
-      ? ((screenX - width / 2) / width) * view.fovRad
+    localX !== undefined && width > 0
+      ? ((localX - width / 2) / width) * view.fovRad
       : 0;
   const newPos = destination(
     lastOrigin,
@@ -1617,9 +1632,29 @@ function addCaption(
   captionEntries.push({ btn, root, label, key, side });
 }
 
-/** Положение кнопки на экране */
+/**
+ * Положение кнопки в системе координат UI. getBoundingClientRect отдаёт
+ * ФИЗИЧЕСКИЕ координаты экрана; при программном повороте (body повёрнут
+ * на 90°) конвертируем в локальные — иначе плашки разъехались бы с
+ * кнопками на четверть оборота.
+ */
 function btnRect(btn: HTMLElement): DOMRect {
-  return btn.getBoundingClientRect();
+  const r = btn.getBoundingClientRect();
+  if (!screenOrientationModule.softRotated() || !r.width) return r;
+  const b = document.body;
+  const br = b.getBoundingClientRect(); // физический бокс повёрнутого body
+  const cx = br.left + br.width / 2;
+  const cy = br.top + br.height / 2;
+  const bw = b.offsetWidth; // offset* игнорируют трансформ — это локальные
+  const bh = b.offsetHeight;
+  // Обратный поворот: lx = bw/2 + (py − cy), ly = bh/2 + (cx − px);
+  // у повёрнутого прямоугольника ширина и высота меняются местами
+  return new DOMRect(
+    bw / 2 + (r.top - cy),
+    bh / 2 + (cx - r.right),
+    r.height,
+    r.width,
+  );
 }
 
 /**
@@ -1792,9 +1827,10 @@ function layoutCaptions(): void {
       y = br.bottom + gap;
     }
     // В пределы экрана; для above/below — ещё и выше/ниже чужих кнопок
-    // того же ряда (плашка шире кнопки и по центру задевает соседей)
-    const W = window.innerWidth;
-    const H = window.innerHeight;
+    // того же ряда (плашка шире кнопки и по центру задевает соседей).
+    // Рамки — в системе координат UI: при программном повороте это
+    // локальные размеры body, а не физические window.innerWidth/Height
+    const { w: W, h: H } = screenOrientationModule.virtualViewport();
     x = Math.max(4, Math.min(x, W - lw - 4));
     y = Math.max(4, Math.min(y, H - lh - 4));
     // Раздвижка, пока есть пересечения. Своя кнопка не считается
@@ -2154,7 +2190,14 @@ function setupNavPad(): void {
  * что влезает даже в самый узкий телефон.
  */
 function layoutControls(): void {
-  const padSize = touchOnly ? 48 : window.innerHeight < 420 ? 108 : 132;
+  // «Низкий экран» смотрим по ВИРТУАЛЬНОЙ высоте: при программном повороте
+  // (ландшафт через CSS, screen-orientation.ts) window.innerHeight остаётся
+  // портретной и эвристика компактного навипада промахивалась бы
+  const padSize = touchOnly
+    ? 48
+    : screenOrientationModule.virtualViewport().h < 420
+      ? 108
+      : 132;
   const mapWidth = 48 + 8;
   if (navPad) {
     navPad.style.width = `${padSize}px`;
@@ -2402,17 +2445,15 @@ function adjustHeight(deltaM: number): void {
  * запоминается. Подпись показывает, ЧТО включится по нажатию, а зелёный фон —
  * что сейчас заперто (не авто).
  *
- * Там, где lock недоступен (десктоп, старый Android, iOS без полноэкранного
- * режима), кнопки нет: показывать ручку, которая ничего не делает, нельзя.
+ * Поворот чисто программный (CSS-трансформ body, см. core/screen-orientation.ts):
+ * системный Screen Orientation lock не используем вовсе — на Android он требует
+ * fullscreen, а на части устройств (Samsung Internet, установленный PWA)
+ * отклоняется. Кнопка поэтому есть везде, где есть DOM.
  */
 function setupOrientationButton(): void {
-  const {
-    canLockOrientation,
-    applyOrientation,
-    rememberOrientation,
-    storedOrientation,
-  } = screenOrientationModule;
-  if (!canLockOrientation()) return;
+  const { applyOrientation, rememberOrientation, storedOrientation } =
+    screenOrientationModule;
+  if (typeof document === "undefined" || !document.body) return;
   let pref = storedOrientation();
   const nextKey = (): TitleKey =>
     pref === "auto"
@@ -2457,23 +2498,16 @@ function setupOrientationButton(): void {
     btn.innerHTML = currentIcon();
     btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
   };
-  btn.onclick = async () => {
-    const prev = pref;
+  btn.onclick = () => {
     pref =
       pref === "auto"
         ? "landscape"
         : pref === "landscape"
           ? "portrait"
           : "auto";
-    if (!(await applyOrientation(pref))) {
-      // Не заперлось (отказ ОС/браузера): честный откат, иначе иконка
-      // нарисует замок на свободном экране
-      pref = prev;
-      sync();
-      return;
-    }
     rememberOrientation(pref);
     sync();
+    applyOrientation(pref);
     // Подтверждение режима: title кнопки говорит, что БУДЕТ по нажатию,
     // поэтому само нажатие без отклика выглядело молчаливой подменой
     if (statusTimer) clearTimeout(statusTimer);
@@ -2484,26 +2518,17 @@ function setupOrientationButton(): void {
     }, 2500);
   };
   sync();
-  // Сохранённый запрет применяем сразу при запуске: в установленном PWA это
-  // работает без жеста. Во вкладке браузера fullscreen требует жеста, запрет
-  // не встанет — тогда иконка показывает «авто», а не замок на свободном
-  // экране (раньше запускалась с иконкой «ландшафт» на портретном экране)
-  if (pref !== "auto") {
-    void applyOrientation(pref).then((applied) => {
-      if (!applied) {
-        pref = "auto";
-        sync();
-      }
-    });
-  }
-  // Выход из fullscreen (жест «назад», свайп) снимает запрет ориентации —
-  // без этого слушателя иконка продолжала рисовать замок на свободном экране
-  document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement && pref !== "auto") {
-      pref = "auto";
-      sync();
-    }
-  });
+  // Сохранённый режим применяем сразу при запуске: CSS-поворот не требует
+  // ни жеста, ни fullscreen
+  if (pref !== "auto") applyOrientation(pref);
+  // ОС могла сама перевернуть окно (системный автоповорот): переоцениваем,
+  // нужен ли ещё наш поворот — иначе сохранённый «ландшафт» на уже
+  // ландшафтном окне дал бы двойной поворот. Отсрочка — на iOS размеры на
+  // момент события ещё старые (та же причина, что у слушателя выше)
+  const reapply = (): void => {
+    setTimeout(() => applyOrientation(pref), 50);
+  };
+  window.addEventListener("resize", reapply);
 }
 
 /** Кнопки ⚙/AR/фото: создаются при старте, видны уже во время загрузки */
