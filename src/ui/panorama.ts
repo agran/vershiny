@@ -47,6 +47,13 @@ export interface ViewState {
 const SKY_TOP = "#0d1b2a";
 const SKY_HORIZON = "#415a77";
 const SKY_BOTTOM = "#16202c";
+/**
+ * Кеш градиента неба: он зависит только от высоты холста (стопы — доли),
+ * а создавался на каждый кадр. CanvasGradient не привязан к контексту —
+ * один и тот же объект годится и для экранного холста, и для холста снимка
+ */
+let skyGradientCache: { height: number; gradient: CanvasGradient } | null =
+  null;
 /** Контур гребня: чёрная линия сверху, белая снизу (для наложения на кадр камеры) */
 const RIDGE_DARK = "rgba(0,0,0,0.85)";
 const RIDGE_LIGHT = "rgba(255,255,255,0.95)";
@@ -157,14 +164,17 @@ export function renderPanorama(
   overlay?: OverlayOptions,
 ): void {
   const { width, height } = ctx.canvas;
-  const horizonY = height * HORIZON_FRAC; // линия горизонта чуть ниже центра
 
-  // Фон — единый градиент на весь кадр (без горизонтальной «ступеньки»)
-  const sky = ctx.createLinearGradient(0, 0, 0, height);
-  sky.addColorStop(0, SKY_TOP);
-  sky.addColorStop(horizonY / height, SKY_HORIZON);
-  sky.addColorStop(1, SKY_BOTTOM);
-  ctx.fillStyle = sky;
+  // Фон — единый градиент на весь кадр (без горизонтальной «ступеньки»).
+  // Стопы — доли высоты, поэтому градиент зависит только от неё и кешируется
+  if (!skyGradientCache || skyGradientCache.height !== height) {
+    const sky = ctx.createLinearGradient(0, 0, 0, height);
+    sky.addColorStop(0, SKY_TOP);
+    sky.addColorStop(HORIZON_FRAC, SKY_HORIZON);
+    sky.addColorStop(1, SKY_BOTTOM);
+    skyGradientCache = { height, gradient: sky };
+  }
+  ctx.fillStyle = skyGradientCache.gradient;
   ctx.fillRect(0, 0, width, height);
 
   drawOverlay(ctx, state, view, uiScale, overlay);
@@ -245,8 +255,12 @@ export function drawOverlay(
         edgeMarginX,
       );
       if (segments.length) {
-        strokeRidge(ctx, segments, -ridgeOffset, RIDGE_DARK, ridgeWidth);
-        strokeRidge(ctx, segments, +ridgeOffset, RIDGE_LIGHT, ridgeWidth);
+        // Децимация общая для обоих проходов: сдвиг по y не влияет на
+        // отклонение от хорды, так что набор точек у чёрной и белой линии
+        // один и тот же
+        const simplified = decimateSegments(segments);
+        strokeRidge(ctx, simplified, -ridgeOffset, RIDGE_DARK, ridgeWidth);
+        strokeRidge(ctx, simplified, +ridgeOffset, RIDGE_LIGHT, ridgeWidth);
       }
       for (let i = 0; i < rayCount; i++) {
         if (prof[i] > runningMax[i]) runningMax[i] = prof[i];
@@ -353,6 +367,63 @@ export function buildRidgeSegments(
   return segments;
 }
 
+/**
+ * Порог децимации точек гребня, px устройства: RDP гарантирует, что каждая
+ * отброшенная точка отклоняется от итоговой ломаной не больше порога — на
+ * линии в 1.4 CSS px (2.8 px при DPR 2) это невидимо
+ */
+const RIDGE_SIMPLIFY_PX = 0.5;
+
+/**
+ * Прореживание точек сегментов перед stroke — Ramer–Douglas–Peucker.
+ * На пологих дугах (снежные хребты) отбрасывается до 90 % точек, на скалистой
+ * «пиле» — около трети. Stroke — самая дорогая часть рендера (два прохода:
+ * чёрный и белый), децимация режет оба. Острые пики отклоняются от хорд
+ * на десятки px и сохраняются вместе с плечами. Итеративно, явным стеком:
+ * сегменты доходят до тысячи с лишним точек, и на вырожденных зигзагах
+ * рекурсия уперлась бы в глубину стека. Расстояние меряется до ПРЯМОЙ, а не
+ * отрезка: внутри сегмента x монотонен (лучи идут по порядку азимутов),
+ * проекции точек за концы не вылетают
+ */
+export function decimateSegments(
+  segments: { x: number; y: number }[][],
+  epsilonPx = RIDGE_SIMPLIFY_PX,
+): { x: number; y: number }[][] {
+  return segments.map((pts) => {
+    const n = pts.length;
+    if (n < 3) return pts;
+    const keep = new Uint8Array(n);
+    keep[0] = keep[n - 1] = 1;
+    const stack: [number, number][] = [[0, n - 1]];
+    while (stack.length) {
+      const [i0, i1] = stack.pop()!;
+      const a = pts[i0];
+      const b = pts[i1];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const len2 = dx * dx + dy * dy;
+      let maxDev = -1;
+      let maxIdx = -1;
+      for (let i = i0 + 1; i < i1; i++) {
+        const p = pts[i];
+        const dev =
+          len2 === 0
+            ? Math.hypot(p.x - a.x, p.y - a.y)
+            : Math.abs(dx * (a.y - p.y) - (a.x - p.x) * dy) / Math.sqrt(len2);
+        if (dev > maxDev) {
+          maxDev = dev;
+          maxIdx = i;
+        }
+      }
+      if (maxDev > epsilonPx) {
+        keep[maxIdx] = 1;
+        stack.push([i0, maxIdx], [maxIdx, i1]);
+      }
+    }
+    return pts.filter((_, i) => keep[i]);
+  });
+}
+
 /** Обводка гребня со сдвигом по вертикали (для двойной линии чёрная/белая) */
 function strokeRidge(
   ctx: CanvasRenderingContext2D,
@@ -374,7 +445,10 @@ function strokeRidge(
   }
   ctx.strokeStyle = style;
   ctx.lineWidth = lineWidth;
-  ctx.lineJoin = "round";
+  // Стыки bevel вместо round: round строит дугу на каждой из тысяч вершин,
+  // а на линии 1.4 CSS px разницы не видно. Концы сегментов остаются round —
+  // их единицы, и плоский срез на конце обрыва гребня был бы заметен
+  ctx.lineJoin = "bevel";
   ctx.lineCap = "round";
   ctx.stroke();
 }
@@ -513,6 +587,28 @@ export function labelVisibleOnScreen(
   );
 }
 
+/**
+ * Кеш ширины подписей: measureText на каждую вершину каждый кадр — одна из
+ * самых дорогих операций раскладки, а результат зависит только от кегля и
+ * строки. Смена языка или региона просто кладёт новые ключи; потолок не даёт
+ * кешу расти бесконечно
+ */
+const labelWidthCache = new Map<string, number>();
+
+function measureLabelWidth(
+  ctx: CanvasRenderingContext2D,
+  font: string,
+  text: string,
+): number {
+  const key = `${font}|${text}`;
+  const cached = labelWidthCache.get(key);
+  if (cached !== undefined) return cached;
+  const measured = ctx.measureText(text).width;
+  if (labelWidthCache.size >= 4000) labelWidthCache.clear();
+  labelWidthCache.set(key, measured);
+  return measured;
+}
+
 function drawLabels(
   ctx: CanvasRenderingContext2D,
   peaks: VisiblePeak[],
@@ -523,7 +619,8 @@ function drawLabels(
   uiScale: number,
 ): void {
   const { width, height } = ctx.canvas;
-  ctx.font = `${13 * uiScale}px system-ui, sans-serif`;
+  const labelFont = `${13 * uiScale}px system-ui, sans-serif`;
+  ctx.font = labelFont;
   // Обратная проекция экрана в азимут — для обрыва выносок о силуэт
   const xToAz = (x: number): number =>
     view.centerAzRad + ((x - width / 2) / width) * view.fovRad;
@@ -597,7 +694,7 @@ function drawLabels(
     if (my < 0 || (!hidden && my > height)) return false;
 
     const text = labelText(peak);
-    const w = ctx.measureText(text).width;
+    const w = measureLabelWidth(ctx, labelFont, text);
 
     // Якорь первой буквы. Обычно — сразу над вершиной по направлению текста;
     // для скрытой вершины поднимаемся вдоль строки, пока подпись целиком

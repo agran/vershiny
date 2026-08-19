@@ -6,6 +6,7 @@
 import { describe, expect, it } from "vitest";
 import {
     buildRidgeSegments,
+    decimateSegments,
     labelVisibleOnScreen,
     MAX_RIDGE_SLOPE,
     rollEdgeMarginX,
@@ -208,5 +209,75 @@ describe("подписи за краем кадра", () => {
     expect(labelVisibleOnScreen(a.x, a.y, w, UX, UY, roll, W, H, 1)).toBe(true);
     // Без доворота тот же отрезок невидим — запас не «панорамный»
     expect(labelVisibleOnScreen(a.x, a.y, w, UX, UY, 0, W, H, 1)).toBe(false);
+  });
+});
+
+describe("децимация точек гребня", () => {
+  it("прямая линия схлопывается до концов", () => {
+    const line = Array.from({ length: 20 }, (_, i) => ({ x: i * 4, y: i * 2 }));
+    const out = decimateSegments([line]);
+    expect(out[0]).toHaveLength(2);
+    expect(out[0][0]).toEqual({ x: 0, y: 0 });
+    expect(out[0][1]).toEqual({ x: 76, y: 38 });
+  });
+
+  it("острый пик сохраняется, а пологие хвосты схлопываются", () => {
+    const peak = [
+      ...Array.from({ length: 20 }, (_, i) => ({ x: i * 4, y: 100 })),
+      { x: 80, y: 20 }, // вершина: отклонение от любой хорды — десятки px
+      ...Array.from({ length: 20 }, (_, i) => ({ x: 84 + i * 4, y: 100 })),
+    ];
+    const out = decimateSegments([peak]);
+    expect(out[0]).toContainEqual({ x: 80, y: 20 });
+    // Остались концы, пик и по точке-плечу рядом с ним (их отклонение от
+    // крутых хорд велико законно), всё остальное схлопнулось
+    expect(out[0]).toHaveLength(5);
+    expect(out[0][0]).toEqual({ x: 0, y: 100 });
+    expect(out[0][4]).toEqual({ x: 160, y: 100 });
+  });
+
+  it("концы сегмента и короткие сегменты не трогаются", () => {
+    const two = [{ x: 0, y: 0 }, { x: 10, y: 5 }];
+    const out = decimateSegments([two]);
+    expect(out[0]).toHaveLength(2);
+    // Конец сегмента — это обрыв гребня: его положение точное
+    const out2 = decimateSegments([
+      [
+        { x: 0, y: 0 },
+        { x: 4, y: 0.2 },
+        { x: 8, y: 0 },
+      ],
+    ]);
+    expect(out2[0][out2[0].length - 1]).toEqual({ x: 8, y: 0 });
+  });
+
+  it("ошибка децимации ограничена порогом на любой форме", () => {
+    // Дуга окружности R=200: каждая тройка почти коллинеарна, но дуга длинная
+    const arc = Array.from({ length: 100 }, (_, i) => {
+      const x = i * 4;
+      return { x, y: 200 - Math.sqrt(200 * 200 - (x - 200) ** 2) || 0 };
+    });
+    const out = decimateSegments([arc], 0.5)[0];
+    expect(out.length).toBeLessThan(arc.length);
+    // RDP гарантирует: каждая исходная точка в пределах ε от итоговой ломаной
+    // (плюс щель на округление float)
+    for (const p of arc) {
+      let minDist = Infinity;
+      for (let k = 1; k < out.length; k++) {
+        const a = out[k - 1];
+        const b = out[k];
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const len2 = dx * dx + dy * dy;
+        if (!len2) continue;
+        const t = Math.max(
+          0,
+          Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2),
+        );
+        const d = Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+        if (d < minDist) minDist = d;
+      }
+      expect(minDist).toBeLessThanOrEqual(0.51);
+    }
   });
 });

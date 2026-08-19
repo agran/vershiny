@@ -41,6 +41,7 @@ import {
 } from "./ui/icons";
 import { isTypingTarget } from "./ui/keys";
 import {
+  HORIZON_FRAC,
   renderPanorama,
   silhouetteProfile,
   type PanoramaState,
@@ -314,7 +315,17 @@ function draw(): void {
   // полный рендер панорамы здесь затирался бы следующим AR-кадром через
   // миллисекунды — 10–60 лишних рендеров в секунду впустую
   if (arSession) return;
-  renderPanorama(ctx, panorama, view);
+  const now = performance.now();
+  lastDrawAt = now;
+  while (recentDraws.length && now - recentDraws[0] > 500) recentDraws.shift();
+  recentDraws.push(now);
+  // Непрерывное движение (drag, поворот по датчику, ползунок калибровки):
+  // кадр собирается из кеша сцены одним drawImage вместо полного рендера
+  if (recentDraws.length >= 3 && drawFromSceneCache()) {
+    scheduleCrispFrame();
+  } else {
+    renderPanorama(ctx, panorama, view);
+  }
   drawnAzRad = view.centerAzRad;
   drawnTiltRad = view.tiltRad;
 }
@@ -341,6 +352,118 @@ function viewDrifted(): boolean {
     (Math.abs(view.tiltRad - drawnTiltRad) / view.fovVRad) *
     canvas.clientHeight;
   return azPx > 0.5 || tiltPx > 0.5;
+}
+
+// --- Кеш сцены при непрерывном движении (GPU-аудит, п. 2.1) ---
+// Между пересчётами воркера сцена — чистая функция взгляда: сдвиг/наклон —
+// это просто смещение картинки. Пока кадры идут непрерывно, панорама
+// рендерится в offscreen-холст с полями запаса и дальше blit-ится со
+// сдвигом; полный рендер — только когда взгляд вышел за поля. Одиночные
+// кадры (кнопки, редкие события) рисуются напрямую — кеш им не нужен
+// и память не тратится.
+
+/** Поля запаса кеша: доля размера экрана с потолком в пикселях устройства */
+const SCENE_MARGIN_FRAC = 0.25;
+const SCENE_MARGIN_MAX_X = 512;
+const SCENE_MARGIN_MAX_Y = 384;
+
+/** Offscreen-холст со сценой, отрисованной с полями вокруг взгляда кеша */
+let sceneCanvas: HTMLCanvasElement | null = null;
+/** Взгляд, под который отрисован кеш */
+let sceneAz = NaN;
+let sceneTilt = NaN;
+let sceneFov = NaN;
+let sceneFovV = NaN;
+/** true после смены содержимого панорамы (воркер, регион, язык) */
+let sceneDirty = true;
+/** Метки последних кадров draw() — по ним движение отличается от одиночных */
+const recentDraws: number[] = [];
+let lastDrawAt = 0;
+let crispTimer: number | null = null;
+
+/**
+ * Кадр из кеша сцены: полный рендер в offscreen при устаревании, иначе один
+ * drawImage со сдвигом. Поля кеша: ±mx по азимуту, по наклону асимметрично
+ * (линия горизонта не по центру холста): от −0.76·my до +1.24·my, с запасом
+ * перерендер раньше. false — кеш неприменим (нулевой размер), зватель рисует
+ * напрямую
+ */
+function drawFromSceneCache(): boolean {
+  const width = canvas.width;
+  const height = canvas.height;
+  if (!width || !height || !panorama) return false;
+  const mx = Math.min(width * SCENE_MARGIN_FRAC, SCENE_MARGIN_MAX_X);
+  const my = Math.min(height * SCENE_MARGIN_FRAC, SCENE_MARGIN_MAX_Y);
+  const pxPerRadH = width / view.fovRad;
+  const pxPerRadV = height / view.fovVRad;
+  const driftX = pxPerRadH * wrapAngle(view.centerAzRad - sceneAz);
+  const driftY = pxPerRadV * (view.tiltRad - sceneTilt);
+  const cacheW = Math.round(width + 2 * mx);
+  const cacheH = Math.round(height + 2 * my);
+  if (
+    sceneDirty ||
+    !sceneCanvas ||
+    sceneCanvas.width !== cacheW ||
+    sceneCanvas.height !== cacheH ||
+    sceneFov !== view.fovRad ||
+    sceneFovV !== view.fovVRad ||
+    Math.abs(driftX) > mx * 0.8 ||
+    driftY < -my * 0.6 ||
+    driftY > my
+  ) {
+    // Полный рендер в кеш: масштаб (px/рад) как у экрана, поэтому fov кеша
+    // шире экранного ровно во столько, во сколько шире холст. Установка
+    // width/height (даже тех же) заодно очищает холст перед рендером
+    if (!sceneCanvas) sceneCanvas = document.createElement("canvas");
+    sceneCanvas.width = cacheW;
+    sceneCanvas.height = cacheH;
+    const offCtx = sceneCanvas.getContext("2d")!;
+    // uiScale у холста вне DOM нулевой — передаём явно, как у экранного
+    const uiScale = canvas.clientWidth > 0 ? width / canvas.clientWidth : 1;
+    renderPanorama(
+      offCtx,
+      panorama,
+      {
+        centerAzRad: view.centerAzRad,
+        tiltRad: view.tiltRad,
+        fovRad: view.fovRad * (cacheW / width),
+        fovVRad: view.fovVRad * (cacheH / height),
+        rollRad: view.rollRad,
+      },
+      uiScale,
+    );
+    sceneAz = view.centerAzRad;
+    sceneTilt = view.tiltRad;
+    sceneFov = view.fovRad;
+    sceneFovV = view.fovVRad;
+    sceneDirty = false;
+  }
+  // Положение кеша на экране: по горизонтали центр кеша на взгляд кеша плюс
+  // дрейф, по вертикали опорная точка — линия горизонта (HORIZON_FRAC)
+  const ox =
+    (width - sceneCanvas.width) / 2 -
+    pxPerRadH * wrapAngle(view.centerAzRad - sceneAz);
+  const oy =
+    HORIZON_FRAC * (height - sceneCanvas.height) +
+    pxPerRadV * (view.tiltRad - sceneTilt);
+  ctx.drawImage(sceneCanvas, ox, oy);
+  return true;
+}
+
+/**
+ * Последний кадр движения — blit с дробным сдвигом (чуть мылит линии), а в
+ * покое кадров не бывает вовсе: когда движение кончилось, дорисовываем один
+ * чёткий прямой рендер и освобождаем память кеша до следующего движения
+ */
+function scheduleCrispFrame(): void {
+  if (crispTimer !== null) clearTimeout(crispTimer);
+  crispTimer = window.setTimeout(() => {
+    crispTimer = null;
+    if (performance.now() - lastDrawAt < 180) return; // движение ещё идёт
+    recentDraws.length = 0; // следующий draw() пойдёт напрямую, не через кеш
+    sceneCanvas = null;
+    draw();
+  }, 200);
 }
 
 /** Кадр уже запланирован — события датчика/мыши сливаются в один рендер */
@@ -907,6 +1030,7 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   // Мутируем существующий объект, а не подменяем ссылку: AR-оверлей захватил
   // его при запуске, и после каждого шага рисовал бы контуры прежней точки
   panorama = panorama ? Object.assign(panorama, next) : next;
+  sceneDirty = true; // содержимое кеша сцены устарело
   lastObserverH = r.observerH;
   // Обновляем индикатор высоты
   const heightEl = document.getElementById("height-indicator");
@@ -1304,6 +1428,7 @@ async function switchRegion(region: string, manual = false): Promise<void> {
       // в режим камеры и рисует его каждый кадр. Подмена объекта здесь
       // оставляла оверлей навсегда на вершинах прежнего региона
       panorama.peaks = [];
+      sceneDirty = true;
       draw();
     }
   }
@@ -2591,6 +2716,7 @@ function setupActionButtons(): void {
         // Кнопки создаются один раз за сессию: без явного перевода их
         // всплывающие подписи оставались на прежнем языке
         relabelUi();
+        sceneDirty = true; // подписи вершин в кеше сцены — на старом языке
         draw();
       },
       onCalibrationChange: () => {

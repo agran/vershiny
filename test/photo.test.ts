@@ -11,9 +11,9 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
-    DEFAULT_PHOTO_CAPTION,
-    setPhotoCaption,
-    type PhotoCaption,
+  DEFAULT_PHOTO_CAPTION,
+  setPhotoCaption,
+  type PhotoCaption,
 } from "../src/core/photo-caption";
 import type { PanoramaState, ViewState } from "../src/ui/panorama";
 import { capturePhoto, photoFilename, uniquePhotoFilename } from "../src/ui/photo";
@@ -50,8 +50,9 @@ let fontSizes: number[] = [];
 let lineWidths: number[] = [];
 /** Всё, что нарисовали текстом: содержимое и место */
 let draws: { text: string; x: number; y: number; align: string }[] = [];
-/** Заливки прямоугольников (плашки) — их на снимке быть не должно */
-let fillRects: { x: number; y: number; w: number; h: number }[] = [];
+/** Заливки прямоугольников (плашки) — их на снимке быть не должно.
+ * fill — fillStyle на момент заливки: по маркеру градиента проверяем небо */
+let fillRects: { x: number; y: number; w: number; h: number; fill: unknown }[] = [];
 /** Размер холста, на котором рисовали */
 let captured: { width: number; height: number } | null = null;
 /** Вызовы drawImage: кадр камеры на снимке */
@@ -107,7 +108,9 @@ beforeEach(() => {
       strokeStyle: "",
       createLinearGradient: () => {
         gradients++;
-        return { addColorStop: () => {} };
+        // Маркер: градиент неба кешируется между вызовами (и тестами), поэтому
+        // «небо нарисовано» проверяется по fillStyle заливки, а не по счётчику
+        return { addColorStop: () => {}, gradient: true };
       },
       drawImage: (img: unknown, x: number, y: number, w: number, h: number) =>
         imageDraws.push({ img, x, y, w, h }),
@@ -115,7 +118,7 @@ beforeEach(() => {
       // ни перенос длинной строки, ни то, что подпись влезла в кадр
       measureText: (text: string) => ({ width: textWidth(text, fontSize) }),
       fillRect: (x: number, y: number, w: number, h: number) =>
-        fillRects.push({ x, y, w, h }),
+        fillRects.push({ x, y, w, h, fill: ctx.fillStyle }),
       fillText: (text: string, x: number, y: number) =>
         draws.push({ text, x, y, align: ctx.textAlign }),
       strokeText: () => {},
@@ -257,7 +260,13 @@ describe("снимок панорамы", () => {
     });
 
     expect(imageDraws).toEqual([]);
-    expect(gradients).toBe(1); // небо на месте
+    // Небо на месте: весь кадр залит градиентом (сам градиент мог быть
+    // создан раньше и взят из кеша — поэтому маркер, а не счётчик)
+    const skyFill = fillRects.find(
+      (r) => (r.fill as { gradient?: boolean })?.gradient === true,
+    );
+    expect(skyFill).toBeDefined();
+    expect(skyFill!.w).toBe(captured!.width);
   });
 
   it("снимок без камеры: контуры рисуются при любом положении переключателя", async () => {    // ridges = false (сброшено в beforeEach), но конфликтовать силуэту не с
