@@ -954,6 +954,16 @@ function drawLabels(
       draw: DrawLine[];
       boxes: { v: number; u0: number; u1: number }[];
     } | null => {
+      // Многострочная подпись поднимается целиком: самая нижняя строка не
+      // должна опускаться ниже точки вершины. Пачка сдвигается на
+      // (nLines−1)·LINE_H вдоль u — нижняя строка встаёт на место первой,
+      // и весь блок оказывается выше пика.
+      const liftU = (lines.length - 1) * LINE_H;
+      const baseOf = (k: number): { x: number; y: number } => ({
+        x: ax + liftU * ux + k * LINE_H * vx,
+        y: ay + liftU * uy + k * LINE_H * vy,
+      });
+
       // Проход 1: почастная обрезка краем кадра БЕЗ сдвига (как раньше).
       // Обрезать уже сдвинутую строку нельзя: обрезка меняет ширину, ширина
       // меняет сдвиг, сдвиг меняет обрезку — цикл. Поэтому двухфазно.
@@ -964,7 +974,7 @@ function drawLabels(
       }[] = [];
       for (let i = 0; i < lines.length && i < MAX_LABEL_LINES; i++) {
         const line = lines[i];
-        const b = lineBase(line.k);
+        const b = baseOf(line.k);
         const range = visibleLabelRange(line.prefixW, (u0, u1) =>
           labelFullyOnScreen(
             b.x + u0 * ux,
@@ -1003,7 +1013,7 @@ function drawLabels(
       const draw: DrawLine[] = [];
       for (let i = 0; i < trimmed.length; i++) {
         const { line, range, w } = trimmed[i];
-        const b = lineBase(line.k);
+        const b = baseOf(line.k);
         const base = b.x * ux + b.y * uy;
         const startU = line.prefixW[range.first];
         let o = i === 0 ? 0 : off[i - 1];
@@ -1048,9 +1058,8 @@ function drawLabels(
 
     // Критерий «лучше» (лексикографический): полнота названия (2 — целиком,
     // 1 — обрезано переносом, 0 — нет) > число видимых info-частей (2/1/0) >
-    // меньше строк. Двустрочная форма получает небольшой бонус: «высота ·
-    // расстояние» второй строкой — пожелание пользователя, когда под
-    // подписью есть место.
+    // меньше строк. Подпись стремится к минимуму строк: к одной строке она
+    // возвращается, как только края кадра перестают мешать.
     let bestScore = -1;
     // Результат — в поле объекта: к let-переменной, присваиваемой внутри
     // замыкания, TS применяет сужение по инициализатору (null навсегда)
@@ -1067,10 +1076,8 @@ function drawLabels(
       },
       nameScore: number,
       infoParts: number,
-      twoLineBonus: number,
     ): void => {
-      const score =
-        nameScore * 100 + infoParts * 10 + twoLineBonus - res.draw.length;
+      const score = nameScore * 100 + infoParts * 10 - res.draw.length;
       if (score > bestScore) {
         bestScore = score;
         result.value = res;
@@ -1086,7 +1093,7 @@ function drawLabels(
       const infoParts = nameSeen
         ? single.draw[0].last
         : single.draw[0].last - single.draw[0].first + 1;
-      consider(single, nameSeen ? 2 : 0, infoParts, 0);
+      consider(single, nameSeen ? 2 : 0, infoParts);
     }
 
     if (!hidden) {
@@ -1104,7 +1111,7 @@ function drawLabels(
             two.draw.length === 2
               ? two.draw[1].last - two.draw[1].first + 1
               : 0;
-          consider(two, 2, infoParts, 2);
+          consider(two, 2, infoParts);
         }
       }
     }
@@ -1134,7 +1141,7 @@ function drawLabels(
               twoFrag.draw.length === 3
                 ? twoFrag.draw[2].last - twoFrag.draw[2].first + 1
                 : 0;
-            consider(twoFrag, twoFrag.draw.length >= 2 ? 2 : 1, infoParts, 0);
+            consider(twoFrag, twoFrag.draw.length >= 2 ? 2 : 1, infoParts);
           }
 
           // 3 фрагмента: хвост делится на оставшихся разрывах
@@ -1160,7 +1167,6 @@ function drawLabels(
                 threeFrag,
                 threeFrag.draw.length >= 3 ? 2 : 1,
                 infoParts,
-                0,
               );
             }
           }

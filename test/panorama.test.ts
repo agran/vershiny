@@ -6,15 +6,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setLocale } from "../src/core/i18n";
 import {
-    buildRidgeSegments,
-    decimateSegments,
-    drawOverlay,
-    labelFullyOnScreen,
-    MAX_RIDGE_SLOPE,
-    rollEdgeMarginX,
-    silhouetteProfile,
-    visibleLabelRange,
-    type PanoramaState,
+  buildRidgeSegments,
+  decimateSegments,
+  drawOverlay,
+  labelFullyOnScreen,
+  MAX_RIDGE_SLOPE,
+  rollEdgeMarginX,
+  silhouetteProfile,
+  visibleLabelRange,
+  type PanoramaState,
 } from "../src/ui/panorama";
 
 const STEP_RAD = (0.1 * Math.PI) / 180; // 3600 лучей
@@ -351,7 +351,8 @@ describe("многострочная подпись", () => {
     "Тау": 300,
     "Большой Пик": 1900,
     "Большой": 100,
-    "Пик": 400,
+    "Пик": 480,
+    "Широкий": 200,
   };
 
   /** Контекст, который ведёт счёт transform-ов и собирает fillText */
@@ -431,17 +432,34 @@ describe("многострочная подпись", () => {
     rollRad: 0,
   } as never;
 
-  it("при свободном месте под подписью высота и расстояние идут второй строкой", () => {
+  it("когда всё помещается в одну строку, подпись остаётся одной строкой", () => {
     const horizon = new Float32Array(2000).fill(0.05);
     const { ctx, texts } = makeCtx();
     drawOverlay(ctx, state(horizon), view, 1, { ridges: false });
 
-    const name = texts.find((t) => t.text === "Эльбрус");
-    const line2 = texts.find((t) => t.text === "5642 м · 5.0 км");
-    expect(name).toBeDefined();
-    expect(line2).toBeDefined();
-    // Вторая строка — под первой (ниже по экрану)
-    expect(line2!.y).toBeGreaterThan(name!.y);
+    // Минимум строк: одна строка, пока края кадра не мешают
+    expect(
+      texts.find((t) => t.text === "Эльбрус · 5642 м · 5.0 км"),
+    ).toBeDefined();
+    expect(texts.find((t) => t.text === "Эльбрус")).toBeUndefined();
+    expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeUndefined();
+  });
+
+  it("две строки выигрывают, когда хвост не влезает в одну строку", () => {
+    // Якорь у правого края: в одной строке « · 5.0 км» обрезается, а на
+    // второй строке info-части помещаются целиком
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon, "Широкий");
+    (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = 0.4265;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    expect(texts.find((t) => t.text === "Широкий")).toBeDefined();
+    expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeDefined();
+    expect(
+      texts.find((t) => t.text === "Широкий · 5642 м · 5.0 км"),
+    ).toBeUndefined();
+    expect(texts.find((t) => t.text === "Широкий · 5642 м")).toBeUndefined();
   });
 
   it("когда вторая строка не помещается в кадр, остаётся одна строка", () => {
@@ -508,8 +526,9 @@ describe("многострочная подпись", () => {
   });
 
   it("сдвиг, выталкивающий строку за край кадра, откатывается к левому выравниванию", () => {
-    // Горизонт −0.1 рад: якорь ниже, чтобы хвост (400 px) помещался по высоте
-    const horizon = new Float32Array(2000).fill(-0.1);
+    // Горизонт −0.15 рад: якорь ниже, чтобы хвост (480 px) и подъём пачки
+    // на (nLines−1)·LINE_H помещались по высоте
+    const horizon = new Float32Array(2000).fill(-0.15);
     const st = state(horizon, "Большой Пик");
     (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = -0.34;
     const { ctx, texts } = makeCtx();
@@ -517,11 +536,11 @@ describe("многострочная подпись", () => {
 
     const f0 = texts.find((t) => t.text === "Большой")!;
     const tail = texts.find((t) => t.text === "Пик")!;
-    // Якорь без сдвига: 60 (азимут) + 3.5 (LEAD вдоль u)
-    expect(f0.x).toBeCloseTo(63.5, 0);
-    // Отцентрованный хвост ушёл бы за левый край (off = −150) — откат к 0:
-    // база строки 1 = якорь + LINE_H·vx = 63.5 + 13
-    expect(tail.x).toBeCloseTo(76.5, 0);
+    // Пачка поднята на 2·LINE_H вдоль u: якорь 60 + 3.5 (LEAD) + 15 (подъём)
+    expect(f0.x).toBeCloseTo(78.5, 0);
+    // Отцентрованный хвост ушёл бы за левый край (off = −190) — откат к 0:
+    // база строки 1 = строка 0 + LINE_H·vx = 78.5 + 13
+    expect(tail.x).toBeCloseTo(91.5, 0);
   });
 });
 
