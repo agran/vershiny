@@ -167,6 +167,14 @@ export interface OverlayOptions {
    */
   viewWidth?: number;
   viewHeight?: number;
+  /**
+   * Заморозить раскладку подписей: они не перекладываются заново, а
+   * переезжают вместе со своими вершинами (многострочность, обрезка и
+   * дорожки сохраняются). Ставится на время перетаскивания панорамы —
+   * иначе кеш сцены перекладывал подписи под свой расширенный FOV, и они
+   * схлопывались в одну строку до конца жеста
+   */
+  stableLabels?: boolean;
 }
 
 /**
@@ -354,6 +362,7 @@ export function drawOverlay(
       uiScale,
       width,
       height,
+      overlay.stableLabels === true,
     );
   }
   if (perfEnabled) {
@@ -528,6 +537,20 @@ interface PlacedLabel {
   /** Сдвиг пачки вверх от естественного якоря, в дорожках (≤ 0) */
   shift: number;
 }
+
+/**
+ * Замороженная раскладка подписей. Хранится между кадрами: во время
+ * перетаскивания панорамы (overlay.stableLabels) подписи не перекладываются
+ * — сохраняют многострочность, обрезку и дорожки — а только переезжают
+ * вместе со своими вершинами. Пересчёт — на первом кадре после жеста.
+ */
+let labelLayoutCache: {
+  horizon: Float32Array;
+  layers: (Float32Array | undefined)[] | undefined;
+  peaks: VisiblePeak[];
+  uiScale: number;
+  placed: PlacedLabel[];
+} | null = null;
 
 /**
  * Видимая линия силуэта по лучам: максимум по всем гребням и слоям.
@@ -827,6 +850,7 @@ function drawLabels(
   uiScale: number,
   width: number,
   height: number,
+  stable: boolean,
 ): void {
   const labelFont = `${13 * uiScale}px system-ui, sans-serif`;
   ctx.font = labelFont;
@@ -867,6 +891,50 @@ function drawLabels(
   // Список отсортирован по приоритету (высота + бонус за близость), поэтому
   // при нехватке места остаётся более высокая (и более близкая) вершина.
   const placed: PlacedLabel[] = [];
+
+  // Заморозка раскладки на время перетаскивания панорамы: подписи не
+  // перекладываются (сохраняют многострочность, обрезку и дорожки), а только
+  // переезжают вместе со своими вершинами. Раскладка пересчитывается на
+  // первом кадре после жеста — иначе кеш сцены перекладывал подписи под свой
+  // расширенный FOV, и они схлопывались в одну строку до конца перетаскивания
+  const frozenLayout =
+    stable &&
+    labelLayoutCache &&
+    labelLayoutCache.horizon === state.horizon &&
+    labelLayoutCache.layers === state.layers &&
+    labelLayoutCache.peaks === peaks &&
+    labelLayoutCache.uiScale === uiScale
+      ? labelLayoutCache
+      : null;
+
+  if (frozenLayout) {
+    for (const p of frozenLayout.placed) {
+      const marker = findPeakMarkerPosition(
+        p.peak,
+        state,
+        silhouette,
+        azToX,
+        elevToY,
+      );
+      if (!marker) continue;
+      // Подпись целиком сдвигается на смещение своей вершины: многострочная
+      // форма, выноска и дорожки остаются прежними
+      const dx = marker.x - p.mx;
+      const dy = marker.y - p.my;
+      placed.push({
+        peak: p.peak,
+        mx: marker.x,
+        my: marker.y,
+        shift: p.shift,
+        lines: p.lines.map((l) => ({ ...l, ax: l.ax + dx, ay: l.ay + dy })),
+        boxes: p.boxes.map((b) => ({
+          v: b.v + dx * vx + dy * vy,
+          u0: b.u0 + dx * ux + dy * uy,
+          u1: b.u1 + dx * ux + dy * uy,
+        })),
+      });
+    }
+  }
 
   /**
    * Отступ от точки скрытой вершины до первой буквы: поднимаемся вдоль строки,
@@ -1697,28 +1765,40 @@ function drawLabels(
 
   // Проход 1: видимые вершины разбирают места первыми — подпись того, что
   // реально видно, всегда важнее подписи того, что за склоном
-  for (const peak of peaks) {
-    if (peak.visibility === "hidden") continue;
-    if (!azimuthNearView(peak)) {
-      perfCount("labelSkipped");
-      continue;
-    }
-    tryPlace(peak);
-  }
-
-  // Проход 2: скрытые добираются по остаточному бюджету. Чем пустее кадр, тем
-  // их больше: на голом склоне подпись «за этим гребнем Эльбрус» — единственная
-  // полезная информация, а в плотной панораме она только мешала бы.
-  let budget = Math.max(0, HIDDEN_LABEL_BUDGET - placed.length);
-  for (const peak of peaks) {
-    if (budget <= 0) break;
-    if (peak.visibility === "hidden") {
+  if (!frozenLayout) {
+    for (const peak of peaks) {
+      if (peak.visibility === "hidden") continue;
       if (!azimuthNearView(peak)) {
         perfCount("labelSkipped");
         continue;
       }
-      if (tryPlace(peak)) budget--;
+      tryPlace(peak);
     }
+
+    // Проход 2: скрытые добираются по остаточному бюджету. Чем пустее кадр, тем
+    // их больше: на голом склоне подпись «за этим гребнем Эльбрус» — единственная
+    // полезная информация, а в плотной панораме она только мешала бы.
+    let budget = Math.max(0, HIDDEN_LABEL_BUDGET - placed.length);
+    for (const peak of peaks) {
+      if (budget <= 0) break;
+      if (peak.visibility === "hidden") {
+        if (!azimuthNearView(peak)) {
+          perfCount("labelSkipped");
+          continue;
+        }
+        if (tryPlace(peak)) budget--;
+      }
+    }
+
+    // Запомнить раскладку: во время следующего жеста она замёрзнет, а по его
+    // окончании пересчитается этим же путём
+    labelLayoutCache = {
+      horizon: state.horizon,
+      layers: state.layers,
+      peaks,
+      uiScale,
+      placed: placed.slice(),
+    };
   }
   perfCount("labelPlaced", placed.length);
 

@@ -333,7 +333,9 @@ function draw(): void {
   if (recentDraws.length >= 3 && drawFromSceneCache()) {
     scheduleCrispFrame();
   } else {
-    renderPanorama(ctx, panorama, view);
+    renderPanorama(ctx, panorama, view, undefined, {
+      stableLabels: dragging,
+    });
   }
   drawnAzRad = view.centerAzRad;
   drawnTiltRad = view.tiltRad;
@@ -441,6 +443,12 @@ function drawFromSceneCache(): boolean {
         rollRad: view.rollRad,
       },
       uiScale,
+      {
+        // Перетаскивание: кеш перерисовывается с расширенным FOV — подписи
+        // не должны перекладываться под него (иначе многострочные формы
+        // схлопываются в одну строку до конца жеста)
+        stableLabels: dragging,
+      },
     );
     perfCount("sceneRender");
     sceneAz = view.centerAzRad;

@@ -611,6 +611,51 @@ describe("многострочная подпись", () => {
     expect(Math.abs(center(info, wInfo) - cName)).toBeLessThanOrEqual(1);
   });
 
+  it("во время перетаскивания подписи не перекладываются — форма не меняется", () => {
+    // «Широкий» у правого края — двухстрочная подпись (хвост не влезает).
+    // При перетаскивании взгляд сдвигается, вершина уходит к центру, где
+    // полная строка помещается: раскладка должна ЗАМЕРЗНУТЬ (stableLabels),
+    // а не схлопнуться в одну строку. В конце жеста — честный пересчёт
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon, "Широкий");
+    (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = 0.4265;
+
+    // До жеста: две строки
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+    const name0 = texts.find((t) => t.text === "Широкий");
+    const info0 = texts.find((t) => t.text === "5642 м · 5.0 км");
+    expect(name0).toBeDefined();
+    expect(info0).toBeDefined();
+
+    // Жест: взгляд сдвинут на 0.2 рад, раскладка замёрзла — форма та же,
+    // позиции переехали вместе с вершиной (−200 px при fovRad 1 и W=1000)
+    const moved = {
+      centerAzRad: 0.3,
+      tiltRad: 0,
+      fovRad: 1,
+      fovVRad: 1,
+      rollRad: 0,
+    } as never;
+    const { ctx: ctx2, texts: texts2 } = makeCtx();
+    drawOverlay(ctx2, st, moved, 1, { ridges: false, stableLabels: true });
+    const name2 = texts2.find((t) => t.text === "Широкий");
+    const info2 = texts2.find((t) => t.text === "5642 м · 5.0 км");
+    expect(name2).toBeDefined();
+    expect(info2).toBeDefined();
+    expect(name2!.x).toBeCloseTo(name0!.x - 200, 1);
+    expect(info2!.x).toBeCloseTo(info0!.x - 200, 1);
+    expect(name2!.y).toBeCloseTo(name0!.y, 1);
+
+    // Конец жеста: пересчёт — в центре кадра всё помещается в одну строку
+    const { ctx: ctx3, texts: texts3 } = makeCtx();
+    drawOverlay(ctx3, st, moved, 1, { ridges: false });
+    expect(
+      texts3.find((t) => t.text === "Широкий · 5642 м · 5.0 км"),
+    ).toBeDefined();
+    expect(texts3.find((t) => t.text === "Широкий")).toBeUndefined();
+  });
+
   it("сдвиг, выталкивающий строку за край кадра, откатывается к левому выравниванию", () => {
     // Горизонт −0.15 рад: якорь ниже, чтобы хвост (480 px) и подъём пачки
     // на (nLines−1)·LINE_H помещались по высоте
