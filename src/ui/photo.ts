@@ -4,11 +4,6 @@
  */
 
 import { applyCoverCrop, type FrameFov } from "../core/camera-fov";
-import {
-  currentFrameRotationDeg,
-  drawVideoAligned,
-  rotatedFrameSize,
-} from "../core/frame-orientation";
 import type { LatLon } from "../core/geo";
 import { getLocale } from "../core/i18n";
 import { getPhotoCaption } from "../core/photo-caption";
@@ -108,19 +103,22 @@ export async function capturePhoto(
   if (video && video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    // Тот же конвейер, что на экране (drawArFrame): кадр уже ориентирован
-    // под окно (R = 0), FOV и cover-кроп — от него же
-    const rot = currentFrameRotationDeg();
-    const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
+    // Кадр — как на экране, БЕЗ доворота: его ориентацию определяет
+    // платформа, и любой наш трансформ ломал совпадение с контурами
+    const scale = Math.max(canvas.width / vw, canvas.height / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawVideoAligned(ctx, video, canvas.width, canvas.height, rot);
-    // fovForFrame от повёрнутого кадра: оси меняются местами при ±90°
-    const baseFov =
-      options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
-    const full: FrameFov =
-      rot === 90 || rot === 270 ? { h: baseFov.v, v: baseFov.h } : baseFov;
-    const visible = applyCoverCrop(full, pw, ph, canvas.width, canvas.height);
+    ctx.drawImage(
+      video,
+      (canvas.width - dw) / 2,
+      (canvas.height - dh) / 2,
+      dw,
+      dh,
+    );
+    const full = options.cameraFov?.() ?? { h: view.fovRad, v: view.fovVRad };
+    const visible = applyCoverCrop(full, vw, vh, canvas.width, canvas.height);
     const overlayView: ViewState = {
       ...view,
       fovRad: visible.h,

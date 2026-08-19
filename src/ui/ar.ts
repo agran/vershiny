@@ -14,17 +14,12 @@
 
 import { DEFAULT_CAMERA_FOV_DEG, getCalibration } from "../core/calibration";
 import {
-    applyCoverCrop,
-    applyZoom,
-    fovForFrame,
-    horizonFracInFrame,
-    type FrameFov,
+  applyCoverCrop,
+  applyZoom,
+  fovForFrame,
+  horizonFracInFrame,
+  type FrameFov,
 } from "../core/camera-fov";
-import {
-    currentFrameRotationDeg,
-    drawVideoAligned,
-    rotatedFrameSize,
-} from "../core/frame-orientation";
 import { softAngleDeg } from "../core/screen-orientation";
 import type { PanoramaState, ViewState } from "./panorama";
 import { HORIZON_FRAC, drawOverlay, rotateAroundCenter } from "./panorama";
@@ -315,38 +310,25 @@ export async function startAr(
       videoEl.srcObject = null;
     },
     fullFrameFov,
-    frameHorizonFrac: () => {
-      // При довёрнутом кадре оси меняются местами: «строка» горизонта идёт
-      // вдоль ШИРИНЫ исходного кадра. Доворот — тот же, что на экране
-      const rot = currentFrameRotationDeg();
-      const { w: pw, h: ph } = rotatedFrameSize(
+    frameHorizonFrac: () =>
+      horizonFracInFrame(
         videoEl.videoWidth,
         videoEl.videoHeight,
-        rot,
-      );
-      return horizonFracInFrame(
-        pw,
-        ph,
         canvas.width,
         canvas.height,
         HORIZON_FRAC,
-      );
-    },
+      ),
     grabFrame: () => {
       if (!probeCtx || videoEl.readyState < 2) return null;
-      const rot = currentFrameRotationDeg();
-      const { w: pw, h: ph } = rotatedFrameSize(
-        videoEl.videoWidth,
-        videoEl.videoHeight,
-        rot,
-      );
-      // Кадр в пробу — в той же системе, что на экране (тот же доворот),
-      // иначе автокалибровка искала бы линию неба вдоль лежачего кадра
+      const vw = videoEl.videoWidth;
+      const vh = videoEl.videoHeight;
+      // Кадр в пробу — как есть, без всякого доворота: в той же системе,
+      // что на экране
       const width = 320;
-      const height = Math.max(1, Math.round((width * ph) / pw));
+      const height = Math.max(1, Math.round((width * vh) / vw));
       probe.width = width;
       probe.height = height;
-      drawVideoAligned(probeCtx, videoEl, width, height, rot);
+      probeCtx.drawImage(videoEl, 0, 0, width, height);
       return {
         rgba: probeCtx.getImageData(0, 0, width, height).data,
         width,
@@ -392,7 +374,7 @@ function setupArDebug(
       el.textContent =
         `β=${f(beta)} γ=${f(gamma)}\n` +
         `win: ${so?.type ?? "?"} ${so?.angle ?? "?"}°\n` +
-        `css: ${softAngleDeg()}°  R: ${currentFrameRotationDeg()}°\n` +
+        `css: ${softAngleDeg()}°\n` +
         `frame: ${videoEl.videoWidth}×${videoEl.videoHeight}\n` +
         `canvas: ${canvas.width}×${canvas.height}`;
     },
@@ -417,19 +399,19 @@ function drawArFrame(
   if (video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    // Кадр ориентирован под окно (Samsung компенсирует сенсор), а body при
-    // CSS-повороте повёрнут вместе с видео — доворачивать кадр НЕ нужно,
-    // R = 0 (подтверждено отладочным оверлеем на устройстве)
-    const rot = currentFrameRotationDeg();
-    const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
-    drawVideoAligned(ctx, video, width, height, rot);
+    // Кадр рисуется КАК ЕСТЬ, без всякого доворота: ориентацию кадра
+    // определяет платформа (Samsung компенсирует сенсор под окно), и любой
+    // наш трансформ ломал совпадение с контурами. Cover-кроп по центру.
+    const scale = Math.max(width / vw, height / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
+    ctx.drawImage(video, (width - dw) / 2, (height - dh) / 2, dw, dh);
 
-    // Оверлей подгоняем под ВИДИМУЮ часть ПОВЁРНУТОГО кадра: полный FOV
-    // камеры минус обрезанные cover'ом края и зум. Без этого контуры
-    // сходились по центру кадра и расходились к краям, когда пропорции
-    // экрана и видео различались
-    const full = applyZoom(fovForFrame(baseFovRad(), pw, ph), zoomFactor);
-    const visible = applyCoverCrop(full, pw, ph, width, height);
+    // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
+    // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
+    // кадра и расходились к краям, когда пропорции экрана и видео различались
+    const full = applyZoom(fovForFrame(baseFovRad(), vw, vh), zoomFactor);
+    const visible = applyCoverCrop(full, vw, vh, width, height);
     overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
   } else {
     ctx.fillStyle = "#000";
