@@ -2745,7 +2745,7 @@ function setupActionButtons(): void {
   const arBtn = makeButton(
     ICON_AR,
     "arMode",
-    `right:${edgeRight()};bottom:${edgeBottom()}`,
+    `right:${edgeRight()};bottom:${edgeBottom(60)}`,
   );
   let arVideo: HTMLVideoElement | null = null;
   /** Камера запрашивается прямо сейчас: второй вход открыл бы второй поток */
@@ -2862,11 +2862,13 @@ function setupActionButtons(): void {
   updateCalibrateBtnRef = updateCalibrateBtn;
   updateCalibrateBtn(); // старт: видна, но неактивна (подпись есть, нажать нельзя)
 
-  // Фото с подписями
+  // Фото с подписями — самая полезная кнопка: ей место в самом углу экрана,
+  // чтобы попадать по ней не глядя (камера на углу — под ней, калибровка —
+  // ещё выше: стек у правого края, порядок по убыванию частоты использования)
   const photoBtn = makeButton(
     ICON_PHOTO,
     "photo",
-    `right:${edgeRight()};bottom:${edgeBottom(60)}`,
+    `right:${edgeRight()};bottom:${edgeBottom()}`,
   );
   // Имена снимков, уже скачанные в этой сессии: повтор за секунду получает
   // суффикс -2, -3… вместо вопроса браузера про перезапись файла
