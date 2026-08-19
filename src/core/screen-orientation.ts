@@ -7,9 +7,27 @@
  * сюда. Поэтому ориентация у нас ручная: кнопка рядом с настройками, выбор
  * запоминается; системный автоповорот приложением не используется.
  *
- * На десктопе и где API недоступен (старый Android, iOS без полноэкранного
- * режима) — считаем, что экран свободный: показывать кнопку, которая ничего
- * не делает, нельзя.
+ * Стратегия — трёхслойная, каждый слой покрывает слабости предыдущего:
+ *
+ * 1. **Манифест** (`"orientation": "landscape"`) — в установленном Android
+ *    PWA даёт ландшафт сразу при запуске, без жеста и fullscreen. Но: это
+ *    системный запрет — ось поменять можно только программным lock поверх,
+ *    «авто» достижимо лишь возвратом к манифестному запрету.
+ * 2. **Screen Orientation lock** — поверх манифеста переключает оси
+ *    (ландшафт ↔ портрет) в установленном PWA без fullscreen и жеста.
+ *    Слабости: iOS не поддерживает API вовсе, Firefox Android требует
+ *    fullscreen, на Samsung запрет слетает при сворачивании (лечится
+ *    пере-применением при возврате — см. main.ts).
+ * 3. **CSS-поворот body на 90°** — универсальный фолбэк: iOS, Firefox,
+ *    вкладка браузера, отказ lock. Поворачивается только контент, система
+ *    остаётся в портрете; зато работает везде и без жеста.
+ *
+ * ВАЖНО: при повороте body ровно на ±90° системная ориентация типа
+ * «landscape-primary» физически становится «portrait-primary» (смена осей),
+ * и примитивная проверка «type startsWith pref» после CSS-поворота ложно
+ * решала бы, что поворот не сработал. Поэтому результат проверяется по
+ * реальным пропорциям окна (innerWidth vs innerHeight) с поправкой на наш
+ * трансформ, а не по строке type.
  */
 
 export type ScreenOrientationPref = "auto" | "landscape" | "portrait";
@@ -22,6 +40,14 @@ export function storedOrientation(): ScreenOrientationPref {
     return raw === "landscape" || raw === "portrait" ? raw : "auto";
   } catch {
     return "auto";
+  }
+}
+
+export function rememberOrientation(pref: ScreenOrientationPref): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, pref);
+  } catch {
+    // Без хранилища выбор живёт до перезагрузки — лучше, чем ничего
   }
 }
 
@@ -38,19 +64,22 @@ function orientationApi(): LockableOrientation | null {
   return (screen.orientation as LockableOrientation) ?? null;
 }
 
-/** Можем ли вообще запирать экран (Fullscreen API — обязательное условие lock) */
+/**
+ * Можно ли пробовать системный lock: сам метод есть (не iOS). Fullscreen
+ * здесь НЕ требуем: в установленном Android PWA lock работает без него, а
+ * требование requestFullscreen на iOS отрезало бы даже проверку API.
+ */
 export function canLockOrientation(): boolean {
   return (
     typeof document !== "undefined" &&
-    !!document.documentElement &&
-    typeof document.documentElement.requestFullscreen === "function" &&
     typeof orientationApi()?.lock === "function"
   );
 }
 
 /**
- * Текущий эффективный вид: что реально видно на экране (заперт он или нет).
- * По нему кнопка показывает, ЧТО включится по нажатию.
+ * Физическая форма окна (screen.orientation.type, в старых браузерах — по
+ * форме экрана). Программный поворот её НЕ меняет: CSS-трансформ до layout-
+ * вьюпорта не доходит, поэтому по ней решаем, нужен ли поворот.
  */
 export function effectiveOrientation(): "landscape" | "portrait" {
   const type = screen.orientation?.type ?? "";
@@ -60,44 +89,291 @@ export function effectiveOrientation(): "landscape" | "portrait" {
   return window.innerWidth >= window.innerHeight ? "landscape" : "portrait";
 }
 
+// ---------------------------------------------------------------------------
+// Слой 3: программный поворот — CSS-трансформ body
+// ---------------------------------------------------------------------------
+
 /**
- * Применить предпочтение. `auto` снимает запрет; фиксированная ориентация
- * запирает экран (во вкладке браузера нужен полноэкранный режим, в
- * установленном PWA lock работает и без него). Возвращает, получилось ли
- * применить: вызывающий обязан это знать — иконка не имеет права рисовать
- * замок на свободном экране.
+ * Поворачиваем document.body целиком, а не #app: кнопки, плашки, карта и
+ * настройки лежат в body и позиционируются position:fixed. Трансформ предка
+ * делает его контейнером позиционирования для fixed-потомков (CSS Transforms),
+ * поэтому поворот body захватывает ВЕСЬ интерфейс разом — отдельно крутить
+ * кнопки и оверлеи не нужно.
+ *
+ * Побочный эффект нам на руку: getBoundingClientRect, canvas.clientWidth/Height
+ * у всего внутри уже «повёрнуты» браузером, поэтому раскладка плашек и FOV
+ * продолжают считаться сами. Две вещи браузер НЕ поворачивает:
+ *   - window.innerWidth/innerHeight — про физический экран: их читатели
+ *     (layoutControls, layoutCaptions) берут virtualViewport();
+ *   - clientX/clientY событий указателя — физические координаты: дельты
+ *     жестов конвертируются через toLocalDelta(), точки — toLocalPoint().
+ *   - vh/vw — от физического окна: видимые доли задаются в cqh/cqw
+ *     (body делается query-контейнером container-type:size).
+ */
+function rotatableRoot(): HTMLElement | null {
+  return typeof document === "undefined" ? null : document.body;
+}
+
+/** Текущий программный поворот: 0 — системная ориентация как есть */
+let softAngle: 0 | 90 = 0;
+
+/** Действует ли сейчас программный поворот */
+export function softRotated(): boolean {
+  return softAngle !== 0;
+}
+
+/**
+ * Типизированные размеры UI как CSS-переменные: --app-w/--app-h. На них же
+ * опираются логические единицы cqh/cqw (см. container-type ниже): панель
+ * настроек ограничивает высоту долей ВИДИМОГО контейнера, а не физического
+ * окна — иначе при повороте 80vh считались от портретного окна и панель с
+ * кнопкой закрытия уезжала за кадр.
+ *
+ * registerProperty с синтаксисом <length> делает переменные пригодными для
+ * calc(), а без container-type:size единицы cqw/cqh были бы «маленькими
+ * вьюпортными» и считались бы от физического окна — то есть неверно.
+ */
+let propsRegistered = false;
+function registerAppSizeProps(): void {
+  if (propsRegistered || typeof CSS === "undefined") return;
+  const reg = (
+    CSS as unknown as {
+      registerProperty?: (def: {
+        name: string;
+        syntax: string;
+        inherits: boolean;
+        initialValue: string;
+      }) => void;
+    }
+  ).registerProperty;
+  if (typeof reg !== "function") return;
+  try {
+    reg({
+      name: "--app-w",
+      syntax: "<length>",
+      inherits: true,
+      initialValue: "0px",
+    });
+    reg({
+      name: "--app-h",
+      syntax: "<length>",
+      inherits: true,
+      initialValue: "0px",
+    });
+    propsRegistered = true;
+  } catch {
+    // Старые браузеры: поворот работает и без переменных, просто настройки
+    // ограничат высоту физическим vh (запасной вариант, ничего не ломается)
+  }
+}
+
+/** Записать актуальные локальные размеры body в --app-w/--app-h */
+function syncAppSizeVars(w: number, h: number): void {
+  document.documentElement.style.setProperty("--app-w", `${w}px`);
+  document.documentElement.style.setProperty("--app-h", `${h}px`);
+}
+
+/**
+ * Физические safe-area-инсеты окна. env() из JS не читается, поэтому они
+ * продублированы CSS-переменными :root в index.html — отсюда и берём.
+ * Нужны, чтобы при повороте вырез камеры и полоса жестов остались за
+ * пределами UI: body ужимается и сдвигается в безопасную зону.
+ */
+function safeInsets(): { t: number; b: number; l: number; r: number } {
+  const cs = getComputedStyle(document.documentElement);
+  const px = (name: string): number =>
+    parseFloat(cs.getPropertyValue(name)) || 0;
+  return {
+    t: px("--inset-top"),
+    b: px("--inset-bottom"),
+    l: px("--inset-left"),
+    r: px("--inset-right"),
+  };
+}
+
+/**
+ * Виртуальный viewport с учётом программного поворота. Это те размеры,
+ * под которые надо раскладывать UI: при 90° ширина и высота меняются местами.
+ * Используют только читатели СЫРОГО window.innerWidth/innerHeight —
+ * layoutCaptions (рамки экрана) и layoutControls (низкий экран). Вся
+ * остальная геометрия (canvas, getBoundingClientRect) уже повёрнута
+ * браузером и в поправке не нуждается.
+ */
+export function virtualViewport(): { w: number; h: number } {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  if (softAngle === 0) return { w, h };
+  // Точные локальные размеры — у body (он уже ужат инсетами); в jsdom
+  // раскладки нет и clientWidth = 0 — откат на простую перестановку
+  const b = document.body;
+  return { w: b.clientWidth || h, h: b.clientHeight || w };
+}
+
+/**
+ * Повернуть интерфейс на 90° или вернуть в 0. При включении стили пишутся
+ * всегда (размеры окна могли измениться под нами — клавиатура, строка
+ * адреса), при выключении — сброс. Возвращает, ИЗМЕНИЛОСЬ ли состояние
+ * поворота. Пересчёт холста делает сам ResizeObserver на canvas: изменение
+ * CSS-размеров body меняет clientWidth/clientHeight холста → resize().
+ */
+export function applySoftRotation(rotated: boolean): boolean {
+  const root = rotatableRoot();
+  if (!root) return false;
+  const next: 0 | 90 = rotated ? 90 : 0;
+  const changed = next !== softAngle;
+  softAngle = next;
+  if (softAngle === 0) {
+    // Полный сброс: возвращаем body к исходной раскладке из index.html
+    root.style.transform = "";
+    root.style.width = "";
+    root.style.height = "";
+    root.style.position = "";
+    root.style.left = "";
+    root.style.top = "";
+    root.style.transformOrigin = "";
+    root.style.containerType = "";
+    // Размеры без поворота — само окно
+    syncAppSizeVars(window.innerWidth, window.innerHeight);
+    return changed;
+  }
+  // Геометрия: body делаем размером «высота окна × ширина окна» минус
+  // safe-area-инсеты и центрируем в безопасной зоне — после поворота на 90°
+  // он ляжет в неё ровно. Локальные оси после rotate(90deg): local-left =
+  // physical-top (вырез камеры), local-right = physical-bottom (полоса
+  // жестов) — оба вырезаны из body, до них кнопки уже не дотянутся.
+  const { t, b, l, r } = safeInsets();
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const bw = h - t - b; // локальная ширина = физическая высота без инсетов
+  const bh = w - l - r;
+  const cx = l + (w - l - r) / 2; // центр безопасной зоны, физические коорд.
+  const cy = t + (h - t - b) / 2;
+  root.style.position = "fixed";
+  root.style.width = `${bw}px`;
+  root.style.height = `${bh}px`;
+  root.style.left = `${cx - bw / 2}px`;
+  root.style.top = `${cy - bh / 2}px`;
+  root.style.transformOrigin = "50% 50%";
+  root.style.transform = "rotate(90deg)";
+  // body — query-контейнер по размеру: cqw/cqh внутри считаются от него
+  // (то есть от повёрнутого вьюпорта), а не от физического окна
+  registerAppSizeProps();
+  root.style.containerType = "size";
+  syncAppSizeVars(bw, bh);
+  return changed;
+}
+
+/**
+ * Дельта указателя (clientX/Y) из физических координат экрана в локальные
+ * оси UI. При повороте на 90°: local +x = physical +y, local +y = −x.
+ * Без поворота — тождественность. Нужна жестам: drag панорамы,
+ * панорамирование карты.
+ */
+export function toLocalDelta(
+  dx: number,
+  dy: number,
+): { x: number; y: number } {
+  return softAngle === 0 ? { x: dx, y: dy } : { x: dy, y: -dx };
+}
+
+/**
+ * Точка указателя из физических координат в локальные (система body).
+ * Обратный поворот вокруг центра body: lx = bw/2 + (py − cy),
+ * ly = bh/2 + (cx − px). Нужна тем, кто меряет по canvas.clientWidth —
+ * двойной клик «переместиться в точку», ручка сектора взгляда на карте.
+ */
+export function toLocalPoint(px: number, py: number): { x: number; y: number } {
+  if (softAngle === 0) return { x: px, y: py };
+  const b = document.body;
+  const br = b.getBoundingClientRect(); // физический бокс повёрнутого body
+  const cx = br.left + br.width / 2;
+  const cy = br.top + br.height / 2;
+  return {
+    x: b.offsetWidth / 2 + (py - cy), // offset* игнорируют трансформ
+    y: b.offsetHeight / 2 + (cx - px),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Оркестрация слоёв: манифест → системный lock → CSS-поворот
+// ---------------------------------------------------------------------------
+
+/** Эффективная ВИДИМАЯ форма: физическая форма с поправкой на наш трансформ */
+function visibleOrientation(): "landscape" | "portrait" {
+  const phys = effectiveOrientation();
+  if (softAngle === 0) return phys;
+  return phys === "landscape" ? "portrait" : "landscape";
+}
+
+/**
+ * Применить предпочтение всеми доступными слоями. Возвращает, получилось ли
+ * достичь желаемой формы — вызывающий обязан это знать: иконка не имеет
+ * права рисовать замок на экране, оставшемся в прежней форме.
+ *
+ * «auto»: снимаем оба запрета. В установленном PWA манифестный ландшафт
+ * остаётся (его не снять) — осознанный предел платформы, кнопка «авто» там
+ * по-прежнему показывает манифестный ландшафт.
  */
 export async function applyOrientation(
   pref: ScreenOrientationPref,
 ): Promise<boolean> {
-  if (!canLockOrientation()) return false;
   const api = orientationApi();
-  if (!api) return false;
+  const lockable = canLockOrientation();
+
+  // «auto» — снять всё
   if (pref === "auto") {
-    api.unlock?.();
-    return true;
-  }
-  try {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen();
+    applySoftRotation(false);
+    if (lockable) {
+      try {
+        api?.unlock?.();
+        return true;
+      } catch {
+        /* unlock дёшев, отказ некритичен */
+      }
     }
-  } catch {
-    // Нет жеста (запуск приложения) или отказ политики: в установленном PWA
-    // lock работает и без fullscreen — попытку не отменяем
-  }
-  try {
-    await api.lock?.(pref);
     return true;
-  } catch {
-    // Отказали (нет fullscreen, политика браузера) — экран остался свободным
-    return false;
   }
+
+  // Слой 2: системный lock. В установленном Android PWA работает без
+  // fullscreen и жеста; манифестный запрет он перекрывает корректно.
+  if (lockable) {
+    // Поворот, оставшийся от прошлого фолбэка, мешает системному lock:
+    // снимаем заранее, чтобы экран не дёргался дважды
+    applySoftRotation(false);
+    try {
+      // Во вкладке браузера lock требует fullscreen — просим; в установленном
+      // PWA fullscreen не нужен, а requestFullscreen без жеста отклонится:
+      // это не повод отменять попытку lock
+      if (!document.fullscreenElement) {
+        try {
+          await document.documentElement.requestFullscreen();
+        } catch {
+          /* жеста нет (запуск) или отказ — lock всё равно пробуем */
+        }
+      }
+      await api?.lock?.(pref);
+      return true;
+    } catch {
+      // Отказали (iOS, Firefox без fullscreen, политика) — идём в CSS-фолбэк
+    }
+  }
+
+  // Слой 3: CSS-поворот. Включаем, только если желаемая форма не совпадает
+  // с физической; «портрет» на портретном окне — это отсутствие поворота.
+  const phys = effectiveOrientation();
+  applySoftRotation(phys !== pref);
+  return true;
 }
 
-export function rememberOrientation(pref: ScreenOrientationPref): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, pref);
-  } catch {
-    // Без хранилища выбор живёт до перезагрузки — лучше, чем ничего
-  }
+/**
+ * Проверка «режим реально действует» — для пере-применения после возврата
+ * в приложение (на Samsung системный lock слетает при сворачивании).
+ * Сравниваем по пропорциям окна, а не по строке type: при повороте ровно
+ * на ±90° primary/secondary меняются местами, и проверка по type ложно
+ * решала бы, что CSS-поворот «не сработал». Возвращает true, если видимая
+ * форма совпадает с желаемой.
+ */
+export function orientationMatches(pref: ScreenOrientationPref): boolean {
+  if (pref === "auto") return true; // авто не может «слететь»
+  return visibleOrientation() === pref;
 }

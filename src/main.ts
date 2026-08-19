@@ -346,7 +346,7 @@ canvas.addEventListener("pointerdown", (ev) => {
   if (!touchOnly) {
     const now = Date.now();
     if (now - lastTap < 300) {
-      moveForward(ev.clientX);
+      moveForward(ev.clientX, ev.clientY);
       lastTap = 0;
     } else {
       lastTap = now;
@@ -380,8 +380,16 @@ canvas.addEventListener("pointermove", (ev) => {
   if (activePointers.size > 1) return;
 
   if (!dragging) return;
-  const dx = ev.clientX - lastX;
-  const dy = ev.clientY - lastY;
+  // clientX/clientY — физические координаты экрана; при программном повороте
+  // (ландшафт через CSS, screen-orientation.ts) локальные оси UI не совпадают
+  // с ними: физическое «вправо» — это локальное «вниз». Конвертируем раз,
+  // дальше вся математика жеста идёт в локальных осях
+  const dl = screenOrientationModule.toLocalDelta(
+    ev.clientX - lastX,
+    ev.clientY - lastY,
+  );
+  const dx = dl.x;
+  const dy = dl.y;
   lastX = ev.clientX;
   lastY = ev.clientY;
 
@@ -460,14 +468,21 @@ canvas.addEventListener("contextmenu", (ev) => ev.preventDefault()); // прав
  * Азимут берётся из точки клика, а не из центра кадра: изучая маршрут дома,
  * человек тычет в тот склон, куда собирается идти.
  *
- * @param screenX точка клика в CSS-пикселях; без неё — прямо по взгляду
+ * @param screenX/screenY точка клика, ФИЗИЧЕСКИЕ CSS-пиксели; без них —
+ *   прямо по взгляду. При программном повороте экрана конвертируются в
+ *   локальные координаты UI: clientX физический, а canvas.clientWidth —
+ *   локальный, смешивать их нельзя
  */
-function moveForward(screenX?: number): void {
+function moveForward(screenX?: number, screenY?: number): void {
   if (!panorama) return;
   const width = canvas.clientWidth;
+  const localX =
+    screenX !== undefined && screenY !== undefined
+      ? screenOrientationModule.toLocalPoint(screenX, screenY).x
+      : undefined;
   const offset =
-    screenX !== undefined && width > 0
-      ? ((screenX - width / 2) / width) * view.fovRad
+    localX !== undefined && width > 0
+      ? ((localX - width / 2) / width) * view.fovRad
       : 0;
   const newPos = destination(
     lastOrigin,
@@ -1617,9 +1632,29 @@ function addCaption(
   captionEntries.push({ btn, root, label, key, side });
 }
 
-/** Положение кнопки на экране */
+/**
+ * Положение кнопки в системе координат UI. getBoundingClientRect отдаёт
+ * ФИЗИЧЕСКИЕ координаты экрана; при программном повороте (body повёрнут
+ * на 90°) конвертируем в локальные — иначе плашки разъехались бы с
+ * кнопками на четверть оборота.
+ */
 function btnRect(btn: HTMLElement): DOMRect {
-  return btn.getBoundingClientRect();
+  const r = btn.getBoundingClientRect();
+  if (!screenOrientationModule.softRotated() || !r.width) return r;
+  const b = document.body;
+  const br = b.getBoundingClientRect(); // физический бокс повёрнутого body
+  const cx = br.left + br.width / 2;
+  const cy = br.top + br.height / 2;
+  const bw = b.offsetWidth; // offset* игнорируют трансформ — это локальные
+  const bh = b.offsetHeight;
+  // Обратный поворот: lx = bw/2 + (py − cy), ly = bh/2 + (cx − px);
+  // у повёрнутого прямоугольника ширина и высота меняются местами
+  return new DOMRect(
+    bw / 2 + (r.top - cy),
+    bh / 2 + (cx - r.right),
+    r.height,
+    r.width,
+  );
 }
 
 /**
@@ -1792,9 +1827,10 @@ function layoutCaptions(): void {
       y = br.bottom + gap;
     }
     // В пределы экрана; для above/below — ещё и выше/ниже чужих кнопок
-    // того же ряда (плашка шире кнопки и по центру задевает соседей)
-    const W = window.innerWidth;
-    const H = window.innerHeight;
+    // того же ряда (плашка шире кнопки и по центру задевает соседей).
+    // Рамки — в системе координат UI: при программном повороте это
+    // локальные размеры body, а не физические window.innerWidth/Height
+    const { w: W, h: H } = screenOrientationModule.virtualViewport();
     x = Math.max(4, Math.min(x, W - lw - 4));
     y = Math.max(4, Math.min(y, H - lh - 4));
     // Раздвижка, пока есть пересечения. Своя кнопка не считается
@@ -2154,7 +2190,14 @@ function setupNavPad(): void {
  * что влезает даже в самый узкий телефон.
  */
 function layoutControls(): void {
-  const padSize = touchOnly ? 48 : window.innerHeight < 420 ? 108 : 132;
+  // «Низкий экран» смотрим по ВИРТУАЛЬНОЙ высоте: при программном повороте
+  // (ландшафт через CSS, screen-orientation.ts) window.innerHeight остаётся
+  // портретной и эвристика компактного навипада промахивалась бы
+  const padSize = touchOnly
+    ? 48
+    : screenOrientationModule.virtualViewport().h < 420
+      ? 108
+      : 132;
   const mapWidth = 48 + 8;
   if (navPad) {
     navPad.style.width = `${padSize}px`;
@@ -2402,17 +2445,14 @@ function adjustHeight(deltaM: number): void {
  * запоминается. Подпись показывает, ЧТО включится по нажатию, а зелёный фон —
  * что сейчас заперто (не авто).
  *
- * Там, где lock недоступен (десктоп, старый Android, iOS без полноэкранного
- * режима), кнопки нет: показывать ручку, которая ничего не делает, нельзя.
+ * Стратегия гибридная (см. core/screen-orientation.ts): системный lock где
+ * возможен (Android PWA — без жеста и fullscreen), иначе CSS-поворот body
+ * (iOS, Firefox, вкладка). Кнопка поэтому есть везде, где есть DOM.
  */
 function setupOrientationButton(): void {
-  const {
-    canLockOrientation,
-    applyOrientation,
-    rememberOrientation,
-    storedOrientation,
-  } = screenOrientationModule;
-  if (!canLockOrientation()) return;
+  const { applyOrientation, rememberOrientation, storedOrientation } =
+    screenOrientationModule;
+  if (typeof document === "undefined" || !document.body) return;
   let pref = storedOrientation();
   const nextKey = (): TitleKey =>
     pref === "auto"
@@ -2484,25 +2524,29 @@ function setupOrientationButton(): void {
     }, 2500);
   };
   sync();
-  // Сохранённый запрет применяем сразу при запуске: в установленном PWA это
-  // работает без жеста. Во вкладке браузера fullscreen требует жеста, запрет
-  // не встанет — тогда иконка показывает «авто», а не замок на свободном
-  // экране (раньше запускалась с иконкой «ландшафт» на портретном экране)
+  // Сохранённый режим применяем сразу при запуске: манифест даёт ландшафт
+  // без жеста, системный lock в установленном PWA — тоже, CSS-поворот — тем
+  // более. Отсрочка ~0.4 с даёт манифестному запрету сработать первым —
+  // иначе на медленных устройствах включили бы CSS-поворот поверх уже
+  // поворачивающегося окна и получили двойной поворот
   if (pref !== "auto") {
-    void applyOrientation(pref).then((applied) => {
-      if (!applied) {
-        pref = "auto";
-        sync();
-      }
-    });
+    setTimeout(() => {
+      void applyOrientation(pref).then((applied) => {
+        if (!applied) {
+          pref = "auto";
+          sync();
+        }
+      });
+    }, 400);
   }
-  // Выход из fullscreen снимает системный запрет ориентации, а на Samsung
-  // это случается при обычном сворачивании PWA. Режим НЕ сбрасываем: выбор
-  // пользователя хранится в localStorage — вместо отката в «авто» запрет
-  // пере-применяется при возврате в приложение (и при возврате в fullscreen).
-  // Повторный lock дёшев и идемпотентен: уже запертый экран не дёргается.
+  // Возврат в приложение (на Samsung системный lock слетает при сворачивании):
+  // пере-применяем выбранный режим, а не сбрасываем в «авто» — выбор живёт в
+  // localStorage и переживает сворачивание, как в нативных приложениях.
+  // orientationMatches проверяет по пропорциям окна (см. модуль): проверка по
+  // строке type ложно решала бы, что CSS-поворот «не сработал»
   const relock = (): void => {
     if (pref === "auto" || document.hidden) return;
+    if (screenOrientationModule.orientationMatches(pref)) return; // не слетело
     void applyOrientation(pref).then((applied) => {
       if (!applied) {
         // Реальный отказ (политика браузера): честный откат, иначе иконка
@@ -2512,9 +2556,6 @@ function setupOrientationButton(): void {
       }
     });
   };
-  document.addEventListener("fullscreenchange", () => {
-    if (document.fullscreenElement) relock(); // вернулись в fullscreen
-  });
   document.addEventListener("visibilitychange", relock); // вернулись в приложение
   window.addEventListener("pageshow", relock); // bfcache-восстановление
 }
