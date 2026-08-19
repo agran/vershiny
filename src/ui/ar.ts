@@ -25,6 +25,7 @@ import {
   drawVideoAligned,
   rotatedFrameSize,
 } from "../core/frame-orientation";
+import { perfCount, perfEnabled, perfFrame, perfPhase } from "../core/perf";
 import { softAngleDeg } from "../core/screen-orientation";
 import type { PanoramaState, ViewState } from "./panorama";
 import {
@@ -304,17 +305,30 @@ export async function startAr(
   // скриншот с устройства отвечал на вопрос о ветке (browser-compensated vs
   // raw-sensor) без гипотез. Только локальная отладка, в проде выключен
   const debugEl = setupArDebug(canvas, videoEl);
-  function frame() {
-    drawArFrame(
-      ctx,
-      videoEl,
-      state,
-      view,
-      opacity,
-      zoomFactor,
-      overlayCache,
-    );
-    debugEl?.update();
+  // rAF следует за частотой дисплея: на 120 Гц мониторах цикл AR рисовал
+  // 120 кадров/с при 30 кадрах/с самой камеры — вдвое больше видео-дроу и
+  // композитинга впустую. Держим не выше 60 кадров/с
+  const MIN_AR_FRAME_MS = 1000 / 60;
+  let lastFrameAt = 0;
+  function frame(nowMs: number) {
+    if (nowMs - lastFrameAt >= MIN_AR_FRAME_MS - 2) {
+      lastFrameAt = nowMs;
+      const t0 = perfEnabled ? performance.now() : 0;
+      drawArFrame(
+        ctx,
+        videoEl,
+        state,
+        view,
+        opacity,
+        zoomFactor,
+        overlayCache,
+      );
+      debugEl?.update();
+      if (perfEnabled) {
+        perfFrame(performance.now() - t0);
+        perfCount("srcAr");
+      }
+    }
     raf = requestAnimationFrame(frame);
   }
   raf = requestAnimationFrame(frame);
@@ -399,6 +413,14 @@ const TILT_DRIFT_PX = 4; // наклон: субпиксельный дрейф 
 /** Полный перерендер раз в N кадров, даже если взгляд стоит: освежить выбор подписей */
 const OVERLAY_REFRESH_FRAMES = 30;
 
+/** Порог «взгляд движется»: дельта за кадр, экранные px */
+const MOTION_DELTA_PX = 1.5;
+/** Столько кадров подряд — непрерывное движение (защита от одиночных скачков) */
+const MOTION_FRAMES = 3;
+/** Во время движения грубые пороги дрейфа: внутри запаса — только blit */
+const MOVE_AZ_FRAC = 0.85;
+const MOVE_TILT_FRAC = 0.5;
+
 /**
  * Кэш AR-оверлея. Два offscreen-холста: линии (полупрозрачный слой) и
  * подписи (непрозрачные). Каждый живой кадр — видео плюс два blit с
@@ -428,6 +450,10 @@ interface ArOverlayCache {
   renderedAt: number;
   /** Текущий номер кадра сессии (инкрементируется при blit/рендере) */
   frameNo: number;
+  /** Последние az/tilt и счётчик движущихся кадров (грубые пороги в движении) */
+  lastAz: number;
+  lastTilt: number;
+  movingFrames: number;
   /** Освободить память при stop() */
   free: () => void;
 }
@@ -453,6 +479,9 @@ export function createArOverlayCache(): ArOverlayCache {
     fovV: NaN,
     renderedAt: -1,
     frameNo: 0,
+    lastAz: NaN,
+    lastTilt: NaN,
+    movingFrames: 0,
     free() {
       // Сбрасываем ссылки: буферы соберёт GC, без повторной аллокации
       this.ridges = null;
@@ -488,7 +517,9 @@ function drawArFrame(
     // поэтому доворачиваем кадр сами на −softAngle, иначе в ландшафтном
     // режиме картинка лежит на боку. Cover-кроп по центру.
     const rot = currentFrameRotationDeg();
+    const tVideo = perfEnabled ? performance.now() : 0;
     drawVideoAligned(ctx, video, width, height, rot);
+    if (perfEnabled) perfPhase("video", performance.now() - tVideo);
 
     // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
     // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
@@ -533,8 +564,11 @@ function drawArFrame(
 /**
  * Оверлей из кэша: два blit (линии полупрозрачно, подписи непрозрачно) с
  * доворотом на крен. Полный перерендер — по порогам: дрейф азимута за
- * половину запаса, наклон дальше субпикселя, смена peaks/layers/fov/зума,
- * либо регламентное обновление раз в OVERLAY_REFRESH_FRAMES кадров.
+ * половину запаса, наклон дальше 4 px, смена peaks/layers/fov/зума, либо
+ * регламентное обновление раз в OVERLAY_REFRESH_FRAMES кадров. При
+ * НЕПРЕРЫВНОМ движении (свайп, поворот по датчику) пороги грубеют до края
+ * запаса — blit и так сдвигает оверлей точно, — а на остановке рендерится
+ * один чёткий кадр с актуальными подписями.
  */
 export function drawArOverlayCached(
   ctx: CanvasRenderingContext2D,
@@ -576,6 +610,39 @@ export function drawArOverlayCached(
   const driftTiltPx =
     Math.abs(tilt - (cache.anchor?.tiltRad ?? NaN)) * (height / (fovV || 1));
 
+  // Детектор непрерывного движения: пока взгляд меняется кадр за кадром
+  // (свайп подстройки контуров, поворот по датчику), перерендериваем редко —
+  // blit и так двигает оверлей точно, а перерендер нужен только чтобы не
+  // выйти за поля запаса. Иначе порог наклона 4 px перерендеривал кэш на
+  // каждый кадр жеста, и полный рендер горел всё время движения
+  const azDeltaPx = Number.isFinite(cache.lastAz)
+    ? Math.abs(shortestAngle(az - cache.lastAz)) * (width / (fovH || 1))
+    : Infinity;
+  const tiltDeltaPx = Number.isFinite(cache.lastTilt)
+    ? Math.abs(tilt - cache.lastTilt) * (height / (fovV || 1))
+    : Infinity;
+  const wasMoving = cache.movingFrames >= MOTION_FRAMES;
+  // Первый кадр (lastAz/lastTilt ещё NaN) движением не считается
+  const hasPrev =
+    Number.isFinite(cache.lastAz) && Number.isFinite(cache.lastTilt);
+  cache.movingFrames =
+    hasPrev &&
+    (azDeltaPx > MOTION_DELTA_PX || tiltDeltaPx > MOTION_DELTA_PX)
+      ? cache.movingFrames + 1
+      : 0;
+  const moving = cache.movingFrames >= MOTION_FRAMES;
+  const stoppedMoving = wasMoving && !moving;
+  cache.lastAz = az;
+  cache.lastTilt = tilt;
+
+  // Пороги дрейфа: в покое — точные (наклон дальше 4 px перерендеривает),
+  // в движении — грубые (только край запаса) плюс чёткий кадр на остановке
+  const driftLimit = moving
+    ? driftAzPx > marginX * MOVE_AZ_FRAC ||
+      driftTiltPx > marginY * MOVE_TILT_FRAC
+    : driftAzPx > marginX * AZ_DRIFT_TRIGGER_FRAC ||
+      driftTiltPx > TILT_DRIFT_PX;
+
   // Счётчик кадров сессии: регламентное обновление кэша раз в N кадров
   cache.frameNo++;
   const needRender =
@@ -589,8 +656,8 @@ export function drawArOverlayCached(
     cache.fovH !== fovH ||
     cache.fovV !== fovV ||
     cache.zoom !== zoomFactor ||
-    driftAzPx > marginX * AZ_DRIFT_TRIGGER_FRAC ||
-    driftTiltPx > TILT_DRIFT_PX ||
+    driftLimit ||
+    stoppedMoving ||
     cache.frameNo - cache.renderedAt >= OVERLAY_REFRESH_FRAMES;
 
   if (needRender) {
@@ -636,6 +703,9 @@ export function drawArOverlayCached(
     cache.fovH = fovH;
     cache.fovV = fovV;
     cache.renderedAt = cache.frameNo;
+    perfCount("arOverlayRender");
+  } else {
+    perfCount("arOverlayBlit");
   }
 
   // Blit: положение кэша на экране — центр кэша на центр запаса + дрейф по

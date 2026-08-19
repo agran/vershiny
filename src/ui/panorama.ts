@@ -8,6 +8,7 @@
 import { toDeg, wrapAngle } from "../core/geo";
 import type { VisiblePeak } from "../core/horizon";
 import { getLocale, peakName, t } from "../core/i18n";
+import { perfCount, perfEnabled, perfPhase } from "../core/perf";
 
 export interface PanoramaState {
   /** Углы горизонта по лучам, рад (0 = север) — верхний слой */
@@ -170,6 +171,7 @@ export function renderPanorama(
   overlay?: OverlayOptions,
 ): void {
   const { width, height } = ctx.canvas;
+  const tSky = perfEnabled ? performance.now() : 0;
 
   // Фон — единый градиент на весь кадр (без горизонтальной «ступеньки»).
   // Стопы — доли высоты, поэтому градиент зависит только от неё и кешируется
@@ -182,6 +184,7 @@ export function renderPanorama(
   }
   ctx.fillStyle = skyGradientCache.gradient;
   ctx.fillRect(0, 0, width, height);
+  if (perfEnabled) perfPhase("sky", performance.now() - tSky);
 
   drawOverlay(ctx, state, view, uiScale, overlay);
 }
@@ -204,6 +207,8 @@ export function drawOverlay(
   const { width, height } = ctx.canvas;
   const horizonY = height * HORIZON_FRAC;
   const drawRidges = overlay.ridges !== false;
+  const tTotal = perfEnabled ? performance.now() : 0;
+  let tSection = tTotal;
 
   const azToX = (az: number): number =>
     (wrapAngle(az - (overlay.anchorAzRad ?? view.centerAzRad)) /
@@ -276,6 +281,10 @@ export function drawOverlay(
       }
     }
   }
+  if (perfEnabled) {
+    perfPhase("ridge", performance.now() - tSection);
+    tSection = performance.now();
+  }
 
   // Шкала азимутов: каждые 15°, подписи сторон света. Без гребней шкала
   // бессмысленна — рисовать риски посреди фотографии нечему
@@ -308,11 +317,19 @@ export function drawOverlay(
       }
     }
   }
+  if (perfEnabled) {
+    perfPhase("scale", performance.now() - tSection);
+    tSection = performance.now();
+  }
 
   // Подписи пиков с кластеризацией. Отдельным флагом: AR рисует их вторым
   // проходом без полупрозрачности (labels:false у прохода с контурами)
   if (overlay.labels !== false) {
     drawLabels(ctx, state.peaks, azToX, elevToY, view, state, uiScale);
+  }
+  if (perfEnabled) {
+    perfPhase("labels", performance.now() - tSection);
+    perfPhase("overlayTotal", performance.now() - tTotal);
   }
 }
 
@@ -460,6 +477,13 @@ function strokeRidge(
   ctx.lineJoin = "bevel";
   ctx.lineCap = "round";
   ctx.stroke();
+  if (perfEnabled) {
+    // Объём геометрии на GPU: по одной обводке — два вызова на профиль
+    perfCount("ridgeStrokes");
+    let pts = 0;
+    for (const s of segments) pts += s.length;
+    perfCount("ridgePoints", pts);
+  }
 }
 
 /** Размещённая подпись в повёрнутой системе координат (все подписи параллельны) */
@@ -612,6 +636,7 @@ function measureLabelWidth(
   const key = `${font}|${text}`;
   const cached = labelWidthCache.get(key);
   if (cached !== undefined) return cached;
+  perfCount("labelMeasureText"); // реальные measureText (мимо кеша)
   const measured = ctx.measureText(text).width;
   if (labelWidthCache.size >= 4000) labelWidthCache.clear();
   labelWidthCache.set(key, measured);
@@ -649,6 +674,20 @@ function drawLabels(
   const LINE_H = 15 * uiScale; // зазор между параллельными «дорожками»
   const LEAD = 7 * uiScale; // отступ от вершины до первой буквы
   const PAD_U = 8 * uiScale; // зазор между подписями вдоль строки
+
+  // Дешёвый отсев по азимуту ДО дорогой раскладки: подпись уходит
+  // вправо-вверх от вершины, поэтому вершина правее кадра или глубже
+  // левого края, чем длина подписи, заведомо невидима. Запас: длинный
+  // текст (~400 px) плюс доворот кадра на крен (rollEdgeMarginX).
+  // Раньше все 500+ вершин региона проходили findPeakMarkerPosition
+  // (поиск фронта по окну лучей) и проверку видимости — самая дорогая
+  // фаза полного рендера
+  const xSkipPad = rollEdgeMarginX(width, height, view.rollRad ?? 0, uiScale) +
+    400 * uiScale;
+  const azimuthNearView = (peak: VisiblePeak): boolean => {
+    const x = azToX(peak.azimuthRad);
+    return x >= -xSkipPad && x <= width + xSkipPad;
+  };
 
   // Список отсортирован по приоритету (высота + бонус за близость), поэтому
   // при нехватке места остаётся более высокая (и более близкая) вершина.
@@ -688,6 +727,7 @@ function drawLabels(
 
   /** Попытка занять место под подпись. false — не поместилась */
   const tryPlace = (peak: VisiblePeak): boolean => {
+    perfCount("labelTries");
     const marker = findPeakMarkerPosition(
       peak,
       state,
@@ -757,7 +797,12 @@ function drawLabels(
   // Проход 1: видимые вершины разбирают места первыми — подпись того, что
   // реально видно, всегда важнее подписи того, что за склоном
   for (const peak of peaks) {
-    if (peak.visibility !== "hidden") tryPlace(peak);
+    if (peak.visibility === "hidden") continue;
+    if (!azimuthNearView(peak)) {
+      perfCount("labelSkipped");
+      continue;
+    }
+    tryPlace(peak);
   }
 
   // Проход 2: скрытые добираются по остаточному бюджету. Чем пустее кадр, тем
@@ -766,8 +811,15 @@ function drawLabels(
   let budget = Math.max(0, HIDDEN_LABEL_BUDGET - placed.length);
   for (const peak of peaks) {
     if (budget <= 0) break;
-    if (peak.visibility === "hidden" && tryPlace(peak)) budget--;
+    if (peak.visibility === "hidden") {
+      if (!azimuthNearView(peak)) {
+        perfCount("labelSkipped");
+        continue;
+      }
+      if (tryPlace(peak)) budget--;
+    }
   }
+  perfCount("labelPlaced", placed.length);
 
   // Рендер: подпись вершины, для которой нашлось место
   for (const p of placed) {

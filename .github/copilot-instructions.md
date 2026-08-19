@@ -75,6 +75,12 @@ python tools\dem-to-tiles\dem_to_tiles.py input.tif -o public\tiles\elbrus
 - URL-параметры позиции: `?lat=43.318&lon=42.458` (Приют 11)
 - Локаль: `localStorage.setItem('vershiny-locale', 'en')` → перезагрузка
 - Консоль: `Горизонт: 3600 лучей, N пиков, наблюдатель XXXX м, YYY мс`
+- `?perf` — профайлер рендера (`src/core/perf.ts`): раз в 2 с в консоль печатает
+  кадры/с, время фаз (sky/ridge/scale/labels/video/overlayTotal), объём
+  геометрии (ridgePoints, ridgeStrokes) и источники перерисовок
+  (srcPointer/srcOrientation/srcResize/srcAr, sceneRender/sceneBlit,
+  arOverlayRender/arOverlayBlit, crispFrame). В покое молчит
+- `?ardebug` — живой оверлей ориентации кадра (β/γ, угол окна, CSS, размеры)
 
 ## Частые ловушки
 

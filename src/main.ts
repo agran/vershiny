@@ -198,6 +198,7 @@ const DRAG_DPR = 1;
 let dragLowRes = false;
 
 function resize(): void {
+  perfCount("srcResize");
   const dpr = Math.min(devicePixelRatio || 1, MAX_DPR);
   const scale = dragLowRes ? Math.min(dpr, DRAG_DPR) : dpr;
   canvas.width = Math.round(canvas.clientWidth * scale);
@@ -253,6 +254,7 @@ if (
 function setDragLowRes(on: boolean): void {
   if (dragLowRes === on) return;
   dragLowRes = on;
+  perfCount(on ? "dragLowResOn" : "dragLowResOff");
   resize();
 }
 
@@ -316,6 +318,7 @@ function draw(): void {
   // миллисекунды — 10–60 лишних рендеров в секунду впустую
   if (arSession) return;
   const now = performance.now();
+  const t0 = perfEnabled ? now : 0;
   lastDrawAt = now;
   while (recentDraws.length && now - recentDraws[0] > 500) recentDraws.shift();
   recentDraws.push(now);
@@ -328,6 +331,7 @@ function draw(): void {
   }
   drawnAzRad = view.centerAzRad;
   drawnTiltRad = view.tiltRad;
+  if (perfEnabled) perfFrame(performance.now() - t0);
 }
 
 /** Углы, попавшие в последний отрисованный кадр (NaN — кадра ещё не было) */
@@ -432,6 +436,7 @@ function drawFromSceneCache(): boolean {
       },
       uiScale,
     );
+    perfCount("sceneRender");
     sceneAz = view.centerAzRad;
     sceneTilt = view.tiltRad;
     sceneFov = view.fovRad;
@@ -446,6 +451,7 @@ function drawFromSceneCache(): boolean {
   const oy =
     HORIZON_FRAC * (height - sceneCanvas.height) +
     pxPerRadV * (view.tiltRad - sceneTilt);
+  perfCount("sceneBlit");
   ctx.drawImage(sceneCanvas, ox, oy);
   return true;
 }
@@ -462,6 +468,7 @@ function scheduleCrispFrame(): void {
     if (performance.now() - lastDrawAt < 180) return; // движение ещё идёт
     recentDraws.length = 0; // следующий draw() пойдёт напрямую, не через кеш
     sceneCanvas = null;
+    perfCount("crispFrame");
     draw();
   }, 200);
 }
@@ -577,6 +584,7 @@ canvas.addEventListener("pointermove", (ev) => {
   if (activePointers.size > 1) return;
 
   if (!dragging) return;
+  perfCount("srcPointer");
   // clientX/clientY — физические координаты экрана; при программном повороте
   // (ландшафт через CSS, screen-orientation.ts) локальные оси UI не совпадают
   // с ними: физическое «вправо» — это локальное «вниз». Конвертируем раз,
@@ -771,6 +779,7 @@ import {
 } from "./core/calibration";
 import { destination } from "./core/geo";
 import { orientationTracker } from "./core/orientation";
+import { perfCount, perfEnabled, perfFrame } from "./core/perf";
 import { overlayRollRad } from "./core/roll-compensation";
 import * as screenOrientationModule from "./core/screen-orientation";
 
@@ -870,6 +879,7 @@ function updateCompassCalibration(): void {
 
 orientationTracker.start((state) => {
   if (state.source === "sensor") {
+    perfCount("srcOrientation");
     const tiltOffset = (getCalibration().tiltDeg * Math.PI) / 180;
     view.centerAzRad = state.azimuthRad;
     view.tiltRad = Math.max(

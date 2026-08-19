@@ -216,4 +216,33 @@ describe("AR overlay cache", () => {
     drawArOverlayCached(ctx as never, state, tilted, 0, 0.55, 1, cache);
     expect(draws.stroke).toBeGreaterThan(0);
   });
+
+  it("непрерывное движение: редкий перерендер, на остановке — чёткий кадр", () => {
+    const { ctx, draws } = makeCanvas();
+    const cache = createArOverlayCache();
+    const state = makeState();
+    drawArOverlayCached(ctx as never, state, VIEW, 0, 0.55, 1, cache);
+    draws.stroke = 0;
+
+    // Свайп подстройки: взгляд ползёт по ~3 px за кадр. В покое такой дрейф
+    // перерендеривал бы каждый кадр (порог наклона 4 px); в движении кэш
+    // должен обновляться только на входе в режим и на остановке
+    const stepTilt = (3 * VIEW.fovVRad) / 450; // 3 экранных px
+    // Считаем РЕНДЕРЫ, а не штрихи: один перерендер — несколько stroke
+    let renders = 0;
+    for (let i = 1; i <= 10; i++) {
+      const v = { ...VIEW, tiltRad: VIEW.tiltRad + i * stepTilt };
+      const before = draws.stroke;
+      drawArOverlayCached(ctx as never, state, v, 0, 0.55, 1, cache);
+      if (draws.stroke > before) renders++;
+    }
+    // Один перерендер на входе в движение (за порогом 4 px), дальше — blit
+    expect(renders).toBe(1);
+
+    // Остановка: взгляд замер — один чёткий кадр с актуальными подписями
+    draws.stroke = 0;
+    const stopped = { ...VIEW, tiltRad: VIEW.tiltRad + 10 * stepTilt };
+    drawArOverlayCached(ctx as never, state, stopped, 0, 0.55, 1, cache);
+    expect(draws.stroke).toBeGreaterThan(0);
+  });
 });

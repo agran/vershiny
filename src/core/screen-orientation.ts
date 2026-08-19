@@ -430,7 +430,9 @@ export function lockSystemOrientation(): void {
     | undefined;
   const lockFn = so?.lock;
   if (typeof lockFn !== "function") return;
-  lockFn("portrait").catch((err) => {
+  // lock — метод ScreenOrientation: без call() браузер падает с
+  // «Illegal invocation» (функция оторвана от this)
+  lockFn.call(so, "portrait").catch((err) => {
     console.info("Системная ориентация не зафиксирована:", err);
   });
 }
