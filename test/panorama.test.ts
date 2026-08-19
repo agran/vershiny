@@ -523,6 +523,19 @@ describe("многострочная подпись", () => {
     expect(texts.find((t) => t.text === "5642 м · 5.0 км")).toBeDefined();
   });
 
+  it("полностью невидимая подпись не ставится — место в кадре не занимает", () => {
+    // Вершина за правым краем (x ≈ 1300): ни одна буква не попадает в кадр.
+    // Раньше фолбэк D ставил подпись-невидимку, и она забивала дорожки
+    // видимым подписям и тратила бюджет скрытых
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = 0.9;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    expect(texts.filter((t) => t.text.includes("Эльбрус"))).toHaveLength(0);
+  });
+
   it("нижняя строка не сдвигается левее якоря — стрелка и кружок видны", () => {
     const horizon = new Float32Array(2000).fill(0.05);
     const st = state(horizon);
@@ -586,6 +599,25 @@ describe("многострочная подпись", () => {
 
     expect(texts.find((t) => t.text === "Длинное")).toBeDefined();
     expect(texts.find((t) => t.text === "Название")).toBeDefined();
+  });
+
+  it("выноска скрытой вершины обрывается точно на линии силуэта", () => {
+    // Ровный горизонт (0.05 рад → y = 342), вершина на 0.03 рад ниже него.
+    // Конец выноски должен лечь на линию силуэта, а не висеть в воздухе
+    // над склоном — раньше обрыв был на последней пробе ВЫШЕ линии
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    (st.peaks[0] as unknown as { visibility: string }).visibility = "hidden";
+    (st.peaks[0] as unknown as { elevationRad: number }).elevationRad = 0.03;
+    const { ctx, segs } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    // Мок контекста сбрасывает путь после каждого stroke: в segs попадает
+    // только тёмный проход выноски (светлый повторяет тот же путь)
+    expect(segs.length).toBe(1);
+    const end = segs[0];
+    expect(end.y1).toBeCloseTo(342, 0);
+    expect(end.x1).toBeCloseTo(506.9, 1);
   });
 
   it("строки центрируются под первой (по оси текста)", () => {

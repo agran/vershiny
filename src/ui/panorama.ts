@@ -363,6 +363,7 @@ export function drawOverlay(
       width,
       height,
       overlay.stableLabels === true,
+      overlay.anchorAzRad,
     );
   }
   if (perfEnabled) {
@@ -716,6 +717,51 @@ export function labelFullyOnScreen(
 }
 
 /**
+ * Виден ли отрезок строки подписи хотя бы краешком: попадает ли в кадр
+ * хоть один угол рамки глифов. Дополняет labelFullyOnScreen — свешивание
+ * строки за край кадра разрешено, только если от неё в кадре остаётся
+ * что-то видимое. Целиком невидимая подпись не ставится: раньше она
+ * занимала дорожки и бюджет, выталкивая подписи, которые реально видно.
+ */
+export function labelPartiallyOnScreen(
+  ax: number,
+  ay: number,
+  w: number,
+  ux: number,
+  uy: number,
+  rollRad: number,
+  width: number,
+  height: number,
+  uiScale: number,
+): boolean {
+  const vh = 9 * uiScale; // полувысота глифов с обводкой
+  const vx = -uy;
+  const vy = ux;
+  const corners: [number, number][] = [];
+  for (const u of [0, w]) {
+    for (const v of [-vh, vh]) {
+      corners.push([ax + u * ux + v * vx, ay + u * uy + v * vy]);
+    }
+  }
+  if (rollRad) {
+    const c = Math.cos(rollRad);
+    const s = Math.sin(rollRad);
+    const cx = width / 2;
+    const cy = height / 2;
+    for (let i = 0; i < corners.length; i++) {
+      const [x, y] = corners[i];
+      corners[i] = [
+        cx + (x - cx) * c - (y - cy) * s,
+        cy + (x - cx) * s + (y - cy) * c,
+      ];
+    }
+  }
+  return corners.some(
+    ([x, y]) => x >= 0 && x <= width && y >= 0 && y <= height,
+  );
+}
+
+/**
  * Какие части подписи остаются в кадре. Части лежат на одной строке подряд:
  * k-я начинается на prefixW[k] от якоря, последняя кончается на последнем
  * элементе. Часть, уходящая за край кадра, скрывается ЦЕЛИКОМ (вместе со
@@ -800,7 +846,11 @@ function nameTokens(
   font: string,
   name: string,
 ): NameTokens {
-  const cached = nameTokenCache.get(name);
+  // Ключ — вместе с кеглем: ширины меряются под конкретный шрифт, и после
+  // смены масштаба (поворот, ресайз) старый кеш дал бы неверные точки
+  // переноса — строка, которая реально не влезает, резалась бы не там
+  const key = `${font}|${name}`;
+  const cached = nameTokenCache.get(key);
   if (cached) return cached;
   const breaks: NameBreak[] = [];
   for (let i = 0; i < name.length && breaks.length < MAX_NAME_BREAKS; i++) {
@@ -836,7 +886,7 @@ function nameTokens(
   }
   const tokens: NameTokens = { breaks, prefW, tailW, midW };
   if (nameTokenCache.size >= 500) nameTokenCache.clear();
-  nameTokenCache.set(name, tokens);
+  nameTokenCache.set(key, tokens);
   return tokens;
 }
 
@@ -851,12 +901,17 @@ function drawLabels(
   width: number,
   height: number,
   stable: boolean,
+  anchorAzRad: number | undefined,
 ): void {
   const labelFont = `${13 * uiScale}px system-ui, sans-serif`;
   ctx.font = labelFont;
-  // Обратная проекция экрана в азимут — для обрыва выносок о силуэт
+  // Обратная проекция экрана в азимут — для обрыва выносок о силуэт.
+  // Якорь тот же, что у azToX (overlay.anchorAzRad): иначе xToAz∘azToX
+  // сдвигало бы азимуты на (centerAz − anchorAz), и выноски скрытых
+  // вершин обрывались бы о чужой участок силуэта
   const xToAz = (x: number): number =>
-    view.centerAzRad + ((x - width / 2) / width) * view.fovRad;
+    (anchorAzRad ?? view.centerAzRad) +
+    ((x - width / 2) / width) * view.fovRad;
   // Видимая линия силуэта: считается один раз на кадр, её спрашивают
   // и подъём подписи, и обрыв выноски, и запасное место маркера
   const silhouette = silhouetteProfile(state);
@@ -949,9 +1004,10 @@ function drawLabels(
       const ax = mx + ux * lead;
       const ay = my + uy * lead;
       if (ay < LINE_H) break;
-      // Проверяем всю строку: склон правее может подниматься круче текста
+      // Проверяем всю строку девятью пробами: склон правее может
+      // подниматься круче текста, а редкие пробы пропускали тонкие шпили
       let clear = true;
-      for (let s = 0; s <= 1; s += 0.25) {
+      for (let s = 0; s <= 1; s += 0.125) {
         const x = ax + ux * w * s;
         const y = ay + uy * w * s;
         if (x < 0 || x > width) continue;
@@ -1222,17 +1278,25 @@ function drawLabels(
           // Первая и последняя строки могут свешиваться за край кадра
           // (канвас обрежет), если кандидат явно попросил: иначе при уходе
           // названия или info-строки за край подпись теряла бы их, хотя
-          // частично они могли бы остаться видны.
-          if (i === 0 && hangFirst) {
-            trimmed.push({
-              line,
-              range: { first: 0, last: line.parts.length - 1 },
-              w: line.prefixW[line.prefixW.length - 1],
-              hang: true,
-            });
-            continue;
-          }
-          if (i === lines.length - 1 && hangLast) {
+          // частично они могли бы остаться видны. Но свешиваться строке
+          // позволено, только если она видна хотя бы краешком: подпись-
+          // невидимка не должна занимать дорожки и бюджет у видимых
+          const hangs =
+            (i === 0 && hangFirst) || (i === lines.length - 1 && hangLast);
+          if (
+            hangs &&
+            labelPartiallyOnScreen(
+              b.x,
+              b.y,
+              line.prefixW[line.prefixW.length - 1],
+              ux,
+              uy,
+              view.rollRad ?? 0,
+              width,
+              height,
+              uiScale,
+            )
+          ) {
             trimmed.push({
               line,
               range: { first: 0, last: line.parts.length - 1 },
@@ -1529,6 +1593,22 @@ function drawLabels(
     for (const shift of [0, -1, -2, -3]) {
       const bx = ax + shift * LINE_H * vx;
       const by = ay + shift * LINE_H * vy;
+      // Фолбэк D тоже не ставит подпись, которой в кадре не видно ни буквы
+      if (
+        !labelPartiallyOnScreen(
+          bx,
+          by,
+          fullW,
+          ux,
+          uy,
+          view.rollRad ?? 0,
+          width,
+          height,
+          uiScale,
+        )
+      ) {
+        continue;
+      }
       const fullBox = {
         v: bx * vx + by * vy,
         u0: bx * ux + by * uy,
@@ -2044,13 +2124,31 @@ function clipToSilhouette(
 ): { x: number; y: number } {
   const STEPS = 24;
   let last = { x: ax, y: ay };
+  let prevH = horizonAtAzimuth(silhouette, stepRad, xToAz(ax), elevToY);
   for (let i = 1; i <= STEPS; i++) {
     const t = i / STEPS;
     const x = ax + (mx - ax) * t;
     const y = ay + (my - ay) * t;
+    const h = horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY);
     // y растёт вниз: точка ниже линии силуэта — уже за склоном
-    if (y > horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY)) break;
+    if (y > h) {
+      // Пересечение внутри шага: кладём конец выноски ТОЧНО на линию
+      // силуэта (линейная интерполяция по обеим величинам), чтобы штрих
+      // касался гребня, а не висел в воздухе над ним
+      const denom = y - last.y - (h - prevH);
+      if (Number.isFinite(denom) && denom !== 0) {
+        const tau = (prevH - last.y) / denom;
+        if (tau >= 0 && tau <= 1) {
+          return {
+            x: last.x + (x - last.x) * tau,
+            y: last.y + (y - last.y) * tau,
+          };
+        }
+      }
+      break;
+    }
     last = { x, y };
+    prevH = h;
   }
   return last;
 }
