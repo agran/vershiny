@@ -69,9 +69,18 @@ export function softRotated(): boolean {
   return softAngle !== 0;
 }
 
-/** Форма хвата по датчику: портрет или ландшафт (см. notePhysicalTilt) */
-export function holdForm(): "portrait" | "landscape" {
-  return tiltForm;
+/**
+ * События deviceorientation в координатах УСТРОЙСТВА (Android Chrome), а не
+ * экрана: видно по ландшафтному окну, где ровный ландшафтный хват даёт
+ * |roll| ≈ 90° (в координатах экрана — ≈ 0°). Латч держится, пока окно
+ * ландшафтное: при вращении телефона из ландшафта в портрет крен проходит
+ * середину дуги, и детектор по мгновенному значению отключал бы коррекцию
+ * крена на полпути — оверлей прыгал бы на 90° до системной смены окна.
+ */
+let deviceReferenced = false;
+
+export function deviceReferencedEvents(): boolean {
+  return deviceReferenced;
 }
 
 /** Куда повёрнут интерфейс, градусы: -90 | 0 | +90 */
@@ -134,6 +143,13 @@ const PORTRAIT_ROLL_DEG = 40;
  */
 export function notePhysicalTilt(rollDeg: number): void {
   const abs = Math.abs(rollDeg);
+  // Детектор системы координат датчика (см. deviceReferencedEvents):
+  // обновляется на КАЖДОМ показании, до дебаунса и гистерезиса ниже
+  if (effectiveOrientation() === "landscape") {
+    deviceReferenced = deviceReferenced || abs > 45;
+  } else {
+    deviceReferenced = false;
+  }
   const side =
     rollDeg > LANDSCAPE_ROLL_DEG
       ? 1
@@ -180,6 +196,7 @@ export function _resetOrientationForTests(): void {
   hasTilt = false;
   lockAttempted = false;
   formListener = null;
+  deviceReferenced = false;
 }
 
 // Сторону хвата узнаём из УГЛА КРЕНА (устойчив, в отличие от сырого γ):

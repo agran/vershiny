@@ -86,4 +86,19 @@ describe("overlayRollRad", () => {
     // Программный ландшафт: вычитается только softAngle, окно не ландшафтное
     expect(rc.overlayRollRad(deg(-90), -90)).toBeCloseTo(0, 12);
   });
+
+  it("при вращении из ландшафта в портрет коррекция не отключается на середине дуги", async () => {
+    const { rc, so } = await fresh();
+    setOrientation({ type: "landscape-primary", angle: 90 });
+    so.notePhysicalTilt(98); // ровный ландшафтный хват: детектор ставит координаты устройства
+    // Вращение к портрету: окно ещё ландшафтное, крен прошёл «портретную»
+    // зону (30° < 40° — форма хвата по гистерезису уже портретная), но
+    // коррекция окна должна держаться: видимый крен = 30 − 90 = −60°
+    so.notePhysicalTilt(30);
+    expect(rc.overlayRollRad(deg(30), 0)).toBeCloseTo(deg(-60), 12);
+    // Дошли до портретного окна: коррекция окна снимается, крен как есть
+    setOrientation({ type: "portrait-primary", angle: 0 });
+    so.notePhysicalTilt(10);
+    expect(rc.overlayRollRad(deg(10), 0)).toBeCloseTo(deg(10), 12);
+  });
 });

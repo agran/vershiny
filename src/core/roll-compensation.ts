@@ -8,7 +8,10 @@
  * всегда: настройки у компенсации больше нет.
  */
 
-import { effectiveOrientation, holdForm } from "./screen-orientation";
+import {
+    deviceReferencedEvents,
+    effectiveOrientation,
+} from "./screen-orientation";
 
 /**
  * Крен для доворота оверлея, рад.
@@ -43,11 +46,18 @@ export function overlayRollRad(
  * ≈ ±90°, хотя картинка ровная — эти ±90° в кадр добавил браузер, и их надо
  * вычесть (на S25 Ultra: окно landscape-primary 90°, крен датчика +98° при
  * завале телефона всего на ~8°). На iOS события в координатах ЭКРАНА — крен
- * в ландшафтном окне ≈ 0, форма хвата по ним портретная, вычитать нечего:
- * поэтому коррекция включается только при ландшафтном хвате (tiltForm).
+ * в ландшафтном окне ≈ 0, вычитать нечего. Систему координат датчика
+ * отслеживает защёлка deviceReferencedEvents() (screen-orientation.ts): она
+ * НЕ снимается до выхода окна из ландшафта — иначе при вращении телефона из
+ * ландшафта в портрет коррекция отключалась бы на середине дуги (крен
+ * проходит «портретную» зону, а окно ещё ландшафтное) и оверлей прыгал бы
+ * на 90° до системной смены окна.
  */
 function landscapeWindowHoldRollDeg(): number {
-  if (effectiveOrientation() !== "landscape" || holdForm() !== "landscape") {
+  if (
+    effectiveOrientation() !== "landscape" ||
+    !deviceReferencedEvents()
+  ) {
     return 0;
   }
   const angle = screen.orientation?.angle ?? 0;
