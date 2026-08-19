@@ -97,6 +97,29 @@ export function rotateAroundCenter(
 }
 
 /**
+ * Горизонтальный запас, с которым нужно рисовать контуры при довороте кадра
+ * на крен: в повёрнутых координатах края экрана — наклонные линии, и углы
+ * кадра выходят за x = 0 / x = width на (W·(1−cosθ) + H·sinθ)/2 в каждую
+ * сторону. Для крена 30° на портретном экране это ~500 px — прежние 20 px
+ * оставляли контуры недорисованными у левого и правого края.
+ */
+export function rollEdgeMarginX(
+  width: number,
+  height: number,
+  rollRad: number,
+  uiScale: number,
+): number {
+  const pad = 2 * (RIDGE_OFFSET_CSS + RIDGE_WIDTH_CSS) * uiScale + 8;
+  return Math.max(
+    20,
+    (width * (1 - Math.cos(rollRad)) +
+      height * Math.abs(Math.sin(rollRad))) /
+      2 +
+      pad,
+  );
+}
+
+/**
  * Доля высоты кадра, на которой проходит линия горизонта — чуть ниже центра,
  * чтобы небо не занимало полкадра. Экспортируется: автокалибровка (skyline.ts)
  * переводит пиксели кадра в углы по этой же величине, и разойтись они не должны.
@@ -181,6 +204,11 @@ export function drawOverlay(
     uiScaleOverride ??
     (ctx.canvas.clientWidth > 0 ? width / ctx.canvas.clientWidth : 1);
 
+  // Довёрнутый на крен кадр (rotateAroundCenter) шире холста в повёрнутых
+  // координатах — без этого запаса контуры и шкала обрываются, не дойдя
+  // до краёв экрана
+  const edgeMarginX = rollEdgeMarginX(width, height, view.rollRad ?? 0, uiScale);
+
   // Профили силуэта: видимые гребни по возрастанию дистанции.
   // Гребень = локальный максимум угла вдоль луча (то, что реально видно как линия).
   const profiles: Float32Array[] = [];
@@ -214,6 +242,7 @@ export function drawOverlay(
         elevToY,
         width,
         height,
+        edgeMarginX,
       );
       if (segments.length) {
         strokeRidge(ctx, segments, -ridgeOffset, RIDGE_DARK, ridgeWidth);
@@ -235,7 +264,7 @@ export function drawOverlay(
     for (let deg = 0; deg < 360; deg += stepDeg) {
       const az = (deg * Math.PI) / 180;
       const x = azToX(az);
-      if (x < 0 || x > width) continue;
+      if (x < -edgeMarginX || x > width + edgeMarginX) continue;
       const tickLen = (deg % 45 === 0 ? 14 : 7) * uiScale;
       ctx.beginPath();
       ctx.moveTo(x, horizonY);
@@ -278,6 +307,8 @@ export function buildRidgeSegments(
   elevToY: (elev: number) => number,
   width: number,
   height: number,
+  /** Горизонтальный запас за края кадра, px (доворот кадра на крен) */
+  marginX = 20,
 ): { x: number; y: number }[][] {
   const segments: { x: number; y: number }[][] = [];
   let current: { x: number; y: number }[] = [];
@@ -303,7 +334,7 @@ export function buildRidgeSegments(
       continue;
     }
     const x = azToX(i * stepRad);
-    if (x < -20 || x > width + 20) {
+    if (x < -marginX || x > width + marginX) {
       flush();
       continue;
     }
@@ -421,6 +452,67 @@ let silhouetteCache: {
 /** Переиспользуемый буфер окклюзии гребней (drawOverlay) */
 let runningMaxBuf = new Float32Array(0);
 
+/**
+ * Видна ли на экране хоть часть подписи. Подпись — отрезок от якоря вдоль
+ * направления текста (глифы добавляют толщину ~g с каждой стороны), а экран
+ * в оверлейных координатах при довороте на крен — повёрнутый прямоугольник.
+ * Поэтому отрезок сперва переводится в экранные координаты (тот же переход,
+ * что делает ctx.rotate в rotateAroundCenter) и клипается о прямоугольник
+ * кадра Liang–Barsky — за O(1), без тригонометрии на каждую вершину.
+ */
+export function labelVisibleOnScreen(
+  ax: number,
+  ay: number,
+  w: number,
+  ux: number,
+  uy: number,
+  rollRad: number,
+  width: number,
+  height: number,
+  uiScale: number,
+): boolean {
+  let x0 = ax;
+  let y0 = ay;
+  let x1 = ax + w * ux;
+  let y1 = ay + w * uy;
+  if (rollRad) {
+    const c = Math.cos(rollRad);
+    const s = Math.sin(rollRad);
+    const cx = width / 2;
+    const cy = height / 2;
+    const toScreen = (x: number, y: number): [number, number] => [
+      cx + (x - cx) * c - (y - cy) * s,
+      cy + (x - cx) * s + (y - cy) * c,
+    ];
+    [x0, y0] = toScreen(x0, y0);
+    [x1, y1] = toScreen(x1, y1);
+  }
+  const g = 9 * uiScale; // полувысота глифов с запасом
+  let t0 = 0;
+  let t1 = 1;
+  const dx = x1 - x0;
+  const dy = y1 - y0;
+  // Liang–Barsky: отрезок пересекает [−g, width+g] × [−g, height+g]
+  const clip = (p: number, q: number): boolean => {
+    if (p === 0) return q >= 0;
+    const r = q / p;
+    if (p < 0) {
+      if (r > t1) return false;
+      if (r > t0) t0 = r;
+    } else {
+      if (r < t0) return false;
+      if (r < t1) t1 = r;
+    }
+    return true;
+  };
+  return (
+    clip(-dx, x0 + g) &&
+    clip(dx, width + g - x0) &&
+    clip(-dy, y0 + g) &&
+    clip(dy, height + g - y0)
+  );
+}
+
 function drawLabels(
   ctx: CanvasRenderingContext2D,
   peaks: VisiblePeak[],
@@ -502,8 +594,7 @@ function drawLabels(
     const hidden = peak.visibility === "hidden";
     // Точка скрытой вершины лежит ниже силуэта — она и должна уходить
     // за нижний край, важно лишь чтобы сама подпись попала в кадр
-    if (mx < 0 || mx > width || my < 0 || (!hidden && my > height))
-      return false;
+    if (my < 0 || (!hidden && my > height)) return false;
 
     const text = labelText(peak);
     const w = ctx.measureText(text).width;
@@ -515,6 +606,29 @@ function drawLabels(
     const ax = mx + ux * lead;
     const ay = my + uy * lead;
     if (ay < LINE_H) return false; // подпись ушла бы за верх кадра
+
+    // Вершина может стоять за краем кадра: подпись смотрит вправо-вверх,
+    // поэтому слева она выглядывает из-за края, пока вершина ещё не вошла.
+    // Ставим подпись, когда видна хоть её часть (канвас сам обрежет остаток):
+    // при повороте подпись плавно выходит из-за края, а не возникает скачком.
+    // Проверка — в координатах ЭКРАНА, чтобы крен (rotateAroundCenter) не
+    // резал подписи у углов повёрнутого кадра; полностью невидимые подписи
+    // места в кадре не занимают.
+    if (
+      !labelVisibleOnScreen(
+        ax,
+        ay,
+        w,
+        ux,
+        uy,
+        view.rollRad ?? 0,
+        width,
+        height,
+        uiScale,
+      )
+    ) {
+      return false;
+    }
 
     const u0 = ax * ux + ay * uy;
     const v = ax * vx + ay * vy;

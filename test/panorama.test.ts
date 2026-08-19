@@ -3,12 +3,14 @@
  * поверхности, не должны соединяться ложной «вертикалью» через весь кадр.
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  buildRidgeSegments,
-  silhouetteProfile,
-  MAX_RIDGE_SLOPE,
-  type PanoramaState,
+    buildRidgeSegments,
+    labelVisibleOnScreen,
+    MAX_RIDGE_SLOPE,
+    rollEdgeMarginX,
+    silhouetteProfile,
+    type PanoramaState,
 } from "../src/ui/panorama";
 
 const STEP_RAD = (0.1 * Math.PI) / 180; // 3600 лучей
@@ -131,5 +133,80 @@ describe("видимая линия силуэта", () => {
     });
     expect(profile[0]).toBeCloseTo(0.02);
     expect(profile[2]).toBeCloseTo(0.07);
+  });
+});
+
+describe("контуры при довороте кадра (крен)", () => {
+  it("запас по x удерживает гребень за краем кадра", () => {
+    const prof = new Float32Array(30).fill(0.05);
+    const runningMax = new Float32Array(30).fill(-Infinity);
+    // x от −60 до −31: за пределами дефолтного запаса ±20, но внутри ±60
+    const shiftedAzToX = (az: number): number => az / STEP_RAD - 60;
+    const noMargin = buildRidgeSegments(
+      prof, runningMax, 5e-4, STEP_RAD, shiftedAzToX, elevToY, WIDTH, HEIGHT,
+    );
+    expect(noMargin).toHaveLength(0);
+    const withMargin = buildRidgeSegments(
+      prof, runningMax, 5e-4, STEP_RAD, shiftedAzToX, elevToY, WIDTH, HEIGHT, 60,
+    );
+    expect(withMargin).toHaveLength(1);
+    expect(withMargin[0]).toHaveLength(30);
+  });
+
+  it("запас покрывает угол повёрнутого кадра при любом крене", () => {
+    for (const roll of [0, 0.2, 0.5, 1.0, Math.PI / 2, Math.PI]) {
+      const needed =
+        (WIDTH * (1 - Math.cos(roll)) +
+          HEIGHT * Math.abs(Math.sin(roll))) /
+        2;
+      expect(rollEdgeMarginX(WIDTH, HEIGHT, roll, 1)).toBeGreaterThanOrEqual(
+        needed,
+      );
+    }
+    // Без крена запас не растёт сверх прежних 20 px
+    expect(rollEdgeMarginX(WIDTH, HEIGHT, 0, 1)).toBeGreaterThanOrEqual(20);
+    expect(rollEdgeMarginX(WIDTH, HEIGHT, 0, 1)).toBeLessThan(30);
+  });
+});
+
+describe("подписи за краем кадра", () => {
+  const W = 1000;
+  const H = 600;
+  // Направление текста подписи: вправо-вверх под 60°
+  const UX = Math.cos(Math.PI / 3);
+  const UY = -Math.sin(Math.PI / 3);
+
+  it("торчащая из-за левого края подпись считается видимой", () => {
+    // Вершина за краем, текст заходит на экран — подпись плавно выезжает
+    expect(labelVisibleOnScreen(-150, 350, 350, UX, UY, 0, W, H, 1)).toBe(true);
+  });
+
+  it("полностью невидимая подпись место не занимает", () => {
+    // Текст кончается левее края даже с запасом на глифы
+    expect(labelVisibleOnScreen(-400, 350, 350, UX, UY, 0, W, H, 1)).toBe(false);
+    // И полностью за правым краем — тоже
+    expect(labelVisibleOnScreen(1100, 350, 350, UX, UY, 0, W, H, 1)).toBe(false);
+  });
+
+  it("при крене видимость считается в координатах экрана, а не оверлея", () => {
+    const roll = 0.5;
+    const c = Math.cos(roll);
+    const s = Math.sin(roll);
+    // Верхний левый угол ЭКРАНА в координатах повёрнутого оверлея
+    const toOverlay = (sx: number, sy: number): { x: number; y: number } => {
+      const X = sx - W / 2;
+      const Y = sy - H / 2;
+      return { x: W / 2 + X * c + Y * s, y: H / 2 - X * s + Y * c };
+    };
+    const a = toOverlay(5, 40);
+    const w = 40;
+    const b = { x: a.x + w * UX, y: a.y + w * UY };
+    // Обе точки отрезка — левее нуля в координатах оверлея, но весь отрезок
+    // лежит в углу повёрнутого кадра: он видим только с учётом крена
+    expect(a.x).toBeLessThan(0);
+    expect(b.x).toBeLessThan(0);
+    expect(labelVisibleOnScreen(a.x, a.y, w, UX, UY, roll, W, H, 1)).toBe(true);
+    // Без доворота тот же отрезок невидим — запас не «панорамный»
+    expect(labelVisibleOnScreen(a.x, a.y, w, UX, UY, 0, W, H, 1)).toBe(false);
   });
 });
