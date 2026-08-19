@@ -2497,23 +2497,18 @@ function setupOrientationButton(): void {
     btn.innerHTML = currentIcon();
     btn.style.background = pref === "auto" ? "#415a77" : "#2d6a4f";
   };
-  btn.onclick = async () => {
-    const prev = pref;
+  btn.onclick = () => {
     pref =
       pref === "auto"
         ? "landscape"
         : pref === "landscape"
           ? "portrait"
           : "auto";
-    if (!(await applyOrientation(pref))) {
-      // Не заперлось (отказ ОС/браузера): честный откат, иначе иконка
-      // нарисует замок на свободном экране
-      pref = prev;
-      sync();
-      return;
-    }
     rememberOrientation(pref);
     sync();
+    // Программный поворот не требует ни жеста, ни разрешений и не может
+    // отказать — отката «не заперлось» здесь нет и не нужен
+    applyOrientation(pref);
     // Подтверждение режима: title кнопки говорит, что БУДЕТ по нажатию,
     // поэтому само нажатие без отклика выглядело молчаливой подменой
     if (statusTimer) clearTimeout(statusTimer);
@@ -2524,37 +2519,23 @@ function setupOrientationButton(): void {
     }, 2500);
   };
   sync();
-  // Сохранённый режим применяем сразу при запуске: манифест даёт ландшафт
-  // без жеста, системный lock в установленном PWA — тоже, CSS-поворот — тем
-  // более. Отсрочка ~0.4 с даёт манифестному запрету сработать первым —
-  // иначе на медленных устройствах включили бы CSS-поворот поверх уже
-  // поворачивающегося окна и получили двойной поворот
+  // Сохранённый режим применяем сразу при запуске: CSS-поворот не требует
+  // ни жеста, ни fullscreen. Отсрочка ~0.4 с даёт манифестному запрету
+  // (Android PWA, "orientation": "landscape") сработать первым — иначе на
+  // медленных устройствах включили бы поворот поверх уже поворачивающегося
+  // окна и получили двойной
   if (pref !== "auto") {
-    setTimeout(() => {
-      void applyOrientation(pref).then((applied) => {
-        if (!applied) {
-          pref = "auto";
-          sync();
-        }
-      });
-    }, 400);
+    setTimeout(() => applyOrientation(pref), 400);
   }
-  // Возврат в приложение (на Samsung системный lock слетает при сворачивании):
-  // пере-применяем выбранный режим, а не сбрасываем в «авто» — выбор живёт в
-  // localStorage и переживает сворачивание, как в нативных приложениях.
-  // orientationMatches проверяет по пропорциям окна (см. модуль): проверка по
-  // строке type ложно решала бы, что CSS-поворот «не сработал»
+  // Возврат в приложение: манифестный/системный поворот окна мог слететь
+  // или само окно перевернуться (автоповорот ОС) — переоцениваем, нужен ли
+  // ещё наш поворот. orientationMatches проверяет по пропорциям окна (см.
+  // модуль): проверка по строке type ложно решала бы, что поворот «не
+  // сработал»
   const relock = (): void => {
     if (pref === "auto" || document.hidden) return;
     if (screenOrientationModule.orientationMatches(pref)) return; // не слетело
-    void applyOrientation(pref).then((applied) => {
-      if (!applied) {
-        // Реальный отказ (политика браузера): честный откат, иначе иконка
-        // нарисует замок на свободном экране
-        pref = "auto";
-        sync();
-      }
-    });
+    applyOrientation(pref);
   };
   document.addEventListener("visibilitychange", relock); // вернулись в приложение
   window.addEventListener("pageshow", relock); // bfcache-восстановление
