@@ -263,9 +263,86 @@ export async function startAr(
   const ctx = canvas.getContext("2d")!;
   const opacity = options.opacity ?? 0.55;
   // Кэш оверлея (см. ArOverlayCache ниже): линии и подписи перерендериваются
-  // только при смене азимута/наклона/содержимого, а каждый rAF — это видео
-  // плюс два blit готовых слоёв с доворотом на текущий крен
+  // только при смене азимута/наклона/содержимого, а каждый rAF — это
+  // clearRect + два blit готовых слоёв с доворотом на текущий крен
   const overlayCache = createArOverlayCache();
+
+  // Слой видео отделён от слоя оверлея (GPU-аудит, п. 5.2): камера даёт
+  // 30–50 кадров/с, и рисовать видео 60 раз/с — лишний decode→upload на
+  // каждый rAF. Видео перерисовывается ТОЛЬКО на реальный кадр камеры
+  // (requestVideoFrameCallback), оверлей — на каждый rAF поверх; два холста
+  // композитятся браузером. Основной холст в AR теперь прозрачен, поэтому
+  // каждый кадр оверлея начинается с clearRect. Без rVFC (ниже нашего
+  // минимума Safari 16.4) видео рисуется в rAF, как раньше
+  const videoLayer = document.createElement("canvas");
+  // В #app перед основным холстом: та же сетка CSS (#app canvas), тот же
+  // размер, ниже по стеку. Вне DOM (тесты) вызов — безвредный no-op
+  canvas.insertAdjacentElement("beforebegin", videoLayer);
+  const vctx = videoLayer.getContext("2d")!;
+  const hasRvfc = typeof videoEl.requestVideoFrameCallback === "function";
+  /** Подогнать видео-слой под размер основного холста */
+  function syncVideoLayer(): boolean {
+    if (
+      videoLayer.width === canvas.width &&
+      videoLayer.height === canvas.height
+    )
+      return false;
+    videoLayer.width = canvas.width;
+    videoLayer.height = canvas.height;
+    return true;
+  }
+  /** Ключ геометрии последнего нарисованного кадра видео */
+  let lastVideoKey = "";
+  /**
+   * Один кадр видео в слой: тот же доворот/cover, что раньше рисовался на
+   * основной холст (drawVideoAligned). Чёрная заливка — до первого кадра
+   */
+  function drawVideoLayer(): void {
+    syncVideoLayer();
+    const { width, height } = videoLayer;
+    lastVideoKey =
+      `${currentFrameRotationDeg()}|${videoEl.videoWidth}|` +
+      `${videoEl.videoHeight}|${width}|${height}`;
+    if (videoEl.readyState >= 2 && videoEl.videoWidth > 0) {
+      const tVideo = perfEnabled ? performance.now() : 0;
+      drawVideoAligned(
+        vctx,
+        videoEl,
+        width,
+        height,
+        currentFrameRotationDeg(),
+      );
+      if (perfEnabled) perfPhase("video", performance.now() - tVideo);
+    } else {
+      vctx.fillStyle = "#000";
+      vctx.fillRect(0, 0, width, height);
+    }
+    if (perfEnabled) perfCount("videoDraw");
+  }
+  /** Геометрия/доворот сменились без нового кадра камеры */
+  function videoLayoutChanged(): boolean {
+    return (
+      lastVideoKey !==
+      `${currentFrameRotationDeg()}|${videoEl.videoWidth}|` +
+        `${videoEl.videoHeight}|${canvas.width}|${canvas.height}`
+    );
+  }
+  // Цепочка rVFC: callback одноразовый, перерегистрируемся на каждый кадр.
+  // Видео-слой — отдельный элемент: обновление не трогает оверлей вообще
+  let rvfcArmed = false;
+  let lastVideoFrameAt = performance.now();
+  function armRvfc(): void {
+    if (rvfcArmed || !hasRvfc) return;
+    rvfcArmed = true;
+    videoEl.requestVideoFrameCallback(onVideoFrame);
+  }
+  function onVideoFrame(): void {
+    rvfcArmed = false;
+    lastVideoFrameAt = performance.now();
+    if (stopped) return;
+    drawVideoLayer();
+    armRvfc();
+  }
 
   // Зум камеры, если браузер его сообщает (Android Chrome; на iOS поля нет).
   // События смены зума в спецификации нет — читаем при старте и перезапуске.
@@ -290,8 +367,9 @@ export async function startAr(
   /** FOV полного кадра камеры: базовый угол → пропорции кадра → зум */
   function fullFrameFov(): FrameFov {
     // Размеры кадра — ПОСЛЕ доворота под программный поворот UI: они
-    // описывают тот же кадр, что рисует drawArFrame, и только с ними
-    // калибровка и снимок совпадут с картинкой на экране
+    // описывают тот же кадр, что рисует видео-слой (под который drawArFrame
+    // подгоняет оверлей), и только с ними калибровка и снимок совпадут
+    // с картинкой на экране
     const { w, h } = rotatedFrameSize(
       videoEl.videoWidth,
       videoEl.videoHeight,
@@ -305,15 +383,27 @@ export async function startAr(
   // скриншот с устройства отвечал на вопрос о ветке (browser-compensated vs
   // raw-sensor) без гипотез. Только локальная отладка, в проде выключен
   const debugEl = setupArDebug(canvas, videoEl);
-  // rAF следует за частотой дисплея: на 120 Гц мониторах цикл AR рисовал
+  // rAF следует за частотой дисплея: на 120 Гц мониторах цикл рисовал
   // 120 кадров/с при 30 кадрах/с самой камеры — вдвое больше видео-дроу и
-  // композитинга впустую. Держим не выше 60 кадров/с
+  // композитинга впустую. Оверлей держим не выше 60 кадров/с, видео идёт
+  // по rVFC — по реальным кадрам камеры (GPU-аудит, п. 5.2)
   const MIN_AR_FRAME_MS = 1000 / 60;
   let lastFrameAt = 0;
   function frame(nowMs: number) {
     if (nowMs - lastFrameAt >= MIN_AR_FRAME_MS - 2) {
       lastFrameAt = nowMs;
       const t0 = perfEnabled ? performance.now() : 0;
+      // Видео — только без rVFC, при смене геометрии без нового кадра
+      // (поворот окна, resize, новый поток) или когда кадры камеры давно
+      // не шли (цепочка rVFC могла умереть на паузе видео — перевзвести)
+      if (
+        !hasRvfc ||
+        videoLayoutChanged() ||
+        nowMs - lastVideoFrameAt > 200
+      ) {
+        armRvfc();
+        drawVideoLayer();
+      }
       drawArFrame(
         ctx,
         videoEl,
@@ -331,6 +421,7 @@ export async function startAr(
     }
     raf = requestAnimationFrame(frame);
   }
+  armRvfc();
   raf = requestAnimationFrame(frame);
 
   // Отдельный маленький холст для анализа: снимать пиксели с экранного
@@ -341,6 +432,7 @@ export async function startAr(
   return {
     stop: () => {
       stopped = true;
+      videoLayer.remove();
       debugEl?.remove();
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("focus", onVisible);
@@ -390,8 +482,6 @@ export async function startAr(
   };
 }
 
-/** Один кадр AR: видео + полупрозрачный силуэт и непрозрачные подписи */
-
 /**
  * Запас кэша оверлея вокруг кадра: крен до ±40° (больше обычно не держат) +
  * поле под дрейф азимута/наклона между перерендерами. Кадр строит drawOverlay
@@ -423,7 +513,7 @@ const MOVE_TILT_FRAC = 0.5;
 
 /**
  * Кэш AR-оверлея. Два offscreen-холста: линии (полупрозрачный слой) и
- * подписи (непрозрачные). Каждый живой кадр — видео плюс два blit с
+ * подписи (непрозрачные). Каждый живой кадр — clearRect плюс два blit с
  * доворотом на текущий крен; полный drawOverlay — только по порогам выше.
  */
 interface ArOverlayCache {
@@ -491,10 +581,11 @@ export function createArOverlayCache(): ArOverlayCache {
 }
 
 /**
- * Один кадр AR: видео + оверлей. Видео — каждый кадр (содержимое камеры),
- * оверлей — blit из кэша; полный рендер слоёв — по порогам дрейфа/смене
- * содержимого. Крен применяется поворотом blit'а вокруг центра экрана, а не
- * перерендером: это ~0.2 мс вместо 10–20 мс и не «плывёт» от фильтра.
+ * Один кадр оверлея AR: clearRect + blit из кэша; полный рендер слоёв — по
+ * порогам дрейфа/смене содержимого. Крен применяется поворотом blit'а вокруг
+ * центра экрана, а не перерендером: это ~0.2 мс вместо 10–20 мс и не
+ * «плывёт» от фильтра. Видео — на отдельном слое под холстом, обновляется
+ * по реальным кадрам камеры (rVFC), а не в этом цикле.
  */
 function drawArFrame(
   ctx: CanvasRenderingContext2D,
@@ -506,32 +597,24 @@ function drawArFrame(
   cache?: ArOverlayCache,
 ): void {
   const { width, height } = ctx.canvas;
+  // Видео живёт на собственном слое под этим холстом (см. startAr): здесь
+  // только оверлей, поэтому каждый кадр начинается с очистки — иначе blit
+  // оставлял бы следы прежних позиций линий и подписей
+  ctx.clearRect(0, 0, width, height);
 
   let overlayView = view;
   if (video.readyState >= 2 && video.videoWidth > 0) {
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    // Кадр ориентацией «ровно под окно» (Samsung компенсирует сенсор под
-    // системную ориентацию окна), а интерфейс может быть довёрнут CSS-ом на
-    // ±90° (программный ландшафт). drawImage CSS-трансформ не применяет —
-    // поэтому доворачиваем кадр сами на −softAngle, иначе в ландшафтном
-    // режиме картинка лежит на боку. Cover-кроп по центру.
-    const rot = currentFrameRotationDeg();
-    const tVideo = perfEnabled ? performance.now() : 0;
-    drawVideoAligned(ctx, video, width, height, rot);
-    if (perfEnabled) perfPhase("video", performance.now() - tVideo);
-
     // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
     // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
     // кадра и расходились к краям, когда пропорции экрана и видео различались.
     // Размеры кадра — после доворота: FOV считается от повёрнутого кадра
+    const rot = currentFrameRotationDeg();
     const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
     const full = applyZoom(fovForFrame(baseFovRad(), pw, ph), zoomFactor);
     const visible = applyCoverCrop(full, pw, ph, width, height);
     overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
-  } else {
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, width, height);
   }
 
   const roll = overlayView.rollRad ?? 0;

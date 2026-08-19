@@ -79,7 +79,7 @@ python tools\dem-to-tiles\dem_to_tiles.py input.tif -o public\tiles\elbrus
   кадры/с, время фаз (sky/ridge/scale/labels/video/overlayTotal), объём
   геометрии (ridgePoints, ridgeStrokes) и источники перерисовок
   (srcPointer/srcOrientation/srcResize/srcAr, sceneRender/sceneBlit,
-  arOverlayRender/arOverlayBlit, crispFrame). В покое молчит
+  arOverlayRender/arOverlayBlit, videoDraw, crispFrame). В покое молчит
 - `?ardebug` — живой оверлей ориентации кадра (β/γ, угол окна, CSS, размеры)
 
 ## Частые ловушки
