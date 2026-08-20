@@ -685,6 +685,146 @@ describe("многострочная подпись", () => {
     expect(pLine.y).toBeCloseTo(330.34 - 7.5, 0);
   });
 
+  it("при равенстве максимумов пары сосед всё равно уходит с дорожки — наша выноска короче", () => {
+    // Вершины почти на одном азимуте (Δx ≈ 7 px, дорожки конфликтуют):
+    // X встаёт на дорожку −1 (выноска 16.5 px), подъём P на одну дорожку не
+    // меняет максимум пары (16.5 ↔ 16.5), и прежний критерий after < before
+    // отвергал размен — P оставался на дорожке 0, X висел выше. Теперь размен
+    // принимается: выноска X короче, содержимое не потеряно, максимум не вырос
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    st.peaks = [
+      {
+        azimuthRad: 0.3,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "М",
+      },
+      {
+        azimuthRad: 0.545,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "М",
+      },
+      {
+        azimuthRad: 0.307,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "Эльбрус",
+      },
+    ] as never;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    // X — полной строкой на естественном якоре (horizonY = 0.62·H)
+    const xLine = texts.find((t) => t.text === "Эльбрус · 5642 м · 5.0 км")!;
+    expect(xLine).toBeDefined();
+    expect(xLine.y).toBeCloseTo(335.94, 0);
+    // P1 поднят на одну дорожку вверх
+    const p1Line = texts.find(
+      (t) => t.text === "М · 5642 м · 5.0 км" && t.x < 720,
+    )!;
+    expect(p1Line).toBeDefined();
+    expect(p1Line.y).toBeCloseTo(335.94 - 7.5, 0);
+  });
+
+  it("глубинный размен: сосед, мешающий соседу, уходит с ним вместе — кластерная релаксация", () => {
+    // Четыре вершины почти на одном азимуте. Парный сдвиг оставляет X на
+    // D(−2) с выноской 30 px; одиночные ходы не улучшают (A упёрся в потолок
+    // дорожек, B и P3 мешают друг другу, сдвиги вправо деградируют выноски).
+    // Релаксация кластера находит ход P3 на дорожку выше: X опускается на
+    // D(−1) (выноска 16.5 px), худшая выноска группы (A, 45 px) не выросла,
+    // содержимое не потеряно
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    st.peaks = [
+      {
+        azimuthRad: 0.3,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "М",
+      },
+      {
+        azimuthRad: 0.313,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "М",
+      },
+      {
+        azimuthRad: 0.307,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "М",
+      },
+      {
+        azimuthRad: 0.307,
+        elevationRad: 0.05,
+        distanceM: 5000,
+        ele: 5642,
+        visibility: "visible",
+        name: "Джанги-Тау",
+      },
+    ] as never;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    // X — полной строкой на −1 (после релаксации), а не на −2 с длинной
+    // выноской; название не терялось
+    const xLine = texts.find(
+      (t) => t.text === "Джанги-Тау · 5642 м · 5.0 км",
+    )!;
+    expect(xLine).toBeDefined();
+    expect(xLine.y).toBeCloseTo(335.94 - 7.5, 0);
+    // Соседи: A на −3 (парный сдвиг), P3 на −2 (релаксация), B на якоре;
+    // все строки целы
+    const mLines = texts.filter((t) => t.text === "М · 5642 м · 5.0 км");
+    expect(mLines).toHaveLength(3);
+    const ys = mLines.map((t) => t.y).sort((a, b) => a - b);
+    expect(ys[0]).toBeCloseTo(335.94 - 22.5, 0); // A, −3
+    expect(ys[1]).toBeCloseTo(335.94 - 15, 0); // P3, −2
+    expect(ys[2]).toBeCloseTo(335.94, 0); // B, 0
+  });
+
+  it("зеркальная дорожка: когда левые заняты, подпись уходит вправо-вверх", () => {
+    // Четыре подписи почти на одном азимуте (Δaz = 0.001): левые дорожки
+    // 0…−3 разобраны, а левая выноска новичка режет тексты уже размещённых.
+    // Зеркальная дорожка m=2 уводит пачку вправо-вверх на (26, −15) —
+    // выноска той же длины, что у левого подъёма, но путь свободен
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon);
+    st.peaks = [0.3, 0.301, 0.302, 0.303].map((az) => ({
+      azimuthRad: az,
+      elevationRad: 0.05,
+      distanceM: 5000,
+      ele: 5642,
+      visibility: "visible",
+      name: "Эльбрус",
+    })) as never;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    const full = texts.filter((t) => t.text === "Эльбрус · 5642 м · 5.0 км");
+    // Место нашлось не всем: зеркальная дорожка — запасной путь, а не
+    // бесконечные уровни
+    expect(full).toHaveLength(3);
+    // Одна из подписей стоит правее якоря своей вершины (x ≈ 731.5) и на
+    // полторы дорожки выше него (y ≈ 320.9): это зеркальный сдвиг (26, −15)
+    // — влево-вверх подписи в этом кластере не уезжают, там занято
+    expect(full.some((t) => t.x > 728 && t.x < 735 && t.y < 323)).toBe(true);
+  });
+
   it("во время перетаскивания подписи не перекладываются — форма не меняется", () => {
     // «Широкий» у правого края — двухстрочная подпись (хвост не влезает).
     // При перетаскивании взгляд сдвигается, вершина уходит к центру, где

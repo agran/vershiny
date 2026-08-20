@@ -372,6 +372,26 @@ describe("снимок панорамы", () => {
           distanceM: 4200,
           visibility: "visible",
         },
+        {
+          name: "Delta",
+          lat: 43.3,
+          lon: 42.4,
+          ele: 4700,
+          azimuthRad: 0.023,
+          elevationRad: 0.05,
+          distanceM: 4300,
+          visibility: "visible",
+        },
+        {
+          name: "Epsilon",
+          lat: 43.3,
+          lon: 42.4,
+          ele: 4600,
+          azimuthRad: 0.024,
+          elevationRad: 0.05,
+          distanceM: 4400,
+          visibility: "visible",
+        },
       ],
     };
 
@@ -381,9 +401,13 @@ describe("снимок панорамы", () => {
       source: screenCanvas(800, 450),
     });
 
-    // Место нашлось не всем — иначе тест ничего не проверяет
+    // Gamma и Delta уходят на зеркальные дорожки вправо-вверх: их левые
+    // выноски пересекали бы уже размещённые подписи, а справа свободно.
+    // Место всё же нашлось не всем (Epsilon вытеснен) — иначе тест ничего
+    // не проверяет
     expect(draws.some((d) => d.text.startsWith("Alpha"))).toBe(true);
-    expect(draws.some((d) => d.text.startsWith("Gamma"))).toBe(false);
+    expect(draws.some((d) => d.text.startsWith("Gamma"))).toBe(true);
+    expect(draws.some((d) => d.text.startsWith("Epsilon"))).toBe(false);
     expect(draws.filter((d) => d.text.includes("+"))).toEqual([]);
   });
 
