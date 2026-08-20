@@ -795,7 +795,15 @@ window.addEventListener("keydown", (ev) => {
 });
 
 // --- Ориентация устройства (сенсоры + ручная подстройка) ---
-import { rememberArMode, shouldAutoStartAr } from "./core/ar-mode";
+import {
+  clearArAutoStartMark,
+  hadArAutostartKill,
+  isMiBrowser,
+  isStandalone,
+  markArAutoStart,
+  rememberArMode,
+  shouldAutoStartAr,
+} from "./core/ar-mode";
 import {
   DEFAULT_CAMERA_FOV_DEG,
   getCalibration,
@@ -2884,6 +2892,12 @@ function setupActionButtons(): void {
       rememberArMode(false);
       return;
     }
+    // Mi Browser в установленном приложении камеру не отдаёт вовсе:
+    // диалога не будет, а getUserMedia повиснет или откажет молча
+    if (isMiBrowser()) {
+      setStatus(t("arNoCamera"));
+      return;
+    }
     // Запоминаем результат, а не намерение: отказ в доступе — это «нет».
     // «Занято» не запоминаем вовсе: камеру в этот момент открывает автозапуск
     const result = await enterAr();
@@ -2893,10 +2907,21 @@ function setupActionButtons(): void {
   /**
    * Камера при запуске: главный режим приложения не должен требовать
    * нажатия. Ждём первого расчёта — оверлей без панорамы рисовать нечем.
+   *
+   * Сторож от убийства процесса (Xiaomi HyperOS): если прошлый автозапуск
+   * камеры не дожил до ответа (метка не снята), эта загрузка идёт без
+   * камеры — включается кнопкой. Метка снимается при любом ответе enterAr:
+   * раз сеанс жив, автозапуск не стал причиной смерти.
    */
   async function maybeAutoStartAr(): Promise<void> {
     if (!shouldAutoStartAr()) return;
+    if (isStandalone() && hadArAutostartKill()) {
+      console.info("Камера при запуске отключена: прошлый автозапуск прервал сеанс");
+      return;
+    }
+    if (isStandalone()) markArAutoStart();
     const result = await enterAr(true);
+    clearArAutoStartMark();
     // Отказ запоминаем: иначе диалог о камере всплывал бы при каждой загрузке.
     // А вот «занято» означает, что человек успел нажать кнопку сам
     if (result === "off") rememberArMode(false);

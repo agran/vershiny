@@ -9,6 +9,10 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
+  clearArAutoStartMark,
+  hadArAutostartKill,
+  isMiBrowser,
+  markArAutoStart,
   rememberArMode,
   shouldAutoStartAr,
   storedArPreference,
@@ -23,6 +27,33 @@ function stubCamera(available: boolean): void {
   });
 }
 
+/** Установленное приложение: media-запрос display-mode отвечает на standalone */
+function stubStandalone(): void {
+  // В jsdom matchMedia нет — фейковый MQL собираем сами
+  const orig =
+    typeof matchMedia === "function" ? matchMedia.bind(globalThis) : undefined;
+  const fake = (query: string): MediaQueryList => {
+    const mql = (orig
+      ? orig(query)
+      : {
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: () => {},
+          removeListener: () => {},
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          dispatchEvent: () => false,
+        }) as MediaQueryList;
+    Object.defineProperty(mql, "matches", {
+      configurable: true,
+      get: () => query === "(display-mode: standalone)",
+    });
+    return mql;
+  };
+  vi.stubGlobal("matchMedia", fake);
+}
+
 beforeEach(() => {
   localStorage.clear();
   stubCamera(true);
@@ -30,6 +61,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe("режим камеры", () => {
@@ -67,5 +99,43 @@ describe("режим камеры", () => {
   it("мусор в хранилище читается как «ещё не решал»", () => {
     localStorage.setItem("vershiny-ar", '{"on":true}');
     expect(storedArPreference()).toBe("unset");
+  });
+
+  it("в установленном приложении первый запуск — без камеры", () => {
+    // HyperOS убивает процесс при старте камеры во время запуска PWA;
+    // не решивший ещё человек включит камеру кнопкой — это его выбор
+    stubStandalone();
+    expect(shouldAutoStartAr("unset", true)).toBe(false);
+  });
+
+  it("в установленном приложении выбор «on» уважается", () => {
+    // Человек уже показал, что AR — его режим: автозапуск остаётся
+    stubStandalone();
+    expect(shouldAutoStartAr("on", true)).toBe(true);
+  });
+
+  it("в обычной вкладке первый запуск на телефоне — как раньше, с камерой", () => {
+    // display-mode в jsdom по умолчанию не standalone
+    expect(shouldAutoStartAr("unset", true)).toBe(true);
+  });
+
+  it("Mi Browser камеру не включает — там её нет вовсе", () => {
+    Object.defineProperty(navigator, "userAgent", {
+      value:
+        "Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 " +
+        "(KHTML, like Gecko) Version/4.0 Chrome/130.0.0.0 " +
+        "Mobile Safari/537.36 XiaoMi/MiuiBrowser/19.3.2",
+      configurable: true,
+    });
+    expect(isMiBrowser()).toBe(true);
+    expect(shouldAutoStartAr("on", true)).toBe(false);
+  });
+
+  it("метка сторожа автозапуска ставится и снимается", () => {
+    expect(hadArAutostartKill()).toBe(false);
+    markArAutoStart();
+    expect(hadArAutostartKill()).toBe(true);
+    clearArAutoStartMark();
+    expect(hadArAutostartKill()).toBe(false);
   });
 });

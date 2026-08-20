@@ -85,6 +85,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   // Глагол, а не «AR-режим»: аббревиатура AR многим ничего не говорит,
   // а кнопка именно включает камеру с подписями поверх кадра
   arMode: { ru: "Включить камеру", en: "Enable camera" },
+  arNoCamera: {
+    ru: "Камера в этом браузере недоступна. Откройте приложение в Chrome.",
+    en: "The camera is not available in this browser. Open the app in Chrome.",
+  },
   photo: { ru: "Сохранить фото с подписями", en: "Save photo with labels" },
   photoSaved: { ru: "Снимок сохранён", en: "Photo saved" },
   photoCaption: { ru: "Снимок", en: "Photo" },
