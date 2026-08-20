@@ -169,6 +169,9 @@ describe("манифест PWA", () => {
     ]) {
       expect(html).toContain(text);
     }
+    // Заголовок-имя приложения тоже переводится
+    expect(html).toContain('data-i18n="appName"');
+    expect(html).toContain('appName: { ru: "Вершины", en: "Vershiny" }');
   });
 
   it("index.html подставляет en-манифест по сохранённой локали", () => {
