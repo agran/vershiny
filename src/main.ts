@@ -540,8 +540,8 @@ let pinchStartFovDeg = DEFAULT_CAMERA_FOV_DEG;
 canvas.addEventListener("pointerdown", (ev) => {
   // Первый жест — попытка зафиксировать системную ориентацию окна:
   // сработает там, где lock разрешён без fullscreen (установленный PWA),
-  // в обычной вкладке это честный no-op — систему там чинит только
-  // манифест установленного приложения
+  // в обычной вкладке это честный no-op — там работает системный
+  // автоповорот
   screenOrientationModule.lockSystemOrientation();
   activePointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
 
