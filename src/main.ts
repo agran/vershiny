@@ -1478,6 +1478,11 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   void refreshDownloadState();
 
   const base = import.meta.env.BASE_URL;
+  // DEM и пики не зависят друг от друга: на мёртвой сети их таймауты
+  // складывались (8 с на пики + пробы DEM), хотя могли идти параллельно.
+  // Воркер обрабатывает init и следующий compute в порядке postMessage,
+  // поэтому задержка init на порядок сообщений не влияет
+  const demPromise = initDemForRegion(region);
   let peaks: PeaksFile["peaks"] | null = null;
   const { fetchWithTimeout } = await import("./core/fetch-timeout");
   const res = await fetchWithTimeout(`${base}peaks/${region}.json`).catch(
@@ -1511,8 +1516,9 @@ async function switchRegion(region: string, manual = false): Promise<void> {
     currentPeaks = [];
   }
 
-  // Детальный патч рельефа у каждого региона свой
-  await initDemForRegion(region);
+  // Детальный патч рельефа у каждого региона свой (стартовал параллельно
+  // пикам — дожидаемся, чтобы запрос точки не обогнал init)
+  await demPromise;
 }
 
 /**
