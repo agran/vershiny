@@ -2719,6 +2719,10 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   );
   for (let k = 1; k < 8; k++) {
     await new Promise((resolve) => setTimeout(resolve, 110));
+    // За 110 мс человек мог выйти из AR: exitAr() обнуляет модульный
+    // arSession, и grabFrame() здесь бросил бы TypeError → unhandled
+    // rejection (вызов калибровки идёт через void)
+    if (!arSession) return;
     const next = arSession.grabFrame();
     if (!next) break;
     stab = tracker.push(extractSkyline(next.rgba, next.width, next.height));
