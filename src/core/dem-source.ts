@@ -286,17 +286,33 @@ export class DemSource {
     );
   }
 
-  /** Высота наблюдателя: точнейший источник, с фолбэком на остальные */
+  /** Высота наблюдателя: точнейший источник, с фолбэком на остальные.
+   *  Порядок и фолбэк — как в sample(): bbox ≠ покрытие, и разреженный
+   *  детальный слой (hi: bbox глобальный, тайлы — только p-регионы) может
+   *  содержать точку, но не иметь в ней данных — тогда уходим дальше,
+   *  а не бросаем (Краснодар на ровном месте давал «Точка вне покрытия DEM»
+   *  при живом Terrarium) */
   async observerHeight(pos: LatLon): Promise<number> {
-    const fine = this.covering(pos, false)[0];
-    if (fine) return fine.sampler.observerHeight(pos);
+    for (const p of this.covering(pos, false)) {
+      try {
+        return await p.sampler.observerHeight(pos);
+      } catch {
+        // нет данных в этой точке — следующий источник
+      }
+    }
     try {
       return await this.terrarium.heightAt(pos);
-    } catch (err) {
-      const coarse = this.covering(pos, true)[0];
-      if (!coarse) throw err;
-      return coarse.sampler.observerHeight(pos); // офлайн: глобальная пирамида
+    } catch {
+      // нет данных в Terrarium — остаются грубые слои
     }
+    for (const p of this.covering(pos, true)) {
+      try {
+        return await p.sampler.observerHeight(pos);
+      } catch {
+        // нет данных в этой точке — следующий источник
+      }
+    }
+    throw new Error("Точка вне покрытия DEM");
   }
 
   /**
@@ -313,14 +329,29 @@ export class DemSource {
    * (`observerElevationM`), и делать это дважды незачем.
    */
   async observerHeightSafe(pos: LatLon): Promise<number> {
-    const fine = this.covering(pos, false)[0];
-    if (fine) return fine.sampler.observerHeightSafe(pos);
+    // Порядок — как в sample(): детальные слои → Terrarium → грубые. Тот же
+    // фолбэк по данным, а не по bbox: у разреженного hi bbox глобальный, и
+    // без него точка в Краснодаре (равнина, покрытия нет) роняла расчёт,
+    // хотя Terrarium и пирамида оба готовы отдать высоту
+    for (const p of this.covering(pos, false)) {
+      try {
+        return await p.sampler.observerHeightSafe(pos);
+      } catch {
+        // нет данных в этой точке — следующий источник
+      }
+    }
     try {
       return await this.terrarium.heightAt(pos);
-    } catch (err) {
-      const coarse = this.covering(pos, true)[0];
-      if (!coarse) throw err;
-      return coarse.sampler.observerHeightSafe(pos); // офлайн: только пирамида
+    } catch {
+      // нет данных в Terrarium — остаются грубые слои
     }
+    for (const p of this.covering(pos, true)) {
+      try {
+        return await p.sampler.observerHeightSafe(pos);
+      } catch {
+        // нет данных в этой точке — следующий источник
+      }
+    }
+    throw new Error("Точка вне покрытия DEM");
   }
 }

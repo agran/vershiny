@@ -134,4 +134,61 @@ describe("DemSource: предзагрузка грубой пирамиды", ()
     );
     expect(coarseTileRequests()).toBeGreaterThan(0);
   });
+
+  it("высота наблюдателя падает на грубый слой, когда у fine bbox есть, а тайлов нет", async () => {
+    // Как у hi-слоя: bbox глобальный, покрытие разреженное. Точка в bbox,
+    // но без тайлов (Краснодар — равнина вне p-регионов). Раньше
+    // observerHeightSafe бросал «Точка вне покрытия DEM» при живом coarse
+    const sparseFine: DemIndex = {
+      bbox: [-180, -90, 180, 90],
+      lods: [
+        {
+          cellDeg: 0.001,
+          gridWidth: 360_000,
+          gridHeight: 180_000,
+          tilesX: 1407,
+          tilesY: 704,
+          // Покрыт только тайл (0,0) — далеко от точки
+          coverage: (() => {
+            const bits = new Uint8Array(Math.ceil((1407 * 704) / 8));
+            bits[0] = 1;
+            let binary = "";
+            for (const byte of bits) binary += String.fromCharCode(byte);
+            return btoa(binary);
+          })(),
+        },
+      ],
+    };
+    const requested: string[] = [];
+    const fetchFn = (async (url: string) => {
+      const u = String(url);
+      requested.push(u);
+      if (u.includes("tiles/sparse/index.json")) {
+        return new Response(JSON.stringify(sparseFine), {
+          headers: { "content-type": "application/json" },
+        });
+      }
+      if (u.includes("tiles/coarse/index.json")) {
+        return new Response(JSON.stringify(COARSE_INDEX), {
+          headers: { "content-type": "application/json" },
+        });
+      }
+      if (u.includes("tiles/coarse/")) {
+        return new Response(
+          new Uint8Array(TILE_SIZE * TILE_SIZE * 2) as unknown as BodyInit,
+        );
+      }
+      return new Response("", { status: 404 });
+    }) as unknown as typeof fetch;
+
+    const source = new DemSource({
+      patchBaseUrls: ["tiles/sparse", "tiles/coarse"],
+      fetchFn,
+    });
+    await source.init();
+
+    const h = await source.observerHeightSafe({ lat: 45.035, lon: 38.976 });
+    // Coarse-тайл из нулей → высота 0, но главное — не исключение
+    expect(h).toBe(0);
+  });
 });
