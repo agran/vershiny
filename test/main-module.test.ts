@@ -63,6 +63,13 @@ vi.mock("../src/ui/settings", () => ({
   ),
 }));
 
+// Загрузка региона идёт по сети тысячи тайлов — в тесте это заглушка;
+// поведение ПОСЛЕ успешной докачки (пересоздание DEM воркера) — настоящее
+vi.mock("../src/ui/download", async (importOriginal) => {
+  const original = await importOriginal<typeof import("../src/ui/download")>();
+  return { ...original, downloadRegion: vi.fn().mockResolvedValue(42) };
+});
+
 // Рендер — вне предмета теста (jsdom без canvas), остальное модуля — настоящее
 vi.mock("../src/ui/panorama", async (importOriginal) => {
   const original = await importOriginal<typeof import("../src/ui/panorama")>();
@@ -380,3 +387,43 @@ describe("быстрая смена региона не постит устар�
     expect(computes).toHaveLength(computesBefore + 1);
   });
 });
+
+describe("докачка региона обновляет DEM воркера", () => {
+  beforeEach(() => {
+    stubEnvironment();
+  });
+
+  it("после успешной загрузки идёт новый init и пересчёт панорамы", async () => {
+    vi.resetModules();
+    await import("../src/main");
+
+    // Только сообщения воркера ТЕКУЩЕГО инстанса main.ts
+    const posted = () => captured.posted.filter((m) => m._w === 0);
+
+    // Стартовый расчёт ушёл — базовая линия зафиксирована
+    await vi.waitFor(
+      () => expect(posted().some((m) => m.type === "compute")).toBe(true),
+      { timeout: 10_000 },
+    );
+    const initsBefore = posted().filter((m) => m.type === "init").length;
+    const computesBefore = posted().filter((m) => m.type === "compute").length;
+
+    // Сэмплеры офлайн-режима запоминали отсутствовавшие тайлы как «пусто»
+    // (setTile null), и докачка их не отменяла: новый расчёт возвращал дыры
+    // до перезагрузки. Теперь загрузка пересоздаёт источник воркера
+    findButton("Скачать регион для офлайна").click();
+
+    await vi.waitFor(
+      () => {
+        expect(posted().filter((m) => m.type === "init").length).toBe(
+          initsBefore + 1,
+        );
+      },
+      { timeout: 10_000 },
+    );
+    expect(posted().filter((m) => m.type === "compute").length).toBe(
+      computesBefore + 1,
+    );
+  });
+});
+

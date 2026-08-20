@@ -1828,13 +1828,16 @@ function setupDownloadButton(): void {
     if (busy) return;
     busy = true;
     btn.disabled = true;
+    // Загрузка идёт долго: регион за это время мог смениться — чужой
+    // результат не применяем и панораму не пересчитываем
+    const region = currentRegion;
     try {
       // Всё уже на устройстве: прогонять тысячи ключей загрузки незачем —
       // человек видит секундный прогресс при нуле трафика. Проверка полноты
       // тоже недешёвая (по одному чтению IndexedDB на тайл), но в разы
       // быстрее сетевой загрузки и не зависит от связи.
       const regions = await loadRegions();
-      const info = regions[currentRegion];
+      const info = regions[region];
       if (
         regionDownloaded &&
         !regionOutdated &&
@@ -1844,7 +1847,7 @@ function setupDownloadButton(): void {
         setStatus(t("downloadUpToDate"), 2500);
         return;
       }
-      await downloadRegion(currentRegion, lastOrigin, (p: DownloadProgress) => {
+      await downloadRegion(region, lastOrigin, (p: DownloadProgress) => {
         if (p.phase === "peaks") {
           setStatus(t("downloadPeaks"));
         } else if (p.phase === "tiles") {
@@ -1856,6 +1859,14 @@ function setupDownloadButton(): void {
       regionDownloaded = true;
       regionOutdated = false;
       applyDownloadState();
+      // Докачка могла закрыть дыры, которые офлайн-режим уже запомнил как
+      // отсутствующие тайлы (setTile null в сэмплерах): без переинициализации
+      // новый расчёт продолжал бы возвращать закешированное «пусто» до
+      // перезагрузки или смены региона. Пересоздаём источник и пересчитываем
+      if (region === currentRegion) {
+        await initDemForRegion(region, regionSwitchSeq);
+        requestCompute(lastOrigin);
+      }
     } catch (err) {
       setStatus(`${t("error")}: ${err instanceof Error ? err.message : err}`);
       btn.textContent = "✗";
