@@ -216,6 +216,40 @@ describe("ray-marching горизонта", () => {
     expect(layered.layers[4][0]).toBeCloseTo(expected, 8);
   });
 
+  it("фронтов на луче может быть больше 32 — кап не теряет дальние", () => {
+    // Регресс: жёсткий FRONT_CAP = 32 молча отбрасывал фронты сверх капа.
+    // Гребни с возрастающими наклонами ставятся ровно на шаги марша —
+    // каждый образует новый фронт (разрыв между ними > 2 км)
+    const march = buildMarchTable(100 * 1.5, 200_000);
+    const step = (1 * Math.PI) / 180; // 360 лучей — тест быстрый
+    const ridges: { d: number; h: number }[] = [];
+    let k = 0;
+    let started = false;
+    for (let s = 0; s < march.count; s++) {
+      const d = march.d[s];
+      if (!started && d >= 500) started = true;
+      if (started && s % 10 === 0) {
+        // Наклон гребня растёт с номером: каждый следующий — новый максимум
+        ridges.push({ d, h: d * (0.02 + 0.001 * k) });
+        k++;
+      }
+    }
+    const ridgeByD = new Map(ridges.map((r) => [r.d, r.h]));
+    const sample: SampleFn = (_pos, d) => ridgeByD.get(d) ?? 0;
+
+    const { fronts } = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+    });
+    expect(ridges.length).toBeGreaterThan(32);
+    // В ближней зоне гребни сливаются в один фронт (разрывы < 2 км — это
+    // штатное поведение), поэтому проверяем не точное равенство, а то, что
+    // кап не режет счётчик и самый дальний гребень дошёл до конца
+    expect(fronts[0].length).toBeGreaterThan(32);
+    expect(fronts[0][fronts[0].length - 1].distM).toBe(
+      ridges[ridges.length - 1].d,
+    );
+  });
+
   it("horizon и layers[0] делят буфер: дубль в трансферах postMessage запрещён", () => {
     // Регресс: воркер передавал result.horizon.buffer И layers[0].buffer
     // в списке трансферов — это один и тот же ArrayBuffer (horizon ===

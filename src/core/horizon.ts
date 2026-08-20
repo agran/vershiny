@@ -294,12 +294,25 @@ export function computeLayeredHorizon(
   const steps = march.count;
 
   // Фронты в плоских массивах (SoA): объекты VisibleFront аллоцируются один
-  // раз на луч при сборе, а не на каждый обнаруженный фронт
-  const FRONT_CAP = 32;
-  const fDist = new Float64Array(FRONT_CAP);
-  const fEnd = new Float64Array(FRONT_CAP);
-  const fStartRad = new Float64Array(FRONT_CAP);
-  const fMaxRad = new Float64Array(FRONT_CAP);
+  // раз на луч при сборе, а не на каждый обнаруженный фронт. Буферы растут
+  // по требованию: жёсткий кап в 32 молча терял дальние фронты в сложном
+  // рельефе, и маркеры вершин уезжали на запасные позиции
+  const FRONT_INITIAL = 32;
+  let fDist = new Float64Array(FRONT_INITIAL);
+  let fEnd = new Float64Array(FRONT_INITIAL);
+  let fStartRad = new Float64Array(FRONT_INITIAL);
+  let fMaxRad = new Float64Array(FRONT_INITIAL);
+  const growFronts = (): void => {
+    const doubled = (src: Float64Array): Float64Array => {
+      const next = new Float64Array(src.length * 2);
+      next.set(src);
+      return next;
+    };
+    fDist = doubled(fDist);
+    fEnd = doubled(fEnd);
+    fStartRad = doubled(fStartRad);
+    fMaxRad = doubled(fMaxRad);
+  };
 
   // Буферы состояния луча переиспользуются: 3600 лучей × 4 массива
   // Float64Array(5) — это 14.4 тыс. короткоживущих аллокаций на расчёт
@@ -388,13 +401,12 @@ export function computeLayeredHorizon(
         const angle = Math.atan(slope);
         if (frontCount === 0 || d - fEnd[frontCount - 1] > 2000) {
           // Новый фронт (после провала >2 км)
-          if (frontCount < FRONT_CAP) {
-            fDist[frontCount] = d;
-            fEnd[frontCount] = d;
-            fStartRad[frontCount] = angle;
-            fMaxRad[frontCount] = angle;
-            frontCount++;
-          }
+          if (frontCount === fDist.length) growFronts();
+          fDist[frontCount] = d;
+          fEnd[frontCount] = d;
+          fStartRad[frontCount] = angle;
+          fMaxRad[frontCount] = angle;
+          frontCount++;
         } else {
           // Продолжение текущего фронта
           fEnd[frontCount - 1] = d;
