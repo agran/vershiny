@@ -185,10 +185,31 @@ export class DemSource {
     ];
     // Грубую пирамиду не тянем там, где точку наблюдателя уже покрывает
     // детальный слой: лучи отсюда прочитают hi-тайлы, а global-тайлы того же
-    // места — двойной трафик без выигрыша
-    const fineAtOrigin = this.covering(origin, false).length > 0;
+    // места — двойной трафик без выигрыша. Но «покрывает точку» ≠ «покрывает
+    // весь луч»: у детального слоя бывают лакуны (берег, дыры в данных), и
+    // там офлайн раньше получал дыру — скачанные базовые тайлы лежали в
+    // IndexedDB, а в память сэмплера (синхронный sample) не читались. Поэтому
+    // coarse пропускается не целиком, а только в точках, где детальный слой
+    // ответит хотя бы на одном LOD (тем же фолбэком, что sample())
+    const fineAtOrigin = this.covering(origin, false);
     for (const p of this.patches) {
-      if (p.coarse && fineAtOrigin) continue;
+      if (p.coarse && fineAtOrigin.length > 0) {
+        const fine = fineAtOrigin;
+        tasks.push(
+          p.sampler.prefetchAlongRay(
+            origin,
+            azRad,
+            maxDistM,
+            stepM,
+            destinationFn,
+            (pos, distM) =>
+              !fine.some((f) =>
+                f.sampler.hasAnyCoverageAt(pos, this.lodForDistance(distM)),
+              ),
+          ),
+        );
+        continue;
+      }
       tasks.push(
         p.sampler.prefetchAlongRay(
           origin,

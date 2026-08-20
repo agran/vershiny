@@ -273,6 +273,29 @@ export class DemSampler {
   }
 
   /**
+   * Есть ли данные в точке хотя бы на одном LOD, начиная с lodStart — ровно
+   * тем фолбэком, каким пойдёт sample() (hint.lod → грубее). Нужно DemSource:
+   * грубую пирамиду предзагружают только там, где детальный слой не ответит
+   * вовсе (лакуны покрытия) — иначе офлайн в лакунах оставались дыры, хотя
+   * базовые тайлы лежали в IndexedDB, но в память сэмплера не читались.
+   */
+  hasAnyCoverageAt(pos: LatLon, lodStart: number): boolean {
+    if (!this.index) return false;
+    const start = Math.max(0, Math.floor(lodStart));
+    for (let lod = start; lod < this.index.lods.length; lod++) {
+      const l = this.index.lods[lod];
+      const tx = Math.floor(
+        (pos.lon - this.index.bbox[0]) / l.cellDeg / TILE_SIZE,
+      );
+      const ty = Math.floor(
+        (this.index.bbox[3] - pos.lat) / l.cellDeg / TILE_SIZE,
+      );
+      if (this.hasTile(lod, tx, ty)) return true;
+    }
+    return false;
+  }
+
+  /**
    * Высота точки (метры) с билинейной интерполяцией.
    * NaN — вне покрытия. Требует, чтобы тайлы были предзагружены
    * (prefetchAlongRay / prefetchPoint); синхронная — для использования в worker.
@@ -599,6 +622,10 @@ export class DemSampler {
    * Предзагрузка тайлов вдоль луча: из origin по азимуту azRad до maxDistM.
    * Вызывается worker'ом перед ray-marching'ом луча. Грузим выбранный LOD
    * и все более грубые — на них уходит фолбэк, если детального тайла нет.
+   *
+   * @param needTile необязательный фильтр точки (pos, дистанция, LOD):
+   *   false — тайлы этой точки не тянем (так DemSource исключает грубую
+   *   пирамиду там, где детальный слой и так ответит)
    */
   async prefetchAlongRay(
     origin: LatLon,
@@ -606,6 +633,7 @@ export class DemSampler {
     maxDistM: number,
     stepM: number,
     destinationFn: (o: LatLon, az: number, d: number) => LatLon,
+    needTile?: (pos: LatLon, distM: number, lodIndex: number) => boolean,
   ): Promise<void> {
     if (!this.index) await this.loadIndex();
     const keys = new Set<string>();
@@ -616,6 +644,7 @@ export class DemSampler {
         lodIdx < this.index!.lods.length;
         lodIdx++
       ) {
+        if (needTile && !needTile(p, d, lodIdx)) continue;
         const l = this.index!.lods[lodIdx];
         const gx = Math.floor(
           (p.lon - this.index!.bbox[0]) / l.cellDeg / TILE_SIZE,
