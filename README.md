@@ -143,4 +143,5 @@ python tools/peaks-index/build_index.py
 **Vershiny** — mountain horizon panorama with peak labels, running entirely in
 the browser. Open-source PeakFinder alternative: no server, no sign-up, works
 offline as a PWA. UI in Russian and English.
-[Live demo](https://agran.github.io/vershiny/).
+
+🏔 [Live demo](https://agran.github.io/vershiny/) · 📲 [Install](https://agran.github.io/vershiny/install.html)
