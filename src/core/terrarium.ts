@@ -21,6 +21,17 @@ export const TERRARIUM_BASE_URL =
 const TILE_PX = 256;
 const MAX_LATITUDE = 85.051_128_78; // предел Web Mercator
 
+/** Сигнатура PNG (8 байт): отсекает HTML/JSON от SPA-fallback и прокси */
+const PNG_SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10];
+
+function isPngSignature(bytes: Uint8Array): boolean {
+  if (bytes.length < PNG_SIGNATURE.length) return false;
+  for (let i = 0; i < PNG_SIGNATURE.length; i++) {
+    if (bytes[i] !== PNG_SIGNATURE[i]) return false;
+  }
+  return true;
+}
+
 /** Пиксель z15 на экваторе ≈ 4.8 м, но данные внутри — класса 90 м (SRTM 3″) */
 export interface ZoomRule {
   /** Дистанция луча до которой применяется зум, метры */
@@ -228,9 +239,16 @@ export class TerrariumSampler {
           // Запрет хранилища (приватный режим) не должен ронять расчёт
           const offline = await db.getTerrariumTile(key).catch(() => undefined);
           if (offline) {
-            const tile = await this.decodePng(offline, key);
-            this.setTile(key, tile);
-            return tile;
+            try {
+              const tile = await this.decodePng(offline, key);
+              this.setTile(key, tile);
+              return tile;
+            } catch {
+              // Битые байты в хранилище (HTML от прокси, усечённый PNG,
+              // сохранённые старым кодом): запись удаляем, чтобы расчёт не
+              // спотыкался о неё каждый раз, а онлайн мог докачать тайл
+              db.deleteTerrariumTile(key).catch(() => {});
+            }
           }
         }
 
@@ -301,8 +319,17 @@ export class TerrariumSampler {
       const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
       if (res.status === 404) return "missing";
       if (!res.ok) return "failed";
+      // «200 OK» ещё не значит PNG: SPA-fallback Vite отдаёт index.html, а
+      // прокси могут подсунуть что угодно. Такой «тайл» в хранилище = регион
+      // «скачан», а контур с дырой до ручной очистки. Сигнатура отсекает
+      // HTML дёшево; усечённый PNG ловится при чтении — битая запись
+      // удаляется, см. loadTile
+      const ct = (res.headers.get("content-type") ?? "").toLowerCase();
+      if (ct && !ct.includes("image/png")) return "failed";
+      const raw = new Uint8Array(await res.arrayBuffer());
+      if (!isPngSignature(raw)) return "failed";
       if (!db) return "failed"; // скачали, но положить некуда
-      await db.saveTerrariumTile(key, new Uint8Array(await res.arrayBuffer()));
+      await db.saveTerrariumTile(key, raw);
       return "saved";
     } catch {
       return "failed";

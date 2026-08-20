@@ -289,6 +289,17 @@ export async function getTerrariumTile(
   return get<Uint8Array>(STORE_TERRARIUM, key);
 }
 
+/** Удалить Terrarium-тайл из офлайн-кеша (битая запись чистится при чтении) */
+export async function deleteTerrariumTile(key: string): Promise<void> {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_TERRARIUM, "readwrite");
+    tx.objectStore(STORE_TERRARIUM).delete(key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
 /**
  * Кеш реестра регионов (regions.json). Без него офлайн не открыть список
  * регионов и не сменить активный — даже тот, что уже лежит в хранилище.

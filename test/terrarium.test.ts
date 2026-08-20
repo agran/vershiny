@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
     decodeTerrarium,
     lonLatToPixel,
@@ -7,6 +7,16 @@ import {
     TerrariumSampler,
     zoomForDistance,
 } from "../src/core/terrarium";
+
+// db-модуль подменяется: проверяем, что в хранилище попадают только валидные
+// PNG и что битые записи удаляются при чтении
+const dbMock = vi.hoisted(() => ({
+    getTerrariumTile: vi.fn(),
+    saveTerrariumTile: vi.fn(),
+    deleteTerrariumTile: vi.fn(),
+}));
+
+vi.mock("../src/core/db", () => dbMock);
 
 describe("terrarium", () => {
   it("slippy-конверсия: Эльбрус z15 → x=20246 y=11996", () => {
@@ -234,5 +244,59 @@ describe("terrarium", () => {
         1,
       ),
     ).toBe("missing");
+  });
+});
+
+describe("валидация PNG при сохранении в офлайн-кеш", () => {
+  beforeEach(() => {
+    // TerrariumSampler ходит в db-модуль только при наличии IndexedDB
+    vi.stubGlobal("indexedDB", {});
+    dbMock.getTerrariumTile.mockReset().mockResolvedValue(undefined);
+    dbMock.saveTerrariumTile.mockReset().mockResolvedValue(undefined);
+    dbMock.deleteTerrariumTile.mockReset().mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("HTML-ответ 200 не сохраняется как тайл", async () => {
+    // SPA-fallback Vite отдаёт index.html с 200 на любой путь: такой ответ
+    // оседал в хранилище, регион считался скачанным, а контур — с дырой
+    // до ручной очистки хранилища
+    const fetchFn = (async () =>
+      new Response("<!doctype html><html><body>…</body></html>", {
+        status: 200,
+        headers: { "content-type": "text/html" },
+      })) as unknown as typeof fetch;
+    const sampler = new TerrariumSampler({ fetchFn });
+
+    await expect(sampler.saveTileOffline(12, 100, 100)).resolves.toBe("failed");
+    expect(dbMock.saveTerrariumTile).not.toHaveBeenCalled();
+  });
+
+  it("PNG-сигнатура и image/png сохраняются", async () => {
+    const bytes = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 0, 1, 2]);
+    const fetchFn = (async () =>
+      new Response(bytes, {
+        status: 200,
+        headers: { "content-type": "image/png" },
+      })) as unknown as typeof fetch;
+    const sampler = new TerrariumSampler({ fetchFn });
+
+    await expect(sampler.saveTileOffline(12, 100, 100)).resolves.toBe("saved");
+    expect(dbMock.saveTerrariumTile).toHaveBeenCalledWith("12/100/100", bytes);
+  });
+
+  it("битая запись удаляется при чтении, а не блокирует тайл навсегда", async () => {
+    // Сигнатура на месте, но это не PNG: decode падает, запись вычищается —
+    // онлайн докачает тайл заново, офлайн честно вернёт null
+    dbMock.getTerrariumTile.mockResolvedValue(
+      new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 7, 7, 7]),
+    );
+    const sampler = new TerrariumSampler({ offlineOnly: true });
+
+    await expect(sampler.loadTile(12, 100, 100)).resolves.toBeNull();
+    expect(dbMock.deleteTerrariumTile).toHaveBeenCalledWith("12/100/100");
   });
 });
