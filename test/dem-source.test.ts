@@ -7,9 +7,9 @@
  */
 
 import { describe, expect, it } from "vitest";
+import { TILE_SIZE, type DemIndex } from "../src/core/dem";
 import { DemSource } from "../src/core/dem-source";
 import { destination, type LatLon } from "../src/core/geo";
-import { TILE_SIZE, type DemIndex } from "../src/core/dem";
 
 const ORIGIN: LatLon = { lat: 43, lon: 42 };
 

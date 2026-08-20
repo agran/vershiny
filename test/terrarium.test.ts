@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
-  decodeTerrarium,
-  lonLatToPixel,
-  lonLatToTile,
-  lonLatToTileAndPixel,
-  zoomForDistance,
-  TerrariumSampler,
+    decodeTerrarium,
+    lonLatToPixel,
+    lonLatToTile,
+    lonLatToTileAndPixel,
+    TerrariumSampler,
+    zoomForDistance,
 } from "../src/core/terrarium";
 
 describe("terrarium", () => {

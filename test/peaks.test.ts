@@ -3,12 +3,12 @@
  * высокой) как заменитель prominence, которого в OSM практически нет.
  */
 
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  annotateIsolation,
-  isolationWeight,
-  peakScore,
-  type Peak,
+    annotateIsolation,
+    isolationWeight,
+    peakScore,
+    type Peak,
 } from "../src/core/peaks";
 
 /** Вершина по смещению в километрах от условного центра */
