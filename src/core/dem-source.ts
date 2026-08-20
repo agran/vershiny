@@ -6,7 +6,7 @@
  */
 
 import { DemSampler } from "./dem";
-import { bboxContains, type LatLon } from "./geo";
+import { bboxContains, destination, type LatLon } from "./geo";
 import type { SampleHint } from "./horizon";
 import { sectorBoundsForTiles, type SectorTile } from "./sector-bounds";
 import {
@@ -30,6 +30,12 @@ export interface DemSourceOptions {
 const NEAR_M = 30_000;
 /** Патч детальнее этого порога считаем «своим» и приоритетным (90-м патчи) */
 const FINE_RES_M = 120;
+/**
+ * Таймаут ближних тайлов превью (см. prefetchNearZone). Короткий намеренно:
+ * превью обязано выйти быстро, дыра в нём допустима, а финальный кадр по
+ * полному вееру с обычным таймаутом её пересчитает
+ */
+const NEAR_FETCH_TIMEOUT_MS = 2_500;
 
 /** Подключённый источник: сэмплер + классификация по разрешению */
 interface Patch {
@@ -295,6 +301,50 @@ export class DemSource {
     await Promise.all(
       [...zooms].map((zoom) => this.terrarium.prefetchAround(origin, zoom)),
     );
+  }
+
+  /** Ближний веер всех слоёв для превью-марша (0–15 км): патчи + Terrarium */
+  private async prefetchNearFan(
+    origin: LatLon,
+    maxDistM: number,
+    stepM: number,
+  ): Promise<void> {
+    const tasks: Promise<void>[] = [];
+    for (let az = 0; az < 2 * Math.PI; az += (5 * Math.PI) / 180) {
+      tasks.push(
+        this.prefetchAlongRay(origin, az, maxDistM, stepM, destination),
+      );
+    }
+    await Promise.all(tasks);
+  }
+
+  /**
+   * Волна 1 для превью: ближняя зона (3×3 Terrarium + веер до maxDistM) с
+   * КОРОТКИМ таймаутом сети. Превью — это быстрый грубый кадр: если ближний
+   * тайл не приехал за 2.5 с, дальше ничего не приедет, и рисовать с дырой
+   * лучше, чем ждать 8 секунд. Финальный кадр считается по полному вееру с
+   * обычным таймаутом и пересчитывает дыры.
+   */
+  async prefetchNearZone(
+    origin: LatLon,
+    maxDistM: number,
+    stepM: number,
+  ): Promise<void> {
+    const saved: number[] = [this.terrarium.fetchTimeoutMs];
+    this.terrarium.fetchTimeoutMs = NEAR_FETCH_TIMEOUT_MS;
+    for (const p of this.patches) {
+      saved.push(p.sampler.fetchTimeoutMs);
+      p.sampler.fetchTimeoutMs = NEAR_FETCH_TIMEOUT_MS;
+    }
+    try {
+      await Promise.all([
+        this.prefetchNear(origin),
+        this.prefetchNearFan(origin, maxDistM, stepM),
+      ]);
+    } finally {
+      this.terrarium.fetchTimeoutMs = saved[0];
+      this.patches.forEach((p, i) => (p.sampler.fetchTimeoutMs = saved[i + 1]));
+    }
   }
 
   /** Высота наблюдателя: точнейший источник, с фолбэком на остальные.

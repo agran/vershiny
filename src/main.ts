@@ -809,7 +809,7 @@ import {
   getCalibration,
   setCalibration,
 } from "./core/calibration";
-import { destination } from "./core/geo";
+import { destination, distanceM } from "./core/geo";
 import { orientationTracker } from "./core/orientation";
 import { perfCount, perfEnabled, perfFrame } from "./core/perf";
 import { overlayRollRad } from "./core/roll-compensation";
@@ -1051,6 +1051,19 @@ let nextReqId = 1;
 /** Номер последнего отправленного `compute`: ответы постарше — мусор */
 let activeComputeId = 0;
 
+/**
+ * Пики региона — держим в воркере (setPeaks), чтобы не клонировать массив
+ * в каждое compute-сообщение: у iberia 49 тыс. объектов, а при drag compute
+ * уходит на каждый pointermove
+ */
+function syncWorkerPeaks(): void {
+  worker.postMessage({
+    type: "setPeaks",
+    peaks: currentPeaks,
+    reqId: nextReqId++,
+  });
+}
+
 worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   const msg = ev.data;
   if (msg.type === "error") {
@@ -1067,6 +1080,37 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     return;
   }
   if (msg.type === "viewpoint") return; // ждёт свой одноразовый обработчик
+  // Превью: грубый ближний кадр до полного расчёта. Без пиков и фронтов —
+  // маркеров нет, силуэт рисуется по слоям/гребням. Гасящее «Расчёт
+  // панорамы…» здесь не убираем полностью — меняем на неблокирующий статус,
+  // чтобы человек видел: картинка есть, но детали доезжают
+  if (msg.type === "preview") {
+    if (msg.reqId !== undefined && msg.reqId !== activeComputeId) return;
+    const next = {
+      horizon: msg.horizon,
+      stepRad: msg.stepRad,
+      layers: msg.layers,
+      distanceToHorizonM: msg.distanceToHorizonM,
+      fronts: [],
+      crests: msg.crests,
+      peaks: [],
+    };
+    // Мутируем существующий объект, а не подменяем ссылку: AR-оверлей захватил
+    // его при запуске и рисовал бы контуры прежней точки (тот же контракт,
+    // что в обработчике result ниже)
+    panorama = panorama ? Object.assign(panorama, next) : next;
+    sceneDirty = true; // содержимое кеша сцены устарело
+    lastObserverH = msg.observerH;
+    const heightEl = document.getElementById("height-indicator");
+    if (heightEl)
+      heightEl.textContent = `${Math.round(msg.observerH)} ${t("unitM")}`;
+    setStatus(t("refining"));
+    draw();
+    console.info(
+      `Превью: ${msg.horizon.length} лучей, наблюдатель ${msg.observerH.toFixed(0)} м, ${msg.computeMs.toFixed(0)} мс`,
+    );
+    return;
+  }
   const r = msg as ResultMessage;
   // Расчёт старой точки, обогнавший свежий: применить его — значит показать
   // панораму не оттуда, где стоит наблюдатель
@@ -1125,7 +1169,9 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   arAutoStart?.();
   console.info(
     `Горизонт: ${r.horizon.length} лучей, ${r.peaks.length} из ${currentPeaks.length} пиков, ` +
-      `наблюдатель ${r.observerH.toFixed(0)} м, ${r.computeMs.toFixed(0)} мс`,
+      `наблюдатель ${r.observerH.toFixed(0)} м, ${r.computeMs.toFixed(0)} мс ` +
+      `(prefetch ${r.prefetchMs.toFixed(0)}, march ${r.marchMs.toFixed(0)}, ` +
+      `peaks ${r.peaksMs.toFixed(0)}, pack ${r.packMs.toFixed(0)})`,
   );
 };
 
@@ -1241,6 +1287,7 @@ async function main(): Promise<void> {
   // соответствие региона, и плашка «вы в другом районе» появлялась только
   // после первого перемещения
   currentPeaks = [];
+  syncWorkerPeaks();
   requestCompute(origin, fix.trusted);
   const startOrigin = origin;
   const startRegion = currentRegion;
@@ -1253,6 +1300,7 @@ async function main(): Promise<void> {
       await annotatePeaks(loaded);
       if (currentRegion !== startRegion) return;
       currentPeaks = loaded;
+      syncWorkerPeaks();
       if (
         lastOrigin.lat === startOrigin.lat &&
         lastOrigin.lon === startOrigin.lon &&
@@ -1502,6 +1550,7 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   const switchSeq = ++regionSwitchSeq;
   if (region !== currentRegion) {
     currentPeaks = [];
+    syncWorkerPeaks();
     if (panorama) {
       // Мутируем на месте, не подменяя ссылку — тот же контракт, что в
       // worker.onmessage: AR-сессия захватывает объект панорамы при входе
@@ -1550,10 +1599,12 @@ async function switchRegion(region: string, manual = false): Promise<void> {
       void saveIsolation(region, isoSnapshot).catch(() => {});
     }
     currentPeaks = peaks;
+    syncWorkerPeaks();
   } else {
     // Офлайн и регион не скачан: вершины прежнего региона оставлять нельзя —
     // они за сотни километров отсюда. Рельеф при этом есть из пирамиды
     currentPeaks = [];
+    syncWorkerPeaks();
   }
 
   // Детальный патч рельефа у каждого региона свой (стартовал параллельно
@@ -1577,6 +1628,7 @@ async function goToLocation(pos: LatLon): Promise<void> {
     // километров. Оставлять вершины прежнего нельзя: они к этому месту
     // отношения не имеют
     currentPeaks = [];
+    syncWorkerPeaks();
   }
   heightOverride = null; // на землю: набранная высота к новой точке не относится
   autoTiltPending = true;
@@ -2653,13 +2705,19 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
  *   значит выдавать выдумку за положение человека
  */
 function requestCompute(origin: LatLon, checkRegion = true): void {
+  // Превью (грубый ближний кадр) уместно при первом расчёте и при прыжке на
+  // новое место: там тайлы холодные, и полный кадр займёт секунды. При drag
+  // и малых шагах тайлы тёплые, и превью лишь откатило бы картинку к грубому
+  // силуэту посреди жеста
+  const wantPreview =
+    !dragging && (panorama === null || distanceM(lastOrigin, origin) > 2_000);
   lastOrigin = origin;
   activeComputeId = nextReqId++;
   worker.postMessage({
     type: "compute",
     origin,
-    peaks: currentPeaks,
     observerHeightOverride: heightOverride ?? undefined,
+    wantPreview,
     reqId: activeComputeId,
   });
   setStatus(t("computing"));

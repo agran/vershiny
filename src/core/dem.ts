@@ -15,7 +15,7 @@
 
 import { gunzipSync } from "fflate";
 import { demStorePrefix } from "./dem-config";
-import { fetchWithTimeout } from "./fetch-timeout";
+import { FETCH_TIMEOUT_MS, fetchWithTimeout } from "./fetch-timeout";
 import type { LatLon } from "./geo";
 import { distanceM } from "./geo";
 import { root } from "./globals";
@@ -116,11 +116,24 @@ export class DemSampler {
   /** Битсеты покрытия по LOD (если index их содержит) */
   private coverage: (Uint8Array | null)[] = [];
   private readonly baseUrl: string;
-  private readonly fetchFn: typeof fetch;
+  /**
+   * Третий аргумент — таймаут (fetchWithTimeout); обычный fetch лишний аргумент
+   * игнорирует, тестовые заглушки тоже
+   */
+  private readonly fetchFn: (
+    url: string,
+    init?: RequestInit,
+    timeoutMs?: number,
+  ) => Promise<Response>;
   /** Префикс ключа в офлайн-хранилище: у каждого источника своя сетка тайлов */
   private readonly storePrefix: string;
   /** Офлайн-хранилище (IndexedDB); null — недоступно (тесты, приватный режим) */
   private dbCache: typeof import("./db") | null | undefined;
+  /**
+   * Таймаут сетевых запросов тайла. По умолчанию общий (8 с); ближняя волна
+   * превью временно ставит более короткий (см. DemSource.prefetchNearZone)
+   */
+  fetchTimeoutMs = FETCH_TIMEOUT_MS;
 
   /** Порог переключения LOD, метры (DATA-PIPELINE: 30 км) */
   lodSwitchM = 30_000;
@@ -449,7 +462,7 @@ export class DemSampler {
           }
         }
 
-        const res = await this.fetchFn(this.tileUrl(key));
+        const res = await this.fetchFn(this.tileUrl(key), {}, this.fetchTimeoutMs);
         let tile: Int16Array | null = null;
         if (res.ok) {
           tile = await this.decodeTile(

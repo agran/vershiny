@@ -39,9 +39,24 @@ export interface InitMessage {
 export interface ComputeMessage {
   type: "compute";
   origin: LatLon;
-  peaks: Peak[];
   /** Переопределение высоты наблюдателя (для навигации вверх/вниз) */
   observerHeightOverride?: number;
+  /**
+   * Показывать ли превью (грубый ближний кадр) перед полным расчётом.
+   * Ставит main: превью уместно при первом расчёте и при прыжке на новое
+   * место (холодные тайлы), не уместно при drag/малых шагах (тёплые тайлы —
+   * превью лишь откатило бы картинку к грубому силуэту посреди жеста)
+   */
+  wantPreview?: boolean;
+  reqId?: number;
+}
+
+/** Пики региона — отдельным сообщением, а не в каждом compute: у iberia 49 тыс.
+ *  объектов, и их structuredClone в каждое сообщение при drag (каждый
+ *  pointermove) — скрытый налог на main-потоке */
+export interface SetPeaksMessage {
+  type: "setPeaks";
+  peaks: Peak[];
   reqId?: number;
 }
 
@@ -59,6 +74,31 @@ export interface ViewpointResult {
   origin: LatLon;
   /** Азимут с точки на вершину, рад */
   azimuthRad: number;
+  reqId?: number;
+}
+
+/**
+ * Превью: грубый ближний кадр (720 лучей, 0–12 км) — то, что человек видит
+ * в первую секунду, пока полный веер тайлов не приехал. Без пиков: их
+ * классификация зависит от полного горизонта по всем лучам, и на грубом
+ * шаге дальние вершины были бы помечены неверно
+ */
+export interface PreviewMessage {
+  type: "preview";
+  /** Углы горизонта по лучам, рад (верхний слой) */
+  horizon: Float32Array;
+  /** Шаг между лучами, рад */
+  stepRad: number;
+  /** Слои горизонта по дистанционным корзинам */
+  layers: Float32Array[];
+  /** Дистанция до точки горизонта по лучам */
+  distanceToHorizonM: Float32Array;
+  /** Гребни силуэта по корзинам дистанций [корзина][луч] */
+  crests: Float32Array[];
+  /** Высота наблюдателя из DEM */
+  observerH: number;
+  /** Время превью-марша, мс */
+  computeMs: number;
   reqId?: number;
 }
 
@@ -85,6 +125,11 @@ export interface ResultMessage {
   peaks: VisiblePeak[];
   /** Высота наблюдателя из DEM */
   observerH: number;
+  /** Разбивка времени расчёта, мс (для лога) */
+  prefetchMs: number;
+  marchMs: number;
+  peaksMs: number;
+  packMs: number;
   computeMs: number;
   reqId?: number;
 }
@@ -95,10 +140,20 @@ export interface ErrorMessage {
   reqId?: number;
 }
 
-export type WorkerInMessage = InitMessage | ComputeMessage | ViewpointMessage;
-export type WorkerOutMessage = ResultMessage | ErrorMessage | ViewpointResult;
+export type WorkerInMessage =
+  | InitMessage
+  | ComputeMessage
+  | SetPeaksMessage
+  | ViewpointMessage;
+export type WorkerOutMessage =
+  | ResultMessage
+  | PreviewMessage
+  | ErrorMessage
+  | ViewpointResult;
 
 let dem: DemSource | null = null;
+/** Пики текущего региона — живут в воркере (см. SetPeaksMessage) */
+let workerPeaks: Peak[] = [];
 
 /**
  * Инициализация источника высот идёт асинхронно, а `self.onmessage = async`
@@ -119,30 +174,27 @@ const MAX_DIST_M = 200_000;
 /** Сектора секторных границ обрыва: 5° — в 50 раз грубее луча */
 const SECTOR_COUNT = 72;
 
+// Превью: грубый ближний кадр до полного расчёта. 720 лучей × ~93 шага до
+// 12 км ≈ 67 тыс. выборок — в ~30 раз меньше полного марша (1.93 млн).
+// Шаг 0.5° на дистанции 12 км — это ~105 м, уровень ячейки DEM: дальше мельчить
+// превью незачем, финальный кадр всё равно пересчитает на 3600 лучей
+const PREVIEW_MAX_DIST_M = 12_000;
+const PREVIEW_STEP_RAD = (0.5 * Math.PI) / 180;
+/** Веер волны 1: те же 5° по азимуту, шаг точек 4 км */
+const PREVIEW_FAN_STEP_M = 4_000;
+
 async function compute(
   origin: LatLon,
-  peaks: Peak[],
   heightOverride?: number,
-): Promise<ResultMessage> {
+  wantPreview = false,
+): Promise<{ preview: PreviewMessage | null; result: ResultMessage }> {
   const source = dem;
   if (!source) throw new Error("Worker не инициализирован (init)");
   const t0 = performance.now();
 
   // Высота наблюдателя: max по окрестности 3×3 (не ниже поверхности)
   const observerH = heightOverride ?? (await source.observerHeightSafe(origin));
-
-  // Предзагрузка тайлов веером лучей (шаг 5° — достаточно для покрытия).
-  // Ближняя зона веером не покрывается: на первых километрах все лучи лежат
-  // в одном-двух тайлах, а сетка предзагрузки (5°, 8 км) туда просто не
-  // попадает — до двух третей ближних выборок приходились на незагруженные
-  // тайлы, и передний план молча считался по грубой пирамиде вместо Terrarium
-  const prefetchTasks: Promise<void>[] = [source.prefetchNear(origin)];
-  for (let az = 0; az < 2 * Math.PI; az += (5 * Math.PI) / 180) {
-    prefetchTasks.push(
-      source.prefetchAlongRay(origin, az, MAX_DIST_M, 8_000, destination),
-    );
-  }
-  await Promise.all(prefetchTasks);
+  const tObserver = performance.now();
 
   // Именно `source`, а не живая переменная `dem`: смена региона могла прийти
   // прямо посреди расчёта, и тогда выборка пошла бы из нового источника с
@@ -150,27 +202,76 @@ async function compute(
   // Подсказки таблицы марша: LOD пирамиды и зум Terrarium предвычислены по
   // дальности шага — из горячего цикла уходит и логарифм lodForDistance, и
   // перебор ZOOM_RULES
-  const sample = (pos: LatLon, distM: number, hint?: SampleHint): number =>
+  const sampleFn = (pos: LatLon, distM: number, hint?: SampleHint): number =>
     source.sample(pos, distM, hint);
   const marchDeps = {
     lodForDistance: (distM: number) => source.lodForDistance(distM),
   };
 
-  const layered = computeLayeredHorizon(origin, observerH, sample, {
+  // Волна 1: ближняя зона. При wantPreview — с коротким таймаутом и ближним
+  // веером (превью обязано выйти быстро, дыра в нём допустима). Без превью
+  // (drag, малые шаги) — только 3×3 Terrarium с обычным таймаутом: она нужна
+  // и полному маршу (веер 0–2 км не покрывает), а дыры в финальном кадре
+  // недопустимы
+  let tNear = tObserver;
+  let tPreviewEnd = tObserver;
+  let preview: PreviewMessage | null = null;
+  if (wantPreview) {
+    await source.prefetchNearZone(origin, 15_000, PREVIEW_FAN_STEP_M);
+    tNear = performance.now();
+
+    // Превью-марш: грубый шаг по азимуту, только ближняя зона. Пиков не несёт —
+    // классификация видимости зависит от полного горизонта по всем лучам
+    const previewLayered = computeLayeredHorizon(origin, observerH, sampleFn, {
+      azimuthStepRad: PREVIEW_STEP_RAD,
+      maxDistM: PREVIEW_MAX_DIST_M,
+      marchDeps,
+    });
+    tPreviewEnd = performance.now();
+    preview = {
+      type: "preview",
+      horizon: previewLayered.layers[0],
+      stepRad: previewLayered.stepRad,
+      layers: previewLayered.layers,
+      distanceToHorizonM: previewLayered.distanceToHorizonM,
+      crests: previewLayered.crests,
+      observerH,
+      computeMs: tPreviewEnd - tNear,
+    };
+  } else {
+    await source.prefetchNear(origin);
+    tNear = performance.now();
+    tPreviewEnd = tNear;
+  }
+
+  // Волна 2: полный веер — запускаем сразу после волны 1 (греет соединения,
+  // пока мы считали превью), но ждём только сейчас
+  const fanTasks: Promise<void>[] = [];
+  for (let az = 0; az < 2 * Math.PI; az += (5 * Math.PI) / 180) {
+    fanTasks.push(
+      source.prefetchAlongRay(origin, az, MAX_DIST_M, 8_000, destination),
+    );
+  }
+  await Promise.all(fanTasks);
+  const tFull = performance.now();
+
+  const layered = computeLayeredHorizon(origin, observerH, sampleFn, {
     marchDeps,
     // Секторные верхние границы по уже загруженным тайлам: консервативны,
     // поэтому обрыв луча не меняет видимый результат, а дальние шаги
     // (самая дорогая часть марша) в равнинных секторах выпадают
     sectorMax: source.sectorMaxHeights(origin, SECTOR_COUNT),
   });
+  const tMarch = performance.now();
   const visible = filterVisiblePeaks(
     origin,
     observerH,
-    peaks,
-    sample,
+    workerPeaks,
+    sampleFn,
     layered,
     marchDeps,
   );
+  const tPeaks = performance.now();
 
   // Фронты — в плоский SoA для трансфера (объекты соберёт main-поток)
   const rayCount = layered.fronts.length;
@@ -188,19 +289,29 @@ async function compute(
       frontsFlat[o++] = f.elevMaxRad;
     }
   }
+  const tPack = performance.now();
 
   return {
-    type: "result",
-    horizon: layered.layers[0], // ближний слой = основной горизонт
-    stepRad: layered.stepRad,
-    layers: layered.layers,
-    distanceToHorizonM: layered.distanceToHorizonM,
-    frontsFlat,
-    frontsOffsets,
-    crests: layered.crests,
-    peaks: visible,
-    observerH,
-    computeMs: performance.now() - t0,
+    preview,
+    result: {
+      type: "result",
+      horizon: layered.layers[0], // ближний слой = основной горизонт
+      stepRad: layered.stepRad,
+      layers: layered.layers,
+      distanceToHorizonM: layered.distanceToHorizonM,
+      frontsFlat,
+      frontsOffsets,
+      crests: layered.crests,
+      peaks: visible,
+      observerH,
+      // Сеть: волна 1 (observer→near) + волна 2 (превью→full); превью-марш
+      // вычтен, чтобы не смешивать сеть с CPU
+      prefetchMs: (tNear - tObserver) + (tFull - tPreviewEnd),
+      marchMs: tMarch - tFull,
+      peaksMs: tPeaks - tMarch,
+      packMs: tPack - tPeaks,
+      computeMs: performance.now() - t0,
+    },
   };
 }
 
@@ -305,6 +416,23 @@ async function pump(): Promise<void> {
   }
 }
 
+/** Пост превью/результата с трансфером типизированных буферов (без копирования).
+ *  horizon — тот же буфер, что layers[0], поэтому в списке трансферов его нет
+ *  (дубль ArrayBuffer запрещён); фронты — только у полного result */
+function postTransfer(
+  msg: PreviewMessage | ResultMessage,
+): void {
+  const transfers: ArrayBuffer[] = [
+    ...msg.layers.map((a) => a.buffer),
+    msg.distanceToHorizonM.buffer,
+    ...msg.crests.map((a) => a.buffer),
+  ];
+  if (msg.type === "result") {
+    transfers.push(msg.frontsFlat.buffer, msg.frontsOffsets.buffer);
+  }
+  (self as unknown as Worker).postMessage(msg, transfers);
+}
+
 async function handle(msg: WorkerInMessage): Promise<void> {
   const reqId = msg.reqId;
   try {
@@ -326,6 +454,11 @@ async function handle(msg: WorkerInMessage): Promise<void> {
       await initPromise;
       return;
     }
+    // Пики региона: живут в воркере, чтобы не клонировать их в каждый compute
+    if (msg.type === "setPeaks") {
+      workerPeaks = msg.peaks;
+      return;
+    }
     // Расчёты ждут инициализацию: иначе патч рельефа подключится уже после
     // того, как панорама посчитана по грубым данным
     await initPromise;
@@ -335,23 +468,17 @@ async function handle(msg: WorkerInMessage): Promise<void> {
       return;
     }
     if (msg.type === "compute") {
-      const result = await compute(
+      const { preview, result } = await compute(
         msg.origin,
-        msg.peaks,
         msg.observerHeightOverride,
+        msg.wantPreview ?? false,
       );
+      if (preview) {
+        preview.reqId = reqId;
+        postTransfer(preview);
+      }
       result.reqId = reqId;
-      // Все типизированные буферы уходят без копирования (transfer):
-      // 5 слоёв + дистанции + гребни + плоские фронты. horizon отдельно не
-      // передаём: это тот же буфер, что layers[0], а дубль ArrayBuffer в
-      // списке трансферов запрещён («ArrayBuffer at index N is a duplicate»)
-      (self as unknown as Worker).postMessage(result, [
-        ...result.layers.map((a) => a.buffer),
-        result.distanceToHorizonM.buffer,
-        ...result.crests.map((a) => a.buffer),
-        result.frontsFlat.buffer,
-        result.frontsOffsets.buffer,
-      ]);
+      postTransfer(result);
     }
   } catch (err) {
     const out: ErrorMessage = {

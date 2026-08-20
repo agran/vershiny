@@ -51,6 +51,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     en: "Could not determine your position",
   },
   computing: { ru: "Расчёт панорамы…", en: "Computing panorama…" },
+  // Неблокирующий статус превью: ближний кадр уже нарисован, доезжают дальние
+  // слои. Не «Расчёт панорамы…» — человеку видно, что картинка есть, а не
+  // что всё ещё считается с нуля
+  refining: { ru: "Уточняем детали…", en: "Refining…" },
   noRegionData: {
     ru: "Нет данных региона.\nЗапустите tools/dem-to-tiles и tools/peaks-to-json.",
     en: "No region data.\nRun tools/dem-to-tiles and tools/peaks-to-json.",

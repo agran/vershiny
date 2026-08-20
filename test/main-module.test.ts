@@ -105,6 +105,10 @@ function resultMessage(peaks: unknown[]): MessageEvent {
       distanceToHorizonM: new Float32Array(1),
       crests: [],
       observerH: 2000,
+      prefetchMs: 1,
+      marchMs: 1,
+      peaksMs: 1,
+      packMs: 1,
       computeMs: 1,
     },
   } as unknown as MessageEvent;
@@ -249,5 +253,45 @@ describe("гонка таймера статуса", () => {
     expect(statusEl.textContent).toBe("Расчёт панорамы…");
     await vi.advanceTimersByTimeAsync(4_000);
     expect(statusEl.textContent).toBe("Расчёт панорамы…");
+  });
+});
+
+/** Ответ воркера с превью (грубый ближний кадр, без пиков) */
+function previewMessage(): MessageEvent {
+  return {
+    data: {
+      type: "preview",
+      horizon: new Float32Array(1),
+      stepRad: 0.5,
+      layers: [],
+      distanceToHorizonM: new Float32Array(1),
+      crests: [],
+      observerH: 2000,
+      computeMs: 1,
+    },
+  } as unknown as MessageEvent;
+}
+
+describe("превью до полного расчёта", () => {
+  beforeEach(() => {
+    stubEnvironment();
+  });
+
+  it("рисует грубый кадр со статусом «Уточняем детали…», не запуская камеру", async () => {
+    vi.resetModules();
+    await import("../src/main");
+
+    // Превью приходит первым: панорама есть, но статус неблокирующий
+    workerInstances[0].onmessage?.(previewMessage());
+    const statusEl = document.getElementById("status")!;
+    expect(statusEl.textContent).toBe("Уточняем детали…");
+    // Камеру превью не запускает: оверлею нужны пики, их в превью нет
+    expect(captured.arStates).toHaveLength(0);
+
+    // Полный результат доезжает: статус гаснет, пики появляются
+    workerInstances[0].onmessage?.(
+      resultMessage([{ name: "Тест", lat: 43, lon: 42, ele: 5000 }]),
+    );
+    expect(statusEl.textContent).toBe("");
   });
 });

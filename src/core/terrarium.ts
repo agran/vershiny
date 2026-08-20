@@ -10,7 +10,7 @@
  * декодируем чистым JS (src/core/png.ts).
  */
 
-import { fetchWithTimeout } from "./fetch-timeout";
+import { FETCH_TIMEOUT_MS, fetchWithTimeout } from "./fetch-timeout";
 import { normalizeLon, type LatLon } from "./geo";
 import { root } from "./globals";
 import { decodePngToRgba } from "./png";
@@ -147,7 +147,21 @@ export interface TerrariumOptions {
 
 export class TerrariumSampler {
   private readonly baseUrl: string;
-  private readonly fetchFn: typeof fetch;
+  /**
+   * Третий аргумент — таймаут (fetchWithTimeout); обычный fetch лишний аргумент
+   * игнорирует, тестовые заглушки тоже
+   */
+  private readonly fetchFn: (
+    url: string,
+    init?: RequestInit,
+    timeoutMs?: number,
+  ) => Promise<Response>;
+  /**
+   * Таймаут сетевых запросов тайла. По умолчанию общий (8 с); ближняя волна
+   * превью временно ставит более короткий (см. DemSource.prefetchNearZone) —
+   * на ограниченной сети быстрее нарисовать превью с дырой, чем ждать таймаут
+   */
+  fetchTimeoutMs = FETCH_TIMEOUT_MS;
   /** Декодированные тайлы: 'z/x/y' → Float32Array 256×256 (null = вне покрытия) */
   private tiles = new Map<string, Float32Array | null>();
   private pending = new Map<string, Promise<Float32Array | null>>();
@@ -213,7 +227,11 @@ export class TerrariumSampler {
         }
 
         // 2. Сеть (через SW cache-first, если он зарегистрирован)
-        const res = await this.fetchFn(`${this.baseUrl}/${z}/${x}/${y}.png`);
+        const res = await this.fetchFn(
+          `${this.baseUrl}/${z}/${x}/${y}.png`,
+          {},
+          this.fetchTimeoutMs,
+        );
         let tile: Float32Array | null = null;
         if (res.ok) {
           const raw = new Uint8Array(await res.arrayBuffer());
