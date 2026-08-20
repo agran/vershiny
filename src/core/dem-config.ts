@@ -104,11 +104,15 @@ export async function pickDemBase(
     online(url: string): Promise<boolean>;
     cached(url: string): Promise<boolean>;
   },
+  offlineOnly = false,
 ): Promise<string | undefined> {
-  // Заведомый офлайн (onLine === false ложным не бывает, в отличие от true):
+  // Регион скачан (offlineOnly) или заведомый офлайн (onLine === false):
   // сетевые пробы пропускаем целиком — не тратим по 2.5 с таймаута на
   // кандидата, когда всё равно ответ один, из IndexedDB
-  if (typeof navigator !== "undefined" && navigator.onLine === false) {
+  if (
+    offlineOnly ||
+    (typeof navigator !== "undefined" && navigator.onLine === false)
+  ) {
     for (const candidate of candidates) {
       if (await probes.cached(candidate)) return candidate;
     }

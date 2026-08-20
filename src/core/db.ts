@@ -137,6 +137,21 @@ export async function getPeaks(region: string): Promise<unknown[] | undefined> {
   return get<unknown[]>(STORE_PEAKS, region);
 }
 
+/** Сохранить метку генерации peaks/{region}.json — для детекта обновления */
+export async function savePeaksVersion(
+  region: string,
+  generated: string,
+): Promise<void> {
+  await set(STORE_META, `peaks-version:${region}`, generated);
+}
+
+/** Метка генерации peaks, по которой лежали в хранилище пики региона */
+export async function getPeaksVersion(
+  region: string,
+): Promise<string | undefined> {
+  return get(STORE_META, `peaks-version:${region}`);
+}
+
 /** Сохранить массив изоляции вершин региона (по индексу, см. restoreIsolation) */
 export async function saveIsolation(
   region: string,

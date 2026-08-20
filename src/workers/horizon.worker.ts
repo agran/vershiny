@@ -33,6 +33,8 @@ export interface InitMessage {
    * (tiles/{region} | tiles/hi + tiles/global); пустой — только Terrarium
    */
   patchBaseUrls?: string[];
+  /** Регион скачан: DemSource читает кешированные индексы, в сеть не ходит */
+  offlineFirst?: boolean;
   reqId?: number;
 }
 
@@ -470,7 +472,10 @@ async function handle(msg: WorkerInMessage): Promise<void> {
   try {
     if (msg.type === "init") {
       initPromise = (async () => {
-        const next = new DemSource({ patchBaseUrls: msg.patchBaseUrls });
+        const next = new DemSource({
+          patchBaseUrls: msg.patchBaseUrls,
+          offlineFirst: msg.offlineFirst,
+        });
         try {
           await next.init();
         } catch (err) {

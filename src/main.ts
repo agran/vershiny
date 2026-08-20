@@ -1189,6 +1189,54 @@ let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
 /** SW уже получил сигнал «первая панорама готова» (чанки можно докачивать) */
 let precacheSignaled = false;
 
+/**
+ * Пики региона — офлайн-первым: если в IndexedDB уже есть (регион скачан
+ * или просмотрен ранее) — берём оттуда и в сеть не ходим. Сеть трогается
+ * только фоном, чтобы заметить обновление: peaks перегенерированы — кладём
+ * свежие на следующий запуск и показываем плашку. Без кеша — обычный
+ * сетевой путь (и тоже с сохранением на будущее).
+ */
+async function loadPeaks(region: string): Promise<PeaksFile["peaks"] | null> {
+  const base = import.meta.env.BASE_URL;
+  const { fetchWithTimeout } = await import("./core/fetch-timeout");
+  const db = await import("./core/db");
+  const cached = (await db.getPeaks(region).catch(() => undefined)) as
+    | PeaksFile["peaks"]
+    | undefined;
+
+  // Фоновая проверка обновления — не блокирует показ офлайн-данных. Только
+  // когда кеш уже был: иначе это и есть первая загрузка, а не «обновление»
+  if (cached && cached.length) {
+    void (async () => {
+      const res = await fetchWithTimeout(
+        `${base}peaks/${region}.json`,
+      ).catch(() => null);
+      if (!res || !isJson(res)) return;
+      const file = (await res.json()) as PeaksFile;
+      const known = await db.getPeaksVersion(region).catch(() => undefined);
+      if (file.generated && file.generated !== known) {
+        await db.savePeaks(region, file.peaks ?? []).catch(() => {});
+        await db.savePeaksVersion(region, file.generated).catch(() => {});
+        setStatus(t("peaksUpdateAvailable"), 8_000);
+      }
+    })();
+    return cached;
+  }
+
+  // Кеша нет — сеть (как раньше), сохранить на будущее
+  const res = await fetchWithTimeout(`${base}peaks/${region}.json`).catch(
+    () => null,
+  );
+  if (res && isJson(res)) {
+    const file = (await res.json()) as PeaksFile;
+    if (file.generated)
+      void db.savePeaksVersion(region, file.generated).catch(() => {});
+    void db.savePeaks(region, file.peaks ?? []).catch(() => {});
+    return file.peaks;
+  }
+  return cached ?? null;
+}
+
 async function main(): Promise<void> {
   setStatus(t("waitingGps"));
 
@@ -1209,8 +1257,6 @@ async function main(): Promise<void> {
     // Регион мог смениться по GPS — состояние кнопки перечитываем
     void refreshDownloadState();
   }
-
-  const base = import.meta.env.BASE_URL;
 
   // Позиция: ссылка → GPS → запасная точка (Приют 11, контрольная по ROADMAP)
   const fix = await getPosition();
@@ -1241,22 +1287,14 @@ async function main(): Promise<void> {
     }
   }
 
-  // Пики: сеть → офлайн-кеш (IndexedDB). Панорама их не ждёт: compute
+  // Пики: офлайн-кеш (IndexedDB) → сеть. Если регион скачан (или просмотрен
+  // ранее и пики сохранены) — берём кеш и в сеть не ходим, обновление
+  // заметит фоновая проверка (см. loadPeaks). Панорама их не ждёт: compute
   // уходит сразу с пустым списком, вершины докидываются вторым compute,
   // когда загружены (и изоляция посчитана/восстановлена из кеша). На
   // больших регионах (iberia: 4.8 МБ, 49 тыс. вершин) JSON.parse + изоляция
   // блокировали первый кадр на ~0.6–1 с на телефоне
-  const { fetchWithTimeout } = await import("./core/fetch-timeout");
-  const peaksPromise = (async (): Promise<PeaksFile["peaks"]> => {
-    const peaksRes = await fetchWithTimeout(
-      `${base}peaks/${currentRegion}.json`,
-    ).catch(() => null);
-    if (peaksRes && isJson(peaksRes)) {
-      return ((await peaksRes.json()) as PeaksFile).peaks;
-    }
-    const { getPeaks } = await import("./core/db");
-    return ((await getPeaks(currentRegion)) ?? []) as PeaksFile["peaks"];
-  })();
+  const peaksPromise = loadPeaks(currentRegion).then((p) => p ?? []);
   // Изоляция вершин (расстояние до ближайшей более высокой) — основа
   // приоритета подписей. Считается один раз на регион, не на кадр.
   // Порядок: сначала кеш из IndexedDB (saveIsolation при прошлом заходе),
@@ -1494,10 +1532,17 @@ async function initDemForRegion(region: string): Promise<void> {
   const base = import.meta.env.BASE_URL;
   const { regionDemCandidates, hiDemCandidates, globalDemCandidates, pickDemBase } =
     await import("./core/dem-config");
-  const { getDemIndex } = await import("./core/db");
+  const { getDemIndex, getDownloadedRegions } = await import("./core/db");
   const { fetchWithTimeout, PROBE_TIMEOUT_MS } = await import(
     "./core/fetch-timeout"
   );
+  // Регион скачан: источники выбираем по кешированным индексам и воркеру
+  // говорим не ходить в сеть за index.json — офлайн-данные приоритетнее
+  // свежести, а обновление покажет фоновая проверка (refreshDownloadState
+  // → isRegionOutdated), предложив перекачать регион
+  const offlineFirst = (
+    await getDownloadedRegions().catch((): string[] => [])
+  ).includes(region);
   const probes = {
     online: async (url: string) => {
       // Мёртвая сеть: проба index.json без таймаута ждёт до минуты,
@@ -1517,12 +1562,17 @@ async function initDemForRegion(region: string): Promise<void> {
   };
   const patchBaseUrls = (
     await Promise.all([
-      pickDemBase(regionDemCandidates(base, region), probes),
-      pickDemBase(hiDemCandidates(base), probes),
-      pickDemBase(globalDemCandidates(base), probes),
+      pickDemBase(regionDemCandidates(base, region), probes, offlineFirst),
+      pickDemBase(hiDemCandidates(base), probes, offlineFirst),
+      pickDemBase(globalDemCandidates(base), probes, offlineFirst),
     ])
   ).filter((url): url is string => !!url);
-  worker.postMessage({ type: "init", patchBaseUrls, reqId: nextReqId++ });
+  worker.postMessage({
+    type: "init",
+    patchBaseUrls,
+    offlineFirst,
+    reqId: nextReqId++,
+  });
 }
 
 /**
@@ -1575,23 +1625,12 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   setStatus(t("loadingRegion"));
   void refreshDownloadState();
 
-  const base = import.meta.env.BASE_URL;
   // DEM и пики не зависят друг от друга: на мёртвой сети их таймауты
   // складывались (8 с на пики + пробы DEM), хотя могли идти параллельно.
   // Воркер обрабатывает init и следующий compute в порядке postMessage,
   // поэтому задержка init на порядок сообщений не влияет
   const demPromise = initDemForRegion(region);
-  let peaks: PeaksFile["peaks"] | null = null;
-  const { fetchWithTimeout } = await import("./core/fetch-timeout");
-  const res = await fetchWithTimeout(`${base}peaks/${region}.json`).catch(
-    () => null,
-  );
-  if (res && isJson(res)) {
-    peaks = ((await res.json()) as PeaksFile).peaks;
-  } else {
-    const { getPeaks } = await import("./core/db");
-    peaks = ((await getPeaks(region)) ?? null) as PeaksFile["peaks"] | null;
-  }
+  const peaks = await loadPeaks(region);
   // Пока грузили, регион могли сменить повторно: чужой результат не применяем
   if (switchSeq !== regionSwitchSeq) return;
   if (peaks) {

@@ -187,6 +187,10 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     ru: "Рельеф обновлён и стал точнее — перекачайте скачанные регионы в настройках",
     en: "Terrain data improved — re-download your saved regions in Settings",
   },
+  peaksUpdateAvailable: {
+    ru: "Данные вершин обновлены — применятся при следующем запуске",
+    en: "Peak data updated — applies on next launch",
+  },
   close: { ru: "Закрыть", en: "Close" },
   searchPeak: { ru: "Поиск вершины", en: "Search peak" },
   searchPrompt: { ru: "Название вершины", en: "Peak name" },

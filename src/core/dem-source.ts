@@ -24,6 +24,11 @@ export interface DemSourceOptions {
   patchBaseUrls?: string[];
   terrariumBaseUrl?: string;
   fetchFn?: typeof fetch;
+  /**
+   * Регион скачан: индексы источников читать из офлайн-хранилища, в сеть
+   * не ходить (обновление детектит фоновая проверка в main)
+   */
+  offlineFirst?: boolean;
 }
 
 /** Ближняя зона: тут разница в разрешении источников видна на панораме */
@@ -52,8 +57,11 @@ interface Patch {
 export class DemSource {
   private patches: Patch[] = [];
   readonly terrarium: TerrariumSampler;
+  /** Регион скачан: индексы читаем из кеша, без сети (см. DemSourceOptions) */
+  private readonly offlineFirst: boolean;
 
   constructor(options: DemSourceOptions) {
+    this.offlineFirst = options.offlineFirst ?? false;
     this.patchSamplers = (options.patchBaseUrls ?? []).map(
       (baseUrl) => new DemSampler({ baseUrl, fetchFn: options.fetchFn }),
     );
@@ -80,7 +88,7 @@ export class DemSource {
     const loaded = await Promise.all(
       this.patchSamplers.map(async (sampler): Promise<Patch | null> => {
         try {
-          const index = await sampler.loadIndex();
+          const index = await sampler.loadIndex(this.offlineFirst);
           return {
             sampler,
             bbox: index.bbox,

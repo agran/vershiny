@@ -182,9 +182,28 @@ export class DemSampler {
     return this.dbCache;
   }
 
-  async loadIndex(): Promise<DemIndex> {
+  /**
+   * `preferCached` — регион скачан: читаем кешированный index.json без сети.
+   * Тайлы в хранилище согласованы с этим (старым) индексом — та же версия,
+   * высоты корректны. Обновление рельефа детектит отдельная фоновая проверка
+   * (isRegionOutdated), она же предложит перекачать регион; без кеша падаем
+   * на обычный сетевой путь ниже
+   */
+  async loadIndex(preferCached = false): Promise<DemIndex> {
     if (this.index) return this.index;
     const db = await this.db();
+    if (preferCached) {
+      const cached = db
+        ? await db.getDemIndex(this.baseUrl).catch(() => undefined)
+        : undefined;
+      if (cached) {
+        this.index = cached as DemIndex;
+        this.coverage = this.index.lods.map((lod) =>
+          lod.coverage ? base64ToBytes(lod.coverage) : null,
+        );
+        return this.index;
+      }
+    }
     try {
       const res = await this.fetchFn(`${this.baseUrl}/index.json`);
       if (!res.ok) throw new Error(`index.json: HTTP ${res.status}`);
