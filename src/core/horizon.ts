@@ -275,6 +275,12 @@ export function computeLayeredHorizon(
     new Float32Array(rayCount).fill(-Infinity),
   );
   const distanceToHorizonM = new Float32Array(rayCount).fill(Infinity);
+  // Дистанция горизонта ПО СЛОЮ: ближний гребень на луче не должен задавать
+  // окно сглаживания и фильтр разрывов дальнему слою (острые дальние пики
+  // смазывались окном, посчитанным от ближней дистанции)
+  const layerDistM = Array.from({ length: LAYER_COUNT }, () =>
+    new Float32Array(rayCount).fill(Infinity),
+  );
   const fronts: VisibleFront[][] = Array.from({ length: rayCount }, () => []);
   // Гребни: видимые перегибы силуэта по корзинам дистанций
   const crests = Array.from({ length: CREST_COUNT }, () =>
@@ -413,6 +419,7 @@ export function computeLayeredHorizon(
     for (let b = 0; b < LAYER_COUNT; b++) {
       if (binMaxAngle[b] > -Infinity) {
         layers[b][i] = binMaxAngle[b];
+        layerDistM[b][i] = binDist[b];
         if (b === 0 || binDist[b] < distanceToHorizonM[i]) {
           distanceToHorizonM[i] = binDist[b];
         }
@@ -433,15 +440,16 @@ export function computeLayeredHorizon(
   }
 
   // Адаптивное сглаживание с защитой разрывов дистанции
-  const smoothed = smoothLayers(layers, distanceToHorizonM, stepRad);
+  const smoothed = smoothLayers(layers, layerDistM, stepRad);
 
   return { layers: smoothed, stepRad, distanceToHorizonM, fronts, crests };
 }
 
-/** Адаптивное сглаживание силуэта: ширина окна ~ полразмера ячейки в лучах */
+/** Адаптивное сглаживание силуэта: ширина окна ~ полразмера ячейки в лучах.
+ *  Каждый слой гладится своей дистанцией горизонта — см. layerDistM */
 function smoothLayers(
   layers: Float32Array[],
-  distanceToHorizonM: Float32Array,
+  layerDistM: Float32Array[],
   stepRad: number,
 ): Float32Array[] {
   const rayCount = layers[0].length;
@@ -449,6 +457,7 @@ function smoothLayers(
 
   for (let layerIdx = 0; layerIdx < layers.length; layerIdx++) {
     const layer = layers[layerIdx];
+    const dists = layerDistM[layerIdx];
     const out = smoothed[layerIdx];
 
     for (let i = 0; i < rayCount; i++) {
@@ -461,7 +470,11 @@ function smoothLayers(
       // Ячейка не 90 м: на дальних лучах работает LOD ~ dist/150 (у патча) и
       // Terrarium z11–z9 (76–306 м). Фиксированные 90 м занижали окно в
       // 2–20 раз, и дальние гребни оставались «пилой» от квантования высоты
-      const dist = distanceToHorizonM[i];
+      const dist = dists[i];
+      if (!Number.isFinite(dist)) {
+        out[i] = layer[i];
+        continue;
+      }
       const cellSizeM = Math.max(90, dist / 150);
       const halfWin = Math.min(
         8,
@@ -472,8 +485,10 @@ function smoothLayers(
       let n = 0;
       for (let j = -halfWin; j <= halfWin; j++) {
         const k = (i + j + rayCount) % rayCount;
-        // Не сглаживать через разрывы дистанции
-        if (Math.abs(distanceToHorizonM[k] - dist) / dist > 0.5) continue;
+        // Не сглаживать через разрывы дистанции — своей, а не чужого слоя
+        const dk = dists[k];
+        if (!Number.isFinite(dk)) continue;
+        if (Math.abs(dk - dist) / dist > 0.5) continue;
         if (layer[k] === -Infinity) continue;
         sum += layer[k];
         n++;

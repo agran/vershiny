@@ -1,12 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { destination, makeRayMarcher, type LatLon } from "../src/core/geo";
 import {
-  buildMarchTable,
-  checkPeakVisibility,
-  computeHorizon,
-  computeLayeredHorizon,
-  nextRayStep,
-  type SampleFn,
+    azimuthRad,
+    destination,
+    earthDrop,
+    makeRayMarcher,
+    wrapAngle,
+    type LatLon,
+} from "../src/core/geo";
+import {
+    buildMarchTable,
+    checkPeakVisibility,
+    computeHorizon,
+    computeLayeredHorizon,
+    nextRayStep,
+    type SampleFn,
 } from "../src/core/horizon";
 import type { Peak } from "../src/core/peaks";
 
@@ -166,6 +173,47 @@ describe("ray-marching горизонта", () => {
         expect(p.lon).toBe(ref.lon);
       }
     }
+  });
+
+  it("дальний слой сглаживается своей дистанцией, а не ближним гребнем", () => {
+    // Регресс: все слои гладились общим distanceToHorizonM (минимум по
+    // корзинам). Ближний гребень (1 км) на луче 0 задавал окно ±8 лучей
+    // дальнему слою, и острая гора на 100 км усреднялась с дальним плато
+    // соседних лучей (155–170 км) — дальние пики смазывались.
+    const step = 1 / 600; // окно сглаживания на 100 км = 2 луча
+    // Дистанция марша, ближайшая к 100 км СВЕРХУ: гора должна попасть
+    // в корзину 100–200 км (layers[4]), а не в 40–100 км
+    const march = buildMarchTable(100 * 1.5, 200_000);
+    let D = 0;
+    for (let s = 0; s < march.count; s++) {
+      if (march.d[s] >= 100_000) {
+        D = march.d[s];
+        break;
+      }
+    }
+    expect(D).toBeGreaterThan(0);
+
+    const sample: SampleFn = (pos, d) => {
+      // Ближний гребень на всех лучах: общая дистанция горизонта ≈ 1 км
+      if (d >= 900 && d <= 1_100) return 500;
+      // Дальние признаки — по азимуту, без «размывания» конуса на соседей
+      const az = Math.abs(wrapAngle(azimuthRad(ORIGIN, pos)));
+      if (az < step / 2 && Math.abs(d - D) < 1) return 5000; // гора на 100 км
+      // Плато соседей на ~160 км: выше drop (кривизна там ≈ 1.7 км),
+      // иначе его угол не поднимется над плоским максимумом корзины
+      if (d > 150_000 && d < 170_000) return 2000;
+      return 0;
+    };
+
+    const layered = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+    });
+    // Дальний слой (100–200 км) на луче 0: только своя гора, без примеси
+    // плато соседних лучей (у него разрыв дистанции >50% от 100 км)
+    const expected = Math.atan(
+      (5000 - 1.7 - earthDrop(D)) / D,
+    );
+    expect(layered.layers[4][0]).toBeCloseTo(expected, 8);
   });
 
   it("horizon и layers[0] делят буфер: дубль в трансферах postMessage запрещён", () => {
