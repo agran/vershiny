@@ -200,6 +200,33 @@
         </p>
       </div>
 
+      <div id="ios-other" class="note" hidden>
+        <p>
+          <strong>В этом браузере установить не получится.</strong>
+          Откройте страницу в Safari — дальше те же два шага.
+        </p>
+        <!-- iOS 17+: схема x-safari-https:// открывает Safari сразу.
+             href подставляется скриптом, чтобы адрес был текущий -->
+        <a class="btn" id="ios-open-safari" href="#" hidden>
+          Открыть в Safari
+        </a>
+        <button class="btn secondary" id="ios-copy">
+          Скопировать адрес для Safari
+        </button>
+      </div>
+
+      <!-- Android внутри WebView мессенджера: даём выход в нормальный браузер -->
+      <div id="android-webview" class="note" hidden>
+        <p>
+          <strong>Вы во встроенном браузере приложения</strong> — установка
+          тут недоступна. Нажмите <kbd>⋮</kbd> →
+          <kbd>Открыть в браузере</kbd>, либо:
+        </p>
+        <a class="btn" id="android-open-browser" href="#">
+          Открыть в Chrome
+        </a>
+      </div>
+
       <div id="install-steps">
         <h2>Android — Chrome</h2>
         <ol>
@@ -210,18 +237,22 @@
             <kbd>Добавить на главный экран</kbd>).
           </li>
         </ol>
+        <p class="aside">
+          Яндекс Браузер и Samsung Internet — тоже Chromium: у них работают
+          те же шаги. Firefox: меню <kbd>⋮</kbd> →
+          <kbd>Добавить на главный экран</kbd>.
+        </p>
 
         <div id="ios-steps">
-          <h2>iPhone и iPad — Safari</h2>
+          <h2>iPhone и iPad</h2>
           <ol>
-            <li>
-              Откройте эту страницу <strong>в Safari</strong> (в других
-              браузерах установка на iOS недоступна).
-            </li>
             <li>Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.</li>
             <li>Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.</li>
           </ol>
-          <p class="aside">Значок откроет саму панораму, а не эту страницу.</p>
+          <p class="aside">
+            Работает в Safari, Chrome, Яндекс Браузере и других — iOS 16.4 и
+            новее. Значок откроет саму панораму, а не эту страницу.
+          </p>
         </div>
 
         <h2>Компьютер</h2>
@@ -231,25 +262,6 @@
             Можно и не устанавливать — в браузере работает всё то же самое.
           </li>
         </ul>
-      </div>
-
-      <div id="ios-other" class="note" hidden>
-        <p>
-          <strong>В этом браузере на iPhone установить нельзя</strong> —
-          Apple разрешает «На экран “Домой”» только в Safari. Самый короткий
-          путь:
-        </p>
-        <button class="btn" id="ios-copy">
-          Скопировать адрес для Safari
-        </button>
-        <button class="btn secondary" id="ios-share" hidden>
-          Поделиться…
-        </button>
-        <ol>
-          <li>Вставьте адрес в адресную строку Safari и откройте страницу.</li>
-          <li>Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.</li>
-          <li>Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.</li>
-        </ol>
       </div>
 
       <div class="note">
@@ -307,70 +319,88 @@
         document.body.classList.add("standalone");
       });
 
-      // iOS в чужом браузере (Chrome, Edge, Firefox, встроенные браузеры
-      // мессенджеров): «На экран “Домой”» есть только в Safari. Даём самый
-      // короткий путь — копия адреса одним касанием + инструкция из двух
-      // шагов, вместо списка инструкций для Android/компьютера
+      // Определяем среду один раз и показываем ровно одну подсказку.
+      // Правила устаревания:
+      //  - iOS 16.4+: «На экран “Домой”» есть в Chrome/Edge/Firefox/Яндексе —
+      //    отдельная инструкция «идите в Safari» больше не нужна;
+      //  - реально «не умеют» только WebView (Telegram, VK, Instagram и т.п.)
+      //    и старые iOS в чужих браузерах.
       var ua = navigator.userAgent;
       var isIOS =
         /iPhone|iPad|iPod/.test(ua) ||
         (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-      var isSafari =
-        /Safari/.test(ua) && !/(CriOS|FxiOS|EdgiOS|OPiOS)/.test(ua);
-      if (isIOS && !isSafari) {
-        var panel = document.getElementById("ios-other");
-        var steps = document.getElementById("install-steps");
-        if (panel && steps) {
-          panel.hidden = false;
-          steps.hidden = true;
-        }
 
-        var legacyCopy = function (text) {
-          var ta = document.createElement("textarea");
-          ta.value = text;
-          ta.style.cssText = "position:fixed;left:-9999px";
-          document.body.appendChild(ta);
-          ta.select();
-          try {
-            document.execCommand("copy");
-          } catch (err) {
-            // Старые WebView: копии не будет, но адрес человек введёт и так
+      // Встроенные браузеры: у них нет ни beforeinstallprompt, ни листа
+      // «Поделиться» с пунктом «На экран “Домой”». Список заведомо неполный —
+      // UA-детекция неточна, поэтому панель дополняет инструкции сверху, а
+      // не заменяет их: ложное срабатывание не должно прятать рабочие шаги.
+      var isInAppWebView =
+        /(Telegram|VK|Instagram|FBAN|FBAV|Line|OKApp|WhatsApp)/i.test(ua) ||
+        (/Android/.test(ua) && /; wv\)/.test(ua));
+
+      // Версия iOS: с 16.4 установка доступна из сторонних браузеров
+      var iosVer = (ua.match(/OS (\d+)_(\d+)/) || []).slice(1).map(Number);
+      var iosCanInstallAnywhere =
+        iosVer.length > 0 &&
+        (iosVer[0] > 16 || (iosVer[0] === 16 && iosVer[1] >= 4));
+
+      if (isIOS) {
+        if (
+          isInAppWebView ||
+          (!iosCanInstallAnywhere && !/Safari/.test(ua))
+        ) {
+          document.getElementById("ios-other").hidden = false;
+
+          // iOS 17+: прямой переход в Safari одной кнопкой
+          if (iosVer.length > 0 && iosVer[0] >= 17) {
+            var openBtn = document.getElementById("ios-open-safari");
+            openBtn.href = "x-safari-" + location.href;
+            openBtn.hidden = false;
           }
-          document.body.removeChild(ta);
-        };
-        var copyBtn = document.getElementById("ios-copy");
-        if (copyBtn) {
-          copyBtn.addEventListener("click", function () {
-            var done = function () {
-              copyBtn.textContent =
-                "Адрес скопирован — вставьте его в Safari";
-            };
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(location.href).then(done, function () {
-                legacyCopy(location.href);
-                done();
-              });
-            } else {
+        }
+        // Иначе работают обычные шаги «Поделиться → На экран “Домой”» —
+        // они одинаковы для Safari, Chrome, Яндекса и остальных на iOS 16.4+
+      } else if (isInAppWebView) {
+        document.getElementById("android-webview").hidden = false;
+        // intent:// заставляет Android открыть настоящий браузер
+        document.getElementById("android-open-browser").href =
+          "intent://" +
+          location.host +
+          location.pathname +
+          location.search +
+          "#Intent;scheme=https;package=com.android.chrome;end";
+      }
+
+      // Копия адреса — для панели тупиковых сред (WebView, старая iOS)
+      var legacyCopy = function (text) {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.cssText = "position:fixed;left:-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand("copy");
+        } catch (err) {
+          // Старые WebView: копии не будет, но адрес человек введёт и так
+        }
+        document.body.removeChild(ta);
+      };
+      var copyBtn = document.getElementById("ios-copy");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", function () {
+          var done = function () {
+            copyBtn.textContent = "Адрес скопирован — вставьте его в Safari";
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(location.href).then(done, function () {
               legacyCopy(location.href);
               done();
-            }
-          });
-        }
-
-        var shareBtn = document.getElementById("ios-share");
-        if (shareBtn && navigator.share) {
-          shareBtn.hidden = false;
-          shareBtn.addEventListener("click", function () {
-            navigator
-              .share({
-                title: "Вершины — панорама гор",
-                url: location.href,
-              })
-              .catch(function () {
-                // Отмена листа «Поделиться» — не ошибка
-              });
-          });
-        }
+            });
+          } else {
+            legacyCopy(location.href);
+            done();
+          }
+        });
       }
     </script>
     <!--

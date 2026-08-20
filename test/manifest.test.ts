@@ -93,15 +93,25 @@ describe("манифест PWA", () => {
     expect(html).toContain('href="./"');
   });
 
-  it("на iOS из чужого браузера страница даёт кнопку копирования адреса", () => {
-    // «На экран “Домой”» на iOS есть только в Safari: страница установки
-    // должна показать кнопку «Скопировать адрес для Safari» и короткую
-    // инструкцию — и панель обязана быть ВНЕ #install-steps: тот блок
-    // скрывается целиком, вместе с ним пропала бы и сама инструкция
+  it("для тупиковых сред страница даёт обходы, не пряча рабочие шаги", () => {
+    // WebView (Telegram, VK, мессенджеры) и старая iOS в чужом браузере —
+    // единственные места, где установка действительно недоступна. Панели с
+    // обходами (Открыть в Safari / Открыть в Chrome, копия адреса) должны
+    // лежать ВНЕ #install-steps: UA-детекция неточна, и ложное срабатывание
+    // не должно прятать рабочие инструкции
     const html = read("../install.html");
     expect(html).toContain('id="ios-copy"');
-    const stepsEnd = html.indexOf("</ul>\n      </div>");
-    expect(stepsEnd).toBeGreaterThan(0);
-    expect(html.indexOf('id="ios-other"')).toBeGreaterThan(stepsEnd);
+    expect(html).toContain('id="ios-open-safari"');
+    expect(html).toContain('id="android-open-browser"');
+    const stepsOpen = html.indexOf('id="install-steps"');
+    const stepsEnd = html.indexOf("</ul>\n      </div>", stepsOpen);
+    expect(stepsOpen).toBeGreaterThan(0);
+    expect(stepsEnd).toBeGreaterThan(stepsOpen);
+    const outside = (marker: string): boolean => {
+      const at = html.indexOf(marker);
+      return at < stepsOpen || at > stepsEnd;
+    };
+    expect(outside('id="ios-other"')).toBe(true);
+    expect(outside('id="android-webview"')).toBe(true);
   });
 });
