@@ -62,12 +62,17 @@ export class DemSource {
 
   constructor(options: DemSourceOptions) {
     this.offlineFirst = options.offlineFirst ?? false;
+    // Регион скачан: тайлы только из офлайн-хранилища (loadTile не ходит в сеть)
+    const samplerOpts = {
+      fetchFn: options.fetchFn,
+      offlineOnly: options.offlineFirst,
+    };
     this.patchSamplers = (options.patchBaseUrls ?? []).map(
-      (baseUrl) => new DemSampler({ baseUrl, fetchFn: options.fetchFn }),
+      (baseUrl) => new DemSampler({ baseUrl, ...samplerOpts }),
     );
     this.terrarium = new TerrariumSampler({
       baseUrl: options.terrariumBaseUrl,
-      fetchFn: options.fetchFn,
+      ...samplerOpts,
     });
   }
 

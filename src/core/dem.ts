@@ -84,6 +84,11 @@ export interface DemSamplerOptions {
   baseUrl: string;
   /** Переопределение загрузки (для тестов/офлайн-кеша) */
   fetchFn?: typeof fetch;
+  /**
+   * Регион скачан: тайлов вне офлайн-хранилища не качаем — промах значит
+   * «нет данных» (фолбэк на следующий источник), в сеть не ходим
+   */
+  offlineOnly?: boolean;
 }
 
 /**
@@ -134,6 +139,8 @@ export class DemSampler {
    * превью временно ставит более короткий (см. DemSource.prefetchNearZone)
    */
   fetchTimeoutMs = FETCH_TIMEOUT_MS;
+  /** Регион скачан: сеть за тайлами не трогаем (см. DemSamplerOptions) */
+  private readonly offlineOnly: boolean;
 
   /** Порог переключения LOD, метры (DATA-PIPELINE: 30 км) */
   lodSwitchM = 30_000;
@@ -145,6 +152,7 @@ export class DemSampler {
     // хотя в IndexedDB лежали и индекс, и тайлы
     this.fetchFn = options.fetchFn ?? fetchWithTimeout;
     this.storePrefix = demStorePrefix(this.baseUrl);
+    this.offlineOnly = options.offlineOnly ?? false;
   }
 
   /** Ключ тайла в офлайн-хранилище (см. demStorePrefix) */
@@ -479,6 +487,14 @@ export class DemSampler {
             this.setTile(key, tile);
             return tile;
           }
+        }
+
+        // Регион скачан (offlineOnly): в сеть за тайлом не ходим — отсутствие
+        // в офлайн-хранилище значит «нет данных», дыру закроет следующий
+        // источник (а обновление покажет фоновая проверка в main)
+        if (this.offlineOnly) {
+          this.setTile(key, null);
+          return null;
         }
 
         const res = await this.fetchFn(this.tileUrl(key), {}, this.fetchTimeoutMs);

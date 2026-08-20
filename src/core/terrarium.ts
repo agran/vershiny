@@ -143,6 +143,11 @@ function decodeTerrariumPngFallback(bytes: Uint8Array): Float32Array {
 export interface TerrariumOptions {
   baseUrl?: string;
   fetchFn?: typeof fetch;
+  /**
+   * Регион скачан: тайлы вне офлайн-хранилища не качаем — промах значит
+   * «нет данных» (фолбэк на следующий источник), в сеть не ходим
+   */
+  offlineOnly?: boolean;
 }
 
 export class TerrariumSampler {
@@ -162,6 +167,8 @@ export class TerrariumSampler {
    * на ограниченной сети быстрее нарисовать превью с дырой, чем ждать таймаут
    */
   fetchTimeoutMs = FETCH_TIMEOUT_MS;
+  /** Регион скачан: сеть за тайлами не трогаем (см. TerrariumOptions) */
+  private readonly offlineOnly: boolean;
   /** Декодированные тайлы: 'z/x/y' → Float32Array 256×256 (null = вне покрытия) */
   private tiles = new Map<string, Float32Array | null>();
   private pending = new Map<string, Promise<Float32Array | null>>();
@@ -173,6 +180,7 @@ export class TerrariumSampler {
   constructor(options: TerrariumOptions = {}) {
     this.baseUrl = (options.baseUrl ?? TERRARIUM_BASE_URL).replace(/\/$/, "");
     this.fetchFn = options.fetchFn ?? fetchWithTimeout;
+    this.offlineOnly = options.offlineOnly ?? false;
   }
 
   /** Ленивая загрузка db.ts (в тестах и приватном режиме IndexedDB может не быть) */
@@ -224,6 +232,14 @@ export class TerrariumSampler {
             this.setTile(key, tile);
             return tile;
           }
+        }
+
+        // Регион скачан (offlineOnly): в сеть за тайлом не ходим — отсутствие
+        // в офлайн-хранилище значит «нет данных», дыру закроет следующий
+        // источник (а обновление покажет фоновая проверка в main)
+        if (this.offlineOnly) {
+          this.setTile(key, null);
+          return null;
         }
 
         // 2. Сеть (через SW cache-first, если он зарегистрирован)
