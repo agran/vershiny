@@ -313,11 +313,12 @@ export class DemSampler {
   }
 
   private sampleLod(pos: LatLon, lodIndex: number): number {
-    const lod = this.index!.lods[lodIndex];
-    const minLon = this.index!.bbox[0];
+    const index = this.index!;
+    const lod = index.lods[lodIndex];
+    const minLon = index.bbox[0];
 
     const gx = (pos.lon - minLon) / lod.cellDeg;
-    const gy = (this.index!.bbox[3] - pos.lat) / lod.cellDeg; // сетка с севера на юг
+    const gy = (index.bbox[3] - pos.lat) / lod.cellDeg; // сетка с севера на юг
     if (
       gx < 0 ||
       gy < 0 ||

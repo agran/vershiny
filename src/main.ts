@@ -786,18 +786,11 @@ window.addEventListener("keydown", (ev) => {
     return;
   }
 
-  // Перемещение по земле
-  const newAz = az + dAz;
-  const newPos = destination(lastOrigin, newAz, Math.abs(dDist));
-  if (dDist < 0) {
-    // Назад: дистанция отрицательная — идём в противоположную сторону
-    newPos.lat = lastOrigin.lat;
-    newPos.lon = lastOrigin.lon;
-    const backAz = az + Math.PI;
-    const backPos = destination(lastOrigin, backAz, MOVE_STEP_M);
-    newPos.lat = backPos.lat;
-    newPos.lon = backPos.lon;
-  }
+  // Перемещение по земле. Вперёд — по азимуту взгляда, вбок — перпендикулярно,
+  // назад — в противоположную сторону (прежний код считал destination для
+  // «вперёд» и выбрасывал его в ветке назад)
+  const moveAz = dDist < 0 ? az + Math.PI : az + dAz;
+  const newPos = destination(lastOrigin, moveAz, MOVE_STEP_M);
   requestCompute(newPos);
 });
 

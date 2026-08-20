@@ -188,14 +188,15 @@ export function buildMarchTable(
       lod: deps.lodForDistance ? deps.lodForDistance(d[i]) : 0,
       zoom: zoomForDistance(d[i]),
     };
-    // Тот же перебор границ, что был в цикле марша, — один раз на таблицу
-    let b = 0;
+    // Тот же перебор границ, что был в цикле марша, — один раз на таблицу.
+    // По умолчанию — последняя корзина (d ≥ верхней границы); условие от k
+    // не зависело, а выполнялось в каждой итерации
+    let b = LAYER_COUNT - 1;
     for (let k = 0; k < LAYER_COUNT; k++) {
       if (d[i] >= LAYER_BOUNDS[k] && d[i] < LAYER_BOUNDS[k + 1]) {
         b = k;
         break;
       }
-      if (d[i] >= LAYER_BOUNDS[LAYER_COUNT]) b = LAYER_COUNT - 1;
     }
     bin[i] = b;
   }
