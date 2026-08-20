@@ -1345,8 +1345,11 @@ function setupMapButton(): void {
     // Вершины скачанных регионов — фоном: карта уже открыта и рисует то,
     // что есть. Запрет хранилища или обрыв не должны ронять открытие карты
     void (async () => {
-      const { getDownloadedRegions, getPeaks } = await import("./core/db");
-      const { annotateIsolation } = await import("./core/peaks");
+      const { getDownloadedRegions, getPeaks, getIsolation } =
+        await import("./core/db");
+      const { ensureIsolation, restoreIsolation } = await import(
+        "./core/peaks"
+      );
       const others = (await getDownloadedRegions().catch(() => [])).filter(
         (r) => r !== currentRegion,
       );
@@ -1356,7 +1359,14 @@ function setupMapButton(): void {
         const peaks = (await getPeaks(region).catch(() => undefined)) as
           PeaksFile["peaks"] | undefined;
         if (peaks?.length) {
-          annotateIsolation(peaks); // значимость вершин нужна отбору слоя
+          // Значимость вершин нужна отбору слоя. Сначала кеш из IndexedDB
+          // (main/switchRegion уже сохраняли изоляцию): аннотирование 49 тыс.
+          // вершин iberia — до сотен мс джанка на главном потоке, и платить
+          // его на каждое открытие карты незачем
+          const cachedIso = await getIsolation(region).catch(() => undefined);
+          if (!cachedIso || !restoreIsolation(peaks, cachedIso)) {
+            ensureIsolation(peaks);
+          }
           listener(peaks);
         }
       }
