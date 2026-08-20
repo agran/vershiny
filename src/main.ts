@@ -1201,16 +1201,15 @@ async function loadPeaks(region: string): Promise<PeaksFile["peaks"] | null> {
   const { fetchWithTimeout } = await import("./core/fetch-timeout");
   const db = await import("./core/db");
   const cached = (await db.getPeaks(region).catch(() => undefined)) as
-    | PeaksFile["peaks"]
-    | undefined;
+    PeaksFile["peaks"] | undefined;
 
   // Фоновая проверка обновления — не блокирует показ офлайн-данных. Только
   // когда кеш уже был: иначе это и есть первая загрузка, а не «обновление»
   if (cached && cached.length) {
     void (async () => {
-      const res = await fetchWithTimeout(
-        `${base}peaks/${region}.json`,
-      ).catch(() => null);
+      const res = await fetchWithTimeout(`${base}peaks/${region}.json`).catch(
+        () => null,
+      );
       if (!res || !isJson(res)) return;
       const file = (await res.json()) as PeaksFile;
       const known = await db.getPeaksVersion(region).catch(() => undefined);
@@ -1302,9 +1301,7 @@ async function main(): Promise<void> {
   // ~5 мс чтением и ~300–400 мс вычисления, блокирующего главный поток
   const annotatePeaks = async (list: PeaksFile["peaks"]): Promise<void> => {
     if (!list.length) return;
-    const { ensureIsolation, restoreIsolation } = await import(
-      "./core/peaks"
-    );
+    const { ensureIsolation, restoreIsolation } = await import("./core/peaks");
     const { getIsolation, saveIsolation } = await import("./core/db");
     const isoT0 = performance.now();
     const cachedIso = await getIsolation(currentRegion).catch(() => undefined);
@@ -1472,9 +1469,8 @@ function setupMapButton(): void {
     void (async () => {
       const { getDownloadedRegions, getPeaks, getIsolation } =
         await import("./core/db");
-      const { ensureIsolation, restoreIsolation } = await import(
-        "./core/peaks"
-      );
+      const { ensureIsolation, restoreIsolation } =
+        await import("./core/peaks");
       const others = (await getDownloadedRegions().catch(() => [])).filter(
         (r) => r !== currentRegion,
       );
@@ -1530,12 +1526,15 @@ async function goToHit(
  */
 async function initDemForRegion(region: string): Promise<void> {
   const base = import.meta.env.BASE_URL;
-  const { regionDemCandidates, hiDemCandidates, globalDemCandidates, pickDemBase } =
-    await import("./core/dem-config");
+  const {
+    regionDemCandidates,
+    hiDemCandidates,
+    globalDemCandidates,
+    pickDemBase,
+  } = await import("./core/dem-config");
   const { getDemIndex, getDownloadedRegions } = await import("./core/db");
-  const { fetchWithTimeout, PROBE_TIMEOUT_MS } = await import(
-    "./core/fetch-timeout"
-  );
+  const { fetchWithTimeout, PROBE_TIMEOUT_MS } =
+    await import("./core/fetch-timeout");
   // Регион скачан: источники выбираем по кешированным индексам и воркеру
   // говорим не ходить в сеть за index.json — офлайн-данные приоритетнее
   // свежести, а обновление покажет фоновая проверка (refreshDownloadState
@@ -1635,9 +1634,7 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   if (switchSeq !== regionSwitchSeq) return;
   if (peaks) {
     // Изоляция: сначала кеш (см. main), потом расчёт — и запомнить
-    const { ensureIsolation, restoreIsolation } = await import(
-      "./core/peaks"
-    );
+    const { ensureIsolation, restoreIsolation } = await import("./core/peaks");
     const { getIsolation, saveIsolation } = await import("./core/db");
     const cachedIso = await getIsolation(region).catch(() => undefined);
     const fromCache = cachedIso ? restoreIsolation(peaks, cachedIso) : false;
@@ -3060,7 +3057,9 @@ function setupActionButtons(): void {
   async function maybeAutoStartAr(): Promise<void> {
     if (!shouldAutoStartAr()) return;
     if (isStandalone() && hadArAutostartKill()) {
-      console.info("Камера при запуске отключена: прошлый автозапуск прервал сеанс");
+      console.info(
+        "Камера при запуске отключена: прошлый автозапуск прервал сеанс",
+      );
       return;
     }
     if (isStandalone()) markArAutoStart();

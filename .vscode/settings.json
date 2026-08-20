@@ -1,0 +1,18 @@
+{
+  // Проект форматируется Prettier'ом (2 пробела, см. .prettierrc — там tabWidth
+  // не задан, значит по умолчанию 2). Глобальный tabSize (например, 4) иначе
+  // подхватывают «Organize Imports» и встроенный TS-форматтер, и import-блоки
+  // переформатировываются на 4 пробела — отклонение от стиля, которое
+  // `npm run format:check` считает ошибкой
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
