@@ -967,6 +967,7 @@ function drawLabels(
       const marker = findPeakMarkerPosition(
         p.peak,
         state,
+        silhouette,
         azToX,
         elevToY,
       );
@@ -1029,6 +1030,7 @@ function drawLabels(
     const marker = findPeakMarkerPosition(
       peak,
       state,
+      silhouette,
       azToX,
       elevToY,
     );
@@ -2596,14 +2598,17 @@ function clipToSilhouette(
 /**
  * Точная позиция маркера вершины на силуэте.
  * Алгоритм из промта: матчинг по дистанции фронта, не по углу.
+ * Обёртка над peakMarkerAngle: та кеширует результат в УГЛАХ на версию
+ * панорамы (от взгляда он не зависит), пиксели считаются здесь — дёшево.
  */
 function findPeakMarkerPosition(
   peak: VisiblePeak,
   state: PanoramaState,
+  silhouette: Float32Array,
   azToX: (az: number) => number,
   elevToY: (elev: number) => number,
 ): { x: number; y: number } | null {
-  const m = peakMarkerAngle(peak, state);
+  const m = peakMarkerAngle(peak, state, silhouette);
   return m ? { x: azToX(m.az), y: elevToY(m.elev) } : null;
 }
 
@@ -2612,7 +2617,9 @@ function findPeakMarkerPosition(
  * поэтому кешируется на версию панорамы (state.horizon — ссылка, меняется
  * при каждом пересчёте), а пиксели накладываются в точке использования.
  * Оконное сканирование фронтов — самая дорогая часть раскладки подписей,
- * и повторять его каждый кадр (и в frozen-ветке) незачем.
+ * и повторять его каждый кадр (и в frozen-ветке) незачем. silhouette
+ * приходит из drawLabels — тот же профиль, что и для обрыва выносок;
+ * внутри silhouetteProfile не вызывается.
  */
 const peakMarkerAngleCache = new WeakMap<
   VisiblePeak,
@@ -2622,11 +2629,20 @@ const peakMarkerAngleCache = new WeakMap<
 function peakMarkerAngle(
   peak: VisiblePeak,
   state: PanoramaState,
+  silhouette: Float32Array,
 ): { az: number; elev: number } | null {
   const cached = peakMarkerAngleCache.get(peak);
   if (cached && cached.rev === state.horizon) return cached;
 
-  const silhouette = silhouetteProfile(state);
+  // Скрытая вершина: ставим точку в её истинное положение — оно ниже силуэта,
+  // а выноска обрежется о склон (clipToSilhouette). Матчинг по фронтам тут
+  // не годится: фронта на этой дистанции нет, он и перекрыл вершину.
+  if (peak.visibility === "hidden") {
+    const result = { az: peak.azimuthRad, elev: peak.elevationRad };
+    peakMarkerAngleCache.set(peak, { rev: state.horizon, ...result });
+    return result;
+  }
+
   // Запасное место маркера: линия силуэта на азимуте вершины. Рельефа на
   // азимуте может не быть вовсе — тогда маркеру взяться неоткуда
   const onSilhouette = (): { az: number; elev: number } | null => {
@@ -2639,12 +2655,7 @@ function peakMarkerAngle(
   };
 
   let result: { az: number; elev: number } | null;
-  // Скрытая вершина: ставим точку в её истинное положение — оно ниже силуэта,
-  // а выноска обрежется о склон (clipToSilhouette). Матчинг по фронтам тут
-  // не годится: фронта на этой дистанции нет, он и перекрыл вершину.
-  if (peak.visibility === "hidden") {
-    result = { az: peak.azimuthRad, elev: peak.elevationRad };
-  } else if (!state.layers || !state.fronts) {
+  if (!state.layers || !state.fronts) {
     result = onSilhouette();
   } else {
     // Окно азимутов: ширина зависит от дистанции (ближние горы шире)
