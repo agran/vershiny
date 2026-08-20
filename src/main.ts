@@ -3167,35 +3167,44 @@ function setupActionButtons(): void {
   const usedPhotoNames = new Set<string>();
   photoBtn.onclick = async () => {
     if (!panorama) return;
-    const { capturePhoto, savePhoto, uniquePhotoFilename } =
-      await import("./ui/photo");
-    // Регион — запасной вариант подписи на случай кадра без видимых вершин
-    // (ui/photo.ts): туда идёт название на языке интерфейса
-    // («Приэльбрусье»), а не ключ реестра («elbrus») — ID людям ни о чём
-    // не говорит. Реестр к этому моменту уже в памяти (allRegions кеширует),
-    // обращения к сети здесь нет
-    const regionInfo = (await allRegions())[currentRegion];
-    const options = {
-      // Именно актуальные, а не аргументы функции: кнопки создаются один раз,
-      // и замыкание держало бы точку первого расчёта — после перелёта к
-      // вершине подпись врала бы координатами и высотой старта
-      origin: lastOrigin,
-      observerH: lastObserverH,
-      region: regionInfo ? regionLabelSync(regionInfo) : currentRegion,
-      peakName: mainPeakInView(),
-      source: canvas,
-      // В AR кадр содержит настоящие горы — там действует галочка «Контуры
-      // склонов». Без камеры силуэту не с чем конфликтовать: рисуем всегда
-      fromCamera: arSession !== null,
-      // Живой кадр камеры — фон снимка; без него «фото» содержало только
-      // контуры поверх градиента неба. FOV полного кадра нужен, чтобы оверлей
-      // подогнать под видимую часть после cover-кропа, как в drawArFrame
-      cameraVideo: arVideo,
-      cameraFov: arSession?.fullFrameFov,
-    };
-    const blob = await capturePhoto(panorama, view, options);
-    savePhoto(blob, uniquePhotoFilename(usedPhotoNames, options));
-    setStatus(t("photoSaved"), 3000);
+    try {
+      const { capturePhoto, savePhoto, uniquePhotoFilename } =
+        await import("./ui/photo");
+      // Регион — запасной вариант подписи на случай кадра без видимых вершин
+      // (ui/photo.ts): туда идёт название на языке интерфейса
+      // («Приэльбрусье»), а не ключ реестра («elbrus») — ID людям ни о чём
+      // не говорит. Реестр к этому моменту уже в памяти (allRegions кеширует),
+      // обращения к сети здесь нет
+      const regionInfo = (await allRegions())[currentRegion];
+      const options = {
+        // Именно актуальные, а не аргументы функции: кнопки создаются один раз,
+        // и замыкание держало бы точку первого расчёта — после перелёта к
+        // вершине подпись врала бы координатами и высотой старта
+        origin: lastOrigin,
+        observerH: lastObserverH,
+        region: regionInfo ? regionLabelSync(regionInfo) : currentRegion,
+        peakName: mainPeakInView(),
+        source: canvas,
+        // В AR кадр содержит настоящие горы — там действует галочка «Контуры
+        // склонов». Без камеры силуэту не с чем конфликтовать: рисуем всегда
+        fromCamera: arSession !== null,
+        // Живой кадр камеры — фон снимка; без него «фото» содержало только
+        // контуры поверх градиента неба. FOV полного кадра нужен, чтобы оверлей
+        // подогнать под видимую часть после cover-кропа, как в drawArFrame
+        cameraVideo: arVideo,
+        cameraFov: arSession?.fullFrameFov,
+      };
+      const blob = await capturePhoto(panorama, view, options);
+      savePhoto(blob, uniquePhotoFilename(usedPhotoNames, options));
+      setStatus(t("photoSaved"), 3000);
+    } catch (err) {
+      // Отказ toBlob (OOM) и т.п. раньше молчал: человек жмёт «фото»,
+      // а ничего не происходит и не сообщается
+      setStatus(
+        `${t("error")}: ${err instanceof Error ? err.message : String(err)}`,
+        4_000,
+      );
+    }
   };
 
   // Камера стартует не отсюда, а по первому результату воркера
