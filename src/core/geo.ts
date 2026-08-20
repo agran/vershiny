@@ -83,8 +83,14 @@ export function destination(
   const lat1 = toRad(origin.lat);
   const lon1 = toRad(origin.lon);
   const lat2 = Math.asin(
-    Math.sin(lat1) * Math.cos(d) +
-      Math.cos(lat1) * Math.sin(d) * Math.cos(azRad),
+    Math.min(
+      1,
+      Math.max(
+        -1,
+        Math.sin(lat1) * Math.cos(d) +
+          Math.cos(lat1) * Math.sin(d) * Math.cos(azRad),
+      ),
+    ),
   );
   const lon2 =
     lon1 +
@@ -129,7 +135,9 @@ export function makeRayMarcher(
   return (stepIdx: number): LatLon => {
     const cosD = table.cosD[stepIdx];
     const sinD = table.sinD[stepIdx];
-    const lat2 = Math.asin(sinLat1 * cosD + cosLat1 * sinD * cosAz);
+    const lat2 = Math.asin(
+      Math.min(1, Math.max(-1, sinLat1 * cosD + cosLat1 * sinD * cosAz)),
+    );
     // Важно: normalizeLon(toDeg(lon2)) НЕ тождественна toDeg(lon2) даже внутри
     // диапазона [−180, 180) — цепочка остатков даёт 1-ulp сдвиг (проверено
     // воспроизведением), поэтому пропускать её «для скорости» нельзя без

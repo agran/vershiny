@@ -4,9 +4,11 @@ import {
   bboxContains,
   destination,
   distanceM,
+  EARTH_RADIUS_M,
   earthDrop,
   elevationAngleRad,
   isValidLatLon,
+  makeRayMarcher,
   normalizeAz,
   normalizeLon,
   toDeg,
@@ -110,5 +112,75 @@ describe("geo", () => {
     expect(normalizeLon(180.837)).toBeCloseTo(-179.163, 6);
     expect(normalizeLon(-540.5)).toBeCloseTo(179.5, 6);
     expect(normalizeLon(42.4)).toBeCloseTo(42.4, 10);
+  });
+});
+
+describe("destination / makeRayMarcher: приполярные широты", () => {
+  it("не даёт NaN и не выпускает широту за ±90 у полюсов", () => {
+    for (const lat of [90, -90, 89.99999999, -89.99999999]) {
+      for (const az of [0, Math.PI / 2, Math.PI, -Math.PI / 2, 1.234]) {
+        for (const d of [0.1, 10, 1_000, 100_000]) {
+          const p = destination({ lat, lon: 0 }, az, d);
+          expect(Number.isFinite(p.lat)).toBe(true);
+          expect(Number.isFinite(p.lon)).toBe(true);
+          expect(Math.abs(p.lat)).toBeLessThanOrEqual(90);
+        }
+      }
+    }
+  });
+
+  it("из точки полюса уходит на юг честное расстояние", () => {
+    const pole: LatLon = { lat: 90, lon: 0 };
+    const p = destination(pole, 0, 100_000);
+    expect(p.lat).toBeLessThan(90);
+    expect(distanceM(pole, p)).toBeCloseTo(100_000, 0);
+  });
+
+  it("марчер повторяет destination побитово — зажим ничего не меняет", () => {
+    // Таблица шагов строится как в horizon.ts: sin/cos(d/R) считаются
+    // независимо, поэтому у марчера округления свои
+    const origin: LatLon = { lat: 43.2912, lon: 42.4697 };
+    const az = 1.234;
+    const n = 32;
+    const d = new Float64Array(n);
+    const sinD = new Float64Array(n);
+    const cosD = new Float64Array(n);
+    for (let i = 0; i < n; i++) {
+      const distM = (i + 1) * 1234;
+      const a = distM / EARTH_RADIUS_M;
+      d[i] = distM;
+      sinD[i] = Math.sin(a);
+      cosD[i] = Math.cos(a);
+    }
+    const march = makeRayMarcher(origin, az, { d, sinD, cosD });
+    for (let i = 0; i < n; i++) {
+      const a = destination(origin, az, d[i]);
+      const b = march(i);
+      expect(b.lat).toBe(a.lat);
+      expect(b.lon).toBe(a.lon);
+    }
+  });
+
+  it("марчер тоже не даёт NaN на приполярных широтах", () => {
+    const n = 8;
+    const d = new Float64Array(n);
+    const sinD = new Float64Array(n);
+    const cosD = new Float64Array(n);
+    for (let i = 0; i < n; i++) {
+      const distM = (i + 1) * 37; // мелкие шаги: максимум шансов на 1+ε
+      const a = distM / EARTH_RADIUS_M;
+      d[i] = distM;
+      sinD[i] = Math.sin(a);
+      cosD[i] = Math.cos(a);
+    }
+    for (const lat of [90, -90, 89.99999999, -89.99999999]) {
+      const march = makeRayMarcher({ lat, lon: 0 }, 0, { d, sinD, cosD });
+      for (let i = 0; i < n; i++) {
+        const p = march(i);
+        expect(Number.isFinite(p.lat)).toBe(true);
+        expect(Number.isFinite(p.lon)).toBe(true);
+        expect(Math.abs(p.lat)).toBeLessThanOrEqual(90);
+      }
+    }
   });
 });
