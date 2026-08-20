@@ -117,6 +117,12 @@ export function annotateIsolation(peaks: Peak[]): void {
         ? ISO_SEARCH_LIMIT_M
         : Math.min(Math.sqrt(best2), ISO_SEARCH_LIMIT_M);
 
+    // Вершина без высоты не «выше» никого: если вставить её в сетку, она
+    // станет фиктивным более высоким соседом для следующих безысотных
+    // вершин, и их изоляция посчитается до неё. Свою изоляцию такая
+    // вершина уже честно получила от реально более высоких
+    if (peaks[i].ele === undefined) continue;
+
     const key = `${gx},${gy}`;
     const bucket = grid.get(key);
     if (bucket) bucket.push(i);
