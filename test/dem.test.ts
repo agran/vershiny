@@ -3,13 +3,26 @@
  * + квантование высоты, разреженное покрытие с фолбэком на грубый LOD.
  */
 
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  DemSampler,
-  TILE_SIZE,
-  indexVersion,
-  type DemIndex,
+    DemSampler,
+    TILE_SIZE,
+    indexVersion,
+    type DemIndex,
 } from "../src/core/dem";
+
+// db-модуль подменяется частично: только тайловые функции — в хранилище
+// должны попадать валидные тайлы, а битые записи удаляться при чтении
+const dbMock = vi.hoisted(() => ({
+  getDemTile: vi.fn(),
+  deleteDemTile: vi.fn(),
+}));
+
+vi.mock("../src/core/db", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../src/core/db")>()),
+  getDemTile: (...args: unknown[]) => dbMock.getDemTile(...args),
+  deleteDemTile: (...args: unknown[]) => dbMock.deleteDemTile(...args),
+}));
 
 /** gzip средствами платформы — как и распаковка в dem.ts */
 async function gzip(bytes: Uint8Array): Promise<Uint8Array> {
@@ -386,5 +399,78 @@ describe("DemSampler: отказ сети", () => {
     );
     expect(stats.ok).toBe(1);
     expect(stats.failed).toBe(1);
+  });
+
+  it("HTML-ответ 200 не сохраняется и не считается успехом", async () => {
+    // SPA-fallback Vite отдаёт index.html с 200 на любой путь: такой «тайл»
+    // оседал в хранилище, регион считался скачанным, а рельеф — с дырой
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith("index.json")) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { "content-type": "application/json" },
+        });
+      }
+      return new Response("<!doctype html><html><body>…</body></html>", {
+        status: 200,
+        headers: { "content-type": "text/html" },
+      });
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
+
+    const stats = await sampler.downloadTiles(["0/444/92"], () => {});
+    expect(stats.ok).toBe(0);
+    expect(stats.failed).toBe(1);
+  });
+
+  it("сырой int16-тайл 256×256 проходит валидацию", async () => {
+    // Тайл без gzip (региональные патчи): ровно 256×256×2 байт
+    const raw = new Uint8Array(TILE_SIZE * TILE_SIZE * 2);
+    raw[0] = 1;
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith("index.json")) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { "content-type": "application/json" },
+        });
+      }
+      return new Response(raw as unknown as BodyInit);
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
+
+    const stats = await sampler.downloadTiles(["0/444/92"], () => {});
+    expect(stats.ok).toBe(1);
+  });
+});
+
+describe("битая запись пирамиды удаляется при чтении", () => {
+  beforeEach(() => {
+    // DemSampler ходит в db-модуль только при наличии IndexedDB
+    vi.stubGlobal("indexedDB", {});
+    dbMock.getDemTile.mockReset().mockResolvedValue(undefined);
+    dbMock.deleteDemTile.mockReset().mockResolvedValue(undefined);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("усечённый gzip вычищается, тайл не блокируется навсегда", async () => {
+    // Сигнатура gzip на месте, но это не тайл: decodeTile падает, запись
+    // удаляется — онлайн докачает тайл заново, а не спотыкается о неё вечно
+    dbMock.getDemTile.mockResolvedValue(
+      new Uint8Array([0x1f, 0x8b, 8, 0, 0, 0, 0, 0, 0, 3, 9, 9, 9, 9]),
+    );
+    const fetchFn = (async (url: string) => {
+      if (String(url).endsWith("index.json")) {
+        return new Response(JSON.stringify(INDEX), {
+          headers: { "content-type": "application/json" },
+        });
+      }
+      return new Response("", { status: 404 });
+    }) as unknown as typeof fetch;
+    const sampler = new DemSampler({ baseUrl: "tiles/global", fetchFn });
+    await sampler.loadIndex();
+
+    await expect(sampler.loadTile(0, 444, 92)).resolves.toBeNull();
+    expect(dbMock.deleteDemTile).toHaveBeenCalled();
   });
 });

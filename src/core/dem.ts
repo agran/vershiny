@@ -22,10 +22,23 @@ import { root } from "./globals";
 import type { SampleHint } from "./horizon";
 
 export const TILE_SIZE = 256;
+/** Байт в сыром int16-тайле 256×256: ровно столько должна дать распаковка */
+const RAW_TILE_BYTES = TILE_SIZE * TILE_SIZE * 2;
 /** Метры в одном градусе широты (для перевода размера ячейки в метры) */
 const METERS_PER_DEG_LAT = 111_320;
 /** Ячейка не должна быть мельче, чем ~1/150 дальности луча (ALGORITHMS.md) */
 const RES_PER_DIST = 1 / 150;
+
+/**
+ * Байты похожи на тайл пирамиды: либо сырой int16 256×256 (ровно 128 КБ),
+ * либо gzip с сигнатурой. HTML от SPA-fallback/прокси не проходит ни по
+ * одному признаку; усечённый gzip с валидной сигнатурой ловится при чтении
+ * (decodeTile проверяет длину распаковки, битая запись удаляется)
+ */
+function isValidPyramidTileBytes(bytes: Uint8Array): boolean {
+  if (bytes.length === RAW_TILE_BYTES) return true;
+  return bytes[0] === 0x1f && bytes[1] === 0x8b;
+}
 
 export interface DemLod {
   /** Размер ячейки в градусах */
@@ -476,16 +489,23 @@ export class DemSampler {
             .getDemTile(this.storeKey(key))
             .catch(() => undefined);
           if (stored) {
-            const tile = await this.decodeTile(
-              stored.buffer.slice(
-                stored.byteOffset,
-                stored.byteOffset + stored.byteLength,
-              ) as ArrayBuffer,
-              lodIndex,
-              `${tx}/${ty}`,
-            );
-            this.setTile(key, tile);
-            return tile;
+            try {
+              const tile = await this.decodeTile(
+                stored.buffer.slice(
+                  stored.byteOffset,
+                  stored.byteOffset + stored.byteLength,
+                ) as ArrayBuffer,
+                lodIndex,
+                `${tx}/${ty}`,
+              );
+              this.setTile(key, tile);
+              return tile;
+            } catch {
+              // Битые байты (HTML от прокси, усечённый gzip, сохранённые
+              // старым кодом): запись удаляем — иначе расчёт спотыкался бы
+              // о неё каждый раз, а онлайн не мог докачать тайл заново
+              db.deleteDemTile(this.storeKey(key)).catch(() => {});
+            }
           }
         }
 
@@ -608,6 +628,9 @@ export class DemSampler {
             const res = await this.fetchFn(this.tileUrl(key));
             if (!res.ok) return;
             const raw = new Uint8Array(await res.arrayBuffer());
+            // «200 OK» ещё не значит тайл: SPA-fallback/прокси отдают HTML,
+            // и он оседал в хранилище — регион «скачан», а рельеф с дырой
+            if (!isValidPyramidTileBytes(raw)) return;
             bytes += raw.byteLength;
             if (db) await db.saveDemTile(this.storeKey(key), raw);
             ok++;
@@ -631,13 +654,19 @@ export class DemSampler {
     keyTail: string,
   ): Promise<Int16Array> {
     let bytes = new Uint8Array(buffer);
-    // Сигнатура gzip: сервер (или SW) мог распаковать ответ за нас
     if (
       this.index?.encoding === "gzip" &&
       bytes[0] === 0x1f &&
       bytes[1] === 0x8b
     ) {
       bytes = await gunzip(bytes);
+    }
+    // Тайл обязан разжаться ровно в 256×256 int16: HTML от прокси и усечённый
+    // ответ здесь отсекаются — иначе из мусора молча получались NaN-горы
+    if (bytes.length !== RAW_TILE_BYTES) {
+      throw new Error(
+        `тайл ${keyTail}: ${bytes.length} байт, ожидалось ${RAW_TILE_BYTES}`,
+      );
     }
     // Int16Array требует чётного смещения — при нужде копируем
     const aligned = bytes.byteOffset % 2 === 0 ? bytes : new Uint8Array(bytes);

@@ -124,6 +124,17 @@ export async function getDemTile(key: string): Promise<Uint8Array | undefined> {
   return get<Uint8Array>(STORE_TILES, key);
 }
 
+/** Удалить тайл пирамиды из офлайн-хранилища (битая запись чистится при чтении) */
+export async function deleteDemTile(key: string): Promise<void> {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_TILES, "readwrite");
+    tx.objectStore(STORE_TILES).delete(key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
 /** Сохранить пики региона */
 export async function savePeaks(
   region: string,
