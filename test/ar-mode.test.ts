@@ -7,15 +7,15 @@
  * где главный режим спрятан за кнопкой в углу.
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  clearArAutoStartMark,
-  hadArAutostartKill,
-  isMiBrowser,
-  markArAutoStart,
-  rememberArMode,
-  shouldAutoStartAr,
-  storedArPreference,
+    clearArAutoStartMark,
+    hadArAutostartKill,
+    isMiBrowser,
+    markArAutoStart,
+    rememberArMode,
+    shouldAutoStartAr,
+    storedArPreference,
 } from "../src/core/ar-mode";
 
 /** Камера в браузере есть (сам вызов в этих тестах не делается) */
@@ -101,11 +101,11 @@ describe("режим камеры", () => {
     expect(storedArPreference()).toBe("unset");
   });
 
-  it("в установленном приложении первый запуск — без камеры", () => {
-    // HyperOS убивает процесс при старте камеры во время запуска PWA;
-    // не решивший ещё человек включит камеру кнопкой — это его выбор
+  it("в установленном приложении первый запуск — с камерой, как во вкладке", () => {
+    // Камера по умолчанию включена везде (это главный режим). От убийства
+    // процесса на HyperOS защищает сторож в main.ts, а не этот предикат
     stubStandalone();
-    expect(shouldAutoStartAr("unset", true)).toBe(false);
+    expect(shouldAutoStartAr("unset", true)).toBe(true);
   });
 
   it("в установленном приложении выбор «on» уважается", () => {
