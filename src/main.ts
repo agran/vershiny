@@ -858,6 +858,20 @@ const captionEntries: CaptionEntry[] = [];
 let captionLayer: HTMLElement | null = null;
 let captionArrowLayer: SVGSVGElement | null = null;
 let compassBtn: HTMLButtonElement | null = null;
+
+/** Анимация пульса кнопки компаса: ключевые кадры один раз на документ */
+function ensureCompassPulseCss(): void {
+  if (document.getElementById("vershiny-compass-pulse")) return;
+  const style = document.createElement("style");
+  style.id = "vershiny-compass-pulse";
+  style.textContent =
+    "@keyframes vershiny-compass-pulse{" +
+    "0%,100%{transform:scale(1)}" +
+    "50%{transform:scale(1.15);box-shadow:0 0 0 5px rgba(224,164,88,.35)}" +
+    "}";
+  document.head.appendChild(style);
+}
+
 function updateCompassButton(): void {
   if (!orientationTracker.needsPermission) {
     compassBtn?.remove();
@@ -865,15 +879,30 @@ function updateCompassButton(): void {
     return;
   }
   if (compassBtn) return;
+  ensureCompassPulseCss();
   compassBtn = makeButton(
     ICON_COMPASS,
     "enableCompass",
     `right:${edgeRight()};top:${edgeTop(60)}`,
   );
+  // Пока доступа нет, приложение «работает не полностью»: иконка в углу
+  // не должна остаться незамеченной. Пульс + акцентный цвет; после отказа
+  // пульс снимается — повторно диалог не спамим, кнопка остаётся ручным
+  // повтором
+  compassBtn.style.background = "#e0a458";
+  compassBtn.style.animation =
+    "vershiny-compass-pulse 1.4s ease-in-out infinite";
   compassBtn.onclick = () => {
-    void orientationTracker
-      .requestPermission()
-      .then(() => updateCompassButton());
+    void orientationTracker.requestPermission().then((ok) => {
+      if (ok) {
+        updateCompassButton();
+        return;
+      }
+      if (compassBtn) {
+        compassBtn.style.animation = "none";
+        compassBtn.style.background = "#415a77";
+      }
+    });
   };
 }
 

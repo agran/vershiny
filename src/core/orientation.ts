@@ -307,6 +307,8 @@ class OrientationTracker {
   private listening = false;
   /** Ждём жеста пользователя для запроса доступа к датчикам (iOS 13+) */
   private permissionPending = false;
+  /** Хук «первое касание» уже повешен на эту сессию (см. hookFirstGesture) */
+  private gestureHooked = false;
   /** Слушатели событий ориентации: нужны, чтобы stop() их действительно снял */
   private handler: ((ev: Event) => void) | null = null;
   /** Пришло ли хоть одно абсолютное показание (север, а не произвольный ноль) */
@@ -425,6 +427,9 @@ class OrientationTracker {
       this.permissionPending = true;
       this.state.source = "manual";
       this.callback(this.state);
+      // Жестом будет первое же касание в любом месте — не только кнопка
+      // компаса (см. hookFirstGesture)
+      this.hookFirstGesture();
       return;
     }
 
@@ -448,6 +453,25 @@ class OrientationTracker {
   }
 
   private permissionRequest: Promise<boolean> | null = null;
+
+  /**
+   * Первое касание в любом месте — повод спросить доступ к датчикам.
+   *
+   * iOS требует жест, но не требует, чтобы это была именно кнопка компаса:
+   * человек всё равно начнёт с касания (провести по панораме, открыть
+   * настройки) — искать маленькую иконку ради этого он не должен. Один хук
+   * на сессию: повторный отказ диалогом не спамим — остаётся кнопка
+   * «Включить компас» как ручной повтор.
+   */
+  private hookFirstGesture(): void {
+    if (this.gestureHooked) return;
+    this.gestureHooked = true;
+    const ask = (): void => {
+      if (this.listening || !this.permissionPending) return;
+      void this.requestPermission();
+    };
+    window.addEventListener("pointerdown", ask, { capture: true, once: true });
+  }
 
   private async doRequestPermission(): Promise<boolean> {
     const DOE = DeviceOrientationEvent as unknown as {
@@ -837,6 +861,7 @@ class OrientationTracker {
     this.snapRun = 0;
     this.snapDir = 0;
     this.listening = false;
+    this.gestureHooked = false;
     this.callback = null;
   }
 }

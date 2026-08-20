@@ -8,11 +8,11 @@
  * включался вообще никогда, оставался лишь ручной свайп.
  */
 
-import { describe, it, expect, afterEach, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import {
-  orientationTracker,
-  needsUserGesture,
-  type OrientationState,
+    needsUserGesture,
+    orientationTracker,
+    type OrientationState,
 } from "../src/core/orientation";
 
 /** Подмена платформы: iOS-подобный DeviceOrientationEvent с запросом доступа */
@@ -76,6 +76,37 @@ describe("разрешение на датчики (iOS)", () => {
     expect(a).toBe(true);
     expect(b).toBe(true);
     expect(requestPermission).toHaveBeenCalledTimes(1);
+  });
+
+  it("первое касание в любом месте запрашивает доступ само", async () => {
+    // iOS требует жест, но не обязательно по кнопке компаса: старт сессии
+    // вешает хук, и первое же касание (панорама, любая кнопка) зовёт
+    // requestPermission — искать невзрачную иконку человек не должен
+    const requestPermission = stubIOS("granted");
+    orientationTracker.start(() => {});
+    expect(requestPermission).not.toHaveBeenCalled();
+
+    window.dispatchEvent(new Event("pointerdown"));
+    // Ждём завершения промиса запроса, а не только его вызова:
+    // permissionPending снимается после await Promise.allSettled
+    await vi.waitFor(() =>
+      expect(orientationTracker.needsPermission).toBe(false),
+    );
+    expect(requestPermission).toHaveBeenCalledTimes(1);
+  });
+
+  it("после отказа касания диалог не спамят — остаётся кнопка", async () => {
+    // Хук одноразовый: повторный отказ означает «человек отказал», и каждое
+    // касание открывать системный диалог нельзя. Кнопка остаётся на месте
+    const requestPermission = stubIOS("denied");
+    orientationTracker.start(() => {});
+
+    window.dispatchEvent(new Event("pointerdown"));
+    window.dispatchEvent(new Event("pointerdown"));
+    await vi.waitFor(() =>
+      expect(requestPermission).toHaveBeenCalledTimes(1),
+    );
+    expect(orientationTracker.needsPermission).toBe(true);
   });
 
   it("на Android разрешение не нужно: слушаем сразу", () => {
