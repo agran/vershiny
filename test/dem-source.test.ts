@@ -6,6 +6,7 @@
  * но в память сэмплера (синхронный sample) не читались.
  */
 
+import { zlibSync } from "fflate";
 import { describe, expect, it } from "vitest";
 import { TILE_SIZE, type DemIndex } from "../src/core/dem";
 import { DemSource } from "../src/core/dem-source";
@@ -190,5 +191,118 @@ describe("DemSource: предзагрузка грубой пирамиды", ()
     const h = await source.observerHeightSafe({ lat: 45.035, lon: 38.976 });
     // Coarse-тайл из нулей → высота 0, но главное — не исключение
     expect(h).toBe(0);
+  });
+});
+
+// --- Кеш lastHit: фолбэк дальней зоны не должен «прилипать» к ближней ---
+
+/** CRC32 для PNG-чанков */
+const CRC_TABLE = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(bytes: Uint8Array): number {
+  let c = 0xffffffff;
+  for (const b of bytes) c = CRC_TABLE[(c ^ b) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+function pngChunk(type: string, data: Uint8Array): Uint8Array {
+  const out = new Uint8Array(12 + data.length);
+  const dv = new DataView(out.buffer);
+  dv.setUint32(0, data.length);
+  out.set([type.charCodeAt(0), type.charCodeAt(1), type.charCodeAt(2), type.charCodeAt(3)], 4);
+  out.set(data, 8);
+  dv.setUint32(8 + data.length, crc32(out.subarray(4, 8 + data.length)));
+  return out;
+}
+
+/** Terrarium-PNG 256×256 с постоянным цветом (высота = r*256 + g − 32768) */
+function makeTerrariumPng256(r: number, g: number, b: number): Uint8Array {
+  const w = 256;
+  const h = 256;
+  const raw = new Uint8Array(h * (1 + w * 3));
+  for (let y = 0; y < h; y++) {
+    const row = y * (1 + w * 3);
+    raw[row] = 0; // фильтр 0
+    for (let x = 0; x < w; x++) {
+      const o = row + 1 + x * 3;
+      raw[o] = r;
+      raw[o + 1] = g;
+      raw[o + 2] = b;
+    }
+  }
+  const ihdr = new Uint8Array(13);
+  const dv = new DataView(ihdr.buffer);
+  dv.setUint32(0, w);
+  dv.setUint32(4, h);
+  ihdr[8] = 8; // битовая глубина
+  ihdr[9] = 2; // colorType RGB
+  // сжатие 0, фильтр 0, без чересстрочности
+  const chunks = new Uint8Array(8 + 12 + 13 + 12 + zlibSync(raw).length + 12);
+  let off = 0;
+  chunks.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], 0);
+  off = 8;
+  chunks.set(pngChunk("IHDR", ihdr), off);
+  off += 25;
+  const idat = pngChunk("IDAT", zlibSync(raw));
+  chunks.set(idat, off);
+  off += idat.length;
+  chunks.set(pngChunk("IEND", new Uint8Array(0)), off);
+  return chunks;
+}
+
+describe("DemSource: кеш источника по зонам", () => {
+  it("фолбэк дальней зоны на coarse не портит ближние выборки следующего луча", async () => {
+    // Регресс (разрыв контура у Краснодара): lastHit был один на все зоны.
+    // Хвост луча падал на грубую пирамиду (Terrarium-тайл не догрузился),
+    // кеш «прилипал» к ней, и следующие лучи читали ближнюю зону (первые
+    // сотни метров!) из 217-м пирамиды — скачок детализации на стыке лучей.
+    const png = makeTerrariumPng256(128, 10, 0); // везде 10 м
+
+    const fetchFn = (async (url: string) => {
+      const u = String(url);
+      if (u.includes("tiles/coarse/index.json")) {
+        return new Response(JSON.stringify(COARSE_INDEX), {
+          headers: { "content-type": "application/json" },
+        });
+      }
+      if (u.includes("tiles/coarse/")) {
+        return new Response(
+          new Uint8Array(TILE_SIZE * TILE_SIZE * 2) as unknown as BodyInit,
+        );
+      }
+      if (u.includes("terrarium")) {
+        return new Response(png as unknown as BodyInit, {
+          headers: { "content-type": "image/png" },
+        });
+      }
+      return new Response("", { status: 404 });
+    }) as unknown as typeof fetch;
+
+    const source = new DemSource({
+      patchBaseUrls: ["tiles/coarse"],
+      terrariumBaseUrl: "https://example.invalid/terrarium",
+      fetchFn,
+    });
+    await source.init();
+    // Северный луч: ближние z12 и дальние тайлы обоих источников
+    await source.prefetchAlongRay(ORIGIN, 0, 60_000, 500, destination);
+
+    // Ближняя зона: Terrarium загружен → 10 м
+    const near = destination(ORIGIN, 0, 150);
+    expect(source.sample(near, 150, { lod: 0, zoom: 12 })).toBeCloseTo(10, 5);
+
+    // Дальняя зона: coarse первый в порядке → нули (его тайл загружен)
+    const far = destination(ORIGIN, 0, 40_000);
+    expect(source.sample(far, 40_000, { lod: 0, zoom: 9 })).toBe(0);
+
+    // Снова ближняя: источник обязан вернуться к Terrarium,
+    // а не читать 0 из «прилипшего» coarse
+    expect(source.sample(near, 150, { lod: 0, zoom: 12 })).toBeCloseTo(10, 5);
   });
 });

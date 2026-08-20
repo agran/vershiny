@@ -111,8 +111,15 @@ export class DemSource {
     // Кеш последнего успешного источника: луч идёт внутри одного патча
     // тысячи шагов, а covering() (filter по bbox всех источников) звучал
     // на каждую выборку. Порядок опроса источников не меняется: кеш — это
-    // тот же первый подошедший источник прошлой выборки
-    const last = this.lastHit;
+    // тот же первый подошедший источник прошлой выборки.
+    //
+    // Кеш разделён по зонам (ближняя/дальняя): вдали грубый патч —
+    // законный фолбэк (сеть могла не загрузиться), но если он «прилип»
+    // к концу луча, следующий луч начал бы читать ближнюю зону из грубой
+    // пирамиды, хотя Terrarium рядом загружен — скачок детализации на
+    // стыке лучей и разрыв контура.
+    const near = distM < NEAR_M;
+    const last = near ? this.lastHitNear : this.lastHitFar;
     if (last) {
       let h: number;
       if (last === this.terrarium) {
@@ -138,11 +145,13 @@ export class DemSource {
           ? src.sample(pos, zoomForDistance(distM), hint?.zoom)
           : src.sampler.sample(pos, 0, hint);
       if (h === h) {
-        this.lastHit = src;
+        if (near) this.lastHitNear = src;
+        else this.lastHitFar = src;
         return h;
       }
     }
-    this.lastHit = null;
+    if (near) this.lastHitNear = null;
+    else this.lastHitFar = null;
     return NaN;
   }
 
@@ -170,7 +179,9 @@ export class DemSource {
   }
 
   /** Последний источник, давший высоту (см. sample) */
-  private lastHit: Patch | TerrariumSampler | null = null;
+  /** Кеш источника по зонам (см. sample): фолбэк одной зоны не портит другую */
+  private lastHitNear: Patch | TerrariumSampler | null = null;
+  private lastHitFar: Patch | TerrariumSampler | null = null;
 
   /**
    * Верхние границы высот по секторам азимута — для обрыва лучей (P4).
