@@ -525,6 +525,15 @@
         }
         var toggle = document.getElementById("lang-toggle");
         if (toggle) toggle.textContent = locale === "ru" ? "English" : "Русский";
+        // Имя значка на рабочем столе берётся из манифеста (iOS 16.4+,
+        // Android Chrome) — отдаём браузеру манифест на языке страницы
+        var manifestLink = document.querySelector('link[rel="manifest"]');
+        if (manifestLink) {
+          manifestLink.href =
+            locale === "ru"
+              ? "./manifest.webmanifest"
+              : "./manifest-en.webmanifest";
+        }
       }
 
       var langToggle = document.getElementById("lang-toggle");
@@ -536,7 +545,10 @@
           } catch (err) {
             // Запрет хранилища: язык живёт до перезагрузки страницы
           }
-          applyLocale();
+          // Перезагрузка: Chrome готовит предложение установки по манифесту,
+          // прочитанному при загрузке страницы, — подмена ссылки на лету его
+          // не обновит
+          location.reload();
         });
       }
       applyLocale();

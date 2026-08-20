@@ -1,8 +1,8 @@
 {
-  "name": "Вершины — панорама гор",
-  "short_name": "Вершины",
-  "description": "Панорама горизонта с подписями вершин: что видно с того места, где вы стоите. Работает офлайн.",
-  "lang": "ru",
+  "name": "Vershiny — Mountain Panorama",
+  "short_name": "Vershiny",
+  "description": "Horizon panorama with labeled peaks: what you see from where you stand. Works offline.",
+  "lang": "en",
   "dir": "ltr",
   "id": "/vershiny/",
   "start_url": "./",

@@ -24,6 +24,29 @@
       content="black-translucent"
     />
     <meta name="apple-mobile-web-app-title" content="Вершины" />
+    <!-- Двуязычие установки: имя значка на рабочем столе берётся из
+       манифеста (iOS 16.4+, Android Chrome), а браузеры манифест не
+       локализуют. Подменяем ссылку до того, как браузер её запросит;
+       без JS остаётся ru-манифест по умолчанию. Стоит после meta, которую
+       меняет: раньше querySelector её ещё не находил. -->
+    <script>
+      try {
+        var vershinyLocale =
+          localStorage.getItem("vershiny-locale") ||
+          (navigator.language || "");
+        if (vershinyLocale.toLowerCase().indexOf("ru") !== 0) {
+          document
+            .querySelector('link[rel="manifest"]')
+            .setAttribute("href", "./manifest-en.webmanifest");
+          var vershinyTitle = document.querySelector(
+            'meta[name="apple-mobile-web-app-title"]'
+          );
+          if (vershinyTitle) vershinyTitle.content = "Vershiny";
+        }
+      } catch (e) {
+        /* приватный режим: остаётся ru-манифест */
+      }
+    </script>
     <title>Вершины — панорама гор / Vershiny — Mountain Panorama</title>
     <style>
       html,

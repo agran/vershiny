@@ -222,6 +222,9 @@ describe("Service Worker", () => {
     expect(env.added).toContain(
       "https://example.org/vershiny/manifest.webmanifest",
     );
+    expect(env.added).toContain(
+      "https://example.org/vershiny/manifest-en.webmanifest",
+    );
   });
 
   it("при 500 от сервера отдаёт кеш, а не ошибку", async () => {

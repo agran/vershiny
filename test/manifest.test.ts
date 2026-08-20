@@ -20,6 +20,7 @@ const manifest = JSON.parse(read("../public/manifest.webmanifest")) as {
   name: string;
   short_name: string;
   description: string;
+  id: string;
   start_url: string;
   scope: string;
   display: string;
@@ -48,9 +49,11 @@ describe("манифест PWA", () => {
     expect(INSTALL_URL.startsWith(scope)).toBe(true);
   });
 
-  it("обе страницы ссылаются на один и тот же манифест", () => {
-    // Разные манифесты означали бы два разных «приложения» с одинаковой
-    // иконкой: установленное со страницы инструкции вело бы не туда
+  it("обе страницы ссылаются на один и тот же манифест по умолчанию", () => {
+    // ru-манифест — статическая ссылка в HTML; en подставляется скриптом
+    // по локали. Разные манифесты означали бы два разных «приложения» с
+    // одинаковой иконкой: установленное со страницы инструкции вело бы
+    // не туда — поэтому у en-файла та же точка входа (тест ниже)
     const link = (html: string): string =>
       /<link[^>]+rel="manifest"[^>]+href="([^"]+)"/.exec(html)?.[1] ?? "";
 
@@ -127,13 +130,24 @@ describe("манифест PWA", () => {
     expect(html).toContain("На экран «Домой»");
   });
 
-  it("имя и описание манифеста двуязычны (политика проекта)", () => {
-    // short_name остаётся брендом: двуязычное имя iOS обрезает под иконкой
-    // (тест «подписан по-человечески» выше)
+  it("два манифеста — одно приложение: отличаются только подписи", () => {
+    // Браузеры не локализуют манифест, поэтому имя значка на языке
+    // пользователя даёт второй файл. Различаться могут только подписи
+    // (name/short_name/description/lang): точка входа и иконки обязаны
+    // совпадать, иначе это два разных приложения
+    const en = JSON.parse(
+      read("../public/manifest-en.webmanifest"),
+    ) as typeof manifest;
+    expect(en.name).toBe("Vershiny — Mountain Panorama");
+    expect(en.short_name).toBe("Vershiny");
+    expect(/[а-яё]/i.test(en.name + en.short_name + en.description)).toBe(
+      false,
+    );
     expect(manifest.name).toContain("Вершины");
-    expect(manifest.name).toContain("Vershiny");
-    expect(/[а-яё]/i.test(manifest.description)).toBe(true);
-    expect(/[a-z]/i.test(manifest.description)).toBe(true);
+    for (const field of ["id", "start_url", "scope", "display"] as const) {
+      expect(en[field]).toBe(manifest[field]);
+    }
+    expect(JSON.stringify(en.icons)).toBe(JSON.stringify(manifest.icons));
   });
 
   it("страница установки двуязычна: словарь ru/en и переключатель", () => {
@@ -141,6 +155,10 @@ describe("манифест PWA", () => {
     expect(html).toContain('id="lang-toggle"');
     // Тот же ключ локали, что у приложения: страница и приложение не спорят
     expect(html).toContain("vershiny-locale");
+    // Имя значка на языке страницы — подменой манифеста + перезагрузкой
+    expect(html).toContain('link[rel="manifest"]');
+    expect(html).toContain("./manifest-en.webmanifest");
+    expect(html).toContain("location.reload()");
     for (const text of [
       "Открыть приложение",
       "Open the app",
@@ -151,5 +169,11 @@ describe("манифест PWA", () => {
     ]) {
       expect(html).toContain(text);
     }
+  });
+
+  it("index.html подставляет en-манифест по сохранённой локали", () => {
+    const html = read("../index.html");
+    expect(html).toContain('"./manifest-en.webmanifest"');
+    expect(html).toContain("vershiny-locale");
   });
 });
