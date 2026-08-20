@@ -525,13 +525,16 @@ export function checkPeakVisibility(
   distanceToHorizonM: number,
   epsilonRad = 0.0009, // ~0.05°
   march?: MarchTable,
+  /** Предвычисленные азимут/дистанция (filterVisiblePeaks): те же входы —
+   * побитово те же значения, лишняя тригонометрия не тратится */
+  pre?: { azRad: number; distM: number },
 ): VisiblePeak | null {
   const target: LatLon = { lat: peak.lat, lon: peak.lon };
-  const dist = distanceM(origin, target);
+  const dist = pre?.distM ?? distanceM(origin, target);
   if (dist > PEAK_VISIBILITY_RADIUS_M || dist < 1) return null;
   if (peak.ele === undefined) return null;
 
-  const az = azimuthRad(origin, target);
+  const az = pre?.azRad ?? azimuthRad(origin, target);
   const hO = observerH + OBSERVER_EYE_M;
   const table = march ?? buildMarchTable(100, dist);
   const pointAt = makeRayMarcher(origin, az, table);
@@ -616,10 +619,15 @@ export function filterVisiblePeaks(
   // Таблица шагов общая для всех пиков: луч каждого пика — её префикс
   const march = buildMarchTable(100, PEAK_VISIBILITY_RADIUS_M, marchDeps);
   for (const peak of peaks) {
+    // Отсев до тригонометрии азимута: эти пики checkPeakVisibility
+    // отбросил бы всё равно (радиус видимости, отсутствие высоты)
+    if (peak.ele === undefined) continue;
+    const dist = distanceM(origin, peak);
+    if (dist > PEAK_VISIBILITY_RADIUS_M || dist < 1) continue;
+    const az = azimuthRad(origin, peak);
     const distToHorizon = layered
       ? layered.distanceToHorizonM[
-          Math.round(azimuthRad(origin, peak) / layered.stepRad) %
-            layered.distanceToHorizonM.length
+          Math.round(az / layered.stepRad) % layered.distanceToHorizonM.length
         ]
       : Infinity;
     const visible = checkPeakVisibility(
@@ -630,6 +638,9 @@ export function filterVisiblePeaks(
       distToHorizon,
       undefined,
       march,
+      // Тот же азимут и дистанция, что посчитаны строкой выше, —
+      // внутри повторной тригонометрии нет
+      { azRad: az, distM: dist },
     );
     if (visible) result.push(visible);
   }
