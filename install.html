@@ -255,6 +255,30 @@
           </p>
         </div>
 
+        <div id="ios-yandex" hidden>
+          <h2>iPhone и iPad — Яндекс Браузер</h2>
+          <p>
+            В Яндексе установка идёт через <strong>меню</strong>, а не через
+            «Поделиться»:
+          </p>
+          <ol>
+            <li>
+              Нажмите меню <kbd>⋮</kbd> — кнопка в нижней правой части экрана.
+            </li>
+            <li>
+              Выберите <kbd>Добавить ярлык на рабочий стол</kbd> — если пункта
+              не видно, листайте меню ниже.
+            </li>
+            <li>
+              В появившемся списке выберите <kbd>На экран «Домой»</kbd>.
+            </li>
+            <li>
+              Назовите приложение и нажмите <kbd>Добавить</kbd> — иконка
+              окажется на рабочем столе.
+            </li>
+          </ol>
+        </div>
+
         <h2>Компьютер</h2>
         <ul>
           <li>Chrome или Edge: значок установки в адресной строке.</li>
@@ -344,8 +368,15 @@
         iosVer.length > 0 &&
         (iosVer[0] > 16 || (iosVer[0] === 16 && iosVer[1] >= 4));
 
+      // Яндекс Браузер на iOS: свой путь установки — через меню, а не
+      // «Поделиться» (общая инструкция там путает)
+      var isYandex = /YaBrowser|YandexBrowser/i.test(ua);
+
       if (isIOS) {
-        if (
+        if (isYandex) {
+          document.getElementById("ios-yandex").hidden = false;
+          document.getElementById("ios-steps").hidden = true;
+        } else if (
           isInAppWebView ||
           (!iosCanInstallAnywhere && !/Safari/.test(ua))
         ) {

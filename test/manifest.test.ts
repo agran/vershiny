@@ -114,4 +114,15 @@ describe("манифест PWA", () => {
     expect(outside('id="ios-other"')).toBe(true);
     expect(outside('id="android-webview"')).toBe(true);
   });
+
+  it("в Яндекс Браузере на iOS показывается свой путь через меню", () => {
+    // У Яндекса установка идёт через меню ⋮ → «Добавить ярлык на рабочий
+    // стол» → «На экран “Домой”», а не через «Поделиться» — общая
+    // инструкция там путает. Блок с шагами обязан существовать, а шаги
+    // должны быть на месте (детекция YaBrowser в UA надёжна)
+    const html = read("../install.html");
+    expect(html).toContain('id="ios-yandex"');
+    expect(html).toContain("Добавить ярлык на рабочий стол");
+    expect(html).toContain("На экран «Домой»");
+  });
 });
