@@ -92,4 +92,16 @@ describe("манифест PWA", () => {
     const html = read("../install.html");
     expect(html).toContain('href="./"');
   });
+
+  it("на iOS из чужого браузера страница даёт кнопку копирования адреса", () => {
+    // «На экран “Домой”» на iOS есть только в Safari: страница установки
+    // должна показать кнопку «Скопировать адрес для Safari» и короткую
+    // инструкцию — и панель обязана быть ВНЕ #install-steps: тот блок
+    // скрывается целиком, вместе с ним пропала бы и сама инструкция
+    const html = read("../install.html");
+    expect(html).toContain('id="ios-copy"');
+    const stepsEnd = html.indexOf("</ul>\n      </div>");
+    expect(stepsEnd).toBeGreaterThan(0);
+    expect(html.indexOf('id="ios-other"')).toBeGreaterThan(stepsEnd);
+  });
 });

@@ -211,16 +211,18 @@
           </li>
         </ol>
 
-        <h2>iPhone и iPad — Safari</h2>
-        <ol>
-          <li>
-            Откройте эту страницу <strong>в Safari</strong> (в других браузерах
-            установка на iOS недоступна).
-          </li>
-          <li>Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.</li>
-          <li>Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.</li>
-        </ol>
-        <p class="aside">Значок откроет саму панораму, а не эту страницу.</p>
+        <div id="ios-steps">
+          <h2>iPhone и iPad — Safari</h2>
+          <ol>
+            <li>
+              Откройте эту страницу <strong>в Safari</strong> (в других
+              браузерах установка на iOS недоступна).
+            </li>
+            <li>Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.</li>
+            <li>Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.</li>
+          </ol>
+          <p class="aside">Значок откроет саму панораму, а не эту страницу.</p>
+        </div>
 
         <h2>Компьютер</h2>
         <ul>
@@ -229,6 +231,25 @@
             Можно и не устанавливать — в браузере работает всё то же самое.
           </li>
         </ul>
+      </div>
+
+      <div id="ios-other" class="note" hidden>
+        <p>
+          <strong>В этом браузере на iPhone установить нельзя</strong> —
+          Apple разрешает «На экран “Домой”» только в Safari. Самый короткий
+          путь:
+        </p>
+        <button class="btn" id="ios-copy">
+          Скопировать адрес для Safari
+        </button>
+        <button class="btn secondary" id="ios-share" hidden>
+          Поделиться…
+        </button>
+        <ol>
+          <li>Вставьте адрес в адресную строку Safari и откройте страницу.</li>
+          <li>Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.</li>
+          <li>Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.</li>
+        </ol>
       </div>
 
       <div class="note">
@@ -285,6 +306,72 @@
         button.hidden = true;
         document.body.classList.add("standalone");
       });
+
+      // iOS в чужом браузере (Chrome, Edge, Firefox, встроенные браузеры
+      // мессенджеров): «На экран “Домой”» есть только в Safari. Даём самый
+      // короткий путь — копия адреса одним касанием + инструкция из двух
+      // шагов, вместо списка инструкций для Android/компьютера
+      var ua = navigator.userAgent;
+      var isIOS =
+        /iPhone|iPad|iPod/.test(ua) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+      var isSafari =
+        /Safari/.test(ua) && !/(CriOS|FxiOS|EdgiOS|OPiOS)/.test(ua);
+      if (isIOS && !isSafari) {
+        var panel = document.getElementById("ios-other");
+        var steps = document.getElementById("install-steps");
+        if (panel && steps) {
+          panel.hidden = false;
+          steps.hidden = true;
+        }
+
+        var legacyCopy = function (text) {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.cssText = "position:fixed;left:-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand("copy");
+          } catch (err) {
+            // Старые WebView: копии не будет, но адрес человек введёт и так
+          }
+          document.body.removeChild(ta);
+        };
+        var copyBtn = document.getElementById("ios-copy");
+        if (copyBtn) {
+          copyBtn.addEventListener("click", function () {
+            var done = function () {
+              copyBtn.textContent =
+                "Адрес скопирован — вставьте его в Safari";
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(location.href).then(done, function () {
+                legacyCopy(location.href);
+                done();
+              });
+            } else {
+              legacyCopy(location.href);
+              done();
+            }
+          });
+        }
+
+        var shareBtn = document.getElementById("ios-share");
+        if (shareBtn && navigator.share) {
+          shareBtn.hidden = false;
+          shareBtn.addEventListener("click", function () {
+            navigator
+              .share({
+                title: "Вершины — панорама гор",
+                url: location.href,
+              })
+              .catch(function () {
+                // Отмена листа «Поделиться» — не ошибка
+              });
+          });
+        }
+      }
     </script>
     <!--
   Счётчик посещений — тем же модулем, что и в приложении: без сети не грузится,
