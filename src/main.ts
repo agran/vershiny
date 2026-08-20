@@ -1184,6 +1184,13 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   );
 };
 
+// Смерть воркера (OOM на большом регионе) иначе выглядела бы как вечное
+// «Расчёт панорамы…» с висящими промисами перелётов
+worker.onerror = (): void => {
+  console.error("Горизонт-воркер упал");
+  setStatus(`${t("error")}: ${t("workerFailed")}`, 6_000);
+};
+
 let lastOrigin: LatLon = { lat: 43.318, lon: 42.458 };
 
 /** SW уже получил сигнал «первая панорама готова» (чанки можно докачивать) */
@@ -1735,16 +1742,34 @@ async function jumpToPeak(
  * оба резолвились первым же ответом, а ответ на ошибку не приходил никогда —
  * промис висел вечно вместе со своим слушателем.
  */
+/** Перелёт к вершине: сколько ждать точку обзора от воркера */
+const VIEWPOINT_TIMEOUT_MS = 20_000;
+
 function requestViewpoint(peak: Peak): Promise<ViewpointResult> {
   const reqId = nextReqId++;
   return new Promise((resolve, reject) => {
+    let settled = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const finish = (fn: () => void): void => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      worker.removeEventListener("message", onMessage);
+      fn();
+    };
+    // Смерть воркера (OOM) не присылает ответа вообще: без таймаута промис
+    // висел бы вечно вместе со своим слушателем
+    timer = setTimeout(
+      () => finish(() => reject(new Error(t("viewpointTimeout")))),
+      VIEWPOINT_TIMEOUT_MS,
+    );
     const onMessage = (ev: MessageEvent<WorkerOutMessage>): void => {
       const msg = ev.data;
       if (msg.reqId !== reqId) return;
       if (msg.type !== "viewpoint" && msg.type !== "error") return;
-      worker.removeEventListener("message", onMessage);
-      if (msg.type === "error") reject(new Error(msg.message));
-      else resolve(msg);
+      finish(() =>
+        msg.type === "error" ? reject(new Error(msg.message)) : resolve(msg),
+      );
     };
     worker.addEventListener("message", onMessage);
     worker.postMessage({ type: "viewpoint", peak, reqId });

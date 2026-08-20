@@ -64,6 +64,14 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     ru: "Нет сети, а данных об этом месте на устройстве нет",
     en: "Offline and no stored data for this place",
   },
+  workerFailed: {
+    ru: "воркер расчёта упал — обновите страницу",
+    en: "the panorama worker crashed — reload the page",
+  },
+  viewpointTimeout: {
+    ru: "не удалось подобрать точку обзора",
+    en: "could not find a viewpoint",
+  },
   peaks: { ru: "вершин", en: "peaks" },
   observer: { ru: "наблюдатель", en: "observer" },
   downloadRegion: {
