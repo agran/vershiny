@@ -1105,6 +1105,15 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     if (heightEl)
       heightEl.textContent = `${Math.round(msg.observerH)} ${t("unitM")}`;
     setStatus(t("refining"));
+    // Автонаклон — на превью, а не на полном кадре: иначе уточнение резко
+    // задирало камеру (замер: 0° → 19.1°), и весь силуэт уезжал вниз.
+    // Превью несёт достаточно силуэта (медиана совпадает с полной — 19.1°),
+    // а полный кадр уже не трогает выставленный наклон. Если в превью
+    // силуэта нет (ровное место) — наклон выставит полный кадр
+    if (autoTiltPending) {
+      autoTiltPending = false;
+      applyAutoTilt({ stepRad: msg.stepRad, layers: msg.layers });
+    }
     draw();
     console.info(
       `Превью: ${msg.horizon.length} лучей, наблюдатель ${msg.observerH.toFixed(0)} м, ${msg.computeMs.toFixed(0)} мс`,

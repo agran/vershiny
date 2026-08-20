@@ -303,17 +303,46 @@ export class DemSource {
     );
   }
 
-  /** Ближний веер всех слоёв для превью-марша (0–15 км): патчи + Terrarium */
+  /**
+   * «Региональный» ли патч — в отличие от глобальных слоёв (hi-слой ~87 м,
+   * глобальная пирамида ~217 м), чей bbox покрывает почти весь мир.
+   * Превью (волна 1) качает только региональные патчи: ближний план и так
+   * есть из Terrarium (~90 м) и патча региона, а глобальные слои грузятся
+   * во второй волне для полного кадра — ждать их внешний origin ради превью
+   * незачем (замер: подвешенный тайл hi-слоя держал волну 1 на таймауте 2.5 с)
+   */
+  private isRegionalPatch(p: Patch): boolean {
+    const [minLon, minLat, maxLon, maxLat] = p.bbox;
+    const lonSpan =
+      minLon <= maxLon ? maxLon - minLon : 360 + maxLon - minLon;
+    return lonSpan < 180 || maxLat - minLat < 120;
+  }
+
+  /** Ближний веер для превью-марша (0–15 км): Terrarium + региональные патчи */
   private async prefetchNearFan(
     origin: LatLon,
     maxDistM: number,
     stepM: number,
   ): Promise<void> {
+    const regional = this.patches.filter(
+      (p) => !p.coarse && this.isRegionalPatch(p),
+    );
     const tasks: Promise<void>[] = [];
     for (let az = 0; az < 2 * Math.PI; az += (5 * Math.PI) / 180) {
       tasks.push(
-        this.prefetchAlongRay(origin, az, maxDistM, stepM, destination),
+        this.terrarium.prefetchAlongRay(
+          origin,
+          az,
+          maxDistM,
+          stepM,
+          destination,
+        ),
       );
+      for (const p of regional) {
+        tasks.push(
+          p.sampler.prefetchAlongRay(origin, az, maxDistM, stepM, destination),
+        );
+      }
     }
     await Promise.all(tasks);
   }
@@ -324,11 +353,18 @@ export class DemSource {
    * тайл не приехал за 2.5 с, дальше ничего не приедет, и рисовать с дырой
    * лучше, чем ждать 8 секунд. Финальный кадр считается по полному вееру с
    * обычным таймаутом и пересчитывает дыры.
+   *
+   * `deadlineMs` — жёсткий предел ожидания (страховка от медленной сети):
+   * по истечении возвращаемся, не дожидаясь остатка загрузок. Таймауты
+   * сэмплеров восстанавливаются сразу (в finally), а фоновые загрузки
+   * продолжаются и переиспользуются второй волной (loadTile дедуплицирует
+   * по `pending`), так что полный кадр данные не теряет.
    */
   async prefetchNearZone(
     origin: LatLon,
     maxDistM: number,
     stepM: number,
+    deadlineMs?: number,
   ): Promise<void> {
     const saved: number[] = [this.terrarium.fetchTimeoutMs];
     this.terrarium.fetchTimeoutMs = NEAR_FETCH_TIMEOUT_MS;
@@ -337,10 +373,18 @@ export class DemSource {
       p.sampler.fetchTimeoutMs = NEAR_FETCH_TIMEOUT_MS;
     }
     try {
-      await Promise.all([
+      const work = Promise.all([
         this.prefetchNear(origin),
         this.prefetchNearFan(origin, maxDistM, stepM),
       ]);
+      if (deadlineMs) {
+        await Promise.race([
+          work,
+          new Promise<void>((resolve) => setTimeout(resolve, deadlineMs)),
+        ]);
+      } else {
+        await work;
+      }
     } finally {
       this.terrarium.fetchTimeoutMs = saved[0];
       this.patches.forEach((p, i) => (p.sampler.fetchTimeoutMs = saved[i + 1]));

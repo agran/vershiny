@@ -154,6 +154,15 @@ export type WorkerOutMessage =
 let dem: DemSource | null = null;
 /** Пики текущего региона — живут в воркере (см. SetPeaksMessage) */
 let workerPeaks: Peak[] = [];
+/**
+ * reqId последнего полученного compute. Если во время идущего расчёта пришёл
+ * свежий compute, текущий устарел: он бросает работу на ближайшей границе
+ * фаз, а не тратит сеть и CPU впустую (main всё равно отбросил бы его ответ
+ * по reqId). Без этого двойной compute при старте — пустой список пиков,
+ * затем с пиками — отрабатывал первый полностью (полный веер + марш) и
+ * задерживал видимый кадр на секунды
+ */
+let latestComputeReqId = 0;
 
 /**
  * Инициализация источника высот идёт асинхронно, а `self.onmessage = async`
@@ -182,15 +191,27 @@ const PREVIEW_MAX_DIST_M = 12_000;
 const PREVIEW_STEP_RAD = (0.5 * Math.PI) / 180;
 /** Веер волны 1: те же 5° по азимуту, шаг точек 4 км */
 const PREVIEW_FAN_STEP_M = 4_000;
+/**
+ * Жёсткий предел ожидания волны 1 (ближних тайлов превью). Страховка от
+ * медленной/мёртвой сети: превью обязано выйти быстро, дальше считаем по
+ * тому, что успело загрузиться (дыры закроет полный кадр, который ждёт
+ * полный веер с обычным таймаутом)
+ */
+const PREVIEW_WAVE1_DEADLINE_MS = 1_000;
 
 async function compute(
   origin: LatLon,
-  heightOverride?: number,
-  wantPreview = false,
-): Promise<{ preview: PreviewMessage | null; result: ResultMessage }> {
+  heightOverride: number | undefined,
+  wantPreview: boolean,
+  reqId: number,
+): Promise<ResultMessage | null> {
   const source = dem;
   if (!source) throw new Error("Worker не инициализирован (init)");
   const t0 = performance.now();
+  // Устарел ли расчёт: в очередь пришёл свежий compute с другим reqId.
+  // Проверяем на границах фаз — волна 1 и волна 2 уже ограничены (дедлайн
+  // и таймауты), а вот марш и пики бросаем, чтобы не жечь CPU впустую
+  const superseded = (): boolean => reqId !== latestComputeReqId;
 
   // Высота наблюдателя: max по окрестности 3×3 (не ниже поверхности)
   const observerH = heightOverride ?? (await source.observerHeightSafe(origin));
@@ -215,9 +236,14 @@ async function compute(
   // недопустимы
   let tNear = tObserver;
   let tPreviewEnd = tObserver;
-  let preview: PreviewMessage | null = null;
   if (wantPreview) {
-    await source.prefetchNearZone(origin, 15_000, PREVIEW_FAN_STEP_M);
+    await source.prefetchNearZone(
+      origin,
+      15_000,
+      PREVIEW_FAN_STEP_M,
+      PREVIEW_WAVE1_DEADLINE_MS,
+    );
+    if (superseded()) return null; // устаревший: не маршируем и не постим
     tNear = performance.now();
 
     // Превью-марш: грубый шаг по азимуту, только ближняя зона. Пиков не несёт —
@@ -228,7 +254,10 @@ async function compute(
       marchDeps,
     });
     tPreviewEnd = performance.now();
-    preview = {
+    if (superseded()) return null; // пока маршировали — пришёл свежий
+    // Постим превью СРАЗУ, не дожидаясь волны 2 и полного марша: именно это
+    // даёт быстрый первый кадр, пока дальние тайлы качаются
+    const preview: PreviewMessage = {
       type: "preview",
       horizon: previewLayered.layers[0],
       stepRad: previewLayered.stepRad,
@@ -237,9 +266,12 @@ async function compute(
       crests: previewLayered.crests,
       observerH,
       computeMs: tPreviewEnd - tNear,
+      reqId,
     };
+    postTransfer(preview);
   } else {
     await source.prefetchNear(origin);
+    if (superseded()) return null;
     tNear = performance.now();
     tPreviewEnd = tNear;
   }
@@ -253,6 +285,7 @@ async function compute(
     );
   }
   await Promise.all(fanTasks);
+  if (superseded()) return null; // волна 2 грузила дальние тайлы — пришёл свежий
   const tFull = performance.now();
 
   const layered = computeLayeredHorizon(origin, observerH, sampleFn, {
@@ -292,26 +325,23 @@ async function compute(
   const tPack = performance.now();
 
   return {
-    preview,
-    result: {
-      type: "result",
-      horizon: layered.layers[0], // ближний слой = основной горизонт
-      stepRad: layered.stepRad,
-      layers: layered.layers,
-      distanceToHorizonM: layered.distanceToHorizonM,
-      frontsFlat,
-      frontsOffsets,
-      crests: layered.crests,
-      peaks: visible,
-      observerH,
-      // Сеть: волна 1 (observer→near) + волна 2 (превью→full); превью-марш
-      // вычтен, чтобы не смешивать сеть с CPU
-      prefetchMs: (tNear - tObserver) + (tFull - tPreviewEnd),
-      marchMs: tMarch - tFull,
-      peaksMs: tPeaks - tMarch,
-      packMs: tPack - tPeaks,
-      computeMs: performance.now() - t0,
-    },
+    type: "result",
+    horizon: layered.layers[0], // ближний слой = основной горизонт
+    stepRad: layered.stepRad,
+    layers: layered.layers,
+    distanceToHorizonM: layered.distanceToHorizonM,
+    frontsFlat,
+    frontsOffsets,
+    crests: layered.crests,
+    peaks: visible,
+    observerH,
+    // Сеть: волна 1 (observer→near) + волна 2 (превью→full); превью-марш
+    // вычтен, чтобы не смешивать сеть с CPU
+    prefetchMs: (tNear - tObserver) + (tFull - tPreviewEnd),
+    marchMs: tMarch - tFull,
+    peaksMs: tPeaks - tMarch,
+    packMs: tPack - tPeaks,
+    computeMs: performance.now() - t0,
   };
 }
 
@@ -389,7 +419,8 @@ async function pickViewpoint(
  * main шлёт пересчёт почти на каждый pointermove, и очередь устаревших
  * задач росла быстрее, чем считалась, — каждая тратила CPU и prefetch-
  * запросы, а main всё равно отбрасывал их ответы по reqId. Свежий compute
- * вытесняет ещё не начатые; текущий расчёт досчитывается.
+ * вытесняет ещё не начатые; ИДУЩИЙ расчёт вытесняется на границе фаз
+ * (см. latestComputeReqId и superseded в compute).
  */
 let jobQueue: WorkerInMessage[] = [];
 let pumping = false;
@@ -398,6 +429,7 @@ self.onmessage = (ev: MessageEvent<WorkerInMessage>) => {
   const msg = ev.data;
   if (msg.type === "compute") {
     jobQueue = jobQueue.filter((j) => j.type !== "compute");
+    latestComputeReqId = msg.reqId ?? latestComputeReqId;
   }
   jobQueue.push(msg);
   void pump();
@@ -468,15 +500,15 @@ async function handle(msg: WorkerInMessage): Promise<void> {
       return;
     }
     if (msg.type === "compute") {
-      const { preview, result } = await compute(
+      const result = await compute(
         msg.origin,
         msg.observerHeightOverride,
         msg.wantPreview ?? false,
+        reqId ?? 0,
       );
-      if (preview) {
-        preview.reqId = reqId;
-        postTransfer(preview);
-      }
+      // Устаревший compute (в очередь пришёл свежий): ответ не нужен —
+      // main его отбросил бы по reqId, а мы уже не тратили на него марш
+      if (!result) return;
       result.reqId = reqId;
       postTransfer(result);
     }
