@@ -12,7 +12,7 @@
  * callback при старте не вызывается, и константа успевала инициализироваться).
  */
 
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**
  * Захваченные из замоканных модулей аргументы: AR-сессия получает объект
@@ -200,5 +200,55 @@ describe("смена региона при активной AR-сессии", ()
     // Следующий расчёт доезжает в тот же объект — оверлей живой
     workerInstances[0].onmessage?.(resultMessage([peak, peak]));
     expect(heldByAr.peaks).toHaveLength(2);
+  });
+});
+
+describe("гонка таймера статуса", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("новый статус переживает таймаут автоочистки прежнего", async () => {
+    vi.resetModules();
+    await import("../src/main");
+
+    // Геолокация есть, но спутники не отвечают: «К моему положению»
+    // завершится отказом, и статус получит таймер автоочистки (4 с)
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(
+      new Response('{"region":"x","generated":"","peaks":[]}', {
+        headers: { "content-type": "application/json" },
+      }),
+    ));
+    const failingGeolocation = {
+      // Отказ приходит не сразу: сначала срабатывает таймаут «быстрого
+      // фикса» (4 с), и только потом — отказ точного запроса. Так статус
+      // «Не удалось определить положение» появляется ПОСЛЕ наших advance,
+      // и его 4-секундная автоочистка не успевает сработать внутри окна
+      getCurrentPosition: (
+        _ok: unknown,
+        err: () => void,
+      ) => {
+        setTimeout(err, 5_000);
+      },
+    };
+    Object.defineProperty(navigator, "geolocation", {
+      value: failingGeolocation,
+      configurable: true,
+    });
+
+    vi.useFakeTimers();
+    findButton("К моей геопозиции").click();
+    // Быстрый фикс (4 с) — по таймауту; отказ точного запроса — через 5 с
+    await vi.advanceTimersByTimeAsync(4_000);
+    await vi.advanceTimersByTimeAsync(5_000);
+    const statusEl = document.getElementById("status")!;
+    expect(statusEl.textContent).toBe("Не удалось определить положение");
+
+    // Поверх тоста с таймером приходит статус без таймаута («Расчёт…»).
+    // Устаревший setTimeout чистильщика не должен его стереть
+    findButton("Вперёд").click();
+    expect(statusEl.textContent).toBe("Расчёт панорамы…");
+    await vi.advanceTimersByTimeAsync(4_000);
+    expect(statusEl.textContent).toBe("Расчёт панорамы…");
   });
 });

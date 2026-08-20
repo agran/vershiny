@@ -117,11 +117,18 @@ if (!import.meta.env.DEV) {
   );
 }
 
+/** Таймер автоочистки статуса: новый статус должен отменять прежний —
+ *  иначе устаревший setTimeout стирал более свежее сообщение (фото сохранено,
+ *  затем шаг навипадом → «Расчёт панорамы…» гас через остаток старого таймера) */
+let statusTimer = 0;
+
 function setStatus(
   text: string,
   timeoutMs?: number,
   action?: { label: string; onClick: () => void },
 ): void {
+  clearTimeout(statusTimer);
+  statusTimer = 0;
   statusEl.textContent = text;
   statusEl.style.display = text ? "block" : "none";
   // Кнопка действия внутри тоста: «Перекачать» рядом с текстом, а не где-то
@@ -140,7 +147,10 @@ function setStatus(
     statusEl.appendChild(btn);
   }
   if (timeoutMs) {
-    setTimeout(() => setStatus(""), timeoutMs);
+    statusTimer = window.setTimeout(() => {
+      statusTimer = 0;
+      setStatus("");
+    }, timeoutMs);
   }
 }
 
@@ -1674,8 +1684,7 @@ function setupDownloadButton(): void {
         info &&
         !(await isRegionIncomplete(info, lastOrigin))
       ) {
-        setStatus(t("downloadUpToDate"));
-        setTimeout(() => setStatus(""), 2500);
+        setStatus(t("downloadUpToDate"), 2500);
         return;
       }
       await downloadRegion(currentRegion, lastOrigin, (p: DownloadProgress) => {
@@ -2393,8 +2402,7 @@ function setupNavPad(): void {
         setStatus(t("waitingGps"));
         void getFreshPosition().then((pos) => {
           if (!pos) {
-            setStatus(t("gpsFailed"));
-            setTimeout(() => setStatus(""), 4000);
+            setStatus(t("gpsFailed"), 4000);
             return;
           }
           heightOverride = null; // возврат на землю в точке GPS
@@ -2571,8 +2579,7 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   });
 
   if (match.confidence < MIN_CONFIDENCE) {
-    setStatus(silent ? "" : t("calibrateFailed"));
-    if (!silent) setTimeout(() => setStatus(""), 4000);
+    setStatus(silent ? "" : t("calibrateFailed"), silent ? undefined : 4000);
     return;
   }
 
@@ -2589,8 +2596,8 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
   const azDeg = (match.azimuthRad * 180) / Math.PI;
   setStatus(
     `${t("calibrateDone")} ${azDeg > 0 ? "+" : ""}${azDeg.toFixed(1)}°`,
+    3000,
   );
-  setTimeout(() => setStatus(""), 3000);
 }
 
 /**
@@ -2957,8 +2964,7 @@ function setupActionButtons(): void {
     };
     const blob = await capturePhoto(panorama, view, options);
     savePhoto(blob, uniquePhotoFilename(usedPhotoNames, options));
-    setStatus(t("photoSaved"));
-    setTimeout(() => setStatus(""), 3000);
+    setStatus(t("photoSaved"), 3000);
   };
 
   // Камера стартует не отсюда, а по первому результату воркера
