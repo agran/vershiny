@@ -22,6 +22,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const captured = vi.hoisted(() => ({
   arStates: [] as Array<{ peaks: unknown[] }>,
   settingsOptions: [] as Array<{ onRegionChange: (region: string) => void }>,
+  posted: [] as Array<{
+    type: string;
+    gen?: number;
+    reqId?: number;
+    _w: number;
+  }>,
 }));
 
 // Камера в jsdom невозможна — startAr подменяется, объект панорамы запоминается
@@ -83,7 +89,21 @@ function stubWorker(): void {
     "Worker",
     class {
       onmessage: ((ev: MessageEvent) => void) | null = null;
-      postMessage() {}
+      postMessage(msg: unknown) {
+        // Метка экземпляра: фоновые цепочки инстансов main.ts из прошлых
+        // тестов постят в тот же captured.posted — их надо отфильтровывать
+        // (у старых инстансов в обновлённом workerInstances их уже нет,
+        // indexOf даёт −1)
+        captured.posted.push({
+          ...(msg as object),
+          _w: workerInstances.indexOf(this),
+        } as {
+          type: string;
+          gen?: number;
+          reqId?: number;
+          _w: number;
+        });
+      }
       addEventListener() {}
       removeEventListener() {}
       constructor() {
@@ -129,9 +149,13 @@ function stubEnvironment(): void {
   // Локаль ru: кнопку ищем по подписи «Включить компас» (i18n читает
   // хранилище при вычислении модуля, поэтому кладём её до импорта)
   localStorage.setItem("vershiny-locale", "ru");
+  // Геолокация-стаб из теста гонки таймеров не должен протекать в соседние
+  // тесты: с ним getPosition ждал бы «спутники» по 4–5 с
+  Reflect.deleteProperty(navigator, "geolocation");
   workerInstances.length = 0;
   captured.arStates.length = 0;
   captured.settingsOptions.length = 0;
+  captured.posted.length = 0;
   stubWorker();
   stubIosSensorApi();
   // jsdom без пакета canvas не умеет getContext и пишет «Not implemented»
@@ -207,6 +231,10 @@ describe("смена региона при активной AR-сессии", ()
 });
 
 describe("гонка таймера статуса", () => {
+  beforeEach(() => {
+    stubEnvironment();
+  });
+
   afterEach(() => {
     vi.useRealTimers();
   });
@@ -238,6 +266,17 @@ describe("гонка таймера статуса", () => {
       value: failingGeolocation,
       configurable: true,
     });
+
+    // Дождаться собственного стартового расчёта ДО fake-таймеров: иначе его
+    // requestCompute доползает уже во время advance и перетирает «Не удалось
+    // определить положение» своим «Расчёт панорамы…»
+    await vi.waitFor(
+      () =>
+        expect(
+          captured.posted.some((m) => m.type === "compute" && m._w === 0),
+        ).toBe(true),
+      { timeout: 10_000 },
+    );
 
     vi.useFakeTimers();
     findButton("К моей геопозиции").click();
@@ -293,5 +332,51 @@ describe("превью до полного расчёта", () => {
       resultMessage([{ name: "Тест", lat: 43, lon: 42, ele: 5000 }]),
     );
     expect(statusEl.textContent).toBe("");
+  });
+});
+
+describe("быстрая смена региона не постит устаревший init", () => {
+  beforeEach(() => {
+    stubEnvironment();
+  });
+
+  it("после A→B воркер получает init только последнего региона", async () => {
+    vi.resetModules();
+    await import("../src/main");
+
+    // Только сообщения воркера ТЕКУЩЕГО инстанса main.ts
+    const posted = () => captured.posted.filter((m) => m._w === 0);
+
+    // Стартовый расчёт ушёл — базовая линия зафиксирована
+    await vi.waitFor(
+      () => expect(posted().some((m) => m.type === "compute")).toBe(true),
+      { timeout: 10_000 },
+    );
+    const computesBefore = posted().filter((m) => m.type === "compute").length;
+
+    findButton("Настройки").click();
+    await vi.waitFor(() => expect(captured.settingsOptions).toHaveLength(1));
+    const change = captured.settingsOptions[0].onRegionChange;
+
+    // Две смены подряд: init первой отменяется токеном поколения, иначе
+    // поздний init A переключал воркер на патч A уже после init B, и расчёт
+    // последнего региона шёл по чужому рельефу
+    change("region-a");
+    change("region-b");
+
+    await vi.waitFor(
+      () => {
+        const inits = posted().filter(
+          (m) => m.type === "init" && (m.gen ?? 0) > 0,
+        );
+        expect(inits).toHaveLength(1);
+        expect(inits[0].gen).toBe(2);
+      },
+      { timeout: 10_000 },
+    );
+    // Отменённая смена не пересчитывает панораму: compute — только от
+    // последнего региона (все микрозадачи уже открутились, числа финальные)
+    const computes = posted().filter((m) => m.type === "compute");
+    expect(computes).toHaveLength(computesBefore + 1);
   });
 });

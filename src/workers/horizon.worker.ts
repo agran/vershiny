@@ -36,6 +36,8 @@ export interface InitMessage {
   /** Регион скачан: DemSource читает кешированные индексы, в сеть не ходит */
   offlineFirst?: boolean;
   reqId?: number;
+  /** Поколение смены региона (regionSwitchSeq в main): устаревший init не применяется */
+  gen?: number;
 }
 
 export interface ComputeMessage {
@@ -179,6 +181,9 @@ let latestComputeReqId = 0;
  * (см. `compute`), поэтому подмена `dem` их не задевает.
  */
 let initPromise: Promise<void> = Promise.resolve();
+/** Поколение последнего принятого init: устаревшие (из отменённой смены
+ *  региона) не должны переключать DEM на чужой патч */
+let latestInitGen = 0;
 
 /** Максимальная дальность луча — синхронизирована с computeHorizon */
 const MAX_DIST_M = 200_000;
@@ -471,6 +476,11 @@ async function handle(msg: WorkerInMessage): Promise<void> {
   const reqId = msg.reqId;
   try {
     if (msg.type === "init") {
+      // Устаревший init (регион сменился, пока main собирал источники):
+      // применять нельзя — DEM переключился бы на патч чужого региона
+      // (порядок прихода init'ов не гарантирован)
+      if (msg.gen !== undefined && msg.gen < latestInitGen) return;
+      if (msg.gen !== undefined) latestInitGen = msg.gen;
       initPromise = (async () => {
         const next = new DemSource({
           patchBaseUrls: msg.patchBaseUrls,

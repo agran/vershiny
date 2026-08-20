@@ -1322,7 +1322,7 @@ async function main(): Promise<void> {
   // DEM: детальный патч региона → локальная пирамида → внешняя пирамида
   // (agran/vershiny-dem). Промах всех — только Terrarium; офлайн — кеш.
   // Идёт параллельно с загрузкой вершин: им обоим нужен только origin
-  await initDemForRegion(currentRegion);
+  await initDemForRegion(currentRegion, regionSwitchSeq);
 
   setStatus(t("computing"));
   // Первая фаза: панорама без вершин — она появляется на ~0.5–1 с раньше
@@ -1389,7 +1389,10 @@ async function refineStartPosition(): Promise<void> {
   if (!manualRegion) {
     const { loadRegions, regionForPosition } = await import("./ui/download");
     const region = regionForPosition(precise, await loadRegions());
-    if (region && region !== currentRegion) await switchRegion(region);
+    if (region && region !== currentRegion) {
+      // Отменённая смена: свежий запрос уже в полёте, свой пересчёт не делаем
+      if (!(await switchRegion(region))) return;
+    }
   }
   heightOverride = null; // мы на земле в своей точке
   autoTiltPending = true;
@@ -1507,7 +1510,9 @@ let navUiReady = false;
 async function goToHit(
   hit: SearchHit,
 ): Promise<{ origin: LatLon; headingRad: number } | null> {
-  await switchRegion(hit.region);
+  // Смена региона могла быть отменена более свежим запросом: перелетать
+  // к вершине устаревшего региона нельзя
+  if (!(await switchRegion(hit.region))) return null;
   return jumpToPeak(hit.peak);
 }
 
@@ -1524,7 +1529,7 @@ async function goToHit(
  * из `main()`, и после переключения с карты, из поиска или по плашке рельеф
  * продолжал считаться по патчу прежнего региона.
  */
-async function initDemForRegion(region: string): Promise<void> {
+async function initDemForRegion(region: string, gen: number): Promise<void> {
   const base = import.meta.env.BASE_URL;
   const {
     regionDemCandidates,
@@ -1566,11 +1571,17 @@ async function initDemForRegion(region: string): Promise<void> {
       pickDemBase(globalDemCandidates(base), probes, offlineFirst),
     ])
   ).filter((url): url is string => !!url);
+  // Токен актуальности: за время проб регион могли сменить (быстрая
+  // последовательность A → B), и поздний init A переключил бы воркер на
+  // патч прежнего региона. Устаревший init не постим вовсе — воркер
+  // применяет init'ы в порядке прихода и не знает, что регион уже другой
+  if (gen !== regionSwitchSeq) return;
   worker.postMessage({
     type: "init",
     patchBaseUrls,
     offlineFirst,
     reqId: nextReqId++,
+    gen,
   });
 }
 
@@ -1596,7 +1607,7 @@ async function initDemForRegion(region: string): Promise<void> {
  */
 let regionSwitchSeq = 0;
 
-async function switchRegion(region: string, manual = false): Promise<void> {
+async function switchRegion(region: string, manual = false): Promise<boolean> {
   // Флаг ставим до раннего выхода: ткнуть в уже активный регион — это
   // законный способ закрепить его за собой, и раньше он работал (обработчик
   // настроек выставлял флаг сам, до вызова)
@@ -1604,7 +1615,7 @@ async function switchRegion(region: string, manual = false): Promise<void> {
     manualRegion = true;
     rememberRegion();
   }
-  if (region === currentRegion && currentPeaks.length) return;
+  if (region === currentRegion && currentPeaks.length) return true;
   const switchSeq = ++regionSwitchSeq;
   if (region !== currentRegion) {
     currentPeaks = [];
@@ -1628,10 +1639,12 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   // складывались (8 с на пики + пробы DEM), хотя могли идти параллельно.
   // Воркер обрабатывает init и следующий compute в порядке postMessage,
   // поэтому задержка init на порядок сообщений не влияет
-  const demPromise = initDemForRegion(region);
+  const demPromise = initDemForRegion(region, switchSeq);
   const peaks = await loadPeaks(region);
-  // Пока грузили, регион могли сменить повторно: чужой результат не применяем
-  if (switchSeq !== regionSwitchSeq) return;
+  // Пока грузили, регион могли сменить повторно: чужой результат не применяем.
+  // Ложь сообщает вызывающему, что запрос отменён, — перелёт к устаревшей
+  // вершине и пересчёт панорамы для чужого региона делать нельзя
+  if (switchSeq !== regionSwitchSeq) return false;
   if (peaks) {
     // Изоляция: сначала кеш (см. main), потом расчёт — и запомнить
     const { ensureIsolation, restoreIsolation } = await import("./core/peaks");
@@ -1655,6 +1668,7 @@ async function switchRegion(region: string, manual = false): Promise<void> {
   // Детальный патч рельефа у каждого региона свой (стартовал параллельно
   // пикам — дожидаемся, чтобы запрос точки не обогнал init)
   await demPromise;
+  return true;
 }
 
 /**
@@ -1667,7 +1681,8 @@ async function goToLocation(pos: LatLon): Promise<void> {
   const { loadRegions, regionForPosition } = await import("./ui/download");
   const region = regionForPosition(pos, await loadRegions());
   if (region) {
-    await switchRegion(region);
+    // Отменённая смена региона: свежий запрос уже в полёте, этот — нет
+    if (!(await switchRegion(region))) return;
   } else {
     // Реестр покрывает не всю сушу, и ближайший район может быть за сотни
     // километров. Оставлять вершины прежнего нельзя: они к этому месту
@@ -2844,7 +2859,7 @@ function showRegionSuggestion(region: string, info: RegionInfo): void {
     "font-weight:600;background:#4cc9f0;color:#1a1a2e;cursor:pointer";
   accept.onclick = async () => {
     hideRegionSuggestion();
-    await switchRegion(region);
+    if (!(await switchRegion(region))) return;
     requestCompute(lastOrigin);
   };
 
@@ -2926,7 +2941,7 @@ function setupActionButtons(): void {
         void (async () => {
           // Единственный по-настоящему ручной выбор: человек открыл список и
           // ткнул в регион. Дальше автоподбор по GPS его не трогает
-          await switchRegion(region, true);
+          if (!(await switchRegion(region, true))) return;
           void refreshDownloadState();
           requestCompute(lastOrigin);
         })();
