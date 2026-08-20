@@ -3,6 +3,7 @@ import {
   decodeTerrarium,
   lonLatToPixel,
   lonLatToTile,
+  lonLatToTileAndPixel,
   zoomForDistance,
   TerrariumSampler,
 } from "../src/core/terrarium";
@@ -11,6 +12,31 @@ describe("terrarium", () => {
   it("slippy-конверсия: Эльбрус z15 → x=20246 y=11996", () => {
     const t = lonLatToTile({ lat: 43.35, lon: 42.44 }, 15);
     expect(t).toEqual({ x: 20246, y: 11996 });
+  });
+
+  it("объединённая проекция совпадает с парой tile+pixel побитово", () => {
+    // sample() пользуется объединённой проекцией; отдельные функции — её
+    // делегаты, поэтому расхождение невозможно, но побитовость с прежними
+    // формулами стережём на сетке точек и зумов
+    const points = [
+      { lat: 43.35, lon: 42.44 },
+      { lat: 0, lon: 0 },
+      { lat: 85.05, lon: 179.999 },
+      { lat: -85.05, lon: -179.999 },
+      { lat: 43.318123, lon: -180.8371 }, // за антимеридианом
+      { lat: 71.2, lon: 12.7 },
+    ];
+    for (const pos of points) {
+      for (const zoom of [0, 4, 9, 11, 12, 15]) {
+        const t = lonLatToTileAndPixel(pos, zoom);
+        const tile = lonLatToTile(pos, zoom);
+        const px = lonLatToPixel(pos, zoom);
+        expect(t.tx).toBe(tile.x);
+        expect(t.ty).toBe(tile.y);
+        expect(t.px).toBe(px.px);
+        expect(t.py).toBe(px.py);
+      }
+    }
   });
 
   it("slippy-конверсия: углы карты z0 → единственный тайл", () => {

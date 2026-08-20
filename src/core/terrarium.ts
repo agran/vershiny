@@ -54,17 +54,8 @@ export function lonLatToTile(
   pos: LatLon,
   zoom: number,
 ): { x: number; y: number } {
-  const n = 2 ** zoom;
-  const lat = Math.min(MAX_LATITUDE, Math.max(-MAX_LATITUDE, pos.lat));
-  const latRad = (lat * Math.PI) / 180;
-  const x = Math.floor(((normalizeLon(pos.lon) + 180) / 360) * n);
-  const y = Math.floor(
-    ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n,
-  );
-  // По долготе мир замкнут — индекс заворачивается; по широте упираемся в край
-  // проекции. Раньше зажимались оба, и точка за антимеридианом (луч на Врангеле
-  // уходит туда сразу) получала нулевой тайл — с другого края планеты
-  return { x: ((x % n) + n) % n, y: Math.min(n - 1, Math.max(0, y)) };
+  const t = lonLatToTileAndPixel(pos, zoom);
+  return { x: t.tx, y: t.ty };
 }
 
 /** Дробная позиция пикселя внутри тайла: [0..256) */
@@ -72,15 +63,38 @@ export function lonLatToPixel(
   pos: LatLon,
   zoom: number,
 ): { px: number; py: number } {
+  const t = lonLatToTileAndPixel(pos, zoom);
+  return { px: t.px, py: t.py };
+}
+
+/**
+ * Тайл и дробный пиксель одной проекцией Меркатора. Раньше lonLatToTile и
+ * lonLatToPixel считали normalizeLon и log(tan)+sec каждая — двойная работа
+ * на каждую выборку (~4.3 млн на панораму). Выражения сохранены как были:
+ * результаты совпадают побитово.
+ */
+export function lonLatToTileAndPixel(
+  pos: LatLon,
+  zoom: number,
+): { tx: number; ty: number; px: number; py: number } {
   const n = 2 ** zoom;
   const lat = Math.min(MAX_LATITUDE, Math.max(-MAX_LATITUDE, pos.lat));
   const latRad = (lat * Math.PI) / 180;
-  const px = ((normalizeLon(pos.lon) + 180) / 360) * n * TILE_PX;
-  const py =
+  const wx = ((normalizeLon(pos.lon) + 180) / 360) * n;
+  const wy =
     ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) *
-    n *
-    TILE_PX;
-  return { px: px % TILE_PX, py: py % TILE_PX };
+    n;
+  // По долготе мир замкнут — индекс заворачивается; по широте упираемся в край
+  // проекции. Раньше зажимались оба, и точка за антимеридианом (луч на Врангеле
+  // уходит туда сразу) получала нулевой тайл — с другого края планеты
+  const tx = ((Math.floor(wx) % n) + n) % n;
+  const ty = Math.min(n - 1, Math.max(0, Math.floor(wy)));
+  return {
+    tx,
+    ty,
+    px: (wx * TILE_PX) % TILE_PX,
+    py: (wy * TILE_PX) % TILE_PX,
+  };
 }
 
 /** Декодирование Terrarium RGB → высота, метры */
@@ -339,13 +353,12 @@ export class TerrariumSampler {
    */
   sample(pos: LatLon, zoom: number, zoomHint?: number): number {
     const z = zoomHint ?? zoom;
-    const { x, y } = lonLatToTile(pos, z);
-    const { px, py } = lonLatToPixel(pos, z);
-    const tile = this.tileAt(z, x, y);
+    const t = lonLatToTileAndPixel(pos, z);
+    const tile = this.tileAt(z, t.tx, t.ty);
     if (tile === null) return NaN;
 
-    const gx = x * TILE_PX + px;
-    const gy = y * TILE_PX + py;
+    const gx = t.tx * TILE_PX + t.px;
+    const gy = t.ty * TILE_PX + t.py;
     const gx0 = Math.floor(gx);
     const gy0 = Math.floor(gy);
     const fx = gx - gx0;
