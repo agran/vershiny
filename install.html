@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#1a1a2e" />
     <title>Установить «Вершины» на телефон</title>
     <meta
+      id="meta-desc"
       name="description"
       content="Установка «Вершин» на домашний экран: работает офлайн, без магазина приложений и регистрации."
     />
@@ -101,6 +102,18 @@
       .btn[hidden] {
         display: none;
       }
+      .lang-btn {
+        margin-left: auto;
+        flex: none;
+        background: transparent;
+        color: #4cc9f0;
+        border: 1px solid #415a77;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font: inherit;
+        font-size: 14px;
+        cursor: pointer;
+      }
       h2 {
         font-size: 17px;
         margin: 28px 0 10px;
@@ -168,137 +181,147 @@
         <img src="./icons/icon-192.png" alt="" />
         <div>
           <h1>Вершины</h1>
-          <p class="sub">Панорама горизонта с подписями вершин</p>
+          <p class="sub" data-i18n="sub">Панорама горизонта с подписями вершин</p>
         </div>
+        <button id="lang-toggle" class="lang-btn">English</button>
       </header>
 
       <img
         class="shot"
         src="./media/panorama.png"
         alt="Панорама Эльбруса с подписями вершин"
+        data-i18n-alt="shotAlt"
       />
-      <p class="caption">
+      <p class="caption" data-i18n="caption">
         Тот же силуэт без камеры — вид с Приюта 11. Восточная вершина видна: у
         неё кружок; Западная стоит за склоном, поэтому её выноска обрывается о
         гребень. На телефоне подписи ложатся поверх живого кадра — камера
         включается сама.
       </p>
 
-      <a class="btn" href="./">Открыть приложение</a>
-      <button class="btn secondary" id="install" hidden>
+      <a class="btn" href="./" data-i18n="openApp">Открыть приложение</a>
+      <button class="btn secondary" id="install" hidden data-i18n="installBtn">
         Установить на телефон
       </button>
 
       <div id="installed" class="note">
-        <p>
+        <p data-i18n-html="installedTitle">
           <strong>Вы открыли эту страницу из установленного приложения.</strong>
           Панорама — по кнопке «Открыть приложение» выше.
         </p>
-        <p>
+        <p data-i18n="installedUpdates">
           Обновления приезжают сами: когда выйдет новая версия, внизу появится
           плашка «Доступно обновление».
         </p>
       </div>
 
       <div id="ios-other" class="note" hidden>
-        <p>
+        <p data-i18n-html="iosOtherTitle">
           <strong>В этом браузере установить не получится.</strong>
           Откройте страницу в Safari — дальше те же два шага.
         </p>
         <!-- iOS 17+: схема x-safari-https:// открывает Safari сразу.
              href подставляется скриптом, чтобы адрес был текущий -->
-        <a class="btn" id="ios-open-safari" href="#" hidden>
+        <a class="btn" id="ios-open-safari" href="#" hidden data-i18n="openSafari">
           Открыть в Safari
         </a>
-        <button class="btn secondary" id="ios-copy">
+        <button class="btn secondary" id="ios-copy" data-i18n="copyAddr">
           Скопировать адрес для Safari
         </button>
       </div>
 
       <!-- Android внутри WebView мессенджера: даём выход в нормальный браузер -->
       <div id="android-webview" class="note" hidden>
-        <p>
+        <p data-i18n-html="androidWebviewBody">
           <strong>Вы во встроенном браузере приложения</strong> — установка
           тут недоступна. Нажмите <kbd>⋮</kbd> →
           <kbd>Открыть в браузере</kbd>, либо:
         </p>
-        <a class="btn" id="android-open-browser" href="#">
+        <a class="btn" id="android-open-browser" href="#" data-i18n="openChrome">
           Открыть в Chrome
         </a>
       </div>
 
       <div id="install-steps">
-        <h2>Android — Chrome</h2>
+        <h2 data-i18n="androidTitle">Android — Chrome</h2>
         <ol>
-          <li>Нажмите кнопку «Установить на телефон» выше.</li>
-          <li>
+          <li data-i18n="androidStep1">
+            Нажмите кнопку «Установить на телефон» выше.
+          </li>
+          <li data-i18n-html="androidStep2">
             Если её нет — меню <kbd>⋮</kbd> →
             <kbd>Установить приложение</kbd> (или
             <kbd>Добавить на главный экран</kbd>).
           </li>
         </ol>
-        <p class="aside">
+        <p class="aside" data-i18n-html="androidAside">
           Яндекс Браузер и Samsung Internet — тоже Chromium: у них работают
           те же шаги. Firefox: меню <kbd>⋮</kbd> →
           <kbd>Добавить на главный экран</kbd>.
         </p>
 
         <div id="ios-steps">
-          <h2>iPhone и iPad</h2>
+          <h2 data-i18n="iosTitle">iPhone и iPad</h2>
           <ol>
-            <li>Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.</li>
-            <li>Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.</li>
+            <li data-i18n-html="iosStep1">
+              Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.
+            </li>
+            <li data-i18n-html="iosStep2">
+              Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.
+            </li>
           </ol>
-          <p class="aside">
+          <p class="aside" data-i18n="iosAside">
             Работает в Safari, Chrome, Яндекс Браузере и других — iOS 16.4 и
             новее. Значок откроет саму панораму, а не эту страницу.
           </p>
         </div>
 
         <div id="ios-yandex" hidden>
-          <h2>iPhone и iPad — Яндекс Браузер</h2>
-          <p>
+          <h2 data-i18n="yandexTitle">iPhone и iPad — Яндекс Браузер</h2>
+          <p data-i18n-html="yandexIntro">
             В Яндексе установка идёт через <strong>меню</strong>, а не через
             «Поделиться»:
           </p>
           <ol>
-            <li>
+            <li data-i18n-html="yandex1">
               Нажмите меню <kbd>⋮</kbd> — кнопка в нижней правой части экрана.
             </li>
-            <li>
+            <li data-i18n-html="yandex2">
               Выберите <kbd>Добавить ярлык на рабочий стол</kbd> — если пункта
               не видно, листайте меню ниже.
             </li>
-            <li>
+            <li data-i18n-html="yandex3">
               В появившемся списке выберите <kbd>На экран «Домой»</kbd>.
             </li>
-            <li>
+            <li data-i18n-html="yandex4">
               Назовите приложение и нажмите <kbd>Добавить</kbd> — иконка
               окажется на рабочем столе.
             </li>
           </ol>
         </div>
 
-        <h2>Компьютер</h2>
+        <h2 data-i18n="desktopTitle">Компьютер</h2>
         <ul>
-          <li>Chrome или Edge: значок установки в адресной строке.</li>
-          <li>
+          <li data-i18n="desktopLi1">
+            Chrome или Edge: значок установки в адресной строке.
+          </li>
+          <li data-i18n="desktopLi2">
             Можно и не устанавливать — в браузере работает всё то же самое.
           </li>
         </ul>
       </div>
 
       <div class="note">
-        <p>
+        <p data-i18n-html="updatesTitle">
           <strong>Обновления.</strong> Приложение проверяет новую версию при
           каждом запуске и раз в час. Когда она появится, внизу возникнет плашка
           «Доступно обновление» — нажатие обновит его за пару секунд.
         </p>
-        <p>Магазин приложений не нужен, аккаунт тоже.</p>
+        <p data-i18n="updatesP2">Магазин приложений не нужен, аккаунт тоже.</p>
       </div>
 
       <div class="note">
-        <p>
+        <p data-i18n-html="offlineTitle">
           <strong>Офлайн.</strong> Откройте <kbd>⚙</kbd> → выберите свой регион
           и нажмите «Скачать»: рельеф и вершины лягут в память телефона, и
           панорама будет строиться без сети — там, где её обычно и нет.
@@ -306,14 +329,218 @@
       </div>
 
       <footer>
-        Открытый код:
-        <a href="https://github.com/agran/vershiny">github.com/agran/vershiny</a
-        ><br />
-        Рельеф — © DLR/ESA Copernicus DEM, вершины — © участники OpenStreetMap
+        <span data-i18n-html="footerCode">
+          Открытый код:
+          <a href="https://github.com/agran/vershiny"
+            >github.com/agran/vershiny</a
+          ><br />
+        </span>
+        <span data-i18n="footerCredits">
+          Рельеф — © DLR/ESA Copernicus DEM, вершины — © участники
+          OpenStreetMap
+        </span>
       </footer>
     </main>
 
     <script>
+      // Двуязычие, как в приложении (src/core/i18n.ts): локаль — тот же ключ
+      // localStorage, что у приложения, затем язык браузера. Текст — статичный
+      // словарь; innerHTML подставляется только из него (имен пользователя нет).
+      var I18N = {
+        title: {
+          ru: "Установить «Вершины» на телефон",
+          en: "Install Vershiny on your phone",
+        },
+        metaDesc: {
+          ru: "Установка «Вершин» на домашний экран: работает офлайн, без магазина приложений и регистрации.",
+          en: "Installing Vershiny to the home screen: works offline, no app store, no account.",
+        },
+        sub: {
+          ru: "Панорама горизонта с подписями вершин",
+          en: "Horizon panorama with labeled peaks",
+        },
+        shotAlt: {
+          ru: "Панорама Эльбруса с подписями вершин",
+          en: "Panorama of Elbrus with labeled peaks",
+        },
+        caption: {
+          ru: "Тот же силуэт без камеры — вид с Приюта 11. Восточная вершина видна: у неё кружок; Западная стоит за склоном, поэтому её выноска обрывается о гребень. На телефоне подписи ложатся поверх живого кадра — камера включается сама.",
+          en: "The same skyline without the camera — the view from Priyut 11. The eastern summit is visible (it has a circle); the western one hides behind the ridge, so its leader line stops at the crest. On a phone, labels overlay the live camera view — the camera starts by itself.",
+        },
+        openApp: { ru: "Открыть приложение", en: "Open the app" },
+        installBtn: {
+          ru: "Установить на телефон",
+          en: "Install on this phone",
+        },
+        installedTitle: {
+          ru: "<strong>Вы открыли эту страницу из установленного приложения.</strong> Панорама — по кнопке «Открыть приложение» выше.",
+          en: "<strong>You opened this page from the installed app.</strong> The panorama is behind the “Open the app” button above.",
+        },
+        installedUpdates: {
+          ru: "Обновления приезжают сами: когда выйдет новая версия, внизу появится плашка «Доступно обновление».",
+          en: "Updates arrive automatically: when a new version is out, an “Update available” banner appears at the bottom.",
+        },
+        iosOtherTitle: {
+          ru: "<strong>В этом браузере установить не получится.</strong> Откройте страницу в Safari — дальше те же два шага.",
+          en: "<strong>This browser cannot install the app.</strong> Open the page in Safari — then the same two steps.",
+        },
+        openSafari: { ru: "Открыть в Safari", en: "Open in Safari" },
+        copyAddr: {
+          ru: "Скопировать адрес для Safari",
+          en: "Copy the address for Safari",
+        },
+        copied: {
+          ru: "Адрес скопирован — вставьте его в Safari",
+          en: "Address copied — paste it in Safari",
+        },
+        androidWebviewBody: {
+          ru: "<strong>Вы во встроенном браузере приложения</strong> — установка тут недоступна. Нажмите <kbd>⋮</kbd> → <kbd>Открыть в браузере</kbd>, либо:",
+          en: "<strong>You are in an in-app browser</strong> — installing is not available here. Tap <kbd>⋮</kbd> → <kbd>Open in browser</kbd>, or:",
+        },
+        openChrome: { ru: "Открыть в Chrome", en: "Open in Chrome" },
+        androidTitle: { ru: "Android — Chrome", en: "Android — Chrome" },
+        androidStep1: {
+          ru: "Нажмите кнопку «Установить на телефон» выше.",
+          en: "Tap the “Install on this phone” button above.",
+        },
+        androidStep2: {
+          ru: "Если её нет — меню <kbd>⋮</kbd> → <kbd>Установить приложение</kbd> (или <kbd>Добавить на главный экран</kbd>).",
+          en: "If it is not there — menu <kbd>⋮</kbd> → <kbd>Install app</kbd> (or <kbd>Add to Home screen</kbd>).",
+        },
+        androidAside: {
+          ru: "Яндекс Браузер и Samsung Internet — тоже Chromium: у них работают те же шаги. Firefox: меню <kbd>⋮</kbd> → <kbd>Добавить на главный экран</kbd>.",
+          en: "Yandex Browser and Samsung Internet are Chromium too: the same steps work. Firefox: menu <kbd>⋮</kbd> → <kbd>Add to Home screen</kbd>.",
+        },
+        iosTitle: { ru: "iPhone и iPad", en: "iPhone and iPad" },
+        iosStep1: {
+          ru: "Нажмите <kbd>Поделиться</kbd> — квадрат со стрелкой вверх.",
+          en: "Tap <kbd>Share</kbd> — the square with an up arrow.",
+        },
+        iosStep2: {
+          ru: "Выберите <kbd>На экран «Домой»</kbd> → <kbd>Добавить</kbd>.",
+          en: "Choose <kbd>Add to Home Screen</kbd> → <kbd>Add</kbd>.",
+        },
+        iosAside: {
+          ru: "Работает в Safari, Chrome, Яндекс Браузере и других — iOS 16.4 и новее. Значок откроет саму панораму, а не эту страницу.",
+          en: "Works in Safari, Chrome, Yandex Browser and others — iOS 16.4 and newer. The icon opens the panorama itself, not this page.",
+        },
+        yandexTitle: {
+          ru: "iPhone и iPad — Яндекс Браузер",
+          en: "iPhone and iPad — Yandex Browser",
+        },
+        yandexIntro: {
+          ru: "В Яндексе установка идёт через <strong>меню</strong>, а не через «Поделиться»:",
+          en: "In Yandex, installing goes through the <strong>menu</strong>, not “Share”:",
+        },
+        yandex1: {
+          ru: "Нажмите меню <kbd>⋮</kbd> — кнопка в нижней правой части экрана.",
+          en: "Tap the menu <kbd>⋮</kbd> — the button in the lower right of the screen.",
+        },
+        yandex2: {
+          ru: "Выберите <kbd>Добавить ярлык на рабочий стол</kbd> — если пункта не видно, листайте меню ниже.",
+          en: "Choose <kbd>Add shortcut to Home screen</kbd> — if you do not see it, scroll the menu down.",
+        },
+        yandex3: {
+          ru: "В появившемся списке выберите <kbd>На экран «Домой»</kbd>.",
+          en: "In the list, choose <kbd>Add to Home screen</kbd>.",
+        },
+        yandex4: {
+          ru: "Назовите приложение и нажмите <kbd>Добавить</kbd> — иконка окажется на рабочем столе.",
+          en: "Name the app and tap <kbd>Add</kbd> — the icon lands on the home screen.",
+        },
+        desktopTitle: { ru: "Компьютер", en: "Computer" },
+        desktopLi1: {
+          ru: "Chrome или Edge: значок установки в адресной строке.",
+          en: "Chrome or Edge: the install icon in the address bar.",
+        },
+        desktopLi2: {
+          ru: "Можно и не устанавливать — в браузере работает всё то же самое.",
+          en: "You can also skip installing — everything works in the browser.",
+        },
+        updatesTitle: {
+          ru: "<strong>Обновления.</strong> Приложение проверяет новую версию при каждом запуске и раз в час. Когда она появится, внизу возникнет плашка «Доступно обновление» — нажатие обновит его за пару секунд.",
+          en: "<strong>Updates.</strong> The app checks for a new version on every launch and once an hour. When one appears, an “Update available” banner shows at the bottom — tapping it updates in a couple of seconds.",
+        },
+        updatesP2: {
+          ru: "Магазин приложений не нужен, аккаунт тоже.",
+          en: "No app store, no account.",
+        },
+        offlineTitle: {
+          ru: "<strong>Офлайн.</strong> Откройте <kbd>⚙</kbd> → выберите свой регион и нажмите «Скачать»: рельеф и вершины лягут в память телефона, и панорама будет строиться без сети — там, где её обычно и нет.",
+          en: "<strong>Offline.</strong> Open <kbd>⚙</kbd> → pick your region and tap “Download”: the terrain and peaks are stored on the phone, and the panorama builds without a network — exactly where there usually is none.",
+        },
+        footerCode: {
+          ru: "Открытый код: <a href=\"https://github.com/agran/vershiny\">github.com/agran/vershiny</a><br />",
+          en: "Open source: <a href=\"https://github.com/agran/vershiny\">github.com/agran/vershiny</a><br />",
+        },
+        footerCredits: {
+          ru: "Рельеф — © DLR/ESA Copernicus DEM, вершины — © участники OpenStreetMap",
+          en: "Terrain — © DLR/ESA Copernicus DEM, peaks — © OpenStreetMap contributors",
+        },
+      };
+
+      // Тот же ключ, что и в приложении (src/core/i18n.ts): страница и
+      // приложение не спорят о языке
+      var locale = "ru";
+      try {
+        var savedLocale = localStorage.getItem("vershiny-locale");
+        if (savedLocale === "ru" || savedLocale === "en") locale = savedLocale;
+        else if (
+          navigator.language &&
+          navigator.language.toLowerCase().indexOf("ru") !== 0
+        ) {
+          locale = "en";
+        }
+      } catch (err) {
+        // Приватный режим или запрет хранилища — язык по браузеру
+        if (
+          navigator.language &&
+          navigator.language.toLowerCase().indexOf("ru") !== 0
+        ) {
+          locale = "en";
+        }
+      }
+
+      function applyLocale() {
+        document.documentElement.lang = locale;
+        document.title = I18N.title[locale];
+        var meta = document.getElementById("meta-desc");
+        if (meta) meta.content = I18N.metaDesc[locale];
+        var els = document.querySelectorAll("[data-i18n]");
+        for (var i = 0; i < els.length; i++) {
+          var key = els[i].getAttribute("data-i18n");
+          if (key && I18N[key]) els[i].textContent = I18N[key][locale];
+        }
+        var htmlEls = document.querySelectorAll("[data-i18n-html]");
+        for (var j = 0; j < htmlEls.length; j++) {
+          var htmlKey = htmlEls[j].getAttribute("data-i18n-html");
+          if (htmlKey && I18N[htmlKey]) {
+            htmlEls[j].innerHTML = I18N[htmlKey][locale];
+          }
+        }
+        var altEls = document.querySelectorAll("[data-i18n-alt]");
+        for (var k = 0; k < altEls.length; k++) {
+          var altKey = altEls[k].getAttribute("data-i18n-alt");
+          if (altKey && I18N[altKey]) altEls[k].alt = I18N[altKey][locale];
+        }
+        var toggle = document.getElementById("lang-toggle");
+        if (toggle) toggle.textContent = locale === "ru" ? "English" : "Русский";
+      }
+
+      var langToggle = document.getElementById("lang-toggle");
+      if (langToggle) {
+        langToggle.addEventListener("click", function () {
+          locale = locale === "ru" ? "en" : "ru";
+          try {
+            localStorage.setItem("vershiny-locale", locale);
+          } catch (err) {
+            // Запрет хранилища: язык живёт до перезагрузки страницы
+          }
+          applyLocale();
+        });
+      }
+      applyLocale();
+
       // Страницу открыли из установленного приложения — показываем другой текст
       if (
         window.matchMedia("(display-mode: standalone)").matches ||
@@ -420,7 +647,7 @@
       if (copyBtn) {
         copyBtn.addEventListener("click", function () {
           var done = function () {
-            copyBtn.textContent = "Адрес скопирован — вставьте его в Safari";
+            copyBtn.textContent = I18N.copied[locale];
           };
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(location.href).then(done, function () {

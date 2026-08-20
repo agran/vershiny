@@ -19,6 +19,7 @@ const read = (path: string): string =>
 const manifest = JSON.parse(read("../public/manifest.webmanifest")) as {
   name: string;
   short_name: string;
+  description: string;
   start_url: string;
   scope: string;
   display: string;
@@ -124,5 +125,31 @@ describe("манифест PWA", () => {
     expect(html).toContain('id="ios-yandex"');
     expect(html).toContain("Добавить ярлык на рабочий стол");
     expect(html).toContain("На экран «Домой»");
+  });
+
+  it("имя и описание манифеста двуязычны (политика проекта)", () => {
+    // short_name остаётся брендом: двуязычное имя iOS обрезает под иконкой
+    // (тест «подписан по-человечески» выше)
+    expect(manifest.name).toContain("Вершины");
+    expect(manifest.name).toContain("Vershiny");
+    expect(/[а-яё]/i.test(manifest.description)).toBe(true);
+    expect(/[a-z]/i.test(manifest.description)).toBe(true);
+  });
+
+  it("страница установки двуязычна: словарь ru/en и переключатель", () => {
+    const html = read("../install.html");
+    expect(html).toContain('id="lang-toggle"');
+    // Тот же ключ локали, что у приложения: страница и приложение не спорят
+    expect(html).toContain("vershiny-locale");
+    for (const text of [
+      "Открыть приложение",
+      "Open the app",
+      "Установить на телефон",
+      "Install on this phone",
+      "Скопировать адрес для Safari",
+      "Copy the address for Safari",
+    ]) {
+      expect(html).toContain(text);
+    }
   });
 });
