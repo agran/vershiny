@@ -967,7 +967,6 @@ function drawLabels(
       const marker = findPeakMarkerPosition(
         p.peak,
         state,
-        silhouette,
         azToX,
         elevToY,
       );
@@ -1030,7 +1029,6 @@ function drawLabels(
     const marker = findPeakMarkerPosition(
       peak,
       state,
-      silhouette,
       azToX,
       elevToY,
     );
@@ -2160,82 +2158,131 @@ function clipToSilhouette(
 function findPeakMarkerPosition(
   peak: VisiblePeak,
   state: PanoramaState,
-  silhouette: Float32Array,
   azToX: (az: number) => number,
   elevToY: (elev: number) => number,
 ): { x: number; y: number } | null {
+  const m = peakMarkerAngle(peak, state);
+  return m ? { x: azToX(m.az), y: elevToY(m.elev) } : null;
+}
+
+/**
+ * Маркер вершины в УГЛАХ (азимут, возвышение): от взгляда не зависит,
+ * поэтому кешируется на версию панорамы (state.horizon — ссылка, меняется
+ * при каждом пересчёте), а пиксели накладываются в точке использования.
+ * Оконное сканирование фронтов — самая дорогая часть раскладки подписей,
+ * и повторять его каждый кадр (и в frozen-ветке) незачем.
+ */
+const peakMarkerAngleCache = new WeakMap<
+  VisiblePeak,
+  { rev: Float32Array; az: number; elev: number }
+>();
+
+function peakMarkerAngle(
+  peak: VisiblePeak,
+  state: PanoramaState,
+): { az: number; elev: number } | null {
+  const cached = peakMarkerAngleCache.get(peak);
+  if (cached && cached.rev === state.horizon) return cached;
+
+  const silhouette = silhouetteProfile(state);
+  // Запасное место маркера: линия силуэта на азимуте вершины. Рельефа на
+  // азимуте может не быть вовсе — тогда маркеру взяться неоткуда
+  const onSilhouette = (): { az: number; elev: number } | null => {
+    const elev = silhouetteAngleAt(
+      silhouette,
+      state.stepRad,
+      peak.azimuthRad,
+    );
+    return Number.isFinite(elev) ? { az: peak.azimuthRad, elev } : null;
+  };
+
+  let result: { az: number; elev: number } | null;
   // Скрытая вершина: ставим точку в её истинное положение — оно ниже силуэта,
   // а выноска обрежется о склон (clipToSilhouette). Матчинг по фронтам тут
   // не годится: фронта на этой дистанции нет, он и перекрыл вершину.
   if (peak.visibility === "hidden") {
-    return { x: azToX(peak.azimuthRad), y: elevToY(peak.elevationRad) };
-  }
-
-  // Запасное место маркера: линия силуэта на азимуте вершины. Рельефа на
-  // азимуте может не быть вовсе — тогда маркеру взяться неоткуда
-  const onSilhouette = (): { x: number; y: number } | null => {
-    const y = horizonAtAzimuth(
-      silhouette,
-      state.stepRad,
-      peak.azimuthRad,
-      elevToY,
+    result = { az: peak.azimuthRad, elev: peak.elevationRad };
+  } else if (!state.layers || !state.fronts) {
+    result = onSilhouette();
+  } else {
+    // Окно азимутов: ширина зависит от дистанции (ближние горы шире)
+    const windowRad = Math.max(
+      0.009,
+      Math.min(0.052, Math.atan2(1500, peak.distanceM)),
     );
-    return Number.isFinite(y) ? { x: azToX(peak.azimuthRad), y } : null;
-  };
+    const stepRad = state.stepRad;
+    const centerIdx = Math.round(peak.azimuthRad / stepRad);
+    const windowRays = Math.ceil(windowRad / stepRad);
 
-  if (!state.layers || !state.fronts) {
-    return onSilhouette();
-  }
+    // Ищем фронт, соответствующий дистанции пика
+    const distTolerance = Math.max(2000, peak.distanceM * 0.15);
+    let best: { az: number; elev: number; score: number } | null = null;
 
-  // Окно азимутов: ширина зависит от дистанции (ближние горы шире)
-  const windowRad = Math.max(
-    0.009,
-    Math.min(0.052, Math.atan2(1500, peak.distanceM)),
-  );
-  const stepRad = state.stepRad;
-  const centerIdx = Math.round(peak.azimuthRad / stepRad);
-  const windowRays = Math.ceil(windowRad / stepRad);
+    for (
+      let i = Math.max(0, centerIdx - windowRays);
+      i <= Math.min(state.fronts.length - 1, centerIdx + windowRays);
+      i++
+    ) {
+      const az = i * stepRad;
+      const rayFronts = state.fronts[i];
+      if (!rayFronts) continue;
 
-  // Ищем фронт, соответствующий дистанции пика
-  const distTolerance = Math.max(2000, peak.distanceM * 0.15);
-  let best: { az: number; elev: number; score: number } | null = null;
+      for (const front of rayFronts) {
+        const dDist =
+          peak.distanceM < front.distM
+            ? front.distM - peak.distanceM
+            : peak.distanceM > front.distEndM
+              ? peak.distanceM - front.distEndM
+              : 0;
+        if (dDist > distTolerance) continue;
 
-  for (
-    let i = Math.max(0, centerIdx - windowRays);
-    i <= Math.min(state.fronts.length - 1, centerIdx + windowRays);
-    i++
-  ) {
-    const az = i * stepRad;
-    const rayFronts = state.fronts[i];
-    if (!rayFronts) continue;
+        const dAz = Math.abs(wrapAngle(az - peak.azimuthRad));
+        const score =
+          -(dDist / distTolerance) * 0.4 -
+          (dAz / windowRad) * 0.3 +
+          (front.elevMaxRad / 0.3) * 0.3;
 
-    for (const front of rayFronts) {
-      const dDist =
-        peak.distanceM < front.distM
-          ? front.distM - peak.distanceM
-          : peak.distanceM > front.distEndM
-            ? peak.distanceM - front.distEndM
-            : 0;
-      if (dDist > distTolerance) continue;
-
-      const dAz = Math.abs(wrapAngle(az - peak.azimuthRad));
-      const score =
-        -(dDist / distTolerance) * 0.4 -
-        (dAz / windowRad) * 0.3 +
-        (front.elevMaxRad / 0.3) * 0.3;
-
-      if (!best || score > best.score) {
-        best = { az, elev: front.elevMaxRad, score };
+        if (!best || score > best.score) {
+          best = { az, elev: front.elevMaxRad, score };
+        }
       }
     }
+
+    // Не нашли фронт — запасной вариант: линия силуэта на азимуте
+    result = best ? { az: best.az, elev: best.elev } : onSilhouette();
   }
 
-  if (best) {
-    return { x: azToX(best.az), y: elevToY(best.elev) };
+  if (result) {
+    peakMarkerAngleCache.set(peak, { rev: state.horizon, ...result });
   }
+  return result;
+}
 
-  // Не нашли фронт — запасной вариант: линия силуэта на азимуте
-  return onSilhouette();
+/**
+ * Возвышение силуэта на азимуте в РАДИАНАХ (интерполяция между лучами).
+ * `+Infinity` — рельефа на этом азимуте нет вовсе.
+ */
+function silhouetteAngleAt(
+  silhouette: Float32Array,
+  stepRad: number,
+  azRad: number,
+): number {
+  // Азимут приходит и отрицательным (обратная проекция экрана) — нормализуем,
+  // иначе индекс уходит в минус и высота силуэта становится NaN
+  const idx = azRad / stepRad;
+  const i0 =
+    ((Math.floor(idx) % silhouette.length) + silhouette.length) %
+    silhouette.length;
+  const i1 = (i0 + 1) % silhouette.length;
+  const frac = idx - Math.floor(idx);
+  const a0 = silhouette[i0];
+  const a1 = silhouette[i1];
+  // Дырявый луч не «опускает» силуэт к нулю: берём соседний, а если данных
+  // нет вовсе — сообщаем, что рельефа здесь не существует
+  if (!Number.isFinite(a0) && !Number.isFinite(a1)) return Infinity;
+  if (!Number.isFinite(a0)) return a1;
+  if (!Number.isFinite(a1)) return a0;
+  return a0 + (a1 - a0) * frac;
 }
 
 function cardinal(deg: number): string {
