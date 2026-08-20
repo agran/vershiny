@@ -103,7 +103,6 @@ function resultMessage(peaks: unknown[]): MessageEvent {
       peaks,
       layers: [],
       distanceToHorizonM: new Float32Array(1),
-      fronts: [],
       crests: [],
       observerH: 2000,
       computeMs: 1,

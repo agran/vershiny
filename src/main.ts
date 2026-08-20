@@ -1041,11 +1041,10 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
   // Расчёт старой точки, обогнавший свежий: применить его — значит показать
   // панораму не оттуда, где стоит наблюдатель
   if (r.reqId !== undefined && r.reqId !== activeComputeId) return;
-  // Фронты приехали плоскими (трансфер без клонирования объектов) —
-  // собираем обратно; если поля нет (старый воркер), берём как есть
-  let fronts = r.fronts;
+  // Фронты приезжают только плоскими (трансфер без клонирования объектов):
+  // воркер и страница — один бандл, поэтому ветки «без flat» не существует
+  const fronts: import("./core/horizon").VisibleFront[][] = [];
   if (r.frontsFlat && r.frontsOffsets) {
-    fronts = [];
     for (let i = 0; i + 1 < r.frontsOffsets.length; i++) {
       const rayFronts = [];
       for (let o = r.frontsOffsets[i]; o < r.frontsOffsets[i + 1]; o += 4) {

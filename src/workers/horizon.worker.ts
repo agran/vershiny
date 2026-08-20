@@ -72,11 +72,10 @@ export interface ResultMessage {
   layers: Float32Array[];
   /** Дистанция до точки горизонта по лучам */
   distanceToHorizonM: Float32Array;
-  /** Фронты видимости по лучам (для точных маркеров) */
-  fronts: import("../core/horizon").VisibleFront[][];
   /** Фронты в плоском виде (SoA): по 4 значения на фронт —
    * distM, distEndM, elevStartRad, elevMaxRad. Передаётся трансфером —
-   * structuredClone тысяч объектов VisibleFront стоил заметных миллисекунд */
+   * structuredClone тысяч объектов VisibleFront стоил заметных миллисекунд,
+   * а ветка «старый воркер без flat» недостижима: воркер и страница — один бандл */
   frontsFlat: Float32Array;
   /** Оффсеты: у луча i фронты frontsFlat[frontsOffsets[i] .. frontsOffsets[i+1]] */
   frontsOffsets: Uint32Array;
@@ -190,7 +189,6 @@ async function compute(
     stepRad: layered.stepRad,
     layers: layered.layers,
     distanceToHorizonM: layered.distanceToHorizonM,
-    fronts: layered.fronts,
     frontsFlat,
     frontsOffsets,
     crests: layered.crests,
