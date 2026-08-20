@@ -342,7 +342,8 @@ export class TerrariumSampler {
     return tile;
   }
 
-  /** Максимум высоты по загруженным тайлам — для обрыва луча (№4) */
+  /** Максимум высоты по загруженным тайлам (задел: потребителя нет, обрыв луча
+   * использует секторные границы) */
   private maxDecodedHeight = -Infinity;
   /** Максимумы высот декодированных тайлов: 'z/x/y' → м (для секторных границ) */
   private tileMaxMap = new Map<string, number>();
@@ -352,7 +353,8 @@ export class TerrariumSampler {
     return this.tileMaxMap;
   }
 
-  /** Верхняя граница высоты по загруженным тайлам — для обрыва луча (№4) */
+  /** Максимум высоты по загруженным тайлам (задел: секторные границы читают
+   * loadedTileMaxes, а не эту глобальную границу) */
   get loadedMaxHeight(): number {
     return this.maxDecodedHeight;
   }

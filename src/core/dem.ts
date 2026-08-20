@@ -681,7 +681,8 @@ export class DemSampler {
   /** Максимум высоты среди декодированных тайлов (−Infinity, пока ни одного) */
   private maxDecodedHeight = -Infinity;
 
-  /** Верхняя граница высоты по загруженным тайлам — для обрыва луча (№4) */
+  /** Максимум высоты по загруженным тайлам (задел: потребителя нет, обрыв луча
+   * использует секторные границы) */
   get loadedMaxHeight(): number {
     return this.maxDecodedHeight;
   }

@@ -234,3 +234,31 @@ structuredClone `fronts` **платится на каждом compute** — эт
   на реальных устройствах) остаются в силе.
 - Известная проблема №4 STATUS.md (неограниченные кеши тайлов в памяти) —
   подтверждается, остаётся в списке.
+
+## 6. Статус реализации (перепроверка по коду)
+
+- BUG-1: `hasAnyCoverageAt` + предикат в `prefetchAlongRay` — coarse тянется
+  только в лакунах fine. Тест: `test/dem-source.test.ts`.
+- BUG-2: `statusTimer` + `clearTimeout` при входе в `setStatus`.
+  Тест: «гонка таймера статуса» в `test/main-module.test.ts`.
+- BUG-3: вершины без `ele` не вставляются в сетку. Тест: `test/peaks.test.ts`.
+- BUG-4: `layerDistM` — дистанция горизонта на слой в `smoothLayers`.
+  Тест: «дальний слой сглаживается своей дистанцией» в `test/horizon.test.ts`.
+- BUG-5: жёсткий кап снят — буферы фронтов растут (`growFronts`).
+- P1: поле `fronts` удалено из `ResultMessage` — только `frontsFlat`/`frontsOffsets`.
+- P2: `pre {azRad, distM}` в `checkPeakVisibility`, отсев пиков до тригонометрии.
+- P3: `lonLatToTileAndPixel` — одна проекция Меркатора на выборку.
+- P4: `core/sector-bounds.ts` + `sectorMaxHeights` + обрыв марша с 20 км
+  (порог снижен с 60 км, граница консервативна — видимый результат не меняется).
+  Тесты: `test/sector-bounds.test.ts`, «секторная граница обрывает хвост луча».
+- P5: `switchRegion` — `initDemForRegion` и `loadPeaks` параллельно.
+- P6: карта берёт изоляцию из кеша (`getIsolation`/`restoreIsolation`).
+- P7: `peakMarkerAngleCache` (WeakMap на `state.horizon`).
+- P8: `buildMarchTable` (корзина по умолчанию — последняя, условие из цикла
+  вынесено), keydown «назад» считает только нужную ветку, `sampleLod` держит
+  `this.index!` в локальной. Числовой ключ тайла — опционально, не сделано
+  (last-tile кеш уже покрывает).
+- Базовая линия на момент перепроверки: `npx tsc` — чисто, тесты 527/527 (45 файлов).
+- Единственное расхождение при перепроверке: комментарии `loadedMaxHeight`
+  всё ещё говорили «используется обрывом луча (№4)» в настоящем времени, хотя
+  потребителя нет (обрыв использует секторные границы) — синхронизированы.
