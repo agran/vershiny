@@ -102,6 +102,23 @@ export function decodeTerrarium(r: number, g: number, b: number): number {
   return r * 256 + g + b / 256 - 32768;
 }
 
+/** Bbox тайла Mercator [minLon, minLat, maxLon, maxLat] —
+ *  для секторных границ обрыва луча (core/sector-bounds.ts) */
+export function tileBbox(
+  z: number,
+  x: number,
+  y: number,
+): [number, number, number, number] {
+  const n = 2 ** z;
+  const minLon = (x / n) * 360 - 180;
+  const maxLon = ((x + 1) / n) * 360 - 180;
+  const latOf = (ty: number): number =>
+    (Math.atan(Math.sinh(Math.PI * (1 - (2 * ty) / n))) * 180) / Math.PI;
+  const maxLat = Math.min(MAX_LATITUDE, latOf(y));
+  const minLat = Math.max(-MAX_LATITUDE, latOf(y + 1));
+  return [minLon, minLat, maxLon, maxLat];
+}
+
 /** iOS < 16.4: в воркере нет OffscreenCanvas/createImageBitmap */
 const HAS_NATIVE_PNG_DECODE =
   typeof OffscreenCanvas === "function" &&
@@ -189,7 +206,7 @@ export class TerrariumSampler {
           // Запрет хранилища (приватный режим) не должен ронять расчёт
           const offline = await db.getTerrariumTile(key).catch(() => undefined);
           if (offline) {
-            const tile = await this.decodePng(offline);
+            const tile = await this.decodePng(offline, key);
             this.setTile(key, tile);
             return tile;
           }
@@ -200,7 +217,7 @@ export class TerrariumSampler {
         let tile: Float32Array | null = null;
         if (res.ok) {
           const raw = new Uint8Array(await res.arrayBuffer());
-          tile = await this.decodePng(raw);
+          tile = await this.decodePng(raw, key);
           // Сохраняем в офлайн-кеш для следующего запуска
           if (db) db.saveTerrariumTile(key, raw).catch(() => {});
         } else if (res.status === 404) {
@@ -258,32 +275,48 @@ export class TerrariumSampler {
     }
   }
 
-  /** PNG-байты → сетка высот 256×256 */
-  private async decodePng(bytes: Uint8Array): Promise<Float32Array> {
+  /** PNG-байты → сетка высот 256×256; key — 'z/x/y' для карты максимумов */
+  private async decodePng(
+    bytes: Uint8Array,
+    key: string,
+  ): Promise<Float32Array> {
     // Современные браузеры идут прежним путём; фолбэк включается только там,
     // где OffscreenCanvas нет (iOS < 16.4) — свежим айфонам ничего не меняет
+    let tile: Float32Array;
     if (!HAS_NATIVE_PNG_DECODE) {
-      return decodeTerrariumPngFallback(bytes);
+      tile = decodeTerrariumPngFallback(bytes);
+    } else {
+      const blob = new Blob([bytes as BlobPart], { type: "image/png" });
+      const bitmap = await createImageBitmap(blob);
+      const ctx = this.ensureCanvas();
+      ctx.drawImage(bitmap, 0, 0);
+      bitmap.close();
+      const img = ctx.getImageData(0, 0, TILE_PX, TILE_PX).data;
+      tile = new Float32Array(TILE_PX * TILE_PX);
+      for (let i = 0; i < tile.length; i++) {
+        tile[i] = decodeTerrarium(img[i * 4], img[i * 4 + 1], img[i * 4 + 2]);
+      }
     }
-    const blob = new Blob([bytes as BlobPart], { type: "image/png" });
-    const bitmap = await createImageBitmap(blob);
-    const ctx = this.ensureCanvas();
-    ctx.drawImage(bitmap, 0, 0);
-    bitmap.close();
-    const img = ctx.getImageData(0, 0, TILE_PX, TILE_PX).data;
-    const tile = new Float32Array(TILE_PX * TILE_PX);
     let max = -Infinity;
     for (let i = 0; i < tile.length; i++) {
-      const h = decodeTerrarium(img[i * 4], img[i * 4 + 1], img[i * 4 + 2]);
-      tile[i] = h;
-      if (h > max) max = h;
+      if (tile[i] > max) max = tile[i];
     }
-    if (max > this.maxDecodedHeight) this.maxDecodedHeight = max;
+    if (Number.isFinite(max)) {
+      this.tileMaxMap.set(key, max);
+      if (max > this.maxDecodedHeight) this.maxDecodedHeight = max;
+    }
     return tile;
   }
 
-  /** Максимум высоты среди декодированных тайлов (−Infinity, пока ни одного) */
+  /** Максимум высоты по загруженным тайлам — для обрыва луча (№4) */
   private maxDecodedHeight = -Infinity;
+  /** Максимумы высот декодированных тайлов: 'z/x/y' → м (для секторных границ) */
+  private tileMaxMap = new Map<string, number>();
+
+  /** Максимумы высот декодированных тайлов — читается DemSource для секторных границ */
+  get loadedTileMaxes(): ReadonlyMap<string, number> {
+    return this.tileMaxMap;
+  }
 
   /** Верхняя граница высоты по загруженным тайлам — для обрыва луча (№4) */
   get loadedMaxHeight(): number {

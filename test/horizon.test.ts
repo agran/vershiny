@@ -250,6 +250,71 @@ describe("ray-marching горизонта", () => {
     );
   });
 
+  it("секторная граница обрывает хвост луча, не меняя видимый результат", () => {
+    // Одинокая гора на 80 км по азимуту π/2, остальное — равнина. Истинная
+    // секторная граница (3000 в секторе горы ± окаймление, 0 в остальных)
+    // обязана дать тот же видимый результат: силуэт, дистанции горизонта,
+    // гребни и фронты. Дальние корзины ниже максимума луча могут не
+    // записаться — они и так невидимы (силуэт берёт максимум, гребни —
+    // бегущий максимум по ближним профилям)
+    const step = (0.1 * Math.PI) / 180;
+    const march = buildMarchTable(100 * 1.5, 200_000);
+    let D = 0;
+    for (let s = 0; s < march.count; s++) {
+      if (march.d[s] >= 80_000) {
+        D = march.d[s];
+        break;
+      }
+    }
+    expect(D).toBeGreaterThan(0);
+    const azM = Math.PI / 2;
+    const sample: SampleFn = (pos, d) => {
+      if (
+        d === D &&
+        Math.abs(wrapAngle(azimuthRad(ORIGIN, pos) - azM)) < step / 2
+      ) {
+        return 3000;
+      }
+      return 0;
+    };
+
+    const baseline = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+    });
+    const sectors = 72;
+    const sectorMax = new Float32Array(sectors).fill(0);
+    const s0 = Math.floor((azM / (2 * Math.PI)) * sectors);
+    for (const ds of [-1, 0, 1]) {
+      sectorMax[((s0 + ds) % sectors + sectors) % sectors] = 3000;
+    }
+    const culled = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+      sectorMax,
+    });
+
+    // Видимые инварианты: силуэт (max по слоям и гребням), дистанции,
+    // гребни, фронты
+    const silhouetteOf = (l: typeof baseline): Float32Array => {
+      const out = new Float32Array(l.layers[0].length).fill(-Infinity);
+      for (const prof of [...l.layers, ...l.crests]) {
+        for (let i = 0; i < out.length; i++) {
+          const v = prof[i];
+          if (Number.isFinite(v) && v > out[i]) out[i] = v;
+        }
+      }
+      return out;
+    };
+    expect(silhouetteOf(culled)).toEqual(silhouetteOf(baseline));
+    expect(culled.distanceToHorizonM).toEqual(baseline.distanceToHorizonM);
+    expect(culled.crests).toEqual(baseline.crests);
+    expect(culled.fronts).toEqual(baseline.fronts);
+
+    // И хотя бы где-то хвост действительно оборван: в секторе равнины
+    // дальняя корзина пуста
+    const flatRay = Math.round(Math.PI / step) % culled.layers[0].length;
+    expect(culled.layers[4][flatRay]).toBe(-Infinity);
+  });
+
   it("horizon и layers[0] делят буфер: дубль в трансферах postMessage запрещён", () => {
     // Регресс: воркер передавал result.horizon.buffer И layers[0].buffer
     // в списке трансферов — это один и тот же ArrayBuffer (horizon ===

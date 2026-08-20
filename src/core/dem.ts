@@ -272,6 +272,25 @@ export class DemSampler {
     return (bits[bit >> 3] & (1 << (bit & 7))) !== 0;
   }
 
+  /** Bbox тайла [minLon, minLat, maxLon, maxLat] — для секторных границ обрыва */
+  tileBbox(
+    lodIndex: number,
+    tx: number,
+    ty: number,
+  ): [number, number, number, number] | null {
+    if (!this.index) return null;
+    const lod = this.index.lods[lodIndex];
+    if (!lod) return null;
+    const minLon = this.index.bbox[0] + tx * lod.cellDeg * TILE_SIZE;
+    const maxLat = this.index.bbox[3] - ty * lod.cellDeg * TILE_SIZE;
+    return [
+      minLon,
+      maxLat - lod.cellDeg * TILE_SIZE,
+      minLon + lod.cellDeg * TILE_SIZE,
+      maxLat,
+    ];
+  }
+
   /**
    * Есть ли данные в точке хотя бы на одном LOD, начиная с lodStart — ровно
    * тем фолбэком, каким пойдёт sample() (hint.lod → грубее). Нужно DemSource:

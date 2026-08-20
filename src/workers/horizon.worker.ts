@@ -116,6 +116,8 @@ let initPromise: Promise<void> = Promise.resolve();
 
 /** Максимальная дальность луча — синхронизирована с computeHorizon */
 const MAX_DIST_M = 200_000;
+/** Сектора секторных границ обрыва: 5° — в 50 раз грубее луча */
+const SECTOR_COUNT = 72;
 
 async function compute(
   origin: LatLon,
@@ -156,6 +158,10 @@ async function compute(
 
   const layered = computeLayeredHorizon(origin, observerH, sample, {
     marchDeps,
+    // Секторные верхние границы по уже загруженным тайлам: консервативны,
+    // поэтому обрыв луча не меняет видимый результат, а дальние шаги
+    // (самая дорогая часть марша) в равнинных секторах выпадают
+    sectorMax: source.sectorMaxHeights(origin, SECTOR_COUNT),
   });
   const visible = filterVisiblePeaks(
     origin,

@@ -43,6 +43,13 @@ export interface HorizonOptions {
   observerElevationM?: number;
   /** Зависимости таблицы марша (LOD-выборка по дальности) */
   marchDeps?: MarchDeps;
+  /**
+   * Верхние границы высот по секторам азимута (core/sector-bounds.ts).
+   * Луч обрывается, когда даже высочайший тайл сектора не даёт наклона
+   * выше всего, что луч уже видел, — хвост добавил бы только рельеф,
+   * скрытый за текущим максимумом. Граница консервативна: видимое не теряется
+   */
+  sectorMax?: Float32Array;
 }
 
 /** Насколько выше земли глаз наблюдателя (телефон в руках), м */
@@ -335,6 +342,18 @@ export function computeLayeredHorizon(
     binMaxAngle.fill(-Infinity);
     binExitSlope.fill(-Infinity);
 
+    // Секторная граница обрыва (P4): сектор луча + максимум тайлов сектора
+    const sectorMax = options.sectorMax;
+    const sector =
+      sectorMax && sectorMax.length > 0
+        ? Math.floor((i * sectorMax.length) / rayCount)
+        : -1;
+    const sectorBound = sector >= 0 && sectorMax ? sectorMax[sector] : NaN;
+    // Максимальный наклон, который луч уже видел (любая дистанция): всё,
+    // что ниже его, для рендера и маркеров невидимо — силуэт берёт максимум,
+    // гребни — бегущий максимум по ближним профилям
+    let rayMaxSlope = -Infinity;
+
     // Фронты: точки, где рельеф пробивает текущий максимум
     let frontCount = 0;
     let currentMaxSlope = -Infinity;
@@ -368,6 +387,7 @@ export function computeLayeredHorizon(
       if (h !== h) continue;
       const slope = (h - march.drop[s] - hO) / d;
       const bin = march.bin[s];
+      if (slope > rayMaxSlope) rayMaxSlope = slope;
 
       if (slope > binMaxSlope[bin]) {
         binMaxSlope[bin] = slope;
@@ -423,6 +443,19 @@ export function computeLayeredHorizon(
         binMaxAngle[bin] < -0.005
       )
         break;
+
+      // Секторная граница (P4): (максимум высоты сектора − drop − hO)/d —
+      // монотонно убывает с дистанцией, поэтому если уже сейчас наклон
+      // верхней границы ниже всего виденного, дальше он не поднимется —
+      // хвост луча добавляет только скрытый за максимумом рельеф
+      if (
+        d > 60_000 &&
+        Number.isFinite(sectorBound) &&
+        rayMaxSlope > -Infinity
+      ) {
+        const boundSlope = (sectorBound - march.drop[s] - hO) / d;
+        if (boundSlope < rayMaxSlope) break;
+      }
     }
 
     // Последний максимум по лучу — это линия неба (skyline)

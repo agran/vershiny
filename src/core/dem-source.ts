@@ -8,7 +8,13 @@
 import { DemSampler } from "./dem";
 import { bboxContains, type LatLon } from "./geo";
 import type { SampleHint } from "./horizon";
-import { TerrariumSampler, ZOOM_RULES, zoomForDistance } from "./terrarium";
+import { sectorBoundsForTiles, type SectorTile } from "./sector-bounds";
+import {
+    TerrariumSampler,
+    tileBbox as terrariumTileBbox,
+    ZOOM_RULES,
+    zoomForDistance,
+} from "./terrarium";
 
 export interface DemSourceOptions {
   /**
@@ -165,6 +171,45 @@ export class DemSource {
 
   /** Последний источник, давший высоту (см. sample) */
   private lastHit: Patch | TerrariumSampler | null = null;
+
+  /**
+   * Верхние границы высот по секторам азимута — для обрыва лучей (P4).
+   *
+   * Каждый загруженный тайл всех источников приписывается секторам,
+   * пересекающим его описанную окружность (см. core/sector-bounds.ts);
+   * тайлы целиком ближе порога отсечения не учитываются — луч дальше порога
+   * их не читает. Граница консервативна: занизить её нельзя, поэтому обрыв
+   * не теряет видимый рельеф.
+   */
+  sectorMaxHeights(origin: LatLon, sectorCount: number): Float32Array {
+    const tiles: SectorTile[] = [];
+    for (const p of this.patches) {
+      for (const [key, h] of p.sampler.tileMax) {
+        const [lod, tx, ty] = key.split("/").map(Number);
+        const bbox = p.sampler.tileBbox(lod, tx, ty);
+        if (!bbox) continue;
+        tiles.push({
+          minLon: bbox[0],
+          minLat: bbox[1],
+          maxLon: bbox[2],
+          maxLat: bbox[3],
+          h,
+        });
+      }
+    }
+    for (const [key, h] of this.terrarium.loadedTileMaxes) {
+      const [z, x, y] = key.split("/").map(Number);
+      const bbox = terrariumTileBbox(z, x, y);
+      tiles.push({
+        minLon: bbox[0],
+        minLat: bbox[1],
+        maxLon: bbox[2],
+        maxLat: bbox[3],
+        h,
+      });
+    }
+    return sectorBoundsForTiles(origin, tiles, sectorCount);
+  }
 
   /** Предзагрузка вдоль луча всеми слоями */
   async prefetchAlongRay(
