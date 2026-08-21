@@ -78,7 +78,7 @@ export const CREST_BOUNDS = [
 ] as const;
 export const CREST_COUNT = CREST_BOUNDS.length - 1;
 /** Насколько угол должен упасть после максимума, чтобы это считалось гребнем, рад (~0.09°) */
-const CREST_DROP_RAD = 0.0015;
+export const CREST_DROP_RAD = 0.0015;
 
 /**
  * Порог «чуть-чуть не видно» для подписи скрытой вершины.
@@ -386,6 +386,9 @@ export function computeLayeredHorizon(
   const marchDrop = march.drop;
   const marchHints = march.hints;
   const marchBin = march.bin;
+  // Строка наклонов секторной границы — один буфер на весь расчёт
+  // (заполняется на луч только при конечной границе сектора)
+  const boundSlopes = new Float64Array(steps);
 
   // Обрезка хвоста офлайн-лучей: за пределами скачанных тайлов все
   // источники отвечают NaN, и дальняя зона (до 2/3 шагов) считалась
@@ -444,6 +447,15 @@ export function computeLayeredHorizon(
         ? Math.floor((i * sectorMax.length) / rayCount)
         : -1;
     const sectorBound = sector >= 0 && sectorMax ? sectorMax[sector] : NaN;
+    // Наклоны верхней границы сектора по шагам луча: выражение зависит
+    // только от (сектор, шаг), а делилось на каждом шаге каждого луча.
+    // Те же операнды в том же порядке — побитово те же значения
+    const hasBound = Number.isFinite(sectorBound);
+    if (hasBound) {
+      for (let s = 0; s < steps; s++) {
+        boundSlopes[s] = (sectorBound - marchDrop[s] - hO) / marchD[s];
+      }
+    }
     // Максимальный наклон, который луч уже видел (любая дистанция): всё,
     // что ниже его, для рендера и маркеров невидимо — силуэт берёт максимум,
     // гребни — бегущий максимум по ближним профилям
@@ -547,13 +559,10 @@ export function computeLayeredHorizon(
       // всем загруженным тайлам сектора, а prefetch завершается до марша —
       // занизить её нельзя), так что обрыв не теряет видимый рельеф, а в
       // равнинных/приморских секторах экономит весь хвост луча
-      if (
-        d > 20_000 &&
-        Number.isFinite(sectorBound) &&
-        rayMaxSlope > -Infinity
-      ) {
-        const boundSlope = (sectorBound - march.drop[s] - hO) / d;
-        if (boundSlope < rayMaxSlope) break;
+      // Наклоны границы предвычислены на луч (строка выше) — в шаге
+      // осталось только сравнение
+      if (d > 20_000 && hasBound && rayMaxSlope > -Infinity) {
+        if (boundSlopes[s] < rayMaxSlope) break;
       }
     }
 
