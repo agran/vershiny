@@ -49,6 +49,15 @@ const SKY_STD_MAX = 0.12;
 const DP_LAMBDA = 0.02;
 /** ДП: наибольший перепад линии между соседними колонками, строк сетки */
 const DP_MAX_STEP = 6;
+/**
+ * Таблица штрафов перехода λ·k^1.5: тот же Math.pow на тех же входах, но
+ * один раз на модуль, а не на каждой паре переходов внутреннего цикла ДП
+ * (8 проходов на автокалибровку). Побитово тождественно исходной формуле
+ */
+const DP_PENALTY = Array.from(
+  { length: DP_MAX_STEP + 1 },
+  (_, k) => DP_LAMBDA * Math.pow(k, 1.5),
+);
 /** ДП: цена колонки без границы; слабее этого уровня границе не верим */
 const DP_NONE_COST = 0.04;
 /**
@@ -298,7 +307,7 @@ function dynamicProgrammingProfile(
       const hi = Math.min(NY - 1, yi + DP_MAX_STEP);
       for (let yj = lo; yj <= hi; yj++) {
         const dy = Math.abs(yj - yi);
-        const c = dpPrev[yj] + DP_LAMBDA * Math.pow(dy, 1.5);
+        const c = dpPrev[yj] + DP_PENALTY[dy];
         if (c < best) {
           best = c;
           par = yj;

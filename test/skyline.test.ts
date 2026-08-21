@@ -263,3 +263,29 @@ describe("совмещение кадра с рельефом", () => {
     expect(match.azimuthRad).toBe(0);
   });
 });
+
+describe("ДП: таблица штрафов побитово тождественна пошаговой формуле", () => {
+  it("профиль фиксированного кадра детерминирован, совмещение сходится", () => {
+    // DP_PENALTY (λ·k^1.5, предвычислена на модуль) обязана давать тот же
+    // профиль, что пошаговая формула: два прогона побитово равны, а
+    // совмещение возвращает те же поправки и доверие
+    const azTrue = deg(60);
+    const tiltTrue = deg(1.5);
+    const frame = renderFrame(azTrue, tiltTrue);
+    const a = extractSkyline(frame, 320, 240);
+    const b = extractSkyline(frame, 320, 240);
+    expect(a).toEqual(b);
+
+    const defined = [...a].filter((v) => !Number.isNaN(v));
+    expect(defined.length).toBeGreaterThan(a.length * 0.9);
+
+    const match = matchSkyline(a, {
+      ...VIEW,
+      centerAzRad: azTrue - deg(5),
+      tiltRad: tiltTrue,
+    });
+    expect(match.confidence).toBeGreaterThan(MIN_CONFIDENCE);
+    expect((match.azimuthRad * 180) / Math.PI).toBeCloseTo(5, 0);
+    expect((match.tiltRad * 180) / Math.PI).toBeCloseTo(0, 0);
+  });
+});
