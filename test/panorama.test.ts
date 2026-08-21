@@ -620,6 +620,78 @@ describe("многострочная подпись", () => {
     expect(end.x1).toBeCloseTo(506.9, 1);
   });
 
+  // Раньше liftAboveSilhouette при недостижимом клиренсе возвращала MAX_LEAD
+  // как фолбэк — неотличимый от честно найденного отступа, и подпись ложилась
+  // прямо на склон (то самое «вершина вот здесь», ради отказа от которого
+  // подъём и существует) плюс тратила бюджет скрытых.
+  it("клиренса нет — подпись скрытой вершины не ставится", () => {
+    // Силуэт по всему кадру на 0.4 рад → y = 132. Скрытая вершина на
+    // −0.1 рад → y = 432; на любом отступе вплоть до MAX_LEAD начало
+    // строки остаётся ниже силуэта
+    const horizon = new Float32Array(2000).fill(0.4);
+    const st = state(horizon);
+    (st.peaks[0] as unknown as { visibility: string }).visibility = "hidden";
+    (st.peaks[0] as unknown as { elevationRad: number }).elevationRad = -0.1;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    expect(texts.filter((t) => t.text.includes("Эльбрус"))).toHaveLength(0);
+  });
+
+  // Раньше клиренс над силуэтом искался до раскладки, а подъём стопкой
+  // сдвигал готовую пачку вдоль −v (влево-вверх, 30° к горизонту) или
+  // зеркально (вправо-вверх) без перепроверки клиренса — на склоне круче
+  // 30° начало строки возвращалось под силуэт.
+  it("подъём стопкой не возвращает подпись скрытой вершины под склон", () => {
+    // x = индекс + 400. Стена (0.3 рад → y = 192) левее x = 655, дальше
+    // низкий гребень (0.05 рад → y = 342). Сосед занимает естественное
+    // место скрытой вершины
+    const horizon = new Float32Array(2000);
+    for (let i = 0; i < horizon.length; i++) horizon[i] = i < 255 ? 0.3 : 0.05;
+    const st = {
+      horizon,
+      stepRad: 0.001,
+      peaks: [
+        {
+          azimuthRad: 0.26,
+          elevationRad: 0.05,
+          distanceM: 5000,
+          ele: 5642,
+          visibility: "visible",
+          name: "Сосед",
+        },
+        {
+          azimuthRad: 0.25,
+          elevationRad: 0.02,
+          distanceM: 5000,
+          ele: 5642,
+          visibility: "hidden",
+          name: "Эльбрус",
+        },
+      ],
+    } as unknown as PanoramaState;
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 1, { ridges: false });
+
+    // Без соседа подъём вдоль строки выводит якорь правее стены
+    const solo = { ...st, peaks: [st.peaks[1]] } as unknown as PanoramaState;
+    const control = makeCtx();
+    drawOverlay(control.ctx, solo, view, 1, { ridges: false });
+    const alone = control.texts.find((t) => t.text.startsWith("Эльбрус"))!;
+    expect(alone.x).toBeCloseTo(663.5, 0);
+    expect(alone.x).toBeGreaterThanOrEqual(655);
+
+    // С соседом обычная сторона ведёт на стену и отсеивается по клиренсу,
+    // а чистая зеркальная дорожка стоит дороже, чем подпись (штраф
+    // 100/дорожку) — вершина остаётся без подписи, это нормально для
+    // тесного места. Главное: подпись не должна возвращаться на стену
+    // (x < 655 ниже её верха с запасом CLEAR, y > 187)
+    const label = texts.find((t) => t.text.startsWith("Эльбрус"));
+    if (label) {
+      expect(label.x >= 655 || label.y <= 187).toBe(true);
+    }
+  });
+
   it("строки центрируются под первой (по оси текста)", () => {
     const horizon = new Float32Array(2000).fill(0.05);
     const { ctx, texts } = makeCtx();

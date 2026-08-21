@@ -1020,37 +1020,48 @@ function drawLabels(
     }
   }
 
+  const CLEAR = 5 * uiScale; // запас над линией силуэта
+  /**
+   * Вся ли строка подписи выше силуэта с запасом CLEAR. Пробы — девять
+   * точек вдоль строки: склон правее может подниматься круче текста, а
+   * редкие пробы пропускали тонкие шпили.
+   */
+  const overSilhouette = (ax: number, ay: number, w: number): boolean => {
+    for (let s = 0; s <= 1; s += 0.125) {
+      const x = ax + ux * w * s;
+      const y = ay + uy * w * s;
+      if (x < 0 || x > width) continue;
+      if (
+        y > horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY) - CLEAR
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   /**
    * Отступ от точки скрытой вершины до первой буквы: поднимаемся вдоль строки,
    * пока вся подпись не выйдет из-за загораживающего склона. Её место — сразу
    * над силуэтом: текст поверх склона читался бы как «вершина вот здесь».
+   * null — чистого места нет вплоть до MAX_LEAD (или подъём упёрся в верхний
+   * край): подпись не ставится вовсе, а раньше фолбэк клал её прямо на склон
+   * и тратил бюджет скрытых.
    */
-  const liftAboveSilhouette = (mx: number, my: number, w: number): number => {
+  const liftAboveSilhouette = (
+    mx: number,
+    my: number,
+    w: number,
+  ): number | null => {
     const STEP = 5 * uiScale;
-    const CLEAR = 5 * uiScale; // запас над линией силуэта
     const MAX_LEAD = 260 * uiScale;
     for (let lead = LEAD; lead <= MAX_LEAD; lead += STEP) {
       const ax = mx + ux * lead;
       const ay = my + uy * lead;
       if (ay < LINE_H) break;
-      // Проверяем всю строку девятью пробами: склон правее может
-      // подниматься круче текста, а редкие пробы пропускали тонкие шпили
-      let clear = true;
-      for (let s = 0; s <= 1; s += 0.125) {
-        const x = ax + ux * w * s;
-        const y = ay + uy * w * s;
-        if (x < 0 || x > width) continue;
-        if (
-          y >
-          horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY) - CLEAR
-        ) {
-          clear = false;
-          break;
-        }
-      }
-      if (clear) return lead;
+      if (overSilhouette(ax, ay, w)) return lead;
     }
-    return MAX_LEAD;
+    return null;
   };
 
   /** Попытка занять место под подпись. false — не поместилась */
@@ -1094,6 +1105,7 @@ function drawLabels(
     // для скрытой вершины поднимаемся вдоль строки, пока подпись целиком
     // не выйдет из-за загораживающего склона (её место — над силуэтом).
     const lead = hidden ? liftAboveSilhouette(mx, my, fullW) : LEAD;
+    if (lead === null) return false; // над силуэтом чистого места нет
     const ax = mx + ux * lead;
     const ay = my + uy * lead;
     if (ay < LINE_H) return false; // подпись ушла бы за верх кадра
@@ -1368,8 +1380,10 @@ function drawLabels(
         const startU = line.prefixW[range.first];
         let o = i === 0 ? 0 : off[i - 1];
         // Нижняя строка — якорь выноски: левее якоря её не сдвигать, иначе
-        // текст накроет кружок вершины и стрелку
-        if (i === trimmed.length - 1) o = Math.max(0, o);
+        // текст накроет кружок вершины и стрелку. У скрытой вершины якорь
+        // поднят над силуэтом впритык — сдвиг любой строки влево-вниз
+        // вернул бы её на склон, поэтому клиним всю пачку.
+        if (i === trimmed.length - 1 || hidden) o = Math.max(0, o);
         const fits = (s: number): boolean =>
           labelFullyOnScreen(
             b.x + (startU + s) * ux,
@@ -1541,7 +1555,23 @@ function drawLabels(
         const dx = c.mirror ? c.p * vx : -c.p * vx;
         const dy = -c.p * vy;
         const res = tryLines(lines, hangFirst, hangLast, dx, dy);
-        if (res && leaderClear(res.draw, res.boxes, list)) {
+        // Скрытая вершина: liftAboveSilhouette чистит только естественную
+        // точку, а подъём сдвигает готовую пачку — клиренс над силуэтом
+        // обязан пережить сдвиг (на склоне круче 30° и обычная сторона
+        // может вернуть строку под силуэт). Кандидат без клиренса
+        // пропускается — пробуем следующий.
+        if (
+          res &&
+          leaderClear(res.draw, res.boxes, list) &&
+          (!hidden ||
+            res.draw.every((l) =>
+              overSilhouette(
+                l.ax,
+                l.ay,
+                measureLabelWidth(ctx, labelFont, l.text),
+              ),
+            ))
+        ) {
           return { res, liftPx: c.p, mirror: c.mirror };
         }
       }
@@ -1805,6 +1835,9 @@ function drawLabels(
           boxes: [fullBox],
         };
         if (!leaderClear(dRes.draw, dRes.boxes, list)) continue;
+        // Скрытая вершина: подъём не должен возвращать строку под силуэт —
+        // пропускаем кандидат и пробуем следующий, а не отбрасываем подпись
+        if (hidden && !overSilhouette(bx, by, fullW)) continue;
         consider(dRes, 2, parts.length - 1, 5 + liftPenalty(p, c.mirror));
         break;
       }
