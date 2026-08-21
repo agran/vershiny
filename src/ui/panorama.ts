@@ -542,8 +542,6 @@ interface PlacedLabel {
   lines: { ax: number; ay: number; text: string }[];
   /** Дорожки строк в координатах (v, u) — для проверки пересечений */
   boxes: { v: number; u0: number; u1: number }[];
-  /** Сдвиг пачки вверх от естественного якоря, в дорожках (≤ 0) */
-  shift: number;
 }
 
 /**
@@ -935,6 +933,21 @@ function drawLabels(
   const LINE_H = 15 * uiScale; // зазор между параллельными «дорожками»
   const LEAD = 7 * uiScale; // отступ от вершины до первой буквы
   const PAD_U = 8 * uiScale; // зазор между подписями вдоль строки
+  // Потолок подъёма: без него полное содержимое (счёт +100 за имя) всегда
+  // выигрывало у сколь угодно длинной выноски, и подпись в тесном кластере
+  // уползала на десятки-сотни px, лишь бы не потерять «· высота · км».
+  // Форма с более узкими строками (B/C) или без части сведений даёт куда
+  // более короткую выноску — пусть выигрывает она. Величина — того же
+  // порядка, что и прежний жёсткий предел дискретных дорожек (0…−3)
+  const MAX_LIFT_PX = 3 * LINE_H;
+
+  // Зеркальный подъём: пачка уезжает не влево-вверх (обычный, вдоль −v),
+  // а вправо-вверх — вдоль (vx, −vy). Это направление НЕ ортогонально u, v
+  // по отдельности, поэтому с ростом подъёма r меняются сразу обе координаты
+  // строки: Δu = r·MIRROR_CU, Δv = r·MIRROR_CV (см. stackParam ниже) — запасной
+  // путь для кластера, где левые дорожки заняты, а справа место есть.
+  const MIRROR_CU = vx * ux - vy * uy;
+  const MIRROR_CV = vx * vx - vy * vy;
 
   // Дешёвый отсев по азимуту ДО дорогой раскладки: подпись уходит
   // вправо-вверх от вершины, поэтому вершина правее кадра или глубже
@@ -993,7 +1006,6 @@ function drawLabels(
         peak: p.peak,
         mx: marker.x,
         my: marker.y,
-        shift: p.shift,
         lines: p.lines.map((l) => ({
           ...l,
           ax: l.ax * k + dx,
@@ -1247,8 +1259,8 @@ function drawLabels(
       lines: LineCand[],
       hangFirst = false,
       hangLast = false,
-      shiftLanes = 0,
-      mirror = false,
+      dx = 0,
+      dy = 0,
     ): {
       draw: DrawLine[];
       boxes: { v: number; u0: number; u1: number }[];
@@ -1259,20 +1271,13 @@ function drawLabels(
       // строк, а остальные строки уходят от неё вверх — вся пачка выше
       // точки вершины. Сдвиг блока — по поперечной оси (без u-компоненты),
       // поэтому расстояния вдоль строк и центрирование не меняются.
-      // shiftLanes < 0 поднимает всю пачку на |shift| дорожек, когда
-      // естественная дорожка занята соседями. mirror отражает подъём по
-      // вертикали: пачка уезжает не влево-вверх, а ВПРАВО-ВВЕРХ на ту же
-      // высоту — «зеркальные» дорожки. Их v-координаты ложатся между
-      // обычными (шаг половины дорожки), поэтому с левыми подписями они
-      // конфликтуют только на малых m, а разъезжаются по u на 13 px за
-      // дорожку — в плотном кластере это единственный дешёвый путь вправо.
+      // (dx, dy) — смещение всей пачки (обычное вдоль −v или зеркальное
+      // вдоль (vx,−vy)), вычисленное stackParam: пачка встаёт вплотную к
+      // соседу, а не перескакивает через дорожку.
       const bottomK = lines.length - 1;
       const baseOf = (k: number): { x: number; y: number } => ({
-        x:
-          ax +
-          (k - bottomK) * LINE_H * vx +
-          (mirror ? -shiftLanes : shiftLanes) * LINE_H * vx,
-        y: ay + (k - bottomK) * LINE_H * vy + shiftLanes * LINE_H * vy,
+        x: ax + (k - bottomK) * LINE_H * vx + dx,
+        y: ay + (k - bottomK) * LINE_H * vy + dy,
       });
 
       // Проход 1: почастная обрезка краем кадра БЕЗ сдвига (как раньше).
@@ -1436,6 +1441,113 @@ function drawLabels(
       };
     };
 
+    /**
+     * Минимальный сдвиг пачки вверх (в единицах v, ≤ 0), при котором её
+     * строки — по прикидке «полная ширина без обрезки» — не пересекаются
+     * по (u, v) с уже размещёнными подписями. Сдвиг непрерывный: пачка
+     * встаёт вплотную к соседу снизу, а не перескакивает через свободную
+     * половину дорожки, как было при переборе дискретных дорожек {0,−1,…}.
+     * rows[i].kRel — на сколько дорожек строка выше якорной (нижней, 0).
+     * Оценка ведётся по неусечённой ширине части — это верхняя граница
+     * фактической (после обрезки краем кадра) ширины, так что итоговая
+     * раскладка только просторнее прикидки, никогда не теснее.
+     *
+     * Обе стороны (обычная — вдоль −v, и зеркальная — вдоль (vx,−vy))
+     * сводятся к одному и тому же виду: координаты строки при подъёме p —
+     * это (u0 + p·cu, v0 + p·cv), и конфликт с чужой рамкой — пересечение
+     * условий «u-интервалы пересекаются» и «v-дорожки ближе LINE_H», каждое
+     * из которых линейно по p и потому задаёт ИНТЕРВАЛ запрещённых p.
+     * Минимальный свободный p ищется точным пересечением интервалов —
+     * не перебором дискретных дорожек и не итеративным приближением.
+     */
+    const firstFreeParam = (
+      rows: { kRel: number; u0: number; u1: number }[],
+      cu: number,
+      cv: number,
+      list: PlacedLabel[],
+    ): number => {
+      // Интервал p, на котором a + p·c лежит строго между lo и hi
+      // (c = 0 — величина от p не зависит: условие либо всегда, либо никогда)
+      const range = (a: number, c: number, lo: number, hi: number): [number, number] => {
+        if (c === 0) return a > lo && a < hi ? [-Infinity, Infinity] : [Infinity, -Infinity];
+        const t1 = (lo - a) / c;
+        const t2 = (hi - a) / c;
+        return c > 0 ? [t1, t2] : [t2, t1];
+      };
+      const forbidden: [number, number][] = [];
+      for (const row of rows) {
+        const w = row.u1 - row.u0;
+        const v0 = ax * vx + ay * vy - row.kRel * LINE_H;
+        for (const p of list) {
+          for (const b of p.boxes) {
+            const [uLo, uHi] = range(row.u0, cu, b.u0 - PAD_U - w, b.u1 + PAD_U);
+            const [vLo, vHi] = range(v0, cv, b.v - LINE_H, b.v + LINE_H);
+            const lo = Math.max(uLo, vLo, 0);
+            const hi = Math.min(uHi, vHi);
+            if (lo < hi) forbidden.push([lo, hi]);
+          }
+        }
+      }
+      forbidden.sort((a, b) => a[0] - b[0]);
+      let p = 0;
+      for (const [lo, hi] of forbidden) {
+        if (lo <= p + 1e-9 && p < hi) p = hi;
+      }
+      return p;
+    };
+
+    /**
+     * Раскладка пачки против уже размещённых, перебором обеих сторон
+     * (обычной и зеркальной). Если готовый результат всё же режет чужую
+     * выноску (диагональ, которую прикидка коробок не ловит) — пробуем
+     * отодвинуть ещё на несколько дорожек: редкий случай, а не полный
+     * перебор дорожек, как было раньше.
+     */
+    const placeStacked = (
+      lines: LineCand[],
+      hangFirst: boolean,
+      hangLast: boolean,
+      rows: { kRel: number; u0: number; u1: number }[],
+      list: PlacedLabel[],
+    ): {
+      res: { draw: DrawLine[]; boxes: { v: number; u0: number; u1: number }[]; hang: number };
+      liftPx: number;
+      mirror: boolean;
+    } | null => {
+      // Обычная сторона: p = shiftV в единицах v (cu=0, cv=−1 — растёт по v
+      // при движении вверх, u не меняется). Зеркальная: p = r вдоль
+      // (vx,−vy) — может выйти дешевле, если слева всё занято, а справа нет.
+      const pPlain = firstFreeParam(rows, 0, -1, list);
+      const pMirror = firstFreeParam(rows, MIRROR_CU, MIRROR_CV, list);
+      if (pPlain > MAX_LIFT_PX && pMirror > MAX_LIFT_PX) return null; // слишком далеко — пусть место возьмёт форма скромнее
+      // Прикидка коробок не ловит диагональное пересечение с чужой
+      // выноской — доводим мелким шагом (а не целой дорожкой), иначе
+      // подпись перескакивала мимо ближайшего свободного места к куда
+      // более длинной выноске. Оба направления пробуются вперемешку по
+      // возрастанию подъёма — принимается первый же свободный, то есть
+      // самый короткий из проверенных. Сам подъём не пересекает MAX_LIFT_PX:
+      // за этим пределом полное содержимое уже не стоит длинной выноски.
+      const STEP = LINE_H / 4;
+      const TRIES = 12;
+      const candidates: { p: number; mirror: boolean }[] = [];
+      for (let i = 0; i <= TRIES; i++) {
+        const pp = pPlain + i * STEP;
+        if (pp <= MAX_LIFT_PX) candidates.push({ p: pp, mirror: false });
+        const pm = pMirror + i * STEP;
+        if (pm <= MAX_LIFT_PX) candidates.push({ p: pm, mirror: true });
+      }
+      candidates.sort((a, b) => a.p - b.p);
+      for (const c of candidates) {
+        const dx = c.mirror ? c.p * vx : -c.p * vx;
+        const dy = -c.p * vy;
+        const res = tryLines(lines, hangFirst, hangLast, dx, dy);
+        if (res && leaderClear(res.draw, res.boxes, list)) {
+          return { res, liftPx: c.p, mirror: c.mirror };
+        }
+      }
+      return null;
+    };
+
     // Критерий «лучше» (лексикографический): полнота названия (2 — целиком,
     // 1 — обрезано переносом, 0 — нет) > число видимых info-частей (2/1/0) >
     // меньше строк. Подпись стремится к минимуму строк: к одной строке она
@@ -1450,9 +1562,7 @@ function drawLabels(
     ): {
       draw: DrawLine[];
       boxes: { v: number; u0: number; u1: number }[];
-      shift: number;
       score: number;
-      mirror: boolean;
     } | null => {
       activePlaced = list;
       let bestScore = -1;
@@ -1462,9 +1572,7 @@ function drawLabels(
         value: {
           draw: DrawLine[];
           boxes: { v: number; u0: number; u1: number }[];
-          shift: number;
           score: number;
-          mirror: boolean;
         } | null;
       } = { value: null };
       const consider = (
@@ -1475,60 +1583,47 @@ function drawLabels(
         nameScore: number,
         infoParts: number,
         penalty = 0,
-        shift = 0,
-        mirror = false,
       ): void => {
         const score =
           nameScore * 100 + infoParts * 10 - penalty - res.draw.length;
         if (score > bestScore) {
           bestScore = score;
-          result.value = { ...res, shift, score, mirror };
+          result.value = { ...res, score };
         }
       };
-      const considerClear = (
-        res: {
-          draw: DrawLine[];
-          boxes: { v: number; u0: number; u1: number }[];
-        },
-        nameScore: number,
-        infoParts: number,
-        penalty = 0,
-        shift = 0,
-        mirror = false,
-      ): void => {
-        if (!leaderClear(res.draw, res.boxes, list)) {
-          return;
-        }
-        consider(res, nameScore, infoParts, penalty, shift, mirror);
-      };
+      // Точка отсчёта u для всех дорожек кандидата: сдвиг вдоль v не меняет
+      // u (оси ортогональны), поэтому она одна на все формы и строки
+      const baseU = ax * ux + ay * uy;
+      // Штраф за подъём: длина выноски должна стремиться к минимальной
+      // ВСЕГДА — 100 очков за дорожку (та же цена, что и у видимого имени),
+      // поэтому лишняя дорожка подъёма перевешивает выигрыш от более
+      // полного содержимого. Формы с более узкими строками почти всегда
+      // дают меньший подъём — при заметной разнице побеждают именно они,
+      // а не «выжать побольше текста ценой длинной стрелки». Зеркальная
+      // сторона вдобавок штрафуется на +1 — при равном подъёме предпочтение
+      // обычной стороне.
+      const liftPenalty = (liftPx: number, mirror: boolean): number =>
+        (liftPx / LINE_H) * 100 + (mirror ? 1 : 0);
 
     // A. Одна строка: «Название · высота · расстояние» с почастной обрезкой
     // краем кадра (она же — финальный фолбэк: усечённая строка, если не
-    // вышло ничего другого). Дорожку тоже ищем: при занятой — строкой выше,
-    // а когда и верх занят — зеркальной дорожкой вправо-вверх.
-    for (const shift of [0, -1]) {
-      for (const mirror of [false, true]) {
-        if (mirror && shift === 0) continue;
-        const single = tryLines(
-          [{ k: 0, parts, prefixW }],
-          false,
-          false,
-          shift,
-          mirror,
-        );
-        if (!single) continue;
+    // вышло ничего другого). Дорожка — вычисленная стопкой: пачка встаёт
+    // вплотную к самому нижнему свободному месту над соседями.
+    {
+      const placedA = placeStacked(
+        [{ k: 0, parts, prefixW }],
+        false,
+        false,
+        [{ kRel: 0, u0: baseU, u1: baseU + fullW }],
+        list,
+      );
+      if (placedA) {
+        const { res: single, liftPx, mirror } = placedA;
         const nameSeen = single.draw[0].first === 0;
         const infoParts = nameSeen
           ? single.draw[0].last
           : single.draw[0].last - single.draw[0].first + 1;
-        considerClear(
-          single,
-          nameSeen ? 2 : 0,
-          infoParts,
-          -shift * 2 + (mirror ? 1 : 0),
-          shift,
-          mirror,
-        );
+        consider(single, nameSeen ? 2 : 0, infoParts, liftPenalty(liftPx, mirror));
       }
     }
 
@@ -1539,39 +1634,25 @@ function drawLabels(
     // якорится нижней строкой, поэтому и у скрытых вершин — их подпись
     // поднята над склоном — нижняя строка на склон не ложится.
     if (parts.length > 1) {
-      // Пробуем положения пачки: естественное и до трёх дорожек выше — когда
-      // дорожка info-строки занята соседями, сдвиг вверх находит свободную,
-      // и высота с расстоянием не теряются. Сдвиг штрафуется в критерии;
-      // зеркальные дорожки (вправо-вверх) — запасной путь, когда все левые
-      // заняты: выноска той же длины, подпись уезжает в сторону
-      for (const shift of [0, -1, -2, -3]) {
-        for (const mirror of [false, true]) {
-          if (mirror && shift === 0) continue;
-          const two = tryLines(
-            [
-              { k: 0, parts: [parts[0]], prefixW: [0, prefixW[1]] },
-              { k: 1, parts: parts.slice(1), prefixW: prefixW2 },
-            ],
-            true,
-            true,
-            shift,
-            mirror,
-          );
-          if (two) {
-            const infoParts =
-              two.draw.length === 2
-                ? two.draw[1].last - two.draw[1].first + 1
-                : 0;
-            considerClear(
-              two,
-              2,
-              infoParts,
-              two.hang * 2 - shift * 2 + (mirror ? 1 : 0),
-              shift,
-              mirror,
-            );
-          }
-        }
+      const infoW = prefixW2[prefixW2.length - 1];
+      const placedB = placeStacked(
+        [
+          { k: 0, parts: [parts[0]], prefixW: [0, prefixW[1]] },
+          { k: 1, parts: parts.slice(1), prefixW: prefixW2 },
+        ],
+        true,
+        true,
+        [
+          { kRel: 1, u0: baseU, u1: baseU + prefixW[1] },
+          { kRel: 0, u0: baseU, u1: baseU + infoW },
+        ],
+        list,
+      );
+      if (placedB) {
+        const { res: two, liftPx, mirror } = placedB;
+        const infoParts =
+          two.draw.length === 2 ? two.draw[1].last - two.draw[1].first + 1 : 0;
+        consider(two, 2, infoParts, two.hang * 2 + liftPenalty(liftPx, mirror));
       }
     }
 
@@ -1583,13 +1664,14 @@ function drawLabels(
     // скрытых вершин: пачка целиком поднята над склоном.
     if (!fitsAt(0, 0, prefixW[1])) {
         const T = nameTokens(ctx, labelFont, parts[0]);
+        const infoW = prefixW2[prefixW2.length - 1];
         wrapped: for (let i = T.breaks.length - 1; i >= 0; i--) {
           if (!fitsAt(0, 0, T.prefW[i])) continue;
           const b = T.breaks[i];
           let any = false;
 
           // 2 фрагмента: остаток названия целиком на второй дорожке
-          const twoFrag = tryLines(
+          const placed2 = placeStacked(
             [
               { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
               { k: 1, parts: [parts[0].slice(b.start)], prefixW: [0, T.tailW[i]] },
@@ -1597,25 +1679,32 @@ function drawLabels(
             ],
             false,
             true,
+            [
+              { kRel: 2, u0: baseU, u1: baseU + T.prefW[i] },
+              { kRel: 1, u0: baseU, u1: baseU + T.tailW[i] },
+              { kRel: 0, u0: baseU, u1: baseU + infoW },
+            ],
+            list,
           );
-          if (twoFrag) {
+          if (placed2) {
             any = true;
+            const twoFrag = placed2.res;
             const infoParts =
               twoFrag.draw.length === 3
                 ? twoFrag.draw[2].last - twoFrag.draw[2].first + 1
                 : 0;
-            considerClear(
+            consider(
               twoFrag,
               twoFrag.draw.length >= 2 ? 2 : 1,
               infoParts,
-              twoFrag.hang * 2,
+              twoFrag.hang * 2 + liftPenalty(placed2.liftPx, placed2.mirror),
             );
           }
 
           // 3 фрагмента: хвост делится на оставшихся разрывах
           for (let j = i + 1; j < T.breaks.length; j++) {
             const bj = T.breaks[j];
-            const threeFrag = tryLines(
+            const placed3 = placeStacked(
               [
                 { k: 0, parts: [parts[0].slice(0, b.end)], prefixW: [0, T.prefW[i]] },
                 {
@@ -1628,18 +1717,26 @@ function drawLabels(
               ],
               false,
               true,
+              [
+                { kRel: 3, u0: baseU, u1: baseU + T.prefW[i] },
+                { kRel: 2, u0: baseU, u1: baseU + T.midW[i][j] },
+                { kRel: 1, u0: baseU, u1: baseU + T.tailW[j] },
+                { kRel: 0, u0: baseU, u1: baseU + infoW },
+              ],
+              list,
             );
-            if (threeFrag) {
+            if (placed3) {
               any = true;
+              const threeFrag = placed3.res;
               const infoParts =
                 threeFrag.draw.length === 4
                   ? threeFrag.draw[3].last - threeFrag.draw[3].first + 1
                   : 0;
-              considerClear(
+              consider(
                 threeFrag,
                 threeFrag.draw.length >= 3 ? 2 : 1,
                 infoParts,
-                threeFrag.hang * 2,
+                threeFrag.hang * 2 + liftPenalty(placed3.liftPx, placed3.mirror),
               );
             }
           }
@@ -1651,13 +1748,28 @@ function drawLabels(
     // влезает): полная строка может частично уходить за левый и правый край
     // экрана — ничего не скрываем, лишнее обрежет канвас. Штраф в критерии
     // держит D ниже всех влезающих раскладок (включая перенос), но выше
-    // тех, что что-нибудь скрывают. Дорожку тоже ищем: при занятой —
-    // строкой выше.
-    for (const shift of [0, -1, -2, -3]) {
-      for (const mirror of [false, true]) {
-        if (mirror && shift === 0) continue;
-        const bx = ax + (mirror ? -shift : shift) * LINE_H * vx;
-        const by = ay + shift * LINE_H * vy;
+    // тех, что что-нибудь скрывают. Дорожка — та же стопка, что у формы A,
+    // перебором обеих сторон (обычной и зеркальной).
+    {
+      const rows = [{ kRel: 0, u0: baseU, u1: baseU + fullW }];
+      const pPlain = firstFreeParam(rows, 0, -1, list);
+      const pMirror = firstFreeParam(rows, MIRROR_CU, MIRROR_CV, list);
+      const STEP = LINE_H / 4;
+      const TRIES = 12;
+      const dCandidates: { p: number; mirror: boolean }[] = [];
+      if (pPlain <= MAX_LIFT_PX || pMirror <= MAX_LIFT_PX) {
+        for (let i = 0; i <= TRIES; i++) {
+          const pp = pPlain + i * STEP;
+          if (pp <= MAX_LIFT_PX) dCandidates.push({ p: pp, mirror: false });
+          const pm = pMirror + i * STEP;
+          if (pm <= MAX_LIFT_PX) dCandidates.push({ p: pm, mirror: true });
+        }
+        dCandidates.sort((a, b) => a.p - b.p);
+      }
+      for (const c of dCandidates) {
+        const p = c.p;
+        const bx = ax + (c.mirror ? p * vx : -p * vx);
+        const by = ay - p * vy;
         // Фолбэк D тоже не ставит подпись, которой в кадре не видно ни буквы
         if (
           !labelPartiallyOnScreen(
@@ -1679,699 +1791,32 @@ function drawLabels(
           u0: bx * ux + by * uy,
           u1: bx * ux + by * uy + fullW,
         };
-        if (!conflicts([fullBox])) {
-          considerClear(
+        if (conflicts([fullBox])) continue;
+        const dRes = {
+          draw: [
             {
-              draw: [
-                {
-                  ax: bx,
-                  ay: by,
-                  text: parts.join(LABEL_SEP),
-                  first: 0,
-                  last: parts.length - 1,
-                },
-              ],
-              boxes: [fullBox],
+              ax: bx,
+              ay: by,
+              text: parts.join(LABEL_SEP),
+              first: 0,
+              last: parts.length - 1,
             },
-            2,
-            parts.length - 1,
-            5 - shift * 2 + (mirror ? 1 : 0),
-            shift,
-            mirror,
-          );
-        }
+          ],
+          boxes: [fullBox],
+        };
+        if (!leaderClear(dRes.draw, dRes.boxes, list)) continue;
+        consider(dRes, 2, parts.length - 1, 5 + liftPenalty(p, c.mirror));
+        break;
       }
     }
 
     return result.value;
     };
 
-    // ============ Размещение с парным сдвигом ============
-
     const res = bestFor(placed);
+    if (!res) return false; // ни одна раскладка не влезла — прячем всё
 
-    // Длина выноски: от точки вершины до первой буквы нижней строки
-    const leaderLenOf = (draw: DrawLine[]): number => {
-      const bot = draw[draw.length - 1];
-      return Math.hypot(bot.ax - mx, bot.ay - my);
-    };
-    const leaderLenPlaced = (p: PlacedLabel): number => {
-      const bot = p.lines[p.lines.length - 1];
-      return Math.hypot(bot.ax - p.mx, bot.ay - p.my);
-    };
-
-    // Подпись соседа, поднятая на m дорожек вверх. Подъём допустим, только
-    // если все её строки остаются в кадре целиком (свешиваний не плодим),
-    // а дорожки и выноски не пересекают остальных
-    const MAX_PAIR_LANES = 3;
-    // Релаксация группы: порог запуска (≈ две дорожки выноски), гистерезис
-    // против дрожания между кадрами и потолки перебора
-    const LEADER_RELAX_PX = 30 * uiScale;
-    const RELAX_MIN_GAIN = 0.5 * LINE_H;
-    const CLUSTER_MAX = 8;
-    const RELAX_ITERS = 4;
-    const RELAX_EVAL_CAP = 80;
-    const validMoved = (
-      p: PlacedLabel,
-      lines: PlacedLabel["lines"],
-      boxes: PlacedLabel["boxes"],
-      others: PlacedLabel[],
-    ): boolean => {
-      for (let i = 0; i < lines.length; i++) {
-        if (
-          !labelFullyOnScreen(
-            lines[i].ax,
-            lines[i].ay,
-            boxes[i].u1 - boxes[i].u0,
-            ux,
-            uy,
-            view.rollRad ?? 0,
-            width,
-            height,
-            uiScale,
-          )
-        ) {
-          return false;
-        }
-      }
-      if (conflictsAgainst(others, boxes)) return false;
-      const moved: PlacedLabel = { ...p, lines, boxes };
-      const L = placedLeader(moved);
-      for (const q of others) {
-        for (const b of q.boxes) {
-          if (leaderCrossesBox(L.x1, L.y1, L.x2, L.y2, b)) return false;
-        }
-        const ql = placedLeader(q);
-        if (
-          segmentsCross(L.x1, L.y1, L.x2, L.y2, ql.x1, ql.y1, ql.x2, ql.y2)
-        ) {
-          return false;
-        }
-        for (const b of boxes) {
-          if (leaderCrossesBox(ql.x1, ql.y1, ql.x2, ql.y2, b)) return false;
-        }
-      }
-      return true;
-    };
-
-    const moveUp = (
-      p: PlacedLabel,
-      m: number,
-      others: PlacedLabel[],
-    ): PlacedLabel | null => {
-      const step = -m * LINE_H;
-      const lines = p.lines.map((l) => ({
-        ...l,
-        ax: l.ax + step * vx,
-        ay: l.ay + step * vy,
-      }));
-      const boxes = p.boxes.map((b) => ({ ...b, v: b.v + step }));
-      if (!validMoved(p, lines, boxes, others)) return null;
-      return { ...p, lines, boxes, shift: p.shift - m };
-    };
-
-    // Сосед, сдвинутый на du вправо ВДОЛЬ своей строки: освобождает
-    // u-коридор для нашей подписи, не поднимая соседа по дорожкам. Его
-    // выноска растёт по горизонтали — та же цена, что у подъёма, и критерий
-    // «меньше максимум длин выносок пары» выбирает дешевле. Поперечная
-    // координата v не меняется: u и v ортогональны
-    const moveRight = (
-      p: PlacedLabel,
-      du: number,
-      others: PlacedLabel[],
-    ): PlacedLabel | null => {
-      const lines = p.lines.map((l) => ({
-        ...l,
-        ax: l.ax + du * ux,
-        ay: l.ay + du * uy,
-      }));
-      const boxes = p.boxes.map((b) => ({
-        ...b,
-        u0: b.u0 + du,
-        u1: b.u1 + du,
-      }));
-      if (!validMoved(p, lines, boxes, others)) return null;
-      return { ...p, lines, boxes, shift: p.shift };
-    };
-
-    // Мешает ли сосед нашему варианту: дорожками или выноской
-    const blocks = (
-      p: PlacedLabel,
-      boxes: { v: number; u0: number; u1: number }[],
-      draw: DrawLine[],
-    ): boolean => {
-      if (conflictsAgainst([p], boxes)) return true;
-      const q = placedLeader(p);
-      for (const b of boxes) {
-        if (leaderCrossesBox(q.x1, q.y1, q.x2, q.y2, b)) return true;
-      }
-      const L = candidateLeader(draw);
-      for (const b of p.boxes) {
-        if (leaderCrossesBox(L.x1, L.y1, L.x2, L.y2, b)) return true;
-      }
-      return segmentsCross(
-        L.x1,
-        L.y1,
-        L.x2,
-        L.y2,
-        q.x1,
-        q.y1,
-        q.x2,
-        q.y2,
-      );
-    };
-
-    // Кандидаты на парный сдвиг: соседи, занимающие естественные дорожки
-    // полной строки (дорожки 0…−2 от якоря) — именно они заставили нашу
-    // подпись подняться, даже если поднятый вариант с ними уже не
-    // пересекается. Если вариантов нет вовсе — тот же отбор
-    const blockers = (
-      r:
-        | {
-            draw: DrawLine[];
-            boxes: { v: number; u0: number; u1: number }[];
-          }
-        | null,
-    ): PlacedLabel[] => {
-      const out: PlacedLabel[] = [];
-      const probeBoxes: { v: number; u0: number; u1: number }[] = [0, -1, -2].map(
-        (s) => ({
-          v: ax * vx + ay * vy + s * LINE_H,
-          u0: ax * ux + ay * uy,
-          u1: ax * ux + ay * uy + fullW,
-        }),
-      );
-      for (const p of placed) {
-        if (p.shift <= -MAX_PAIR_LANES) continue;
-        if (
-          conflictsAgainst([p], probeBoxes) ||
-          (r && blocks(p, r.boxes, r.draw))
-        ) {
-          out.push(p);
-          if (out.length >= 3) break;
-        }
-      }
-      return out;
-    };
-
-    /**
-     * Релаксация кластера: переразложить ГРУППУ подписей так, чтобы наша
-     * выноска стала как можно короче, при этом худшая выноска группы не
-     * удлиняется, а содержимое не деградирует.
-     *
-     * Парный сдвиг двигает одного соседа; релаксация ищет комбинации
-     * (глубина 2): когда подъём одного соседа упирается в другого,
-     * поднимаются оба разом — «поднять двоих на одну дорожку вместо одного
-     * на три». Перебор — worst-first спуск с потолком оценок: дорого, но
-     * запускается только когда наша выноска длиннее LEADER_RELAX_PX.
-     * Сумма длин выносок группы при обмене дорожками сохраняется (кто-то
-     * должен занять самую глубокую дорожку), поэтому критерий — не
-     * «минимум суммы», а «наша выноска короче на гистерезис при неувеличенном
-     * максимуме»: тяжесть глубокой дорожки переходит к уже размещённым
-     * подписям, а не к той, которую человек рассматривает сейчас.
-     */
-    const relaxCluster = (
-      initial: NonNullable<typeof res>,
-    ): {
-      final: NonNullable<typeof res>;
-      moves: { old: PlacedLabel; new: PlacedLabel }[];
-    } | null => {
-      // Кластер: транзитивное замыкание по «борьбе за одни дорожки» —
-      // u-диапазоны пересекаются (с запасом PAD_U), v-дорожки близки
-      const seed: PlacedLabel = {
-        peak,
-        mx,
-        my,
-        shift: initial.shift,
-        lines: initial.draw,
-        boxes: initial.boxes,
-      };
-      const uRange = (p: PlacedLabel): [number, number] => {
-        let lo = Infinity;
-        let hi = -Infinity;
-        for (const b of p.boxes) {
-          lo = Math.min(lo, b.u0);
-          hi = Math.max(hi, b.u1);
-        }
-        return [lo, hi];
-      };
-      const vRange = (p: PlacedLabel): [number, number] => {
-        let lo = Infinity;
-        let hi = -Infinity;
-        for (const b of p.boxes) {
-          lo = Math.min(lo, b.v);
-          hi = Math.max(hi, b.v);
-        }
-        return [lo, hi];
-      };
-      const fightsForLanes = (a: PlacedLabel, b: PlacedLabel): boolean => {
-        const [au0, au1] = uRange(a);
-        const [bu0, bu1] = uRange(b);
-        if (!(au0 < bu1 + PAD_U && au1 > bu0 - PAD_U)) return false;
-        const [av0, av1] = vRange(a);
-        const [bv0, bv1] = vRange(b);
-        return (
-          Math.abs(av0 - bv0) < LINE_H * (MAX_PAIR_LANES + 1) ||
-          Math.abs(av1 - bv1) < LINE_H * (MAX_PAIR_LANES + 1)
-        );
-      };
-      const members: PlacedLabel[] = [];
-      const pool = [seed];
-      for (let i = 0; i < pool.length; i++) {
-        for (const q of placed) {
-          if (pool.includes(q)) continue;
-          if (!fightsForLanes(pool[i], q)) continue;
-          pool.push(q);
-          members.push(q);
-          if (members.length >= CLUSTER_MAX) break;
-        }
-        if (members.length >= CLUSTER_MAX) break;
-      }
-      if (members.length < 2) return null; // пару развёл парный сдвиг
-
-      const applied = new Map<PlacedLabel, PlacedLabel>();
-      const currentList = (): PlacedLabel[] =>
-        placed.map((q) => applied.get(q) ?? q);
-      const memberLen = (p: PlacedLabel): number =>
-        leaderLenPlaced(applied.get(p) ?? p);
-      const evaluate = (): {
-        cand: NonNullable<typeof res>;
-        candLen: number;
-        maxLen: number;
-        sumLen: number;
-      } | null => {
-        const cand = bestFor(currentList());
-        if (!cand) return null;
-        let maxLen = 0;
-        let sumLen = 0;
-        for (const p of members) {
-          const len = memberLen(p);
-          maxLen = Math.max(maxLen, len);
-          sumLen += len;
-        }
-        const candLen = leaderLenOf(cand.draw);
-        return {
-          cand,
-          candLen,
-          maxLen: Math.max(maxLen, candLen),
-          sumLen: sumLen + candLen,
-        };
-      };
-      const init = evaluate();
-      if (!init) return null;
-      let cur = init;
-      let evals = 0;
-
-      // Сырые ходы члена (без проверки валидности): подъём по дорожкам и
-      // сдвиг вправо вдоль строки. Валидность проверяется отдельно: у
-      // одиночного хода — validMoved, у невалидного ищется тот, кто мешает,
-      // и пробуется комбинация «сдвинуть обоих»
-      const rawMoves = (
-        p: PlacedLabel,
-      ): { lines: PlacedLabel["lines"]; boxes: PlacedLabel["boxes"]; shift: number }[] => {
-        const out: { lines: PlacedLabel["lines"]; boxes: PlacedLabel["boxes"]; shift: number }[] =
-          [];
-        for (
-          let m = 1;
-          m <= MAX_PAIR_LANES && p.shift - m >= -MAX_PAIR_LANES;
-          m++
-        ) {
-          const step = -m * LINE_H;
-          out.push({
-            lines: p.lines.map((l) => ({
-              ...l,
-              ax: l.ax + step * vx,
-              ay: l.ay + step * vy,
-            })),
-            boxes: p.boxes.map((b) => ({ ...b, v: b.v + step })),
-            shift: p.shift - m,
-          });
-        }
-        const pU0 = Math.min(...p.boxes.map((b) => b.u0));
-        const need = Math.min(
-          Math.max(...seed.boxes.map((b) => b.u1)) + PAD_U - pU0 + 2,
-          120,
-        );
-        if (need > 2) {
-          for (const du of [need, Math.max(need / 2, 14)]) {
-            out.push({
-              lines: p.lines.map((l) => ({
-                ...l,
-                ax: l.ax + du * ux,
-                ay: l.ay + du * uy,
-              })),
-              boxes: p.boxes.map((b) => ({
-                ...b,
-                u0: b.u0 + du,
-                u1: b.u1 + du,
-              })),
-              shift: p.shift,
-            });
-          }
-        }
-        return out;
-      };
-
-      for (let iter = 0; iter < RELAX_ITERS; iter++) {
-        let bestEv: NonNullable<ReturnType<typeof evaluate>> | null = null;
-        let bestMv: { p: PlacedLabel; p2: PlacedLabel }[] = [];
-        const consider = (
-          mv: { p: PlacedLabel; p2: PlacedLabel }[],
-          ev: NonNullable<ReturnType<typeof evaluate>>,
-        ): void => {
-          // Наша выноска короче минимум на гистерезис, худшая выноска группы
-          // не выросла, содержимое не деградировало
-          if (
-            ev.candLen + RELAX_MIN_GAIN > cur.candLen ||
-            ev.maxLen > init.maxLen + 0.01 ||
-            ev.cand.score < initial.score
-          ) {
-            return;
-          }
-          if (
-            !bestEv ||
-            ev.candLen < bestEv.candLen ||
-            (ev.candLen === bestEv.candLen &&
-              (ev.maxLen < bestEv.maxLen ||
-                (ev.maxLen === bestEv.maxLen &&
-                  ev.sumLen < bestEv.sumLen)))
-          ) {
-            bestEv = ev;
-            bestMv = mv;
-          }
-        };
-        for (const p of members) {
-          const pCur = applied.get(p) ?? p;
-          const others = currentList().filter((q) => q !== pCur);
-          // Соответствие «текущая версия → исходный член»: applied ключуется
-          // исходными объектами, а others содержит текущие
-          const originOf = (cur: PlacedLabel): PlacedLabel | undefined => {
-            if (members.includes(cur)) return cur;
-            for (const m of members) {
-              if (applied.get(m) === cur) return m;
-            }
-            return undefined;
-          };
-          for (const mv of rawMoves(pCur)) {
-            const p2: PlacedLabel = { ...pCur, ...mv };
-            if (validMoved(pCur, mv.lines, mv.boxes, others)) {
-              // Одиночный ход валиден. Откат восстанавливает прежний
-              // (возможно уже закоммиченный) ход, а не стирает его
-              const prevP = applied.get(p) ?? null;
-              applied.set(p, p2);
-              const ev = evaluate();
-              evals++;
-              if (ev) consider([{ p, p2 }], ev);
-              // Глубина 2: ход не улучшил нашу выноску — пробуем сдвинуть
-              // и того, кто мешает уже подвинутому соседу
-              if (ev && ev.candLen >= cur.candLen) {
-                for (const q of members) {
-                  if (q === p) continue;
-                  const qCur = applied.get(q) ?? q;
-                  if (!conflictsAgainst([p2], qCur.boxes)) continue;
-                  const others2 = currentList().filter((r) => r !== qCur);
-                  for (const qm of rawMoves(qCur)) {
-                    const q2: PlacedLabel = { ...qCur, ...qm };
-                    if (!validMoved(qCur, qm.lines, qm.boxes, others2)) continue;
-                    const prevQ = applied.get(q) ?? null;
-                    applied.set(q, q2);
-                    const ev2 = evaluate();
-                    evals++;
-                    if (ev2) consider([{ p, p2 }, { p: q, p2: q2 }], ev2);
-                    // Откат: восстановить прежний (возможно уже закоммиченный)
-                    // ход члена, а не стирать его из карты
-                    if (prevQ === null) applied.delete(q);
-                    else applied.set(q, prevQ);
-                    if (evals >= RELAX_EVAL_CAP) break;
-                  }
-                  if (evals >= RELAX_EVAL_CAP) break;
-                }
-              }
-              if (prevP === null) applied.delete(p);
-              else applied.set(p, prevP);
-            } else {
-              // Ход невалиден — ищем, кто именно мешает, и пробуем
-              // комбинацию «подвинуть обоих» (глубина 2)
-              const blockerCur = others.find((q) =>
-                conflictsAgainst([q], mv.boxes),
-              );
-              if (!blockerCur) continue;
-              // Кроме блокера никто не должен мешать сырой позиции
-              if (
-                others.some(
-                  (q) => q !== blockerCur && conflictsAgainst([q], mv.boxes),
-                )
-              ) {
-                continue;
-              }
-              const blocker = originOf(blockerCur);
-              if (!blocker) continue;
-              const bOthers = others.filter((q) => q !== blockerCur);
-              for (const bm of rawMoves(blockerCur)) {
-                const b2: PlacedLabel = { ...blockerCur, ...bm };
-                if (!validMoved(blockerCur, bm.lines, bm.boxes, bOthers)) {
-                  continue;
-                }
-                if (conflictsAgainst([b2], mv.boxes)) continue;
-                const prevP = applied.get(p) ?? null;
-                const prevB = applied.get(blocker) ?? null;
-                applied.set(p, p2);
-                applied.set(blocker, b2);
-                const ev2 = evaluate();
-                evals++;
-                if (ev2) consider([{ p, p2 }, { p: blocker, p2: b2 }], ev2);
-                // Откат: восстановить прежние (возможно уже закоммиченные)
-                // ходы обоих членов, а не стирать их из карты
-                if (prevB === null) applied.delete(blocker);
-                else applied.set(blocker, prevB);
-                if (prevP === null) applied.delete(p);
-                else applied.set(p, prevP);
-                if (evals >= RELAX_EVAL_CAP) break;
-              }
-            }
-            if (evals >= RELAX_EVAL_CAP) break;
-          }
-          if (evals >= RELAX_EVAL_CAP) break;
-        }
-        if (!bestEv) break;
-        for (const mv of bestMv) {
-          applied.set(mv.p, mv.p2);
-          // Классификация применённого хода: подъём меняет shift (дорожки),
-          // сдвиг вправо вдоль строки — нет
-          if (mv.p2.shift < mv.p.shift) perfCount("labelMoveUp");
-          else if (mv.p2.shift === mv.p.shift) perfCount("labelMoveRight");
-        }
-        const next = evaluate();
-        evals++;
-        if (!next) break;
-        cur = next;
-        if (evals >= RELAX_EVAL_CAP) break;
-      }
-      if (applied.size === 0) return null;
-      const cand = bestFor(currentList());
-      if (!cand || cand.score < initial.score) return null;
-      return {
-        final: cand,
-        moves: [...applied.entries()].map(([old, nw]) => ({ old, new: nw })),
-      };
-    };
-
-    let final = res;
-    let movedOld: PlacedLabel | null = null;
-    let movedNew: PlacedLabel | null = null;
-
-    if (res) {
-      // Сосед мешает и вынуждает подниматься: пробуем поднять и его — если
-      // максимум длин выносок пары при этом уменьшится, принимаем обмен.
-      // Второй способ размена — сдвиг соседа ВПРАВО вдоль его строки: тогда
-      // наша подпись может вернуться к нижним дорожкам, а выноски пары
-      // уравниваются (или хотя бы их максимум уменьшается)
-      const lenRes = leaderLenOf(res.draw);
-      let bestTrial: {
-        p: PlacedLabel;
-        p2: PlacedLabel;
-        res2: NonNullable<typeof res>;
-        after: number;
-        kind: "up" | "right";
-      } | null = null;
-      /**
-       * Принять ли размен. Строгий путь: максимум пары уменьшился. Второй
-       * («справедливый») путь: максимум не вырос, а НАША выноска стала
-       * существенно короче (на RELAX_MIN_GAIN) без потери содержимого.
-       * Раньше при равенстве максимумов размен отвергался — мешающий сосед
-       * оставался на естественной дорожке, а наша подпись висела выше:
-       * именно эта «лесенка» видна на скриншотах с длинными сносками.
-       */
-      const acceptablePair = (
-        res2: NonNullable<typeof res>,
-        p2: PlacedLabel,
-        before: number,
-        kind: "up" | "right",
-      ): boolean => {
-        const after = Math.max(leaderLenOf(res2.draw), leaderLenPlaced(p2));
-        if (after < before - 0.01) return true;
-        if (
-          after <= before + 0.01 &&
-          leaderLenOf(res2.draw) < lenRes - RELAX_MIN_GAIN &&
-          res2.score >= res.score
-        ) {
-          perfCount("labelPairRelief"); // «справедливый» размен при равенстве максимумов
-          return true;
-        }
-        // Горизонтальный разъезд: сосед едет вправо-вверх вдоль своей строки,
-        // его сноска растёт на need (потолок 120 px) — дороже классического
-        // подъёма. Оправдан, когда наша подпись возвращается на нижнюю
-        // дорожку, а переплата по худшей сноске пары не больше одной дорожки:
-        // длинная боковая сноска визуально легче, чем «лесенка» вверх
-        if (
-          kind === "right" &&
-          after <= before + LINE_H &&
-          leaderLenOf(res2.draw) < lenRes - RELAX_MIN_GAIN &&
-          res2.score >= res.score
-        ) {
-          perfCount("labelPairRightRelief"); // правый разъезд с переплатой до дорожки
-          return true;
-        }
-        return false;
-      };
-      const betterTrial = (
-        after: number,
-        res2: NonNullable<typeof res>,
-        kind: "up" | "right",
-      ): boolean => {
-        if (!bestTrial) return true;
-        if (after < bestTrial.after - 0.01) return true;
-        if (after > bestTrial.after + 0.01) return false;
-        // При равной цене размена предпочитаем горизонтальный разъезд:
-        // сосед уезжает вдоль своей строки, а не растягивает «лесенку» вверх
-        if (kind === "right" && bestTrial.kind !== "right") {
-          return (
-            leaderLenOf(res2.draw) <=
-            leaderLenOf(bestTrial.res2.draw) + 0.01
-          );
-        }
-        if (kind !== "right" && bestTrial.kind === "right") return false;
-        return leaderLenOf(res2.draw) < leaderLenOf(bestTrial.res2.draw);
-      };
-      for (const p of blockers(res)) {
-        const before = Math.max(lenRes, leaderLenPlaced(p));
-        for (
-          let m = 1;
-          m <= MAX_PAIR_LANES && p.shift - m >= -MAX_PAIR_LANES;
-          m++
-        ) {
-          const p2 = moveUp(p, m, placed.filter((q) => q !== p));
-          if (!p2) continue;
-          const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
-          if (!res2) continue;
-          const after = Math.max(leaderLenOf(res2.draw), leaderLenPlaced(p2));
-          if (
-            acceptablePair(res2, p2, before, "up") &&
-            betterTrial(after, res2, "up")
-          ) {
-            bestTrial = { p, p2, res2, after, kind: "up" };
-          }
-        }
-        // Сдвиг вправо: насколько нужно отодвинуть соседа, чтобы наши строки
-        // перестали пересекаться с ним по u вовсе (запас PAD_U + 2 px).
-        // Половинный сдвиг — промежуточный вариант: сосед едет меньше, мы
-        // поднимаемся на одну-две дорожки, критерий выбирает дешевле.
-        // Потолок 120 px — дальше выноска соседа деградирует без пользы
-        const xU1 = Math.max(...res.boxes.map((b) => b.u1));
-        const pU0 = Math.min(...p.boxes.map((b) => b.u0));
-        const need = Math.min(xU1 + PAD_U - pU0 + 2, 120);
-        if (need > 2) {
-          for (const du of [need, Math.max(need / 2, 14)]) {
-            const p2 = moveRight(p, du, placed.filter((q) => q !== p));
-            if (!p2) continue;
-            const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
-            if (!res2) continue;
-            const after = Math.max(leaderLenOf(res2.draw), leaderLenPlaced(p2));
-            if (
-              acceptablePair(res2, p2, before, "right") &&
-              betterTrial(after, res2, "right")
-            ) {
-              bestTrial = { p, p2, res2, after, kind: "right" };
-            }
-          }
-        }
-      }
-      if (bestTrial) {
-        final = bestTrial.res2;
-        movedOld = bestTrial.p;
-        movedNew = bestTrial.p2;
-      }
-    } else {
-      // Места не нашлось вовсе: раздвигаем соседей — вверх по дорожкам или
-      // вправо вдоль строки — вдруг появится место хотя бы для одной строки
-      for (const p of blockers(null)) {
-        for (
-          let m = 1;
-          m <= MAX_PAIR_LANES && p.shift - m >= -MAX_PAIR_LANES;
-          m++
-        ) {
-          const p2 = moveUp(p, m, placed.filter((q) => q !== p));
-          if (!p2) continue;
-          const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
-          if (res2) {
-            final = res2;
-            movedOld = p;
-            movedNew = p2;
-            break;
-          }
-        }
-        if (final) break;
-        const xU1 = ax * ux + ay * uy + fullW;
-        const pU0 = Math.min(...p.boxes.map((b) => b.u0));
-        const need = Math.min(xU1 + PAD_U - pU0 + 2, 120);
-        if (need > 2) {
-          for (const du of [need, Math.max(need / 2, 14)]) {
-            const p2 = moveRight(p, du, placed.filter((q) => q !== p));
-            if (!p2) continue;
-            const res2 = bestFor(placed.map((q) => (q === p ? p2 : q)));
-            if (res2) {
-              final = res2;
-              movedOld = p;
-              movedNew = p2;
-              break;
-            }
-          }
-        }
-        if (final) break;
-      }
-    }
-
-    if (!final) return false; // ни одна раскладка не влезла — прячем всё
-
-    if (movedOld && movedNew) {
-      placed[placed.indexOf(movedOld)] = movedNew;
-    }
-
-    // Кластерная релаксация: после парного сдвига выноска всё ещё длинная —
-    // пробуем переразложить группу комбинацией ходов, недоступной парному
-    if (leaderLenOf(final.draw) > LEADER_RELAX_PX) {
-      const relaxed = relaxCluster(final);
-      if (relaxed) {
-        perfCount("labelRelax");
-        perfCount("labelRelaxMoved", relaxed.moves.length);
-        final = relaxed.final;
-        for (const mv of relaxed.moves) {
-          const i = placed.indexOf(mv.old);
-          if (i >= 0) placed[i] = mv.new;
-        }
-      }
-    }
-
-    if (final.mirror) perfCount("labelMirror");
-
-    placed.push({
-      peak,
-      mx,
-      my,
-      lines: final.draw,
-      boxes: final.boxes,
-      shift: final.shift,
-    });
+    placed.push({ peak, mx, my, lines: res.draw, boxes: res.boxes });
     return true;
   };
 
