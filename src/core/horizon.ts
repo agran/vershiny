@@ -562,8 +562,9 @@ export function computeLayeredHorizon(
 }
 
 /** Адаптивное сглаживание силуэта: ширина окна ~ полразмера ячейки в лучах.
- *  Каждый слой гладится своей дистанцией горизонта — см. layerDistM */
-function smoothLayers(
+ *  Каждый слой гладится своей дистанцией горизонта — см. layerDistM.
+ *  Экспортируется для тестов (сверка с эталонной копией на `%`) */
+export function smoothLayers(
   layers: Float32Array[],
   layerDistM: Float32Array[],
   stepRad: number,
@@ -600,7 +601,14 @@ function smoothLayers(
       let sum = 0;
       let n = 0;
       for (let j = -halfWin; j <= halfWin; j++) {
-        const k = (i + j + rayCount) % rayCount;
+        // Ветка-обёртка вместо деления по модулю. halfWin ≤ 8, а лучей
+        // сотни; при rayCount < 9 окно всегда нулевое (дистанция марша
+        // ≥ 150 м против условия dist·stepRad ≤ 90 м), поэтому каждая
+        // ветка срабатывает не больше одного раза и результат в точности
+        // равен fmod
+        let k = i + j;
+        if (k < 0) k += rayCount;
+        if (k >= rayCount) k -= rayCount;
         // Не сглаживать через разрывы дистанции — своей, а не чужого слоя
         const dk = dists[k];
         if (!Number.isFinite(dk)) continue;
