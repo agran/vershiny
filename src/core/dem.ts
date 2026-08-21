@@ -424,6 +424,8 @@ export class DemSampler {
   private lastTx = -1;
   private lastTy = -1;
   private lastTile: Int16Array | null = null;
+  /** Квант высоты последнего тайла (к тайлу привязан однозначно через LOD) */
+  private lastQuant = 1;
 
   /** Максимум высоты по тайлам (ключ 'lod/x/y') — считается при декодировании.
    * Задел для точных верхних границ ray-marching (отсечение луча) */
@@ -451,11 +453,12 @@ export class DemSampler {
       this.lastTx = tx;
       this.lastTy = ty;
       this.lastTile = tile;
+      this.lastQuant = this.index?.lods[lodIndex]?.quantM ?? 1;
     }
     if (tile === null) return null;
     const cx = gx - tx * TILE_SIZE;
     const cy = gy - ty * TILE_SIZE;
-    return tile[cy * TILE_SIZE + cx];
+    return tile[cy * TILE_SIZE + cx] * this.lastQuant;
   }
 
   /** Загрузка одного тайла (с дедупликацией параллельных запросов) */
@@ -646,7 +649,8 @@ export class DemSampler {
     return { bytes, ok, failed: keys.length - ok };
   }
 
-  /** Распаковка тайла: gzip → дельта по строкам → квант высоты.
+  /** Распаковка тайла: gzip → дельта по строкам. Квант высоты применяется
+   *  при чтении в cell() (4 умножения на выборку вместо 65 536 на тайл).
    *  keyTail — 'tx/ty' для записи tileMax */
   private async decodeTile(
     buffer: ArrayBuffer,
@@ -695,15 +699,16 @@ export class DemSampler {
     }
 
     const quant = this.index?.lods[lodIndex]?.quantM ?? 1;
-    if (quant !== 1) {
-      for (let i = 0; i < values.length; i++) values[i] *= quant;
-    }
     if (Number.isFinite(max)) {
       this.tileMax.set(`${lodIndex}/${keyTail}`, max * quant);
       if (max * quant > this.maxDecodedHeight) {
         this.maxDecodedHeight = max * quant;
       }
     }
+    // Квант НЕ предумножается: умножение перенесено в cell() — 4 операции
+    // на билинейную выборку вместо 65 536 на тайл при декодировании.
+    // int16 × целый квант — точное целочисленное произведение (высоты до
+    // 32767 м), поэтому результат совпадает с прежним предумножением
     return values;
   }
 
