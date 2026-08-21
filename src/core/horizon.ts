@@ -222,10 +222,11 @@ export function buildMarchTable(
  *  поиска «последней покрытой» точки с последующим бинарным уточнением */
 const COVERAGE_PROBE_EVERY = 64;
 
-/** Первый шаг марша, на котором данные закончились навсегда (−1 — покрыт
- *  весь луч). Зонд по пробникам: покрытие может прерваться и вернуться
- *  (луч пересекает второй скачанный регион) — обрезаем только после
- *  последнего покрытого пробника, уточняя границу бинарным поиском. */
+/** Первый шаг марша, на котором данные закончились навсегда (число шагов
+ *  марша — покрыт весь луч, обрезки нет). Зонд по пробникам: покрытие может
+ *  прерваться и вернуться (луч пересекает второй скачанный регион) —
+ *  обрезаем только после последнего покрытого пробника, уточняя границу
+ *  бинарным поиском. */
 function computeNeverAgain(
   origin: LatLon,
   rayCount: number,
@@ -233,8 +234,8 @@ function computeNeverAgain(
   march: MarchTable,
   probe: (pos: LatLon, distM: number) => boolean,
 ): Int32Array {
-  const neverAgain = new Int32Array(rayCount).fill(-1);
   const steps = march.count;
+  const neverAgain = new Int32Array(rayCount).fill(steps);
   const probeCount = Math.ceil(steps / COVERAGE_PROBE_EVERY);
   for (let i = 0; i < rayCount; i++) {
     const pointAt = makeRayMarcher(origin, i * stepRad, march);

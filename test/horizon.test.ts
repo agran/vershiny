@@ -365,6 +365,25 @@ describe("ray-marching горизонта", () => {
     expect(baseline.layers[4].some((v) => Number.isFinite(v))).toBe(true);
   });
 
+  it("зонд, покрывающий весь луч, не меняет результат", () => {
+    // Регресс: сторож «покрыт весь луч» был −1, и условие обрыва
+    // `s >= neverAgain[i]` резало луч на нулевом шаге — пустой горизонт
+    // при предзагруженных данных региона
+    const step = (0.1 * Math.PI) / 180;
+    const sample: SampleFn = () => 100;
+    const baseline = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+    });
+    const capped = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+      coverageProbe: () => true,
+    });
+    expect(capped.layers).toEqual(baseline.layers);
+    expect(capped.distanceToHorizonM).toEqual(baseline.distanceToHorizonM);
+    expect(capped.crests).toEqual(baseline.crests);
+    expect(capped.fronts).toEqual(baseline.fronts);
+  });
+
   it("зонд не режет луч, если покрытие прервалось и вернулось", () => {
     // Луч выходит из одного скачанного региона и входит во второй:
     // обрезка должна сработать только после ПОСЛЕДНЕГО покрытого участка,
