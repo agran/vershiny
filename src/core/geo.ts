@@ -98,7 +98,15 @@ export function destination(
       Math.sin(azRad) * Math.sin(d) * Math.cos(lat1),
       Math.cos(d) - Math.sin(lat1) * Math.sin(lat2),
     );
-  return { lat: toDeg(lat2), lon: normalizeLon(toDeg(lon2)) };
+  // Быстрая ветка вместо normalizeLon: lon1 ∈ [−180, 180), atan2 ∈ (−π, π]
+  // ⇒ |lonDeg| < 360, двух сравнений достаточно. Марчер ниже использует ту же
+  // формулу — результаты совпадают побитово (у normalizeLon цепочка остатков
+  // сама вносила 1-ulp сдвиг, так что разница с прежним выводом ≤ 1 ulp)
+  const lonDeg = toDeg(lon2);
+  return {
+    lat: toDeg(lat2),
+    lon: lonDeg >= 180 ? lonDeg - 360 : lonDeg < -180 ? lonDeg + 360 : lonDeg,
+  };
 }
 
 /** Таблица шагов луча: дистанции и предвычисленные sin/cos(d/R) */
@@ -138,15 +146,16 @@ export function makeRayMarcher(
     const lat2 = Math.asin(
       Math.min(1, Math.max(-1, sinLat1 * cosD + cosLat1 * sinD * cosAz)),
     );
-    // Важно: normalizeLon(toDeg(lon2)) НЕ тождественна toDeg(lon2) даже внутри
-    // диапазона [−180, 180) — цепочка остатков даёт 1-ulp сдвиг (проверено
-    // воспроизведением), поэтому пропускать её «для скорости» нельзя без
-    // потери побитовости с destination(). Оставляем выражение как у оригинала.
     const lon2 =
       lon1 +
       Math.atan2(sinAz * sinD * cosLat1, cosD - sinLat1 * Math.sin(lat2));
+    // Быстрая нормализация долготы (см. destination): lon1 ∈ [−180, 180),
+    // atan2 ∈ (−π, π] ⇒ |lonDeg| < 360. В горячем цикле (~2 млн шагов на
+    // панораму) двойной `%` из normalizeLon был ощутимой долей pointAt.
+    const lonDeg = toDeg(lon2);
     out.lat = toDeg(lat2);
-    out.lon = normalizeLon(toDeg(lon2));
+    out.lon =
+      lonDeg >= 180 ? lonDeg - 360 : lonDeg < -180 ? lonDeg + 360 : lonDeg;
     return out;
   };
 }
