@@ -1428,7 +1428,16 @@ async function refineStartPosition(): Promise<void> {
   rememberPosition(precise);
   // Склонению достаточно знать, где человек, — даже если панораму не двигаем
   orientationTracker.setLocation(precise.lat, precise.lon);
-  if (!worthRefining(lastOrigin, precise)) return;
+
+  // Активный регион сверяем при любом настоящем положении, а не только при
+  // заметном сдвиге: плашка «вы в другом районе» раньше появлялась лишь
+  // вместе с пересчётом панорамы, и человек, открывший приложение на новом
+  // месте в пределах 500 м от прошлой точки (вплоть до границы региона),
+  // оставался с чужими вершинами до первого перемещения
+  if (!worthRefining(lastOrigin, precise)) {
+    void checkRegionForPosition(precise);
+    return;
+  }
 
   console.info(
     `Уточнение по спутникам: ${precise.lat.toFixed(4)}, ${precise.lon.toFixed(4)}`,
@@ -1444,6 +1453,7 @@ async function refineStartPosition(): Promise<void> {
   }
   heightOverride = null; // мы на земле в своей точке
   autoTiltPending = true;
+  // requestCompute сам сверяет район с положением (checkRegion = true)
   requestCompute(precise);
 }
 
