@@ -2067,6 +2067,26 @@ function makeButton(
 /** Ключ словаря переводов (i18n.t) */
 type TitleKey = Parameters<typeof t>[0];
 
+/**
+ * Кратко подсвечивает кнопку — обратная связь на клик перед долгой операцией
+ * (сохранение фото), где иначе непонятно, сработало ли нажатие.
+ */
+function flashButton(btn: HTMLButtonElement, ms = 200): void {
+  btn.style.filter = "brightness(1.6)";
+  setTimeout(() => {
+    btn.style.filter = "";
+  }, ms);
+}
+
+/** Звук затвора при сохранении фото (public/media) */
+function playShutterSound(): void {
+  new Audio(`${import.meta.env.BASE_URL}media/photo.mp3`)
+    .play()
+    .catch(() => {
+      // Автовоспроизведение мог отклонить браузер — тишина не критична
+    });
+}
+
 function setTitle(el: HTMLElement, key: TitleKey): void {
   const title = t(key);
   el.title = title;
@@ -3231,6 +3251,10 @@ function setupActionButtons(): void {
   const usedPhotoNames = new Set<string>();
   photoBtn.onclick = async () => {
     if (!panorama) return;
+    // Мгновенная обратная связь: сборка снимка иногда заметно тянется,
+    // и без неё непонятно, сработало ли нажатие
+    flashButton(photoBtn);
+    playShutterSound();
     try {
       const { capturePhoto, savePhoto, uniquePhotoFilename } =
         await import("./ui/photo");
