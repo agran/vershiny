@@ -200,7 +200,7 @@ describe("main.ts грузится при iOS-пути старта ориент
     await expect(import("../src/main")).resolves.toBeDefined();
 
     const btn = Array.from(document.querySelectorAll("button")).find(
-      (b) => b.getAttribute("aria-label") === "Включить компас",
+      (b) => b.getAttribute("aria-label") === "Нажмите, чтобы включить компас",
     );
     expect(btn).toBeDefined();
   });

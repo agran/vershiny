@@ -136,6 +136,12 @@ const STRINGS: Record<string, Record<Locale, string>> = {
     en: "Compass is off: wave the phone in a figure-eight",
   },
   enableCompass: { ru: "Включить компас", en: "Enable compass" },
+  // Подпись кнопки компаса на iOS: включение — ПО НАЖАТИЮ (Safari даёт
+  // датчики только из жеста пользователя, молчаливый отказ — навсегда)
+  tapToEnableCompass: {
+    ru: "Нажмите, чтобы включить компас",
+    en: "Tap to enable the compass",
+  },
   resetOffset: { ru: "Сбросить подстройку", en: "Reset offset" },
   calibration: { ru: "Калибровка", en: "Calibration" },
   calibrationHint: {

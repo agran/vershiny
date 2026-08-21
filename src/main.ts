@@ -28,7 +28,7 @@ import {
   ICON_AR,
   ICON_CALIBRATE,
   ICON_CLOSE,
-  ICON_COMPASS,
+  ICON_COMPASS_TAP,
   ICON_DOWN,
   ICON_DOWNLOAD,
   ICON_DOWNLOADED,
@@ -853,11 +853,15 @@ interface CaptionEntry {
   label: HTMLElement;
   key: TitleKey;
   side: "left" | "right" | "above" | "below";
+  /** Подпись остаётся и после начальной загрузки (компас на iOS) */
+  always: boolean;
 }
 const captionEntries: CaptionEntry[] = [];
 let captionLayer: HTMLElement | null = null;
 let captionArrowLayer: SVGSVGElement | null = null;
 let compassBtn: HTMLButtonElement | null = null;
+/** Подпись кнопки компаса — убирается вместе с кнопкой, когда доступ дан */
+let compassCaption: CaptionEntry | null = null;
 
 /** Анимация пульса кнопки компаса: ключевые кадры один раз на документ */
 function ensureCompassPulseCss(): void {
@@ -874,17 +878,33 @@ function ensureCompassPulseCss(): void {
 
 function updateCompassButton(): void {
   if (!orientationTracker.needsPermission) {
-    compassBtn?.remove();
-    compassBtn = null;
+    if (compassBtn) {
+      compassBtn.remove();
+      compassBtn = null;
+      if (compassCaption) {
+        compassCaption.root.remove();
+        const i = captionEntries.indexOf(compassCaption);
+        if (i >= 0) captionEntries.splice(i, 1);
+        compassCaption = null;
+        layoutCaptions(); // стрелка к убранной кнопке не должна висеть
+      }
+    }
     return;
   }
   if (compassBtn) return;
   ensureCompassPulseCss();
+  // Стрелка иконки повёрнута на 45° — читается как «не в строю»; подпись
+  // объясняет, что включение — по нажатию. Она постоянная (captionAlways):
+  // после загрузки подписи кнопок скрываются, а эту надо видеть, пока
+  // доступ не дан
   compassBtn = makeButton(
-    ICON_COMPASS,
-    "enableCompass",
+    ICON_COMPASS_TAP,
+    "tapToEnableCompass",
     `right:${edgeRight()};top:${edgeTop(60)}`,
+    undefined,
+    true,
   );
+  compassCaption = captionEntries.find((e) => e.btn === compassBtn) ?? null;
   // Пока доступа нет, приложение «работает не полностью»: иконка в углу
   // не должна остаться незамеченной. Пульс + акцентный цвет; после отказа
   // пульс снимается — повторно диалог не спамим, кнопка остаётся ручным
@@ -1991,6 +2011,7 @@ function makeButton(
   titleKey: TitleKey,
   pos: string,
   captionPlace?: CaptionEntry["side"],
+  captionAlways = false,
 ): HTMLButtonElement {
   const btn = document.createElement("button");
   if (icon.startsWith("<svg")) btn.innerHTML = icon;
@@ -2015,7 +2036,7 @@ function makeButton(
       : pos.includes("left:")
         ? "right"
         : "below");
-  addCaption(btn, titleKey, place);
+  addCaption(btn, titleKey, place, captionAlways);
   document.body.appendChild(btn);
   // Раскладка плашек — после вставки кнопки в DOM, когда у неё есть размеры
   requestAnimationFrame(layoutCaptions);
@@ -2069,6 +2090,7 @@ function addCaption(
   btn: HTMLElement,
   key: TitleKey,
   side: CaptionEntry["side"],
+  always = false,
 ): void {
   const { layer } = ensureCaptionLayer();
   const root = document.createElement("div");
@@ -2082,9 +2104,9 @@ function addCaption(
     "border-radius:6px;background:rgba(13,27,42,0.85);color:#f1faee;" +
     "font-family:system-ui;box-shadow:0 1px 4px rgba(0,0,0,.4)";
   root.appendChild(label);
-  root.style.display = captionsVisible ? "" : "none";
+  root.style.display = captionsVisible || always ? "" : "none";
   layer.appendChild(root);
-  captionEntries.push({ btn, root, label, key, side });
+  captionEntries.push({ btn, root, label, key, side, always });
 }
 
 /**
@@ -2239,8 +2261,14 @@ function layoutCaptions(): void {
   // Ранний вызов из resize() при вычислении модуля (requestAnimationFrame в
   // jsdom срабатывает синхронно): captionEntries/captionLayer ещё в TDZ —
   // откладываем: настоящая раскладка случится при первом показе кнопок.
+  // Постоянные подписи (компас) переразводятся и после скрытия загрузочных
   try {
-    if (!captionsVisible || !captionEntries.length || !captionLayer) return;
+    if (
+      (!captionsVisible && !captionEntries.some((c) => c.always)) ||
+      !captionEntries.length ||
+      !captionLayer
+    )
+      return;
   } catch {
     return; // TDZ на этапе инициализации модуля
   }
@@ -2265,6 +2293,7 @@ function layoutCaptions(): void {
   const placedArrows: [Pt, Pt][] = [];
 
   for (const c of captionEntries) {
+    if (c.root.style.display === "none") continue; // скрытые загрузочные
     const br = btnRect(c.btn);
     if (!br.width) continue;
     const label = c.label;
@@ -2501,11 +2530,17 @@ function layoutCaptions(): void {
   }
 }
 
-/** Скрыть подписи кнопок: начальная загрузка завершена (результат или ошибка) */
+/** Скрыть подписи кнопок: начальная загрузка завершена (результат или ошибка).
+ *  Постоянные подписи (always — компас на iOS, пока доступ не дан) остаются. */
 function hideButtonCaptions(): void {
   if (!captionsVisible) return;
   captionsVisible = false;
-  if (captionLayer) captionLayer.style.display = "none";
+  for (const c of captionEntries) {
+    c.root.style.display = c.always ? "" : "none";
+  }
+  if (!captionEntries.some((c) => c.always) && captionLayer) {
+    captionLayer.style.display = "none";
+  }
   // Кнопки, чья видимость зависит от фазы загрузки (автокалибровка: при
   // загрузке — неактивная с подписью, после — скрыта до входа в AR)
   updateCalibrateBtnRef?.();
