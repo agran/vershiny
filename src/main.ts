@@ -559,15 +559,12 @@ canvas.addEventListener("pointerdown", (ev) => {
   // дёрганье картинки туда-сюда между точками касания
   if (activePointers.size > 1) return;
 
-  dragging = true;
+  // dragging и пониженное разрешение ставятся на первом pointermove ниже,
+  // а не здесь: простое нажатие без движения не должно переключать
+  // разрешение и замораживать раскладку подписей — именно это давало
+  // видимый прыжок подписей при нажатии
   lastX = ev.clientX;
   lastY = ev.clientY;
-  // Пониженное разрешение на время поворота. Только ручной режим: при
-  // датчиках свайп — редкая подстройка калибровки, и мылить картинку под
-  // почти неподвижным пальцем незачем. В AR холст занят видео — не трогаем
-  if (!arSession && orientationTracker.current.source !== "sensor") {
-    setDragLowRes(true);
-  }
   try {
     canvas.setPointerCapture(ev.pointerId);
   } catch {
@@ -591,10 +588,13 @@ canvas.addEventListener("pointerdown", (ev) => {
 
 canvas.addEventListener("pointermove", (ev) => {
   const pointer = activePointers.get(ev.pointerId);
-  if (pointer) {
-    pointer.x = ev.clientX;
-    pointer.y = ev.clientY;
-  }
+  // Наведение без нажатия (мышь без клика): activePointers пуст, pointerdown
+  // не было — раньше это отсеивал общий `if (!dragging) return;` ниже, но
+  // теперь dragging включается прямо здесь, и без явного выхода наведение
+  // само становилось «нажатием» и крутило контуры под курсором
+  if (!pointer) return;
+  pointer.x = ev.clientX;
+  pointer.y = ev.clientY;
 
   // Pinch в AR: раздвинули пальцы — приближаем (поле зрения меньше).
   // Отсчёт от начала жеста, а не от прошлого кадра: поправка не накапливает
@@ -614,7 +614,19 @@ canvas.addEventListener("pointermove", (ev) => {
   }
   if (activePointers.size > 1) return;
 
-  if (!dragging) return;
+  // dragging и пониженное разрешение ставятся здесь, а не на pointerdown:
+  // простое нажатие без движения не должно переключать разрешение и
+  // замораживать раскладку подписей — именно это давало видимый прыжок
+  // подписей в момент нажатия, ещё до начала перетаскивания
+  if (!dragging) {
+    dragging = true;
+    // Пониженное разрешение на время поворота. Только ручной режим: при
+    // датчиках свайп — редкая подстройка калибровки, и мылить картинку под
+    // почти неподвижным пальцем незачем. В AR холст занят видео — не трогаем
+    if (!arSession && orientationTracker.current.source !== "sensor") {
+      setDragLowRes(true);
+    }
+  }
   perfCount("srcPointer");
   // clientX/clientY — физические координаты экрана; при программном повороте
   // (ландшафт через CSS, screen-orientation.ts) локальные оси UI не совпадают
