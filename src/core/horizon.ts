@@ -50,6 +50,13 @@ export interface HorizonOptions {
    * скрытый за текущим максимумом. Граница консервативна: видимое не теряется
    */
   sectorMax?: Float32Array;
+  /**
+   * Зонд «в точке ещё могут быть данные» — для обрезки хвоста офлайн-лучей.
+   * До марша по пробным шагам вычисляется первый шаг, после которого данные
+   * уже никогда не вернутся; луч обрывается на нём. Онлайн зонд отвечает
+   * true всегда — обрезка не срабатывает.
+   */
+  coverageProbe?: (pos: LatLon, distM: number) => boolean;
 }
 
 /** Насколько выше земли глаз наблюдателя (телефон в руках), м */
@@ -210,6 +217,53 @@ export function buildMarchTable(
   return { d, sinD, cosD, drop, hints, bin, count: n };
 }
 
+/** Шаг зонда покрытия: между пробниками покрытие не меняется заметно
+ *  (тайлы — десятки км), поэтому 64 шагов марша достаточно для точного
+ *  поиска «последней покрытой» точки с последующим бинарным уточнением */
+const COVERAGE_PROBE_EVERY = 64;
+
+/** Первый шаг марша, на котором данные закончились навсегда (−1 — покрыт
+ *  весь луч). Зонд по пробникам: покрытие может прерваться и вернуться
+ *  (луч пересекает второй скачанный регион) — обрезаем только после
+ *  последнего покрытого пробника, уточняя границу бинарным поиском. */
+function computeNeverAgain(
+  origin: LatLon,
+  rayCount: number,
+  stepRad: number,
+  march: MarchTable,
+  probe: (pos: LatLon, distM: number) => boolean,
+): Int32Array {
+  const neverAgain = new Int32Array(rayCount).fill(-1);
+  const steps = march.count;
+  const probeCount = Math.ceil(steps / COVERAGE_PROBE_EVERY);
+  for (let i = 0; i < rayCount; i++) {
+    const pointAt = makeRayMarcher(origin, i * stepRad, march);
+    let lastCovered = -1;
+    for (let p = 0; p < probeCount; p++) {
+      const s = Math.min(p * COVERAGE_PROBE_EVERY, steps - 1);
+      if (probe(pointAt(s), march.d[s])) lastCovered = p;
+    }
+    if (lastCovered < 0) {
+      // Нет данных даже у наблюдателя — пустой луч, как и без обрезки
+      neverAgain[i] = 0;
+      continue;
+    }
+    if (lastCovered === probeCount - 1) continue; // покрыт до конца
+    // Первый непокрытый шаг — между последним покрытым и следующим пробником
+    const loStep = Math.min(lastCovered * COVERAGE_PROBE_EVERY + 1, steps - 1);
+    const hiStep = Math.min((lastCovered + 1) * COVERAGE_PROBE_EVERY, steps - 1);
+    let lo = loStep;
+    let hi = hiStep;
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1;
+      if (probe(pointAt(mid), march.d[mid])) lo = mid + 1;
+      else hi = mid;
+    }
+    neverAgain[i] = lo;
+  }
+  return neverAgain;
+}
+
 /**
  * Профиль горизонта: для каждого азимута — максимальный угол возвышения
  * видимого рельефа. Возвращает Float32Array длиной ceil(2π/step).
@@ -301,6 +355,15 @@ export function computeLayeredHorizon(
   const march = buildMarchTable(marchStart, maxDist, options.marchDeps);
   const steps = march.count;
 
+  // Обрезка хвоста офлайн-лучей: за пределами скачанных тайлов все
+  // источники отвечают NaN, и дальняя зона (до 2/3 шагов) считалась
+  // впустую. Зонд покрытия по загруженным тайлам даёт для каждого луча
+  // первый «навсегда пустой» шаг — обрезка точна, видимое не теряется
+  const coverageProbe = options.coverageProbe;
+  const neverAgain = coverageProbe
+    ? computeNeverAgain(origin, rayCount, stepRad, march, coverageProbe)
+    : null;
+
   // Фронты в плоских массивах (SoA): объекты VisibleFront аллоцируются один
   // раз на луч при сборе, а не на каждый обнаруженный фронт. Буферы растут
   // по требованию: жёсткий кап в 32 молча терял дальние фронты в сложном
@@ -382,6 +445,8 @@ export function computeLayeredHorizon(
     };
 
     for (let s = 0; s < steps; s++) {
+      // Хвост луча за пределами скачанных тайлов: данных нет по построению
+      if (neverAgain && s >= neverAgain[i]) break;
       const d = march.d[s];
       const h = sample(pointAt(s), d, march.hints[s]);
       if (h !== h) continue;

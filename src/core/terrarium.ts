@@ -400,6 +400,17 @@ export class TerrariumSampler {
     this.lastPixZ = -1;
   }
 
+  /** Есть ли декодированный тайл в точке — зонд для обрезки хвоста
+   *  офлайн-лучей (core/horizon.ts, computeNeverAgain). По всем зумам правил. */
+  hasLoadedTileAt(pos: LatLon): boolean {
+    for (const rule of ZOOM_RULES) {
+      const { x, y } = lonLatToTile(pos, rule.zoom);
+      const tile = this.tiles.get(`${rule.zoom}/${x}/${y}`);
+      if (tile) return true;
+    }
+    return false;
+  }
+
   /** Тайл по индексам (null — не загружен или вне покрытия), с кешем последнего */
   private tileAt(zoom: number, tx: number, ty: number): Float32Array | null {
     if (

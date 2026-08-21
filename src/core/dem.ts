@@ -437,6 +437,27 @@ export class DemSampler {
     this.lastLod = -1;
   }
 
+  /** Есть ли ДАННЫЕ (декодированный тайл) в точке — зонд для обрезки хвоста
+   *  офлайн-лучей (core/horizon.ts, computeNeverAgain). Смотрит только уже
+   *  загруженные тайлы: null-записи (нет покрытия/хранилища) и отсутствующие
+   *  ключи — «нет данных». Вызывается до марша, когда prefetch завершён. */
+  hasLoadedTileAt(pos: LatLon): boolean {
+    const index = this.index;
+    if (!index) return false;
+    for (let lod = 0; lod < index.lods.length; lod++) {
+      const l = index.lods[lod];
+      const gx = Math.floor(
+        (pos.lon - index.bbox[0]) / l.cellDeg / TILE_SIZE,
+      );
+      const gy = Math.floor(
+        (index.bbox[3] - pos.lat) / l.cellDeg / TILE_SIZE,
+      );
+      const tile = this.tiles.get(`${lod}/${gx}/${gy}`);
+      if (tile) return true;
+    }
+    return false;
+  }
+
   private cell(lodIndex: number, gx: number, gy: number): number | null {
     const tx = Math.floor(gx / TILE_SIZE);
     const ty = Math.floor(gy / TILE_SIZE);

@@ -113,6 +113,25 @@ export class DemSource {
     return this.patches.some((p) => bboxContains(pos, p.bbox));
   }
 
+  /** Регион скачан и источники работают без сети (см. DemSourceOptions) */
+  get isOffline(): boolean {
+    return this.offlineFirst;
+  }
+
+  /**
+   * Зонд обрезки хвоста офлайн-лучей (core/horizon.ts, computeNeverAgain):
+   * есть ли ДАННЫЕ в точке по уже загруженным тайлам. Онлайн — всегда true,
+   * обрезка отключена. Вызывается после prefetch, когда тайлы веера
+   * загружены, поэтому отсутствие ключа в кеше и означает «нет данных».
+   */
+  mayHaveOfflineData(pos: LatLon): boolean {
+    if (!this.offlineFirst) return true;
+    for (const p of this.patches) {
+      if (p.sampler.hasLoadedTileAt(pos)) return true;
+    }
+    return this.terrarium.hasLoadedTileAt(pos);
+  }
+
   /** Источники, чей bbox покрывает точку, по классу детализации */
   private covering(pos: LatLon, coarse: boolean): Patch[] {
     return this.patches.filter(

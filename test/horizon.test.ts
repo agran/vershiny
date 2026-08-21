@@ -315,6 +315,79 @@ describe("ray-marching горизонта", () => {
     expect(culled.layers[4][flatRay]).toBe(-Infinity);
   });
 
+  it("покрывной зонд обрывает хвост луча, не меняя видимый результат", () => {
+    // Офлайн: тайлы есть только до 150 км, дальше — NaN у всех источников.
+    // Обрезка по зонду покрытия обязана дать тот же видимый результат и
+    // выкинуть дальнюю корзину целиком
+    const step = (0.1 * Math.PI) / 180;
+    const coverageLimit = 150_000;
+    let baselineSamples = 0;
+    let cappedSamples = 0;
+    const makeSample = (counter: { calls: number }): SampleFn => {
+      counter.calls = 0;
+      return (_pos, d) => {
+        counter.calls++;
+        return d < coverageLimit ? 0 : NaN;
+      };
+    };
+    const baselineCounter = { calls: 0 };
+    const cappedCounter = { calls: 0 };
+    const probe = (_pos: LatLon, d: number): boolean => d < coverageLimit;
+
+    const baseline = computeLayeredHorizon(ORIGIN, 0, makeSample(baselineCounter), {
+      azimuthStepRad: step,
+    });
+    baselineSamples = baselineCounter.calls;
+    const capped = computeLayeredHorizon(ORIGIN, 0, makeSample(cappedCounter), {
+      azimuthStepRad: step,
+      coverageProbe: probe,
+    });
+    cappedSamples = cappedCounter.calls;
+
+    const silhouetteOf = (l: typeof baseline): Float32Array => {
+      const out = new Float32Array(l.layers[0].length).fill(-Infinity);
+      for (const prof of [...l.layers, ...l.crests]) {
+        for (let i = 0; i < out.length; i++) {
+          const v = prof[i];
+          if (Number.isFinite(v) && v > out[i]) out[i] = v;
+        }
+      }
+      return out;
+    };
+    expect(silhouetteOf(capped)).toEqual(silhouetteOf(baseline));
+    expect(capped.layers).toEqual(baseline.layers);
+    expect(capped.distanceToHorizonM).toEqual(baseline.distanceToHorizonM);
+    expect(capped.crests).toEqual(baseline.crests);
+    expect(capped.fronts).toEqual(baseline.fronts);
+    // Хвост действительно оборван: выборок меньше (шаги за 150 км не
+    // сэмплировались), при том что профили совпали бит-в-бит
+    expect(cappedSamples).toBeLessThan(baselineSamples);
+    expect(baseline.layers[4].some((v) => Number.isFinite(v))).toBe(true);
+  });
+
+  it("зонд не режет луч, если покрытие прервалось и вернулось", () => {
+    // Луч выходит из одного скачанного региона и входит во второй:
+    // обрезка должна сработать только после ПОСЛЕДНЕГО покрытого участка,
+    // иначе дальний регион потерял бы рельеф
+    const step = (0.1 * Math.PI) / 180;
+    const covered = (d: number): boolean =>
+      d < 60_000 || (d >= 90_000 && d < 150_000);
+    const sample: SampleFn = (_pos, d) => (covered(d) ? 0 : NaN);
+    const probe = (_pos: LatLon, d: number): boolean => covered(d);
+
+    const baseline = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+    });
+    const capped = computeLayeredHorizon(ORIGIN, 0, sample, {
+      azimuthStepRad: step,
+      coverageProbe: probe,
+    });
+    expect(capped.layers).toEqual(baseline.layers);
+    expect(capped.distanceToHorizonM).toEqual(baseline.distanceToHorizonM);
+    expect(capped.crests).toEqual(baseline.crests);
+    expect(capped.fronts).toEqual(baseline.fronts);
+  });
+
   it("horizon и layers[0] делят буфер: дубль в трансферах postMessage запрещён", () => {
     // Регресс: воркер передавал result.horizon.buffer И layers[0].buffer
     // в списке трансферов — это один и тот же ArrayBuffer (horizon ===

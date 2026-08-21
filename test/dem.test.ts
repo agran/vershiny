@@ -158,6 +158,20 @@ describe("DemSampler: формат глобальной пирамиды", () =>
     );
   });
 
+  it("hasLoadedTileAt видит данные только в загруженных тайлах", async () => {
+    // Зонд обрезки офлайн-лучей: смотрит фактически декодированные тайлы,
+    // а не карту покрытия — в офлайне битсет покрытия есть, а тайла в
+    // хранилище может не быть
+    const sampler = samplerWith({
+      "0/444/92.bin.gz": await encodeTile(slopeTile(), 2),
+    });
+    await sampler.loadIndex();
+    await sampler.loadTile(0, 444, 92);
+
+    expect(sampler.hasLoadedTileAt({ lat: 44, lon: 42 })).toBe(true);
+    expect(sampler.hasLoadedTileAt({ lat: 0, lon: 0 })).toBe(false);
+  });
+
   it("не запрашивает тайлы, которых нет в карте покрытия", async () => {
     const requested: string[] = [];
     const sampler = samplerWith({}, requested);
