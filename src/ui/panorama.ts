@@ -485,7 +485,14 @@ export function decimateSegments(
         stack.push([i0, maxIdx], [maxIdx, i1]);
       }
     }
-    return pts.filter((_, i) => keep[i]);
+    // Ручной проход вместо filter: без callback на каждую точку, тот же
+    // порядок и тот же набор точек
+    let count = 0;
+    for (let i = 0; i < n; i++) if (keep[i]) count++;
+    const out = new Array<{ x: number; y: number }>(count);
+    let oi = 0;
+    for (let i = 0; i < n; i++) if (keep[i]) out[oi++] = pts[i];
+    return out;
   });
 }
 

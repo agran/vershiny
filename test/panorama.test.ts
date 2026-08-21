@@ -1205,4 +1205,62 @@ describe("децимация точек гребня", () => {
       expect(minDist).toBeLessThanOrEqual(0.51);
     }
   });
+
+  it("ручной проход по keep даёт те же точки, что filter (эталон)", () => {
+    // Эталонная копия прежней реализации с pts.filter((_, i) => keep[i]):
+    // набор и порядок точек обязаны совпасть побитово на сложных сегментах
+    const refDecimate = (
+      segments: { x: number; y: number }[][],
+      epsilonPx: number,
+    ): { x: number; y: number }[][] =>
+      segments.map((pts) => {
+        const n = pts.length;
+        if (n < 3) return pts;
+        const keep = new Uint8Array(n);
+        keep[0] = keep[n - 1] = 1;
+        const stack: [number, number][] = [[0, n - 1]];
+        while (stack.length) {
+          const [i0, i1] = stack.pop()!;
+          const a = pts[i0];
+          const b = pts[i1];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const len2 = dx * dx + dy * dy;
+          let maxDev = -1;
+          let maxIdx = -1;
+          for (let i = i0 + 1; i < i1; i++) {
+            const p = pts[i];
+            const dev =
+              len2 === 0
+                ? Math.hypot(p.x - a.x, p.y - a.y)
+                : Math.abs(dx * (a.y - p.y) - (a.x - p.x) * dy) /
+                  Math.sqrt(len2);
+            if (dev > maxDev) {
+              maxDev = dev;
+              maxIdx = i;
+            }
+          }
+          if (maxDev > epsilonPx) {
+            keep[maxIdx] = 1;
+            stack.push([i0, maxIdx], [maxIdx, i1]);
+          }
+        }
+        return pts.filter((_, i) => keep[i]);
+      });
+
+    // Пилообразный гребень и плавная дуга
+    const saw = Array.from({ length: 300 }, (_, i) => ({
+      x: i * 2,
+      y: 50 + ((i % 17) - 8) * ((i * 13) % 5) + Math.sin(i * 0.31) * 40,
+    }));
+    const arc = Array.from({ length: 200 }, (_, i) => {
+      const x = i * 3;
+      return { x, y: 120 - Math.sqrt(14400 - (x - 300) ** 2) || 0 };
+    });
+    for (const eps of [0.1, 0.5, 2]) {
+      expect(decimateSegments([saw, arc], eps)).toEqual(
+        refDecimate([saw, arc], eps),
+      );
+    }
+  });
 });
