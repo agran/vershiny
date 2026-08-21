@@ -1002,8 +1002,10 @@ let heightOverride: number | null = null;
 let actionButtonsReady = false;
 /**
  * Автозапуск камеры: назначается в setupActionButtons (кнопки создаются
- * при старте), вызывается по первому результату воркера — оверлею нужна
- * панорама
+ * при старте). Камера стартует сразу, до загрузки — человек целится на
+ * вершину, пока едут GPS/регион/DEM; оверлей появляется с первым кадром
+ * воркера. Повторный вызов по первому результату — страховка на случай,
+ * если ранний старт не сработал.
  */
 let arAutoStart: (() => void) | null = null;
 
@@ -1194,7 +1196,9 @@ worker.onmessage = (ev: MessageEvent<WorkerOutMessage>) => {
     });
   }
   draw();
-  // Камера — по первому результату: оверлею нужна панорама
+  // Страховка раннего автозапуска: если камера по какой-то причине ещё не
+  // открылась (например, AR-кнопка появилась позже автозапуска) — пробуем
+  // ещё раз по первому кадру
   arAutoStart?.();
   console.info(
     `Горизонт: ${r.horizon.length} лучей, ${r.peaks.length} из ${currentPeaks.length} пиков, ` +
@@ -1283,6 +1287,11 @@ async function main(): Promise<void> {
     // Регион мог смениться по GPS — состояние кнопки перечитываем
     void refreshDownloadState();
   }
+
+  // Камера — сразу, параллельно загрузке: пока едут позиция, регион и DEM,
+  // человек целится на нужную вершину. Оверлей дорисуется, когда воркер
+  // пришлёт первый кадр (см. startAr в ui/ar.ts)
+  arAutoStart?.();
 
   // Позиция: ссылка → GPS → запасная точка (Приют 11, контрольная по ROADMAP)
   const fix = await getPosition();
@@ -3075,8 +3084,9 @@ function setupActionButtons(): void {
   async function enterAr(auto = false): Promise<"on" | "off" | "busy"> {
     // Флаг снимается только вместе с выходом: между проверкой и присвоением
     // `arSession` стоит await, и нажатие кнопки поверх автозапуска открывало
-    // вторую камеру — первый поток оставался гореть без ссылки на него
-    if (!panorama || arSession || arStarting) return "busy";
+    // вторую камеру — первый поток оставался гореть без ссылки на него.
+    // Панорама не нужна: камера стартует до первого расчёта (см. main)
+    if (arSession || arStarting) return "busy";
     arStarting = true;
     const video = document.createElement("video");
     try {
@@ -3085,7 +3095,7 @@ function setupActionButtons(): void {
         "position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1";
       document.body.prepend(video);
       arVideo = video;
-      arSession = await startAr(video, canvas, panorama, view);
+      arSession = await startAr(video, canvas, () => panorama, view);
       arBtn.style.background = "#e63946";
       updateCalibrateBtn();
       // Автоматическая попытка при входе в AR (включена по умолчанию):
@@ -3136,7 +3146,10 @@ function setupActionButtons(): void {
 
   /**
    * Камера при запуске: главный режим приложения не должен требовать
-   * нажатия. Ждём первого расчёта — оверлей без панорамы рисовать нечем.
+   * нажатия. Стартует сразу, до загрузки (см. main) — человек целится на
+   * вершину, пока едут GPS/регион/DEM; оверлей появляется с первым кадром
+   * воркера. Повторный вызов по первому результату — страховка на случай,
+   * если ранний старт не сработал.
    *
    * Сторож от убийства процесса (Xiaomi HyperOS): если прошлый автозапуск
    * камеры не дожил до ответа (метка не снята), эта загрузка идёт без
@@ -3145,6 +3158,10 @@ function setupActionButtons(): void {
    * enterAr: раз сеанс жив, автозапуск не стал причиной смерти.
    */
   async function maybeAutoStartAr(): Promise<void> {
+    // Уже идёт или работает: повторный вход (страховка по первому кадру)
+    // не должен ни открывать вторую камеру, ни видеть собственную метку
+    // запуска как «прошлый автозапуск прервал сеанс»
+    if (arSession || arStarting) return;
     if (!shouldAutoStartAr()) return;
     if (isStandalone() && hadArAutostartKill()) {
       console.info(

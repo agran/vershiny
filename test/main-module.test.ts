@@ -15,12 +15,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**
- * Захваченные из замоканных модулей аргументы: AR-сессия получает объект
- * панорамы по ссылке, и регрессия с подменой этого объекта видна именно
- * через сохранённую ссылку
+ * Захваченные из замоканных модулей аргументы: AR-сессия получает геттер
+ * панорамы, и регрессия с подменой объекта видна через вызов геттера — он
+ * обязан возвращать один и тот же объект до и после смены региона
  */
 const captured = vi.hoisted(() => ({
-  arStates: [] as Array<{ peaks: unknown[] }>,
+  arStates: [] as Array<() => { peaks: unknown[] } | null>,
   settingsOptions: [] as Array<{ onRegionChange: (region: string) => void }>,
   posted: [] as Array<{
     type: string;
@@ -30,15 +30,15 @@ const captured = vi.hoisted(() => ({
   }>,
 }));
 
-// Камера в jsdom невозможна — startAr подменяется, объект панорамы запоминается
+// Камера в jsdom невозможна — startAr подменяется, геттер панорамы запоминается
 vi.mock("../src/ui/ar", () => ({
   startAr: vi.fn(
     async (
       _video: HTMLVideoElement,
       _canvas: HTMLCanvasElement,
-      state: { peaks: unknown[] },
+      getState: () => { peaks: unknown[] } | null,
     ) => {
-      captured.arStates.push(state);
+      captured.arStates.push(getState);
       return {
         stop: () => {},
         fullFrameFov: () => ({ h: 1, v: 1 }),
@@ -220,20 +220,23 @@ describe("смена региона при активной AR-сессии", ()
     workerInstances[0].onmessage?.(resultMessage([peak]));
     findButton("Включить камеру").click();
     await vi.waitFor(() => expect(captured.arStates).toHaveLength(1));
-    const heldByAr = captured.arStates[0];
-    expect(heldByAr.peaks).toHaveLength(1);
+    const heldByAr = captured.arStates[0]();
+    expect(heldByAr).not.toBeNull();
+    const panoramaRef = heldByAr!;
+    expect(panoramaRef.peaks).toHaveLength(1);
 
     // Регресс: switchRegion подменял panorama новым объектом (`{ ...panorama,
     // peaks: [] }`), и AR-оверлей, держащий старую ссылку, навсегда оставался
-    // на вершинах прежнего региона
+    // на вершинах прежнего региона. Геттер обязан вернуть ТОТ ЖЕ объект
     findButton("Настройки").click();
     await vi.waitFor(() => expect(captured.settingsOptions).toHaveLength(1));
     captured.settingsOptions[0].onRegionChange("alps-west");
-    expect(heldByAr.peaks).toHaveLength(0);
+    expect(captured.arStates[0]()).toBe(panoramaRef);
+    expect(panoramaRef.peaks).toHaveLength(0);
 
     // Следующий расчёт доезжает в тот же объект — оверлей живой
     workerInstances[0].onmessage?.(resultMessage([peak, peak]));
-    expect(heldByAr.peaks).toHaveLength(2);
+    expect(panoramaRef.peaks).toHaveLength(2);
   });
 });
 

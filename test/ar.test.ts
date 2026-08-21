@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { startAr } from "../src/ui/ar";
+import { drawArFrame, startAr } from "../src/ui/ar";
 
 function createStream(readyState: "live" | "ended" = "live"): MediaStream {
   const track = {
@@ -110,7 +110,7 @@ describe("AR camera resume", () => {
     const { videoEl, play } = createVideoEl({ frozen: false });
 
     const canvas = document.createElement("canvas");
-    const session = await startAr(videoEl, canvas, {} as never, {} as never);
+    const session = await startAr(videoEl, canvas, () => ({} as never), {} as never);
     expect(play).toHaveBeenCalledTimes(1);
 
     document.dispatchEvent(new Event("visibilitychange"));
@@ -132,7 +132,7 @@ describe("AR camera resume", () => {
     const { videoEl, play, pause } = createVideoEl({ frozen: true });
 
     const canvas = document.createElement("canvas");
-    const session = await startAr(videoEl, canvas, {} as never, {} as never);
+    const session = await startAr(videoEl, canvas, () => ({} as never), {} as never);
     expect(play).toHaveBeenCalledTimes(1);
 
     document.dispatchEvent(new Event("visibilitychange"));
@@ -158,7 +158,7 @@ describe("AR camera resume", () => {
     const { videoEl, play } = createVideoEl({ frozen: true });
 
     const canvas = document.createElement("canvas");
-    const session = await startAr(videoEl, canvas, {} as never, {} as never);
+    const session = await startAr(videoEl, canvas, () => ({} as never), {} as never);
     expect(play).toHaveBeenCalledTimes(1);
 
     // Три сигнала одной и той же разблокировки почти одновременно
@@ -190,7 +190,7 @@ describe("AR camera resume", () => {
     app.appendChild(canvas);
     document.body.appendChild(app);
 
-    const session = await startAr(videoEl, canvas, {} as never, {} as never);
+    const session = await startAr(videoEl, canvas, () => ({} as never), {} as never);
     const layer = canvas.previousElementSibling as HTMLCanvasElement | null;
     expect(layer).not.toBeNull();
     expect(layer!.style.position).toBe("absolute");
@@ -200,5 +200,26 @@ describe("AR camera resume", () => {
     session.stop();
     expect(app.children.length).toBe(1); // stop() убирает видео-слой
     app.remove();
+  });
+
+  it("без панорамы оверлей не рисуется — кадр камеры остаётся чистым", () => {
+    // Камера стартует до первого расчёта: drawArFrame с пустой панорамой
+    // обязан только очистить холст, а не падать на drawOverlay
+    const videoEl = document.createElement("video");
+    const calls: string[] = [];
+    const ctx = {
+      canvas: { width: 320, height: 240 },
+      clearRect: () => calls.push("clearRect"),
+      save: () => {},
+      restore: () => {},
+      translate: () => {},
+      rotate: () => {},
+      drawImage: () => calls.push("drawImage"),
+      set globalAlpha(_v: number) {},
+    } as unknown as CanvasRenderingContext2D;
+
+    // Панорамы нет: только очистка холста, ни одного drawImage
+    drawArFrame(ctx, videoEl, null, {} as never, 0.55, 1);
+    expect(calls).toEqual(["clearRect"]);
   });
 });

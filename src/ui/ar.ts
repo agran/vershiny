@@ -157,11 +157,18 @@ async function attachStreamAndVerify(
   });
 }
 
-/** Запуск камеры и привязка к canvas */
+/**
+ * Запуск камеры и привязка к canvas.
+ *
+ * `getState` — геттер панорамы, а не сам объект: камера стартует до первого
+ * расчёта (человек целится на вершину, пока грузится рельеф), и оверлей
+ * обязан видеть панораму, когда она появится. Пока её нет — чистый кадр
+ * камеры без контуров.
+ */
 export async function startAr(
   videoEl: HTMLVideoElement,
   canvas: HTMLCanvasElement,
-  state: PanoramaState,
+  getState: () => PanoramaState | null,
   view: ViewState,
   options: ArOptions = {},
 ): Promise<ArSession> {
@@ -418,7 +425,7 @@ export async function startAr(
       drawArFrame(
         ctx,
         videoEl,
-        state,
+        getState(),
         view,
         opacity,
         zoomFactor,
@@ -476,7 +483,7 @@ export async function startAr(
       drawArFrame(
         ctx,
         videoEl,
-        state,
+        getState(),
         view,
         opacity,
         zoomFactor,
@@ -612,10 +619,10 @@ export function createArOverlayCache(): ArOverlayCache {
  * «плывёт» от фильтра. Видео — на отдельном слое под холстом, обновляется
  * по реальным кадрам камеры (rVFC), а не в этом цикле.
  */
-function drawArFrame(
+export function drawArFrame(
   ctx: CanvasRenderingContext2D,
   video: HTMLVideoElement,
-  state: PanoramaState,
+  state: PanoramaState | null,
   view: ViewState,
   opacity: number,
   zoomFactor: number,
@@ -626,6 +633,11 @@ function drawArFrame(
   // только оверлей, поэтому каждый кадр начинается с очистки — иначе blit
   // оставлял бы следы прежних позиций линий и подписей
   ctx.clearRect(0, 0, width, height);
+  // Панорамы ещё нет (камера стартует до первого расчёта): рисовать нечего —
+  // остаётся чистый кадр камеры, человек целится на вершину во время загрузки.
+  // Кеш оверлея не трогаем: с первым кадром панорамы refs сменятся, и он
+  // перерендерится сам
+  if (!state) return;
 
   let overlayView = view;
   if (video.readyState >= 2 && video.videoWidth > 0) {
