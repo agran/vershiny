@@ -161,7 +161,14 @@ export class DemSource {
     if (last) {
       let h: number;
       if (last === this.terrarium) {
-        h = this.terrarium.sample(pos, zoomForDistance(distM), hint?.zoom);
+        // Зум уже лежит в подсказке таблицы марша: hint.zoom построен тем же
+        // zoomForDistance — перебор ZOOM_RULES на каждую выборку не нужен,
+        // значение побитово то же
+        h = this.terrarium.sample(
+          pos,
+          hint?.zoom ?? zoomForDistance(distM),
+          hint?.zoom,
+        );
       } else {
         h = (last as Patch).sampler.sample(pos, 0, hint);
       }
@@ -180,7 +187,7 @@ export class DemSource {
       // «вся суша», а уже потом к следующему источнику
       const h =
         src instanceof TerrariumSampler
-          ? src.sample(pos, zoomForDistance(distM), hint?.zoom)
+          ? src.sample(pos, hint?.zoom ?? zoomForDistance(distM), hint?.zoom)
           : src.sampler.sample(pos, 0, hint);
       if (h === h) {
         if (near) this.lastHitNear = src;
