@@ -471,9 +471,28 @@ export class TerrariumSampler {
     const fx = gx - gx0;
     const fy = gy - gy0;
 
+    // Быстрый путь: все четыре узла билинейной сетки внутри одного тайла —
+    // четыре прямых чтения из уже найденного тайла вместо четырёх pixelAt
+    // (каждая с wrap'ом мира, двумя floor и поиском тайла). Локальные
+    // индексы — точные целые: floor(tx·256 + px) − tx·256 для px из
+    // [0, 256) побитово равен px, поэтому значения тождественны pixelAt
+    const lx0 = gx0 - t.tx * TILE_PX;
+    const ly0 = gy0 - t.ty * TILE_PX;
+    if (lx0 < TILE_PX - 1 && ly0 < TILE_PX - 1) {
+      const row0 = ly0 * TILE_PX;
+      const h00 = tile[row0 + lx0];
+      const h10 = tile[row0 + lx0 + 1];
+      const h01 = tile[row0 + TILE_PX + lx0];
+      const h11 = tile[row0 + TILE_PX + lx0 + 1];
+      const top = h00 + (h10 - h00) * fx;
+      const bottom = h01 + (h11 - h01) * fx;
+      return top + (bottom - top) * fy;
+    }
+
+    // Граница тайла / полюсная кромка: прежний общий путь. Соседний тайл
+    // может быть не загружен — тогда ведём себя как раньше и повторяем
+    // свой краевой пиксель, а не отдаём NaN на весь луч
     const h00 = this.pixelAt(gx0, gy0, z);
-    // Соседний тайл может быть не загружен — тогда ведём себя как раньше
-    // и повторяем свой краевой пиксель, а не отдаём NaN на весь луч
     const at = (ax: number, ay: number): number => {
       const v = this.pixelAt(ax, ay, z);
       return Number.isNaN(v) ? h00 : v;
