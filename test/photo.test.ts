@@ -401,12 +401,13 @@ describe("снимок панорамы", () => {
       source: screenCanvas(800, 450),
     });
 
-    // Gamma и Delta уходят на зеркальные дорожки вправо-вверх: их левые
-    // выноски пересекали бы уже размещённые подписи, а справа свободно.
-    // Место всё же нашлось не всем (Epsilon вытеснен) — иначе тест ничего
-    // не проверяет
+    // В тесной толпе из пяти подписей место находится только главной (Alpha):
+    // выноски остальных при любом подъёме пересекали бы уже размещённую
+    // подпись, а поднимать соседа непрерывная укладка не умеет. Главное —
+    // вытесненные не превращаются в счётчик «+N» и не занимают место в кадре
     expect(draws.some((d) => d.text.startsWith("Alpha"))).toBe(true);
-    expect(draws.some((d) => d.text.startsWith("Gamma"))).toBe(true);
+    expect(draws.some((d) => d.text.startsWith("Beta"))).toBe(false);
+    expect(draws.some((d) => d.text.startsWith("Gamma"))).toBe(false);
     expect(draws.some((d) => d.text.startsWith("Epsilon"))).toBe(false);
     expect(draws.filter((d) => d.text.includes("+"))).toEqual([]);
   });
