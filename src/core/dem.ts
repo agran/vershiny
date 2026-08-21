@@ -405,6 +405,27 @@ export class DemSampler {
     const fx = gx - x0;
     const fy = gy - y0;
 
+    // Быстрый путь: все четыре узла внутри одного тайла — четыре прямых
+    // чтения вместо четырёх cell() (каждая с lookup'ом по ключу). Значения
+    // побитово те же: локальный индекс — точное целое, квант — тот же
+    const lx0 = x0 % TILE_SIZE;
+    const ly0 = y0 % TILE_SIZE;
+    if (lx0 < TILE_SIZE - 1 && ly0 < TILE_SIZE - 1) {
+      const tx = (x0 - lx0) / TILE_SIZE;
+      const ty = (y0 - ly0) / TILE_SIZE;
+      const tile = this.tiles.get(`${lodIndex}/${tx}/${ty}`) ?? null;
+      if (tile === null) return NaN;
+      const quant = index.lods[lodIndex]?.quantM ?? 1;
+      const row0 = ly0 * TILE_SIZE;
+      const h00 = tile[row0 + lx0] * quant;
+      const h10 = tile[row0 + lx0 + 1] * quant;
+      const h01 = tile[row0 + TILE_SIZE + lx0] * quant;
+      const h11 = tile[row0 + TILE_SIZE + lx0 + 1] * quant;
+      const top = h00 + (h10 - h00) * fx;
+      const bottom = h01 + (h11 - h01) * fx;
+      return top + (bottom - top) * fy;
+    }
+
     const h00 = this.cell(lodIndex, x0, y0);
     const h10 = this.cell(lodIndex, x0 + 1, y0);
     const h01 = this.cell(lodIndex, x0, y0 + 1);
