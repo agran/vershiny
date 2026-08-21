@@ -317,6 +317,31 @@ export function computeHorizon(
 }
 
 /**
+ * Фиксация видимого перегиба в корзину гребней. Модульная функция вместо
+ * замыкания: замыкание создавалось на каждый из 3600 лучей (аллокация на
+ * расчёт), а обращения шли через него. Возвращает новое значение pending
+ * (ложь после фиксации — поведение тождественно прежнему).
+ */
+function recordCrest(
+  crests: Float32Array[],
+  i: number,
+  crestDist: number,
+  crestMaxAngle: number,
+  crestPending: boolean,
+): boolean {
+  if (!crestPending) return crestPending;
+  let b = CREST_COUNT - 1;
+  for (let k = 0; k < CREST_COUNT; k++) {
+    if (crestDist >= CREST_BOUNDS[k] && crestDist < CREST_BOUNDS[k + 1]) {
+      b = k;
+      break;
+    }
+  }
+  if (crestMaxAngle > crests[b][i]) crests[b][i] = crestMaxAngle;
+  return false;
+}
+
+/**
  * Слоистый горизонт: для каждой корзины дистанций — свой профиль.
  * Также собираем фронты видимости (локальные максимумы по дистанции).
  *
@@ -355,6 +380,12 @@ export function computeLayeredHorizon(
   // Таблица шагов общая для всех лучей: sin/cos(d/R) и drop считаются один раз
   const march = buildMarchTable(marchStart, maxDist, options.marchDeps);
   const steps = march.count;
+  // Хойсты горячего цикла: таблица марша читается по локальным ссылкам,
+  // а не через поля объекта на каждом шаге каждого луча
+  const marchD = march.d;
+  const marchDrop = march.drop;
+  const marchHints = march.hints;
+  const marchBin = march.bin;
 
   // Обрезка хвоста офлайн-лучей: за пределами скачанных тайлов все
   // источники отвечают NaN, и дальняя зона (до 2/3 шагов) считалась
@@ -432,27 +463,19 @@ export function computeLayeredHorizon(
     let crestDropSlope = -Infinity;
     let crestDist = 0;
     let crestPending = false;
-    const recordCrest = (): void => {
-      if (!crestPending) return;
-      let b = CREST_COUNT - 1;
-      for (let k = 0; k < CREST_COUNT; k++) {
-        if (crestDist >= CREST_BOUNDS[k] && crestDist < CREST_BOUNDS[k + 1]) {
-          b = k;
-          break;
-        }
-      }
-      if (crestMaxAngle > crests[b][i]) crests[b][i] = crestMaxAngle;
-      crestPending = false;
-    };
+
+    // Первый «навсегда пустой» шаг этого луча (обрезка офлайн-хвоста) —
+    // читается один раз на луч
+    const neverAgainI = neverAgain ? neverAgain[i] : steps;
 
     for (let s = 0; s < steps; s++) {
       // Хвост луча за пределами скачанных тайлов: данных нет по построению
-      if (neverAgain && s >= neverAgain[i]) break;
-      const d = march.d[s];
-      const h = sample(pointAt(s), d, march.hints[s]);
+      if (s >= neverAgainI) break;
+      const d = marchD[s];
+      const h = sample(pointAt(s), d, marchHints[s]);
       if (h !== h) continue;
-      const slope = (h - march.drop[s] - hO) / d;
-      const bin = march.bin[s];
+      const slope = (h - marchDrop[s] - hO) / d;
+      const bin = marchBin[s];
       if (slope > rayMaxSlope) rayMaxSlope = slope;
 
       if (slope > binMaxSlope[bin]) {
@@ -472,7 +495,13 @@ export function computeLayeredHorizon(
         crestDist = d;
         crestPending = true;
       } else if (crestPending && slope < crestDropSlope) {
-        recordCrest();
+        crestPending = recordCrest(
+          crests,
+          i,
+          crestDist,
+          crestMaxAngle,
+          crestPending,
+        );
       }
 
       // Фронт: новый максимум = начало или продолжение.
@@ -529,7 +558,13 @@ export function computeLayeredHorizon(
     }
 
     // Последний максимум по лучу — это линия неба (skyline)
-    recordCrest();
+    crestPending = recordCrest(
+      crests,
+      i,
+      crestDist,
+      crestMaxAngle,
+      crestPending,
+    );
 
     // Слои
     for (let b = 0; b < LAYER_COUNT; b++) {
