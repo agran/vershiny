@@ -6,6 +6,12 @@
   // `npm run format:check` считает ошибкой
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
+  // «Organize Imports» на сохранении переставляет и переотстукивает импорты
+  // по-своему (встроенный TS-форматтер, не Prettier) — отключён: формат
+  // импортов курирует Prettier
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never"
+  },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
