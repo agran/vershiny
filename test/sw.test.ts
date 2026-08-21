@@ -89,6 +89,7 @@ function runSw(existingCaches: string[], opts: SwOptions = {}): SwEnv {
     fetch: opts.fetchImpl ?? (async () => new Response("")),
     Response,
     URL,
+    AbortController,
     // Отложенный прекэш: таймер activate запоминаем, чтобы запустить вручную
     setTimeout: (fn: () => void) => {
       timers.push(fn);
@@ -306,6 +307,33 @@ describe("Service Worker", () => {
     expect(kept.length).toBeGreaterThan(0);
     // И завершается молча, без необработанного отклонения
     await expect(Promise.all(kept)).resolves.toBeDefined();
+  });
+
+  it("сетевые запросы стратегий идут с таймаутом (AbortSignal)", async () => {
+    // «Мёртвая» сеть: fetch без таймаута в воркере висел бы до TCP-таймаута
+    // ОС, хотя страница свой запрос уже оборвала по 8 с
+    let captured: AbortSignal | undefined;
+    const env = runSw([], {
+      fetchImpl: async (_url?: unknown, init?: { signal?: AbortSignal }) => {
+        captured = init?.signal;
+        return new Response("ok");
+      },
+    });
+    let responded: Promise<Response> | null = null;
+    env.handlers.fetch({
+      request: {
+        url: "https://example.org/vershiny/regions.json",
+        method: "GET",
+        mode: "cors",
+      },
+      waitUntil: () => {},
+      respondWith: (p: Promise<Response>) => {
+        responded = p;
+      },
+    });
+    await responded!;
+    expect(captured).toBeInstanceOf(AbortSignal);
+    expect(captured?.aborted).toBe(false);
   });
 
   it("не трогает не-GET запросы", () => {

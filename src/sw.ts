@@ -189,6 +189,30 @@ self.addEventListener("fetch", (ev) => {
   }
 });
 
+/** Сколько ждать сеть из воркера: при «мёртвой» сети (DNS/TCP проходят, ответ
+ *  не приходит) fetch без таймаута висит до TCP-таймаута ОС. Страница свои
+ *  запросы уже обрывает по 8 с — воркер не должен держать соединения дольше */
+const NET_TIMEOUT_MS = 8_000;
+
+/** fetch с таймаутом: AbortController + setTimeout (AbortSignal.timeout в
+ *  Safari < 16 нет), клиентский abort пробрасывается слушателем */
+function fetchWithTimeout(request: Request): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), NET_TIMEOUT_MS);
+  const clientSignal = request.signal;
+  if (clientSignal) {
+    if (clientSignal.aborted) controller.abort();
+    else {
+      clientSignal.addEventListener("abort", () => controller.abort(), {
+        once: true,
+      });
+    }
+  }
+  return fetch(request, { signal: controller.signal }).finally(() =>
+    clearTimeout(timer),
+  );
+}
+
 /**
  * Запись в кеш живёт дольше ответа: без `waitUntil` браузер вправе остановить
  * worker сразу после `respondWith`, и `cache.put` без await не успевал —
@@ -207,7 +231,7 @@ async function cacheFirst(
   const cached = await cache.match(request);
   if (cached) return cached;
   try {
-    const response = await fetch(request);
+    const response = await fetchWithTimeout(request);
     if (response.ok) {
       keep(ev, cache.put(request, response.clone()));
     }
@@ -228,7 +252,7 @@ async function networkFirst(
     (await cache.match(request)) ??
     (fallbackUrl ? await cache.match(fallbackUrl) : undefined);
   try {
-    const response = await fetch(request);
+    const response = await fetchWithTimeout(request);
     if (response.ok) {
       keep(ev, cache.put(request, response.clone()));
       return response;
@@ -253,7 +277,7 @@ async function staleWhileRevalidate(
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
 
-  const fetched = fetch(request).then((response) => {
+  const fetched = fetchWithTimeout(request).then((response) => {
     if (response.ok) {
       keep(ev, cache.put(request, response.clone()));
     }
