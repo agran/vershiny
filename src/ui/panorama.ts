@@ -958,18 +958,24 @@ function drawLabels(
   // перекладываются (сохраняют многострочность, обрезку и дорожки), а только
   // переезжают вместе со своими вершинами. Раскладка пересчитывается на
   // первом кадре после жеста — иначе кеш сцены перекладывал подписи под свой
-  // расширенный FOV, и они схлопывались в одну строку до конца перетаскивания
+  // расширенный FOV, и они схлопывались в одну строку до конца перетаскивания.
+  // uiScale в ключ не входит: dragLowRes меняет плотность пикселей посреди
+  // жеста, и прежняя проверка рвала кеш на первом кадре — подписи
+  // перекладывались заново (прыжок при нажатии) и возвращались после
+  // отпускания; теперь раскладка просто масштабируется (k ниже)
   const frozenLayout =
     stable &&
     labelLayoutCache &&
     labelLayoutCache.horizon === state.horizon &&
     labelLayoutCache.layers === state.layers &&
-    labelLayoutCache.peaks === peaks &&
-    labelLayoutCache.uiScale === uiScale
+    labelLayoutCache.peaks === peaks
       ? labelLayoutCache
       : null;
 
   if (frozenLayout) {
+    // Смена плотности пикселей посреди жеста: та же раскладка в других
+    // единицах устройства — переводим её в текущие, не перекладывая
+    const k = uiScale / frozenLayout.uiScale;
     for (const p of frozenLayout.placed) {
       const marker = findPeakMarkerPosition(
         p.peak,
@@ -981,18 +987,22 @@ function drawLabels(
       if (!marker) continue;
       // Подпись целиком сдвигается на смещение своей вершины: многострочная
       // форма, выноска и дорожки остаются прежними
-      const dx = marker.x - p.mx;
-      const dy = marker.y - p.my;
+      const dx = marker.x - p.mx * k;
+      const dy = marker.y - p.my * k;
       placed.push({
         peak: p.peak,
         mx: marker.x,
         my: marker.y,
         shift: p.shift,
-        lines: p.lines.map((l) => ({ ...l, ax: l.ax + dx, ay: l.ay + dy })),
+        lines: p.lines.map((l) => ({
+          ...l,
+          ax: l.ax * k + dx,
+          ay: l.ay * k + dy,
+        })),
         boxes: p.boxes.map((b) => ({
-          v: b.v + dx * vx + dy * vy,
-          u0: b.u0 + dx * ux + dy * uy,
-          u1: b.u1 + dx * ux + dy * uy,
+          v: b.v * k + dx * vx + dy * vy,
+          u0: b.u0 * k + dx * ux + dy * uy,
+          u1: b.u1 * k + dx * ux + dy * uy,
         })),
       });
     }

@@ -870,6 +870,41 @@ describe("многострочная подпись", () => {
     expect(texts3.find((t) => t.text === "Широкий")).toBeUndefined();
   });
 
+  it("при смене плотности пикселей замёрзшая раскладка масштабируется, а не перекладывается", () => {
+    // Регресс: dragLowRes сбрасывает DPR на время жеста — uiScale менялся,
+    // кеш замёрзшей раскладки промахивался, и первый кадр жеста перекладывал
+    // подписи заново (видимый прыжок при нажатии, возврат при отпускании).
+    // Теперь раскладка масштабируется под текущий uiScale без пересчёта
+    const horizon = new Float32Array(2000).fill(0.05);
+    const st = state(horizon, "Широкий");
+    (st.peaks[0] as unknown as { azimuthRad: number }).azimuthRad = 0.4265;
+
+    // Покой: uiScale 2 — у правого края подпись в две строки
+    const { ctx, texts } = makeCtx();
+    drawOverlay(ctx, st, view, 2, { ridges: false });
+    const name0 = texts.find((t) => t.text === "Широкий");
+    const info0 = texts.find((t) => t.text === "5642 м · 5.0 км");
+    expect(name0).toBeDefined();
+    expect(info0).toBeDefined();
+
+    // Нажатие: stableLabels + uiScale 1 — та же форма, но смещения подписи
+    // от якоря вершины масштабированы ×0.5 (в моке холст не уменьшается,
+    // поэтому якорь остаётся на месте; в приложении DPR-сдвиг уменьшает и
+    // якорь — подпись сохраняет своё место в CSS-координатах)
+    const mx = 500 + (0.4265 - 0.1) * 1000; // azToX(0.4265)
+    const my = 0.62 * 600 - 0.05 * 600; // elevToY(0.05)
+    const { ctx: ctx2, texts: texts2 } = makeCtx();
+    drawOverlay(ctx2, st, view, 1, { ridges: false, stableLabels: true });
+    const name2 = texts2.find((t) => t.text === "Широкий");
+    const info2 = texts2.find((t) => t.text === "5642 м · 5.0 км");
+    expect(name2).toBeDefined();
+    expect(info2).toBeDefined();
+    expect(name2!.x).toBeCloseTo(mx + (name0!.x - mx) / 2, 1);
+    expect(name2!.y).toBeCloseTo(my + (name0!.y - my) / 2, 1);
+    expect(info2!.x).toBeCloseTo(mx + (info0!.x - mx) / 2, 1);
+    expect(info2!.y).toBeCloseTo(my + (info0!.y - my) / 2, 1);
+  });
+
   it("сдвиг, выталкивающий строку за край кадра, откатывается к левому выравниванию", () => {
     // Горизонт −0.15 рад: якорь ниже, чтобы хвост (480 px) и подъём пачки
     // на (nLines−1)·LINE_H помещались по высоте
