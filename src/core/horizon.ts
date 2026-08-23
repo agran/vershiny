@@ -386,9 +386,13 @@ export function computeLayeredHorizon(
   const marchDrop = march.drop;
   const marchHints = march.hints;
   const marchBin = march.bin;
-  // Строка наклонов секторной границы — один буфер на весь расчёт
-  // (заполняется на луч только при конечной границе сектора)
+  // Строка наклонов секторной границы — один буфер на весь расчёт.
+  // Строка зависит только от (сектор, шаг), а лучей в секторе ~50:
+  // заполняем её при СМЕНЕ сектора (lastBoundSector), а не на каждом
+  // луче — экономит ~2 мс делений на полный расчёт, значения побитово
+  // те же (те же операнды в том же порядке)
   const boundSlopes = new Float64Array(steps);
+  let lastBoundSector = -1;
 
   // Обрезка хвоста офлайн-лучей: за пределами скачанных тайлов все
   // источники отвечают NaN, и дальняя зона (до 2/3 шагов) считалась
@@ -427,6 +431,11 @@ export function computeLayeredHorizon(
   const binMaxAngle = new Float64Array(LAYER_COUNT);
   const binExitSlope = new Float64Array(LAYER_COUNT);
 
+  // Пропускаем ближнюю зону для фронтов (0–500 м): мы на этом склоне.
+  // Константа вынесена из тела цикла лучей — она не зависит ни от луча,
+  // ни от шага
+  const nearSkip = 500;
+
   for (let i = 0; i < rayCount; i++) {
     const pointAt = makeRayMarcher(origin, i * stepRad, march);
     // Максимумы храним как наклоны (возвышение/дистанция): atan2 монотонна,
@@ -449,9 +458,11 @@ export function computeLayeredHorizon(
     const sectorBound = sector >= 0 && sectorMax ? sectorMax[sector] : NaN;
     // Наклоны верхней границы сектора по шагам луча: выражение зависит
     // только от (сектор, шаг), а делилось на каждом шаге каждого луча.
-    // Те же операнды в том же порядке — побитово те же значения
+    // Те же операнды в том же порядке — побитово те же значения; строка
+    // перестраивается только при переходе луча в другой сектор
     const hasBound = Number.isFinite(sectorBound);
-    if (hasBound) {
+    if (hasBound && sector !== lastBoundSector) {
+      lastBoundSector = sector;
       for (let s = 0; s < steps; s++) {
         boundSlopes[s] = (sectorBound - marchDrop[s] - hO) / marchD[s];
       }
@@ -464,9 +475,6 @@ export function computeLayeredHorizon(
     // Фронты: точки, где рельеф пробивает текущий максимум
     let frontCount = 0;
     let currentMaxSlope = -Infinity;
-
-    // Пропускаем ближнюю зону для фронтов (0–500 м): мы на этом склоне
-    const nearSkip = 500;
 
     // Гребни: отслеживаем текущий максимум наклона и дистанцию, на которой он достигнут
     let crestMaxSlope = -Infinity;

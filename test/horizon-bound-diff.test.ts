@@ -305,6 +305,18 @@ describe("ядерный марш: пакет оптимизаций ≡ пре�
       maxDistM: 120_000,
       sectorMax: realistic,
     });
+    // Чередование конечных и бесконечных границ: строка наклонов обязана
+    // перестраиваться при каждом возврате конечной границы после пустого
+    // сектора (кеш строки по номеру сектора)
+    const alternating = new Float32Array(72);
+    for (let i = 0; i < 72; i++) {
+      alternating[i] = i % 3 === 0 ? NaN : 1200 + 2600 * ((i * 37) % 11 / 11);
+    }
+    assertBitwise({
+      azimuthStepRad: STEP,
+      maxDistM: 120_000,
+      sectorMax: alternating,
+    });
     // Полный марш без секторов (200 км)
     assertBitwise({ azimuthStepRad: STEP, maxDistM: 200_000 });
   });
