@@ -406,16 +406,34 @@ export class DemSampler {
     const fy = gy - y0;
 
     // Быстрый путь: все четыре узла внутри одного тайла — четыре прямых
-    // чтения вместо четырёх cell() (каждая с lookup'ом по ключу). Значения
-    // побитово те же: локальный индекс — точное целое, квант — тот же
+    // чтения вместо четырёх cell(). Значения побитово те же: локальный
+    // индекс — точное целое, квант — тот же. Тайл берём из кеша последнего
+    // (lastLod/lastTx/lastTy/lastTile — тем же, что cell()): луч идёт внутри
+    // одного тайла десятки шагов, и строка-ключ + Map.get на каждую выборку
+    // были лишними — кеш почти всегда попадает. setTile() сбрасывает lastLod,
+    // поэтому инвалидация та же, что у cell()
     const lx0 = x0 % TILE_SIZE;
     const ly0 = y0 % TILE_SIZE;
     if (lx0 < TILE_SIZE - 1 && ly0 < TILE_SIZE - 1) {
       const tx = (x0 - lx0) / TILE_SIZE;
       const ty = (y0 - ly0) / TILE_SIZE;
-      const tile = this.tiles.get(`${lodIndex}/${tx}/${ty}`) ?? null;
+      let tile: Int16Array | null;
+      if (
+        lodIndex === this.lastLod &&
+        tx === this.lastTx &&
+        ty === this.lastTy
+      ) {
+        tile = this.lastTile;
+      } else {
+        tile = this.tiles.get(`${lodIndex}/${tx}/${ty}`) ?? null;
+        this.lastLod = lodIndex;
+        this.lastTx = tx;
+        this.lastTy = ty;
+        this.lastTile = tile;
+        this.lastQuant = index.lods[lodIndex]?.quantM ?? 1;
+      }
       if (tile === null) return NaN;
-      const quant = index.lods[lodIndex]?.quantM ?? 1;
+      const quant = this.lastQuant;
       const row0 = ly0 * TILE_SIZE;
       const h00 = tile[row0 + lx0] * quant;
       const h10 = tile[row0 + lx0 + 1] * quant;

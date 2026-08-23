@@ -228,4 +228,34 @@ describe("DemSampler.sampleLod: быстрый путь ≡ cell() (побито
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
   });
+
+  it("кеш последнего тайла инвалидируется при setTile (быстрый путь)", () => {
+    const { sampler, tiles } = makeHarness();
+    const lodIndex = 0;
+    const tx = 100;
+    const ty = 40;
+    // Точка внутри тайла (lx0=ly0=0) — быстрый путь, все 4 узла в (tx,ty)
+    const pos = posAt(lodIndex, tx * TILE_SIZE + 0.5, ty * TILE_SIZE + 0.5);
+    const key = `${lodIndex}/${tx}/${ty}`;
+    tiles.set(key, makeTile(1));
+
+    // Первая выборка заполняет кеш последнего тайла
+    const before = sampler.sample(pos, lodIndex);
+    expect(Number.isFinite(before)).toBe(true);
+
+    // Заменяем тайл через setTile — он сбрасывает lastLod, поэтому быстрый
+    // путь обязан перечитать Map и вернуть НОВЫЕ значения, а не кэшированные
+    // (вызываем как метод: setTile обращается к this.tiles/this.lastLod)
+    (
+      sampler as unknown as {
+        setTile: (k: string, t: Int16Array | null) => void;
+      }
+    ).setTile(key, makeTile(999));
+
+    const after = sampler.sample(pos, lodIndex);
+    // Побитово совпадает с эталоном (читает свежий тайл из Map)
+    expect(after).toBe(refSampleLod(tiles, INDEX, pos, lodIndex));
+    // И отличается от значения до замены — кеш не отдал устаревший тайл
+    expect(after).not.toBe(before);
+  });
 });
