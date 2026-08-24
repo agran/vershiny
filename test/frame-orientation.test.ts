@@ -125,4 +125,43 @@ describe("frame-orientation", () => {
       "restore",
     ]);
   });
+
+  it("videoCoverRect: свои пропорции — весь холст, без кропа", async () => {
+    const { fo } = await fresh();
+    expect(fo.videoCoverRect(640, 480, 0, 1280, 960)).toEqual({
+      x: 0,
+      y: 0,
+      w: 1280,
+      h: 960,
+    });
+  });
+
+  it("videoCoverRect: широкий низкий холст режет кадр сверху/снизу", async () => {
+    const { fo } = await fresh();
+    // Как drawVideoAligned в тесте выше: 640×480 в 1280×720
+    expect(fo.videoCoverRect(640, 480, 0, 1280, 720)).toEqual({
+      x: 0,
+      y: -120,
+      w: 1280,
+      h: 960,
+    });
+  });
+
+  it("videoCoverRect: поворот на 90° — прямоугольник повёрнутых размеров", async () => {
+    const { fo } = await fresh();
+    // 640×480 с поворотом → кадр 480×640 в цели 960×640: масштаб 2 по
+    // ширине, высота вылезает — кроп сверху/снизу, прямоугольник 960×1280
+    expect(fo.videoCoverRect(640, 480, 90, 960, 640)).toEqual({
+      x: 0,
+      y: -320,
+      w: 960,
+      h: 1280,
+    });
+  });
+
+  it("videoCoverRect: нулевой кадр или холст — честный null", async () => {
+    const { fo } = await fresh();
+    expect(fo.videoCoverRect(0, 480, 0, 1280, 720)).toBeNull();
+    expect(fo.videoCoverRect(640, 480, 0, 0, 720)).toBeNull();
+  });
 });

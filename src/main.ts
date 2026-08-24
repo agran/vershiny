@@ -4,6 +4,7 @@
  */
 
 import { fovForFrame } from "./core/camera-fov";
+import { PINHOLE_ENABLED } from "./core/camera-projection";
 import { normalizeAz, toRad, wrapAngle, type LatLon } from "./core/geo";
 import { getLocale, t } from "./core/i18n";
 import type { Peak, PeaksFile } from "./core/peaks";
@@ -2849,6 +2850,10 @@ async function runAutoCalibration(silent: boolean): Promise<void> {
     fovRad: frameFov.h,
     fovVRad: frameFov.v,
     horizonFrac: arSession.frameHorizonFrac(),
+    // Pinhole-камера — как у оверлея: кадр после прошивочной коррекции
+    // прямолинейный, и совмещение обязано думать в той же геометрии, что
+    // рисует AR, иначе у краёв останется S-образный невязок
+    projection: PINHOLE_ENABLED ? "pinhole" : "linear",
     // Ровно та линия, что нарисована на экране: совмещать кадр с ближней
     // корзиной 0–5 км нельзя (за неё в горах отвечает трава под ногами), а
     // считать её здесь по-своему — значит рано или поздно разойтись с

@@ -81,3 +81,27 @@ export function drawVideoAligned(
   ctx.drawImage(video, -vw / 2, -vh / 2);
   ctx.restore();
 }
+
+/**
+ * Прямоугольник cover-кропа кадра в координатах целевого холста.
+ * Ровно тот, что занимает картинка после drawVideoAligned при любом
+ * довороте: rotate+scale оставляют кадр центрированным прямоугольником
+ * ПОВЁРНУТЫХ размеров. По нему оверлеи (отладочные контуры, снимки)
+ * совмещаются с кадром камеры.
+ *
+ * null — кадр или холст нулевого размера.
+ */
+export function videoCoverRect(
+  frameW: number,
+  frameH: number,
+  rotationDeg: number,
+  viewW: number,
+  viewH: number,
+): { x: number; y: number; w: number; h: number } | null {
+  const { w: pw, h: ph } = rotatedFrameSize(frameW, frameH, rotationDeg);
+  if (pw <= 0 || ph <= 0 || viewW <= 0 || viewH <= 0) return null;
+  const scale = Math.max(viewW / pw, viewH / ph);
+  const dw = pw * scale;
+  const dh = ph * scale;
+  return { x: (viewW - dw) / 2, y: (viewH - dh) / 2, w: dw, h: dh };
+}

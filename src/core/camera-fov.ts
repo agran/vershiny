@@ -40,6 +40,41 @@ export function fovForFrame(
   return { v: baseRad, h: 2 * Math.atan((half * width) / height) };
 }
 
+/** Диагональ полного кадра 35 мм (36×24), мм — база эквивалентного фокуса */
+export const FULL_FRAME_DIAG_MM = Math.hypot(36, 24);
+
+/**
+ * Угол обзора объектива по диагонали кадра из фокусного в 35-мм эквиваленте.
+ *
+ * Производители определяют 35-мм эквивалент через ДИАГОНАЛЬ полного кадра
+ * 36×24: fl35 = (diag35/2) / tan(fovDiag/2). Поэтому hfov = 2·atan(18/fl35)
+ * верна только для кадра 3:2; у 4:3 (большинство телефонов) она завышает
+ * длинную сторону на ~4% (docs/AR-OPTICS-AUDIT.md, №5). Радианы, как и
+ * FrameFov.
+ */
+export function diagFovFromFl35(fl35mm: number): number | null {
+  if (!Number.isFinite(fl35mm) || fl35mm <= 0) return null;
+  return 2 * Math.atan(FULL_FRAME_DIAG_MM / 2 / fl35mm);
+}
+
+/**
+ * Угол обзора по длинной стороне кадра из фокусного в 35-мм эквиваленте:
+ * диагональный угол делится пропорционально сторонам кадра (тангенс линеен
+ * по размеру на фокальной плоскости — как fovForFrame, но база — диагональ,
+ * а не длинная сторона).
+ */
+export function longSideFovFromFl35(
+  fl35mm: number,
+  width: number,
+  height: number,
+): number | null {
+  const diag = diagFovFromFl35(fl35mm);
+  if (diag === null || width <= 0 || height <= 0) return null;
+  const longSide = Math.max(width, height);
+  const frameDiag = Math.hypot(width, height);
+  return 2 * Math.atan(Math.tan(diag / 2) * (longSide / frameDiag));
+}
+
 /** Зум камеры: 1 = без зума, 2 = двукратное приближение (угол вдвое меньше) */
 export function applyZoom(fov: FrameFov, zoom: number): FrameFov {
   const z = Number.isFinite(zoom) && zoom > 0 ? zoom : 1;

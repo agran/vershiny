@@ -21,15 +21,22 @@ import {
   type FrameFov,
 } from "../core/camera-fov";
 import {
+  createLinearProjection,
+  createPinholeProjection,
+  PINHOLE_ENABLED,
+  type CameraProjection,
+} from "../core/camera-projection";
+import {
   currentFrameRotationDeg,
   drawVideoAligned,
   rotatedFrameSize,
+  videoCoverRect,
 } from "../core/frame-orientation";
 import { perfCount, perfEnabled, perfFrame, perfPhase } from "../core/perf";
 import { softAngleDeg } from "../core/screen-orientation";
 import type { PanoramaState, ViewState } from "./panorama";
 import {
-  HORIZON_FRAC,
+  AR_HORIZON_FRAC,
   drawOverlay,
   rotateAroundCenter,
   type OverlayOptions,
@@ -38,6 +45,31 @@ import {
 export interface ArOptions {
   /** Прозрачность оверлея 0–1 */
   opacity?: number;
+  /**
+   * Фото вместо камеры (режим «загруженное фото»): готовый поток с
+   * canvas.captureStream. Камеру не запрашиваем вовсе — getUserMedia не
+   * вызывается, и ветки перезапуска камеры в resume() не работают.
+   */
+  photoStream?: MediaStream;
+  /** Остановить рисующий цикл фото-потока при stop() сессии */
+  stopPhotoDraw?: () => void;
+}
+
+/**
+ * Отладочные контуры поверх кадра камеры (только десктоп): результат
+ * экстрактора «небо/земля» или нейросети, чтобы сравнить их работу на
+ * одном снимке. Профили — доли высоты ПОЛНОГО кадра (0 — верх) по
+ * колонкам СОБСТВЕННОЙ сетки экстрактора (классика — GRID_W, NN — сетка
+ * препроцессинга 518): ширина кадра делится на длину профиля.
+ */
+export interface DebugContours {
+  kind: "classic" | "nn";
+  profiles: Float32Array[];
+  /**
+   * Граница неба от NN (кандидат линии горизонта) — рисуется белым контуром
+   * ПЕРВЫМ, поверх остальных: её и сравнивают с пурпурной классикой
+   */
+  skyline?: Float32Array;
 }
 
 export interface ArSession {
@@ -46,8 +78,12 @@ export interface ArSession {
   /**
    * Кадр камеры как пиксели — для автокалибровки (core/skyline.ts).
    * null, пока камера не отдала первый кадр.
+   *
+   * @param width ширина пробы: 320 достаточно экстрактору линии неба, а
+   *   NN-глубине (ступень 4) на таком мелком кадре не хватает контраста
+   *   «небо/горы» — она просит 768
    */
-  grabFrame: () => {
+  grabFrame: (width?: number) => {
     rgba: Uint8ClampedArray;
     width: number;
     height: number;
@@ -58,16 +94,32 @@ export interface ArSession {
    */
   fullFrameFov: () => FrameFov;
   /**
+   * Текущий зум трека (1 = без зума). Оценённый по кадру FOV включает зум,
+   * и его обратный пересчёт в базовый угол калибровки без этой величины
+   * невозможен
+   */
+  zoom: () => number;
+  /**
    * Доля высоты полного кадра, где рисуется линия горизонта оверлея, —
    * вторая половина привязки автокалибровки к кадру.
    */
   frameHorizonFrac: () => number;
+  /**
+   * Проекция видимой части кадра в CSS-пикселях. Ручная подстройка берёт
+   * из неё обе точки drag, чтобы pinhole не подменял геометрию линейной.
+   */
+  overlayProjection: () => CameraProjection;
   /**
    * Немедленная перерисовка обоих слоёв. Нужна после внешнего resize:
    * смена размеров холста очищает его, и до ближайшего rAF оверлей
    * мигал бы прозрачностью поверх видео (моргание контуров при повороте)
    */
   redraw: () => void;
+  /**
+   * Отладочные контуры поверх кадра (null — убрать). Рисуются в геометрии
+   * cover-кропа видео (videoCoverRect) — поверх контуров панорамы.
+   */
+  setDebugContours: (contours: DebugContours | null) => void;
 }
 
 /** Базовый угол обзора по длинной стороне кадра камеры (калибровка), рад */
@@ -77,13 +129,49 @@ function baseFovRad(): number {
   );
 }
 
+/** Видимый FOV кадра после зума, доворота и центрального cover-кропа. */
+function visibleOverlayFov(
+  video: HTMLVideoElement,
+  viewWidth: number,
+  viewHeight: number,
+  zoomFactor: number,
+): FrameFov | null {
+  if (
+    video.readyState < 2 ||
+    video.videoWidth <= 0 ||
+    video.videoHeight <= 0 ||
+    viewWidth <= 0 ||
+    viewHeight <= 0
+  ) {
+    return null;
+  }
+  const rot = currentFrameRotationDeg();
+  const { w: frameWidth, h: frameHeight } = rotatedFrameSize(
+    video.videoWidth,
+    video.videoHeight,
+    rot,
+  );
+  const full = applyZoom(
+    fovForFrame(baseFovRad(), frameWidth, frameHeight),
+    zoomFactor,
+  );
+  return applyCoverCrop(full, frameWidth, frameHeight, viewWidth, viewHeight);
+}
+
 /** Параметры запроса камеры — вынесены: понадобятся при перезапуске трека */
 const CAMERA_CONSTRAINTS: MediaStreamConstraints = {
   video: {
     facingMode: "environment", // задняя камера
     width: { ideal: 1920 },
     height: { ideal: 1080 },
-  },
+    // Без этого UA может кропнуть/растянуть кадр сенсора под EIS — 5–12% FOV
+    // молча (docs/AR-OPTICS-AUDIT.md, №8). С "none" кадр приходит в нативной
+    // геометрии сенсора, и getSettings() описывает ровно тот кадр, что рисует
+    // видео. Не поддерживающие UA ограничение просто игнорируют. Свойства нет
+    // в lib.dom (констрейнт выпал из спецификации, но Chromium его исполняет) —
+    // точечный каст, чтобы лишняя проверка свойств не мешала
+    resizeMode: "none",
+  } as MediaTrackConstraints,
   audio: false,
 };
 
@@ -172,7 +260,10 @@ export async function startAr(
   view: ViewState,
   options: ArOptions = {},
 ): Promise<ArSession> {
-  let stream = await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS);
+  // Фото-режим: поток уже готов (canvas.captureStream), камеру не трогаем
+  let stream =
+    options.photoStream ??
+    (await navigator.mediaDevices.getUserMedia(CAMERA_CONSTRAINTS));
 
   // Дальше всё может отказать (часть WebView отклоняет play()), а поток уже
   // запущен: без явной остановки камера продолжала гореть, вызывающий видел
@@ -208,6 +299,20 @@ export async function startAr(
    */
   const resume = async (): Promise<void> => {
     if (stopped || resuming) return;
+    readZoom(); // зум могли изменить, пока приложение было в фоне
+    if (options.photoStream) {
+      // Фото: canvas-трек не «умирает», как камера. Единственное, что может
+      // случиться при сворачивании, — браузер поставил видео на паузу;
+      // возобновить воспроизведение и всё
+      if (!document.hidden && videoEl.paused) {
+        try {
+          await videoEl.play();
+        } catch {
+          // Следующий resume (по одному из трёх событий) попробует снова
+        }
+      }
+      return;
+    }
     resuming = true;
     try {
       const track = stream.getVideoTracks()[0];
@@ -275,6 +380,73 @@ export async function startAr(
 
   const ctx = canvas.getContext("2d")!;
   const opacity = options.opacity ?? 0.55;
+  // Отладочные контуры поверх кадра (setDebugContours): включены только
+  // кнопками на десктопе, рисуются поверх оверлея в геометрии видео
+  let debugContours: DebugContours | null = null;
+  /** Цвета NN-контуров по индексу; классика — пурпурный, граница неба — белая */
+  const NN_CONTOUR_COLORS = ["#ffaa00", "#00ffcc", "#ff5588"];
+  const CLASSIC_CONTOUR_COLOR = "#ff00ff";
+  const SKYLINE_CONTOUR_COLOR = "#ffffff";
+
+  /** Один кадр отладочных контуров поверх всего (оверлей уже нарисован) */
+  function drawDebugContours(): void {
+    if (!debugContours) return;
+    const rect = videoCoverRect(
+      videoEl.videoWidth,
+      videoEl.videoHeight,
+      currentFrameRotationDeg(),
+      canvas.width,
+      canvas.height,
+    );
+    if (!rect) return;
+    // yFrac — доля ВЫСОТЫ ПОЛНОГО кадра, и rect.h — та же высота в пикселях
+    // холста: контур ложится на кадр при любом cover-кропе
+    ctx.save();
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    // Порядок линий: белая граница неба NN — первой (под цветными слоями),
+    // затем профили палитрой
+    const lines: { p: Float32Array; color: string }[] = [];
+    if (debugContours.kind === "nn" && debugContours.skyline) {
+      lines.push({ p: debugContours.skyline, color: SKYLINE_CONTOUR_COLOR });
+    }
+    debugContours.profiles.forEach((p, i) => {
+      lines.push({
+        p,
+        color:
+          debugContours!.kind === "classic"
+            ? CLASSIC_CONTOUR_COLOR
+            : NN_CONTOUR_COLORS[i % NN_CONTOUR_COLORS.length],
+      });
+    });
+    for (const { p, color } of lines) {
+      ctx.strokeStyle = color;
+      ctx.beginPath();
+      let started = false;
+      // Ширина кадра делится на ДЛИНУ профиля: у NN сетка препроцессинга
+      // (518 колонок) шире пробы (320), и общий масштаб растягивал бы
+      // контур на 62% по горизонтали — «совсем не похоже»
+      const sx = rect.w / Math.max(1, p.length);
+      for (let x = 0; x < p.length; x++) {
+        const f = p[x];
+        if (!Number.isFinite(f)) {
+          started = false; // разрыв линии (облако, отказ колонки)
+          continue;
+        }
+        const px = rect.x + (x + 0.5) * sx;
+        const py = rect.y + f * rect.h;
+        if (!started) {
+          ctx.moveTo(px, py);
+          started = true;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
   // Кэш оверлея (см. ArOverlayCache ниже): линии и подписи перерендериваются
   // только при смене азимута/наклона/содержимого, а каждый rAF — это
   // clearRect + два blit готовых слоёв с доворотом на текущий крен
@@ -381,6 +553,30 @@ export async function startAr(
     }
   }
   readZoom();
+  // События смены зума в спецификации нет; <video> шлёт resize, когда трек
+  // начинает доставлять кадр другой геометрии (в т.ч. после цифрового зума) —
+  // единственная зацепка перечитать settings, не дожидаясь перезапуска трека
+  videoEl.addEventListener("resize", readZoom);
+
+  /**
+   * Геометрия доставляемого кадра — из настроек трека, а не из <video>:
+   * с resizeMode:"none" они совпадают, а до первого кадра (videoWidth=0) и
+   * на UA с пересэмплингом settings описывают нативный кадр сенсора, под
+   * который и считается FOV (docs/AR-OPTICS-AUDIT.md, №8)
+   */
+  function trackFrameSize(): { w: number; h: number } {
+    try {
+      const settings = stream.getVideoTracks()[0]?.getSettings() as
+        | { width?: number; height?: number }
+        | undefined;
+      if (settings && settings.width && settings.height) {
+        return { w: settings.width, h: settings.height };
+      }
+    } catch {
+      // getSettings не обязателен — смотрим <video>
+    }
+    return { w: videoEl.videoWidth, h: videoEl.videoHeight };
+  }
 
   /** FOV полного кадра камеры: базовый угол → пропорции кадра → зум */
   function fullFrameFov(): FrameFov {
@@ -389,11 +585,35 @@ export async function startAr(
     // подгоняет оверлей), и только с ними калибровка и снимок совпадут
     // с картинкой на экране
     const { w, h } = rotatedFrameSize(
-      videoEl.videoWidth,
-      videoEl.videoHeight,
+      trackFrameSize().w,
+      trackFrameSize().h,
       currentFrameRotationDeg(),
     );
     return applyZoom(fovForFrame(baseFovRad(), w, h), zoomFactor);
+  }
+
+  /** Та же проекция, что у оверлея, но в CSS-пикселях указателя. */
+  function overlayProjection(): CameraProjection {
+    const width = canvas.clientWidth || canvas.width || 1;
+    const height = canvas.clientHeight || canvas.height || 1;
+    const visible = visibleOverlayFov(
+      videoEl,
+      canvas.width || width,
+      canvas.height || height,
+      zoomFactor,
+    );
+    const params = {
+      width,
+      height,
+      centerAzRad: view.centerAzRad,
+      tiltRad: view.tiltRad,
+      fovRad: visible?.h ?? view.fovRad,
+      fovVRad: visible?.v ?? view.fovVRad,
+      horizonFrac: AR_HORIZON_FRAC,
+    };
+    return PINHOLE_ENABLED
+      ? createPinholeProjection(params)
+      : createLinearProjection(params);
   }
 
   let raf = 0;
@@ -431,6 +651,7 @@ export async function startAr(
         zoomFactor,
         overlayCache,
       );
+      drawDebugContours();
       debugEl?.update();
       if (perfEnabled) {
         perfFrame(performance.now() - t0);
@@ -447,6 +668,24 @@ export async function startAr(
   const probe = document.createElement("canvas");
   const probeCtx = probe.getContext("2d", { willReadFrequently: true });
 
+  // Именованная перерисовка: нужна и redraw(), и setDebugContours (методы
+  // объектного литерала друг друга по имени не видят)
+  const redrawAr = (): void => {
+    if (stopped) return;
+    syncVideoLayer();
+    drawVideoLayer();
+    drawArFrame(
+      ctx,
+      videoEl,
+      getState(),
+      view,
+      opacity,
+      zoomFactor,
+      overlayCache,
+    );
+    drawDebugContours();
+  };
+
   return {
     stop: () => {
       stopped = true;
@@ -455,13 +694,18 @@ export async function startAr(
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("focus", onVisible);
       window.removeEventListener("pageshow", onVisible);
+      videoEl.removeEventListener("resize", readZoom);
       endedTrack?.removeEventListener("ended", onTrackEnded);
       cancelAnimationFrame(raf);
       overlayCache.free();
+      // Фото-режим: остановить рисующий цикл до остановки его трека
+      options.stopPhotoDraw?.();
       stream.getTracks().forEach((t) => t.stop());
       videoEl.srcObject = null;
     },
     fullFrameFov,
+    overlayProjection,
+    zoom: () => zoomFactor,
     frameHorizonFrac: () => {
       const { w, h } = rotatedFrameSize(
         videoEl.videoWidth,
@@ -473,24 +717,16 @@ export async function startAr(
         h,
         canvas.width,
         canvas.height,
-        HORIZON_FRAC,
+        AR_HORIZON_FRAC,
       );
     },
-    redraw: () => {
+    redraw: redrawAr,
+    setDebugContours: (contours) => {
       if (stopped) return;
-      syncVideoLayer();
-      drawVideoLayer();
-      drawArFrame(
-        ctx,
-        videoEl,
-        getState(),
-        view,
-        opacity,
-        zoomFactor,
-        overlayCache,
-      );
+      debugContours = contours;
+      redrawAr();
     },
-    grabFrame: () => {
+    grabFrame: (width = 320) => {
       if (!probeCtx || videoEl.readyState < 2) return null;
       const vw = videoEl.videoWidth;
       const vh = videoEl.videoHeight;
@@ -500,15 +736,15 @@ export async function startAr(
       // калибровка искала бы линию неба поперёк экрана)
       const rot = currentFrameRotationDeg();
       const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
-      const width = 320;
-      const height = Math.max(1, Math.round((width * ph) / pw));
-      probe.width = width;
-      probe.height = height;
-      drawVideoAligned(probeCtx, videoEl, width, height, rot);
+      const probeWidth = Math.max(1, Math.min(width, pw));
+      const probeHeight = Math.max(1, Math.round((probeWidth * ph) / pw));
+      probe.width = probeWidth;
+      probe.height = probeHeight;
+      drawVideoAligned(probeCtx, videoEl, probeWidth, probeHeight, rot);
       return {
-        rgba: probeCtx.getImageData(0, 0, width, height).data,
-        width,
-        height,
+        rgba: probeCtx.getImageData(0, 0, probeWidth, probeHeight).data,
+        width: probeWidth,
+        height: probeHeight,
       };
     },
   };
@@ -534,6 +770,12 @@ const AZ_CENTER_STEP_FRAC = 0.25; // шаг перецентровки цент�
 const TILT_DRIFT_PX = 4; // наклон: субпиксельный дрейф — только blit
 /** Полный перерендер раз в N кадров, даже если взгляд стоит: освежить выбор подписей */
 const OVERLAY_REFRESH_FRAMES = 30;
+
+/**
+ * Допустимая ошибка blit'а на КРАЮ кадра под пинхолом, px устройства:
+ * перерендер раньше, чем краевой контур уйдёт дальше этого (см. №6)
+ */
+const PINHOLE_EDGE_EPS_PX = 2;
 
 /** Порог «взгляд движется»: дельта за кадр, экранные px */
 const MOTION_DELTA_PX = 1.5;
@@ -640,17 +882,10 @@ export function drawArFrame(
   if (!state) return;
 
   let overlayView = view;
-  if (video.readyState >= 2 && video.videoWidth > 0) {
-    const vw = video.videoWidth;
-    const vh = video.videoHeight;
-    // Оверлей подгоняем под ВИДИМУЮ часть кадра: полный FOV камеры минус
-    // обрезанные cover'ом края и зум. Без этого контуры сходились по центру
-    // кадра и расходились к краям, когда пропорции экрана и видео различались.
-    // Размеры кадра — после доворота: FOV считается от повёрнутого кадра
-    const rot = currentFrameRotationDeg();
-    const { w: pw, h: ph } = rotatedFrameSize(vw, vh, rot);
-    const full = applyZoom(fovForFrame(baseFovRad(), pw, ph), zoomFactor);
-    const visible = applyCoverCrop(full, pw, ph, width, height);
+  const visible = visibleOverlayFov(video, width, height, zoomFactor);
+  if (visible) {
+    // Полный FOV камеры сужается на обрезанные cover'ом края и зум. Без этого
+    // контуры сходились по центру кадра и расходились у краёв экрана.
     overlayView = { ...view, fovRad: visible.h, fovVRad: visible.v };
   }
 
@@ -670,14 +905,23 @@ export function drawArFrame(
   }
 
   // Без кэша (старый путь: тесты без готового видео, первый кадр до него)
+  const arOverlay: OverlayOptions = {
+    labels: false,
+    horizonFrac: AR_HORIZON_FRAC,
+    projection: PINHOLE_ENABLED ? "pinhole" : "linear",
+  };
   ctx.save();
   rotateAroundCenter(ctx, roll);
   ctx.globalAlpha = opacity;
-  drawOverlay(ctx, state, overlayView, undefined, { labels: false });
+  drawOverlay(ctx, state, overlayView, undefined, arOverlay);
   ctx.restore();
   ctx.save();
   rotateAroundCenter(ctx, roll);
-  drawOverlay(ctx, state, overlayView, undefined, { ridges: false });
+  drawOverlay(ctx, state, overlayView, undefined, {
+    ...arOverlay,
+    labels: true,
+    ridges: false,
+  });
   ctx.restore();
 }
 
@@ -728,11 +972,23 @@ export function drawArOverlayCached(
         Math.round(shortestAngle(az - cache.anchor.azRad) / anchorStep) *
           anchorStep;
 
-  const driftAzPx =
-    Math.abs(shortestAngle(az - (cache.anchor?.azRad ?? NaN))) *
-    (width / (fovH || 1));
-  const driftTiltPx =
-    Math.abs(tilt - (cache.anchor?.tiltRad ?? NaN)) * (height / (fovV || 1));
+  // Смещения — через проекцию кадра (core/camera-projection.ts): та же,
+  // по которой drawOverlay нарисовал кеш. До первого рендера anchor = null,
+  // и углы дают NaN — те же ветки, что у прежнего масштаба px/рад
+  const driftProj = createLinearProjection({
+    width,
+    height,
+    centerAzRad: cache.anchor?.azRad ?? az,
+    tiltRad: cache.anchor?.tiltRad ?? tilt,
+    fovRad: fovH || 1,
+    fovVRad: fovV || 1,
+    horizonFrac: AR_HORIZON_FRAC,
+  });
+  const driftAzPx = Math.abs(driftProj.angleToView(az, tilt)!.x - width / 2);
+  const driftTiltPx = Math.abs(
+    driftProj.angleToView(az, tilt)!.y -
+      driftProj.angleToView(az, cache.anchor?.tiltRad ?? NaN)!.y,
+  );
 
   // Детектор непрерывного движения: пока взгляд меняется кадр за кадром
   // (свайп подстройки контуров, поворот по датчику), перерендериваем редко —
@@ -740,10 +996,16 @@ export function drawArOverlayCached(
   // выйти за поля запаса. Иначе порог наклона 4 px перерендеривал кэш на
   // каждый кадр жеста, и полный рендер горел всё время движения
   const azDeltaPx = Number.isFinite(cache.lastAz)
-    ? Math.abs(shortestAngle(az - cache.lastAz)) * (width / (fovH || 1))
+    ? Math.abs(
+        driftProj.angleToView(az, tilt)!.x -
+          driftProj.angleToView(cache.lastAz, tilt)!.x,
+      )
     : Infinity;
   const tiltDeltaPx = Number.isFinite(cache.lastTilt)
-    ? Math.abs(tilt - cache.lastTilt) * (height / (fovV || 1))
+    ? Math.abs(
+        driftProj.angleToView(az, tilt)!.y -
+          driftProj.angleToView(az, cache.lastTilt)!.y,
+      )
     : Infinity;
   const wasMoving = cache.movingFrames >= MOTION_FRAMES;
   // Первый кадр (lastAz/lastTilt ещё NaN) движением не считается
@@ -759,13 +1021,25 @@ export function drawArOverlayCached(
   cache.lastAz = az;
   cache.lastTilt = tilt;
 
-  // Пороги дрейфа: в покое — точные (наклон дальше 4 px перерендеривает),
-  // в движении — грубые (только край запаса) плюс чёткий кадр на остановке
-  const driftLimit = moving
-    ? driftAzPx > marginX * MOVE_AZ_FRAC ||
-      driftTiltPx > marginY * MOVE_TILT_FRAC
-    : driftAzPx > marginX * AZ_DRIFT_TRIGGER_FRAC ||
-      driftTiltPx > TILT_DRIFT_PX;
+  // Пороги дрейфа: в линейном режиме в покое — точные (наклон дальше 4 px
+  // перерендеривает), в движении — грубые (только край запаса) плюс чёткий
+  // кадр на остановке. Под пинхолом blit — не точная трансляция (край
+  // сжимается/растягивается), поэтому его точный порог действует и во время
+  // движения; иначе после трёх pointer-кадров контур прыгал при перерендере.
+  // Порог азимута — в ПИКСЕЛЯХ края, а не в долях запаса:
+  // ошибка на краю = дрейф · tan²(fovH/2) (docs/AR-OPTICS-AUDIT.md, №6)
+  const driftLimit = PINHOLE_ENABLED
+    ? driftAzPx >
+        Math.max(
+          1,
+          (PINHOLE_EDGE_EPS_PX * uiScale) / Math.tan(fovH / 2) ** 2,
+        ) ||
+      driftTiltPx > TILT_DRIFT_PX
+    : moving
+      ? driftAzPx > marginX * MOVE_AZ_FRAC ||
+        driftTiltPx > marginY * MOVE_TILT_FRAC
+      : driftAzPx > marginX * AZ_DRIFT_TRIGGER_FRAC ||
+        driftTiltPx > TILT_DRIFT_PX;
 
   // Счётчик кадров сессии: регламентное обновление кэша раз в N кадров
   cache.frameNo++;
@@ -801,7 +1075,11 @@ export function drawArOverlayCached(
       fovVRad: fovV,
       rollRad: 0,
     };
-    const cacheOpts: OverlayOptions = { anchorAzRad: anchorAz };
+    const cacheOpts: OverlayOptions = {
+      anchorAzRad: anchorAz,
+      horizonFrac: AR_HORIZON_FRAC,
+      projection: PINHOLE_ENABLED ? "pinhole" : "linear",
+    };
     const rctx = cache.ridges.getContext("2d")!;
     const lctx = cache.labels.getContext("2d")!;
     rctx.save();
@@ -845,14 +1123,25 @@ export function drawArOverlayCached(
   // Blit: положение кэша на экране — центр кэша на центр запаса + дрейф по
   // азимуту/наклону; поворот на крен — вокруг центра экрана (drawImage уже
   // сдвинут, а поворачиваем мы экранную систему)
-  const pxPerRadH = width / (fovH || 1);
-  const pxPerRadV = height / (fovV || 1);
+  // Проекция строится по СВЕЖЕМУ якорю (он мог появиться только что — на
+  // первом кадре driftProj выше был с центром по текущему взгляду)
+  const anchorProj = createLinearProjection({
+    width,
+    height,
+    centerAzRad: cache.anchor!.azRad,
+    tiltRad: cache.anchor!.tiltRad,
+    fovRad: fovH || 1,
+    fovVRad: fovV || 1,
+    horizonFrac: AR_HORIZON_FRAC,
+  });
   const ox =
-    (width - bufW) / 2 -
-    pxPerRadH * shortestAngle(az - cache.anchor!.azRad);
+    (width - bufW) / 2 +
+    anchorProj.angleToView(cache.anchor!.azRad, tilt)!.x -
+    anchorProj.angleToView(az, tilt)!.x;
   const oy =
     (height - bufH) / 2 +
-    pxPerRadV * (tilt - cache.anchor!.tiltRad);
+    anchorProj.angleToView(az, cache.anchor!.tiltRad)!.y -
+    anchorProj.angleToView(az, tilt)!.y;
 
   ctx.save();
   rotateAroundCenter(ctx, roll);

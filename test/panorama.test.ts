@@ -6,6 +6,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setLocale } from "../src/core/i18n";
 import {
+  AR_HORIZON_FRAC,
   buildRidgeSegments,
   decimateSegments,
   drawOverlay,
@@ -23,9 +24,11 @@ const STEP_RAD = (0.1 * Math.PI) / 180; // 3600 лучей
 const WIDTH = 1000;
 const HEIGHT = 600;
 
-/** Проекции как в drawOverlay, но без вида: 1 луч = 1 пиксель */
-const azToX = (az: number): number => (az / STEP_RAD) * 1;
-const elevToY = (elev: number): number => 300 - elev * 1000;
+/** Проекция как в drawOverlay, но без вида: 1 луч = 1 пиксель, x и y независимы */
+const toView = (az: number, elev: number): { x: number; y: number } => ({
+  x: (az / STEP_RAD) * 1,
+  y: 300 - elev * 1000,
+});
 
 function segmentsOf(profile: number[]): { x: number; y: number }[][] {
   const prof = new Float32Array(profile);
@@ -35,8 +38,7 @@ function segmentsOf(profile: number[]): { x: number; y: number }[][] {
     runningMax,
     5e-4,
     STEP_RAD,
-    azToX,
-    elevToY,
+    toView,
     WIDTH,
     HEIGHT,
   );
@@ -48,9 +50,9 @@ function segmentsOf(profile: number[]): { x: number; y: number }[][] {
  */
 
 describe("оверлей в буфере с полями (кэш AR)", () => {
-  it("проекция считается от видимой области, а не от поверхности", () => {
-    const points: [number, number][] = [];
-    const ctx = {
+  /** Минимальный контекст, собирающий точки линий (подписи выключены) */
+  function makeCtx(points: [number, number][]) {
+    return {
       canvas: { width: 1440, height: 810, clientWidth: 800, clientHeight: 450 },
       beginPath: () => {},
       moveTo: (x: number, y: number) => points.push([x, y]),
@@ -69,6 +71,11 @@ describe("оверлей в буфере с полями (кэш AR)", () => {
       set miterLimit(_v: number) {},
       set globalAlpha(_v: number) {},
     } as unknown as CanvasRenderingContext2D;
+  }
+
+  it("проекция считается от видимой области, а не от поверхности", () => {
+    const points: [number, number][] = [];
+    const ctx = makeCtx(points);
 
     const state = {
       horizon: new Float32Array(0),
@@ -97,6 +104,65 @@ describe("оверлей в буфере с полями (кэш AR)", () => {
       ([, y]) => Math.abs(y - 810 * 0.62) < 0.5,
     );
     expect(bufferHorizon).toHaveLength(0);
+  });
+
+  it("AR-оверлей кладёт горизонт на оптическую ось кадра (0.5)", () => {
+    const points: [number, number][] = [];
+    const ctx = makeCtx(points);
+    const state = {
+      horizon: new Float32Array(0),
+      peaks: [],
+      stepRad: 0.001,
+    } as unknown as PanoramaState;
+    const view = {
+      centerAzRad: 0,
+      tiltRad: 0,
+      fovRad: 1,
+      fovVRad: 1,
+      rollRad: 0,
+    } as never;
+
+    drawOverlay(ctx, state, view, 1, {
+      labels: false,
+      horizonFrac: AR_HORIZON_FRAC,
+    });
+
+    // Кадр камеры рисуется центрированным cover-кропом: при ровном телефоне
+    // горизонт физически в центре кадра (docs/AR-OPTICS-AUDIT.md, №1)
+    expect(points).toContainEqual([720, 810 * AR_HORIZON_FRAC]);
+  });
+
+  it("пинхол: риски за камерой пропускаются, без NaN", () => {
+    const points: [number, number][] = [];
+    const ctx = makeCtx(points);
+    const state = {
+      horizon: new Float32Array(0),
+      peaks: [],
+      stepRad: 0.001,
+    } as unknown as PanoramaState;
+    const view = {
+      centerAzRad: 0,
+      tiltRad: -0.6,
+      fovRad: 1.9,
+      fovVRad: 2.4,
+      rollRad: 0,
+    } as never;
+
+    expect(() =>
+      drawOverlay(ctx, state, view, 1, {
+        labels: false,
+        horizonFrac: AR_HORIZON_FRAC,
+        projection: "pinhole",
+      }),
+    ).not.toThrow();
+    // Каждая нарисованная точка конечна (за камерой — пропуск, не NaN)
+    for (const [x, y] of points) {
+      expect(Number.isFinite(x)).toBe(true);
+      expect(Number.isFinite(y)).toBe(true);
+    }
+    // Взгляд вниз: видимо меньше полукруга рисков (часть за камерой)
+    expect(points.length).toBeGreaterThan(0);
+    expect(points.length).toBeLessThan(24 * 2);
   });
 });
 
@@ -145,8 +211,7 @@ describe("силуэт: разбиение на сегменты", () => {
       runningMax,
       5e-4,
       STEP_RAD,
-      azToX,
-      elevToY,
+      toView,
       WIDTH,
       HEIGHT,
     );
@@ -205,13 +270,16 @@ describe("контуры при довороте кадра (крен)", () => {
     const prof = new Float32Array(30).fill(0.05);
     const runningMax = new Float32Array(30).fill(-Infinity);
     // x от −60 до −31: за пределами дефолтного запаса ±20, но внутри ±60
-    const shiftedAzToX = (az: number): number => az / STEP_RAD - 60;
+    const shiftedToView = (az: number, elev: number): { x: number; y: number } => ({
+      x: az / STEP_RAD - 60,
+      y: 300 - elev * 1000,
+    });
     const noMargin = buildRidgeSegments(
-      prof, runningMax, 5e-4, STEP_RAD, shiftedAzToX, elevToY, WIDTH, HEIGHT,
+      prof, runningMax, 5e-4, STEP_RAD, shiftedToView, WIDTH, HEIGHT,
     );
     expect(noMargin).toHaveLength(0);
     const withMargin = buildRidgeSegments(
-      prof, runningMax, 5e-4, STEP_RAD, shiftedAzToX, elevToY, WIDTH, HEIGHT, 60,
+      prof, runningMax, 5e-4, STEP_RAD, shiftedToView, WIDTH, HEIGHT, 60,
     );
     expect(withMargin).toHaveLength(1);
     expect(withMargin[0]).toHaveLength(30);

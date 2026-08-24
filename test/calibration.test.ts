@@ -10,6 +10,7 @@ import {
   resetCalibration,
   normalizeCalibration,
   CALIBRATION_LIMITS,
+  CALIBRATION_VERSION,
   DEFAULT_CAMERA_FOV_DEG,
 } from "../src/core/calibration";
 
@@ -60,6 +61,15 @@ describe("калибровка датчиков", () => {
     const cal = getCalibration();
     expect(cal.tiltDeg).toBe(CALIBRATION_LIMITS.tiltDeg);
     expect(cal.cameraFovDeg).toBe(CALIBRATION_LIMITS.fovMaxDeg);
+    expect(CALIBRATION_LIMITS.fovMaxDeg).toBe(120);
+  });
+
+  it("телефото-углы разрешены: минимум 10°, ниже зажимается", () => {
+    setCalibration({ cameraFovDeg: 16 });
+    expect(getCalibration().cameraFovDeg).toBe(16);
+    setCalibration({ cameraFovDeg: 2 });
+    expect(getCalibration().cameraFovDeg).toBe(CALIBRATION_LIMITS.fovMinDeg);
+    expect(CALIBRATION_LIMITS.fovMinDeg).toBe(10);
   });
 
   it("битое хранилище не ломает запуск", () => {
@@ -70,8 +80,47 @@ describe("калибровка датчиков", () => {
       tiltDeg: 0,
       cameraFovDeg: null,
       autoCalibrate: true,
+      version: CALIBRATION_VERSION,
     });
     expect(normalizeCalibration(null).cameraFovDeg).toBeNull();
+  });
+
+  it("устаревшая версия сбрасывает наклон и FOV, азимут сохраняется", () => {
+    // Старая модель проекции (опорная линия 0.62): наклон и FOV подбирались
+    // под неё и после смены вредны; азимут компаса от модели не зависит
+    const migrated = normalizeCalibration({
+      azimuthDeg: 7,
+      tiltDeg: -8.4,
+      cameraFovDeg: 75,
+      autoCalibrate: false,
+    });
+    expect(migrated.azimuthDeg).toBe(7);
+    expect(migrated.tiltDeg).toBe(0);
+    expect(migrated.cameraFovDeg).toBeNull();
+    expect(migrated.autoCalibrate).toBe(false);
+    expect(migrated.version).toBe(CALIBRATION_VERSION);
+    // Свежая версия — поправки проходят как раньше
+    const fresh = normalizeCalibration({
+      ...migrated,
+      tiltDeg: 2,
+      cameraFovDeg: 70,
+    });
+    expect(fresh.tiltDeg).toBe(2);
+    expect(fresh.cameraFovDeg).toBe(70);
+  });
+
+  it("линейная калибровка версии 1 не переживает переход на pinhole", () => {
+    const migrated = normalizeCalibration({
+      azimuthDeg: -12,
+      tiltDeg: 4.5,
+      cameraFovDeg: 76,
+      version: 1,
+    });
+
+    expect(migrated.azimuthDeg).toBe(-12);
+    expect(migrated.tiltDeg).toBe(0);
+    expect(migrated.cameraFovDeg).toBeNull();
+    expect(migrated.version).toBe(CALIBRATION_VERSION);
   });
 
   it("автосовмещение включено по умолчанию и выключается", () => {

@@ -158,7 +158,7 @@ describe("AR overlay cache", () => {
     expect(draws.rotate).toBe(2); // оба blit повернулись
   });
 
-  it("дрейф азимута за порог перерендеривает, внутри — blit", () => {
+  it("pinhole: дрейф внутри пиксельного порога — blit, дальше — рендер", () => {
     const { ctx, draws } = makeCanvas();
     const cache = createArOverlayCache();
     const state = makeState();
@@ -166,15 +166,18 @@ describe("AR overlay cache", () => {
     drawArOverlayCached(ctx as never, state, VIEW, 0, 0.55, 1, cache);
     draws.stroke = 0;
 
-    // Малый дрейф: blit
-    const near = { ...VIEW, centerAzRad: VIEW.centerAzRad + 0.01 };
+    // Малый дрейф: ошибка у края меньше 2 px, хватает blit
+    const near = {
+      ...VIEW,
+      centerAzRad: VIEW.centerAzRad + (VIEW.fovRad / 800) * 3,
+    };
     drawArOverlayCached(ctx as never, state, near, 0, 0.55, 1, cache);
     expect(draws.stroke).toBe(0);
 
-    // Дрейф за половину запаса: перерендер
+    // Ошибка у края вышла за допуск: точный полный рендер
     const far = {
       ...VIEW,
-      centerAzRad: VIEW.centerAzRad + (VIEW.fovRad / 800) * 800 * 0.45 * 0.6,
+      centerAzRad: VIEW.centerAzRad + (VIEW.fovRad / 800) * 8,
     };
     drawArOverlayCached(ctx as never, state, far, 0, 0.55, 1, cache);
     expect(draws.stroke).toBeGreaterThan(0);
@@ -217,16 +220,15 @@ describe("AR overlay cache", () => {
     expect(draws.stroke).toBeGreaterThan(0);
   });
 
-  it("непрерывное движение: редкий перерендер, на остановке — чёткий кадр", () => {
+  it("pinhole: непрерывное движение обновляет кэш до накопления ошибки", () => {
     const { ctx, draws } = makeCanvas();
     const cache = createArOverlayCache();
     const state = makeState();
     drawArOverlayCached(ctx as never, state, VIEW, 0, 0.55, 1, cache);
     draws.stroke = 0;
 
-    // Свайп подстройки: взгляд ползёт по ~3 px за кадр. В покое такой дрейф
-    // перерендеривал бы каждый кадр (порог наклона 4 px); в движении кэш
-    // должен обновляться только на входе в режим и на остановке
+    // Свайп подстройки: взгляд ползёт по ~3 px за кадр. Гномонику нельзя
+    // надолго заменять translate-blit: кэш обновляется примерно раз в 4 px.
     const stepTilt = (3 * VIEW.fovVRad) / 450; // 3 экранных px
     // Считаем РЕНДЕРЫ, а не штрихи: один перерендер — несколько stroke
     let renders = 0;
@@ -236,13 +238,38 @@ describe("AR overlay cache", () => {
       drawArOverlayCached(ctx as never, state, v, 0, 0.55, 1, cache);
       if (draws.stroke > before) renders++;
     }
-    // Один перерендер на входе в движение (за порогом 4 px), дальше — blit
-    expect(renders).toBe(1);
+    expect(renders).toBe(5);
 
     // Остановка: взгляд замер — один чёткий кадр с актуальными подписями
     draws.stroke = 0;
     const stopped = { ...VIEW, tiltRad: VIEW.tiltRad + 10 * stepTilt };
     drawArOverlayCached(ctx as never, state, stopped, 0, 0.55, 1, cache);
+    expect(draws.stroke).toBeGreaterThan(0);
+  });
+
+  it("pinhole по умолчанию не оставляет непрерывный drag на грубом blit", () => {
+    const { ctx, draws } = makeCanvas();
+    const cache = createArOverlayCache();
+    const state = makeState();
+
+    drawArOverlayCached(ctx as never, state, VIEW, 0, 0.55, 1, cache);
+    draws.stroke = 0;
+
+    // После третьей дельты включается режим непрерывного движения. Его
+    // линейный blit неприменим к гномонике: кэш надо обновить сразу.
+    const stepAz = (2.1 * VIEW.fovRad) / 800;
+    for (let i = 1; i <= 3; i++) {
+      drawArOverlayCached(
+        ctx as never,
+        state,
+        { ...VIEW, centerAzRad: VIEW.centerAzRad + i * stepAz },
+        0,
+        0.55,
+        1,
+        cache,
+      );
+    }
+
     expect(draws.stroke).toBeGreaterThan(0);
   });
 });

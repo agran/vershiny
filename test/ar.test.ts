@@ -223,3 +223,68 @@ describe("AR camera resume", () => {
     expect(calls).toEqual(["clearRect"]);
   });
 });
+
+describe("AR photo mode", () => {
+  beforeEach(() => {
+    Object.defineProperty(document, "hidden", {
+      configurable: true,
+      value: false,
+    });
+    vi.stubGlobal("requestAnimationFrame", vi.fn(() => 1));
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockImplementation(
+      function (this: HTMLCanvasElement) {
+        return {
+          canvas: this,
+          drawImage: vi.fn(),
+          fillRect: vi.fn(),
+          save: vi.fn(),
+          restore: vi.fn(),
+          rotate: vi.fn(),
+          translate: vi.fn(),
+          scale: vi.fn(),
+          clearRect: vi.fn(),
+          globalAlpha: 1,
+        } as unknown as CanvasRenderingContext2D;
+      },
+    );
+    // mediaDevices отсутствуют: если фото-режим полезет в getUserMedia —
+    // упадёт с TypeError, и тест это поймает
+    Object.defineProperty(navigator, "mediaDevices", {
+      configurable: true,
+      value: undefined,
+    });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("фото: камера не запрашивается, stop() останавливает рисующий цикл", async () => {
+    const stream = createStream("live");
+    const stopPhotoDraw = vi.fn();
+    const { videoEl, play } = createVideoEl({ frozen: false });
+
+    const canvas = document.createElement("canvas");
+    const session = await startAr(
+      videoEl,
+      canvas,
+      () => ({} as never),
+      {} as never,
+      { photoStream: stream, stopPhotoDraw },
+    );
+    expect(play).toHaveBeenCalledTimes(1);
+    expect(stream.getTracks()[0].stop).not.toHaveBeenCalled();
+
+    // Возврат из фона не ведёт к переприсоединению: камера не трогается
+    document.dispatchEvent(new Event("visibilitychange"));
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(play).toHaveBeenCalledTimes(1);
+
+    session.stop();
+    expect(stopPhotoDraw).toHaveBeenCalledTimes(1);
+    expect(stream.getTracks()[0].stop).toHaveBeenCalledTimes(1);
+    expect(videoEl.srcObject).toBeNull();
+  });
+});

@@ -25,6 +25,14 @@ export const DEFAULT_CAMERA_FOV_DEG = 70;
 
 const STORAGE_KEY = "vershiny-calibration";
 
+/**
+ * Версия модели калибровки. 1 — опорная ось AR/фото сменилась с 0.62 на
+ * 0.5; 2 — AR/фото перешли с линейной модели на pinhole. В обоих случаях
+ * прежние tiltDeg/cameraFovDeg поглощали систематику старой модели и после
+ * смены вредны — при устаревшей версии они сбрасываются, азимут сохраняется.
+ */
+export const CALIBRATION_VERSION = 2;
+
 export interface Calibration {
   /** Поправка азимута, градусы (прибавляется к показаниям компаса) */
   azimuthDeg: number;
@@ -34,6 +42,8 @@ export interface Calibration {
   cameraFovDeg: number | null;
   /** Пробовать совместить контуры с кадром автоматически при входе в AR */
   autoCalibrate: boolean;
+  /** Версия модели, при которой поправки подбирались */
+  version: number;
 }
 
 export const DEFAULT_CALIBRATION: Calibration = {
@@ -41,13 +51,16 @@ export const DEFAULT_CALIBRATION: Calibration = {
   tiltDeg: 0,
   cameraFovDeg: null,
   autoCalibrate: true,
+  version: CALIBRATION_VERSION,
 };
 
-/** Границы ползунков: за ними подстройка перестаёт быть подстройкой */
+/** Границы ползунков: за ними подстройка перестаёт быть подстройкой.
+ * Минимум поля зрения — 10°: у телефонов есть телевики (5× ≈ 16°, 10× ≈ 8°),
+ * и AR-оверлею надо позволять такие углы (40° отсекали телефото целиком) */
 export const CALIBRATION_LIMITS = {
   tiltDeg: 20,
-  fovMinDeg: 40,
-  fovMaxDeg: 100,
+  fovMinDeg: 10,
+  fovMaxDeg: 120,
 };
 
 function clamp(value: number, min: number, max: number): number {
@@ -60,12 +73,26 @@ export function normalizeCalibration(
 ): Calibration {
   if (!raw) return { ...DEFAULT_CALIBRATION };
   const azimuth = Number(raw.azimuthDeg);
+  const azimuthNorm = Number.isFinite(azimuth)
+    ? (((azimuth % 360) + 540) % 360) - 180
+    : 0;
+  const version = Number(raw.version);
+  // Старая модель проекции: tilt и FOV подбирались под неё (опорная ось 0.62
+  // или линейная анизотропия) — после смены они вредны, сбрасываем.
+  // Азимут компаса от модели проекции не зависит — сохраняем
+  if (!Number.isFinite(version) || version < CALIBRATION_VERSION) {
+    return {
+      azimuthDeg: azimuthNorm,
+      tiltDeg: 0,
+      cameraFovDeg: null,
+      autoCalibrate: raw.autoCalibrate !== false,
+      version: CALIBRATION_VERSION,
+    };
+  }
   const tilt = Number(raw.tiltDeg);
   const fov = raw.cameraFovDeg == null ? null : Number(raw.cameraFovDeg);
   return {
-    azimuthDeg: Number.isFinite(azimuth)
-      ? (((azimuth % 360) + 540) % 360) - 180
-      : 0,
+    azimuthDeg: azimuthNorm,
     tiltDeg: Number.isFinite(tilt)
       ? clamp(tilt, -CALIBRATION_LIMITS.tiltDeg, CALIBRATION_LIMITS.tiltDeg)
       : 0,
@@ -74,6 +101,7 @@ export function normalizeCalibration(
         ? clamp(fov, CALIBRATION_LIMITS.fovMinDeg, CALIBRATION_LIMITS.fovMaxDeg)
         : null,
     autoCalibrate: raw.autoCalibrate !== false,
+    version: CALIBRATION_VERSION,
   };
 }
 

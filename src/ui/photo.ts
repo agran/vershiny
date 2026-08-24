@@ -4,6 +4,7 @@
  */
 
 import { applyCoverCrop, type FrameFov } from "../core/camera-fov";
+import { PINHOLE_ENABLED } from "../core/camera-projection";
 import {
   currentFrameRotationDeg,
   drawVideoAligned,
@@ -14,6 +15,7 @@ import { getLocale } from "../core/i18n";
 import { getPhotoCaption } from "../core/photo-caption";
 import { translitToLatin } from "../core/transliterate";
 import {
+  AR_HORIZON_FRAC,
   drawOverlay,
   INK_DARK,
   INK_LIGHT,
@@ -130,7 +132,13 @@ export async function capturePhoto(
     // доворачивается так же, как на экране, — снимок повторяет увиденное
     ctx.save();
     rotateAroundCenter(ctx, overlayView.rollRad ?? 0);
-    drawOverlay(ctx, state, overlayView, uiScale, { ridges });
+    // Опорная ось — 0.5 (оптика камеры), модель — pinhole: та же геометрия,
+    // что на экране AR (drawArFrame), чтобы снимок совпадал с увиденным
+    drawOverlay(ctx, state, overlayView, uiScale, {
+      ridges,
+      horizonFrac: AR_HORIZON_FRAC,
+      projection: PINHOLE_ENABLED ? "pinhole" : "linear",
+    });
     ctx.restore();
   } else {
     renderPanorama(ctx, state, view, uiScale, { ridges });

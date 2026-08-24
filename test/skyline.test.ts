@@ -9,10 +9,12 @@
 import { describe, it, expect } from "vitest";
 import {
   extractSkyline,
+  extractSkylineDetailed,
   matchSkyline,
   MIN_CONFIDENCE,
   type SkylineMatchOptions,
 } from "../src/core/skyline";
+import { createPinholeProjection } from "../src/core/camera-projection";
 
 const deg = (d: number): number => (d * Math.PI) / 180;
 
@@ -76,7 +78,68 @@ function renderFrame(
   return rgba;
 }
 
+/** Синтетический профиль кадра, снятого прямолинейной камерой. */
+function renderPinholeProfile(
+  azTrue: number,
+  tiltTrue: number,
+  width = 320,
+  height = 240,
+  fovRad = deg(76),
+): Float32Array {
+  const fovVRad = 2 * Math.atan(Math.tan(fovRad / 2) * (height / width));
+  const projection = createPinholeProjection({
+    width,
+    height,
+    centerAzRad: azTrue,
+    tiltRad: tiltTrue,
+    fovRad,
+    fovVRad,
+    horizonFrac: 0.5,
+  });
+  const profile = new Float32Array(width).fill(NaN);
+  const horizonAt = (az: number): number => {
+    const idx = az / STEP;
+    const i0 = Math.floor(idx);
+    const fraction = idx - i0;
+    const a = HORIZON[((i0 % HORIZON.length) + HORIZON.length) % HORIZON.length];
+    const b =
+      HORIZON[
+        (((i0 + 1) % HORIZON.length) + HORIZON.length) % HORIZON.length
+      ];
+    return a + (b - a) * fraction;
+  };
+
+  for (let x = 0; x < width; x++) {
+    let left = azTrue - fovRad / 2;
+    let right = azTrue + fovRad / 2;
+    for (let step = 0; step < 60; step++) {
+      const az = (left + right) / 2;
+      const point = projection.angleToView(az, horizonAt(az));
+      if (!point || point.x < x + 0.5) left = az;
+      else right = az;
+    }
+    const az = (left + right) / 2;
+    const point = projection.angleToView(az, horizonAt(az));
+    if (point) profile[x] = point.y / height;
+  }
+  return profile;
+}
+
 describe("линия неба из кадра", () => {
+  it("отдаёт качество только для выбранных колонок skyline", () => {
+    const extracted = extractSkylineDetailed(renderFrame(deg(60), 0), 320, 240);
+    for (let index = 0; index < extracted.profile.length; index++) {
+      const profile = extracted.profile[index];
+      const quality = extracted.quality[index];
+      if (Number.isFinite(profile)) {
+        expect(quality).toBeGreaterThan(0);
+        expect(quality).toBeLessThanOrEqual(1);
+      } else {
+        expect(Number.isNaN(quality)).toBe(true);
+      }
+    }
+  });
+
   it("находит границу неба и земли", () => {
     const frame = renderFrame(deg(60), 0);
     const profile = extractSkyline(frame, 320, 240);
@@ -98,6 +161,73 @@ describe("линия неба из кадра", () => {
 });
 
 describe("совмещение кадра с рельефом", () => {
+  it("в pinhole-режиме переводит колонки кадра через модель объектива", () => {
+    const azTrue = deg(60);
+    const compassError = deg(1.5);
+    const tiltTrue = deg(-0.8);
+    const width = 320;
+    const height = 240;
+    const fovRad = deg(76);
+    const fovVRad = 2 * Math.atan(Math.tan(fovRad / 2) * (height / width));
+    const profile = renderPinholeProfile(
+      azTrue,
+      tiltTrue,
+      width,
+      height,
+      fovRad,
+    );
+
+    const match = matchSkyline(profile, {
+      centerAzRad: azTrue - compassError,
+      tiltRad: 0,
+      fovRad,
+      fovVRad,
+      horizonFrac: 0.5,
+      horizon: HORIZON,
+      stepRad: STEP,
+      projection: "pinhole",
+      frameWidthPx: width,
+      frameHeightPx: height,
+    });
+
+    expect(match.confidence).toBeGreaterThan(MIN_CONFIDENCE);
+    expect((match.azimuthRad * 180) / Math.PI).toBeCloseTo(1.5, 0);
+    expect((match.tiltRad * 180) / Math.PI).toBeCloseTo(-0.8, 0);
+  });
+
+  it("в pinhole-режиме находит большой уход компаса по полному кругу", () => {
+    const azTrue = deg(60);
+    const compassError = deg(70);
+    const fovRad = deg(76);
+    const width = 320;
+    const height = 240;
+    const fovVRad = 2 * Math.atan(Math.tan(fovRad / 2) * (height / width));
+    const profile = renderPinholeProfile(
+      azTrue,
+      0,
+      width,
+      height,
+      fovRad,
+    );
+
+    const match = matchSkyline(profile, {
+      centerAzRad: azTrue - compassError,
+      tiltRad: 0,
+      fovRad,
+      fovVRad,
+      horizonFrac: 0.5,
+      horizon: HORIZON,
+      stepRad: STEP,
+      projection: "pinhole",
+      frameWidthPx: width,
+      frameHeightPx: height,
+      peaks: [],
+    });
+
+    expect(match.confidence).toBeGreaterThan(MIN_CONFIDENCE);
+    expect((match.azimuthRad * 180) / Math.PI).toBeCloseTo(70, 0);
+  });
+
   it("возвращает поправку, на которую врал компас", () => {
     const azTrue = deg(60);
     const compassError = deg(8); // компас показывает на 8° меньше правды

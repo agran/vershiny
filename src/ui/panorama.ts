@@ -6,6 +6,11 @@
  */
 
 import { toDeg, wrapAngle } from "../core/geo";
+import {
+  createLinearProjection,
+  createPinholeProjection,
+  type CameraProjection,
+} from "../core/camera-projection";
 import type { VisiblePeak } from "../core/horizon";
 import { getLocale, peakName, t } from "../core/i18n";
 import { perfCount, perfEnabled, perfPhase } from "../core/perf";
@@ -137,6 +142,13 @@ export function rollEdgeMarginX(
  * переводит пиксели кадра в углы по этой же величине, и разойтись они не должны.
  */
 export const HORIZON_FRAC = 0.62;
+/**
+ * Опорная линия горизонта в AR/фото = 0.5: кадр камеры рисуется
+ * центрированным cover-кропом, оптическая ось — в центре кадра, и при
+ * ровном телефоне горизонт физически там (docs/AR-OPTICS-AUDIT.md, №1).
+ * 0.62 — художественный выбор ТОЛЬКО панорамы (больше неба в кадре)
+ */
+export const AR_HORIZON_FRAC = 0.5;
 
 /** Какие части оверлея рисовать */
 export interface OverlayOptions {
@@ -158,6 +170,18 @@ export interface OverlayOptions {
    * чтобы проекция не прыгала при каждом перерендере
    */
   anchorAzRad?: number;
+  /**
+   * Доля высоты кадра, на которой лежит линия горизонта (опорная ось
+   * проекции). Панорама — HORIZON_FRAC (0.62); AR и фото обязаны передавать
+   * AR_HORIZON_FRAC (0.5) — там это оптическая ось камеры, а не эстетика
+   */
+  horizonFrac?: number;
+  /**
+   * Модель проекции: "linear" (px/рад, окно панорамы в цилиндр) или
+   * "pinhole" (гномоника, модель камеры — AR/фото, docs/AR-PROJECTION.md).
+   * Панорама всегда линейная
+   */
+  projection?: "linear" | "pinhole";
   /**
    * Размеры ВИДИМОЙ области, если оверлей рисуется в буфер большего
    * размера (кэш AR с полями запаса): проекция считается от этих размеров,
@@ -232,18 +256,43 @@ export function drawOverlay(
   // иначе горизонт уезжает к низу буфера, и контуры падают за экран
   const width = overlay.viewWidth ?? canvasW;
   const height = overlay.viewHeight ?? canvasH;
-  const horizonY = height * HORIZON_FRAC;
+  const horizonFrac = overlay.horizonFrac ?? HORIZON_FRAC;
+  const horizonY = height * horizonFrac;
   const drawRidges = overlay.ridges !== false;
   const tTotal = perfEnabled ? performance.now() : 0;
   let tSection = tTotal;
 
-  const azToX = (az: number): number =>
-    (wrapAngle(az - (overlay.anchorAzRad ?? view.centerAzRad)) /
-      view.fovRad) *
-      width +
-    width / 2;
-  const elevToY = (elev: number): number =>
-    horizonY - ((elev - view.tiltRad) / view.fovVRad) * height;
+  // Проекция кадра (core/camera-projection.ts): единственная точка правды
+  // для всех пересчётов px↔угол. Панорама всегда линейная; обратные
+  // пересчёты (xToAz для выносок) обязаны ходить через ту же проекцию,
+  // иначе при будущей модели камеры (пинхол/дисторсия) выноски и контуры
+  // разъедутся у краёв кадра
+  const proj: CameraProjection =
+    overlay.projection === "pinhole"
+      ? createPinholeProjection({
+          width,
+          height,
+          centerAzRad: overlay.anchorAzRad ?? view.centerAzRad,
+          tiltRad: view.tiltRad,
+          fovRad: view.fovRad,
+          fovVRad: view.fovVRad,
+          horizonFrac,
+        })
+      : createLinearProjection({
+          width,
+          height,
+          centerAzRad: overlay.anchorAzRad ?? view.centerAzRad,
+          tiltRad: view.tiltRad,
+          fovRad: view.fovRad,
+          fovVRad: view.fovVRad,
+          horizonFrac,
+        });
+  // Пинхол возвращает null за камерой: шкала азимутов и гребни обязаны
+  // пропускать такие лучи, а не рисовать NaN
+  const toView = (
+    az: number,
+    elev: number,
+  ): { x: number; y: number } | null => proj.angleToView(az, elev);
 
   const { horizon, stepRad } = state;
   const layers = state.layers ?? [horizon];
@@ -289,8 +338,7 @@ export function drawOverlay(
         runningMax,
         EPS,
         stepRad,
-        azToX,
-        elevToY,
+        toView,
         width,
         height,
         edgeMarginX,
@@ -322,7 +370,10 @@ export function drawOverlay(
     const stepDeg = 15;
     for (let deg = 0; deg < 360; deg += stepDeg) {
       const az = (deg * Math.PI) / 180;
-      const x = azToX(az);
+      // Пинхол: за камерой — null, пропускаем риску (она физически не видна)
+      const p = toView(az, view.tiltRad);
+      if (!p) continue;
+      const x = p.x;
       if (x < -edgeMarginX || x > width + edgeMarginX) continue;
       const tickLen = (deg % 45 === 0 ? 14 : 7) * uiScale;
       ctx.beginPath();
@@ -355,15 +406,13 @@ export function drawOverlay(
     drawLabels(
       ctx,
       state.peaks,
-      azToX,
-      elevToY,
+      proj,
       view,
       state,
       uiScale,
       width,
       height,
       overlay.stableLabels === true,
-      overlay.anchorAzRad,
     );
   }
   if (perfEnabled) {
@@ -382,8 +431,7 @@ export function buildRidgeSegments(
   runningMax: Float32Array,
   eps: number,
   stepRad: number,
-  azToX: (az: number) => number,
-  elevToY: (elev: number) => number,
+  toView: (az: number, elev: number) => { x: number; y: number } | null,
   width: number,
   height: number,
   /** Горизонтальный запас за края кадра, px (доворот кадра на крен) */
@@ -412,12 +460,17 @@ export function buildRidgeSegments(
       flush();
       continue;
     }
-    const x = azToX(i * stepRad);
+    const p = toView(i * stepRad, v);
+    if (!p) {
+      // Пинхол: луч за камерой — физически не виден
+      flush();
+      continue;
+    }
+    const { x, y } = p;
     if (x < -marginX || x > width + marginX) {
       flush();
       continue;
     }
-    const y = elevToY(v);
     if (y < -height || y > height * 2) {
       flush();
       continue;
@@ -898,29 +951,36 @@ function nameTokens(
 function drawLabels(
   ctx: CanvasRenderingContext2D,
   peaks: VisiblePeak[],
-  azToX: (az: number) => number,
-  elevToY: (elev: number) => number,
+  proj: CameraProjection,
   view: ViewState,
   state: PanoramaState,
   uiScale: number,
   width: number,
   height: number,
   stable: boolean,
-  anchorAzRad: number | undefined,
 ): void {
   const labelFont = `${13 * uiScale}px system-ui, sans-serif`;
   ctx.font = labelFont;
-  // Обратная проекция экрана в азимут — для обрыва выносок о силуэт.
-  // Якорь тот же, что у azToX (overlay.anchorAzRad): иначе xToAz∘azToX
-  // сдвигало бы азимуты на (centerAz − anchorAz), и выноски скрытых
-  // вершин обрывались бы о чужой участок силуэта
-  const xToAz = (x: number): number =>
-    (anchorAzRad ?? view.centerAzRad) +
-    ((x - width / 2) / width) * view.fovRad;
   // Видимая линия силуэта: считается один раз на кадр, её спрашивают
   // и подъём подписи, и обрыв выноски, и запасное место маркера
   const silhouette = silhouetteProfile(state);
   const stepRad = state.stepRad;
+
+  // Пересчёты из ТОЙ ЖЕ проекции, что у контуров (общий якорь
+  // overlay.anchorAzRad — иначе выноски скрытых вершин обрывались бы о
+  // чужой участок силуэта). Линейная модель сепарабельна, поэтому
+  // одиночный пересчёт азимута точен; для линии силуэта используется
+  // парный silhouetteYAt — пинхол связывает колонку и строку кадра
+  const azToX = (az: number): number => proj.angleToView(az, 0)?.x ?? NaN;
+  /** y линии силуэта в колонке x при опорной строке yRef (для обрыва выносок) */
+  const silhouetteYAt = (x: number, yRef: number): number => {
+    const va = proj.viewToAngle(x, yRef);
+    if (!va) return Infinity;
+    const elev = silhouetteElevAt(silhouette, stepRad, va.azRad);
+    if (!Number.isFinite(elev)) return Infinity;
+    const p = proj.angleToView(va.azRad, elev);
+    return p ? p.y : Infinity;
+  };
 
   // Все подписи под одним углом: так они не пересекают друг друга,
   // их помещается больше, а выноска не режет соседние надписи.
@@ -994,8 +1054,7 @@ function drawLabels(
         p.peak,
         state,
         silhouette,
-        azToX,
-        elevToY,
+        proj,
       );
       if (!marker) continue;
       // Подпись целиком сдвигается на смещение своей вершины: многострочная
@@ -1031,9 +1090,7 @@ function drawLabels(
       const x = ax + ux * w * s;
       const y = ay + uy * w * s;
       if (x < 0 || x > width) continue;
-      if (
-        y > horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY) - CLEAR
-      ) {
+      if (y > silhouetteYAt(x, y) - CLEAR) {
         return false;
       }
     }
@@ -1071,8 +1128,7 @@ function drawLabels(
       peak,
       state,
       silhouette,
-      azToX,
-      elevToY,
+      proj,
     );
     if (!marker) return false;
     const { x: mx, y: my } = marker;
@@ -1195,10 +1251,7 @@ function drawLabels(
         bot.ay,
         p.mx,
         p.my,
-        silhouette,
-        stepRad,
-        xToAz,
-        elevToY,
+        silhouetteYAt,
       );
       return { x1: end.x, y1: end.y, x2: bot.ax, y2: bot.ay };
     };
@@ -1214,10 +1267,7 @@ function drawLabels(
         bot.ay,
         mx,
         my,
-        silhouette,
-        stepRad,
-        xToAz,
-        elevToY,
+        silhouetteYAt,
       );
       return { x1: end.x, y1: end.y, x2: bot.ax, y2: bot.ay };
     };
@@ -1905,10 +1955,7 @@ function drawLabels(
             anchorLine.ay,
             p.mx,
             p.my,
-            silhouette,
-            stepRad,
-            xToAz,
-            elevToY,
+            silhouetteYAt,
           )
         : { x: p.mx, y: p.my };
     drawPeakAnchor(
@@ -2016,15 +2063,14 @@ function drawPeakAnchor(
 }
 
 /**
- * Высота силуэта на заданном азимуте в пикселях (интерполяция между лучами).
+ * Возвышение силуэта на заданном азимуте (интерполяция между лучами).
  * `+Infinity` — рельефа на этом азимуте нет вовсе: силуэт «бесконечно низко»,
  * и загораживать он ничего не может.
  */
-function horizonAtAzimuth(
+function silhouetteElevAt(
   silhouette: Float32Array,
   stepRad: number,
   azRad: number,
-  elevToY: (elev: number) => number,
 ): number {
   // Азимут приходит и отрицательным (обратная проекция экрана) — нормализуем,
   // иначе индекс уходит в минус и высота силуэта становится NaN
@@ -2039,9 +2085,9 @@ function horizonAtAzimuth(
   // Дырявый луч не «опускает» силуэт к нулю: берём соседний, а если данных
   // нет вовсе — сообщаем, что рельефа здесь не существует
   if (!Number.isFinite(a0) && !Number.isFinite(a1)) return Infinity;
-  if (!Number.isFinite(a0)) return elevToY(a1);
-  if (!Number.isFinite(a1)) return elevToY(a0);
-  return elevToY(a0 + (a1 - a0) * frac);
+  if (!Number.isFinite(a0)) return a1;
+  if (!Number.isFinite(a1)) return a0;
+  return a0 + (a1 - a0) * frac;
 }
 
 /**
@@ -2054,19 +2100,16 @@ function clipToSilhouette(
   ay: number,
   mx: number,
   my: number,
-  silhouette: Float32Array,
-  stepRad: number,
-  xToAz: (x: number) => number,
-  elevToY: (elev: number) => number,
+  silhouetteYAt: (x: number, yRef: number) => number,
 ): { x: number; y: number } {
   const STEPS = 24;
   let last = { x: ax, y: ay };
-  let prevH = horizonAtAzimuth(silhouette, stepRad, xToAz(ax), elevToY);
+  let prevH = silhouetteYAt(ax, ay);
   for (let i = 1; i <= STEPS; i++) {
     const t = i / STEPS;
     const x = ax + (mx - ax) * t;
     const y = ay + (my - ay) * t;
-    const h = horizonAtAzimuth(silhouette, stepRad, xToAz(x), elevToY);
+    const h = silhouetteYAt(x, y);
     // y растёт вниз: точка ниже линии силуэта — уже за склоном
     if (y > h) {
       // Пересечение внутри шага: кладём конец выноски ТОЧНО на линию
@@ -2100,11 +2143,12 @@ function findPeakMarkerPosition(
   peak: VisiblePeak,
   state: PanoramaState,
   silhouette: Float32Array,
-  azToX: (az: number) => number,
-  elevToY: (elev: number) => number,
+  proj: CameraProjection,
 ): { x: number; y: number } | null {
   const m = peakMarkerAngle(peak, state, silhouette);
-  return m ? { x: azToX(m.az), y: elevToY(m.elev) } : null;
+  if (!m) return null;
+  const p = proj.angleToView(m.az, m.elev);
+  return p ? { x: p.x, y: p.y } : null;
 }
 
 /**

@@ -8,9 +8,15 @@ import { describe, it, expect } from "vitest";
 import {
   applyCoverCrop,
   applyZoom,
+  diagFovFromFl35,
   fovForFrame,
   horizonFracInFrame,
+  longSideFovFromFl35,
 } from "../src/core/camera-fov";
+import {
+  createLinearProjection,
+  createPinholeProjection,
+} from "../src/core/camera-projection";
 
 const DEG = Math.PI / 180;
 /** Угол из половинного тангенса: обратный ход формул модуля */
@@ -45,6 +51,54 @@ describe("fovForFrame", () => {
   it("битые размеры не роняют отрисовку", () => {
     const fov = fovForFrame(60 * DEG, 0, 0);
     expect(fov.h).toBeCloseTo(60 * DEG, 10);
+  });
+});
+
+describe("fl35 → углы кадра (docs/AR-OPTICS-AUDIT.md, №5)", () => {
+  const DIAG35 = Math.hypot(36, 24);
+
+  it("диагональный угол: fl35 привязан к диагонали полного кадра", () => {
+    const fl35 = 23;
+    expect(diagFovFromFl35(fl35)).toBeCloseTo(
+      2 * Math.atan(DIAG35 / 2 / fl35),
+      10,
+    );
+  });
+
+  it("кадр 3:2: длинная сторона как у полного кадра, 2·atan(18/fl35)", () => {
+    const fl35 = 23;
+    // 3600×2400 — 3:2: длинная/диагональ = 36/43.27 → ровно 18/fl35
+    expect(longSideFovFromFl35(fl35, 3600, 2400)).toBeCloseTo(
+      fromHalfTan(18 / fl35),
+      10,
+    );
+  });
+
+  it("кадр 4:3: длинная сторона ~на 2.8% уже наивной 2·atan(18/fl35)", () => {
+    const fl35 = 23;
+    const naive = fromHalfTan(18 / fl35);
+    const long = longSideFovFromFl35(fl35, 4000, 3000)!;
+    expect(long).toBeCloseTo(
+      fromHalfTan((DIAG35 / 2 / fl35) * (4 / 5)),
+      10,
+    );
+    expect(long).toBeLessThan(naive);
+    expect((naive - long) / naive).toBeGreaterThan(0.02);
+  });
+
+  it("портрет: базовый угол получает высота, а не ширина", () => {
+    const fl35 = 23;
+    const land = longSideFovFromFl35(fl35, 4000, 3000)!;
+    const port = longSideFovFromFl35(fl35, 3000, 4000)!;
+    expect(port).toBeCloseTo(land, 10); // та же длинная сторона кадра
+  });
+
+  it("мусор на входе — null", () => {
+    expect(longSideFovFromFl35(0, 4000, 3000)).toBeNull();
+    expect(longSideFovFromFl35(NaN, 4000, 3000)).toBeNull();
+    expect(longSideFovFromFl35(-1, 4000, 3000)).toBeNull();
+    expect(longSideFovFromFl35(23, 0, 3000)).toBeNull();
+    expect(diagFovFromFl35(0)).toBeNull();
   });
 });
 
@@ -87,6 +141,101 @@ describe("applyCoverCrop", () => {
   it("битые размеры возвращают исходный угол", () => {
     const fov = fovForFrame(70 * DEG, 1920, 1080);
     expect(applyCoverCrop(fov, 0, 1080, 100, 100)).toEqual(fov);
+  });
+
+  it("central cover и скорректированный pinhole-FOV совпадают для матрицы пропорций", () => {
+    const frames = [
+      [400, 300], // 4:3
+      [450, 300], // 3:2
+      [480, 270], // 16:9
+      [300, 400], // 3:4
+    ];
+    const viewports = [
+      [400, 300], // 4:3
+      [480, 270], // 16:9
+      [270, 480], // 9:16
+    ];
+    const azimuths = [-0.3, -0.1, 0, 0.14, 0.28];
+    const elevations = [-0.18, -0.05, 0.08, 0.2];
+
+    for (const [frameW, frameH] of frames) {
+      const fullFov = fovForFrame(76 * DEG, frameW, frameH);
+      const full = createPinholeProjection({
+        width: frameW,
+        height: frameH,
+        centerAzRad: 1.1,
+        tiltRad: 0.08,
+        fovRad: fullFov.h,
+        fovVRad: fullFov.v,
+        horizonFrac: 0.5,
+      });
+      for (const [viewW, viewH] of viewports) {
+        const visibleFov = applyCoverCrop(
+          fullFov,
+          frameW,
+          frameH,
+          viewW,
+          viewH,
+        );
+        const visible = createPinholeProjection({
+          width: viewW,
+          height: viewH,
+          centerAzRad: 1.1,
+          tiltRad: 0.08,
+          fovRad: visibleFov.h,
+          fovVRad: visibleFov.v,
+          horizonFrac: 0.5,
+        });
+        const scale = Math.max(viewW / frameW, viewH / frameH);
+        const offsetX = (viewW - frameW * scale) / 2;
+        const offsetY = (viewH - frameH * scale) / 2;
+
+        for (const azimuthOffset of azimuths) {
+          for (const elevationOffset of elevations) {
+            const azimuth = 1.1 + azimuthOffset;
+            const elevation = 0.08 + elevationOffset;
+            const fullPoint = full.angleToView(azimuth, elevation)!;
+            const expected = {
+              x: fullPoint.x * scale + offsetX,
+              y: fullPoint.y * scale + offsetY,
+            };
+            const actual = visible.angleToView(azimuth, elevation)!;
+            if (
+              expected.x < 0 ||
+              expected.x > viewW ||
+              expected.y < 0 ||
+              expected.y > viewH
+            ) {
+              continue;
+            }
+            expect(actual.x).toBeCloseTo(expected.x, 9);
+            expect(actual.y).toBeCloseTo(expected.y, 9);
+          }
+        }
+      }
+    }
+  });
+
+  it("линейная модель заметно расходится с прямолинейной камерой у края", () => {
+    const width = 480;
+    const height = 270;
+    const fov = fovForFrame(90 * DEG, width, height);
+    const params = {
+      width,
+      height,
+      centerAzRad: 1.1,
+      tiltRad: 0,
+      fovRad: fov.h,
+      fovVRad: fov.v,
+      horizonFrac: 0.5,
+    };
+    const pinhole = createPinholeProjection(params);
+    const linear = createLinearProjection(params);
+    const azimuth = params.centerAzRad + 30 * DEG;
+    const pinholePoint = pinhole.angleToView(azimuth, 0)!;
+    const linearPoint = linear.angleToView(azimuth, 0)!;
+
+    expect(Math.abs(linearPoint.x - pinholePoint.x)).toBeGreaterThan(20);
   });
 });
 

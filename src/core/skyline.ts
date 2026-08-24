@@ -18,6 +18,11 @@
  */
 
 import { wrapAngle } from "./geo";
+import {
+  createLinearProjection,
+  createPinholeProjection,
+  type CameraProjection,
+} from "./camera-projection";
 import { matchSkylineCoarse } from "./skyline-match";
 
 /** Ширина рабочей сетки: больше не нужно, гребень — крупная форма */
@@ -67,6 +72,7 @@ const DP_NONE_COST = 0.04;
  * окупить вход, а честный гребень окупает его серией колонок.
  */
 const DP_ENTER_COST = 0.25;
+const SKYLINE_QUALITY_SCALE = 0.16;
 
 /**
  * Окно поиска обратного перепада вокруг кандидата, строк сетки. Граница
@@ -118,11 +124,24 @@ const EDGE_ABOVE_RATIO = 0.5;
  *    слабая, но непрерывная линия дальнего гребня выигрывает у сильной,
  *    но рваной линии «туман/ближний склон».
  */
+export interface SkylineExtraction {
+  profile: Float32Array;
+  quality: Float32Array;
+}
+
 export function extractSkyline(
   rgba: Uint8ClampedArray,
   width: number,
   height: number,
 ): Float32Array {
+  return extractSkylineDetailed(rgba, width, height).profile;
+}
+
+export function extractSkylineDetailed(
+  rgba: Uint8ClampedArray,
+  width: number,
+  height: number,
+): SkylineExtraction {
   const { lum, cbr, sat } = downsampleFeatures(rgba, width, height);
   const W = GRID_W;
   const H = GRID_H;
@@ -272,7 +291,7 @@ function dynamicProgrammingProfile(
   strength: Float32Array,
   yMin: number,
   yMax: number,
-): Float32Array {
+): SkylineExtraction {
   const W = GRID_W;
   const NY = yMax - yMin + 1;
   // Родитель для отката: y'−yMin или −1 = из NONE
@@ -330,15 +349,18 @@ function dynamicProgrammingProfile(
     }
   }
   const profile = new Float32Array(W).fill(NaN);
+  const quality = new Float32Array(W).fill(NaN);
   for (let x = W - 1; x >= 0; x--) {
     if (cur >= 0) {
-      profile[x] = (cur + yMin) / GRID_H;
+      const y = cur + yMin;
+      profile[x] = y / GRID_H;
+      quality[x] = Math.min(1, strength[y * W + x] / SKYLINE_QUALITY_SCALE);
       cur = parent[x * NY + cur];
     } else {
       cur = parentNone[x];
     }
   }
-  return profile;
+  return { profile, quality };
 }
 
 /** Три канала признаков на ячейку сетки */
@@ -422,6 +444,12 @@ export interface SkylineMatchOptions {
   fovVRad: number;
   /** Доля высоты кадра, на которой рисуется линия горизонта (0 = верх) */
   horizonFrac: number;
+  /** Модель камеры, которой был снят профиль кадра */
+  projection?: "linear" | "pinhole";
+  /** Ширина исходного кадра до уменьшения экстрактором, px */
+  frameWidthPx?: number;
+  /** Высота исходного кадра до уменьшения экстрактором, px */
+  frameHeightPx?: number;
   /** Горизонт по лучам: элемент i — угол возвышения на азимуте i·stepRad */
   horizon: Float32Array;
   stepRad: number;
@@ -449,10 +477,49 @@ export interface SkylineMatch {
   confidence: number;
   /** Сколько колонок кадра участвовало в сравнении */
   columns: number;
+  /**
+   * Слой горизонта, по которому сошлось (только matchSkylineLayered):
+   * поправки доводятся по тому же рельефу, что нашёл послойный матчинг,
+   * а не по силуэту
+   */
+  layer?: Float32Array;
 }
 
 /** Порог доверия: ниже него поправка не применяется */
 export const MIN_CONFIDENCE = 0.55;
+
+/**
+ * Обратная проекция столбца профиля в угол мира. Экстрактор хранит только
+ * доли высоты и может уменьшить кадр до своей сетки, поэтому координаты
+ * профиля возвращаем в геометрию исходного кадра перед viewToAngle().
+ */
+function frameAngleProjection(
+  frameColumns: number,
+  options: SkylineMatchOptions,
+): (x: number, yFrac: number) => ReturnType<CameraProjection["viewToAngle"]> {
+  const frameW = options.frameWidthPx ?? frameColumns;
+  const inferredAspect =
+    Math.tan(options.fovVRad / 2) / Math.tan(options.fovRad / 2);
+  const frameH = options.frameHeightPx ?? frameW * inferredAspect;
+  const params = {
+    width: frameW,
+    height: frameH,
+    centerAzRad: options.centerAzRad,
+    tiltRad: options.tiltRad,
+    fovRad: options.fovRad,
+    fovVRad: options.fovVRad,
+    horizonFrac: options.horizonFrac,
+  };
+  const projection =
+    options.projection === "pinhole"
+      ? createPinholeProjection(params)
+      : createLinearProjection(params);
+  return (x, yFrac) =>
+    projection.viewToAngle(
+      ((x + 0.5) / frameColumns) * frameW,
+      yFrac * frameH,
+    );
+}
 
 /**
  * Совмещение линии неба из кадра с горизонтом по рельефу.
@@ -471,24 +538,25 @@ export function matchSkyline(
 ): SkylineMatch {
   const {
     centerAzRad,
-    tiltRad,
     fovRad,
-    fovVRad,
-    horizonFrac,
     horizon,
     stepRad,
     maxAzRad = (25 * Math.PI) / 180,
     maxTiltRad = (12 * Math.PI) / 180,
   } = options;
 
-  // Кадр: доля высоты → угол возвышения в системе «камера смотрит ровно»
+  // Кадр: колонка/доля высоты → угол. В pinhole-режиме x и y связаны
+  // матрицей камеры, поэтому использовать линейные формулы здесь нельзя.
+  const toAngle = frameAngleProjection(frame.length, options);
   const cols: number[] = [];
   const frameElev: number[] = [];
   for (let x = 0; x < frame.length; x++) {
     const yFrac = frame[x];
     if (Number.isNaN(yFrac)) continue;
-    cols.push(((x + 0.5) / frame.length - 0.5) * fovRad);
-    frameElev.push(tiltRad + (horizonFrac - yFrac) * fovVRad);
+    const angle = toAngle(x, yFrac);
+    if (!angle) continue;
+    cols.push(angle.azRad - centerAzRad);
+    frameElev.push(angle.elevRad);
   }
   if (cols.length < frame.length * 0.35) {
     // Небо не нашлось почти нигде: туман, ночь, объектив в стену
@@ -662,4 +730,123 @@ function medianResidualAcrossShifts(
   if (!values.length) return 0;
   values.sort((a, b) => a - b);
   return values[values.length >> 1];
+}
+
+// ==== Послойный матчинг (ступень 3 каскада автокалибровки) ====
+//
+// docs/SKYLINE-NN-FALLBACK.md §6: после отказа основного матчинга профиль
+// кадра сравнивается с каждым непустым `panorama.layers[b]` по отдельности.
+// Случай «горизонт в облаках / многослойный рельеф»: дальние гребни не видны
+// или не извлечены, но ближний склон в кадре есть — и совпадает с одной из
+// дистанционных корзин, а не с максимумом по всем (силуэтом). NN достаётся
+// только то, что не смогло и это.
+
+export interface LayeredMatchOptions extends SkylineMatchOptions {
+  /** Слои горизонта по корзинам дистанций (panorama.layers) */
+  layers: Float32Array[];
+}
+
+/** Минимальная доля заполненных лучей слоя, чтобы его пробовать */
+const LAYER_MIN_FILL = 0.3;
+/** Запас «линия не выше силуэта», рад (~0.1°) — шум экстрактора */
+const LAYER_BELOW_MARGIN_RAD = (0.1 * Math.PI) / 180;
+/** База фактора разрыва при нулевом разрыве с вторым слоем */
+const LAYER_UNIQUENESS_BASE = 0.4;
+/** Разрыв доверий лучшего и второго слоёв, при котором фактор достигает 1 */
+const LAYER_UNIQUENESS_GAIN = 0.3;
+
+/**
+ * Совмещение профиля кадра с каждым слоем горизонта по отдельности.
+ *
+ * Возвращает результат лучшего слоя, но доверие пересчитано: разрыв ошибки
+ * лучшего слоя со вторым (аналог uniqueness) входит множителем — два слоя с
+ * одинаковым доверием неотличимы, и такому ответу верить нельзя. Дополнительно
+ * фильтр задачи: измеренная линия — ближний склон, поэтому обязана лежать
+ * НЕ ВЫШЕ видимого силуэта минус запас.
+ *
+ * null — слоёв нет или ни один не подошёл (честный отказ ступени).
+ */
+export function matchSkylineLayered(
+  frame: Float32Array,
+  options: LayeredMatchOptions,
+): SkylineMatch | null {
+  const { layers, ...base } = options;
+  if (!layers || layers.length < 2) return null;
+
+  const results: SkylineMatch[] = [];
+  const layerOf: Float32Array[] = [];
+  // b = 0 (ближняя корзина 0–5 км) пропускается: она входит в силуэт, и
+  // совмещение по ней дало бы «траву под ногами», а не линию горизонта
+  for (let b = 1; b < layers.length; b++) {
+    const layer = layers[b];
+    if (!layer || layer.length !== base.horizon.length) continue;
+    let finite = 0;
+    for (let i = 0; i < layer.length; i++) {
+      if (Number.isFinite(layer[i])) finite++;
+    }
+    if (finite < layer.length * LAYER_MIN_FILL) continue; // слой почти пуст
+    const m = matchSkyline(frame, { ...base, horizon: layer });
+    if (m.confidence > 0) {
+      results.push(m);
+      layerOf.push(layer);
+    }
+  }
+  if (!results.length) return null;
+
+  const pairs = results
+    .map((m, i) => ({ m, layer: layerOf[i] }))
+    .sort((a, b) => b.m.confidence - a.m.confidence);
+  const best = pairs[0];
+  // Фильтр задачи: если в совмещённой позиции измеренная линия не лежит
+  // ниже силуэта, это не «ближний склон вместо дальнего» — отказ
+  if (!lineBelowSilhouette(frame, base, best.m)) return null;
+
+  const second = pairs[1]?.m.confidence ?? 0;
+  const gap = best.m.confidence - second;
+  const uniqueness = Math.min(
+    1,
+    LAYER_UNIQUENESS_BASE + gap / LAYER_UNIQUENESS_GAIN,
+  );
+  return {
+    ...best.m,
+    confidence: best.m.confidence * uniqueness,
+    layer: best.layer,
+  };
+}
+
+/**
+ * Медиана превышения силуэта над измеренной линией в совмещённой позиции.
+ * Положительная медиана ≥ запас — линия лежит ниже силуэта, как и должна.
+ */
+function lineBelowSilhouette(
+  frame: Float32Array,
+  options: SkylineMatchOptions,
+  match: SkylineMatch,
+): boolean {
+  const {
+    horizon,
+    stepRad,
+  } = options;
+  // Обратная проекция кадра — та же модель, что в matchSkyline выше.
+  const toAngle = frameAngleProjection(frame.length, options);
+  const diffs: number[] = [];
+  for (let x = 0; x < frame.length; x++) {
+    const yFrac = frame[x];
+    if (Number.isNaN(yFrac)) continue;
+    const angle = toAngle(x, yFrac);
+    if (!angle) continue;
+    const az = angle.azRad + match.azimuthRad;
+    const idx = az / stepRad;
+    const i0 = Math.floor(idx);
+    const f = idx - i0;
+    const a = horizon[((i0 % horizon.length) + horizon.length) % horizon.length];
+    const b =
+      horizon[(((i0 + 1) % horizon.length) + horizon.length) % horizon.length];
+    if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
+    const dem = a + (b - a) * f;
+    diffs.push(dem - (angle.elevRad + match.tiltRad));
+  }
+  if (diffs.length < 8) return false;
+  diffs.sort((a, b) => a - b);
+  return diffs[diffs.length >> 1] >= LAYER_BELOW_MARGIN_RAD;
 }
