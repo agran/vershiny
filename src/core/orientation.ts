@@ -813,9 +813,23 @@ class OrientationTracker {
     this.callback?.(this.state);
   }
 
-  /** Сброс оффсета (после калибровки по солнцу или из настроек) */
+  /**
+   * Сброс ручной подстройки азимута (свайп-оффсет из калибровки).
+   *
+   * Пересобирает состояние сразу: иначе панорама до следующего события
+   * датчика показывала бы азимут со старым офсетом. Показаний датчика ещё
+   * не было — только обнуляем калибровку, взгляд вернёт первое же событие
+   * компаса.
+   */
   resetOffset(): void {
     setCalibration({ azimuthDeg: 0 });
+    const base = this.fusedRad ?? this.followedRad;
+    if (base === null) return;
+    this.state = {
+      ...this.state,
+      azimuthRad: normalizeAngle(base),
+    };
+    this.callback?.(this.state);
   }
 
   /** Пересобрать состояние после правки калибровки в настройках */

@@ -22,6 +22,7 @@ import {
   GPS_TIMEOUT_MS,
   ACCURATE_TIMEOUT_MS,
   REFINE_MIN_MOVE_M,
+  GPS_RETURN_MIN_MOVE_M,
 } from "../src/core/position";
 
 const ALPS = { latitude: 46.5, longitude: 8.0 };
@@ -250,6 +251,16 @@ describe("уточнение по спутникам", () => {
     expect(worthRefining(here, nearby)).toBe(false);
     expect(worthRefining(here, far)).toBe(true);
     expect(REFINE_MIN_MOVE_M).toBeGreaterThan(100);
+  });
+
+  it("порог пересчёта можно задать свой — у кнопки возврата к геопозиции он 100 м", () => {
+    const here = { lat: 43.35, lon: 42.44 };
+    const step = { lat: 43.3515, lon: 42.44 }; // ~165 м
+
+    // Кнопке хватает 100 м, стартовое уточнение такой сдвиг не пересчитывает
+    expect(worthRefining(here, step, GPS_RETURN_MIN_MOVE_M)).toBe(true);
+    expect(worthRefining(here, step)).toBe(false);
+    expect(GPS_RETURN_MIN_MOVE_M).toBe(100);
   });
 });
 

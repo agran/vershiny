@@ -33,6 +33,14 @@ export const ACCURATE_TIMEOUT_MS = 60_000;
 /** Ближе этого уточнение картины не меняет — пересчитывать незачем */
 export const REFINE_MIN_MOVE_M = 500;
 
+/**
+ * Порог пересчёта для кнопки «К моей геопозиции». Меньше стартового
+ * REFINE_MIN_MOVE_M: там пересчёт — фоновое уточнение, и шум GPS (<100 м)
+ * дёргал бы панораму без спроса; а кнопку человек нажимает осознанно —
+ * пересчёт на 100 м он просит сам.
+ */
+export const GPS_RETURN_MIN_MOVE_M = 100;
+
 const STORAGE_KEY = "vershiny-position";
 
 export interface PositionFix {
@@ -238,7 +246,11 @@ export function awaitAccuratePosition(
   );
 }
 
-/** Стоит ли пересчитывать панораму из-за уточнённого положения */
-export function worthRefining(from: LatLon, to: LatLon): boolean {
-  return distanceM(from, to) >= REFINE_MIN_MOVE_M;
+/** Стоит ли пересчитывать панораму из-за сдвига положения */
+export function worthRefining(
+  from: LatLon,
+  to: LatLon,
+  minMoveM = REFINE_MIN_MOVE_M,
+): boolean {
+  return distanceM(from, to) >= minMoveM;
 }

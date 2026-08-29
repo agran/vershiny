@@ -305,6 +305,143 @@ describe("гонка таймера статуса", () => {
   });
 });
 
+describe("возврат к геопозиции", () => {
+  beforeEach(() => {
+    stubEnvironment();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("сбрасывает ручную подстройку азимута", async () => {
+    vi.resetModules();
+    await import("../src/main");
+    const { setCalibration, getCalibration } =
+      await import("../src/core/calibration");
+    setCalibration({ azimuthDeg: 12.5 });
+    expect(getCalibration().azimuthDeg).toBeCloseTo(12.5, 6);
+
+    // Рабочая геолокация: свежий фикс приходит сразу
+    Object.defineProperty(navigator, "geolocation", {
+      value: {
+        getCurrentPosition: (ok: (p: unknown) => void) =>
+          ok({
+            coords: { latitude: 43.3, longitude: 42.5 },
+            timestamp: Date.now(),
+          }),
+      },
+      configurable: true,
+    });
+
+    findButton("К моей геопозиции").click();
+    await vi.waitFor(() => expect(getCalibration().azimuthDeg).toBe(0));
+  });
+
+  it("не пересчитывает панораму, если положение не изменилось", async () => {
+    vi.resetModules();
+    await import("../src/main");
+
+    // Стартовая точка — запасная (Приют 11), геолокации на старте нет.
+    // Свежий фикс приходит в ту же точку: сдвига нет
+    Object.defineProperty(navigator, "geolocation", {
+      value: {
+        getCurrentPosition: (ok: (p: unknown) => void) =>
+          ok({
+            coords: { latitude: 43.318, longitude: 42.458 },
+            timestamp: Date.now(),
+          }),
+      },
+      configurable: true,
+    });
+
+    // Сначала панорама должна существовать: без неё кнопка считает заново
+    workerInstances[0].onmessage?.(resultMessage([]));
+
+    const computes = () =>
+      captured.posted.filter((m) => m.type === "compute" && m._w === 0).length;
+    await vi.waitFor(() => expect(computes()).toBeGreaterThan(0), {
+      timeout: 10_000,
+    });
+    const before = computes();
+
+    findButton("К моей геопозиции").click();
+
+    // Кнопка отработала (статус пуст), но нового расчёта не постила
+    await vi.waitFor(() => {
+      expect(document.getElementById("status")!.textContent).toBe("");
+    });
+    expect(computes()).toBe(before);
+  });
+
+  it("пересчитывает панораму при сдвиге больше 100 м", async () => {
+    vi.resetModules();
+    await import("../src/main");
+
+    // Стартовая точка — запасная (Приют 11). Фикс в ~220 м от неё:
+    // для кнопки это заметный сдвиг (порог 100 м), для стартового
+    // уточнения — нет (там 500 м, фоновый compute не мешает счёту)
+    Object.defineProperty(navigator, "geolocation", {
+      value: {
+        getCurrentPosition: (ok: (p: unknown) => void) =>
+          ok({
+            coords: { latitude: 43.32, longitude: 42.458 },
+            timestamp: Date.now(),
+          }),
+      },
+      configurable: true,
+    });
+
+    workerInstances[0].onmessage?.(resultMessage([]));
+
+    const computes = () =>
+      captured.posted.filter((m) => m.type === "compute" && m._w === 0).length;
+    await vi.waitFor(() => expect(computes()).toBeGreaterThan(0), {
+      timeout: 10_000,
+    });
+    const before = computes();
+
+    findButton("К моей геопозиции").click();
+
+    await vi.waitFor(() => expect(computes()).toBe(before + 1), {
+      timeout: 10_000,
+    });
+  });
+
+  it("не мигает «Определяем положение…», когда фикс приходит сразу", async () => {
+    vi.resetModules();
+    await import("../src/main");
+    Object.defineProperty(navigator, "geolocation", {
+      value: {
+        getCurrentPosition: (ok: (p: unknown) => void) =>
+          ok({
+            coords: { latitude: 43.318, longitude: 42.458 },
+            timestamp: Date.now(),
+          }),
+      },
+      configurable: true,
+    });
+    workerInstances[0].onmessage?.(resultMessage([]));
+    // Стартовый compute должен доехать ДО fake-таймеров: иначе его статус
+    // доползает уже во время advance и мешает проверке
+    await vi.waitFor(
+      () =>
+        expect(
+          captured.posted.some((m) => m.type === "compute" && m._w === 0),
+        ).toBe(true),
+      { timeout: 10_000 },
+    );
+
+    vi.useFakeTimers();
+    const statusEl = document.getElementById("status")!;
+    findButton("К моей геопозиции").click();
+    // Фикс мгновенный: плашка «Определяем положение…» не появляется и в тот
+    // момент, когда сработал бы отложенный показ статуса (400 мс)
+    await vi.advanceTimersByTimeAsync(400);
+    expect(statusEl.textContent).not.toBe("Определяем положение…");
+  });
+});
+
 /** Ответ воркера с превью (грубый ближний кадр, без пиков) */
 function previewMessage(): MessageEvent {
   return {

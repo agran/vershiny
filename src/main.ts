@@ -12,6 +12,7 @@ import {
   awaitAccuratePosition,
   getFreshPosition,
   getPosition,
+  GPS_RETURN_MIN_MOVE_M,
   rememberPosition,
   worthRefining,
 } from "./core/position";
@@ -2678,17 +2679,43 @@ function setupNavPad(): void {
       btn.onclick = () => {
         // «К моему положению» — явная просьба о СВЕЖЕМ фиксе. getPosition()
         // для старта отдавал бы точку прошлого запуска как недостоверную,
-        // не спросив GPS, и кнопка кричала об ошибке при рабочей геолокации
-        setStatus(t("waitingGps"));
+        // не спросив GPS, и кнопка кричала об ошибке при рабочей геолокации.
+        // Статус «Определяем положение…» — только если фикс задерживается:
+        // мгновенный ответ кеша системы иначе мигал бы плашкой долю секунды
+        const waitingTimer = setTimeout(
+          () => setStatus(t("waitingGps")),
+          400,
+        );
         void getFreshPosition().then((pos) => {
+          clearTimeout(waitingTimer);
           if (!pos) {
             setStatus(t("gpsFailed"), 4000);
             return;
           }
-          heightOverride = null; // возврат на землю в точке GPS
-          autoTiltPending = true;
+          // Возврат на землю: если человек «летал» кнопками ⬆⬇, высота
+          // менялась — такой случай гасить как «ничего не изменилось» нельзя
+          const wasFlying = heightOverride !== null;
+          heightOverride = null;
           rememberPosition(pos); // следующий запуск начнётся отсюда
           orientationTracker.setLocation(pos.lat, pos.lon);
+          // Возврат к геопозиции возвращает и взгляд на текущий компас:
+          // ручная подстройка азимута (свайп) отбрасывается, контуры
+          // встают туда, куда смотрит человек
+          orientationTracker.resetOffset();
+          // Никуда не двигались (в пределах 100 м — порога кнопки) и высоту
+          // не меняли — пересчитывать нечего: «Расчёт панорамы…» на месте
+          // раздражает. Регион сверяем: границу можно пересечь и шагом
+          // меньше порога пересчёта
+          if (
+            panorama !== null &&
+            !wasFlying &&
+            !worthRefining(lastOrigin, pos, GPS_RETURN_MIN_MOVE_M)
+          ) {
+            setStatus("");
+            void checkRegionForPosition(pos);
+            return;
+          }
+          autoTiltPending = true;
           requestCompute(pos);
         });
       };
