@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.20.1",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "jsdom": "^29.1.1",
     "prettier": "^3.9.6",
     "typescript": "~5.7.0",

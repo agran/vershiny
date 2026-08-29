@@ -50,6 +50,7 @@
 
 ```powershell
 npm run dev          # http://localhost:5173/vershiny/
+npx vite --host 0.0.0.0  # в локальную сеть; HTTPS (self-signed) — для камеры/GPS с телефона
 npm test             # vitest
 npx tsc              # проверка типов
 npm run build        # прод-сборка

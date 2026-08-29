@@ -1,7 +1,16 @@
 import { defineConfig } from "vite";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig({
   base: "/vershiny/",
+  plugins: [
+    // HTTPS в dev/preview: самоподписанный сертификат. Без него браузеры
+    // телефона не считают http://192.168.x.x безопасным контекстом и
+    // блокируют камеру (getUserMedia) и геолокацию — AR с телефона по
+    // локальной сети не включить. На телефоне при первом открытии
+    // «Дополнительно → Перейти на сайт» (сертификат свой, не CA)
+    basicSsl(),
+  ],
   build: {
     // es2019, а не es2022: у бандла с синтаксисом ES2022 (class fields, ??=,
     // ?., числовые разделители) на iOS Safari < 14.5 парсинг падал целиком —
