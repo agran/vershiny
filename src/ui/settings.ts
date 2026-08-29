@@ -538,20 +538,8 @@ function buildCalibration(onChange: () => void): HTMLElement {
     "color:#8a9ba8;font-size:12px;line-height:1.4;margin-bottom:12px";
   box.appendChild(hint);
 
-  // Автосовмещение по кадру камеры — включено по умолчанию: ручная подгонка
-  // ползунками нужна только там, где машине не за что зацепиться
-  const autoRow = row(t("autoCalibrateOnStart"));
-  const autoInput = document.createElement("input");
-  autoInput.type = "checkbox";
-  autoInput.checked = getCalibration().autoCalibrate;
-  autoInput.style.cssText =
-    "width:20px;height:20px;accent-color:#4cc9f0;cursor:pointer";
-  autoInput.onchange = () => {
-    setCalibration({ autoCalibrate: autoInput.checked });
-  };
-  autoRow.appendChild(autoInput);
-  box.appendChild(autoRow);
-
+  // Автосовмещение по кадру камеры отключено (неустойчиво): здесь — только
+  // ручные поправки, которые подстраиваются прямо свайпом по кадру AR
   const slider = (
     label: string,
     min: number,
@@ -644,9 +632,6 @@ function buildCalibration(onChange: () => void): HTMLElement {
       s.input.value = String(values[i]);
       s.valueEl.textContent = s.format(values[i]);
     });
-    // Сброс возвращает и автосовмещение: без этого на экране оставалась
-    // старая галочка, а в хранилище лежало уже другое значение
-    autoInput.checked = fresh.autoCalibrate;
     orientationTracker.applyCalibration();
     onChange();
     resetBtn.textContent = "✓";

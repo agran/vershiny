@@ -158,27 +158,6 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   calibrationFov: { ru: "Поле зрения камеры", en: "Camera field of view" },
   calibrationAzimuth: { ru: "Поправка азимута", en: "Azimuth offset" },
   calibrationTilt: { ru: "Поправка наклона", en: "Tilt offset" },
-  autoCalibrate: {
-    ru: "Совместить вершины с камерой",
-    en: "Match peaks to camera",
-  },
-  autoCalibrateOnStart: {
-    ru: "Совмещать автоматически в AR",
-    en: "Match automatically in AR",
-  },
-  calibrating: {
-    ru: "Сопоставление с камерой…",
-    en: "Matching the camera view…",
-  },
-  calibrateDone: { ru: "Совмещено, поправка", en: "Matched, offset" },
-  calibrateFailed: {
-    ru: "Не удалось совместить: наведите на горизонт с горами",
-    en: "No match: point the camera at a skyline with mountains",
-  },
-  calibrateNoFrame: {
-    ru: "Камера ещё не готова",
-    en: "Camera is not ready yet",
-  },
   downloadedRegions: { ru: "Скачанные регионы", en: "Downloaded regions" },
   noDownloadedRegions: { ru: "пока нет", en: "none yet" },
   regions: { ru: "Регионы", en: "Regions" },

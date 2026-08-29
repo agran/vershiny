@@ -4,7 +4,6 @@
  */
 
 import { fovForFrame } from "./core/camera-fov";
-import { PINHOLE_ENABLED } from "./core/camera-projection";
 import { normalizeAz, toRad, wrapAngle, type LatLon } from "./core/geo";
 import { getLocale, t } from "./core/i18n";
 import type { Peak, PeaksFile } from "./core/peaks";
@@ -28,7 +27,6 @@ import {
 } from "./ui/download";
 import {
   ICON_AR,
-  ICON_CALIBRATE,
   ICON_CLOSE,
   ICON_COMPASS_TAP,
   ICON_DOWN,
@@ -45,7 +43,6 @@ import { isTypingTarget } from "./ui/keys";
 import {
   HORIZON_FRAC,
   renderPanorama,
-  silhouetteProfile,
   type PanoramaState,
   type ViewState,
 } from "./ui/panorama";
@@ -2594,14 +2591,7 @@ function hideButtonCaptions(): void {
   if (!captionEntries.some((c) => c.always) && captionLayer) {
     captionLayer.style.display = "none";
   }
-  // Кнопки, чья видимость зависит от фазы загрузки (автокалибровка: при
-  // загрузке — неактивная с подписью, после — скрыта до входа в AR)
-  updateCalibrateBtnRef?.();
 }
-
-/** Позднее связывание: updateCalibrateBtn объявлен в setupControls() ниже,
- *  а hideButtonCaptions() может вызваться до него (ошибка раннего compute) */
-let updateCalibrateBtnRef: (() => void) | null = null;
 
 /** Перевести подписи интерфейса после смены языка */
 function relabelUi(): void {
@@ -2819,101 +2809,11 @@ function layoutControls(): void {
 let lastObserverH = 0;
 
 /**
- * Сессия AR: нужна автокалибровке, чтобы взять кадр камеры
+ * Сессия AR.
  *
  * Объявлена выше (перед resize): ранний вызов resize() при инициализации
  * модуля иначе читал бы её в TDZ.
  */
-
-/**
- * Автокалибровка по кадру: линия «небо / земля» из камеры совмещается с
- * горизонтом по рельефу (core/skyline.ts).
- *
- * Результат применяется только при достаточном доверии. Молчаливо увести
- * панораму на 20° в сторону хуже, чем ничего не сделать: человек поверит
- * подписям и уйдёт не на ту гору. Поэтому при неудаче — честное сообщение,
- * а ручные ползунки остаются на месте.
- *
- * @param silent автозапуск при входе в AR: о неудаче не сообщаем, пользователь
- *   её не заказывал и разбираться не просил
- */
-async function runAutoCalibration(silent: boolean): Promise<void> {
-  if (!arSession || !panorama) return;
-  const frame = arSession.grabFrame();
-  if (!frame) {
-    if (!silent) setStatus(t("calibrateNoFrame"));
-    return;
-  }
-
-  if (!silent) setStatus(t("calibrating"));
-  const { extractSkyline, matchSkyline, MIN_CONFIDENCE } =
-    await import("./core/skyline");
-  const { SkylineTracker } = await import("./core/skyline-track");
-  // Временна́я стабилизация (core/skyline-track.ts): ~0.8 с видео давят шум
-  // сенсора и отбрасывают колонки, где линия ползёт (облака над гребнем,
-  // блики) — они уходят в NaN и не тянут совмещение
-  const tracker = new SkylineTracker(8);
-  let stab = tracker.push(
-    extractSkyline(frame.rgba, frame.width, frame.height),
-  );
-  for (let k = 1; k < 8; k++) {
-    await new Promise((resolve) => setTimeout(resolve, 110));
-    // За 110 мс человек мог выйти из AR: exitAr() обнуляет модульный
-    // arSession, и grabFrame() здесь бросил бы TypeError → unhandled
-    // rejection (вызов калибровки идёт через void)
-    if (!arSession) return;
-    const next = arSession.grabFrame();
-    if (!next) break;
-    stab = tracker.push(extractSkyline(next.rgba, next.width, next.height));
-  }
-  const profile = stab.profile;
-  // Профиль измерен в долях ПОЛНОГО кадра камеры, поэтому и геометрия нужна
-  // кадра, а не экрана: view.fovRad/HORIZON_FRAC описывают картинку после
-  // cover-кропа (ui/ar.ts), и с ними совмещение ехало бы на величину обрезки
-  const frameFov = arSession.fullFrameFov();
-  const match = matchSkyline(profile, {
-    centerAzRad: view.centerAzRad,
-    tiltRad: view.tiltRad,
-    fovRad: frameFov.h,
-    fovVRad: frameFov.v,
-    horizonFrac: arSession.frameHorizonFrac(),
-    // Pinhole-камера — как у оверлея: кадр после прошивочной коррекции
-    // прямолинейный, и совмещение обязано думать в той же геометрии, что
-    // рисует AR, иначе у краёв останется S-образный невязок
-    projection: PINHOLE_ENABLED ? "pinhole" : "linear",
-    // Ровно та линия, что нарисована на экране: совмещать кадр с ближней
-    // корзиной 0–5 км нельзя (за неё в горах отвечает трава под ногами), а
-    // считать её здесь по-своему — значит рано или поздно разойтись с
-    // отрисовкой и подгонять контуры не туда, куда человек смотрит
-    horizon: silhouetteProfile(panorama),
-    stepRad: panorama.stepRad,
-    // Видимые вершины — якоря для грубого поиска по полному кругу: без них
-    // периодичные гребни неотличимы, с ними ложный максимум ZNCC почти
-    // никогда не угадает ещё и позицию Эльбруса
-    peaks: panorama.peaks,
-  });
-
-  if (match.confidence < MIN_CONFIDENCE) {
-    setStatus(silent ? "" : t("calibrateFailed"), silent ? undefined : 4000);
-    return;
-  }
-
-  const cal = getCalibration();
-  setCalibration({
-    azimuthDeg: cal.azimuthDeg + (match.azimuthRad * 180) / Math.PI,
-    tiltDeg: cal.tiltDeg + (match.tiltRad * 180) / Math.PI,
-  });
-  orientationTracker.applyCalibration();
-  view.centerAzRad += match.azimuthRad;
-  view.tiltRad += match.tiltRad;
-  draw();
-
-  const azDeg = (match.azimuthRad * 180) / Math.PI;
-  setStatus(
-    `${t("calibrateDone")} ${azDeg > 0 ? "+" : ""}${azDeg.toFixed(1)}°`,
-    3000,
-  );
-}
 
 /**
  * Пересчёт панорамы: единственная точка отправки задания воркеру.
@@ -3139,7 +3039,6 @@ function setupActionButtons(): void {
     arVideo?.remove(); // иначе десять входов в AR — десять <video> под холстом
     arVideo = null;
     arBtn.style.background = "#415a77";
-    updateCalibrateBtn();
     draw(); // под видео холст не перерисовывался — вернём панораму
   }
 
@@ -3171,12 +3070,6 @@ function setupActionButtons(): void {
       arVideo = video;
       arSession = await startAr(video, canvas, () => panorama, view);
       arBtn.style.background = "#e63946";
-      updateCalibrateBtn();
-      // Автоматическая попытка при входе в AR (включена по умолчанию):
-      // камере нужно пару кадров на экспозицию, иначе анализируем черноту
-      if (getCalibration().autoCalibrate) {
-        setTimeout(() => void runAutoCalibration(true), 1200);
-      }
       return "on";
     } catch (err) {
       // Отказ в доступе к камере: элемент вставлен до вызова startAr,
@@ -3251,38 +3144,9 @@ function setupActionButtons(): void {
     if (result === "off") rememberArMode(false);
   }
 
-  // Автокалибровка. На старте — видна с подписью, но неактивна (нет кадра
-  // камеры — сопоставлять нечего): так у неё есть пояснение, а нажать нельзя.
-  // После загрузки скрывается; появляется активной только в AR.
-  const calibrateBtn = makeButton(
-    ICON_CALIBRATE,
-    "autoCalibrate",
-    `right:${edgeRight()};bottom:${edgeBottom(120)}`,
-  );
-  /** Видимость/активность кнопки по фазе: загрузка (подпись, disabled) /
-   *  готово (скрыта) / AR (активна) */
-  function updateCalibrateBtn(): void {
-    if (arSession) {
-      calibrateBtn.style.display = "flex";
-      calibrateBtn.disabled = false;
-      calibrateBtn.style.opacity = "1";
-    } else if (captionsVisible) {
-      calibrateBtn.style.display = "flex";
-      calibrateBtn.disabled = true;
-      calibrateBtn.style.opacity = "0.45";
-    } else {
-      calibrateBtn.style.display = "none";
-    }
-  }
-  calibrateBtn.onclick = () => {
-    if (!calibrateBtn.disabled) void runAutoCalibration(false);
-  };
-  updateCalibrateBtnRef = updateCalibrateBtn;
-  updateCalibrateBtn(); // старт: видна, но неактивна (подпись есть, нажать нельзя)
-
   // Фото с подписями — самая полезная кнопка: ей место в самом углу экрана,
-  // чтобы попадать по ней не глядя (камера на углу — под ней, калибровка —
-  // ещё выше: стек у правого края, порядок по убыванию частоты использования)
+  // чтобы попадать по ней не глядя (камера — над ней: стек у правого края,
+  // порядок по убыванию частоты использования)
   const photoBtn = makeButton(
     ICON_PHOTO,
     "photo",

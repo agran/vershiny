@@ -79,7 +79,7 @@ describe("калибровка датчиков", () => {
       azimuthDeg: 0,
       tiltDeg: 0,
       cameraFovDeg: null,
-      autoCalibrate: true,
+      autoCalibrate: false,
       version: CALIBRATION_VERSION,
     });
     expect(normalizeCalibration(null).cameraFovDeg).toBeNull();
@@ -123,13 +123,10 @@ describe("калибровка датчиков", () => {
     expect(migrated.version).toBe(CALIBRATION_VERSION);
   });
 
-  it("автосовмещение включено по умолчанию и выключается", () => {
-    expect(getCalibration().autoCalibrate).toBe(true);
-    setCalibration({ autoCalibrate: false });
-    expect(
-      normalizeCalibration(JSON.parse(store.get("vershiny-calibration")!))
-        .autoCalibrate,
-    ).toBe(false);
+  it("автосовмещение отключено и старым значением не оживляется", () => {
+    expect(getCalibration().autoCalibrate).toBe(false);
+    setCalibration({ autoCalibrate: true });
+    expect(getCalibration().autoCalibrate).toBe(false);
   });
 
   it("сброс возвращает расчётное поле зрения", () => {

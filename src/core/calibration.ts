@@ -40,7 +40,11 @@ export interface Calibration {
   tiltDeg: number;
   /** Поле зрения камеры по длинной стороне кадра, градусы; null — расчётное */
   cameraFovDeg: number | null;
-  /** Пробовать совместить контуры с кадром автоматически при входе в AR */
+  /**
+   * Автосовмещение по кадру отключено (неустойчиво на текущем этапе,
+   * только сбивает с толку). Поле оставлено для совместимости хранилища
+   * и всегда false.
+   */
   autoCalibrate: boolean;
   /** Версия модели, при которой поправки подбирались */
   version: number;
@@ -50,7 +54,7 @@ export const DEFAULT_CALIBRATION: Calibration = {
   azimuthDeg: 0,
   tiltDeg: 0,
   cameraFovDeg: null,
-  autoCalibrate: true,
+  autoCalibrate: false,
   version: CALIBRATION_VERSION,
 };
 
@@ -85,7 +89,7 @@ export function normalizeCalibration(
       azimuthDeg: azimuthNorm,
       tiltDeg: 0,
       cameraFovDeg: null,
-      autoCalibrate: raw.autoCalibrate !== false,
+      autoCalibrate: false,
       version: CALIBRATION_VERSION,
     };
   }
@@ -100,7 +104,7 @@ export function normalizeCalibration(
       fov != null && Number.isFinite(fov)
         ? clamp(fov, CALIBRATION_LIMITS.fovMinDeg, CALIBRATION_LIMITS.fovMaxDeg)
         : null,
-    autoCalibrate: raw.autoCalibrate !== false,
+    autoCalibrate: false,
     version: CALIBRATION_VERSION,
   };
 }
