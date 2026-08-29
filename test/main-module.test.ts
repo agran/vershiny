@@ -314,12 +314,12 @@ describe("возврат к геопозиции", () => {
     vi.useRealTimers();
   });
 
-  it("сбрасывает ручную подстройку азимута", async () => {
+  it("сбрасывает ручные поправки направления, поле зрения остаётся", async () => {
     vi.resetModules();
     await import("../src/main");
     const { setCalibration, getCalibration } =
       await import("../src/core/calibration");
-    setCalibration({ azimuthDeg: 12.5 });
+    setCalibration({ azimuthDeg: 12.5, tiltDeg: 6, cameraFovDeg: 58 });
     expect(getCalibration().azimuthDeg).toBeCloseTo(12.5, 6);
 
     // Рабочая геолокация: свежий фикс приходит сразу
@@ -336,6 +336,10 @@ describe("возврат к геопозиции", () => {
 
     findButton("К моей геопозиции").click();
     await vi.waitFor(() => expect(getCalibration().azimuthDeg).toBe(0));
+    // Наклон — тоже ручная поправка направления: сбрасывается
+    expect(getCalibration().tiltDeg).toBe(0);
+    // Угол обзора камеры (фокусное расстояние) — не трогаем
+    expect(getCalibration().cameraFovDeg).toBe(58);
   });
 
   it("не пересчитывает панораму, если положение не изменилось", async () => {

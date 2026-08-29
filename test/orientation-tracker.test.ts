@@ -3,9 +3,10 @@
  * Поведение синглтона OrientationTracker, требующее DOM-событий датчиков
  * (jsdom). Чистые функции модуля — в orientation.test.ts.
  *
- * Кнопка «К моей геопозиции» сбрасывает ручную подстройку азимута: контуры
- * должны встать на текущий компас сразу, а не после следующего события
- * датчика. Здесь проверяется, что resetOffset() пересобирает состояние.
+ * Кнопка «К моей геопозиции» сбрасывает ручные поправки направления
+ * (азимут и наклон): контуры должны встать на текущий компас сразу, а не
+ * после следующего события датчика. Поле зрения камеры остаётся. Здесь
+ * проверяется, что resetManualOffsets() пересобирает состояние.
  */
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -27,7 +28,7 @@ function sensorEvent(alpha: number, beta: number, gamma: number): Event {
   return ev;
 }
 
-describe("OrientationTracker: сброс ручной подстройки азимута", () => {
+describe("OrientationTracker: сброс ручных поправок направления", () => {
   beforeEach(() => {
     vi.resetModules();
     localStorage.clear();
@@ -40,7 +41,7 @@ describe("OrientationTracker: сброс ручной подстройки аз�
     );
   });
 
-  it("resetOffset обнуляет калибровку и сразу пересобирает азимут без офсета", async () => {
+  it("resetManualOffsets обнуляет азимут и наклон, поле зрения остаётся", async () => {
     const { orientationTracker } = await import("../src/core/orientation");
     const { setCalibration, getCalibration } =
       await import("../src/core/calibration");
@@ -50,7 +51,7 @@ describe("OrientationTracker: сброс ручной подстройки аз�
     // iOS-путь: start() ждёт жеста, запрос доступа включает слушатели
     expect(await orientationTracker.requestPermission()).toBe(true);
 
-    setCalibration({ azimuthDeg: 10 });
+    setCalibration({ azimuthDeg: 10, tiltDeg: 5, cameraFovDeg: 64 });
     // Портрет, взгляд на юг (alpha=180°): азимут ≈ π, без датчиков гироскопа
     // работает прежняя схема — круговое среднее + followAzimuth
     window.dispatchEvent(sensorEvent(180, 90, 0));
@@ -58,27 +59,31 @@ describe("OrientationTracker: сброс ручной подстройки аз�
     const before = seen[seen.length - 1];
     expect(before).toBeCloseTo(Math.PI + (10 * Math.PI) / 180, 6);
 
-    orientationTracker.resetOffset();
+    orientationTracker.resetManualOffsets();
 
     expect(getCalibration().azimuthDeg).toBe(0);
+    expect(getCalibration().tiltDeg).toBe(0);
+    // Оптика аппарата — не направление взгляда: её кнопка не трогает
+    expect(getCalibration().cameraFovDeg).toBe(64);
     // Состояние пересобрано сразу: офсет снят, азимут — чистый компас
     expect(seen[seen.length - 1]).toBeCloseTo(Math.PI, 6);
   });
 
-  it("без сенсорных показаний resetOffset только обнуляет калибровку", async () => {
+  it("без сенсорных показаний resetManualOffsets только обнуляет калибровку", async () => {
     const { orientationTracker } = await import("../src/core/orientation");
     const { setCalibration, getCalibration } =
       await import("../src/core/calibration");
 
-    setCalibration({ azimuthDeg: 7 });
+    setCalibration({ azimuthDeg: 7, tiltDeg: 3 });
     let calls = 0;
     orientationTracker.start(() => calls++);
     // iOS-путь: start() сообщает «manual» синхронно
     expect(calls).toBe(1);
 
-    orientationTracker.resetOffset();
+    orientationTracker.resetManualOffsets();
 
     expect(getCalibration().azimuthDeg).toBe(0);
+    expect(getCalibration().tiltDeg).toBe(0);
     // Данных датчика не было — пересобирать нечего, нового события нет
     expect(calls).toBe(1);
   });
