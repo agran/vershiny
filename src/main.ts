@@ -2817,6 +2817,10 @@ function hideButtonCaptions(): void {
   }
   if (!captionEntries.some((c) => c.always) && captionLayer) {
     captionLayer.style.display = "none";
+  } else {
+    // Слой остаётся ради постоянной подписи: стрелки скрытых подписей надо
+    // стереть, иначе они висят у кнопок, у которых подписи уже нет
+    layoutCaptions();
   }
 }
 
