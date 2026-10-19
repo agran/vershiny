@@ -85,6 +85,37 @@ export function applyZoom(fov: FrameFov, zoom: number): FrameFov {
 }
 
 /**
+ * Обратный ход для калибровки: горизонтальный FOV полного кадра после зума
+ * переводится в базовый FOV по длинной стороне. В портрете горизонталь —
+ * короткая сторона, поэтому одного обратного зума недостаточно.
+ */
+export function longSideFovFromHorizontalFov(
+  horizontalFovRad: number,
+  width: number,
+  height: number,
+  zoom = 1,
+): number | null {
+  if (
+    !Number.isFinite(horizontalFovRad) ||
+    horizontalFovRad <= 0 ||
+    horizontalFovRad >= Math.PI ||
+    !Number.isFinite(width) ||
+    !Number.isFinite(height) ||
+    width <= 0 ||
+    height <= 0
+  ) {
+    return null;
+  }
+  const z = Number.isFinite(zoom) && zoom > 0 ? zoom : 1;
+  const unzoomedH = 2 * Math.atan(Math.tan(horizontalFovRad / 2) * z);
+  const base =
+    width >= height
+      ? unzoomedH
+      : 2 * Math.atan(Math.tan(unzoomedH / 2) * (height / width));
+  return Number.isFinite(base) ? base : null;
+}
+
+/**
  * Видимый угол обзора, когда кадр рисуется с заполнением (object-fit: cover):
  * короткая сторона кадра вылезает за экран и обрезается.
  *

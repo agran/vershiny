@@ -97,6 +97,57 @@ const STRINGS: Record<string, Record<Locale, string>> = {
   // Глагол, а не «AR-режим»: аббревиатура AR многим ничего не говорит,
   // а кнопка именно включает камеру с подписями поверх кадра
   arMode: { ru: "Включить камеру", en: "Enable camera" },
+  // Калибровка по кадру камеры: азимут, наклон и фокус подбираются по линии
+  // гор в кадре (core/photo-fit.ts). Только по нажатию, фоновой работы нет
+  cameraCalibrate: {
+    ru: "Откалибровать по кадру: азимут, наклон и фокус",
+    en: "Calibrate from the camera frame: heading, tilt and focal length",
+  },
+  cameraCalibrating: {
+    ru: "Калибровка по кадру…",
+    en: "Calibrating from the frame…",
+  },
+  cameraCalibrated: { ru: "Откалибровано", en: "Calibrated" },
+  cameraCalibrateApprox: {
+    ru: "приблизительно — проверьте по вершинам",
+    en: "approximately — check against the peaks",
+  },
+  cameraCalibrateAz: { ru: "азимут", en: "heading" },
+  cameraCalibrateTilt: { ru: "наклон", en: "tilt" },
+  cameraCalibrateFovKept: {
+    ru: "фокус по форме гор не определяется — оставлен прежний",
+    en: "focal length cannot be told from these mountains — kept as before",
+  },
+  cameraCalibrateNoFrame: {
+    ru: "Камера ещё не отдала кадр",
+    en: "The camera has not delivered a frame yet",
+  },
+  cameraCalibrateNoSkyline: {
+    ru:
+      "Не нашлась линия гор на фоне неба. Наведите камеру так, чтобы " +
+      "горы были на фоне неба",
+    en:
+      "No mountain skyline against the sky was found. Point the camera so " +
+      "that the mountains are seen against the sky",
+  },
+  cameraCalibrateNoTerrain: {
+    ru: "Вокруг вас нет данных о рельефе",
+    en: "There is no terrain data around you",
+  },
+  cameraCalibrateFlat: {
+    ru: "Горизонт почти плоский: по нему не откалибровать наклон и фокус",
+    en: "The horizon is almost flat: tilt and focal length cannot be calibrated from it",
+  },
+  cameraCalibrateFailed: {
+    ru:
+      "Линия гор в кадре не совпала с рельефом. Если компас сильно врёт, " +
+      "сдвиньте контуры свайпом примерно на горы; если камера приближена — " +
+      "щипком задайте поле зрения. Затем повторите",
+    en:
+      "The skyline in the frame does not match the terrain. If the compass is " +
+      "far off, swipe the outlines roughly onto the mountains; if the camera is " +
+      "zoomed in, set the field of view with a pinch. Then try again",
+  },
   arNoCamera: {
     ru: "Камера в этом браузере недоступна. Откройте приложение в Chrome.",
     en: "The camera is not available in this browser. Open the app in Chrome.",

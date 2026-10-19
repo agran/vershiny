@@ -27,6 +27,7 @@ import {
 } from "./ui/download";
 import {
   ICON_AR,
+  ICON_CALIBRATE,
   ICON_CLOSE,
   ICON_COMPASS_TAP,
   ICON_DOWN,
@@ -43,6 +44,7 @@ import { isTypingTarget } from "./ui/keys";
 import {
   HORIZON_FRAC,
   renderPanorama,
+  silhouetteProfile,
   type PanoramaState,
   type ViewState,
 } from "./ui/panorama";
@@ -1066,6 +1068,231 @@ function applyAutoTilt(state: {
   const median = angles[Math.floor(angles.length / 2)];
   // Ниже линии горизонта не опускаемся: там и так всё видно
   view.tiltRad = Math.max(0, Math.min(MAX_TILT, median));
+}
+
+/** Ширина кадра, с которой снимается линия неба для калибровки по кадру */
+const CAMERA_CALIBRATION_FRAME_WIDTH = 1280;
+/**
+ * Окно поиска азимута вокруг показаний компаса, ±градусов. Компас с учтённым
+ * склонением редко врёт больше; а окно заодно снимает неоднозначность
+ * «несколько направлений подходят одинаково» (особенно на телеобъективе)
+ */
+const CAMERA_CALIBRATION_AZ_HALF_DEG = 25;
+/** Идёт калибровка по кадру: повторное нажатие игнорируется */
+let cameraCalibrationRunning = false;
+
+/**
+ * Передать управление UI между кусками тяжёлой подгонки. Через MessageChannel,
+ * а не setTimeout(0): тот держит ≥ 4 мс на каждый вызов цепочки и до секунды
+ * в неактивной вкладке. Канал создаётся лениво, при первой калибровке: пока
+ * кнопку не нажимали, никаких объектов и задач нет.
+ */
+let yieldChannel: MessageChannel | null | undefined;
+function yieldToUi(): Promise<void> {
+  if (yieldChannel === undefined) {
+    yieldChannel =
+      typeof MessageChannel !== "undefined" ? new MessageChannel() : null;
+  }
+  const channel = yieldChannel;
+  if (!channel) return new Promise((resolve) => setTimeout(resolve, 0));
+  return new Promise((resolve) => {
+    channel.port1.onmessage = () => resolve();
+    channel.port2.postMessage(0);
+  });
+}
+
+/**
+ * Калибровка по кадру камеры: линия гор в кадре ↔ силуэт DEM из точки, где
+ * стоит человек. Подбирает азимут, наклон и фокусное расстояние (core/photo-fit.ts)
+ * и записывает их как обычные поправки калибровки: сдвиг компаса, сдвиг
+ * наклона и поле зрения объектива — те же, что человек крутит свайпом и
+ * щипком. Тяжёлое считается только по нажатию кнопки; фоновой работы нет.
+ *
+ * @param onBusy кнопка занята (идёт подгонка) / свободна
+ */
+async function runCameraCalibration(
+  onBusy: (busy: boolean) => void,
+): Promise<void> {
+  const session = arSession;
+  const state = panorama;
+  if (!session || cameraCalibrationRunning) return;
+  if (!state) {
+    setStatus(t("computing"), 2000);
+    return;
+  }
+  const frame = session.grabFrame(CAMERA_CALIBRATION_FRAME_WIDTH);
+  if (!frame) {
+    setStatus(t("cameraCalibrateNoFrame"), 3000);
+    return;
+  }
+  // Что показывали датчики в момент кадра: пока идёт подгонка, телефон
+  // двигается, и разница считается от этих значений, а не от текущих
+  const azAtGrab = view.centerAzRad;
+  const tiltAtGrab = view.tiltRad;
+  const fullFov = session.fullFrameFov();
+  const horizonRef = state.horizon;
+  cameraCalibrationRunning = true;
+  onBusy(true);
+  setStatus(t("cameraCalibrating"));
+  try {
+    const [
+      { extractPhotoSkylinePoints },
+      { fitPhotoCamera },
+      { adjustmentFromFit },
+    ] = await Promise.all([
+      import("./core/photo-skyline"),
+      import("./core/photo-fit"),
+      import("./core/camera-fit-apply"),
+    ]);
+    const startedAt = performance.now();
+    // Линия по текстуре под кромкой: не принимает кромку тучи за горы
+    let points = extractPhotoSkylinePoints(
+      frame.rgba,
+      frame.width,
+      frame.height,
+      { texture: true },
+    );
+    const runFit = (linePoints: typeof points, fovKnown: boolean) =>
+      fitPhotoCamera({
+        width: frame.width,
+        height: frame.height,
+        points: linePoints,
+        horizon: silhouetteProfile(state),
+        stepRad: state.stepRad,
+        prior: {
+          azRad: azAtGrab,
+          elevRad: tiltAtGrab,
+          rollRad: 0,
+          fovHRad: fullFov.h,
+        },
+        // Текущее поле зрения — разумный приор (у основной камеры телефона
+        // оно близко к расчётному): узкий коридор ±12 % надёжнее и в разы
+        // быстрее слепого поиска фокусного
+        fovKnown,
+        distanceM: state.distanceToHorizonM,
+        // Видимые вершины с высотами из OSM: DEM занижает ближние острые
+        // вершины, а они определяют форму линии неба
+        anchors: state.peaks
+          .filter((p) => p.visibility !== "hidden")
+          .map((p) => ({
+            azimuthRad: p.azimuthRad,
+            elevationRad: p.elevationRad,
+            distanceM: p.distanceM,
+          })),
+        azHint: {
+          centerRad: normalizeAz(azAtGrab),
+          halfRad: toRad(CAMERA_CALIBRATION_AZ_HALF_DEG),
+        },
+        yieldToUi,
+        onProgress: (fraction) =>
+          setStatus(`${t("cameraCalibrating")} ${Math.round(fraction * 100)}%`),
+      });
+    // Каскад по возрастанию цены: линия по текстуре в коридоре фокуса →
+    // яркостная линия в коридоре (на чистом небе и в дымке иногда лучше) →
+    // слепой поиск фокуса по линии по текстуре. Следующая ступень — только
+    // при отказе предыдущей: удачная калибровка не тратит лишнего
+    let result = await runFit(points, true);
+    if (!result.ok && points.source === "texture") {
+      const classic = extractPhotoSkylinePoints(
+        frame.rgba,
+        frame.width,
+        frame.height,
+      );
+      if (classic.x.length >= 24) {
+        const second = await runFit(classic, true);
+        if (second.ok) {
+          result = second;
+          points = classic;
+        }
+      }
+    }
+    if (
+      !result.ok &&
+      result.reason !== "no-skyline" &&
+      result.reason !== "no-terrain"
+    ) {
+      const blind = await runFit(points, false);
+      if (blind.ok) result = blind;
+    }
+    // Пока шла подгонка, камеру могли выключить, а панораму пересчитать
+    // (человек пошёл): поза относится к старой точке
+    if (arSession !== session || panorama?.horizon !== horizonRef) {
+      setStatus("");
+      return;
+    }
+    const d = result.diagnostics;
+    console.info(
+      `Калибровка по кадру: ${result.ok ? "ok" : result.reason}, ` +
+        `${points.x.length} точек линии (${points.source ?? "?"}), ` +
+        `${(performance.now() - startedAt).toFixed(0)} мс, ` +
+        `доля совпавших ${(d.inlierFrac * 100).toFixed(0)}%, ` +
+        `единственность ${d.uniqueness.toFixed(2)}, FOV ${d.fovObservable ? "определён" : "приор"}`,
+    );
+    if (!result.ok) {
+      const key =
+        result.reason === "no-skyline"
+          ? "cameraCalibrateNoSkyline"
+          : result.reason === "no-terrain"
+            ? "cameraCalibrateNoTerrain"
+            : result.reason === "flat-horizon"
+              ? "cameraCalibrateFlat"
+              : "cameraCalibrateFailed";
+      setStatus(t(key), 7000);
+      return;
+    }
+    const adjustment = adjustmentFromFit({
+      pose: result.pose,
+      azAtGrabRad: azAtGrab,
+      tiltAtGrabRad: tiltAtGrab,
+      currentTiltDeg: getCalibration().tiltDeg,
+      fovObservable: d.fovObservable,
+      frameWidth: frame.width,
+      frameHeight: frame.height,
+      zoom: session.zoom(),
+    });
+    if (!adjustment) {
+      setStatus(t("cameraCalibrateFailed"), 7000);
+      return;
+    }
+    if (adjustment.cameraFovDeg !== null) {
+      setCalibration({ cameraFovDeg: adjustment.cameraFovDeg });
+      syncFov();
+    }
+    if (orientationTracker.current.source === "sensor") {
+      // Наклон — раньше азимута: addManualOffset дёргает обработчик датчика,
+      // и он должен увидеть обе поправки сразу
+      setCalibration({ tiltDeg: adjustment.tiltDeg });
+      orientationTracker.addManualOffset(adjustment.azimuthDeltaRad);
+    } else {
+      // Без датчиков (десктоп) взгляд ставится прямо
+      view.centerAzRad = normalizeAz(result.pose.azRad);
+      view.tiltRad = Math.max(
+        -MAX_TILT,
+        Math.min(MAX_TILT, result.pose.elevRad),
+      );
+    }
+    session.redraw();
+    const signed = (v: number, unit: string): string =>
+      `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(1)}${unit}`;
+    setStatus(
+      `${t("cameraCalibrated")}${result.quality === "approximate" ? ` (${t("cameraCalibrateApprox")})` : ""}: ` +
+        `${t("cameraCalibrateAz")} ${signed((adjustment.azimuthDeltaRad * 180) / Math.PI, "°")}, ` +
+        `${t("cameraCalibrateTilt")} ${signed(((result.pose.elevRad - tiltAtGrab) * 180) / Math.PI, "°")}` +
+        (adjustment.cameraFovDeg !== null
+          ? `, FOV ${adjustment.cameraFovDeg.toFixed(0)}°`
+          : `. ${t("cameraCalibrateFovKept")}`),
+      7000,
+    );
+  } catch (err) {
+    console.warn("Калибровка по кадру не удалась:", err);
+    setStatus(
+      `${t("error")}: ${err instanceof Error ? err.message : String(err)}`,
+      4000,
+    );
+  } finally {
+    cameraCalibrationRunning = false;
+    onBusy(false);
+  }
 }
 
 const worker = new Worker(
@@ -3034,12 +3261,37 @@ function setupActionButtons(): void {
   /** Камера запрашивается прямо сейчас: второй вход открыл бы второй поток */
   let arStarting = false;
 
+  /**
+   * Калибровка по кадру: видна только пока включена камера (без кадра ей
+   * нечего калибровать). Создаётся при первом входе в AR — не раньше, чем
+   * понадобится — и дальше прячется/показывается.
+   */
+  let calibrateBtn: HTMLButtonElement | null = null;
+  function showCalibrateButton(show: boolean): void {
+    if (show && !calibrateBtn) {
+      const btn = makeButton(
+        ICON_CALIBRATE,
+        "cameraCalibrate",
+        `right:${edgeRight()};bottom:${edgeBottom(120)}`,
+      );
+      btn.onclick = () => {
+        void runCameraCalibration((busy) => {
+          btn.style.opacity = busy ? "0.5" : "";
+          btn.style.pointerEvents = busy ? "none" : "";
+        });
+      };
+      calibrateBtn = btn;
+    }
+    if (calibrateBtn) calibrateBtn.style.display = show ? "flex" : "none";
+  }
+
   function exitAr(): void {
     arSession?.stop();
     arSession = null;
     arVideo?.remove(); // иначе десять входов в AR — десять <video> под холстом
     arVideo = null;
     arBtn.style.background = "#415a77";
+    showCalibrateButton(false);
     draw(); // под видео холст не перерисовывался — вернём панораму
   }
 
@@ -3071,6 +3323,7 @@ function setupActionButtons(): void {
       arVideo = video;
       arSession = await startAr(video, canvas, () => panorama, view);
       arBtn.style.background = "#e63946";
+      showCalibrateButton(true);
       return "on";
     } catch (err) {
       // Отказ в доступе к камере: элемент вставлен до вызова startAr,
